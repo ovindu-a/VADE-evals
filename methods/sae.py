@@ -74,6 +74,9 @@ Usage
     # only one token set, or a VADE checkout that isn't a sibling dir:
     python methods/sae.py --entity flags --token_sets flag_only
     python methods/sae.py --entity flags --vade_root /path/to/VADE
+
+    # batched (start small, raise it while watching VRAM headroom):
+    python methods/sae.py --entity flags --batch_size 8
 """
 import argparse
 import json
@@ -85,8 +88,21 @@ from PIL import Image
 try:
     from tqdm import tqdm
 except ImportError:  # tqdm is a convenience only, not a hard dependency
-    def tqdm(iterable, **_kwargs):
-        return iterable
+    class _NoTqdm:
+        def __init__(self, *_a, **_kw):
+            pass
+
+        def update(self, *_a, **_kw):
+            pass
+
+        def set_postfix(self, *_a, **_kw):
+            pass
+
+        def close(self):
+            pass
+
+    def tqdm(*_a, **_kw):
+        return _NoTqdm()
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join(REPO_ROOT, "..", "VADE"))
@@ -157,34 +173,59 @@ def find_image_token_positions(input_ids, image_token_id, n_expected):
     return positions
 
 
-def extract_one_image(model, processor, image_path, token_sets, grid, device, image_token_id):
-    """Returns {set_name: tensor[num_layers+1, n_tokens_in_set, hidden_dim]},
-    all sliced from a single forward pass over this image."""
-    image = Image.open(image_path).convert("RGB")
-    messages = [{
-        "role": "user",
-        "content": [{"type": "image"}, {"type": "text", "text": DUMMY_QUESTION}],
-    }]
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    inputs = processor(text=[text], images=[image], return_tensors="pt").to(device)
+def extract_batch(model, processor, image_paths, token_sets, grid, device, image_token_id):
+    """Returns {set_name: tensor[batch, num_layers+1, n_tokens_in_set, hidden_dim]},
+    all sliced from a single batched forward pass over these images.
+
+    Batching is essentially free here memory-wise: every image in an
+    entity shares one fixed canvas size and DUMMY_QUESTION is fixed too,
+    so every sequence in the batch has identical length -- no padding,
+    no attention-mask bookkeeping. The per-item marginal cost of a larger
+    batch is just a few tensors of shape [batch, ~150, hidden_dim] per
+    layer (order of 1MB/image/layer) -- utterly dwarfed by the model
+    weights themselves, which dominate VRAM use almost entirely. So the
+    real question for --batch_size isn't "how much does batching cost"
+    but "does the model comfortably fit at all" -- see the module
+    docstring / project notes for that discussion.
+    """
+    images = [Image.open(p).convert("RGB") for p in image_paths]
+    messages_batch = [
+        [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": DUMMY_QUESTION}]}]
+        for _ in images
+    ]
+    texts = [processor.apply_chat_template(m, tokenize=False, add_generation_prompt=True) for m in messages_batch]
+    inputs = processor(text=texts, images=images, return_tensors="pt").to(device)
 
     n_expected = grid["grid_rows"] * grid["grid_cols"]
-    positions = find_image_token_positions(inputs["input_ids"][0], image_token_id, n_expected)
+    input_ids = inputs["input_ids"]  # [batch, seq_len]
+    # Fixed canvas + fixed prompt text -> every row should have identical
+    # sequence length and identical image-token positions. Verify rather
+    # than assume, so a future non-uniform image size fails loudly instead
+    # of silently misattributing tokens between images.
+    row0_positions = find_image_token_positions(input_ids[0], image_token_id, n_expected)
+    for row in range(1, input_ids.shape[0]):
+        row_positions = find_image_token_positions(input_ids[row], image_token_id, n_expected)
+        if not torch.equal(row_positions, row0_positions):
+            raise ValueError(
+                "Image-token positions differ within a batch -- these images may not "
+                "share identical canvas size/template. Reduce --batch_size to 1, or "
+                "check the entity's renders for a size mismatch."
+            )
 
     with torch.no_grad():
         outputs = model(**inputs, output_hidden_states=True, use_cache=False)
 
     # outputs.hidden_states: tuple of (num_decoder_layers + 1) tensors, each
-    # [1, seq_len, hidden_dim]. Index 0 = embedding output (pre-layer-1);
+    # [batch, seq_len, hidden_dim]. Index 0 = embedding output (pre-layer-1);
     # index i = residual stream AFTER decoder layer i.
     result = {}
     for set_name, flat_indices in token_sets.items():
-        object_positions = positions[flat_indices]  # row-major -> object_location.json's flat order
+        object_positions = row0_positions[flat_indices]  # row-major -> object_location.json's flat order
         per_layer = [
-            layer_hs[0, object_positions, :].to(torch.float32).cpu()
+            layer_hs[:, object_positions, :].to(torch.float32).cpu()  # [batch, n_tokens, hidden_dim]
             for layer_hs in outputs.hidden_states
         ]
-        result[set_name] = torch.stack(per_layer, dim=0)  # [num_layers+1, n_tokens, hidden_dim]
+        result[set_name] = torch.stack(per_layer, dim=1)  # [batch, num_layers+1, n_tokens, hidden_dim]
     return result
 
 
@@ -205,6 +246,12 @@ def main():
     ap.add_argument("--attn_implementation", default=None,
                      help="e.g. 'flash_attention_2' if installed; left to the model's default otherwise")
     ap.add_argument("--limit", type=int, default=None, help="Only process the first N images (smoke test)")
+    ap.add_argument("--batch_size", type=int, default=1,
+                     help="Images per forward pass. Safe to raise well above 1 -- every image in an "
+                          "entity shares one fixed canvas size, so batching adds no padding complexity "
+                          "and costs little extra VRAM (see extract_batch's docstring). Start small and "
+                          "watch nvidia-smi/VRAM headroom, since the model weights themselves are what "
+                          "actually dominate GPU memory here, not the batch.")
     ap.add_argument("--dry_run", action="store_true",
                      help="Skip loading the model entirely -- just validate that the entity's "
                           "images/ground_truth.json/object_location.json line up.")
@@ -246,12 +293,22 @@ def main():
     image_token_id = resolve_image_token_id(model, processor)
 
     all_layers_by_set = {name: None for name in token_sets}
-    for i, (_code, path) in enumerate(tqdm(list(zip(codes, image_paths)), desc=f"extracting ({args.entity})")):
-        per_set = extract_one_image(model, processor, path, token_sets, grid, device, image_token_id)
-        for name, acts in per_set.items():
+    pairs = list(zip(codes, image_paths))
+    pbar = tqdm(total=len(pairs), unit="img", desc=f"extracting ({args.entity})")
+    idx = 0
+    for batch_start in range(0, len(pairs), args.batch_size):
+        batch = pairs[batch_start:batch_start + args.batch_size]
+        batch_codes, batch_paths = zip(*batch)
+        per_set = extract_batch(model, processor, list(batch_paths), token_sets, grid, device, image_token_id)
+        bs = len(batch)
+        for name, acts in per_set.items():  # acts: [bs, num_layers+1, n_tokens, hidden_dim]
             if all_layers_by_set[name] is None:
-                all_layers_by_set[name] = torch.zeros((len(codes),) + tuple(acts.shape), dtype=torch.float32)
-            all_layers_by_set[name][i] = acts
+                all_layers_by_set[name] = torch.zeros((len(codes),) + tuple(acts.shape[1:]), dtype=torch.float32)
+            all_layers_by_set[name][idx:idx + bs] = acts
+        idx += bs
+        pbar.set_postfix(codes=f"{batch_codes[0]}..{batch_codes[-1]}")
+        pbar.update(bs)
+    pbar.close()
 
     output = args.output or os.path.join(
         REPO_ROOT, "methods", "activations",
