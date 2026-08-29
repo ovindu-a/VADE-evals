@@ -57,7 +57,13 @@ VADE_ROOT environment variable if your checkout lives somewhere else.
 Requirements (install on the machine actually running this -- NOT
 expected to run on a laptop without a real GPU; this is a 7B-parameter
 model and we're pulling hidden states at every layer):
-    pip install "transformers>=4.49" torch pillow tqdm accelerate
+    pip install "transformers>=4.49" torch torchvision pillow tqdm accelerate
+
+    torchvision is required even though we only use images -- Qwen2.5-VL's
+    AutoProcessor bundles a video processor too, and building it eagerly
+    needs torchvision installed regardless. Match it to your installed
+    torch/CUDA build (see https://pytorch.org/get-started/locally/) if pip
+    doesn't resolve a compatible wheel automatically.
 
 Usage
 -----

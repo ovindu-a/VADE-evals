@@ -46,7 +46,7 @@ without one via `--dry_run`, which only validates that VADE's images and
 metadata resolve correctly:
 
 ```
-pip install "transformers>=4.49" torch pillow tqdm accelerate
+pip install "transformers>=4.49" torch torchvision pillow tqdm accelerate
 
 python methods/sae.py --entity flags --dry_run
 python methods/sae.py --entity flags --limit 3          # smoke test
