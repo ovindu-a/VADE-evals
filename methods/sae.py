@@ -6,11 +6,18 @@ actually loads a model -- VADE itself stays a pure benchmark (data +
 method-agnostic scorer), per its own score.py docstring: "The scorer
 never touches model internals."
 
-Loads Qwen2.5-VL-7B-Instruct, runs it once per entity image (flags by
-default), and records the residual stream hidden state at EVERY decoder
-layer, at the token positions the object (and a dilated ring around it)
-occupies -- e.g. flags' "flag_only" (8 tokens) and "flag_ring1" (24
-tokens) sets from VADE's <entity>/object_location.json.
+Loads Qwen2.5-VL-7B-Instruct, runs it once per entity image, and records
+the residual stream hidden state at EVERY decoder layer, at the token
+positions the object (and a dilated ring around it) occupies -- read
+generically from each entity's own <entity>/object_location.json, e.g.:
+
+    flags:   flag_only    (8 tokens)   flag_ring1    (24 tokens)
+    brands:  logo_only    (36 tokens)  logo_ring1    (64 tokens)
+    animals: entity_only  (36 tokens)  entity_ring1  (64 tokens)
+
+--entity defaults to "flags"; pass --entity brands or --entity animals
+for the other two built entities (see ITEMS_KEY_BY_ENTITY below --
+"compounds" isn't built yet, so it isn't usable here either).
 
 This produces the *raw activation corpus* an SAE (or PCA) gets trained
 on downstream -- it does not itself train anything. Feature selection
@@ -83,6 +90,10 @@ Usage
 
     # batched (start small, raise it while watching VRAM headroom):
     python methods/sae.py --entity flags --batch_size 8
+
+    # the other two built entities:
+    python methods/sae.py --entity brands --dry_run
+    python methods/sae.py --entity animals --dry_run
 """
 import argparse
 import json
@@ -118,6 +129,13 @@ DEFAULT_MODEL_ID = "Qwen/Qwen2.5-VL-7B-Instruct"
 # module docstring. Keep fixed for reproducibility across runs.
 DUMMY_QUESTION = "Describe this image in one sentence."
 
+# Each VADE entity names its items dict differently in ground_truth.json
+# (flags predates the other entities and kept its original "countries"
+# name even though the concept generalized). "compounds" is deliberately
+# absent -- per VADE/compounds/README.md, nothing is built there yet
+# (no ground_truth.json exists at all).
+ITEMS_KEY_BY_ENTITY = {"flags": "countries", "brands": "brands", "animals": "species"}
+
 
 def load_entity_metadata(vade_root, entity, token_set_names=None):
     """Return (item_codes, image_paths, token_sets, grid) for a VADE entity,
@@ -134,12 +152,24 @@ def load_entity_metadata(vade_root, entity, token_set_names=None):
         raise FileNotFoundError(
             f"No entity directory at {entity_dir!r}. Pass --vade_root to point at "
             f"your VADE checkout (defaulting to sibling dir {DEFAULT_VADE_ROOT!r}).")
-    with open(os.path.join(entity_dir, "ground_truth.json")) as f:
+    gt_path = os.path.join(entity_dir, "ground_truth.json")
+    if not os.path.exists(gt_path):
+        raise FileNotFoundError(
+            f"No ground_truth.json for entity {entity!r} at {gt_path!r} -- this VADE entity "
+            f"likely isn't built yet (e.g. 'compounds' has no data as of VADE/compounds/README.md). "
+            f"Known-buildable entities: {list(ITEMS_KEY_BY_ENTITY)}.")
+    with open(gt_path) as f:
         gt = json.load(f)
     with open(os.path.join(entity_dir, "object_location.json")) as f:
         loc = json.load(f)
 
-    items = gt["countries"]  # {iso_code: {..., "image": "images/XX.png", ...}}
+    items_key = ITEMS_KEY_BY_ENTITY.get(entity)
+    if items_key is None or items_key not in gt:
+        raise ValueError(
+            f"Don't know the ground_truth.json items-dict key for entity {entity!r} "
+            f"(known: {ITEMS_KEY_BY_ENTITY}). If this is a new, real VADE entity, add its "
+            f"items-dict key name to ITEMS_KEY_BY_ENTITY above.")
+    items = gt[items_key]  # {item_id: {..., "image": "images/XX.png", ...}}
     codes = sorted(items)
     image_paths = [os.path.join(entity_dir, items[c]["image"]) for c in codes]
 
