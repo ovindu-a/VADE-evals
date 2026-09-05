@@ -99,8 +99,9 @@ import argparse
 import json
 import os
 
+import numpy as np
 import torch
-from PIL import Image
+from PIL import Image, ImageFilter
 
 try:
     from tqdm import tqdm
@@ -209,7 +210,40 @@ def find_image_token_positions(input_ids, image_token_id, n_expected):
     return positions
 
 
-def extract_batch(model, processor, image_paths, token_sets, grid, device, image_token_id):
+def build_augmentation_transform(seed):
+    """A seeded, PURELY PIXEL-LEVEL perturbation -- color jitter + slight
+    Gaussian noise + a coin-flip of slight blur -- never geometric (no
+    crop/rotate/flip/resize/translate), so the object's exact pixel
+    footprint, and therefore every downstream token-position assumption
+    (object_location.json's flat indices, find_image_token_positions),
+    stays exactly valid unchanged.
+
+    This exists only to give PCA/SAE dictionary FITTING (fit_dictionaries.
+    py's --augmented_pool) a bigger, more varied pool of activations than
+    an entity's real handful of images (84-130) can offer on their own --
+    it is never used for feature selection or scoring, both of which stay
+    tied to the real images and their real ground-truth labels."""
+    from torchvision import transforms as T
+
+    rng = np.random.RandomState(seed)
+    jitter = T.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.15, hue=0.03)
+    torch_seed = int(rng.randint(0, 2 ** 31 - 1))
+    blur_radius = float(rng.uniform(0.15, 0.6)) if rng.rand() < 0.5 else 0.0
+    noise_std = float(rng.uniform(1.0, 4.0))  # 0-255 pixel units
+
+    def _transform(img):
+        torch.manual_seed(torch_seed)
+        out = jitter(img)
+        if blur_radius > 0:
+            out = out.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+        arr = np.asarray(out).astype(np.float32)
+        arr = np.clip(arr + rng.normal(0, noise_std, size=arr.shape), 0, 255).astype(np.uint8)
+        return Image.fromarray(arr)
+
+    return _transform
+
+
+def extract_batch(model, processor, image_paths, token_sets, grid, device, image_token_id, transforms=None):
     """Returns {set_name: tensor[batch, num_layers+1, n_tokens_in_set, hidden_dim]},
     all sliced from a single batched forward pass over these images.
 
@@ -223,8 +257,17 @@ def extract_batch(model, processor, image_paths, token_sets, grid, device, image
     real question for --batch_size isn't "how much does batching cost"
     but "does the model comfortably fit at all" -- see the module
     docstring / project notes for that discussion.
+
+    transforms, if given: a list (aligned with image_paths) of PIL->PIL
+    callables applied right after loading, before the processor ever sees
+    the image -- see build_augmentation_transform. Purely pixel-level
+    (color/noise/blur), never geometric, so the object's pixel footprint
+    and hence every downstream token-position assumption (object_location.
+    json, find_image_token_positions) stays exactly valid unchanged.
     """
     images = [Image.open(p).convert("RGB") for p in image_paths]
+    if transforms is not None:
+        images = [t(img) for t, img in zip(transforms, images)]
     messages_batch = [
         [{"role": "user", "content": [{"type": "image"}, {"type": "text", "text": DUMMY_QUESTION}]}]
         for _ in images
@@ -249,7 +292,14 @@ def extract_batch(model, processor, image_paths, token_sets, grid, device, image
             )
 
     with torch.no_grad():
-        outputs = model(**inputs, output_hidden_states=True, use_cache=False)
+        # logits_to_keep=1: only outputs.hidden_states is ever read below --
+        # without this, the model computes a full [batch, seq_len, vocab_size]
+        # lm_head projection (vocab_size=151936 >> hidden_dim=3584) at EVERY
+        # sequence position for nothing, dominating the forward pass's cost
+        # for no reason (measured: ~30min for 64 images at batch_size=32
+        # without this, vs. the sub-second/image a hidden-states-only forward
+        # pass should cost -- see build_external_flag_pool.py's smoke test).
+        outputs = model(**inputs, output_hidden_states=True, use_cache=False, logits_to_keep=1)
 
     # outputs.hidden_states: tuple of (num_decoder_layers + 1) tensors, each
     # [batch, seq_len, hidden_dim]. Index 0 = embedding output (pre-layer-1);
@@ -291,12 +341,33 @@ def main():
     ap.add_argument("--dry_run", action="store_true",
                      help="Skip loading the model entirely -- just validate that the entity's "
                           "images/ground_truth.json/object_location.json line up.")
+    ap.add_argument("--augment_variants", type=int, default=0,
+                     help="If >0, build an AUGMENTED POOL instead of the real per-image activation file: "
+                          "each real image contributes this many pixel-perturbed variants (see "
+                          "build_augmentation_transform), no unperturbed copy included. Meant only to give "
+                          "fit_dictionaries.py a bigger training pool -- output defaults to a distinctly-named "
+                          "*_augmented_pool_x<N>.pt file, and item_codes become '<code>__augI' pseudo-codes "
+                          "(never matched against ground_truth.json).")
+    ap.add_argument("--augment_seed", type=int, default=0)
     args = ap.parse_args()
 
     token_set_names = args.token_sets.split(",") if args.token_sets else None
     codes, image_paths, token_sets, grid = load_entity_metadata(args.vade_root, args.entity, token_set_names)
     if args.limit:
         codes, image_paths = codes[:args.limit], image_paths[:args.limit]
+
+    transforms_by_idx = None
+    if args.augment_variants > 0:
+        K = args.augment_variants
+        aug_codes, aug_paths, aug_transforms = [], [], []
+        for i, (code, path) in enumerate(zip(codes, image_paths)):
+            for v in range(K):
+                aug_codes.append(f"{code}__aug{v}")
+                aug_paths.append(path)
+                aug_transforms.append(build_augmentation_transform(seed=args.augment_seed * 1_000_003 + i * K + v))
+        codes, image_paths, transforms_by_idx = aug_codes, aug_paths, aug_transforms
+        print(f"--augment_variants={K}: expanded to {len(codes)} pixel-perturbed image variants "
+              f"(no unperturbed copies) for dictionary-training-pool extraction")
 
     set_summary = ", ".join(f"{name}={len(idx)}" for name, idx in token_sets.items())
     print(f"VADE root: {args.vade_root}")
@@ -335,7 +406,10 @@ def main():
     for batch_start in range(0, len(pairs), args.batch_size):
         batch = pairs[batch_start:batch_start + args.batch_size]
         batch_codes, batch_paths = zip(*batch)
-        per_set = extract_batch(model, processor, list(batch_paths), token_sets, grid, device, image_token_id)
+        batch_transforms = (transforms_by_idx[batch_start:batch_start + args.batch_size]
+                             if transforms_by_idx is not None else None)
+        per_set = extract_batch(model, processor, list(batch_paths), token_sets, grid, device, image_token_id,
+                                 transforms=batch_transforms)
         bs = len(batch)
         for name, acts in per_set.items():  # acts: [bs, num_layers+1, n_tokens, hidden_dim]
             if all_layers_by_set[name] is None:
@@ -346,9 +420,12 @@ def main():
         pbar.update(bs)
     pbar.close()
 
-    output = args.output or os.path.join(
-        REPO_ROOT, "methods", "activations",
-        f"{args.entity}_{args.model_id.split('/')[-1]}_all_layers.pt")
+    model_tag = args.model_id.split('/')[-1]
+    if args.augment_variants > 0:
+        default_name = f"{args.entity}_{model_tag}_augmented_pool_x{args.augment_variants}.pt"
+    else:
+        default_name = f"{args.entity}_{model_tag}_all_layers.pt"
+    output = args.output or os.path.join(REPO_ROOT, "methods", "activations", default_name)
     os.makedirs(os.path.dirname(output), exist_ok=True)
     first_set = next(iter(all_layers_by_set.values()))
     torch.save({
@@ -362,6 +439,9 @@ def main():
         "entity": args.entity,
         "hidden_dim": first_set.shape[-1],
         "num_layers": first_set.shape[1] - 1,
+        "is_augmented_pool": args.augment_variants > 0,  # item_codes are '<code>__augI' pseudo-codes if so --
+                                                          # never matched against ground_truth.json; training-only.
+        "augment_variants": args.augment_variants,
     }, output)
     shapes = {name: tuple(t.shape) for name, t in all_layers_by_set.items()}
     print(f"wrote {output}  shapes={shapes}")

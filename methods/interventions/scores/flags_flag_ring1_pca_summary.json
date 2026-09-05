@@ -1,0 +1,52 @@
+{
+  "predictions_file": "/home/ahl4090/DAS-Explorations/VADE-evals/methods/interventions/flags_flag_ring1_pca_predictions.jsonl",
+  "entity": "flags",
+  "attribute": "all",
+  "split": "test",
+  "n_missing_predictions": 42156,
+  "by_target_attribute": {
+    "language": {
+      "overall": {
+        "n": 14052,
+        "pct_accuracy": 31.0,
+        "cause_accuracy": 51.1,
+        "iso_mean_accuracy": 24.8,
+        "final_score": 38.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 26.4,
+          "pct_matches_source": 61.0,
+          "pct_matches_base": 26.4
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 29.1,
+          "pct_matches_source": 67.0,
+          "pct_matches_base": 29.1
+        },
+        {
+          "queried": "currency",
+          "n": 3564,
+          "is_cause": false,
+          "pct_accuracy": 19.0,
+          "pct_matches_source": 62.3,
+          "pct_matches_base": 19.0
+        },
+        {
+          "queried": "language",
+          "n": 3288,
+          "is_cause": true,
+          "pct_accuracy": 51.1,
+          "pct_matches_source": 51.1,
+          "pct_matches_base": 27.8
+        }
+      ]
+    }
+  }
+}
