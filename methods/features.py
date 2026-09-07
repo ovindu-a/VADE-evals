@@ -62,7 +62,26 @@ def load_activations(entity, model_tag=DEFAULT_MODEL_TAG, activations_dir=ACTIVA
     if not os.path.exists(path):
         raise FileNotFoundError(
             f"No activations file at {path!r} -- run methods/sae.py --entity {entity} first.")
-    return torch.load(path, map_location="cpu", weights_only=False)
+    return load_pool_file(path)
+
+
+def load_pool_file(path):
+    """Loads any pool/activations .pt file, transparently handling both
+    small in-RAM pools (activations_by_token_set already holds real
+    tensors) and large memmap-backed pools (is_memmap_pool=True, written
+    by build_external_flag_pool.py) -- for the latter, activations_by_
+    token_set is reconstructed as read-only np.memmap arrays from sibling
+    .npy files next to `path`, so a huge pool (order of 100s of GB across
+    all layers/token-sets on disk) never needs to fit in RAM at once --
+    get_layer_slice() only pages in the one layer it actually reads."""
+    data = torch.load(path, map_location="cpu", weights_only=False)
+    if data.get("is_memmap_pool"):
+        base_dir = os.path.dirname(os.path.abspath(path))
+        data["activations_by_token_set"] = {
+            name: np.load(os.path.join(base_dir, relpath), mmap_mode="r")
+            for name, relpath in data["memmap_paths"].items()
+        }
+    return data
 
 
 def augmented_pool_path(entity, n_variants, model_tag=DEFAULT_MODEL_TAG, activations_dir=ACTIVATIONS_DIR):
@@ -80,18 +99,32 @@ def load_augmented_pool(entity, n_variants, model_tag=DEFAULT_MODEL_TAG, activat
         raise FileNotFoundError(
             f"No augmented pool at {path!r} -- run methods/sae.py --entity {entity} "
             f"--augment_variants {n_variants} first.")
-    return torch.load(path, map_location="cpu", weights_only=False)
+    return load_pool_file(path)
 
 
-def get_layer_slice(data, token_set, layer):
+def get_layer_slice(data, token_set, layer, image_indices=None):
     """[n_images, n_tokens, hidden_dim] float32 numpy array for one
-    (token_set, layer) out of a load_activations() dict."""
+    (token_set, layer) out of a load_activations()/load_pool_file() dict.
+
+    acts is either a real torch tensor (small pools/entity activations,
+    already fully in RAM) or a read-only np.memmap array (large pools --
+    see load_pool_file). Either way, only THIS layer's slice gets
+    materialized as a real in-RAM array here -- for a memmap that's the
+    entire point: a huge pool's other 28 layers are never touched.
+
+    image_indices, if given, subsets the image axis at the same time as the
+    layer axis -- for a memmap pool this reads only those images off disk
+    rather than materializing every image just to subsample afterwards
+    (see build_training_matrix's pool_max_images)."""
     acts = data["activations_by_token_set"][token_set]  # [n_images, n_layers+1, n_tokens, hidden_dim]
     num_layers = data["num_layers"]
     if not (0 <= layer <= num_layers):
         raise ValueError(f"layer {layer} out of range [0, {num_layers}] "
                           f"(0=embedding output, i=after decoder layer i)")
-    return acts[:, layer, :, :].numpy().astype(np.float32)
+    layer_slice = acts[image_indices, layer, :, :] if image_indices is not None else acts[:, layer, :, :]
+    if hasattr(layer_slice, "numpy"):  # torch tensor
+        return layer_slice.numpy().astype(np.float32)
+    return np.array(layer_slice, dtype=np.float32)  # memmap -> real in-RAM copy of just this slice
 
 
 def flatten_positions(X):
@@ -157,13 +190,25 @@ def fit_pca(X, k):
     """X: [n_rows, hidden_dim] (already flattened over positions/images).
     k is capped to min(k, n_rows, hidden_dim) -- sklearn's PCA would raise
     otherwise, and flags/brands/animals' sample counts (a few hundred to a
-    couple thousand rows) don't support RAVEL-scale k like 512/2048."""
+    couple thousand rows) don't support RAVEL-scale k like 512/2048.
+
+    svd_solver="full" computes U at shape [n_rows, min(n_rows, hidden_dim)]
+    regardless of k -- fine for the real-only case (a few hundred/thousand
+    rows: U is at most a few thousand x 3584) but a several-GB allocation
+    once an external pool pushes n_rows into the hundreds of thousands,
+    on top of X itself -- enough to OOM this box. Randomized SVD only ever
+    materializes n_rows x k_eff, independent of n_rows' magnitude, so switch
+    once X is large enough for the difference to matter; components are
+    still variance-ordered either way, so slice_pca's exact-prefix reuse
+    still applies to a "randomized" fit, just an approximate one."""
     from sklearn.decomposition import PCA
 
     k_eff = min(k, X.shape[0], X.shape[1])
-    pca = PCA(n_components=k_eff, svd_solver="full", random_state=0)
+    solver = "full" if X.shape[0] <= 20000 else "randomized"
+    pca = PCA(n_components=k_eff, svd_solver=solver, random_state=0)
     pca.fit(X)
-    meta = {"k_requested": k, "k_effective": k_eff, "n_rows": X.shape[0], "hidden_dim": X.shape[1]}
+    meta = {"k_requested": k, "k_effective": k_eff, "n_rows": X.shape[0], "hidden_dim": X.shape[1],
+            "svd_solver": solver}
     dictionary = PCADictionary(pca.mean_.astype(np.float32), pca.components_.astype(np.float32),
                                 pca.explained_variance_ratio_.astype(np.float32), meta)
     metrics = {"k": k_eff, "cumulative_explained_variance": float(pca.explained_variance_ratio_.sum())}
@@ -385,7 +430,7 @@ def load_labels(vade_root, entity, item_codes):
     line up by construction -- this function asserts that rather than
     assuming it silently).
     """
-    gt_path = os.path.join(vade_root, entity, "ground_truth.json")
+    gt_path = os.path.join(vade_root, "data", entity, "ground_truth.json")
     with open(gt_path) as f:
         gt = json.load(f)
     items_key = ITEMS_KEY_BY_ENTITY[entity]

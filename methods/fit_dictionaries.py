@@ -67,22 +67,47 @@ import numpy as np
 import torch
 
 from features import (DICTIONARIES_DIR, dictionary_path, fit_pca, fit_sae, flatten_positions, get_layer_slice,
-                       load_activations, load_augmented_pool, slice_pca)
+                       load_activations, load_augmented_pool, load_pool_file, slice_pca)
 
 
 def parse_int_list(s):
     return [int(x) for x in s.split(",") if x.strip()]
 
 
-def build_training_matrix(data, aug_pools, token_set, layer):
+def build_training_matrix(data, aug_pools, token_set, layer, pool_max_images=None, seed=0):
     """Flattened per-position training rows for one (token_set, layer):
     the real entity's own rows, plus every extra pool's (if any) --
     concatenated so a bigger, more varied corpus supplements the real
     handful of images. See sae.py's --augment_variants docstring and
-    build_external_flag_pool.py."""
+    build_external_flag_pool.py.
+
+    An extra pool contributes ALL of its own token sets' rows, not just
+    whichever one happens to share `token_set`'s name -- the dictionary
+    is layer-specific, not position-specific (it just wants representative
+    example vectors of "what does this layer's residual stream look like
+    on flag content"), so e.g. build_external_flag_pool.py's full-canvas
+    'full_image' pool (144 real positions/image) usefully supplements
+    fitting BOTH the real entity's 'flag_only' (8) and 'flag_ring1' (24)
+    dictionaries, even though none of its own token set names match.
+
+    pool_max_images caps how many of an oversized pool's images get pulled
+    in per fit (a fixed random subset, same seed every layer so every
+    layer/token_set sees the same images): a 6500-image x 144-token pool is
+    ~13GB float32 once flattened for a SINGLE layer, and build_training_
+    matrix is called once per layer -- on this box's 15GB RAM, letting the
+    full pool through would OOM. Subsetting at the image level lets
+    get_layer_slice read only the sampled images off the memmap in the
+    first place, rather than materializing everything just to downsample
+    after the fact."""
     parts = [flatten_positions(get_layer_slice(data, token_set, layer))]
     for pool in aug_pools:
-        parts.append(flatten_positions(get_layer_slice(pool, token_set, layer)))
+        for pool_token_set, acts in pool["activations_by_token_set"].items():
+            n_images = acts.shape[0]
+            image_indices = None
+            if pool_max_images and n_images > pool_max_images:
+                rng = np.random.RandomState(seed)
+                image_indices = np.sort(rng.choice(n_images, pool_max_images, replace=False))
+            parts.append(flatten_positions(get_layer_slice(pool, pool_token_set, layer, image_indices)))
     return np.concatenate(parts, axis=0) if len(parts) > 1 else parts[0]
 
 
@@ -122,6 +147,10 @@ def main():
                           "output -- see e.g. build_external_flag_pool.py) to concatenate in as well, on top "
                           "of --augmented_pool_variants if both are given. Lets an external, non-synthetic "
                           "pool (real photos composited into VADE's canvas, say) be mixed in too.")
+    ap.add_argument("--pool_max_images", type=int, default=1000,
+                     help="Cap on how many images a single extra pool contributes per fit (random subset, "
+                          "fixed seed across layers) -- see build_training_matrix docstring for why "
+                          "(memory). 0 disables the cap.")
     args = ap.parse_args()
 
     data = load_activations(args.entity, args.model_tag)
@@ -130,7 +159,7 @@ def main():
         aug_pools.append(load_augmented_pool(args.entity, args.augmented_pool_variants, args.model_tag))
     if args.augmented_pool_paths:
         for p in args.augmented_pool_paths.split(","):
-            aug_pools.append(torch.load(p, map_location="cpu", weights_only=False))
+            aug_pools.append(load_pool_file(p))
     token_sets = args.token_sets.split(",") if args.token_sets else list(data["activations_by_token_set"])
     num_layers = data["num_layers"]
     pca_layers = list(range(num_layers + 1)) if args.layers == "all" else parse_int_list(args.layers)
@@ -150,7 +179,7 @@ def main():
     metrics_log = []
     for token_set in token_sets:
         for layer in (pca_layers if args.method in ("pca", "both") else []):
-            X = build_training_matrix(data, aug_pools, token_set, layer)
+            X = build_training_matrix(data, aug_pools, token_set, layer, args.pool_max_images or None, args.seed)
 
             out_paths = {k: dictionary_path(args.entity, token_set, layer, "pca", k, args.output_dir)
                          for k in pca_k_grid}
@@ -181,7 +210,7 @@ def main():
                       f"({fit_seconds}s for the shared fit) -> {out_path}")
 
         for layer in (sae_layers if args.method in ("sae", "both") else []):
-            X = build_training_matrix(data, aug_pools, token_set, layer)
+            X = build_training_matrix(data, aug_pools, token_set, layer, args.pool_max_images or None, args.seed)
             dict_size = args.sae_dict_size or 2 * data["hidden_dim"]
             out_path = dictionary_path(args.entity, token_set, layer, "sae", dict_size, args.output_dir)
             if os.path.exists(out_path) and not args.overwrite:

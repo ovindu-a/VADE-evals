@@ -56,7 +56,7 @@ IMAGE_TOKEN = "<|image_pad|>"
 # ---------------------------------------------------------------------------
 
 def load_entity_assets(vade_root, entity):
-    entity_dir = os.path.join(vade_root, entity)
+    entity_dir = os.path.join(vade_root, "data", entity)
     gt = json.load(open(os.path.join(entity_dir, "ground_truth.json")))
     loc = json.load(open(os.path.join(entity_dir, "object_location.json")))
     templates = json.load(open(os.path.join(entity_dir, "prompt_templates.json")))

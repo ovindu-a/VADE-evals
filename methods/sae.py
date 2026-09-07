@@ -148,7 +148,7 @@ def load_entity_metadata(vade_root, entity, token_set_names=None):
     (must exist in object_location.json's object_token_indices);
     None means "all sets object_location.json defines for this entity".
     """
-    entity_dir = os.path.join(vade_root, entity)
+    entity_dir = os.path.join(vade_root, "data", entity)
     if not os.path.isdir(entity_dir):
         raise FileNotFoundError(
             f"No entity directory at {entity_dir!r}. Pass --vade_root to point at "
