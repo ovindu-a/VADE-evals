@@ -121,3 +121,200 @@ too much into "no winner" for an attribute.
 python methods/select_features.py --entity flags --token_set flag_only --dict_method pca
 python methods/select_features.py --entity flags --token_set flag_only --dict_method sae
 ```
+
+## methods/intervene.py
+
+Phase-B step 5, the actual causal intervention. For every attribute with a
+winner in `select_features.py`'s `winners.json`: runs the source image
+through the model once, caches its hidden state at the winning layer, then
+on the base image's forward pass patches in the winning dictionary-feature
+subset (`encode(base)`/`encode(source)`, copy over only the winning dims,
+`decode`) at the object's token positions, and lets the model generate
+freely. Writes predictions in `VADE/eval/score.py`'s format. No training
+involved -- the "intervention" is just an encode/swap/decode through the
+already-fitted dictionary.
+
+```
+python methods/intervene.py --entity flags --token_set flag_only \
+    --dict_method sae --out methods/interventions/flags_flag_only_sae_predictions.jsonl
+```
+
+Predictions files are append-and-resume: re-running the same command skips
+`(attribute, row_index)` pairs already present in `--out`, so an interrupted
+run just picks up where it left off.
+
+## eval/score.py (in the sibling VADE repo)
+
+Method-agnostic scorer -- takes any predictions JSONL (the format above) and
+reports `cause` (did the target attribute flip to the source's value) and
+`iso` (did every *other* attribute stay at the base's value) accuracy per
+attribute, plus `final_score = 1/2(cause + mean(iso))`.
+
+```
+python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only_sae_predictions.jsonl \
+    --entity flags --attribute all
+```
+
+Writes `<predictions-file-stem>_summary.json` and `.md` next to the
+predictions file (or under `--out_dir`).
+
+## Reproducing results on a fresh machine from the Kaggle-pool SAE checkpoints
+
+This section is a self-contained runbook for picking up the pipeline on a
+**different machine** starting from the SAE dictionaries fit against the
+Kaggle "country-flags-in-the-wild" augmentation pool (6,500 real photos,
+full 144-token canvas, mixed into training alongside VADE's own 84 flag
+images -- see `fit_dictionaries.py`'s docstring). Those checkpoints
+reconstruct meaningfully better than the real-only-84-image SAEs (see the
+sweep numbers in `methods/dictionaries_kaggle_pool/flags/fit_log.jsonl`),
+so this is the config worth running interventions against first. Every
+command below is meant to be run as-is, in order, from a clean checkout.
+
+### 0. Prerequisites
+
+- A CUDA GPU (Qwen2.5-VL-7B-Instruct + generation; ~20GB+ VRAM recommended).
+- `rclone` installed (`wget -qO- cli.runpod.net | sudo bash` works, or your
+  distro's package manager) if pulling the checkpoints from Google Drive.
+- Python 3.10+.
+
+### 1. Clone both repos as siblings
+
+```
+git clone https://github.com/Shaveen12/VADE.git
+git clone https://github.com/ovindu-a/VADE-evals.git
+```
+
+They must sit next to each other (`VADE/` and `VADE-evals/` as siblings) --
+every script here defaults `--vade_root` to `../VADE` relative to this repo,
+overridable via the `VADE_ROOT` env var if you need a different layout.
+`VADE/data/` (images, ground_truth.json, object_location.json,
+prompt_templates.json, tuples/) is tracked directly in the VADE repo, so
+cloning it is all that's needed to get the benchmark data -- no separate
+download step.
+
+### 2. Python environment
+
+```
+cd VADE-evals
+python3 -m venv .venv
+source .venv/bin/activate
+pip install torch torchvision "transformers>=4.49" accelerate \
+    scikit-learn pillow numpy tqdm huggingface_hub
+```
+
+(This repo pins no `requirements.txt`; the versions this pipeline was
+built/verified against are torch 2.13, transformers 5.16, scikit-learn 1.9 --
+install those explicitly if you hit an incompatibility with `latest`.)
+
+### 3. Download the SAE checkpoints
+
+The fitted dictionaries (`dictionaries_kaggle_pool/`, ~11GB, 58 `.pt` files
++ `fit_log.jsonl`) are too large to live in git (each checkpoint is
+individually ~200MB, over GitHub's 100MB/file limit) and were pushed to
+Google Drive instead:
+
+```
+rclone config create gdrive-transfer drive scope=drive.file \
+    token='<paste a token from `rclone authorize "drive"`, run in a browser-capable shell>'
+
+rclone copy --progress gdrive-transfer:VADE-evals-sae-checkpoints/dictionaries_kaggle_pool \
+    methods/dictionaries_kaggle_pool
+```
+
+If a bulk copy stalls with climbing ETAs (minutes turning into "weeks"),
+that's Google Drive's shared per-minute API quota for rclone's default
+OAuth client throttling concurrent/many-small-request transfers -- not a
+network problem. Fixes, cheapest first: (a) use `--drive-chunk-size 256M`
+(each of these checkpoints is ~196MB, so this makes every upload/download a
+single request instead of ~25 chunked ones), (b) drop concurrency
+(`--transfers 2 --checkers 1`), (c) wrap the command in a restart loop since
+`rclone copy` skips files already present:
+```
+while ! timeout 90 rclone copy --drive-chunk-size 256M --transfers 2 --checkers 1 \
+    gdrive-transfer:VADE-evals-sae-checkpoints/dictionaries_kaggle_pool methods/dictionaries_kaggle_pool; do
+  sleep 3
+done
+```
+Verify the transfer matches before moving on: `rclone size
+gdrive-transfer:VADE-evals-sae-checkpoints/dictionaries_kaggle_pool` should
+report 59 objects / ~11.1 GiB, matching `find methods/dictionaries_kaggle_pool -type f | wc -l`.
+
+### 4. Pre-fetch the model weights (optional, but avoids a silent 16GB first-run download)
+
+```
+python -c "from huggingface_hub import snapshot_download; \
+    snapshot_download('Qwen/Qwen2.5-VL-7B-Instruct')"
+```
+
+### 5. Re-extract the real (non-augmented) entity activations
+
+`select_features.py` always scores against the *real* 84 flag images and
+their real ground-truth labels (never the Kaggle pool, which was only ever
+a training-data supplement for `fit_dictionaries.py`) -- so it needs
+`methods/activations/flags_Qwen2.5-VL-7B-Instruct_all_layers.pt` on disk.
+This is cheap and fast to regenerate locally rather than transfer:
+
+```
+python methods/sae.py --entity flags --dry_run     # sanity-check paths/images resolve
+python methods/sae.py --entity flags               # full extraction, ~1GB, well under a minute on a GPU
+```
+
+### 6. Feature selection against the Kaggle-pool SAE dictionaries
+
+Run once per token set. Because this SAE was fit at **every** layer
+(0-28), not just the 4/14/24 subset from the original real-only run, expect
+a wider sweep (more `sweep.jsonl` rows, longer runtime) than the earlier
+examples in this README:
+
+```
+python methods/select_features.py --entity flags --token_set flag_only \
+    --dict_method sae --dictionaries_dir methods/dictionaries_kaggle_pool
+
+python methods/select_features.py --entity flags --token_set flag_ring1 \
+    --dict_method sae --dictionaries_dir methods/dictionaries_kaggle_pool
+```
+
+Each writes `methods/selections/flags/<token_set>_sae/{sweep.jsonl,winners.json}`.
+Check the printed per-attribute winner lines (or `winners.json` directly) --
+an attribute with "no winner" means no (layer, direction, C) combination
+scored (see the note above about `capital`/`calling_code`/`currency` having
+too little within-class repetition on flags' 84-image sample for a
+held-out CV split; this is a property of the dataset, not a bug).
+
+### 7. Run the intervention
+
+```
+python methods/intervene.py --entity flags --token_set flag_only --dict_method sae \
+    --dictionaries_dir methods/dictionaries_kaggle_pool \
+    --out methods/interventions/flags_flag_only_sae_kagglepool_predictions.jsonl
+
+python methods/intervene.py --entity flags --token_set flag_ring1 --dict_method sae \
+    --dictionaries_dir methods/dictionaries_kaggle_pool \
+    --out methods/interventions/flags_flag_ring1_sae_kagglepool_predictions.jsonl
+```
+
+Add `--limit 5` first if you want a fast smoke test before committing to a
+full run (flags' test split is a few thousand rows across 4 attributes).
+
+### 8. Score it
+
+```
+python ../VADE/eval/score.py \
+    --predictions methods/interventions/flags_flag_only_sae_kagglepool_predictions.jsonl \
+    --entity flags --attribute all --method_name sae_kagglepool_flag_only
+
+python ../VADE/eval/score.py \
+    --predictions methods/interventions/flags_flag_ring1_sae_kagglepool_predictions.jsonl \
+    --entity flags --attribute all --method_name sae_kagglepool_flag_ring1
+```
+
+This writes `sae_kagglepool_flag_only_summary.{json,md}` (and the
+`flag_ring1` counterpart) next to the predictions files, with `cause`/`iso`
+per attribute and the overall `final_score = 1/2(cause + mean(iso))`. That
+final number is the end of the pipeline -- it's what should be compared
+against the existing DAS baseline (see VADE's own `results/` for those
+numbers) and against the real-only (non-Kaggle-pool) SAE run, i.e. the same
+steps 6-8 but with `--dictionaries_dir methods/dictionaries` (default) and
+no `_kagglepool` suffix, to see whether the extra training pool actually
+translated into better causal intervention accuracy, not just better
+unsupervised reconstruction.
