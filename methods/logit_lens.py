@@ -130,8 +130,11 @@ def main():
     ap.add_argument("--split", default="test", choices=["test", "train"])
     ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
-    ap.add_argument("--limit", type=int, default=5, help="Number of example rows -- this is an ad hoc "
-                     "probe, not a sweep; keep this small.")
+    ap.add_argument("--limit", type=int, default=5, help="Number of DISTINCT example images -- this is "
+                     "an ad hoc probe, not a sweep; keep this small.")
+    ap.add_argument("--questions_per_image", type=int, default=1, help="Number of differently-worded "
+                     "questions (template_ids) to run per selected image, instead of just one -- total "
+                     "rows run is up to --limit * --questions_per_image.")
     ap.add_argument("--layers", type=int, nargs="+", default=None,
                      help="Decoder layer indices to report (0=embedding output .. n_layers=the real "
                           "output; 28 for Qwen2.5-VL-7B). Defaults to EVERY layer -- unlike "
@@ -148,7 +151,7 @@ def main():
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if not args.allow_unpruned else None)
     rows = load_probe_rows(entity_assets, args.attribute, args.split, tuples_dir=tuples_dir, limit=args.limit,
-                            one_per_image=True)
+                            one_per_image=True, templates_per_image=args.questions_per_image)
     print(f"[logit_lens] entity={args.entity} attribute={args.attribute} positions={args.positions}: "
           f"{len(rows)} example row(s)")
     for r in rows:

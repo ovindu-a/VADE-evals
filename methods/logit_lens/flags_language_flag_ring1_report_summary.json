@@ -2,152 +2,152 @@
   "entity": "flags",
   "attribute": "language",
   "positions": "flag_ring1",
-  "n_rows": 5,
+  "n_rows": 36,
   "per_layer": {
     "0": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 38540.125
+      "mean_gold_rank": 52035.0
     },
     "1": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 58982.75
+      "mean_gold_rank": 57634.88888888889
     },
     "2": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 56932.625
+      "mean_gold_rank": 55409.91111111111
     },
     "3": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 59182.0
+      "mean_gold_rank": 59502.066666666666
     },
     "4": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 66262.25
+      "mean_gold_rank": 66691.97777777778
     },
     "5": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 73827.25
+      "mean_gold_rank": 72404.2
     },
     "6": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 65433.0
+      "mean_gold_rank": 69143.26666666666
     },
     "7": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 49910.75
+      "mean_gold_rank": 57518.48888888889
     },
     "8": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 53864.875
+      "mean_gold_rank": 50960.02222222222
     },
     "9": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 46164.875
+      "mean_gold_rank": 49683.22222222222
     },
     "10": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 36234.375
+      "mean_gold_rank": 39697.02222222222
     },
     "11": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 38119.25
+      "mean_gold_rank": 42347.177777777775
     },
     "12": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 33231.0
+      "mean_gold_rank": 36773.37777777778
     },
     "13": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 32568.125
+      "mean_gold_rank": 33003.62222222222
     },
     "14": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 36069.5
+      "mean_gold_rank": 35880.24444444444
     },
     "15": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 42133.75
+      "mean_gold_rank": 44890.57777777778
     },
     "16": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 43540.0
+      "mean_gold_rank": 45848.08888888889
     },
     "17": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 51189.25
+      "mean_gold_rank": 56772.26666666667
     },
     "18": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 51745.375
+      "mean_gold_rank": 56975.2
     },
     "19": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 49449.875
+      "mean_gold_rank": 60145.22222222222
     },
     "20": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 37302.0
+      "mean_gold_rank": 44265.08888888889
     },
     "21": {
-      "n": 8,
+      "n": 45,
       "top1_match_rate": 0.0,
-      "mean_gold_rank": 44217.375
+      "mean_gold_rank": 43392.42222222222
     },
     "22": {
-      "n": 8,
-      "top1_match_rate": 0.0,
-      "mean_gold_rank": 14970.75
+      "n": 45,
+      "top1_match_rate": 0.044444444444444446,
+      "mean_gold_rank": 12267.577777777778
     },
     "23": {
-      "n": 8,
-      "top1_match_rate": 0.125,
-      "mean_gold_rank": 13821.625
+      "n": 45,
+      "top1_match_rate": 0.06666666666666667,
+      "mean_gold_rank": 8089.622222222222
     },
     "24": {
-      "n": 8,
-      "top1_match_rate": 0.125,
-      "mean_gold_rank": 7457.5
+      "n": 45,
+      "top1_match_rate": 0.06666666666666667,
+      "mean_gold_rank": 4272.577777777778
     },
     "25": {
-      "n": 8,
-      "top1_match_rate": 0.125,
-      "mean_gold_rank": 4206.375
+      "n": 45,
+      "top1_match_rate": 0.15555555555555556,
+      "mean_gold_rank": 2322.088888888889
     },
     "26": {
-      "n": 8,
-      "top1_match_rate": 0.75,
-      "mean_gold_rank": 1606.75
+      "n": 45,
+      "top1_match_rate": 0.7777777777777778,
+      "mean_gold_rank": 760.0888888888888
     },
     "27": {
-      "n": 8,
-      "top1_match_rate": 0.75,
-      "mean_gold_rank": 74.625
+      "n": 45,
+      "top1_match_rate": 0.7777777777777778,
+      "mean_gold_rank": 36.37777777777778
     },
     "28": {
-      "n": 8,
-      "top1_match_rate": 0.875,
-      "mean_gold_rank": 15.625
+      "n": 45,
+      "top1_match_rate": 0.9111111111111111,
+      "mean_gold_rank": 8.511111111111111
     }
   }
 }

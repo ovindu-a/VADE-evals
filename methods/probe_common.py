@@ -55,7 +55,8 @@ def attribute_mention_col(adapter, processor, attribute, question, prefill, n_im
     return adapter.find_last_phrase_token_col(processor, question, prefill, n_image_tokens, phrases)
 
 
-def load_probe_rows(entity_assets, attribute, split, tuples_dir=None, limit=None, one_per_image=False):
+def load_probe_rows(entity_assets, attribute, split, tuples_dir=None, limit=None, one_per_image=False,
+                     templates_per_image=1):
     """One row per unique (base image, template_id) whose OWN question is
     being asked (queried == target_attribute -- VADE's tuples also contain
     "iso" rows asking about some OTHER attribute, e.g. to test whether an
@@ -77,10 +78,18 @@ def load_probe_rows(entity_assets, attribute, split, tuples_dir=None, limit=None
     to the next -- so plain (base, template_id) dedup plus a small `limit`
     silently returns N phrasings of the SAME image rather than N different
     images (verified against flags/language: row_index 0-4 are all
-    base=AO). Pass one_per_image=True to further keep only the first
-    template_id seen per base image, so a small `limit` actually samples
-    across distinct examples -- what an ad hoc probe over "a few rows"
-    almost always wants (see attention_maps.py).
+    base=AO). Pass one_per_image=True so `limit` counts DISTINCT images
+    rather than raw rows -- what an ad hoc probe over "a few rows" almost
+    always wants (see attention_maps.py).
+
+    templates_per_image: only consulted when one_per_image=True. Keeps up
+    to this many distinct template_ids (i.e. differently-worded questions)
+    per selected image instead of just the first one seen -- "N images,
+    each asked K ways" rather than "N images, one question each". `limit`
+    still caps the number of DISTINCT IMAGES selected, not the total row
+    count, so the returned list can be up to limit * templates_per_image
+    rows long (fewer if an image has less than templates_per_image
+    template variants in this split).
     """
     from .common.entities import load_tuples
     rows = load_tuples(entity_assets, attribute, split, tuples_dir=tuples_dir)
@@ -88,10 +97,24 @@ def load_probe_rows(entity_assets, attribute, split, tuples_dir=None, limit=None
         r.setdefault("target_attribute", attribute)
     rows = [r for r in rows if r["queried"] == r["target_attribute"]]
 
+    if one_per_image:
+        per_image_count = {}
+        deduped = []
+        for r in sorted(rows, key=lambda r: r["row_index"]):
+            base = r["base"]
+            count = per_image_count.get(base, 0)
+            if count == 0 and limit is not None and len(per_image_count) >= limit:
+                continue  # already have `limit` distinct images -- a new image doesn't get in
+            if count >= templates_per_image:
+                continue  # this image already contributed its quota of question phrasings
+            per_image_count[base] = count + 1
+            deduped.append(r)
+        return deduped
+
     seen = set()
     deduped = []
     for r in sorted(rows, key=lambda r: r["row_index"]):
-        key = r["base"] if one_per_image else (r["base"], r["template_id"])
+        key = (r["base"], r["template_id"])
         if key in seen:
             continue
         seen.add(key)
