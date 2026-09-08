@@ -16,7 +16,7 @@ prompt." That requires the real question.
 import torch
 
 from .common.entities import build_batch
-from .common.targets import MAX_ANSWER_TOKENS, build_teacher_forced_extension
+from .common.targets import MAX_ANSWER_TOKENS, build_teacher_forced_extension, derive_gold_token_ids
 
 # Candidate English phrasings that name each flags attribute in its OWN question -- entity/prompt
 # content, not a model concern (see adapters/qwen2_5_vl.py's find_last_phrase_token_col, which does
@@ -200,3 +200,39 @@ def token_groups_for_row(seq_len, attention_mask_row, image_token_id, input_ids_
         else:
             groups["text"].append(col)
     return {k: torch.tensor(v, dtype=torch.long) for k, v in groups.items()}
+
+
+def other_attribute_gold_toks(entity_assets, tokenizer, row):
+    """For row's base image, returns {other_attribute: gold_token_ids} for every OTHER scored
+    attribute of this entity (i.e. every entry of entity_assets.attributes except the one actually
+    being queried) -- tokenized as a continuation of THIS row's own prefill via
+    targets.derive_gold_token_ids, exactly like the queried attribute's own base_gold_toks.
+
+    Why tokenize against the CURRENT prefill rather than each attribute's own: the logit-lens
+    readout position this feeds (see logit_lens.py) is "the position right after THIS row's own
+    prefill" -- e.g. ". The official language is ___" -- so asking "what rank does capital's value
+    get at that exact position" only makes sense evaluated as a continuation of that SAME prefix
+    (BPE-correctly, via derive_gold_token_ids -- never by tokenizing the value in isolation, which
+    risks a leading-space/merge mismatch against how it would actually appear there). This is
+    necessarily a bit artificial (the value wouldn't grammatically continue "language is" for most
+    attributes), but it's exactly the right question for "does the model represent OTHER attributes'
+    answers at this position even though it wasn't asked" -- a probe of what's LATENT at that
+    residual-stream position, not of what's grammatical.
+
+    Only the attribute's raw ground_truth value is used (entity_assets.items[base][attr]) -- an
+    attribute missing from a given item (shouldn't happen for any of this project's built entities,
+    but not asserted here) is silently skipped rather than raising, since this is a diagnostic extra,
+    not the row's primary gold answer.
+    """
+    tmpl = entity_assets.template_lookup[row["queried"]][row["template_id"]]
+    prefill = tmpl["prefill"]
+    item = entity_assets.items[row["base"]]
+    out = {}
+    for attr in entity_assets.attributes:
+        if attr == row["target_attribute"]:
+            continue
+        value = item.get(attr)
+        if value is None:
+            continue
+        out[attr] = derive_gold_token_ids(tokenizer, prefill, str(value))
+    return out
