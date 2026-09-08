@@ -62,6 +62,12 @@ TEMP_END = 1e-7
 BATCH_SIZE = 4
 GRAD_ACCUM_STEPS = 16
 CHECKPOINT_EVERY_OPT_STEPS = 5
+# Unlike DAS's train.py (which this file otherwise ports near-verbatim), this prints a one-line
+# progress update every completed optimizer step -- with num_epochs defaulting to 1 and a real
+# tuples file running to thousands of rows, DAS's own per-epoch-only printing means total console
+# silence for the whole run until it's done. Same gap RESULTS.md documents having to patch into
+# select_features.py's layer sweep, for the same reason -- fixed here up front instead.
+PROGRESS_EVERY_OPT_STEPS = 1
 
 
 def dbm_results_dir(model_slug, entity, attribute, l1_coef, positions, pruned=False):
@@ -187,6 +193,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
 
     t_start = time.time()
+    opt_steps_this_call = 0  # for ETA below -- distinct from opt_steps_done, which persists across resumes
     ce_loss = None
     for epoch in range(start_epoch, num_epochs):
         if epoch == start_epoch and resumed_epoch_rows is not None:
@@ -232,6 +239,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
                 scheduler.step()
                 optimizer.zero_grad()
                 opt_steps_done += 1
+                opt_steps_this_call += 1
                 intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
                 log_f.write(json.dumps({
                     "epoch": epoch, "micro_step": global_micro_step, "opt_step": opt_steps_done,
@@ -239,6 +247,16 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
                     "temperature": intervention.get_temperature().item(), "lr": scheduler.get_last_lr()[0],
                 }) + "\n")
                 log_f.flush()
+
+                if opt_steps_done % PROGRESS_EVERY_OPT_STEPS == 0:
+                    elapsed = time.time() - t_start
+                    sec_per_opt_step = elapsed / opt_steps_this_call
+                    remaining_steps = max(t_total - opt_steps_done, 0)
+                    eta_min = sec_per_opt_step * remaining_steps / 60
+                    print(f"[progress] epoch={epoch} opt_step={opt_steps_done}/{t_total} "
+                          f"loss={accum_loss:.4f} ce={accum_ce:.4f} l1={accum_l1:.1f} "
+                          f"temp={intervention.get_temperature().item():.2e} lr={scheduler.get_last_lr()[0]:.2e} "
+                          f"elapsed={elapsed/60:.1f}min eta={eta_min:.1f}min", flush=True)
                 accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
 
                 opt_step_in_epoch = (mb + 1 - mb_start_this_epoch) // grad_accum_steps

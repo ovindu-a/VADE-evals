@@ -220,6 +220,14 @@ for flags, etc.) plus `last_token` -- the closest analogue of RAVEL's own
 `flag_only`/`flag_ring1` are this project's own extension into the
 image-object-span setting that PCA/SAE/DAS already use.
 
+`train.py` prints a `[progress] epoch=... opt_step=X/N loss=... ce=... l1=...
+temp=... lr=... elapsed=...min eta=...min` line every completed optimizer
+step (in addition to the full per-step record already written to
+`layer{L}_train_log.jsonl`) -- unlike VADE's own `das/train.py`, which only
+prints once per epoch, silent for however long a full epoch over a real
+tuples file takes otherwise. `tee_to_log` mirrors all of this to a file
+under this repo's own `logs/` tree too, so `tail -f` works on a detached run.
+
 Training requires VADE's own baseline-pruned tuples (`VADE/models/
 prune_tuples.py`, via `VADE/models/run_accuracy_sweep.py` first) by
 default, same as DAS -- pass `--allow_unpruned` to opt out. Trained
