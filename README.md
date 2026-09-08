@@ -25,12 +25,24 @@ VADE-evals/
                           adapters -- model/entity-agnostic infra (activation-patching hooks,
                           gold-token/teacher-forcing utilities, entity asset + batch loading,
                           per-entity source-activation caching, one ModelAdapter per model family).
-                          Shared by any gradient-trained intervention method (currently just dbm/);
+                          Shared by any gradient-trained intervention method (dbm/) AND by the
+                          read-only probes (probe_common.py/logit_lens.py/attention_maps.py) --
                           entirely separate code path from features.py/fit_dictionaries.py/
                           select_features.py above -- the PCA/SAE stack shares nothing with it.
     dbm/                  Differential Binary Masking (Cao et al. 2020/2022, evaluated in RAVEL --
                           see "methods/dbm/" section below) -- train.py/eval.py/run_layer.py/
                           layer_sweep.py, mirroring the sibling VADE repo's own methods/das/.
+
+    probe_common.py        shared row-selection + teacher-forced-forward helper for the two
+                          read-only probes below (no training, no intervention -- just "how does
+                          the model's own forward pass arrive at its answer").
+    logit_lens.py          per-layer "does the correct answer already dominate the vocabulary-
+                          space prediction" probe -- see "methods/logit_lens.py and
+                          methods/attention_maps.py" section below.
+    attention_maps.py      per-(layer, head) attention-flow probe (image->text conduits, what the
+                          model/the attribute-mention token attends to) -- same section below.
+    logit_lens/, attention_maps/   small JSON/JSONL reports from the two probes above (not
+                          gitignored -- human-inspectable, like selections/).
 ```
 
 ## Expected sibling layout
@@ -236,6 +248,123 @@ trees (never under `--vade_root`); the shared per-entity source-activation
 cache (reused across every method/config/layer for that entity, including
 DAS if you've also run that) still lives under `--vade_root/results/`,
 matching its own existing convention.
+
+## methods/logit_lens.py and methods/attention_maps.py -- read-only interpretability probes
+
+Two small, ad hoc probes -- NOT a sweep, NOT a new pipeline stage, and they
+train/patch nothing. Both ask "given the model's own unpatched forward
+pass on a real VADE prompt, how does it arrive at its answer" over a
+handful of example rows (`--limit`, default 5), which is a different
+question from everything above: PCA/SAE/DAS/DBM all ask "can we causally
+steer this attribute," these two just look at what the frozen model is
+already doing. Both are built on `methods/probe_common.py`, which reuses
+`common/entities.py`'s REAL question+prefill machinery (unlike `sae.py`,
+whose activations are provably independent of the question text -- see
+its own docstring -- so they can't answer this).
+
+This section is written as a self-contained runbook -- e.g. for a fresh
+Claude Code session picking up this repo with no prior context on these
+two scripts.
+
+### 0. Prerequisites
+
+- Same Python env as the rest of this repo (`pip install torch torchvision
+  "transformers>=4.49" accelerate scikit-learn pillow numpy tqdm
+  huggingface_hub`) -- no extra dependency beyond what `sae.py` already needs.
+- A sibling `../VADE` checkout with `data/<entity>/` built (images,
+  `ground_truth.json`, `object_location.json`, `prompt_templates.json`).
+- **Every command below has a `--dry_run` mode that needs NO GPU and does
+  NOT download the 7B model weights** -- it only loads `AutoConfig`
+  (a few KB) to validate that rows/positions/images resolve correctly.
+  Always run `--dry_run` first, especially after editing
+  `--entity`/`--attribute`/`--positions`, before spending GPU time.
+- The actual (non-dry-run) probe needs a CUDA GPU with the full
+  Qwen2.5-VL-7B-Instruct weights (~20GB+ VRAM recommended, same as `sae.py`).
+- Pruned tuples (`VADE/models/prune_tuples.py`, via
+  `VADE/models/run_accuracy_sweep.py` first) are required by default, same
+  as `dbm/train.py` -- pass `--allow_unpruned` to opt out and read
+  `data/<entity>/tuples/` directly instead.
+
+### 1. Validate first, no GPU needed
+
+```bash
+python methods/logit_lens.py     --entity flags --attribute language --limit 5 --dry_run
+python methods/attention_maps.py --entity flags --attribute language --limit 5 --dry_run
+```
+
+Expected output: the resolved example rows (one per DISTINCT flag image,
+not 5 phrasings of the same one -- see `probe_common.load_probe_rows`'s
+`one_per_image=True`, which both scripts pass), how many of the entity's
+image tokens `--positions` resolves to, and confirmation every row's image
+file exists on disk. No model, no GPU, no download beyond `AutoConfig`.
+
+### 2. Run for real, on a GPU box
+
+```bash
+python methods/logit_lens.py     --entity flags --attribute language --limit 5
+python methods/attention_maps.py --entity flags --attribute language --limit 5
+```
+
+`logit_lens.py` prints a per-layer curve (`top1_match_rate`,
+`mean_gold_rank`, averaged over every valid row/answer-position) across
+**every** decoder layer (0 = embedding output .. 28 = the model's real
+output for Qwen2.5-VL-7B -- cheap enough not to subsample; override with
+`--layers` to restrict). Writes
+`methods/logit_lens/<entity>_<attribute>_<positions>_report.jsonl` (full
+per-row/per-layer detail) and `..._summary.json` (the aggregated curve).
+
+`attention_maps.py` requires `attn_implementation="eager"` internally
+(handled automatically -- sdpa/flash-attention silently return `None` for
+attention weights even with `output_attentions=True`) and only scores a
+representative layer spread by default (`--layers 4 10 14 18 24`, matching
+`dbm/layer_sweep.py`'s own example spread, for comparability) since eager
+attention's memory cost scales with sequence length squared. It prints
+three things and writes them to
+`methods/attention_maps/<entity>_<attribute>_<positions>_report.json`:
+
+1. **text->image flow heads** (`"layer.head"` list): heads where
+   question-text query positions place unusually high attention mass on
+   image-token keys -- candidate image-to-text information conduits. This
+   is the only causally valid direction to check: Qwen2.5-VL's image
+   tokens sit *before* the question text, so under causal masking they can
+   never attend forward into it.
+2. **answer-position attention breakdown**: at the model's first
+   answer-prediction position, how attention splits across the entity's
+   own tokens / other image tokens / question text / prior answer tokens
+   -- "what the model looks at when it answers."
+3. **attribute-mention-token attention breakdown**: same 4-way split, but
+   queried FROM the specific token that names the attribute in the
+   question itself (e.g. the `" language"` token in "What is the official
+   language..."), located via `probe_common.attribute_mention_col` +
+   `adapters.qwen2_5_vl.Qwen25VLAdapter.find_last_phrase_token_col` --
+   "when the question first mentions the attribute, where does that token
+   look." Registered phrasings live in `probe_common.ATTRIBUTE_KEYWORDS`
+   (currently flags' 4 scored attributes, verified against all 6 template
+   variants each); an unregistered attribute or an unmatched new template
+   wording is reported as `0/N rows matched`, not a crash -- extend that
+   dict rather than assuming the number silently means something else.
+
+### 3. Reading the results
+
+- `logit_lens.py`: rising `top1_match_rate` / falling `mean_gold_rank`
+  across layers shows WHERE in the decoder stack the correct answer
+  becomes dominant -- compare that layer against whichever layer
+  `select_features.py`'s sweep picked as its winner for the same
+  attribute, and against wherever `intervene.py`/`dbm/train.py` actually
+  patches.
+- `attention_maps.py`: a high `object` share in the attribute-mention
+  breakdown at an early/mid layer would mean the model resolves "which
+  image tokens are relevant" as soon as it reads the attribute's name in
+  the question, well before it starts generating; a high `text_to_image`
+  score at a DIFFERENT layer than intervene.py's/dbm's patch layer is a
+  candidate explanation for the proxy-vs-real intervention gap already
+  documented in RESULTS.md -- the causal information may be flowing
+  through a layer/position this project isn't currently patching.
+- Both scripts are deliberately NOT resumable and NOT append-only (unlike
+  `intervene.py`'s predictions) -- a forward-pass-only probe over a
+  handful of rows is cheap enough to just rerun with different
+  `--entity`/`--attribute`/`--positions`/`--limit` rather than needing to
+  resume a partial run.
 
 ## Reproducing results on a fresh machine from the Kaggle-pool SAE checkpoints
 

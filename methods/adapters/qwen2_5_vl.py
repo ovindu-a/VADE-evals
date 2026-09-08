@@ -15,11 +15,16 @@ class Qwen25VLAdapter(ModelAdapter):
         self.model_id = model_id
         self._template_cache = {}  # (question, prefill) -> rendered chat-template text, see build_inputs
 
-    def load(self, device="cuda:0", dtype=torch.bfloat16):
+    def load(self, device="cuda:0", dtype=torch.bfloat16, attn_implementation=None):
         from transformers import AutoModelForImageTextToText, AutoProcessor
 
         processor = AutoProcessor.from_pretrained(self.model_id)
-        model = AutoModelForImageTextToText.from_pretrained(self.model_id, device_map=device, dtype=dtype)
+        # attn_implementation left at HF's own default (sdpa/flash, whichever is available) unless a
+        # caller explicitly asks otherwise -- e.g. methods/attention_maps.py passes "eager", the only
+        # implementation whose Qwen2_5_VLAttention.forward actually returns attn_weights instead of None
+        # for output_attentions=True (verified against this project's installed transformers version).
+        extra = {"attn_implementation": attn_implementation} if attn_implementation is not None else {}
+        model = AutoModelForImageTextToText.from_pretrained(self.model_id, device_map=device, dtype=dtype, **extra)
         for p in model.parameters():
             p.requires_grad_(False)
         model.eval()  # backbone is fully frozen -- no dropout needed, and eval() removes any train/eval divergence
@@ -33,6 +38,18 @@ class Qwen25VLAdapter(ModelAdapter):
 
     def get_decoder_layers(self, model):
         return model.model.language_model.layers
+
+    def unembed(self, model, hidden_states):
+        # model.model.language_model.norm is the SAME RMSNorm applied at the end of every real
+        # forward pass, right before model.lm_head -- confirmed against this project's installed
+        # transformers (Qwen2_5_VLTextModel.forward: "hidden_states = self.norm(hidden_states)"
+        # immediately before returning last_hidden_state). Applying it again to hidden_states that
+        # are ALREADY post-final-norm (as the last entry of a real forward pass's output.hidden_states
+        # tuple is, via transformers' capture_outputs(tie_last_hidden_states=True) machinery) would
+        # double-normalize and silently corrupt the logit-lens result -- methods/logit_lens.py never
+        # calls this on that last entry; it uses the forward pass's own out.logits there instead
+        # (see its module docstring for why that's the more robust choice regardless of this comment).
+        return model.lm_head(model.model.language_model.norm(hidden_states))
 
     def image_token_id(self, model, processor):
         tok_id = getattr(model.config, "image_token_id", None)
@@ -87,13 +104,63 @@ class Qwen25VLAdapter(ModelAdapter):
         out = processor.image_processor(images=image, return_tensors="pt")
         return {"pixel_values": out["pixel_values"], "image_grid_thw": out["image_grid_thw"]}
 
-    def tokenize_template(self, processor, question, prefill, n_image_tokens):
+    def _render_template_text(self, processor, question, prefill):
+        """The (question, prefill)-only half of build_inputs' chat-template rendering, factored out
+        so tokenize_template and find_last_phrase_token_col don't each re-implement this project's
+        fixed prompt shape (image placeholder + question in a user turn, prefill continuing the
+        assistant turn)."""
         messages = [
             {"role": "user", "content": [{"type": "image"}, {"type": "text", "text": question}]},
             {"role": "assistant", "content": [{"type": "text", "text": prefill}]},
         ]
-        text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=False,
+        return processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=False,
                                               continue_final_message=True)
+
+    def tokenize_template(self, processor, question, prefill, n_image_tokens):
+        text = self._render_template_text(processor, question, prefill)
         image_token = getattr(processor, "image_token", IMAGE_TOKEN)
         text = text.replace(image_token, image_token * n_image_tokens, 1)
         return processor.tokenizer(text, return_tensors="pt")["input_ids"][0]
+
+    def find_last_phrase_token_col(self, processor, question, prefill, n_image_tokens, phrases):
+        """Absolute token-column index (within tokenize_template's own output for this exact
+        (question, prefill, n_image_tokens)) of the LAST token of the LAST occurrence of whichever
+        candidate in `phrases` (tried in order, case-insensitive substring match against `question`
+        only -- never prefill) is found, or None if none match. Lets a probe (see
+        methods/probe_common.py's attribute_mention_col) ask "which token mentions attribute X"
+        without knowing anything about this model's chat-template rendering.
+
+        Verified against a real Qwen2.5-VL-7B-Instruct processor for both a plain single-mention
+        question and currency's few-shot-preamble question (where naive first-occurrence matching
+        would land on the exemplar text's "currency code" instead of the real question's) --
+        rfind against `question` alone, not the full rendered template, is what makes that safe:
+        VADE's few-shot preamble text lives INSIDE `question` (see flags/prompt_templates.json's
+        currency templates), always followed by the real question containing the same phrase again.
+        """
+        q_lower = question.lower()
+        match = next(((p, q_lower.rfind(p.lower())) for p in phrases if p.lower() in q_lower), None)
+        if match is None:
+            return None
+        phrase, char_start = match
+        char_end = char_start + len(phrase)
+
+        text = self._render_template_text(processor, question, prefill)
+        q_pos = text.find(question)
+        assert q_pos != -1, "question text not found verbatim in its own rendered chat template"
+        abs_char_end = q_pos + char_end
+
+        # The image placeholder is expanded from 1 occurrence to n_image_tokens BEFORE tokenizing
+        # (see tokenize_template) -- it sits before the question in this project's fixed prompt shape,
+        # so every char offset found above needs shifting by exactly that expansion's extra length.
+        image_token = getattr(processor, "image_token", IMAGE_TOKEN)
+        img_pos = text.find(image_token)
+        shift = (n_image_tokens - 1) * len(image_token) if 0 <= img_pos < q_pos else 0
+        abs_char_end += shift
+        expanded_text = text.replace(image_token, image_token * n_image_tokens, 1)
+
+        offsets = processor.tokenizer(expanded_text, return_offsets_mapping=True)["offset_mapping"]
+        token_idx = next((i for i, (s, e) in enumerate(offsets) if s < abs_char_end <= e), None)
+        assert token_idx is not None, (
+            f"attribute-mention char span (end={abs_char_end}) didn't land inside any token's offset "
+            f"range -- phrase={phrase!r} question={question!r}")
+        return token_idx

@@ -9,8 +9,14 @@ never touching common/ or das/.
 class ModelAdapter:
     model_id: str
 
-    def load(self, device, dtype):
-        """-> (model, processor), both eval()-mode / ready to use."""
+    def load(self, device, dtype, attn_implementation=None):
+        """-> (model, processor), both eval()-mode / ready to use.
+        attn_implementation: None leaves HF's own default in place (sdpa/
+        flash, whichever is available) -- every training/intervention
+        script wants that for speed. Pass "eager" only when you actually
+        need real attn_weights back from output_attentions=True (e.g.
+        methods/attention_maps.py) -- sdpa/flash silently return None for
+        that instead of raising, so getting this wrong fails quietly."""
         raise NotImplementedError
 
     def hidden_size(self, model) -> int:
@@ -77,4 +83,23 @@ class ModelAdapter:
         bit-identical to build_inputs' input_ids for the same image/question/
         prefill. Returns a 1D LongTensor (no leading batch dim, matching
         build_inputs' "input_ids")."""
+        raise NotImplementedError
+
+    def find_last_phrase_token_col(self, processor, question, prefill, n_image_tokens, phrases) -> "int | None":
+        """-> the absolute token-column index (within tokenize_template's own output for this exact
+        (question, prefill, n_image_tokens)) of the LAST token of the LAST occurrence of whichever
+        candidate in `phrases` is found in `question` (case-insensitive substring match, tried in the
+        given order), or None if none match. Lets a probe locate "the token that names attribute X in
+        this question" (see methods/probe_common.py's attribute_mention_col) without knowing this
+        model's chat-template format. A model with no chat template at all may just return None
+        always."""
+        raise NotImplementedError
+
+    def unembed(self, model, hidden_states) -> "torch.Tensor":
+        """Projects a residual-stream hidden_states tensor ([..., H]) into vocab-space logits
+        ([..., V]) using THIS model's own final norm + output head -- the logit-lens operation.
+        Must reproduce the model's real output logits when applied to the model's own final
+        (post-final-norm) hidden state (see methods/logit_lens.py, which cross-checks this at the
+        last layer against the forward pass's own out.logits rather than trusting that invariant
+        blindly)."""
         raise NotImplementedError
