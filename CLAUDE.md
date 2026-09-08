@@ -1,0 +1,157 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this repo is
+
+Execution repo for the [VADE](https://github.com/Shaveen12/VADE) benchmark (Visual
+Attribute DisEntanglement). VADE itself stays a pure benchmark: data, ground truth,
+prompt templates, object-token geometry, and a method-agnostic scorer (`eval/score.py`)
+that never touches model internals. **This repo holds everything that does touch model
+internals**: activation extraction, dictionary learning, feature selection, and the
+actual causal intervention, run against VADE's entities (flags/brands/animals; a fourth,
+`compounds`, is a known VADE entity name with no data built yet).
+
+Expected checkout layout — every script here defaults `--vade_root` to a sibling
+directory, and default output paths assume this repo root:
+
+```
+<some root>/
+  VADE/            benchmark data (VADE/data/<entity>/...) + scorer (VADE/eval/score.py)
+  VADE-evals/      this repo
+```
+
+Override with `--vade_root /path/to/VADE` or the `VADE_ROOT` environment variable if a
+checkout isn't laid out this way. This repo pins no `requirements.txt`; see the README's
+"Reproducing results on a fresh machine" runbook for exact versions the pipeline was
+built/verified against (torch 2.13, transformers 5.16, scikit-learn 1.9) if `pip install`
+of latest breaks.
+
+## The pipeline (Phase A → C), in order
+
+Each stage's script consumes the previous stage's output file; none re-runs the model
+behind an earlier stage.
+
+1. **`methods/sae.py`** (Phase A) — loads Qwen2.5-VL-7B-Instruct, one forward pass per
+   entity image, records the residual-stream hidden state at every decoder layer,
+   restricted to the object's image-token positions (per-entity token sets defined in
+   `<entity>/object_location.json`, e.g. flags' 8-token `flag_only`/24-token
+   `flag_ring1`). Writes `methods/activations/<entity>_<model>_all_layers.pt`.
+   `--dry_run` validates images/metadata resolve without loading the model (no GPU
+   needed) — the fastest sanity check after touching any entity-loading code.
+   `--augment_variants N` additionally builds a pixel-perturbation-only augmented pool
+   (color jitter/noise/blur, never geometric, so `object_location.json` token positions
+   stay valid) for `fit_dictionaries.py` to optionally train on.
+
+2. **`methods/fit_dictionaries.py`** (Phase B step 2) — fits one PCA and/or SAE
+   dictionary per (entity, token_set, layer) on Phase A's activations, unsupervised (no
+   attribute/entity labels). Fit on *flattened per-position rows* (`features.py`'s
+   `flatten_positions`), not pooled per-image vectors, because the intervention script
+   later needs to encode a single token position. PCA sweeps cheaply at every layer; SAE
+   is data-starved (each entity has only ~84-130 images) so it's deliberately modest
+   (dict_size ~2x hidden_dim, not the usual 8x-32x overcomplete) and by default only fit
+   at a few representative layers. `--augmented_pool_variants N` folds in Phase A's
+   augmented pool to widen the SAE's training set — `select_features.py` is unaffected
+   either way, since it always scores against the real (non-augmented) activations.
+   Writes to `methods/dictionaries/` (or `--dictionaries_dir`, e.g.
+   `methods/dictionaries_kaggle_pool/` for the externally-augmented checkpoints
+   described in the README).
+
+3. **`methods/select_features.py`** (Phase B steps 3-4) — mean-pools each image's
+   token-set positions into one vector (attributes are whole-entity facts, not local
+   features, and positions are correlated — see `features.py`'s `pool_positions`),
+   encodes through a fitted dictionary, then runs two-step L1-SVC + `SelectFromModel`
+   feature selection swept over (direction, layer, C), independently per attribute:
+   - **forward**: broad filter on entity-ID label (1 example/class, never CV'd) → narrow
+     to the attribute label (real stratified CV).
+   - **inverse**: same, swapped — broad filter on attribute (CV'd) → narrow to entity-ID.
+
+   Each candidate is scored by a cause/iso proxy mirroring `eval/score.py`'s
+   `final_score = 1/2(cause + mean(iso))` shape at the feature level; the
+   (direction, layer, C) maximizing that score is the attribute's winner, written to
+   `methods/selections/<entity>/<token_set>_<dict_method>/winners.json` (plus a full
+   `sweep.jsonl`). **Important gotcha**: this default output path does not encode which
+   `--dictionaries_dir` was used to fit the dictionary being scored — running against a
+   different dictionary set (e.g. `dictionaries_kaggle_pool`) silently overwrites a
+   previous run's `winners.json`/`sweep.jsonl` unless you pass a distinct
+   `--output_dir`. An attribute can come back "no winner" legitimately: it needs ≥2
+   classes with ≥2 members to support a held-out CV split at all (on flags' 84-country
+   sample, only `language` qualifies — `capital`/`calling_code` are unique per country
+   and `currency` has just one repeated class), which is a property of the dataset, not
+   a bug.
+
+4. **`methods/intervene.py`** (Phase B step 5, the actual causal intervention) — for
+   every attribute with a winner in `winners.json`: runs the source image through the
+   model once, caches its hidden state at the winning layer, then on the base image's
+   forward pass patches in the winning dictionary-feature subset
+   (`encode(base)`/`encode(source)`, copy over only the winning dims, `decode`) at the
+   object's token positions via a forward hook on that layer (a no-op after the initial
+   multi-token prefill, since the patch is already baked into the KV cache by then), and
+   lets the model generate freely. No training involved. Writes predictions in
+   `VADE/eval/score.py`'s format; runs are **append-and-resume** — re-running the same
+   command skips `(attribute, row_index)` pairs already present in `--out`, so an
+   interrupted run just continues.
+
+5. **`VADE/eval/score.py`** (in the sibling VADE repo, not this one) — method-agnostic
+   scorer: takes a predictions JSONL and reports `cause` (did the target attribute flip
+   to the source's value) and `iso` (did every *other* attribute stay at the base's
+   value) per attribute, plus `final_score = 1/2(cause + mean(iso))`. Writes
+   `<predictions-file-stem>_summary.{json,md}` next to the predictions file (or under
+   `--out_dir`). This final number is the thing to compare across methods/runs.
+
+`methods/features.py` is the shared module behind steps 2-4: activation
+loading/reshaping (`flatten_positions`, `pool_positions`), the interchangeable
+`PCADictionary`/`SAEDictionary` classes (same `encode(X)`/`decode(F)`/`save()`/`load()`
+contract regardless of which kind downstream code is holding), and the `fit_pca()`/
+`fit_sae()` routines. `methods/build_external_flag_pool.py` builds the Kaggle
+"country-flags-in-the-wild" augmentation pool referenced in the README's reproduction
+runbook.
+
+## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
+
+The Phase B feature-selection proxy (a classifier reading the target attribute off
+dictionary-encoded features) can score much higher `cause` than the real Phase C
+generation-time intervention actually achieves (e.g. flags: proxy ~0.74-0.76 vs. real
+2.2%-19.2% flip rate). Linear separability of a feature for a classifier does not mean
+patching it in reliably steers what the model generates — treat `select_features.py`'s
+`sweep.jsonl` scores as a candidate filter, not a prediction of real intervention
+accuracy; only `intervene.py` + `eval/score.py`'s numbers are the real result.
+
+## Commands
+
+```bash
+pip install torch torchvision "transformers>=4.49" accelerate scikit-learn pillow numpy tqdm huggingface_hub
+
+# Phase A
+python methods/sae.py --entity flags --dry_run          # validate paths/images, no GPU/model
+python methods/sae.py --entity flags --limit 3          # smoke test
+python methods/sae.py --entity flags                    # full extraction
+python methods/sae.py --entity brands --dry_run
+python methods/sae.py --entity animals --dry_run
+
+# Phase B
+python methods/fit_dictionaries.py --entity flags --method pca
+python methods/fit_dictionaries.py --entity flags --method sae
+python methods/select_features.py --entity flags --token_set flag_only --dict_method pca
+python methods/select_features.py --entity flags --token_set flag_only --dict_method sae
+
+# Phase C
+python methods/intervene.py --entity flags --token_set flag_only --dict_method sae \
+    --out methods/interventions/flags_flag_only_sae_predictions.jsonl
+
+# Scoring (in the sibling VADE repo)
+python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only_sae_predictions.jsonl \
+    --entity flags --attribute all
+```
+
+There is no build step, lint config, or test suite in this repo — it's a pipeline of
+standalone scripts run directly with `python`, each stage feeding the next via files on
+disk. `--dry_run` (Phase A) and `--limit N` (Phase A/C smoke tests) are the fast,
+GPU-cheap way to validate a change before spending real GPU time on a full run.
+
+`torchvision` is a required dependency of `sae.py` even though only images are used —
+Qwen2.5-VL's `AutoProcessor` eagerly builds a video processor too, and that needs
+torchvision present regardless. `methods/activations/`, `methods/dictionaries*/`
+(large `.pt` checkpoints, one set fetched separately via `rclone` from Google Drive per
+the README — GitHub's 100MB/file limit), `methods/external_data/`, `*.pt`, `*.npz` are
+all gitignored.
