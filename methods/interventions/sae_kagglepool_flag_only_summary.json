@@ -1,0 +1,52 @@
+{
+  "predictions_file": "methods/interventions/flags_flag_only_sae_kagglepool_predictions.jsonl",
+  "entity": "flags",
+  "attribute": "all",
+  "split": "test",
+  "n_missing_predictions": 42156,
+  "by_target_attribute": {
+    "language": {
+      "overall": {
+        "n": 14052,
+        "pct_accuracy": 73.1,
+        "cause_accuracy": 2.2,
+        "iso_mean_accuracy": 94.7,
+        "final_score": 48.5
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 99.5,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 99.5
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        },
+        {
+          "queried": "currency",
+          "n": 3564,
+          "is_cause": false,
+          "pct_accuracy": 84.6,
+          "pct_matches_source": 0.1,
+          "pct_matches_base": 84.6
+        },
+        {
+          "queried": "language",
+          "n": 3288,
+          "is_cause": true,
+          "pct_accuracy": 2.2,
+          "pct_matches_source": 2.2,
+          "pct_matches_base": 92.3
+        }
+      ]
+    }
+  }
+}

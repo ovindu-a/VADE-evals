@@ -225,7 +225,7 @@ def main():
           f"layers={layers} dict_method={args.dict_method} C_grid={C_grid}")
 
     rows = []
-    for layer in layers:
+    for layer_idx, layer in enumerate(layers):
         size = args.dict_size or (list_fitted_sizes(args.entity, args.token_set, layer, args.dict_method,
                                                       args.dictionaries_dir) or [None])[0]
         if size is None:
@@ -262,6 +262,8 @@ def main():
                     rows.append({"attribute": attribute, "layer": layer, "dict_size": size, "direction": direction,
                                  "C": C, "id_c": args.id_c, "n_features_selected": int(len(F_A)),
                                  "feature_indices": [int(i) for i in F_A], **scored})
+
+        print(f"[progress] layer={layer} done ({layer_idx + 1}/{len(layers)}, {len(rows)} rows so far)", flush=True)
 
     out_dir = args.output_dir or os.path.join(REPO_ROOT, "methods", "selections", args.entity,
                                                 f"{args.token_set}_{args.dict_method}")
