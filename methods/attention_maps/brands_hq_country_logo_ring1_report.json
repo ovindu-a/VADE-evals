@@ -1,0 +1,102 @@
+{
+  "entity": "brands",
+  "attribute": "hq_country",
+  "positions": "logo_ring1",
+  "layers": [
+    4,
+    10,
+    14,
+    18,
+    24
+  ],
+  "threshold": 0.2,
+  "n_rows": 5,
+  "n_mention_found": 0,
+  "rows": [
+    {
+      "row_index": 25666,
+      "base": "YANDEX",
+      "template_id": "hq_country_prefill_v1"
+    },
+    {
+      "row_index": 25671,
+      "base": "20TH_CENTURY_STUDIOS",
+      "template_id": "hq_country_prefill_v1"
+    },
+    {
+      "row_index": 25676,
+      "base": "KOREAN_BROADCASTING_SYSTEM",
+      "template_id": "hq_country_prefill_v1"
+    },
+    {
+      "row_index": 25682,
+      "base": "OPEL",
+      "template_id": "hq_country_prefill_v2"
+    },
+    {
+      "row_index": 25686,
+      "base": "FORD_MOTOR_COMPANY",
+      "template_id": "hq_country_prefill_v1"
+    }
+  ],
+  "flagged_text_to_image_heads": [
+    "10.6",
+    "14.11",
+    "14.22",
+    "14.23",
+    "14.24"
+  ],
+  "answer_breakdown_summary": {
+    "4": {
+      "layer_mean_group_share": {
+        "object": 0.0017579131892749241,
+        "image_other": 0.0026273110083171306,
+        "text": 0.9723772321428571,
+        "answer_ctx": 0.02311224256243025
+      },
+      "top_object_attending_head": 1,
+      "top_object_attending_head_score": 0.010357666015625
+    },
+    "10": {
+      "layer_mean_group_share": {
+        "object": 0.008639536585126603,
+        "image_other": 0.018208639962332584,
+        "text": 0.8950055803571427,
+        "answer_ctx": 0.0780606985092163
+      },
+      "top_object_attending_head": 6,
+      "top_object_attending_head_score": 0.1375
+    },
+    "14": {
+      "layer_mean_group_share": {
+        "object": 0.07590950557163781,
+        "image_other": 0.10082920619419644,
+        "text": 0.7494105747767856,
+        "answer_ctx": 0.07389186791011267
+      },
+      "top_object_attending_head": 24,
+      "top_object_attending_head_score": 0.42421875
+    },
+    "18": {
+      "layer_mean_group_share": {
+        "object": 0.009300675988197326,
+        "image_other": 0.026015261241367882,
+        "text": 0.8231689819251188,
+        "answer_ctx": 0.14140101841517858
+      },
+      "top_object_attending_head": 24,
+      "top_object_attending_head_score": 0.0569580078125
+    },
+    "24": {
+      "layer_mean_group_share": {
+        "object": 0.011222244160515921,
+        "image_other": 0.02990182467869349,
+        "text": 0.8794503348214288,
+        "answer_ctx": 0.07964491162981303
+      },
+      "top_object_attending_head": 24,
+      "top_object_attending_head_score": 0.051806640625
+    }
+  },
+  "attribute_mention_breakdown_summary": null
+}

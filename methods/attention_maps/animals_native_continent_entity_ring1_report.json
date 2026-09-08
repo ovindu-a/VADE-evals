@@ -1,0 +1,98 @@
+{
+  "entity": "animals",
+  "attribute": "native_continent",
+  "positions": "entity_ring1",
+  "layers": [
+    4,
+    10,
+    14,
+    18,
+    24
+  ],
+  "threshold": 0.2,
+  "n_rows": 5,
+  "n_mention_found": 0,
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "AMERICAN_ALLIGATOR",
+      "template_id": "native_continent_prefill_v1"
+    },
+    {
+      "row_index": 78,
+      "base": "AMERICAN_BEAVER",
+      "template_id": "native_continent_prefill_v1"
+    },
+    {
+      "row_index": 156,
+      "base": "ATLANTIC_COD",
+      "template_id": "native_continent_prefill_v1"
+    },
+    {
+      "row_index": 246,
+      "base": "ATLANTIC_SALMON",
+      "template_id": "native_continent_prefill_v1"
+    },
+    {
+      "row_index": 336,
+      "base": "ATLAS_MOTH",
+      "template_id": "native_continent_prefill_v1"
+    }
+  ],
+  "flagged_text_to_image_heads": [
+    "10.6"
+  ],
+  "answer_breakdown_summary": {
+    "4": {
+      "layer_mean_group_share": {
+        "object": 0.0009548027600560869,
+        "image_other": 0.0022965192794799807,
+        "text": 0.957728794642857,
+        "answer_ctx": 0.03897179535457066
+      },
+      "top_object_attending_head": 0,
+      "top_object_attending_head_score": 0.003985595703125
+    },
+    "10": {
+      "layer_mean_group_share": {
+        "object": 0.002750010149819511,
+        "image_other": 0.009921605246407646,
+        "text": 0.8970005580357144,
+        "answer_ctx": 0.09008287702287945
+      },
+      "top_object_attending_head": 6,
+      "top_object_attending_head_score": 0.0546875
+    },
+    "14": {
+      "layer_mean_group_share": {
+        "object": 0.004352592570441109,
+        "image_other": 0.011836610521589007,
+        "text": 0.9149344308035713,
+        "answer_ctx": 0.06892618111201695
+      },
+      "top_object_attending_head": 24,
+      "top_object_attending_head_score": 0.03642578125
+    },
+    "18": {
+      "layer_mean_group_share": {
+        "object": 0.011179341429046223,
+        "image_other": 0.018964345114571703,
+        "text": 0.8108023563932096,
+        "answer_ctx": 0.1589879172188895
+      },
+      "top_object_attending_head": 15,
+      "top_object_attending_head_score": 0.0726806640625
+    },
+    "24": {
+      "layer_mean_group_share": {
+        "object": 0.007369082314627511,
+        "image_other": 0.011717534065246582,
+        "text": 0.9202566964285713,
+        "answer_ctx": 0.06063619341169085
+      },
+      "top_object_attending_head": 21,
+      "top_object_attending_head_score": 0.0740234375
+    }
+  },
+  "attribute_mention_breakdown_summary": null
+}
