@@ -20,6 +20,17 @@ VADE-evals/
     dictionaries/         fitted dictionaries (gitignored -- large binaries) + fit_log.jsonl
     select_features.py    Phase-B steps 3-4: pool positions, two-step L1-SVC feature selection
     selections/           per-attribute sweep results + winners.json (small, not gitignored)
+
+    common/, adapters/    copied verbatim from the sibling VADE repo's methods/common,methods/
+                          adapters -- model/entity-agnostic infra (activation-patching hooks,
+                          gold-token/teacher-forcing utilities, entity asset + batch loading,
+                          per-entity source-activation caching, one ModelAdapter per model family).
+                          Shared by any gradient-trained intervention method (currently just dbm/);
+                          entirely separate code path from features.py/fit_dictionaries.py/
+                          select_features.py above -- the PCA/SAE stack shares nothing with it.
+    dbm/                  Differential Binary Masking (Cao et al. 2020/2022, evaluated in RAVEL --
+                          see "methods/dbm/" section below) -- train.py/eval.py/run_layer.py/
+                          layer_sweep.py, mirroring the sibling VADE repo's own methods/das/.
 ```
 
 ## Expected sibling layout
@@ -157,6 +168,66 @@ python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only
 
 Writes `<predictions-file-stem>_summary.json` and `.md` next to the
 predictions file (or under `--out_dir`).
+
+## methods/dbm/ -- Differential Binary Masking
+
+DBM (Cao et al. 2020/2022, evaluated as a RAVEL baseline in Huang et al.
+2024, https://aclanthology.org/2024.acl-long.470/) learns a sigmoid-gated
+binary mask `m` directly over the RAW residual-stream dimensions at one
+layer -- no dictionary, no rotation (`F_A(n) = n`, unlike PCA/SAE/DAS):
+
+```
+n = (1 - sigma(m/T)) . GetVals(M(x), N) + sigma(m/T) . GetVals(M(x'), N)
+L_Cause = CE(tau(M_{N<-n}(x)), A_E') + lambda * ||m||_1
+```
+
+`T` (temperature) is annealed continuously through training, sharpening the
+sigmoid into a near-binary gate; RAVEL's own Appendix B.4 says this exact
+mechanism was implemented via the [pyvene](https://github.com/stanfordnlp/pyvene)
+library (`pip install pyvene`) -- `methods/dbm/intervention.py` imports
+pyvene's own `SigmoidMaskIntervention` directly (verified byte-for-byte
+against the paper's formula) rather than reimplementing it, but does NOT
+use pyvene's `IntervenableModel` wrapper (built/tested against text-only HF
+models, no documented VLM/pixel_values support) -- the actual hook
+mechanism is this project's own `methods/common/hooks.py`, copied verbatim
+from the sibling VADE repo's `methods/das/` and already proven against
+Qwen2.5-VL there.
+
+Unlike PCA/SAE (fit once per layer offline, then a cheap CPU-only
+classifier-based feature selection), DBM's mask is trained end-to-end
+against the real generation objective, with the model itself in the
+training loop -- there is no separate "selection" step, and each
+(entity, attribute, layer) combination needs its own training run:
+
+```
+pip install pyvene   # in addition to methods/sae.py's requirements
+
+python methods/dbm/train.py --entity flags --attribute language --layer 14 --positions flag_ring1
+python methods/dbm/eval.py  --entity flags --attribute language --layer 14 --positions flag_ring1 --split test
+
+# train+eval+score one layer, or sweep several layers in one model load:
+python methods/dbm/run_layer.py --entity flags --attribute language --layer 14 --positions flag_ring1
+python methods/dbm/layer_sweep.py --entity flags --attribute language \
+    --layers 4 10 14 18 24 --positions flag_ring1
+```
+
+`--l1_coef` (default `0.001`) and `--temperature_start`/`--temperature_end`
+(default `1e-2`/`1e-7`) match RAVEL's own reported optimum/schedule for
+DBM (Appendix B.4) -- not re-derived here. `--positions` takes the same
+named sets as everything else in this project (`flag_only`/`flag_ring1`
+for flags, etc.) plus `last_token` -- the closest analogue of RAVEL's own
+*text-only* intervention site (the entity mention's single last token);
+`flag_only`/`flag_ring1` are this project's own extension into the
+image-object-span setting that PCA/SAE/DAS already use.
+
+Training requires VADE's own baseline-pruned tuples (`VADE/models/
+prune_tuples.py`, via `VADE/models/run_accuracy_sweep.py` first) by
+default, same as DAS -- pass `--allow_unpruned` to opt out. Trained
+checkpoints/predictions/logs land under THIS repo's own `results/`/`logs/`
+trees (never under `--vade_root`); the shared per-entity source-activation
+cache (reused across every method/config/layer for that entity, including
+DAS if you've also run that) still lives under `--vade_root/results/`,
+matching its own existing convention.
 
 ## Reproducing results on a fresh machine from the Kaggle-pool SAE checkpoints
 

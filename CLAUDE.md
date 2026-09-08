@@ -107,6 +107,46 @@ contract regardless of which kind downstream code is holding), and the `fit_pca(
 "country-flags-in-the-wild" augmentation pool referenced in the README's reproduction
 runbook.
 
+## methods/dbm/ -- a second, separate pipeline (Differential Binary Masking)
+
+DBM is architecturally unlike PCA/SAE: it has no dictionary/featurizer at
+all (`F_A(n) = n`, the raw residual stream) and its "feature selection" is
+a gradient-trained sigmoid mask learned end-to-end against the real
+generation objective (teacher-forced cross-entropy + an L1 sparsity term
+on the mask, temperature-annealed), not an offline classifier probe over
+precomputed activations. Because of that, it shares **no code** with
+`features.py`/`fit_dictionaries.py`/`select_features.py`/`intervene.py` --
+it lives entirely under `methods/dbm/` (`intervention.py`/`train.py`/
+`eval.py`/`run_layer.py`/`layer_sweep.py`), built on top of
+`methods/common/` + `methods/adapters/`, which were copied **verbatim**
+from the sibling VADE repo's own `methods/common`/`methods/adapters` (the
+same model/entity-agnostic infra VADE's own DAS implementation uses --
+activation-patching hooks, gold-token/teacher-forcing utilities, entity
+asset + batch loading, per-entity source-activation caching, one
+`ModelAdapter` per model family). `methods/dbm/intervention.py` imports
+`pyvene`'s own `SigmoidMaskIntervention` directly (RAVEL's own Appendix B.4
+says pyvene was the reference implementation) rather than reimplementing
+it, but deliberately does **not** use pyvene's `IntervenableModel` wrapper
+-- that machinery is built/tested against text-only HF models with no
+documented multimodal support, whereas `methods/common/hooks.py`'s hook
+mechanism is already proven against Qwen2.5-VL by VADE's DAS. See the
+README's "methods/dbm/" section for usage and exact hyperparameters
+(`--l1_coef`/`--temperature_start`/`--temperature_end`, matching RAVEL's
+own reported optimum/schedule).
+
+Where artifacts land: entity data/tuples/pruned-tuples and the shared
+per-entity source-activation cache are read from (and, for the cache,
+written to) `--vade_root` (the sibling VADE repo) -- same as everywhere
+else in this project. DBM's own trained checkpoints/predictions/train logs
+are NOT written into VADE, though -- they land under this repo's own
+`results/`/`logs/` trees instead (mirroring VADE's own `results/`/`logs/`
+layout, just rooted here). Nothing under `methods/dbm/`, `methods/common/`,
+or `methods/adapters/` has ever been added to `.gitignore` -- worth
+revisiting once real runs exist, since VADE gitignores its own
+`results/`/`logs/` entirely (pod-specific run artifacts) while this repo's
+existing convention is closer to committing predictions/selections
+directly (see `methods/interventions/`/`methods/selections/` above).
+
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
 The Phase B feature-selection proxy (a classifier reading the target attribute off

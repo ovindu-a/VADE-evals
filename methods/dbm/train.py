@@ -1,0 +1,340 @@
+"""DBM training: learns a SigmoidMaskIntervention (methods/dbm/intervention.py,
+pyvene's own class) at one decoder layer, for one target attribute, on one
+VADE entity -- model-agnostic (goes through a ModelAdapter) and
+entity-agnostic (goes through common/entities.py's generic tuple/asset
+loading). Structurally a near-verbatim port of VADE's own methods/das/
+train.py (same adapters/common infra, same teacher-forced-CE training
+shape) with the intervention class swapped and the L1 sparsity term +
+continuous temperature annealing added -- see methods/dbm/intervention.py's
+module docstring for why DBM needs neither a rotation matrix nor pyvene's
+IntervenableModel wrapper.
+
+Where things live: this repo (VADE-evals) is a sibling of the VADE
+benchmark repo (--vade_root, default ../VADE) -- entity assets/tuples/
+pruned-tuples/the shared source-activation cache are all read from (and,
+for the cache, written to) THAT repo, exactly like every other script in
+this project. DBM's own trained artifacts (checkpoints/train logs/
+predictions), however, are NOT written into VADE -- they land under THIS
+repo's own results/ and logs/ trees (methods/common/results.py's
+results_dir/logs_dir are generic over whatever root you pass; DAS passes
+VADE's own root since it lives there, we pass this repo's root instead).
+
+Usage:
+    python methods/dbm/train.py --entity flags --attribute capital --layer 14 \\
+        --positions flag_ring1
+"""
+import argparse
+import json
+import os
+import random
+import sys
+import time
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, REPO_ROOT)
+DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join(REPO_ROOT, "..", "VADE"))
+
+import torch
+from transformers import get_linear_schedule_with_warmup
+
+from methods.adapters.registry import get_adapter
+from methods.common.entities import BuildBatchCache, build_batch, load_entity_assets, load_tuples, require_pruned_tuples
+from methods.common.hooks import cache_layer_hidden, forward_patched, make_cache_aware_patch_hook
+from methods.common.results import logs_dir, results_dir
+from methods.common.run_logging import tee_to_log
+from methods.common.source_cache import get_or_build_source_cache, lookup_source_hidden
+from methods.common.targets import (
+    MAX_ANSWER_TOKENS, build_teacher_forced_extension, gold_labels_from_lens, target_gold_toks_and_len,
+)
+from methods.dbm.intervention import SigmoidMaskIntervention, dbm_config_tag, l1_penalty, temperature_schedule
+
+SEED = 42
+LR = 1e-3
+NUM_EPOCHS = 1
+DBM_L1_COEF = 1e-3     # RAVEL Appendix B.4's reported optimum for DBM (MDBM's is ~0, not our concern here)
+TEMP_START = 1e-2      # RAVEL Appendix B.4: "a starting temperature of 1e-2 and gradually reducing it to 1e-7"
+TEMP_END = 1e-7
+# Same hardware-forced micro-batch/accum defaults as DAS's train.py (single 24GB card, no gradient
+# checkpointing -- conflicts with the forward hooks the intervention needs, so full activations for the
+# whole decoder stack are held for backprop). DBM has no D x D rotation matrix to hold, only a length-H
+# mask vector, so it may well tolerate a larger --batch_size than DAS's BATCH_SIZE=4 on the same card --
+# untested here, raise it and watch VRAM headroom rather than assuming.
+BATCH_SIZE = 4
+GRAD_ACCUM_STEPS = 16
+CHECKPOINT_EVERY_OPT_STEPS = 5
+
+
+def dbm_results_dir(model_slug, entity, attribute, l1_coef, positions, pruned=False):
+    return results_dir(REPO_ROOT, model_slug, entity, "dbm", attribute, dbm_config_tag(l1_coef, positions, pruned))
+
+
+def dbm_logs_dir(model_slug, entity, attribute, l1_coef, positions, pruned=False):
+    return logs_dir(REPO_ROOT, model_slug, entity, "dbm", attribute, dbm_config_tag(l1_coef, positions, pruned))
+
+
+def cache_source_layer_hidden(model, batch, layer_idx):
+    return cache_layer_hidden(model, batch["source_input_ids"], batch["attention_mask"], batch["source_extra"],
+                               batch["positions"], layer_idx)
+
+
+def run_intervened_forward(model, layers, batch, layer_idx, intervention, source_hidden, ext_ids, ext_mask,
+                            randomize_positions=False):
+    """Teacher-forced forward pass with the intervention patch active at
+    layer_idx. Returns logits for the last MAX_ANSWER_TOKENS positions,
+    aligned 1:1 with target_toks (see build_teacher_forced_extension)."""
+    positions = batch["positions"]
+    if randomize_positions:
+        B, n_pos, H = source_hidden.shape
+        source_for_patch = torch.stack([source_hidden[i, torch.randperm(n_pos)] for i in range(B)])
+    else:
+        source_for_patch = source_hidden
+    patch_fn = make_cache_aware_patch_hook(positions, lambda base_vals: intervention(base_vals, source_for_patch))
+    out = forward_patched(model, layers, layer_idx, patch_fn, ext_ids, ext_mask, batch["base_extra"],
+                           logits_to_keep=MAX_ANSWER_TOKENS)
+    return out.logits[:, -MAX_ANSWER_TOKENS:, :]
+
+
+def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_dir,
+                 positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START, temperature_end=TEMP_END,
+                 num_epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, grad_accum_steps=GRAD_ACCUM_STEPS,
+                 cause_only=False, randomize_positions=False, limit_rows=None, tuples_split="train",
+                 tuples_dir=None, cleanup_checkpoint=True, source_cache=None):
+    """Trains one (layer, attribute, positions, l1_coef) DBM run to
+    completion (or resumes an interrupted one), writing checkpoints/epoch
+    snapshots/train_log under out_dir. Returns the path to the final
+    weights-only checkpoint. See methods/das/train.py's train_layer (this
+    is a near-verbatim port) for source_cache/cleanup_checkpoint semantics.
+    """
+    os.makedirs(out_dir, exist_ok=True)
+    layers = adapter.get_decoder_layers(model)
+    hidden_size = adapter.hidden_size(model)
+    batch_cache = BuildBatchCache()
+
+    intervention = SigmoidMaskIntervention(embed_dim=hidden_size).to(model.device)
+    optimizer = torch.optim.Adam(intervention.parameters(), lr=LR)
+
+    rows = load_tuples(entity_assets, attribute, tuples_split, tuples_dir=tuples_dir)
+    for r in rows:
+        r.setdefault("target_attribute", attribute)
+    if cause_only:
+        rows = [r for r in rows if r["queried"] == r["target_attribute"]]
+    if limit_rows:
+        rows = rows[:limit_rows]
+    n_micro_batches_per_epoch = (len(rows) + batch_size - 1) // batch_size
+    t_total = (n_micro_batches_per_epoch // grad_accum_steps) * num_epochs
+    warmup_steps = int(0.1 * t_total)
+    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+
+    log_path = os.path.join(out_dir, f"layer{layer}_train_log.jsonl")
+    ckpt_path = os.path.join(out_dir, f"layer{layer}_checkpoint.pt")
+
+    rng = random.Random(SEED)
+    global_micro_step = 0
+    opt_steps_done = 0
+    start_epoch, start_mb, resumed_epoch_rows = 0, 0, None
+    ckpt = torch.load(ckpt_path, map_location=model.device) if os.path.exists(ckpt_path) else None
+    # The temperature schedule's LENGTH is anchored to whichever t_total the FIRST invocation of this
+    # exact run computed, persisted in the checkpoint -- deliberately NOT recomputed from this call's
+    # own (possibly different) num_epochs/t_total. Without this anchor, resuming a run after raising
+    # --num_epochs (the documented use of --keep_checkpoint) would rebuild a schedule sized to the NEW,
+    # larger t_total and re-index into it by opt_steps_done -- since that's an earlier position in a
+    # now-longer schedule, temperature would jump back UP at the resume boundary instead of continuing
+    # to anneal down (verified with a regression test before this comment was written: a 1-epoch run
+    # resumed with num_epochs=2 produced a temperature that fell to 1e-7 then jumped back to ~4.6e-6).
+    # A fresh run (no checkpoint yet) has no persisted anchor, so it just uses its own t_total.
+    temp_schedule_total_steps = ckpt["temp_schedule_total_steps"] if ckpt is not None else t_total
+    temp_schedule = temperature_schedule(max(temp_schedule_total_steps, 1), temperature_start, temperature_end)
+
+    print(f"[dbm/train] entity={entity_assets.entity} attribute={attribute} layer={layer} "
+          f"l1_coef={l1_coef} temperature={temperature_start}->{temperature_end} positions={positions} "
+          f"rows={len(rows)} cause_only={cause_only} randomize_positions={randomize_positions} "
+          f"micro_batch={batch_size} accum={grad_accum_steps} (effective batch {batch_size * grad_accum_steps}) "
+          f"epochs={num_epochs} total optimizer steps={t_total} (temperature schedule steps={temp_schedule_total_steps})")
+
+    if ckpt is not None:
+        intervention.load_state_dict(ckpt["intervention"])
+        optimizer.load_state_dict(ckpt["optimizer"])
+        scheduler.load_state_dict(ckpt["scheduler"])
+        rng.setstate(ckpt["rng_state"])
+        start_epoch, start_mb = ckpt["epoch"], ckpt["next_mb"]
+        resumed_epoch_rows = ckpt["epoch_rows"]
+        global_micro_step = ckpt["global_micro_step"]
+        opt_steps_done = ckpt["opt_steps_done"]
+        assert ckpt["batch_size"] == batch_size and ckpt["grad_accum_steps"] == grad_accum_steps, (
+            f"{ckpt_path} was trained with batch_size={ckpt['batch_size']}/grad_accum_steps="
+            f"{ckpt['grad_accum_steps']}, but this run passed batch_size={batch_size}/"
+            f"grad_accum_steps={grad_accum_steps} -- resuming with a different micro-batch size "
+            f"than the saved next_mb/optimizer-step counters silently corrupts training.")
+        print(f"resumed from {ckpt_path}: epoch {start_epoch}/{num_epochs}, micro-batch {start_mb}/{n_micro_batches_per_epoch}, "
+              f"opt_steps_done={opt_steps_done}")
+        log_f = open(log_path, "a")
+    else:
+        log_f = open(log_path, "w")
+
+    def save_checkpoint(epoch, next_mb, epoch_rows):
+        torch.save({
+            "intervention": intervention.state_dict(), "optimizer": optimizer.state_dict(),
+            "scheduler": scheduler.state_dict(), "rng_state": rng.getstate(),
+            "epoch": epoch, "next_mb": next_mb, "epoch_rows": epoch_rows,
+            "global_micro_step": global_micro_step, "opt_steps_done": opt_steps_done,
+            "batch_size": batch_size, "grad_accum_steps": grad_accum_steps,
+            "temp_schedule_total_steps": temp_schedule_total_steps,
+        }, ckpt_path)
+
+    # Temperature at the FIRST not-yet-taken optimizer step -- set once up front so the very first
+    # micro-batches (before the first completed opt step below sets it again) already use the right
+    # value, matters most on a resume where opt_steps_done > 0.
+    intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
+
+    t_start = time.time()
+    ce_loss = None
+    for epoch in range(start_epoch, num_epochs):
+        if epoch == start_epoch and resumed_epoch_rows is not None:
+            epoch_rows, mb_start_this_epoch = resumed_epoch_rows, start_mb
+        else:
+            epoch_rows = rows[:]
+            rng.shuffle(epoch_rows)
+            mb_start_this_epoch = 0
+
+        optimizer.zero_grad()
+        accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+        mb_batch_rows = [(mb, epoch_rows[mb * batch_size:(mb + 1) * batch_size])
+                          for mb in range(mb_start_this_epoch, n_micro_batches_per_epoch)]
+        mb_batch_rows = [(mb, br) for mb, br in mb_batch_rows if br]
+        batch_iter = (build_batch(br, entity_assets, adapter, model, processor, positions, batch_cache=batch_cache)
+                      for _, br in mb_batch_rows)
+        for (mb, batch_rows), batch in zip(mb_batch_rows, batch_iter):
+            target_toks, target_len = target_gold_toks_and_len(batch)
+            ext_ids, ext_mask = build_teacher_forced_extension(batch["base_input_ids"], batch["attention_mask"],
+                                                                 target_toks, target_len)
+
+            if source_cache is not None and not batch["is_last_token"]:
+                source_hidden = lookup_source_hidden(source_cache, batch, layer, model.device, model.dtype)
+            else:
+                source_hidden = cache_source_layer_hidden(model, batch, layer)
+            logits = run_intervened_forward(model, layers, batch, layer, intervention, source_hidden, ext_ids,
+                                             ext_mask, randomize_positions=randomize_positions)
+
+            labels = gold_labels_from_lens(target_toks, target_len).to(model.device)
+            ce_loss = torch.nn.functional.cross_entropy(
+                logits.reshape(-1, logits.shape[-1]).float(), labels.reshape(-1), ignore_index=-100,
+            )
+            l1_term = l1_penalty(intervention)
+            loss = (ce_loss + l1_coef * l1_term) / grad_accum_steps
+            loss.backward()
+            accum_loss += loss.item()
+            accum_ce += ce_loss.item() / grad_accum_steps
+            accum_l1 += l1_term.item() / grad_accum_steps
+            global_micro_step += 1
+
+            if global_micro_step % grad_accum_steps == 0:
+                optimizer.step()
+                scheduler.step()
+                optimizer.zero_grad()
+                opt_steps_done += 1
+                intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
+                log_f.write(json.dumps({
+                    "epoch": epoch, "micro_step": global_micro_step, "opt_step": opt_steps_done,
+                    "loss": accum_loss, "ce_loss": ce_loss.item(), "l1_term": accum_l1,
+                    "temperature": intervention.get_temperature().item(), "lr": scheduler.get_last_lr()[0],
+                }) + "\n")
+                log_f.flush()
+                accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+
+                opt_step_in_epoch = (mb + 1 - mb_start_this_epoch) // grad_accum_steps
+                if opt_step_in_epoch % CHECKPOINT_EVERY_OPT_STEPS == 0:
+                    save_checkpoint(epoch, mb + 1, epoch_rows)
+
+        elapsed = time.time() - t_start
+        last_loss = ce_loss.item() if ce_loss is not None else float("nan")
+        print(f"epoch {epoch} done, elapsed={elapsed/60:.1f}min, last ce_loss={last_loss:.4f}, "
+              f"temperature={intervention.get_temperature().item():.2e}", flush=True)
+        save_checkpoint(epoch + 1, 0, None)
+
+    log_f.close()
+    final_path = os.path.join(out_dir, f"layer{layer}_intervention.pt")
+    torch.save(intervention.state_dict(), final_path)
+    print(f"DONE. wrote {final_path}")
+
+    if cleanup_checkpoint and os.path.exists(ckpt_path):
+        os.remove(ckpt_path)
+        print(f"  removed {ckpt_path} (resume state no longer needed -- training finished)")
+
+    return final_path
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--entity", required=True)
+    ap.add_argument("--attribute", required=True, help="Cause attribute -- queried==this flips to source; every "
+                                                         "other attribute in this entity becomes an iso pool.")
+    ap.add_argument("--layer", type=int, required=True, help="0=embedding output, 1..N=decoder layer N's output")
+    ap.add_argument("--positions", default="flag_ring1", help="A named set from the entity's object_location.json "
+                                                                "(e.g. flag_ring1/flag_only for flags, logo_ring1/"
+                                                                "logo_only for brands), or 'last_token' (the closest "
+                                                                "analogue of RAVEL's own text-only intervention "
+                                                                "site: the entity mention's single last token) or "
+                                                                "'full_image'.")
+    ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
+    ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT, help="Path to a sibling VADE checkout (entity data, "
+                                                                     "tuples, pruned tuples, source cache). Defaults "
+                                                                     "to ../VADE, or the VADE_ROOT env var.")
+    ap.add_argument("--l1_coef", type=float, default=DBM_L1_COEF,
+                     help=f"Sparsity coefficient on the raw mask's L1 norm (RAVEL's reported optimum: {DBM_L1_COEF}).")
+    ap.add_argument("--temperature_start", type=float, default=TEMP_START)
+    ap.add_argument("--temperature_end", type=float, default=TEMP_END)
+    ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
+    ap.add_argument("--batch_size", type=int, default=BATCH_SIZE)
+    ap.add_argument("--grad_accum_steps", type=int, default=GRAD_ACCUM_STEPS)
+    ap.add_argument("--cause_only", action="store_true")
+    ap.add_argument("--randomize_positions", action="store_true")
+    ap.add_argument("--limit_rows", type=int, default=None)
+    ap.add_argument("--allow_unpruned", action="store_true",
+                     help="Pruned tuples (VADE's models/<model_slug>/<entity>/tuples/, baseline-pruned by VADE's "
+                          "own models/prune_tuples.py) are REQUIRED by default -- same reasoning as DAS's own "
+                          "--allow_unpruned (see VADE/methods/das/train.py): training on unpruned data wastes "
+                          "capacity on rows the model can't answer correctly even at baseline. Pass this to "
+                          "deliberately opt out and train on VADE's data/<entity>/tuples/ directly instead.")
+    ap.add_argument("--keep_checkpoint", action="store_true",
+                     help="By default, layer{layer}_checkpoint.pt (the resume-state file) is deleted once training "
+                          "finishes successfully. Pass this if you might later raise --num_epochs on this exact "
+                          "run to continue training past what already ran (that resume path needs the file).")
+    ap.add_argument("--out_dir", default=None, help="Defaults to THIS repo's results/<model_slug>/<entity>/dbm/"
+                                                       "<attribute>/<config_tag>/ (never under --vade_root).")
+    ap.add_argument("--no_source_cache", action="store_true",
+                     help="Disable the per-entity source-activation cache (on by default, shared with DAS -- see "
+                          "VADE/methods/common/source_cache.py -- lives under --vade_root/results/ since it's "
+                          "keyed purely by entity+model, not by method). Ignored for --positions=last_token.")
+    args = ap.parse_args()
+
+    model_slug = args.model_id.split("/")[-1]
+    pruned = not args.allow_unpruned
+    tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
+                  if pruned else None)
+    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef, args.positions, pruned),
+                             f"layer{args.layer}_train.log")
+
+    with tee_to_log(log_path):
+        adapter = get_adapter(args.model_id)
+        model, processor = adapter.load()
+
+        entity_assets = load_entity_assets(args.vade_root, args.entity)
+
+        out_dir = args.out_dir or dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                                    args.positions, pruned)
+
+        source_cache = None
+        if not args.no_source_cache:
+            source_cache = get_or_build_source_cache(adapter, model, processor, entity_assets,
+                                                       args.vade_root, model_slug)
+
+        train_layer(adapter, model, processor, entity_assets, args.attribute, args.layer, out_dir,
+                    positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
+                    temperature_end=args.temperature_end, num_epochs=args.num_epochs, batch_size=args.batch_size,
+                    grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
+                    randomize_positions=args.randomize_positions, limit_rows=args.limit_rows, tuples_dir=tuples_dir,
+                    cleanup_checkpoint=not args.keep_checkpoint, source_cache=source_cache)
+
+
+if __name__ == "__main__":
+    main()
