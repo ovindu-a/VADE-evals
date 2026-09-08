@@ -1,0 +1,677 @@
+{
+  "entity": "animals",
+  "attribute": "body_covering",
+  "positions": "entity_ring1",
+  "n_rows": 72,
+  "top_k": 5,
+  "single_forward_pass": true,
+  "per_layer": {
+    "0": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 91745.92857142857,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 41507.333333333336
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 52570.083333333336
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 86788.33333333333
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 44205.583333333336
+        }
+      }
+    },
+    "1": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 43017.392857142855,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 10820.125
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 38480.01388888889
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 69875.0
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 20943.416666666668
+        }
+      }
+    },
+    "2": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 45778.78571428572,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 10120.388888888889
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 52996.194444444445
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 85459.29166666667
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 31772.652777777777
+        }
+      }
+    },
+    "3": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 56850.78571428572,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 19829.430555555555
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 68292.15277777778
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 94037.70833333333
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 70788.70833333333
+        }
+      }
+    },
+    "4": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 91079.02380952382,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 38035.944444444445
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 79942.80555555556
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 112940.83333333333
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 104621.43055555556
+        }
+      }
+    },
+    "5": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 85072.66666666667,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 47294.333333333336
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 85745.19444444444
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 124677.54166666667
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 119582.94444444444
+        }
+      }
+    },
+    "6": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 74797.82142857143,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 36834.5
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 84887.73611111111
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 112683.44444444444
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 103736.625
+        }
+      }
+    },
+    "7": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 43327.130952380954,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 24140.625
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 71303.27777777778
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 112081.70833333333
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 71893.30555555556
+        }
+      }
+    },
+    "8": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 50119.55952380953,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 27829.708333333332
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 62974.958333333336
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 119543.52777777778
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 91480.63888888889
+        }
+      }
+    },
+    "9": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 45108.22619047619,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 20630.680555555555
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 57311.125
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 116488.375
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 88489.88888888889
+        }
+      }
+    },
+    "10": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 33714.916666666664,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 10747.375
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 44243.0
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 100501.76388888889
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 64018.38888888889
+        }
+      }
+    },
+    "11": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 33710.53571428572,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 11197.597222222223
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 56624.40277777778
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 98123.18055555556
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 75438.97222222222
+        }
+      }
+    },
+    "12": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 44697.09523809524,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 12425.125
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 60909.958333333336
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 93681.80555555556
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 62199.73611111111
+        }
+      }
+    },
+    "13": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 40094.95238095238,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 18938.722222222223
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 58672.458333333336
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 95839.36111111111
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 68432.43055555556
+        }
+      }
+    },
+    "14": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 46257.119047619046,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 19631.055555555555
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 55702.166666666664
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 103852.41666666667
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 85347.30555555556
+        }
+      }
+    },
+    "15": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 55569.23809523809,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 20056.194444444445
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 57619.26388888889
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 104899.97222222222
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 89881.73611111111
+        }
+      }
+    },
+    "16": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 40854.28571428572,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 24961.208333333332
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 60819.09722222222
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 100025.875
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 91016.90277777778
+        }
+      }
+    },
+    "17": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 56451.76190476191,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 23461.0
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 53582.194444444445
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 97054.875
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 106466.80555555556
+        }
+      }
+    },
+    "18": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 43340.67857142857,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 22208.875
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 44564.90277777778
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 89636.31944444444
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 92896.98611111111
+        }
+      }
+    },
+    "19": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 41020.65476190476,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 17889.902777777777
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 43030.90277777778
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 86894.77777777778
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 62524.916666666664
+        }
+      }
+    },
+    "20": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 32719.39285714286,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 16010.847222222223
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 52738.73611111111
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 76818.23611111111
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 49138.34722222222
+        }
+      }
+    },
+    "21": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 31643.321428571428,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 19055.027777777777
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 57783.52777777778
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 82571.63888888889
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 74072.38888888889
+        }
+      }
+    },
+    "22": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 14161.857142857143,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 17565.652777777777
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 62453.98611111111
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 58206.26388888889
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 61736.666666666664
+        }
+      }
+    },
+    "23": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 3429.654761904762,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 31928.777777777777
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 76142.95833333333
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 53866.36111111111
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 59500.63888888889
+        }
+      }
+    },
+    "24": {
+      "n": 84,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 1112.3333333333333,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 35561.708333333336
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 71287.81944444444
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 37711.98611111111
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 68534.23611111111
+        }
+      }
+    },
+    "25": {
+      "n": 84,
+      "top1_match_rate": 0.35714285714285715,
+      "mean_gold_rank": 213.54761904761904,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 35334.36111111111
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 57370.47222222222
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 27162.01388888889
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 46693.069444444445
+        }
+      }
+    },
+    "26": {
+      "n": 84,
+      "top1_match_rate": 0.4642857142857143,
+      "mean_gold_rank": 15.880952380952381,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 29402.541666666668
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 66048.05555555556
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 14068.930555555555
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 22280.625
+        }
+      }
+    },
+    "27": {
+      "n": 84,
+      "top1_match_rate": 0.7142857142857143,
+      "mean_gold_rank": 1.3571428571428572,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 8266.944444444445
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 18951.48611111111
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 4706.75
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 2184.4861111111113
+        }
+      }
+    },
+    "28": {
+      "n": 84,
+      "top1_match_rate": 0.9166666666666666,
+      "mean_gold_rank": 1.0714285714285714,
+      "other_attributes": {
+        "native_continent": {
+          "n": 72,
+          "mean_gold_rank": 9272.458333333334
+        },
+        "primary_habitat": {
+          "n": 72,
+          "mean_gold_rank": 1503.2916666666667
+        },
+        "taxonomic_class": {
+          "n": 72,
+          "mean_gold_rank": 291.2361111111111
+        },
+        "reproduction": {
+          "n": 72,
+          "mean_gold_rank": 406.3611111111111
+        }
+      }
+    }
+  }
+}

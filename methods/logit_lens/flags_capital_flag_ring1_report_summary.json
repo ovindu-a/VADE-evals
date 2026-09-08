@@ -1,0 +1,561 @@
+{
+  "entity": "flags",
+  "attribute": "capital",
+  "positions": "flag_ring1",
+  "n_rows": 72,
+  "top_k": 5,
+  "single_forward_pass": true,
+  "per_layer": {
+    "0": {
+      "n": 138,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 57236.47826086957,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 30694.0
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 56967.333333333336
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 6452.0
+        }
+      }
+    },
+    "1": {
+      "n": 138,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 35837.3768115942,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 51407.73611111111
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 63330.708333333336
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 736.2083333333334
+        }
+      }
+    },
+    "2": {
+      "n": 138,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 31716.514492753624,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 45148.541666666664
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 60114.555555555555
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 1803.3333333333333
+        }
+      }
+    },
+    "3": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 45285.362318840576,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 50019.569444444445
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 72462.97222222222
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 6833.319444444444
+        }
+      }
+    },
+    "4": {
+      "n": 138,
+      "top1_match_rate": 0.014492753623188406,
+      "mean_gold_rank": 63279.42753623189,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 59494.958333333336
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 85184.72222222222
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 27904.01388888889
+        }
+      }
+    },
+    "5": {
+      "n": 138,
+      "top1_match_rate": 0.007246376811594203,
+      "mean_gold_rank": 68928.96376811594,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 69298.22222222222
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 92924.29166666667
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 36987.944444444445
+        }
+      }
+    },
+    "6": {
+      "n": 138,
+      "top1_match_rate": 0.028985507246376812,
+      "mean_gold_rank": 61047.60144927536,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 63005.86111111111
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 92589.40277777778
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 19049.347222222223
+        }
+      }
+    },
+    "7": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 47550.108695652176,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 52768.13888888889
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 81341.875
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 10813.041666666666
+        }
+      }
+    },
+    "8": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 42809.31884057971,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 56189.25
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 66942.77777777778
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 13635.5
+        }
+      }
+    },
+    "9": {
+      "n": 138,
+      "top1_match_rate": 0.036231884057971016,
+      "mean_gold_rank": 47798.3768115942,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 58558.90277777778
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 64898.51388888889
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 34368.333333333336
+        }
+      }
+    },
+    "10": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 46929.18115942029,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 52583.041666666664
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 52113.680555555555
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 12059.625
+        }
+      }
+    },
+    "11": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 42658.115942028984,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 57239.083333333336
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 43755.208333333336
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 5197.319444444444
+        }
+      }
+    },
+    "12": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 46158.608695652176,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 60147.833333333336
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 41989.305555555555
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 14731.791666666666
+        }
+      }
+    },
+    "13": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 48073.760869565216,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 54023.055555555555
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 38744.125
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 14720.861111111111
+        }
+      }
+    },
+    "14": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 56206.86956521739,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 67968.55555555556
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 48201.25
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 42426.48611111111
+        }
+      }
+    },
+    "15": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 51625.45652173913,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 72658.22222222222
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 49026.75
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 66052.40277777778
+        }
+      }
+    },
+    "16": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 55976.217391304344,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 76526.36111111111
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 53690.22222222222
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 52224.65277777778
+        }
+      }
+    },
+    "17": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 60733.42753623189,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 82205.94444444444
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 62510.59722222222
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 74825.63888888889
+        }
+      }
+    },
+    "18": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 64026.913043478264,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 85762.30555555556
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 61988.0
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 82452.77777777778
+        }
+      }
+    },
+    "19": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 68034.23188405797,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 83025.375
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 66093.84722222222
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 87219.11111111111
+        }
+      }
+    },
+    "20": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 62445.0,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 81935.23611111111
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 59968.36111111111
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 81112.90277777778
+        }
+      }
+    },
+    "21": {
+      "n": 138,
+      "top1_match_rate": 0.043478260869565216,
+      "mean_gold_rank": 60631.884057971016,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 97394.76388888889
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 73012.48611111111
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 104245.02777777778
+        }
+      }
+    },
+    "22": {
+      "n": 138,
+      "top1_match_rate": 0.07246376811594203,
+      "mean_gold_rank": 40120.0,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 82630.38888888889
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 43291.48611111111
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 92466.56944444444
+        }
+      }
+    },
+    "23": {
+      "n": 138,
+      "top1_match_rate": 0.08695652173913043,
+      "mean_gold_rank": 29119.557971014492,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 83914.91666666667
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 55679.194444444445
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 101082.72222222222
+        }
+      }
+    },
+    "24": {
+      "n": 138,
+      "top1_match_rate": 0.08695652173913043,
+      "mean_gold_rank": 14721.601449275362,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 63491.72222222222
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 27146.73611111111
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 56372.90277777778
+        }
+      }
+    },
+    "25": {
+      "n": 138,
+      "top1_match_rate": 0.2028985507246377,
+      "mean_gold_rank": 7941.275362318841,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 50981.444444444445
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 23847.472222222223
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 58357.541666666664
+        }
+      }
+    },
+    "26": {
+      "n": 138,
+      "top1_match_rate": 0.3695652173913043,
+      "mean_gold_rank": 1094.6159420289855,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 39066.944444444445
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 15093.833333333334
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 57093.791666666664
+        }
+      }
+    },
+    "27": {
+      "n": 138,
+      "top1_match_rate": 0.8115942028985508,
+      "mean_gold_rank": 16.78985507246377,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 24599.680555555555
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 5532.25
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 261.5833333333333
+        }
+      }
+    },
+    "28": {
+      "n": 138,
+      "top1_match_rate": 1.0,
+      "mean_gold_rank": 1.0,
+      "other_attributes": {
+        "currency": {
+          "n": 72,
+          "mean_gold_rank": 7573.583333333333
+        },
+        "language": {
+          "n": 72,
+          "mean_gold_rank": 428.94444444444446
+        },
+        "calling_code": {
+          "n": 72,
+          "mean_gold_rank": 94.29166666666667
+        }
+      }
+    }
+  }
+}

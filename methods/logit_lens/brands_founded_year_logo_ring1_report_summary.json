@@ -1,0 +1,445 @@
+{
+  "entity": "brands",
+  "attribute": "founded_year",
+  "positions": "logo_ring1",
+  "n_rows": 72,
+  "top_k": 5,
+  "single_forward_pass": true,
+  "per_layer": {
+    "0": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 34908.273148148146,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 62499.694444444445
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 85097.48484848485
+        }
+      }
+    },
+    "1": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 820.3518518518518,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 15981.736111111111
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 83204.77272727272
+        }
+      }
+    },
+    "2": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 1777.8425925925926,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 14702.722222222223
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 74871.59090909091
+        }
+      }
+    },
+    "3": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 4749.074074074074,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 16691.625
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 88154.43939393939
+        }
+      }
+    },
+    "4": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 16347.694444444445,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 37736.86111111111
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 111565.07575757576
+        }
+      }
+    },
+    "5": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 26316.26388888889,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 48678.25
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 113789.0303030303
+        }
+      }
+    },
+    "6": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 25026.60185185185,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 57058.75
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 105838.72727272728
+        }
+      }
+    },
+    "7": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 14735.393518518518,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 65335.02777777778
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 94823.27272727272
+        }
+      }
+    },
+    "8": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 19332.671296296296,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 82568.77777777778
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 90216.71212121213
+        }
+      }
+    },
+    "9": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 35734.0,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 96138.31944444444
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 96988.0
+        }
+      }
+    },
+    "10": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 32059.472222222223,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 82165.29166666667
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 86949.81818181818
+        }
+      }
+    },
+    "11": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 26171.35185185185,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 88313.48611111111
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 97464.12121212122
+        }
+      }
+    },
+    "12": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 32995.27777777778,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 90968.59722222222
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 98658.72727272728
+        }
+      }
+    },
+    "13": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 32905.4537037037,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 99304.44444444444
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 100157.39393939394
+        }
+      }
+    },
+    "14": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 33461.319444444445,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 92155.63888888889
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 97822.15151515152
+        }
+      }
+    },
+    "15": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 41529.648148148146,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 90154.44444444444
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 95966.74242424243
+        }
+      }
+    },
+    "16": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 43988.26388888889,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 85738.09722222222
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 92019.56060606061
+        }
+      }
+    },
+    "17": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 46849.819444444445,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 82494.41666666667
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 94843.68181818182
+        }
+      }
+    },
+    "18": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 37650.18981481482,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 77725.27777777778
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 84572.19696969698
+        }
+      }
+    },
+    "19": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 50260.73148148148,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 69479.59722222222
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 87913.71212121213
+        }
+      }
+    },
+    "20": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 34758.555555555555,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 55383.208333333336
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 84130.51515151515
+        }
+      }
+    },
+    "21": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 11524.842592592593,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 72778.11111111111
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 92723.75757575757
+        }
+      }
+    },
+    "22": {
+      "n": 216,
+      "top1_match_rate": 0.037037037037037035,
+      "mean_gold_rank": 13537.069444444445,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 67119.05555555556
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 83059.27272727272
+        }
+      }
+    },
+    "23": {
+      "n": 216,
+      "top1_match_rate": 0.09259259259259259,
+      "mean_gold_rank": 6268.583333333333,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 63459.01388888889
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 77641.27272727272
+        }
+      }
+    },
+    "24": {
+      "n": 216,
+      "top1_match_rate": 0.0,
+      "mean_gold_rank": 5027.467592592592,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 63582.40277777778
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 65828.42424242424
+        }
+      }
+    },
+    "25": {
+      "n": 216,
+      "top1_match_rate": 0.2638888888888889,
+      "mean_gold_rank": 3269.3981481481483,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 56684.98611111111
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 47219.92424242424
+        }
+      }
+    },
+    "26": {
+      "n": 216,
+      "top1_match_rate": 0.6620370370370371,
+      "mean_gold_rank": 16.13888888888889,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 51202.76388888889
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 34330.93939393939
+        }
+      }
+    },
+    "27": {
+      "n": 216,
+      "top1_match_rate": 1.0,
+      "mean_gold_rank": 1.0,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 42170.47222222222
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 10888.439393939394
+        }
+      }
+    },
+    "28": {
+      "n": 216,
+      "top1_match_rate": 1.0,
+      "mean_gold_rank": 1.0,
+      "other_attributes": {
+        "hq_country": {
+          "n": 72,
+          "mean_gold_rank": 17034.041666666668
+        },
+        "industry": {
+          "n": 66,
+          "mean_gold_rank": 4268.030303030303
+        }
+      }
+    }
+  }
+}
