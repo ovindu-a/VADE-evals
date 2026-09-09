@@ -70,12 +70,16 @@ CHECKPOINT_EVERY_OPT_STEPS = 5
 PROGRESS_EVERY_OPT_STEPS = 1
 
 
-def dbm_results_dir(model_slug, entity, attribute, l1_coef, positions, pruned=False):
-    return results_dir(REPO_ROOT, model_slug, entity, "dbm", attribute, dbm_config_tag(l1_coef, positions, pruned))
+def dbm_results_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, positions,
+                     pruned=False):
+    return results_dir(REPO_ROOT, model_slug, entity, "dbm", attribute,
+                        dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned))
 
 
-def dbm_logs_dir(model_slug, entity, attribute, l1_coef, positions, pruned=False):
-    return logs_dir(REPO_ROOT, model_slug, entity, "dbm", attribute, dbm_config_tag(l1_coef, positions, pruned))
+def dbm_logs_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, positions,
+                  pruned=False):
+    return logs_dir(REPO_ROOT, model_slug, entity, "dbm", attribute,
+                     dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned))
 
 
 def cache_source_layer_hidden(model, batch, layer_idx):
@@ -127,7 +131,16 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     if limit_rows:
         rows = rows[:limit_rows]
     n_micro_batches_per_epoch = (len(rows) + batch_size - 1) // batch_size
-    t_total = (n_micro_batches_per_epoch // grad_accum_steps) * num_epochs
+    # Ceiling division: an epoch whose micro-batch count isn't a multiple of grad_accum_steps still
+    # gets one MORE optimizer step per epoch for its trailing partial group (flushed explicitly below,
+    # right after the micro-batch loop) -- floor division here would undercount t_total, silently
+    # discarding that partial group's real forward+backward-computed gradient once the next epoch's
+    # (or, for the last epoch, this run's own final) optimizer.zero_grad() wipes it unapplied. Verified
+    # with a regression test: 21 rows / batch_size=4 / grad_accum_steps=4 (6 micro-batches, not a
+    # multiple of 4) used to take exactly 1 optimizer.step() instead of the 2 needed to actually use
+    # every row -- 5 of 21 rows (~24%) contributed zero training signal despite being computed.
+    steps_per_epoch = -(-n_micro_batches_per_epoch // grad_accum_steps)  # ceil division
+    t_total = steps_per_epoch * num_epochs
     warmup_steps = int(0.1 * t_total)
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
 
@@ -195,6 +208,35 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     t_start = time.time()
     opt_steps_this_call = 0  # for ETA below -- distinct from opt_steps_done, which persists across resumes
     ce_loss = None
+
+    def complete_opt_step(epoch, accum_loss, accum_ce, accum_l1):
+        """optimizer.step() + all its bookkeeping (temperature anneal, jsonl log, progress print) --
+        called both at a normal grad_accum_steps boundary AND to flush a trailing PARTIAL accumulation
+        group at an epoch's end (see steps_per_epoch's ceil-division comment above for why the latter
+        matters: otherwise that partial group's already-computed gradient is silently discarded)."""
+        nonlocal opt_steps_done, opt_steps_this_call
+        optimizer.step()
+        scheduler.step()
+        optimizer.zero_grad()
+        opt_steps_done += 1
+        opt_steps_this_call += 1
+        intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
+        log_f.write(json.dumps({
+            "epoch": epoch, "micro_step": global_micro_step, "opt_step": opt_steps_done,
+            "loss": accum_loss, "ce_loss": ce_loss.item(), "l1_term": accum_l1,
+            "temperature": intervention.get_temperature().item(), "lr": scheduler.get_last_lr()[0],
+        }) + "\n")
+        log_f.flush()
+        if opt_steps_done % PROGRESS_EVERY_OPT_STEPS == 0:
+            elapsed = time.time() - t_start
+            sec_per_opt_step = elapsed / opt_steps_this_call
+            remaining_steps = max(t_total - opt_steps_done, 0)
+            eta_min = sec_per_opt_step * remaining_steps / 60
+            print(f"[progress] epoch={epoch} opt_step={opt_steps_done}/{t_total} "
+                  f"loss={accum_loss:.4f} ce={accum_ce:.4f} l1={accum_l1:.1f} "
+                  f"temp={intervention.get_temperature().item():.2e} lr={scheduler.get_last_lr()[0]:.2e} "
+                  f"elapsed={elapsed/60:.1f}min eta={eta_min:.1f}min", flush=True)
+
     for epoch in range(start_epoch, num_epochs):
         if epoch == start_epoch and resumed_epoch_rows is not None:
             epoch_rows, mb_start_this_epoch = resumed_epoch_rows, start_mb
@@ -205,6 +247,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
 
         optimizer.zero_grad()
         accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+        micro_steps_since_flush = 0  # for the end-of-epoch partial-group flush below
         mb_batch_rows = [(mb, epoch_rows[mb * batch_size:(mb + 1) * batch_size])
                           for mb in range(mb_start_this_epoch, n_micro_batches_per_epoch)]
         mb_batch_rows = [(mb, br) for mb, br in mb_batch_rows if br]
@@ -227,41 +270,35 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
                 logits.reshape(-1, logits.shape[-1]).float(), labels.reshape(-1), ignore_index=-100,
             )
             l1_term = l1_penalty(intervention)
+            # NOTE: divides by grad_accum_steps (the FULL accumulation group size), not by however
+            # many micro-batches actually end up in a trailing partial group -- a partial group's
+            # per-micro-batch loss/gradient contribution is therefore proportionally smaller than a
+            # full group's, matching standard gradient-accumulation semantics (each micro-batch always
+            # contributes 1/grad_accum_steps of a "full" step) rather than rescaling to make a partial
+            # group's total contribution equal to a full group's.
             loss = (ce_loss + l1_coef * l1_term) / grad_accum_steps
             loss.backward()
             accum_loss += loss.item()
             accum_ce += ce_loss.item() / grad_accum_steps
             accum_l1 += l1_term.item() / grad_accum_steps
             global_micro_step += 1
+            micro_steps_since_flush += 1
 
             if global_micro_step % grad_accum_steps == 0:
-                optimizer.step()
-                scheduler.step()
-                optimizer.zero_grad()
-                opt_steps_done += 1
-                opt_steps_this_call += 1
-                intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
-                log_f.write(json.dumps({
-                    "epoch": epoch, "micro_step": global_micro_step, "opt_step": opt_steps_done,
-                    "loss": accum_loss, "ce_loss": ce_loss.item(), "l1_term": accum_l1,
-                    "temperature": intervention.get_temperature().item(), "lr": scheduler.get_last_lr()[0],
-                }) + "\n")
-                log_f.flush()
-
-                if opt_steps_done % PROGRESS_EVERY_OPT_STEPS == 0:
-                    elapsed = time.time() - t_start
-                    sec_per_opt_step = elapsed / opt_steps_this_call
-                    remaining_steps = max(t_total - opt_steps_done, 0)
-                    eta_min = sec_per_opt_step * remaining_steps / 60
-                    print(f"[progress] epoch={epoch} opt_step={opt_steps_done}/{t_total} "
-                          f"loss={accum_loss:.4f} ce={accum_ce:.4f} l1={accum_l1:.1f} "
-                          f"temp={intervention.get_temperature().item():.2e} lr={scheduler.get_last_lr()[0]:.2e} "
-                          f"elapsed={elapsed/60:.1f}min eta={eta_min:.1f}min", flush=True)
+                complete_opt_step(epoch, accum_loss, accum_ce, accum_l1)
                 accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+                micro_steps_since_flush = 0
 
                 opt_step_in_epoch = (mb + 1 - mb_start_this_epoch) // grad_accum_steps
                 if opt_step_in_epoch % CHECKPOINT_EVERY_OPT_STEPS == 0:
                     save_checkpoint(epoch, mb + 1, epoch_rows)
+
+        if micro_steps_since_flush > 0:
+            # Trailing partial accumulation group (n_micro_batches_per_epoch isn't a multiple of
+            # grad_accum_steps) -- flush it now rather than letting the next epoch's (or, on the
+            # last epoch, nobody's) optimizer.zero_grad() discard it unapplied.
+            assert ce_loss is not None  # at least one micro-batch ran this epoch, since micro_steps_since_flush > 0
+            complete_opt_step(epoch, accum_loss, accum_ce, accum_l1)
 
         elapsed = time.time() - t_start
         last_loss = ce_loss.item() if ce_loss is not None else float("nan")
@@ -329,7 +366,8 @@ def main():
     pruned = not args.allow_unpruned
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if pruned else None)
-    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef, args.positions, pruned),
+    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                          args.temperature_start, args.temperature_end, args.positions, pruned),
                              f"layer{args.layer}_train.log")
 
     with tee_to_log(log_path):
@@ -339,6 +377,7 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
 
         out_dir = args.out_dir or dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                                    args.temperature_start, args.temperature_end,
                                                     args.positions, pruned)
 
         source_cache = None

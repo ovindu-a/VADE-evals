@@ -101,14 +101,16 @@ def main():
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if pruned else None)
     layers_tag = "-".join(str(l) for l in args.layers)
-    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef, args.positions, pruned),
+    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                          args.temperature_start, args.temperature_end, args.positions, pruned),
                              f"sweep_layers{layers_tag}.log")
 
     with tee_to_log(log_path):
         adapter = get_adapter(args.model_id)
         model, processor = adapter.load()
         entity_assets = load_entity_assets(args.vade_root, args.entity)
-        out_dir = dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef, args.positions, pruned)
+        out_dir = dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                   args.temperature_start, args.temperature_end, args.positions, pruned)
 
         print(f"[layer_sweep] entity={args.entity} attribute={args.attribute} layers={args.layers} "
               f"l1_coef={args.l1_coef} positions={args.positions} pruned={pruned} -> {out_dir}")

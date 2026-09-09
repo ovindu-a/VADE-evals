@@ -29,7 +29,7 @@ from methods.common.hooks import cache_layer_hidden, generate_patched, make_cach
 from methods.common.run_logging import tee_to_log
 from methods.common.source_cache import get_or_build_source_cache, lookup_source_hidden
 from methods.dbm.intervention import SigmoidMaskIntervention
-from methods.dbm.train import DBM_L1_COEF, dbm_logs_dir, dbm_results_dir
+from methods.dbm.train import DBM_L1_COEF, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
 
 
 def eval_layer(adapter, model, processor, entity_assets, attribute, layer, hidden_size, ckpt_path, out_path,
@@ -102,6 +102,10 @@ def main():
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--l1_coef", type=float, default=DBM_L1_COEF, help="Must match the value train.py was run with "
                                                                          "-- only used to derive the default out_dir.")
+    ap.add_argument("--temperature_start", type=float, default=TEMP_START,
+                     help="Must match the value train.py was run with -- only used to derive the default out_dir.")
+    ap.add_argument("--temperature_end", type=float, default=TEMP_END,
+                     help="Must match the value train.py was run with -- only used to derive the default out_dir.")
     ap.add_argument("--split", default="test", choices=["test", "train"])
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--max_new_tokens", type=int, default=16)
@@ -120,7 +124,8 @@ def main():
     pruned = not args.allow_unpruned
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if pruned else None)
-    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef, args.positions, pruned),
+    log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                          args.temperature_start, args.temperature_end, args.positions, pruned),
                              f"layer{args.layer}_eval_{args.split}.log")
 
     with tee_to_log(log_path):
@@ -135,6 +140,7 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
 
         out_dir = args.out_dir or dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
+                                                    args.temperature_start, args.temperature_end,
                                                     args.positions, pruned)
         ckpt_path = args.ckpt_path or os.path.join(out_dir, f"layer{args.layer}_intervention.pt")
         out_path = os.path.join(out_dir, f"layer{args.layer}_predictions_{args.split}.jsonl")

@@ -67,5 +67,9 @@ def l1_penalty(intervention):
     return intervention.mask.abs().sum()
 
 
-def dbm_config_tag(l1_coef, positions, pruned=False):
-    return f"L1_{l1_coef}_{positions}" + ("_pruned" if pruned else "")
+def dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned=False):
+    """Encodes every hyperparameter that changes the trained artifact -- NOT just l1_coef. An earlier
+    version omitted temperature_start/temperature_end here, so two runs differing only in temperature
+    schedule would collide into the same results/logs directory (the same class of gotcha this
+    project's own select_features.py already hit with --dictionaries_dir -- see its README section)."""
+    return f"L1_{l1_coef}_T{temperature_start:g}-{temperature_end:g}_{positions}" + ("_pruned" if pruned else "")
