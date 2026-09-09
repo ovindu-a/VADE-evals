@@ -237,6 +237,19 @@ for flags, etc.) plus `last_token` -- the closest analogue of RAVEL's own
 `flag_only`/`flag_ring1` are this project's own extension into the
 image-object-span setting that PCA/SAE/DAS already use.
 
+**Results always land in a file, not just stdout.** Per layer, `eval.py`
+(and `run_layer.py`/`layer_sweep.py`, which call the same code) write
+`layer{L}_predictions_{split}.jsonl` plus, via VADE's own `eval/score.py`
+(`score_file()`), a comprehensive `layer{L}_predictions_{split}_summary.
+{json,md}` -- per-attribute `cause`/`iso`/`final_score` breakdown, identical
+shape to PCA/SAE/DAS's own summary files. `layer_sweep.py` additionally
+writes a sweep-level `sweep_layers<tag>_summary.{json,md}` aggregating
+every swept layer's scores side by side plus the winning layer
+(`best_layer`/`best_final_score`) -- this is the file to read/parse for
+"which layer won", rather than re-reading `print_summary`'s console/log
+text. All of these land under the same `results/<model_slug>/<entity>/
+dbm/<attribute>/<config_tag>/` directory as the checkpoints/train logs.
+
 `train.py` prints a `[progress] epoch=... opt_step=X/N loss=... ce=... l1=...
 temp=... lr=... elapsed=...min eta=...min` line every completed optimizer
 step (in addition to the full per-step record already written to

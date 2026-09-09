@@ -10,6 +10,7 @@ Usage:
 """
 import argparse
 import gc
+import json
 import os
 import sys
 import traceback
@@ -64,6 +65,60 @@ def print_summary(layers, results):
         else:
             print(f"layer {layer}: cause={r.get('cause_accuracy')}% iso_mean={r.get('iso_mean_accuracy')}% "
                   f"final_score={r.get('final_score')}%")
+
+
+def write_sweep_summary(out_dir, layers, results, run_config):
+    """Writes sweep_layers<tag>_summary.{json,md} to out_dir -- the sweep-level
+    counterpart to what score.py's score_file() already writes PER layer
+    (layer{L}_predictions_{split}_summary.{json,md}, from run_one_layer's own
+    call to it). Without this, comparing layers side by side or picking the
+    winning one meant re-reading print_summary's plain-text output back out
+    of the log file -- not a structured, easily-reloaded result. run_config:
+    a dict of the sweep's own hyperparameters (entity/attribute/positions/
+    l1_coef/temperature_start/temperature_end/pruned/eval_split/layers), so
+    the summary file is self-describing without needing its own filename or
+    the log file to know what produced it.
+
+    Returns (json_path, md_path)."""
+    layers_tag = "-".join(str(l) for l in layers)
+    by_layer = {
+        str(layer): ({"status": "failed"} if results[layer] is None else {"status": "ok", **results[layer]})
+        for layer in layers
+    }
+    scored = [(layer, r) for layer, r in results.items() if r is not None and "final_score" in r]
+    best_layer, best_score = (None, None)
+    if scored:
+        best_layer, best = max(scored, key=lambda lr: lr[1]["final_score"])
+        best_score = best["final_score"]
+
+    json_out = {**run_config, "layers": layers, "by_layer": by_layer,
+                "best_layer": best_layer, "best_final_score": best_score}
+    json_path = os.path.join(out_dir, f"sweep_layers{layers_tag}_summary.json")
+    with open(json_path, "w") as f:
+        json.dump(json_out, f, ensure_ascii=False, indent=2)
+
+    md_lines = [f"# DBM layer sweep -- entity={run_config['entity']} attribute={run_config['attribute']}", "",
+                f"positions={run_config['positions']} l1_coef={run_config['l1_coef']} "
+                f"temperature={run_config['temperature_start']}->{run_config['temperature_end']} "
+                f"pruned={run_config['pruned']} eval_split={run_config['eval_split']}", ""]
+    if best_layer is not None:
+        md_lines.append(f"**best layer: {best_layer} (final_score={best_score}%)**")
+        md_lines.append("")
+    md_lines += ["| layer | status | cause | iso_mean | final_score | n |", "|---|---|---|---|---|---|"]
+    for layer in layers:
+        r = by_layer[str(layer)]
+        if r["status"] == "failed":
+            md_lines.append(f"| {layer} | FAILED | - | - | - | - |")
+        else:
+            md_lines.append(f"| {layer} | ok | {r.get('cause_accuracy', '-')}% | {r.get('iso_mean_accuracy', '-')}% | "
+                             f"{r.get('final_score', '-')}% | {r.get('n', '-')} |")
+    md_path = os.path.join(out_dir, f"sweep_layers{layers_tag}_summary.md")
+    with open(md_path, "w") as f:
+        f.write("\n".join(md_lines) + "\n")
+
+    print(f"wrote {json_path}")
+    print(f"wrote {md_path}")
+    return json_path, md_path
 
 
 def main():
@@ -130,6 +185,11 @@ def main():
             cleanup_checkpoint=not args.keep_checkpoint, source_cache=source_cache,
         )
         print_summary(args.layers, results)
+        write_sweep_summary(out_dir, args.layers, results, run_config={
+            "entity": args.entity, "attribute": args.attribute, "positions": args.positions,
+            "l1_coef": args.l1_coef, "temperature_start": args.temperature_start,
+            "temperature_end": args.temperature_end, "pruned": pruned, "eval_split": args.eval_split,
+        })
 
 
 if __name__ == "__main__":
