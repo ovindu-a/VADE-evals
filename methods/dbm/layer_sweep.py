@@ -79,10 +79,28 @@ def write_sweep_summary(out_dir, layers, results, run_config):
     the summary file is self-describing without needing its own filename or
     the log file to know what produced it.
 
+    Also folds in each scored layer's n_selected/embed_dim/epsilon from its own
+    layer{L}_mask_stats.json (written by train.py right after the checkpoint --
+    see methods/dbm/intervention.py's mask_stats()), so a layer that ties or
+    nearly ties on final_score but selects far fewer dimensions (more sparse,
+    arguably more interpretable) is visible here rather than only inside each
+    layer's own separate mask_stats.json. Missing file (e.g. a layer trained
+    before this existed) is tolerated -- that layer's row just omits it.
+
     Returns (json_path, md_path)."""
     layers_tag = "-".join(str(l) for l in layers)
+
+    def load_mask_stats(layer):
+        path = os.path.join(out_dir, f"layer{layer}_mask_stats.json")
+        if not os.path.exists(path):
+            return {}
+        with open(path) as f:
+            stats = json.load(f)
+        return {"n_selected": stats["n_selected"], "embed_dim": stats["embed_dim"], "epsilon": stats["epsilon"]}
+
     by_layer = {
-        str(layer): ({"status": "failed"} if results[layer] is None else {"status": "ok", **results[layer]})
+        str(layer): ({"status": "failed"} if results[layer] is None
+                      else {"status": "ok", **results[layer], **load_mask_stats(layer)})
         for layer in layers
     }
     scored = [(layer, r) for layer, r in results.items() if r is not None and "final_score" in r]
@@ -104,14 +122,16 @@ def write_sweep_summary(out_dir, layers, results, run_config):
     if best_layer is not None:
         md_lines.append(f"**best layer: {best_layer} (final_score={best_score}%)**")
         md_lines.append("")
-    md_lines += ["| layer | status | cause | iso_mean | final_score | n |", "|---|---|---|---|---|---|"]
+    md_lines += ["| layer | status | cause | iso_mean | final_score | n | dims selected |",
+                 "|---|---|---|---|---|---|---|"]
     for layer in layers:
         r = by_layer[str(layer)]
         if r["status"] == "failed":
-            md_lines.append(f"| {layer} | FAILED | - | - | - | - |")
+            md_lines.append(f"| {layer} | FAILED | - | - | - | - | - |")
         else:
+            dims = f"{r['n_selected']}/{r['embed_dim']} (eps={r['epsilon']})" if "n_selected" in r else "-"
             md_lines.append(f"| {layer} | ok | {r.get('cause_accuracy', '-')}% | {r.get('iso_mean_accuracy', '-')}% | "
-                             f"{r.get('final_score', '-')}% | {r.get('n', '-')} |")
+                             f"{r.get('final_score', '-')}% | {r.get('n', '-')} | {dims} |")
     md_path = os.path.join(out_dir, f"sweep_layers{layers_tag}_summary.md")
     with open(md_path, "w") as f:
         f.write("\n".join(md_lines) + "\n")

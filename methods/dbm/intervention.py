@@ -43,7 +43,7 @@ import torch
 
 from pyvene.models.interventions import SigmoidMaskIntervention
 
-__all__ = ["SigmoidMaskIntervention", "temperature_schedule", "l1_penalty", "dbm_config_tag"]
+__all__ = ["SigmoidMaskIntervention", "temperature_schedule", "l1_penalty", "dbm_config_tag", "mask_stats"]
 
 
 def temperature_schedule(num_steps, temperature_start=1e-2, temperature_end=1e-7, dtype=torch.float32):
@@ -65,6 +65,36 @@ def l1_penalty(intervention):
     (RAVEL's own reported optimum for DBM: ~0.001, Appendix B.4) and adds it
     to the CE loss -- see train.py."""
     return intervention.mask.abs().sum()
+
+
+def mask_stats(intervention, epsilon=1e-2):
+    """The paper's own discretization of the trained CONTINUOUS mask into the hard feature set it
+    actually claims to have found: "FA is the set of dimensions i where 1-sigma(mi/T) < epsilon"
+    -- i.e. selected iff sigma(mask_i/T) > 1-epsilon (very close to fully swapping in the source).
+    Nothing downstream of training NEEDS this (eval.py's generation-time intervention uses the
+    continuous mask directly, which is already near-binary once temperature has annealed down) --
+    this exists purely so the trained artifact is actually SUMMARIZED somewhere human/machine-
+    readable, the same way PCA/SAE/DAS's own winners.json reports n_features_selected/
+    feature_indices. Without it, answering "how many/which dimensions did this layer actually
+    select" means manually loading layer{L}_intervention.pt and re-deriving this by hand.
+
+    Returns a JSON-able dict: embed_dim, epsilon, n_selected, selected_indices (sorted python ints
+    -- this project's convention elsewhere, e.g. select_features.py's own feature_indices), the
+    temperature this was computed at (normally the fully-annealed end-of-training value), and a
+    few raw-mask/sigmoid summary stats as a sanity check independent of epsilon (e.g. sigmoid_mean
+    close to 0.5 everywhere would mean training never meaningfully differentiated any dimension,
+    whatever a given epsilon's selection count claims)."""
+    with torch.no_grad():
+        temperature = intervention.get_temperature().item()
+        sigmoid = torch.sigmoid(intervention.mask / intervention.temperature.detach())
+        selected_indices = sorted((1 - sigmoid < epsilon).nonzero(as_tuple=True)[0].tolist())
+        return {
+            "embed_dim": int(intervention.mask.shape[0]), "epsilon": epsilon,
+            "n_selected": len(selected_indices), "selected_indices": selected_indices,
+            "temperature": temperature,
+            "mask_min": intervention.mask.min().item(), "mask_max": intervention.mask.max().item(),
+            "mask_mean": intervention.mask.mean().item(), "sigmoid_mean": sigmoid.mean().item(),
+        }
 
 
 def dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned=False):

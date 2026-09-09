@@ -46,7 +46,9 @@ from methods.common.source_cache import get_or_build_source_cache, lookup_source
 from methods.common.targets import (
     MAX_ANSWER_TOKENS, build_teacher_forced_extension, gold_labels_from_lens, target_gold_toks_and_len,
 )
-from methods.dbm.intervention import SigmoidMaskIntervention, dbm_config_tag, l1_penalty, temperature_schedule
+from methods.dbm.intervention import (
+    SigmoidMaskIntervention, dbm_config_tag, l1_penalty, mask_stats, temperature_schedule,
+)
 
 SEED = 42
 LR = 1e-3
@@ -309,7 +311,20 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     log_f.close()
     final_path = os.path.join(out_dir, f"layer{layer}_intervention.pt")
     torch.save(intervention.state_dict(), final_path)
+
+    # The trained artifact is saved above, but that alone doesn't say WHICH/HOW MANY dimensions it
+    # actually selected -- PCA/SAE/DAS report this for free via winners.json's feature_indices/
+    # n_features_selected; DBM needs an explicit discretization step (the paper's own 1-sigma(m/T) <
+    # epsilon rule) to get the equivalent. Written next to the checkpoint so it's never orphaned from
+    # the artifact it describes.
+    stats = mask_stats(intervention)
+    stats_path = os.path.join(out_dir, f"layer{layer}_mask_stats.json")
+    with open(stats_path, "w") as f:
+        json.dump(stats, f, ensure_ascii=False, indent=2)
+    print(f"mask: {stats['n_selected']}/{stats['embed_dim']} dims selected at epsilon={stats['epsilon']} "
+          f"(temperature={stats['temperature']:.2e})")
     print(f"DONE. wrote {final_path}")
+    print(f"  wrote {stats_path}")
 
     if cleanup_checkpoint and os.path.exists(ckpt_path):
         os.remove(ckpt_path)
