@@ -1,0 +1,64 @@
+{
+  "entity": "flags",
+  "attribute": "language",
+  "positions": "flag_ring1",
+  "l1_coef": 0.001,
+  "temperature_start": 0.01,
+  "temperature_end": 1e-07,
+  "pruned": true,
+  "eval_split": "test",
+  "layers": [
+    10,
+    16,
+    20,
+    22
+  ],
+  "by_layer": {
+    "10": {
+      "status": "ok",
+      "n": 13332,
+      "pct_accuracy": 46.7,
+      "cause_accuracy": 52.4,
+      "iso_mean_accuracy": 44.9,
+      "final_score": 48.6,
+      "n_selected": 2095,
+      "embed_dim": 3584,
+      "epsilon": 0.01
+    },
+    "16": {
+      "status": "ok",
+      "n": 13332,
+      "pct_accuracy": 57.8,
+      "cause_accuracy": 60.4,
+      "iso_mean_accuracy": 56.9,
+      "final_score": 58.6,
+      "n_selected": 1916,
+      "embed_dim": 3584,
+      "epsilon": 0.01
+    },
+    "20": {
+      "status": "ok",
+      "n": 13332,
+      "pct_accuracy": 56.0,
+      "cause_accuracy": 51.9,
+      "iso_mean_accuracy": 56.8,
+      "final_score": 54.3,
+      "n_selected": 1934,
+      "embed_dim": 3584,
+      "epsilon": 0.01
+    },
+    "22": {
+      "status": "ok",
+      "n": 13332,
+      "pct_accuracy": 57.9,
+      "cause_accuracy": 58.5,
+      "iso_mean_accuracy": 57.1,
+      "final_score": 57.8,
+      "n_selected": 2008,
+      "embed_dim": 3584,
+      "epsilon": 0.01
+    }
+  },
+  "best_layer": 16,
+  "best_final_score": 58.6
+}

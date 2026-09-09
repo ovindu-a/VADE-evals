@@ -1,0 +1,52 @@
+{
+  "predictions_file": "/workspace/fyp/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_flag_ring1_pruned/layer10_predictions_test.jsonl",
+  "entity": "flags",
+  "attribute": "language",
+  "split": "test",
+  "n_missing_predictions": 0,
+  "by_target_attribute": {
+    "language": {
+      "overall": {
+        "n": 13332,
+        "pct_accuracy": 46.7,
+        "cause_accuracy": 52.4,
+        "iso_mean_accuracy": 44.9,
+        "final_score": 48.6
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 41.1,
+          "pct_matches_source": 41.6,
+          "pct_matches_base": 41.1
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 51.4,
+          "pct_matches_source": 44.4,
+          "pct_matches_base": 51.4
+        },
+        {
+          "queried": "currency",
+          "n": 3096,
+          "is_cause": false,
+          "pct_accuracy": 42.1,
+          "pct_matches_source": 37.9,
+          "pct_matches_base": 42.1
+        },
+        {
+          "queried": "language",
+          "n": 3036,
+          "is_cause": true,
+          "pct_accuracy": 52.4,
+          "pct_matches_source": 52.4,
+          "pct_matches_base": 44.1
+        }
+      ]
+    }
+  }
+}
