@@ -204,7 +204,19 @@ embedding output has no MLP). (3) The site IS encoded in the config tag, so
 `mlp_hidden`/`mlp_output` runs don't collide. (4) Run
 `methods/ndm/verify_sites.py` before any real run -- a hook on the wrong
 tensor trains fine and produces plausible numbers; it also covers `residual`,
-so it doubles as a DBM regression check.
+so it doubles as a DBM regression check. (5) **Run
+`methods/ndm/ceiling_sweep.py` before training a new (site, layer) at all.**
+A mask selects a subset of what a full source swap uses, so the full swap is
+a hard upper bound on `cause` -- and it costs forwards, not a training run.
+Learned the hard way: NDM's first run (flags/language, layer 14, mlp_hidden)
+scored cause=2.4%, which looked like a mask-training failure (it was one --
+ce_loss flat across all 480 steps), but the full-swap ceiling there was also
+~0: swapping ALL 18944 neurons at all 24 object positions did not move the
+answer. No temperature/l1/lr tuning could have helped. Notably `mlp_output`
+(same width as residual, same locality as mlp_hidden) had the same ~0 ceiling
+while `residual` flipped the answer outright -- so at layer 14 the limiting
+variable is LOCALITY, not the basis: one block's additive down_proj update
+does not carry a whole-entity attribute.
 
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
@@ -243,7 +255,9 @@ python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only
     --entity flags --attribute all
 
 # NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
-python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # ALWAYS first
+python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # 1. is the hook right
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers 2 6 10 14 18 22 26 --sites mlp_hidden mlp_output residual              # 2. is there headroom
 python methods/ndm/run_layer.py --entity flags --attribute language --layer 16 \
     --positions flag_ring1 --site mlp_hidden
 python methods/ndm/layer_sweep.py --entity flags --attribute language \

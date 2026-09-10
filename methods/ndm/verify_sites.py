@@ -59,6 +59,7 @@ from methods.adapters.registry import get_adapter  # noqa: E402
 from methods.common.entities import BuildBatchCache, build_batch, load_entity_assets, load_tuples  # noqa: E402
 from methods.common.hooks import extra_to_device, make_cache_aware_patch_hook  # noqa: E402
 from methods.common.sites import SITES, InterventionSite  # noqa: E402
+from methods.common.targets import MAX_ANSWER_TOKENS  # noqa: E402
 from methods.dbm.intervention import SigmoidMaskIntervention  # noqa: E402
 
 # sigma(m/T) is exactly 0.0 / 1.0 in float for |m|=1 at T=1e-7 -- no need for infinities, which would
@@ -157,14 +158,34 @@ def check_site(site_name, adapter, model, processor, batch, layer, pad_token_id,
     # Informational: a REAL swap should actually change something. Not a pass/fail (a given layer/site
     # genuinely may not steer this attribute -- that's the research question, not a bug), but a site
     # where the full source swap changes NOTHING at all is worth knowing about before you train on it.
+    #
+    # Report the FIRST DIFFERING TOKEN INDEX per row, not just token inequality. An earlier version
+    # printed "CHANGES the generation" for any difference at all, which was actively misleading: on
+    # flags/language layer 14 both MLP sites' full swap differed from the unhooked run only at token
+    # index 7 (" ...the flag in the image is" -> "...features"), i.e. a trailing filler word with the
+    # ANSWER untouched -- while the residual site differed at index 1 (" Arabic." -> " English, ...")
+    # which is a real answer flip. Those two cases are not the same finding, and index<MAX_ANSWER_TOKENS
+    # separates them, since the answer occupies exactly the first MAX_ANSWER_TOKENS tokens (see
+    # common/targets.py). For a proper headroom NUMBER across many layers, use ceiling_sweep.py --
+    # this line is a smoke signal, not a measurement.
     patch_fn_real = make_cache_aware_patch_hook(positions, lambda base_vals: one(base_vals, source_act))
     gen_swapped = site.generate_patched(adapter, model, layers, layer, patch_fn_real, batch["base_input_ids"],
                                          batch["attention_mask"], batch["base_extra"], pad_token_id, max_new_tokens)
-    changed = not torch.equal(gen_swapped, gen_clean)
-    print(f"       (info) full swap of the REAL source {'CHANGES' if changed else 'does NOT change'} "
-          f"the generation")
-    print(f"         unhooked   : {processor.tokenizer.batch_decode(gen_clean, skip_special_tokens=True)}")
-    print(f"         full source: {processor.tokenizer.batch_decode(gen_swapped, skip_special_tokens=True)}")
+    clean_txt = processor.tokenizer.batch_decode(gen_clean, skip_special_tokens=True)
+    swap_txt = processor.tokenizer.batch_decode(gen_swapped, skip_special_tokens=True)
+    print("       (info) full swap of the REAL source, per row:")
+    for i in range(gen_clean.shape[0]):
+        diff = (gen_clean[i] != gen_swapped[i]).nonzero(as_tuple=True)[0]
+        if len(diff) == 0:
+            verdict = "IDENTICAL -- this site/layer has no causal effect on this row at all"
+        elif int(diff[0]) < MAX_ANSWER_TOKENS:
+            verdict = f"ANSWER CHANGED (first diff at token {int(diff[0])})"
+        else:
+            verdict = (f"answer UNCHANGED -- only trailing token {int(diff[0])} onward differs, so the "
+                       f"swap landed but did not move the answer")
+        print(f"         row {i}: {verdict}")
+        print(f"           unhooked   : {clean_txt[i]!r}")
+        print(f"           full source: {swap_txt[i]!r}")
 
     return failures
 

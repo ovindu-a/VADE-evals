@@ -57,9 +57,11 @@ VADE-evals/
                           intermediate_size) instead of the residual stream. That makes the model's
                           own MLP the featurizer: a nonlinear, zero-parameter dictionary that needs
                           no fitting and has no reconstruction error. Thin CLIs (config.py/train.py/
-                          eval.py/run_layer.py/layer_sweep.py) over dbm/'s engine, plus
-                          verify_sites.py (a correctness harness to run BEFORE any real training
-                          run). See "methods/ndm/" section below.
+                          eval.py/run_layer.py/layer_sweep.py) over dbm/'s engine, plus two
+                          diagnostics to run BEFORE any real training run: verify_sites.py
+                          (correctness -- is the hook on the right tensor) and ceiling_sweep.py
+                          (training-free causal headroom -- CAN any mask at this site/layer work).
+                          See "methods/ndm/" section below.
 
     probe_common.py        shared row-selection + teacher-forced-forward helper for the three
                           read-only probes below (no training, no intervention -- just "how does
@@ -412,12 +414,20 @@ privilege does not survive a linear map.)
 ### Usage
 
 ```bash
-# ALWAYS run this first -- one model load, ~a GPU-minute, and it catches a
+# STEP 1 -- correctness. One model load, ~a GPU-minute, and it catches a
 # hook attached to the wrong tensor (which otherwise trains fine and
 # produces plausible numbers). Covers `residual` too, so it doubles as a
 # regression check that DBM still behaves identically. Exits nonzero on
 # failure, so you can gate a run on it.
 python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16
+
+# STEP 2 -- CAUSAL HEADROOM, before spending GPU on training. Swaps in 100%
+# of the source at each (site, layer) and measures how far the answer moves.
+# A mask selects a SUBSET of what a full swap uses, so this is a hard upper
+# bound on `cause` for any amount of training there. Costs a couple of
+# forward passes per layer instead of a training run.
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers 2 6 10 14 18 22 26 --sites mlp_hidden mlp_output residual
 
 python methods/ndm/train.py --entity flags --attribute language --layer 16 \
     --positions flag_ring1 --site mlp_hidden
