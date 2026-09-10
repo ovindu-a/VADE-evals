@@ -249,13 +249,30 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
 
         optimizer.zero_grad()
         accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
-        micro_steps_since_flush = 0  # for the end-of-epoch partial-group flush below
+        micro_steps_since_flush = 0
+        groups_completed_this_epoch = 0  # counts opt steps taken THIS epoch, full or trailing-partial alike
         mb_batch_rows = [(mb, epoch_rows[mb * batch_size:(mb + 1) * batch_size])
                           for mb in range(mb_start_this_epoch, n_micro_batches_per_epoch)]
         mb_batch_rows = [(mb, br) for mb, br in mb_batch_rows if br]
+        # Resume always lands exactly on a group boundary (checkpoints are only ever saved right after
+        # complete_opt_step, never mid-group -- see below), so mb_batch_rows here is always some whole
+        # number of remaining full groups plus, at most, the SAME trailing partial group the un-resumed
+        # epoch would have had. That makes it safe to derive the trailing group's true size from just
+        # this call's own remaining count, on every call, not only a fresh (non-resumed) one.
+        n_full_groups, trailing_group_size = divmod(len(mb_batch_rows), grad_accum_steps)
         batch_iter = (build_batch(br, entity_assets, adapter, model, processor, positions, batch_cache=batch_cache)
                       for _, br in mb_batch_rows)
-        for (mb, batch_rows), batch in zip(mb_batch_rows, batch_iter):
+        for i, ((mb, batch_rows), batch) in enumerate(zip(mb_batch_rows, batch_iter)):
+            # The group THIS micro-batch belongs to -- grad_accum_steps for every group except a
+            # trailing partial one at the very end of the epoch (n_micro_batches_per_epoch isn't
+            # always a multiple of grad_accum_steps). Dividing by the group's TRUE size (not always
+            # the constant grad_accum_steps) matters for both the actual gradient (loss.backward()
+            # below) and the logged/diagnostic values -- verified with a real training log: a run's
+            # trailing 5-micro-batch group was previously logged (and gradient-weighted) as if it were
+            # a full 16-micro-batch group, diluting both by 5/16 of what a true average would be
+            # (29.06 * 5/16 ~= 9.08, matching the erroneous 9.05 that got logged).
+            current_group_size = grad_accum_steps if i < n_full_groups * grad_accum_steps else trailing_group_size
+
             target_toks, target_len = target_gold_toks_and_len(batch)
             ext_ids, ext_mask = build_teacher_forced_extension(batch["base_input_ids"], batch["attention_mask"],
                                                                  target_toks, target_len)
@@ -272,35 +289,22 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
                 logits.reshape(-1, logits.shape[-1]).float(), labels.reshape(-1), ignore_index=-100,
             )
             l1_term = l1_penalty(intervention)
-            # NOTE: divides by grad_accum_steps (the FULL accumulation group size), not by however
-            # many micro-batches actually end up in a trailing partial group -- a partial group's
-            # per-micro-batch loss/gradient contribution is therefore proportionally smaller than a
-            # full group's, matching standard gradient-accumulation semantics (each micro-batch always
-            # contributes 1/grad_accum_steps of a "full" step) rather than rescaling to make a partial
-            # group's total contribution equal to a full group's.
-            loss = (ce_loss + l1_coef * l1_term) / grad_accum_steps
+            loss = (ce_loss + l1_coef * l1_term) / current_group_size
             loss.backward()
             accum_loss += loss.item()
-            accum_ce += ce_loss.item() / grad_accum_steps
-            accum_l1 += l1_term.item() / grad_accum_steps
+            accum_ce += ce_loss.item() / current_group_size
+            accum_l1 += l1_term.item() / current_group_size
             global_micro_step += 1
             micro_steps_since_flush += 1
 
-            if global_micro_step % grad_accum_steps == 0:
+            if micro_steps_since_flush == current_group_size:
                 complete_opt_step(epoch, accum_loss, accum_ce, accum_l1)
                 accum_loss, accum_ce, accum_l1 = 0.0, 0.0, 0.0
                 micro_steps_since_flush = 0
+                groups_completed_this_epoch += 1
 
-                opt_step_in_epoch = (mb + 1 - mb_start_this_epoch) // grad_accum_steps
-                if opt_step_in_epoch % CHECKPOINT_EVERY_OPT_STEPS == 0:
+                if groups_completed_this_epoch % CHECKPOINT_EVERY_OPT_STEPS == 0:
                     save_checkpoint(epoch, mb + 1, epoch_rows)
-
-        if micro_steps_since_flush > 0:
-            # Trailing partial accumulation group (n_micro_batches_per_epoch isn't a multiple of
-            # grad_accum_steps) -- flush it now rather than letting the next epoch's (or, on the
-            # last epoch, nobody's) optimizer.zero_grad() discard it unapplied.
-            assert ce_loss is not None  # at least one micro-batch ran this epoch, since micro_steps_since_flush > 0
-            complete_opt_step(epoch, accum_loss, accum_ce, accum_l1)
 
         elapsed = time.time() - t_start
         last_loss = ce_loss.item() if ce_loss is not None else float("nan")
