@@ -8,43 +8,43 @@
     "language": {
       "overall": {
         "n": 13332,
-        "pct_accuracy": 58.0,
-        "cause_accuracy": 53.0,
-        "iso_mean_accuracy": 59.3,
-        "final_score": 56.1
+        "pct_accuracy": 56.2,
+        "cause_accuracy": 50.3,
+        "iso_mean_accuracy": 57.7,
+        "final_score": 54.0
       },
       "by_queried": [
         {
           "queried": "calling_code",
           "n": 3600,
           "is_cause": false,
-          "pct_accuracy": 57.9,
-          "pct_matches_source": 19.4,
-          "pct_matches_base": 57.9
+          "pct_accuracy": 56.8,
+          "pct_matches_source": 18.4,
+          "pct_matches_base": 56.8
         },
         {
           "queried": "capital",
           "n": 3600,
           "is_cause": false,
-          "pct_accuracy": 64.7,
-          "pct_matches_source": 29.0,
-          "pct_matches_base": 64.7
+          "pct_accuracy": 62.5,
+          "pct_matches_source": 31.3,
+          "pct_matches_base": 62.5
         },
         {
           "queried": "currency",
           "n": 3096,
           "is_cause": false,
-          "pct_accuracy": 55.2,
-          "pct_matches_source": 24.3,
-          "pct_matches_base": 55.2
+          "pct_accuracy": 53.9,
+          "pct_matches_source": 27.0,
+          "pct_matches_base": 53.9
         },
         {
           "queried": "language",
           "n": 3036,
           "is_cause": true,
-          "pct_accuracy": 53.0,
-          "pct_matches_source": 53.0,
-          "pct_matches_base": 43.3
+          "pct_accuracy": 50.3,
+          "pct_matches_source": 50.3,
+          "pct_matches_base": 45.9
         }
       ]
     }

@@ -1,0 +1,54 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+
+=== logging to /home/ahl4090/DAS-Explorations/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer16_eval_test.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<11:48,  1.03it/s]Loading weights:   1%|          | 5/729 [00:01<02:00,  6.01it/s]Loading weights:   2%|2         | 16/729 [00:01<00:33, 21.12it/s]Loading weights:   3%|3         | 22/729 [00:01<00:26, 26.90it/s]Loading weights:   4%|3         | 28/729 [00:01<00:23, 30.40it/s]Loading weights:   5%|5         | 40/729 [00:01<00:14, 47.52it/s]Loading weights:   7%|6         | 48/729 [00:01<00:12, 54.23it/s]Loading weights:   8%|7         | 56/729 [00:01<00:13, 51.22it/s]Loading weights:   9%|9         | 66/729 [00:01<00:10, 60.76it/s]Loading weights:  11%|#         | 78/729 [00:02<00:08, 73.93it/s]Loading weights:  12%|#2        | 90/729 [00:02<00:07, 83.25it/s]Loading weights:  14%|#3        | 102/729 [00:02<00:06, 91.11it/s]Loading weights:  16%|#5        | 114/729 [00:02<00:06, 95.07it/s]Loading weights:  17%|#7        | 125/729 [00:02<00:06, 97.40it/s]Loading weights:  19%|#8        | 137/729 [00:02<00:06, 94.09it/s]Loading weights:  20%|##        | 148/729 [00:02<00:06, 96.24it/s]Loading weights:  22%|##1       | 158/729 [00:02<00:05, 96.74it/s]Loading weights:  23%|##3       | 168/729 [00:03<00:07, 78.39it/s]Loading weights:  24%|##4       | 177/729 [00:03<00:08, 66.57it/s]Loading weights:  25%|##5       | 185/729 [00:03<00:08, 66.30it/s]Loading weights:  27%|##7       | 197/729 [00:03<00:07, 75.39it/s]Loading weights:  29%|##8       | 209/729 [00:03<00:06, 83.93it/s]Loading weights:  30%|###       | 221/729 [00:03<00:06, 79.29it/s]Loading weights:  32%|###1      | 233/729 [00:03<00:05, 86.39it/s]Loading weights:  34%|###3      | 245/729 [00:03<00:05, 93.86it/s]Loading weights:  35%|###5      | 257/729 [00:04<00:04, 95.66it/s]Loading weights:  37%|###6      | 269/729 [00:04<00:04, 92.05it/s]Loading weights:  39%|###8      | 281/729 [00:04<00:04, 94.06it/s]Loading weights:  40%|####      | 292/729 [00:04<00:04, 88.92it/s]Loading weights:  42%|####1     | 305/729 [00:04<00:04, 94.60it/s]Loading weights:  43%|####3     | 315/729 [00:04<00:04, 92.57it/s]Loading weights:  45%|####4     | 328/729 [00:04<00:04, 93.92it/s]Loading weights:  53%|#####2    | 385/729 [00:04<00:01, 213.02it/s]Loading weights:  68%|######7   | 493/729 [00:05<00:00, 426.37it/s]Loading weights:  86%|########6 | 628/729 [00:05<00:00, 672.87it/s]Loading weights: 100%|##########| 729/729 [00:05<00:00, 138.19it/s]
+[source_cache] resuming: 84 items already cached at /home/ahl4090/DAS-Explorations/VADE/results/Qwen2.5-VL-7B-Instruct/flags/source_activation_cache/full_image.pt
+[source_cache] entity=flags attribute=capital template=capital_prefill_v1: 0 items to cache (of 84)
+[source_cache] DONE: 84 items -> /home/ahl4090/DAS-Explorations/VADE/results/Qwen2.5-VL-7B-Instruct/flags/source_activation_cache/full_image.pt
+[dbm/eval] entity=flags attribute=language layer=16 site=residual embed_dim=3584 positions=flag_ring1 split=test: 13332 rows remaining of 13332
+/home/ahl4090/DAS-Explorations/VADE-evals/.venv/lib/python3.14/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 20/834
+  batch 40/834
+  batch 60/834
+  batch 80/834
+  batch 100/834
+  batch 120/834
+  batch 140/834
+  batch 160/834
+  batch 180/834
+  batch 200/834
+  batch 220/834
+  batch 240/834
+  batch 260/834
+  batch 280/834
+  batch 300/834
+  batch 320/834
+  batch 340/834
+  batch 360/834
+  batch 380/834
+  batch 400/834
+  batch 420/834
+  batch 440/834
+  batch 460/834
+  batch 480/834
+  batch 500/834
+  batch 520/834
+  batch 540/834
+  batch 560/834
+  batch 580/834
+  batch 600/834
+  batch 620/834
+  batch 640/834
+  batch 660/834
+  batch 680/834
+  batch 700/834
+  batch 720/834
+  batch 740/834
+  batch 760/834
+  batch 780/834
+  batch 800/834
+  batch 820/834
+DONE. wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer16_predictions_test.jsonl
+wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer16_predictions_test_summary.json
+wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer16_predictions_test_summary.md
