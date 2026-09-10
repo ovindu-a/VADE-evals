@@ -23,6 +23,7 @@ DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join
 from methods.adapters.registry import get_adapter
 from methods.common.entities import load_entity_assets, require_pruned_tuples
 from methods.common.run_logging import tee_to_log
+from methods.common.sites import RESIDUAL_SITE
 from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.eval import eval_layer
 from methods.dbm.train import (
@@ -34,7 +35,8 @@ def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, ou
                    positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START,
                    temperature_end=TEMP_END, lr=LR, num_epochs=NUM_EPOCHS, batch_size=None, grad_accum_steps=None,
                    cause_only=False, randomize_positions=False, tuples_dir=None,
-                   eval_split="test", eval_batch_size=16, cleanup_checkpoint=True, source_cache=None):
+                   eval_split="test", eval_batch_size=16, cleanup_checkpoint=True, source_cache=None,
+                   site=None, method_label="dbm"):
     """Train layer, then immediately eval it, then score. Raises on failure
     (no try/except here -- that's the sweep loop's job, see layer_sweep.py's
     run_sweep). Returns score.py's `overall` dict for this attribute
@@ -48,13 +50,14 @@ def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, ou
     from methods.dbm.train import BATCH_SIZE, GRAD_ACCUM_STEPS
     batch_size = batch_size or BATCH_SIZE
     grad_accum_steps = grad_accum_steps or GRAD_ACCUM_STEPS
+    site = site or RESIDUAL_SITE
 
     ckpt_path = train_layer(
         adapter, model, processor, entity_assets, attribute, layer, out_dir,
         positions=positions, l1_coef=l1_coef, temperature_start=temperature_start, temperature_end=temperature_end,
         lr=lr, num_epochs=num_epochs, batch_size=batch_size, grad_accum_steps=grad_accum_steps,
         cause_only=cause_only, randomize_positions=randomize_positions, tuples_dir=tuples_dir,
-        cleanup_checkpoint=cleanup_checkpoint, source_cache=source_cache,
+        cleanup_checkpoint=cleanup_checkpoint, source_cache=source_cache, site=site, method_label=method_label,
     )
     # See VADE's das/run_layer.py's identical comment: training's/eval's allocation regimes differ
     # (backprop activations vs. larger-batch no-grad generation) -- clear the caching allocator's
@@ -64,9 +67,9 @@ def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, ou
 
     predictions_path = os.path.join(out_dir, f"layer{layer}_predictions_{eval_split}.jsonl")
     eval_layer(
-        adapter, model, processor, entity_assets, attribute, layer, adapter.hidden_size(model), ckpt_path,
+        adapter, model, processor, entity_assets, attribute, layer, site.width(adapter, model), ckpt_path,
         predictions_path, positions=positions, split=eval_split, batch_size=eval_batch_size, tuples_dir=tuples_dir,
-        source_cache=source_cache,
+        source_cache=source_cache, site=site, method_label=method_label,
     )
 
     sys.path.insert(0, os.path.join(vade_root, "eval"))

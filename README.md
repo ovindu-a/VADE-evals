@@ -25,13 +25,41 @@ VADE-evals/
                           adapters -- model/entity-agnostic infra (activation-patching hooks,
                           gold-token/teacher-forcing utilities, entity asset + batch loading,
                           per-entity source-activation caching, one ModelAdapter per model family).
-                          Shared by any gradient-trained intervention method (dbm/) AND by the
+                          Shared by any gradient-trained intervention method (dbm/, ndm/) AND by the
                           read-only probes (probe_common.py/logit_lens.py/attention_maps.py) --
                           entirely separate code path from features.py/fit_dictionaries.py/
                           select_features.py above -- the PCA/SAE stack shares nothing with it.
+                          TWO FILES HERE ARE NOT VERBATIM COPIES, both added for ndm/ and both new
+                          FILES rather than edits, so the copied ones stay byte-identical to VADE's
+                          and keep taking upstream fixes cleanly:
+                            common/sites.py             the InterventionSite abstraction -- which
+                                                        tensor inside a decoder block an intervention
+                                                        reads/patches (residual / mlp_output /
+                                                        mlp_hidden). The residual site DELEGATES to
+                                                        common/hooks.py's own functions, so DBM/DAS
+                                                        behavior is unchanged by its existence.
+                            common/site_source_cache.py the MLP sites' source-activation cache (one
+                                                        file per site/positions/layer). MLP internals
+                                                        are absent from output_hidden_states, so
+                                                        common/source_cache.py cannot serve them.
+                          adapters/{base,qwen2_5_vl}.py also gained three ADDITIVE methods absent
+                          from VADE's copies (intermediate_size/get_mlp_block/
+                          get_mlp_hidden_module), so common/sites.py can address MLP internals while
+                          adapters/ stays the only module that knows a model family's attribute names.
     dbm/                  Differential Binary Masking (Cao et al. 2020/2022, evaluated in RAVEL --
                           see "methods/dbm/" section below) -- train.py/eval.py/run_layer.py/
                           layer_sweep.py, mirroring the sibling VADE repo's own methods/das/.
+                          Also the shared ENGINE behind ndm/ below: its train_layer/eval_layer/
+                          run_one_layer/run_sweep take an optional `site=`, defaulting to the
+                          residual stream (i.e. plain DBM, unchanged).
+    ndm/                  Native Dictionary Masking -- DBM's trainer, with the mask learned over a
+                          decoder block's MLP HIDDEN state (the post-SwiGLU neuron vector, width
+                          intermediate_size) instead of the residual stream. That makes the model's
+                          own MLP the featurizer: a nonlinear, zero-parameter dictionary that needs
+                          no fitting and has no reconstruction error. Thin CLIs (config.py/train.py/
+                          eval.py/run_layer.py/layer_sweep.py) over dbm/'s engine, plus
+                          verify_sites.py (a correctness harness to run BEFORE any real training
+                          run). See "methods/ndm/" section below.
 
     probe_common.py        shared row-selection + teacher-forced-forward helper for the three
                           read-only probes below (no training, no intervention -- just "how does
@@ -305,6 +333,166 @@ trees (never under `--vade_root`); the shared per-entity source-activation
 cache (reused across every method/config/layer for that entity, including
 DAS if you've also run that) still lives under `--vade_root/results/`,
 matching its own existing convention.
+
+## methods/ndm/ -- Native Dictionary Masking
+
+NDM keeps DBM's trainer exactly (sigmoid-gated mask, temperature-annealed
+toward binary, teacher-forced generation CE + `lambda * ||m||_1`, used for a
+source->base interchange intervention) and moves the mask to a decoder
+block's **MLP hidden state** -- the post-SwiGLU neuron vector
+`act_fn(gate_proj(x)) * up_proj(x)`, width `intermediate_size` (18944 on
+Qwen2.5-VL-7B-Instruct) -- instead of the residual stream (width
+`hidden_size`, 3584).
+
+### Why this is a different method, not a DBM hyperparameter
+
+In RAVEL's own framing each method in this family is characterized by its
+featurizer `F_A`:
+
+| method | `F_A` | learned? |
+|---|---|---|
+| DBM | `F_A(n) = n` (identity) | -- |
+| DAS / MDAS | orthogonal rotation `R` | yes |
+| PCA / SAE (Phase B above) | fitted dictionary | yes, offline |
+| **NDM** | **the model's own MLP encoder** | **no -- architecturally given** |
+
+Two consequences:
+
+1. **There is a decoder between the masked vector and the causal variable.**
+   DBM's blend lands directly in the residual stream; NDM's passes through
+   `down_proj` first. Since `down_proj` is linear,
+
+   ```
+   resid = base_resid + down_proj((1-s).h_base + s.h_source)
+         = base_resid + (1-s).down_proj(h_base) + s.down_proj(h_source)
+   ```
+
+   so an axis-aligned binary mask in neuron space induces a
+   **non**-axis-aligned intervention in residual space -- a linear image of
+   a binary mask. That is not DBM's hypothesis class; it is closer to DAS,
+   with the "rotation" fixed by the architecture rather than learned (and a
+   18944->3584 projection rather than a square rotation).
+
+2. **The encoder is nonlinear**, the only nonlinear featurizer in the table
+   -- and the reason the space has a *privileged basis*: an elementwise
+   nonlinearity plus an elementwise gating product mean the only
+   function-preserving transformations of that space are permutations, so
+   its coordinates ("neurons") are real objects rather than a choice of
+   axes. The residual stream has no such property: rotate it, fix up every
+   read/write matrix, and the model computes an identical function -- so
+   DBM's selected dimensions are a fact about one checkpoint's arbitrary
+   coordinate system, not about the model. See `methods/common/sites.py`'s
+   module docstring, and Elhage et al.'s *Toy Models of Superposition* /
+   *Privileged Bases in the Transformer Residual Stream*.
+
+So NDM is "SAE-style encode -> mask -> decode patching, where the dictionary
+is the model's own MLP."
+
+### The three sites, and why `mlp_output` exists
+
+`--site` selects which tensor of decoder block `--layer`-1 is masked. All
+three describe the **same block** at the same `--layer` (layer L is the
+residual stream after block L-1, so an MLP site at L is block L-1's MLP --
+the one whose output lands in residual layer L), which is what makes them
+comparable:
+
+| site | width | privileged basis? | what is swapped |
+|---|---|---|---|
+| `residual` (DBM, not an NDM site) | 3584 | no | everything accumulated through the block |
+| `mlp_output` | 3584 | no | only that MLP's contribution to the residual stream |
+| `mlp_hidden` (default) | 18944 | **yes** | that MLP's post-SwiGLU neurons |
+
+`mlp_output` is the control arm. `residual` vs `mlp_output` isolates
+**locality** at matched width; `mlp_output` vs `mlp_hidden` isolates the
+**privileged basis**. Without it, a win for `mlp_hidden` over `residual`
+confounds the two explanations. (`mlp_output` has no privileged basis
+despite being an MLP tensor -- it is a linear image of one that does, and
+privilege does not survive a linear map.)
+
+### Usage
+
+```bash
+# ALWAYS run this first -- one model load, ~a GPU-minute, and it catches a
+# hook attached to the wrong tensor (which otherwise trains fine and
+# produces plausible numbers). Covers `residual` too, so it doubles as a
+# regression check that DBM still behaves identically. Exits nonzero on
+# failure, so you can gate a run on it.
+python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16
+
+python methods/ndm/train.py --entity flags --attribute language --layer 16 \
+    --positions flag_ring1 --site mlp_hidden
+python methods/ndm/eval.py  --entity flags --attribute language --layer 16 \
+    --positions flag_ring1 --site mlp_hidden --split test
+
+# train+eval+score one layer, or sweep several in one model load:
+python methods/ndm/run_layer.py --entity flags --attribute language --layer 16 \
+    --positions flag_ring1 --site mlp_hidden
+python methods/ndm/layer_sweep.py --entity flags --attribute language \
+    --layers 8 10 14 16 20 22 --positions flag_ring1 --site mlp_hidden
+```
+
+`verify_sites.py` runs four checks per site: the captured width is right;
+a mask driven to `sigma=0` (pure base) reproduces an unhooked generation
+token-for-token; a mask driven to `sigma=1` with the **base's own** activation
+as the "source" also reproduces it (this exercises the other branch and
+needs no independently computed ground truth -- patching a value in over
+itself must be a no-op); and `make_cache_aware_patch_hook` passes a
+`[B, 1, width]` decode-step tensor through untouched.
+
+### Hyperparameters -- `--l1_coef` does NOT transfer from DBM
+
+`l1_penalty` is a plain `mask.abs().sum()`, so at `intermediate_size=18944`
+the sparsity term is ~5.3x larger than at 3584 for the same per-dimension
+mask magnitude -- and RAVEL's reported optimum (`0.001`) was tuned on a
+~4096-wide residual stream. The default is deliberately left at `0.001`
+rather than silently renormalized (that would deviate from the paper's
+formula), but it is **not calibrated for `mlp_hidden`**. Sweep it, e.g.
+`0.0002 / 0.001 / 0.005 / 0.02`, and read `layer{L}_mask_stats.json`'s
+`n_selected` alongside `final_score`: too low and the mask selects nearly
+every neuron (no sparsity, and `iso` suffers); too high and it selects
+almost none (`cause` collapses). The config tag encodes `l1_coef`, so
+parallel sweeps land in separate directories and cannot clobber each other.
+
+### Where artifacts land
+
+`results/<model_slug>/<entity>/ndm/<attribute>/<config_tag>/` and
+`logs/<...>/ndm/<...>/` -- a separate tree from `dbm/`'s, so NDM gets its own
+summary files and its own row in comparison tables, and the existing
+committed DBM results stay exactly where they are. The config tag reads
+`L1_<l1>_T<start>-<end>_LR<lr>_<positions>_<site>[_pruned]`; the **site is
+encoded**, because `mlp_hidden` and `mlp_output` runs are different artifacts
+that would otherwise collide in one directory (this repo has been bitten by
+that class of bug twice already -- `select_features.py`'s
+`--dictionaries_dir`, then `dbm_config_tag` omitting the temperature
+schedule).
+
+Per-layer and sweep-level summaries are written exactly as for DBM (via
+VADE's own `eval/score.py`), with `site` recorded in the sweep summary.
+
+### Source-activation cache
+
+NDM has its **own** cache (`methods/common/site_source_cache.py`), on by
+default, disabled with `--no_source_cache`. It is a different cache from the
+one DBM/DAS share: `common/source_cache.py` stores
+`torch.stack(out.hidden_states)`, i.e. the residual stream at every layer,
+and MLP internals appear nowhere in `output_hidden_states`. Both live under
+`--vade_root/results/` since both are keyed by entity+model rather than by
+method.
+
+It is sound for the same reason the residual cache is: under causal
+attention a block's MLP at position `p` reads only the residual stream at
+`p`, which depends only on tokens `<= p`, and the image precedes the
+question in the chat template -- so an image token's MLP hidden state is a
+function of the source image alone. It is keyed by
+**(site, positions, layer)**, one file each (~76MB for flags/flag_ring1/
+mlp_hidden per layer), because an MLP site needs a capture hook at one
+specific module and so cannot get every layer from a single pass the way the
+residual cache does. Changing `--positions` rebuilds it; changing `--layer`
+builds another file. `positions=last_token` is not cacheable at any site
+(that position depends on each row's own prompt length) and falls back to a
+live forward pass. A cache built for the wrong site/layer/positions raises
+rather than mis-patching -- necessary because an `mlp_output` cache and a
+residual cache have identical shapes.
 
 ## methods/logit_lens.py, methods/attention_maps.py, methods/mech_probe.py -- read-only interpretability probes
 

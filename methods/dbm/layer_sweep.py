@@ -29,15 +29,29 @@ from methods.dbm.run_layer import run_one_layer
 from methods.dbm.train import LR, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
 
 
-def run_sweep(adapter, model, processor, entity_assets, attribute, layers, out_dir, vade_root, **run_kwargs):
+def run_sweep(adapter, model, processor, entity_assets, attribute, layers, out_dir, vade_root,
+               source_cache_for_layer=None, **run_kwargs):
     """Loops run_one_layer across `layers`, isolating failures so one bad
-    layer doesn't take down the rest. Returns {layer: overall_dict_or_None}."""
+    layer doesn't take down the rest. Returns {layer: overall_dict_or_None}.
+
+    source_cache_for_layer (optional callable layer -> cache): for methods
+    whose source cache is PER-LAYER rather than one file covering every
+    layer. DBM's residual cache is the latter (built once up front and
+    passed straight through run_kwargs as `source_cache`), so DBM leaves
+    this None and nothing changes. NDM's MLP-site cache is the former --
+    one file per (site, positions, layer), since MLP internals can't be
+    captured for every layer in a single pass -- so it passes a callable
+    here instead and the per-layer cache is built lazily inside the loop.
+    See common/site_source_cache.py."""
     results = {}
     for layer in layers:
         print(f"\n=== layer {layer} ===", flush=True)
         try:
+            layer_kwargs = dict(run_kwargs)
+            if source_cache_for_layer is not None:
+                layer_kwargs["source_cache"] = source_cache_for_layer(layer)
             overall = run_one_layer(adapter, model, processor, entity_assets, attribute, layer, out_dir, vade_root,
-                                     **run_kwargs)
+                                     **layer_kwargs)
             results[layer] = overall
             print(f"layer {layer}: cause={overall.get('cause_accuracy')}% "
                   f"iso_mean={overall.get('iso_mean_accuracy')}% final_score={overall.get('final_score')}%")
@@ -67,7 +81,7 @@ def print_summary(layers, results):
                   f"final_score={r.get('final_score')}%")
 
 
-def write_sweep_summary(out_dir, layers, results, run_config):
+def write_sweep_summary(out_dir, layers, results, run_config, method_label="DBM"):
     """Writes sweep_layers<tag>_summary.{json,md} to out_dir -- the sweep-level
     counterpart to what score.py's score_file() already writes PER layer
     (layer{L}_predictions_{split}_summary.{json,md}, from run_one_layer's own
@@ -115,8 +129,12 @@ def write_sweep_summary(out_dir, layers, results, run_config):
     with open(json_path, "w") as f:
         json.dump(json_out, f, ensure_ascii=False, indent=2)
 
-    md_lines = [f"# DBM layer sweep -- entity={run_config['entity']} attribute={run_config['attribute']}", "",
-                f"positions={run_config['positions']} l1_coef={run_config['l1_coef']} "
+    # `site` appears in run_config only for methods that have one (NDM); DBM's own summary files stay
+    # byte-identical to what they were before sites existed.
+    site_str = f"site={run_config['site']} " if "site" in run_config else ""
+    md_lines = [f"# {method_label} layer sweep -- entity={run_config['entity']} "
+                f"attribute={run_config['attribute']}", "",
+                f"positions={run_config['positions']} {site_str}l1_coef={run_config['l1_coef']} "
                 f"temperature={run_config['temperature_start']}->{run_config['temperature_end']} "
                 f"lr={run_config['lr']} pruned={run_config['pruned']} eval_split={run_config['eval_split']}", ""]
     if best_layer is not None:

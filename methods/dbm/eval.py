@@ -25,23 +25,33 @@ import torch
 
 from methods.adapters.registry import get_adapter
 from methods.common.entities import BuildBatchCache, build_batch, load_entity_assets, load_tuples, require_pruned_tuples
-from methods.common.hooks import cache_layer_hidden, generate_patched, make_cache_aware_patch_hook
+from methods.common.hooks import make_cache_aware_patch_hook
 from methods.common.run_logging import tee_to_log
-from methods.common.source_cache import get_or_build_source_cache, lookup_source_hidden
+from methods.common.sites import RESIDUAL_SITE
+from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.intervention import SigmoidMaskIntervention
 from methods.dbm.train import LR, DBM_L1_COEF, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
 
 
-def eval_layer(adapter, model, processor, entity_assets, attribute, layer, hidden_size, ckpt_path, out_path,
+def eval_layer(adapter, model, processor, entity_assets, attribute, layer, embed_dim, ckpt_path, out_path,
                positions="flag_ring1", split="test", batch_size=16, cause_only=False, max_new_tokens=16,
-               tuples_dir=None, limit_rows=None, source_cache=None):
+               tuples_dir=None, limit_rows=None, source_cache=None, site=None, method_label="dbm"):
     """Writes predictions to out_path (score.py format), resumable -- skips
     (attribute, row_index) pairs already present. Returns out_path.
 
-    source_cache (optional): see train_layer's docstring / common/source_cache.py."""
+    source_cache (optional): see train_layer's docstring / common/source_cache.py.
+
+    embed_dim must be the trained mask's width, i.e. site.width(adapter,
+    model) -- hidden_size for the residual/mlp_output sites, intermediate_size
+    for mlp_hidden. Passing the wrong one fails loudly on load_state_dict
+    below (shape mismatch) rather than silently mis-patching, which is the
+    behavior we want.
+
+    site: see train_layer's docstring. MUST match what train.py was run with."""
+    site = site or RESIDUAL_SITE
     layers = adapter.get_decoder_layers(model)
     batch_cache = BuildBatchCache()
-    intervention = SigmoidMaskIntervention(embed_dim=hidden_size).to(model.device)
+    intervention = SigmoidMaskIntervention(embed_dim=embed_dim).to(model.device)
     intervention.load_state_dict(torch.load(ckpt_path, map_location=model.device))
     intervention.eval()
     pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
@@ -63,7 +73,8 @@ def eval_layer(adapter, model, processor, entity_assets, attribute, layer, hidde
             except Exception:
                 continue
     todo = [r for r in rows if (r["target_attribute"], r["row_index"]) not in done]
-    print(f"[dbm/eval] entity={entity_assets.entity} attribute={attribute} layer={layer} "
+    print(f"[{method_label}/eval] entity={entity_assets.entity} attribute={attribute} layer={layer} "
+          f"site={site.name} embed_dim={embed_dim} "
           f"positions={positions} split={split}: {len(todo)} rows remaining of {len(rows)}")
 
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
@@ -72,14 +83,16 @@ def eval_layer(adapter, model, processor, entity_assets, attribute, layer, hidde
     for bi in range(n_batches):
         batch_rows = todo[bi * batch_size:(bi + 1) * batch_size]
         batch = build_batch(batch_rows, entity_assets, adapter, model, processor, positions, batch_cache=batch_cache)
+        # See train.py's identical gate: unchanged from the pre-sites version, with only the lookup
+        # dispatching per site (and asserting the cache was built for this site/layer/positions).
         if source_cache is not None and not batch["is_last_token"]:
-            source_hidden = lookup_source_hidden(source_cache, batch, layer, model.device, model.dtype)
+            source_hidden = site.lookup_source(source_cache, batch, layer, positions, model.device, model.dtype)
         else:
-            source_hidden = cache_layer_hidden(model, batch["source_input_ids"], batch["attention_mask"],
-                                                batch["source_extra"], batch["positions"], layer)
+            source_hidden = site.capture(adapter, model, layer, batch["source_input_ids"],
+                                          batch["attention_mask"], batch["source_extra"], batch["positions"])
         patch_fn = make_cache_aware_patch_hook(batch["positions"], lambda base_vals: intervention(base_vals, source_hidden))
-        gen_toks = generate_patched(model, layers, layer, patch_fn, batch["base_input_ids"], batch["attention_mask"],
-                                     batch["base_extra"], pad_token_id, max_new_tokens)
+        gen_toks = site.generate_patched(adapter, model, layers, layer, patch_fn, batch["base_input_ids"],
+                                          batch["attention_mask"], batch["base_extra"], pad_token_id, max_new_tokens)
         for i, row in enumerate(batch["rows"]):
             text = processor.tokenizer.decode(gen_toks[i].tolist(), skip_special_tokens=True)
             rec = {"attribute": row["target_attribute"], "row_index": row["row_index"], "generated_text": text}
@@ -153,8 +166,9 @@ def main():
             source_cache = get_or_build_source_cache(adapter, model, processor, entity_assets,
                                                        args.vade_root, model_slug)
 
-        eval_layer(adapter, model, processor, entity_assets, args.attribute, args.layer, adapter.hidden_size(model),
-                   ckpt_path, out_path, positions=args.positions, split=args.split, batch_size=args.batch_size,
+        eval_layer(adapter, model, processor, entity_assets, args.attribute, args.layer,
+                   RESIDUAL_SITE.width(adapter, model), ckpt_path, out_path, positions=args.positions,
+                   split=args.split, batch_size=args.batch_size,
                    cause_only=args.cause_only, max_new_tokens=args.max_new_tokens, tuples_dir=tuples_dir,
                    limit_rows=args.limit_rows, source_cache=source_cache)
 

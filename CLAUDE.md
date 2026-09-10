@@ -147,6 +147,65 @@ revisiting once real runs exist, since VADE gitignores its own
 existing convention is closer to committing predictions/selections
 directly (see `methods/interventions/`/`methods/selections/` above).
 
+## methods/ndm/ -- Native Dictionary Masking, DBM's engine at a different site
+
+NDM reuses DBM's trainer verbatim and moves the mask from the residual stream
+to a decoder block's **MLP hidden state** (the post-SwiGLU neuron vector
+`act_fn(gate_proj(x)) * up_proj(x)`, width `intermediate_size` = 18944 on
+Qwen2.5-VL-7B, vs `hidden_size` = 3584). In RAVEL's `F_A` framing: DBM's
+featurizer is the identity, DAS's is a learned rotation, PCA/SAE's is a fitted
+dictionary, and NDM's is **the model's own MLP** -- nonlinear and
+zero-parameter, so there is nothing to fit and no reconstruction error.
+Structurally it is `encode -> mask -> decode` like `intervene.py`'s SAE
+patching, with `down_proj` as the decoder; because `down_proj` is linear, an
+axis-aligned mask in neuron space induces a *non*-axis-aligned intervention in
+residual space, which is a different hypothesis class from DBM's. The
+motivation is the privileged basis: elementwise nonlinearity + elementwise
+gating mean only *permutations* preserve that space's function, so its
+coordinates are real objects, whereas any rotation of the residual stream
+yields an identical model -- making DBM's chosen dimensions a fact about one
+checkpoint's arbitrary axes.
+
+**Code layout -- read this before editing either method.** `methods/dbm/`
+is the shared ENGINE; `methods/ndm/` owns only the name, the CLIs and the
+results namespace. `dbm/`'s `train_layer`/`eval_layer`/`run_one_layer`/
+`run_sweep` all take an optional `site=` that defaults to the residual
+stream, so DBM's behavior is unchanged. What actually differs between the
+methods is ~40 lines (hook attachment, mask width, source-side capture)
+against ~800 lines of already-debugged infrastructure -- the
+gradient-accumulation tail flush and the temperature-resume anchor (both
+commit 77470b4), checkpoint/resume, progress logging, the predictions format
+`score.py` expects. **Do not fork the loop**; add a site or a parameter.
+
+Two NEW files in `methods/common/` (new files, not edits, so the
+verbatim-from-VADE ones stay byte-identical): `sites.py` (the
+`InterventionSite` abstraction -- `residual` delegates to `hooks.py`'s own
+functions) and `site_source_cache.py` (the MLP sites' source cache, keyed by
+(site, positions, layer), since MLP internals are absent from
+`output_hidden_states`). `adapters/{base,qwen2_5_vl}.py` gained three
+additive methods (`intermediate_size`/`get_mlp_block`/
+`get_mlp_hidden_module`) so `sites.py` never needs to know Qwen attribute
+names.
+
+**Three sites, all addressing the same block** (`--layer L` = block L-1, so
+`L` means the same block for every site): `residual` (3584, DBM's site, not
+an NDM site), `mlp_output` (3584, that MLP's contribution only), `mlp_hidden`
+(18944, default). `mlp_output` is the control arm -- `residual` vs
+`mlp_output` isolates locality at matched width, `mlp_output` vs `mlp_hidden`
+isolates the privileged basis. Without it, `mlp_hidden` beating `residual`
+confounds the two.
+
+**Gotchas.** (1) `--l1_coef`'s default `0.001` is RAVEL's optimum for a
+~4096-wide residual stream and is NOT calibrated for 18944 dims -- since
+`l1_penalty` is a plain `mask.abs().sum()`, the term is ~5.3x larger at equal
+per-dim magnitude. Sweep it and read `mask_stats.json`'s `n_selected`
+alongside `final_score`. (2) `--layer 0` is invalid for MLP sites (the
+embedding output has no MLP). (3) The site IS encoded in the config tag, so
+`mlp_hidden`/`mlp_output` runs don't collide. (4) Run
+`methods/ndm/verify_sites.py` before any real run -- a hook on the wrong
+tensor trains fine and produces plausible numbers; it also covers `residual`,
+so it doubles as a DBM regression check.
+
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
 The Phase B feature-selection proxy (a classifier reading the target attribute off
@@ -182,6 +241,13 @@ python methods/intervene.py --entity flags --token_set flag_only --dict_method s
 # Scoring (in the sibling VADE repo)
 python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only_sae_predictions.jsonl \
     --entity flags --attribute all
+
+# NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
+python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # ALWAYS first
+python methods/ndm/run_layer.py --entity flags --attribute language --layer 16 \
+    --positions flag_ring1 --site mlp_hidden
+python methods/ndm/layer_sweep.py --entity flags --attribute language \
+    --layers 8 10 14 16 20 22 --positions flag_ring1 --site mlp_hidden
 ```
 
 There is no build step, lint config, or test suite in this repo — it's a pipeline of

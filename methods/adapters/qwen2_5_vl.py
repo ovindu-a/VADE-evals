@@ -39,6 +39,24 @@ class Qwen25VLAdapter(ModelAdapter):
     def get_decoder_layers(self, model):
         return model.model.language_model.layers
 
+    def intermediate_size(self, model) -> int:
+        # Same text_config-then-top-level lookup order as hidden_size above: a VLM's config nests the
+        # language model's dims under text_config, but older/flattened configs put them at the top.
+        text_config = getattr(model.config, "text_config", None)
+        if text_config is not None and getattr(text_config, "intermediate_size", None):
+            return text_config.intermediate_size
+        return model.config.intermediate_size
+
+    def get_mlp_block(self, model, block_idx):
+        return self.get_decoder_layers(model)[block_idx].mlp
+
+    def get_mlp_hidden_module(self, model, block_idx):
+        # Qwen2.5-VL's decoder MLP is the gated (SwiGLU) shape -- Qwen2MLP.forward is
+        # down_proj(act_fn(gate_proj(x)) * up_proj(x)), so down_proj's INPUT is precisely the
+        # post-nonlinearity neuron vector [B, T, intermediate_size] that common/sites.py's
+        # `mlp_hidden` site reads and patches (as a forward PRE-hook on this module).
+        return self.get_mlp_block(model, block_idx).down_proj
+
     def unembed(self, model, hidden_states):
         # model.model.language_model.norm is the SAME RMSNorm applied at the end of every real
         # forward pass, right before model.lm_head -- confirmed against this project's installed

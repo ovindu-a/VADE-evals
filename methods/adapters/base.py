@@ -28,6 +28,37 @@ class ModelAdapter:
         see common/hooks.py's register_patch_hook for the exact contract."""
         raise NotImplementedError
 
+    # ---- MLP-internal intervention sites -------------------------------------
+    # The three methods below are ADDITIONS in this repo -- they are not part of
+    # the sibling VADE repo's own copy of this file (which only ever needed the
+    # residual stream, the site DAS/DBM intervene on). They exist so that
+    # common/sites.py can address a decoder block's MLP internals while
+    # remaining the ONLY module allowed to know a model family's attribute
+    # names -- see this file's own header. A text-only or non-gated-MLP model
+    # that never uses an MLP site simply doesn't implement them.
+
+    def intermediate_size(self, model) -> int:
+        """-> the width of the MLP/FFN's internal hidden state, i.e. the
+        post-nonlinearity, pre-down-projection vector's dimension
+        (18944 for Qwen2.5-VL-7B-Instruct, vs. hidden_size's 3584). This is
+        the mask width for the `mlp_hidden` site."""
+        raise NotImplementedError
+
+    def get_mlp_block(self, model, block_idx):
+        """-> decoder block block_idx's MLP submodule, whose forward()
+        OUTPUT is that block's contribution to the residual stream
+        ([B, T, hidden_size]). Hooked for the `mlp_output` site."""
+        raise NotImplementedError
+
+    def get_mlp_hidden_module(self, model, block_idx):
+        """-> the submodule of decoder block block_idx's MLP whose forward()
+        INPUT is the MLP hidden state ([B, T, intermediate_size]). For a
+        gated (SwiGLU-style) MLP that is the down-projection, since its
+        input is exactly act_fn(gate_proj(x)) * up_proj(x) -- hooking it
+        gets the neuron vector without recomputing either branch by hand.
+        Hooked (as a forward PRE-hook) for the `mlp_hidden` site."""
+        raise NotImplementedError
+
     def image_token_id(self, model, processor):
         """-> the image-placeholder token id, or None for a text-only model."""
         raise NotImplementedError

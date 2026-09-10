@@ -39,10 +39,11 @@ from transformers import get_linear_schedule_with_warmup
 
 from methods.adapters.registry import get_adapter
 from methods.common.entities import BuildBatchCache, build_batch, load_entity_assets, load_tuples, require_pruned_tuples
-from methods.common.hooks import cache_layer_hidden, forward_patched, make_cache_aware_patch_hook
+from methods.common.hooks import make_cache_aware_patch_hook
 from methods.common.results import logs_dir, results_dir
 from methods.common.run_logging import tee_to_log
-from methods.common.source_cache import get_or_build_source_cache, lookup_source_hidden
+from methods.common.sites import RESIDUAL_SITE
+from methods.common.source_cache import get_or_build_source_cache
 from methods.common.targets import (
     MAX_ANSWER_TOKENS, build_teacher_forced_extension, gold_labels_from_lens, target_gold_toks_and_len,
 )
@@ -84,16 +85,21 @@ def dbm_logs_dir(model_slug, entity, attribute, l1_coef, temperature_start, temp
                      dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned))
 
 
-def cache_source_layer_hidden(model, batch, layer_idx):
-    return cache_layer_hidden(model, batch["source_input_ids"], batch["attention_mask"], batch["source_extra"],
-                               batch["positions"], layer_idx)
+def cache_source_layer_hidden(adapter, model, batch, layer_idx, site=RESIDUAL_SITE):
+    return site.capture(adapter, model, layer_idx, batch["source_input_ids"], batch["attention_mask"],
+                         batch["source_extra"], batch["positions"])
 
 
-def run_intervened_forward(model, layers, batch, layer_idx, intervention, source_hidden, ext_ids, ext_mask,
-                            randomize_positions=False):
+def run_intervened_forward(adapter, model, layers, batch, layer_idx, intervention, source_hidden, ext_ids, ext_mask,
+                            randomize_positions=False, site=RESIDUAL_SITE):
     """Teacher-forced forward pass with the intervention patch active at
     layer_idx. Returns logits for the last MAX_ANSWER_TOKENS positions,
-    aligned 1:1 with target_toks (see build_teacher_forced_extension)."""
+    aligned 1:1 with target_toks (see build_teacher_forced_extension).
+
+    `site` selects WHICH tensor of decoder block layer_idx-1 gets patched
+    (see common/sites.py); the default residual-stream site delegates
+    straight to common/hooks.py, i.e. is byte-identical to the pre-sites
+    behavior."""
     positions = batch["positions"]
     if randomize_positions:
         B, n_pos, H = source_hidden.shape
@@ -101,8 +107,8 @@ def run_intervened_forward(model, layers, batch, layer_idx, intervention, source
     else:
         source_for_patch = source_hidden
     patch_fn = make_cache_aware_patch_hook(positions, lambda base_vals: intervention(base_vals, source_for_patch))
-    out = forward_patched(model, layers, layer_idx, patch_fn, ext_ids, ext_mask, batch["base_extra"],
-                           logits_to_keep=MAX_ANSWER_TOKENS)
+    out = site.forward_patched(adapter, model, layers, layer_idx, patch_fn, ext_ids, ext_mask, batch["base_extra"],
+                                logits_to_keep=MAX_ANSWER_TOKENS)
     return out.logits[:, -MAX_ANSWER_TOKENS:, :]
 
 
@@ -110,19 +116,31 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
                  positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START, temperature_end=TEMP_END,
                  lr=LR, num_epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, grad_accum_steps=GRAD_ACCUM_STEPS,
                  cause_only=False, randomize_positions=False, limit_rows=None, tuples_split="train",
-                 tuples_dir=None, cleanup_checkpoint=True, source_cache=None):
+                 tuples_dir=None, cleanup_checkpoint=True, source_cache=None, site=None, method_label="dbm"):
     """Trains one (layer, attribute, positions, l1_coef) DBM run to
     completion (or resumes an interrupted one), writing checkpoints/epoch
     snapshots/train_log under out_dir. Returns the path to the final
     weights-only checkpoint. See methods/das/train.py's train_layer (this
     is a near-verbatim port) for source_cache/cleanup_checkpoint semantics.
+
+    site (common/sites.py's InterventionSite, default residual): WHICH
+    tensor of decoder block `layer`-1 the mask is learned over. The default
+    is the residual stream -- plain DBM, byte-identical to this function
+    before sites existed. An MLP site makes this the shared engine behind
+    methods/ndm/ (Native Dictionary Masking) instead; nothing else in this
+    loop changes, since the mask, the L1 term, the temperature anneal and
+    mask_stats are all dimension-agnostic.
+
+    method_label: prefix for this run's progress prints only (so an NDM run
+    doesn't announce itself as "[dbm/train]"). Affects no path or artifact.
     """
+    site = site or RESIDUAL_SITE
     os.makedirs(out_dir, exist_ok=True)
     layers = adapter.get_decoder_layers(model)
-    hidden_size = adapter.hidden_size(model)
+    embed_dim = site.width(adapter, model)
     batch_cache = BuildBatchCache()
 
-    intervention = SigmoidMaskIntervention(embed_dim=hidden_size).to(model.device)
+    intervention = SigmoidMaskIntervention(embed_dim=embed_dim).to(model.device)
     optimizer = torch.optim.Adam(intervention.parameters(), lr=lr)
 
     rows = load_tuples(entity_assets, attribute, tuples_split, tuples_dir=tuples_dir)
@@ -166,7 +184,8 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     temp_schedule_total_steps = ckpt["temp_schedule_total_steps"] if ckpt is not None else t_total
     temp_schedule = temperature_schedule(max(temp_schedule_total_steps, 1), temperature_start, temperature_end)
 
-    print(f"[dbm/train] entity={entity_assets.entity} attribute={attribute} layer={layer} "
+    print(f"[{method_label}/train] entity={entity_assets.entity} attribute={attribute} layer={layer} "
+          f"site={site.name} embed_dim={embed_dim} "
           f"l1_coef={l1_coef} temperature={temperature_start}->{temperature_end} positions={positions} "
           f"rows={len(rows)} cause_only={cause_only} randomize_positions={randomize_positions} "
           f"micro_batch={batch_size} accum={grad_accum_steps} (effective batch {batch_size * grad_accum_steps}) "
@@ -277,12 +296,19 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
             ext_ids, ext_mask = build_teacher_forced_extension(batch["base_input_ids"], batch["attention_mask"],
                                                                  target_toks, target_len)
 
+            # This gate is unchanged from the pre-sites version; only the lookup dispatches. Each site
+            # has its own cache format and file (residual: common/source_cache.py, one file per entity
+            # covering every layer; MLP: common/site_source_cache.py, one file per site/positions/layer)
+            # and site.lookup_source asserts the cache it is handed was actually built for THIS
+            # (site, layer, positions). That assertion is load-bearing: an mlp_output cache and a
+            # residual cache have identical shapes, so a mix-up would not fail on shape alone.
             if source_cache is not None and not batch["is_last_token"]:
-                source_hidden = lookup_source_hidden(source_cache, batch, layer, model.device, model.dtype)
+                source_hidden = site.lookup_source(source_cache, batch, layer, positions,
+                                                    model.device, model.dtype)
             else:
-                source_hidden = cache_source_layer_hidden(model, batch, layer)
-            logits = run_intervened_forward(model, layers, batch, layer, intervention, source_hidden, ext_ids,
-                                             ext_mask, randomize_positions=randomize_positions)
+                source_hidden = cache_source_layer_hidden(adapter, model, batch, layer, site=site)
+            logits = run_intervened_forward(adapter, model, layers, batch, layer, intervention, source_hidden,
+                                             ext_ids, ext_mask, randomize_positions=randomize_positions, site=site)
 
             labels = gold_labels_from_lens(target_toks, target_len).to(model.device)
             ce_loss = torch.nn.functional.cross_entropy(
