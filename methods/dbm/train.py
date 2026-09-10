@@ -57,6 +57,20 @@ NUM_EPOCHS = 1
 DBM_L1_COEF = 1e-3     # RAVEL Appendix B.4's reported optimum for DBM (MDBM's is ~0, not our concern here)
 TEMP_START = 1e-2      # RAVEL Appendix B.4: "a starting temperature of 1e-2 and gradually reducing it to 1e-7"
 TEMP_END = 1e-7
+# SigmoidMaskIntervention's own forward rebuilds sigmoid(mask/T) every call, so d(sigmoid)/d(mask)
+# scales as (1/T) * sigmoid*(1-sigmoid). For a dimension that's already confidently decided (|mask|
+# >> T), sigmoid*(1-sigmoid) ~ 0 and cancels the 1/T -- fine. For a dimension still near mask=0 when
+# T has annealed deep into RAVEL's 1e-7 floor, sigmoid*(1-sigmoid) stays ~0.25 regardless of T, so
+# the 1/T factor is naked: whatever small, CE-noise-dominated gradient that dimension has gets
+# multiplied by up to ~1e7 and turned into a huge, direction-arbitrary parameter jump -- confirmed
+# empirically: a 4-epoch/1920-opt-step layer 16 run (2026-09-10, commit 84eab1b) showed ce_loss
+# oscillating between ~0.05 and ~2.9 within single epochs deep into the anneal (temp<1e-6), final
+# mask_stats indistinguishable from the earlier 1-epoch run's coin-flip-like separation despite 4x
+# the optimizer steps, and a WORSE final_score (54.0% vs 58.6%) -- i.e. more steps under this same
+# instability just changes which noisy snapshot the final checkpoint happens to land on, it doesn't
+# converge. Clipping the mask's gradient norm bounds exactly this blowup regardless of how small T
+# gets; see complete_opt_step below.
+GRAD_CLIP_NORM = 1.0
 # Same hardware-forced micro-batch/accum defaults as DAS's train.py (single 24GB card, no gradient
 # checkpointing -- conflicts with the forward hooks the intervention needs, so full activations for the
 # whole decoder stack are held for backprop). DBM has no D x D rotation matrix to hold, only a length-H
@@ -236,6 +250,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
         group at an epoch's end (see steps_per_epoch's ceil-division comment above for why the latter
         matters: otherwise that partial group's already-computed gradient is silently discarded)."""
         nonlocal opt_steps_done, opt_steps_this_call
+        grad_norm = torch.nn.utils.clip_grad_norm_(intervention.parameters(), GRAD_CLIP_NORM)
         optimizer.step()
         scheduler.step()
         optimizer.zero_grad()
@@ -246,6 +261,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
             "epoch": epoch, "micro_step": global_micro_step, "opt_step": opt_steps_done,
             "loss": accum_loss, "ce_loss": accum_ce, "l1_term": accum_l1,
             "temperature": intervention.get_temperature().item(), "lr": scheduler.get_last_lr()[0],
+            "grad_norm": grad_norm.item(),
         }) + "\n")
         log_f.flush()
         if opt_steps_done % PROGRESS_EVERY_OPT_STEPS == 0:
@@ -256,6 +272,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
             print(f"[progress] epoch={epoch} opt_step={opt_steps_done}/{t_total} "
                   f"loss={accum_loss:.4f} ce={accum_ce:.4f} l1={accum_l1:.1f} "
                   f"temp={intervention.get_temperature().item():.2e} lr={scheduler.get_last_lr()[0]:.2e} "
+                  f"grad_norm={grad_norm.item():.2e} "
                   f"elapsed={elapsed/60:.1f}min eta={eta_min:.1f}min", flush=True)
 
     for epoch in range(start_epoch, num_epochs):
