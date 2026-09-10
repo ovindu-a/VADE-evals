@@ -1,0 +1,538 @@
+
+=== logging to /home/ahl4090/DAS-Explorations/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/sweep_layers24-26.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:10,  1.69it/s]Loading weights:   0%|          | 2/729 [00:00<05:39,  2.14it/s]Loading weights:   1%|          | 4/729 [00:01<02:29,  4.86it/s]Loading weights:   2%|2         | 15/729 [00:01<00:33, 21.53it/s]Loading weights:   3%|3         | 22/729 [00:01<00:23, 30.29it/s]Loading weights:   4%|3         | 29/729 [00:01<00:18, 37.10it/s]Loading weights:   5%|5         | 40/729 [00:01<00:13, 49.22it/s]Loading weights:   6%|6         | 46/729 [00:01<00:13, 48.99it/s]Loading weights:   8%|7         | 57/729 [00:01<00:10, 62.97it/s]Loading weights:   9%|8         | 65/729 [00:01<00:09, 66.53it/s]Loading weights:  10%|#         | 73/729 [00:02<00:09, 69.42it/s]Loading weights:  12%|#2        | 88/729 [00:02<00:08, 76.56it/s]Loading weights:  14%|#3        | 100/729 [00:02<00:07, 84.60it/s]Loading weights:  15%|#5        | 112/729 [00:02<00:06, 88.90it/s]Loading weights:  17%|#7        | 124/729 [00:02<00:06, 90.31it/s]Loading weights:  19%|#8        | 136/729 [00:02<00:06, 92.50it/s]Loading weights:  20%|##        | 148/729 [00:02<00:06, 92.76it/s]Loading weights:  22%|##1       | 160/729 [00:02<00:06, 94.13it/s]Loading weights:  23%|##3       | 170/729 [00:03<00:05, 95.02it/s]Loading weights:  25%|##4       | 180/729 [00:03<00:07, 77.99it/s]Loading weights:  26%|##5       | 189/729 [00:03<00:06, 78.83it/s]Loading weights:  27%|##7       | 198/729 [00:03<00:06, 77.23it/s]Loading weights:  29%|##8       | 210/729 [00:03<00:06, 85.80it/s]Loading weights:  30%|###       | 221/729 [00:03<00:05, 91.70it/s]Loading weights:  32%|###1      | 232/729 [00:03<00:05, 91.39it/s]Loading weights:  33%|###3      | 244/729 [00:03<00:05, 90.32it/s]Loading weights:  35%|###4      | 254/729 [00:04<00:05, 84.66it/s]Loading weights:  36%|###6      | 263/729 [00:04<00:05, 82.61it/s]Loading weights:  37%|###7      | 272/729 [00:04<00:05, 80.81it/s]Loading weights:  39%|###8      | 281/729 [00:04<00:05, 81.14it/s]Loading weights:  40%|####      | 293/729 [00:04<00:05, 84.27it/s]Loading weights:  42%|####1     | 305/729 [00:04<00:04, 88.11it/s]Loading weights:  43%|####3     | 316/729 [00:04<00:04, 93.37it/s]Loading weights:  45%|####4     | 328/729 [00:04<00:04, 93.87it/s]Loading weights:  48%|####7     | 347/729 [00:04<00:03, 118.69it/s]Loading weights:  59%|#####8    | 428/729 [00:05<00:00, 306.27it/s]Loading weights:  68%|######7   | 493/729 [00:05<00:00, 394.53it/s]Loading weights:  81%|########  | 587/729 [00:05<00:00, 539.43it/s]Loading weights:  93%|#########3| 678/729 [00:05<00:00, 644.44it/s]Loading weights: 100%|##########| 729/729 [00:05<00:00, 132.83it/s]
+[layer_sweep] entity=flags attribute=language layers=[24, 26] l1_coef=0.001 positions=flag_ring1 pruned=True -> /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned
+[source_cache] resuming: 84 items already cached at /home/ahl4090/DAS-Explorations/VADE/results/Qwen2.5-VL-7B-Instruct/flags/source_activation_cache/full_image.pt
+[source_cache] entity=flags attribute=capital template=capital_prefill_v1: 0 items to cache (of 84)
+[source_cache] DONE: 84 items -> /home/ahl4090/DAS-Explorations/VADE/results/Qwen2.5-VL-7B-Instruct/flags/source_activation_cache/full_image.pt
+
+=== layer 24 ===
+[dbm/train] entity=flags attribute=language layer=24 site=residual embed_dim=3584 l1_coef=0.001 temperature=0.01->1e-07 positions=flag_ring1 rows=30674 cause_only=False randomize_positions=False micro_batch=5 accum=13 (effective batch 65) epochs=1 total optimizer steps=472 (temperature schedule steps=472)
+/home/ahl4090/DAS-Explorations/VADE-evals/.venv/lib/python3.14/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+[progress] epoch=0 opt_step=1/472 loss=4.2117 ce=4.2117 l1=0.0 temp=9.76e-03 lr=2.13e-05 elapsed=0.1min eta=35.1min
+[progress] epoch=0 opt_step=2/472 loss=3.8915 ce=3.8915 l1=0.0 temp=9.52e-03 lr=4.26e-05 elapsed=0.1min eta=30.7min
+[progress] epoch=0 opt_step=3/472 loss=4.8333 ce=4.8333 l1=0.1 temp=9.29e-03 lr=6.38e-05 elapsed=0.2min eta=29.0min
+[progress] epoch=0 opt_step=4/472 loss=2.8914 ce=2.8913 l1=0.1 temp=9.07e-03 lr=8.51e-05 elapsed=0.2min eta=28.6min
+[progress] epoch=0 opt_step=5/472 loss=3.2411 ce=3.2409 l1=0.2 temp=8.85e-03 lr=1.06e-04 elapsed=0.3min eta=28.1min
+[progress] epoch=0 opt_step=6/472 loss=4.0841 ce=4.0838 l1=0.2 temp=8.64e-03 lr=1.28e-04 elapsed=0.4min eta=27.8min
+[progress] epoch=0 opt_step=7/472 loss=3.4658 ce=3.4655 l1=0.3 temp=8.43e-03 lr=1.49e-04 elapsed=0.4min eta=27.4min
+[progress] epoch=0 opt_step=8/472 loss=3.9577 ce=3.9572 l1=0.4 temp=8.22e-03 lr=1.70e-04 elapsed=0.5min eta=27.2min
+[progress] epoch=0 opt_step=9/472 loss=3.8664 ce=3.8659 l1=0.5 temp=8.03e-03 lr=1.91e-04 elapsed=0.5min eta=26.9min
+[progress] epoch=0 opt_step=10/472 loss=3.1286 ce=3.1279 l1=0.7 temp=7.83e-03 lr=2.13e-04 elapsed=0.6min eta=26.7min
+[progress] epoch=0 opt_step=11/472 loss=4.0578 ce=4.0570 l1=0.8 temp=7.64e-03 lr=2.34e-04 elapsed=0.6min eta=26.7min
+[progress] epoch=0 opt_step=12/472 loss=3.7582 ce=3.7572 l1=1.0 temp=7.46e-03 lr=2.55e-04 elapsed=0.7min eta=26.5min
+[progress] epoch=0 opt_step=13/472 loss=4.7115 ce=4.7102 l1=1.3 temp=7.28e-03 lr=2.77e-04 elapsed=0.7min eta=26.5min
+[progress] epoch=0 opt_step=14/472 loss=3.4805 ce=3.4790 l1=1.5 temp=7.10e-03 lr=2.98e-04 elapsed=0.8min eta=26.3min
+[progress] epoch=0 opt_step=15/472 loss=3.4453 ce=3.4435 l1=1.8 temp=6.93e-03 lr=3.19e-04 elapsed=0.9min eta=26.2min
+[progress] epoch=0 opt_step=16/472 loss=4.1814 ce=4.1793 l1=2.1 temp=6.76e-03 lr=3.40e-04 elapsed=0.9min eta=26.1min
+[progress] epoch=0 opt_step=17/472 loss=3.3367 ce=3.3342 l1=2.4 temp=6.60e-03 lr=3.62e-04 elapsed=1.0min eta=26.0min
+[progress] epoch=0 opt_step=18/472 loss=4.8872 ce=4.8844 l1=2.8 temp=6.44e-03 lr=3.83e-04 elapsed=1.0min eta=25.9min
+[progress] epoch=0 opt_step=19/472 loss=3.1106 ce=3.1074 l1=3.2 temp=6.28e-03 lr=4.04e-04 elapsed=1.1min eta=25.8min
+[progress] epoch=0 opt_step=20/472 loss=3.7878 ce=3.7842 l1=3.7 temp=6.13e-03 lr=4.26e-04 elapsed=1.1min eta=25.7min
+[progress] epoch=0 opt_step=21/472 loss=2.5866 ce=2.5825 l1=4.1 temp=5.99e-03 lr=4.47e-04 elapsed=1.2min eta=25.7min
+[progress] epoch=0 opt_step=22/472 loss=4.3178 ce=4.3131 l1=4.6 temp=5.84e-03 lr=4.68e-04 elapsed=1.3min eta=25.6min
+[progress] epoch=0 opt_step=23/472 loss=3.5532 ce=3.5480 l1=5.2 temp=5.70e-03 lr=4.89e-04 elapsed=1.3min eta=25.5min
+[progress] epoch=0 opt_step=24/472 loss=5.0236 ce=5.0177 l1=5.9 temp=5.56e-03 lr=5.11e-04 elapsed=1.4min eta=25.5min
+[progress] epoch=0 opt_step=25/472 loss=4.6044 ce=4.5978 l1=6.6 temp=5.43e-03 lr=5.32e-04 elapsed=1.4min eta=25.3min
+[progress] epoch=0 opt_step=26/472 loss=4.4130 ce=4.4055 l1=7.5 temp=5.30e-03 lr=5.53e-04 elapsed=1.5min eta=25.3min
+[progress] epoch=0 opt_step=27/472 loss=4.3678 ce=4.3594 l1=8.4 temp=5.17e-03 lr=5.74e-04 elapsed=1.5min eta=25.2min
+[progress] epoch=0 opt_step=28/472 loss=4.1522 ce=4.1428 l1=9.4 temp=5.04e-03 lr=5.96e-04 elapsed=1.6min eta=25.1min
+[progress] epoch=0 opt_step=29/472 loss=4.2967 ce=4.2862 l1=10.5 temp=4.92e-03 lr=6.17e-04 elapsed=1.6min eta=25.1min
+[progress] epoch=0 opt_step=30/472 loss=3.3344 ce=3.3227 l1=11.7 temp=4.80e-03 lr=6.38e-04 elapsed=1.7min eta=25.0min
+[progress] epoch=0 opt_step=31/472 loss=3.6155 ce=3.6026 l1=12.9 temp=4.69e-03 lr=6.60e-04 elapsed=1.8min eta=24.9min
+[progress] epoch=0 opt_step=32/472 loss=3.2474 ce=3.2332 l1=14.1 temp=4.57e-03 lr=6.81e-04 elapsed=1.8min eta=24.9min
+[progress] epoch=0 opt_step=33/472 loss=3.6159 ce=3.6004 l1=15.5 temp=4.46e-03 lr=7.02e-04 elapsed=1.9min eta=24.8min
+[progress] epoch=0 opt_step=34/472 loss=5.2467 ce=5.2299 l1=16.8 temp=4.36e-03 lr=7.23e-04 elapsed=1.9min eta=24.7min
+[progress] epoch=0 opt_step=35/472 loss=3.2335 ce=3.2152 l1=18.2 temp=4.25e-03 lr=7.45e-04 elapsed=2.0min eta=24.6min
+[progress] epoch=0 opt_step=36/472 loss=3.4747 ce=3.4550 l1=19.7 temp=4.15e-03 lr=7.66e-04 elapsed=2.0min eta=24.6min
+[progress] epoch=0 opt_step=37/472 loss=2.5065 ce=2.4854 l1=21.0 temp=4.05e-03 lr=7.87e-04 elapsed=2.1min eta=24.5min
+[progress] epoch=0 opt_step=38/472 loss=3.7796 ce=3.7572 l1=22.4 temp=3.95e-03 lr=8.09e-04 elapsed=2.1min eta=24.5min
+[progress] epoch=0 opt_step=39/472 loss=3.6365 ce=3.6127 l1=23.8 temp=3.85e-03 lr=8.30e-04 elapsed=2.2min eta=24.4min
+[progress] epoch=0 opt_step=40/472 loss=4.2078 ce=4.1827 l1=25.2 temp=3.76e-03 lr=8.51e-04 elapsed=2.3min eta=24.4min
+[progress] epoch=0 opt_step=41/472 loss=3.2518 ce=3.2252 l1=26.6 temp=3.67e-03 lr=8.72e-04 elapsed=2.3min eta=24.3min
+[progress] epoch=0 opt_step=42/472 loss=4.3557 ce=4.3277 l1=28.0 temp=3.58e-03 lr=8.94e-04 elapsed=2.4min eta=24.2min
+[progress] epoch=0 opt_step=43/472 loss=2.6343 ce=2.6049 l1=29.4 temp=3.50e-03 lr=9.15e-04 elapsed=2.4min eta=24.2min
+[progress] epoch=0 opt_step=44/472 loss=3.6918 ce=3.6611 l1=30.7 temp=3.41e-03 lr=9.36e-04 elapsed=2.5min eta=24.1min
+[progress] epoch=0 opt_step=45/472 loss=3.4067 ce=3.3747 l1=32.0 temp=3.33e-03 lr=9.57e-04 elapsed=2.5min eta=24.0min
+[progress] epoch=0 opt_step=46/472 loss=3.0641 ce=3.0309 l1=33.2 temp=3.25e-03 lr=9.79e-04 elapsed=2.6min eta=24.0min
+[progress] epoch=0 opt_step=47/472 loss=2.5282 ce=2.4938 l1=34.3 temp=3.17e-03 lr=1.00e-03 elapsed=2.6min eta=24.0min
+[progress] epoch=0 opt_step=48/472 loss=3.1509 ce=3.1155 l1=35.4 temp=3.09e-03 lr=9.98e-04 elapsed=2.7min eta=23.9min
+[progress] epoch=0 opt_step=49/472 loss=2.4620 ce=2.4255 l1=36.5 temp=3.02e-03 lr=9.95e-04 elapsed=2.8min eta=23.8min
+[progress] epoch=0 opt_step=50/472 loss=3.6582 ce=3.6208 l1=37.4 temp=2.95e-03 lr=9.93e-04 elapsed=2.8min eta=23.7min
+[progress] epoch=0 opt_step=51/472 loss=2.8453 ce=2.8070 l1=38.3 temp=2.87e-03 lr=9.91e-04 elapsed=2.9min eta=23.7min
+[progress] epoch=0 opt_step=52/472 loss=3.4765 ce=3.4375 l1=39.1 temp=2.81e-03 lr=9.88e-04 elapsed=2.9min eta=23.6min
+[progress] epoch=0 opt_step=53/472 loss=3.6461 ce=3.6063 l1=39.8 temp=2.74e-03 lr=9.86e-04 elapsed=3.0min eta=23.6min
+[progress] epoch=0 opt_step=54/472 loss=3.4509 ce=3.4104 l1=40.4 temp=2.67e-03 lr=9.84e-04 elapsed=3.0min eta=23.5min
+[progress] epoch=0 opt_step=55/472 loss=3.2121 ce=3.1710 l1=41.0 temp=2.61e-03 lr=9.81e-04 elapsed=3.1min eta=23.4min
+[progress] epoch=0 opt_step=56/472 loss=3.0064 ce=2.9649 l1=41.5 temp=2.54e-03 lr=9.79e-04 elapsed=3.1min eta=23.4min
+[progress] epoch=0 opt_step=57/472 loss=3.2195 ce=3.1775 l1=42.0 temp=2.48e-03 lr=9.76e-04 elapsed=3.2min eta=23.3min
+[progress] epoch=0 opt_step=58/472 loss=3.0576 ce=3.0152 l1=42.4 temp=2.42e-03 lr=9.74e-04 elapsed=3.3min eta=23.3min
+[progress] epoch=0 opt_step=59/472 loss=2.8322 ce=2.7895 l1=42.7 temp=2.36e-03 lr=9.72e-04 elapsed=3.3min eta=23.2min
+[progress] epoch=0 opt_step=60/472 loss=4.0292 ce=3.9862 l1=43.0 temp=2.31e-03 lr=9.69e-04 elapsed=3.4min eta=23.1min
+[progress] epoch=0 opt_step=61/472 loss=3.3951 ce=3.3519 l1=43.2 temp=2.25e-03 lr=9.67e-04 elapsed=3.4min eta=23.1min
+[progress] epoch=0 opt_step=62/472 loss=3.5827 ce=3.5393 l1=43.4 temp=2.20e-03 lr=9.65e-04 elapsed=3.5min eta=23.0min
+[progress] epoch=0 opt_step=63/472 loss=3.4209 ce=3.3773 l1=43.6 temp=2.14e-03 lr=9.62e-04 elapsed=3.5min eta=23.0min
+[progress] epoch=0 opt_step=64/472 loss=3.3842 ce=3.3406 l1=43.7 temp=2.09e-03 lr=9.60e-04 elapsed=3.6min eta=22.9min
+[progress] epoch=0 opt_step=65/472 loss=3.1484 ce=3.1047 l1=43.7 temp=2.04e-03 lr=9.58e-04 elapsed=3.7min eta=22.9min
+[progress] epoch=0 opt_step=66/472 loss=4.5485 ce=4.5047 l1=43.8 temp=1.99e-03 lr=9.55e-04 elapsed=3.7min eta=22.8min
+[progress] epoch=0 opt_step=67/472 loss=3.0467 ce=3.0029 l1=43.8 temp=1.94e-03 lr=9.53e-04 elapsed=3.8min eta=22.7min
+[progress] epoch=0 opt_step=68/472 loss=3.0234 ce=2.9797 l1=43.7 temp=1.90e-03 lr=9.51e-04 elapsed=3.8min eta=22.7min
+[progress] epoch=0 opt_step=69/472 loss=3.3249 ce=3.2812 l1=43.7 temp=1.85e-03 lr=9.48e-04 elapsed=3.9min eta=22.6min
+[progress] epoch=0 opt_step=70/472 loss=3.6048 ce=3.5613 l1=43.5 temp=1.81e-03 lr=9.46e-04 elapsed=3.9min eta=22.6min
+[progress] epoch=0 opt_step=71/472 loss=4.1290 ce=4.0856 l1=43.4 temp=1.76e-03 lr=9.44e-04 elapsed=4.0min eta=22.5min
+[progress] epoch=0 opt_step=72/472 loss=2.7649 ce=2.7216 l1=43.3 temp=1.72e-03 lr=9.41e-04 elapsed=4.0min eta=22.5min
+[progress] epoch=0 opt_step=73/472 loss=2.6216 ce=2.5785 l1=43.1 temp=1.68e-03 lr=9.39e-04 elapsed=4.1min eta=22.4min
+[progress] epoch=0 opt_step=74/472 loss=3.2865 ce=3.2436 l1=42.9 temp=1.64e-03 lr=9.36e-04 elapsed=4.2min eta=22.3min
+[progress] epoch=0 opt_step=75/472 loss=3.5539 ce=3.5112 l1=42.7 temp=1.60e-03 lr=9.34e-04 elapsed=4.2min eta=22.3min
+[progress] epoch=0 opt_step=76/472 loss=2.7585 ce=2.7160 l1=42.5 temp=1.56e-03 lr=9.32e-04 elapsed=4.3min eta=22.2min
+[progress] epoch=0 opt_step=77/472 loss=2.8951 ce=2.8529 l1=42.2 temp=1.52e-03 lr=9.29e-04 elapsed=4.3min eta=22.2min
+[progress] epoch=0 opt_step=78/472 loss=2.6075 ce=2.5656 l1=42.0 temp=1.49e-03 lr=9.27e-04 elapsed=4.4min eta=22.1min
+[progress] epoch=0 opt_step=79/472 loss=2.7578 ce=2.7161 l1=41.7 temp=1.45e-03 lr=9.25e-04 elapsed=4.4min eta=22.1min
+[progress] epoch=0 opt_step=80/472 loss=3.3473 ce=3.3059 l1=41.4 temp=1.41e-03 lr=9.22e-04 elapsed=4.5min eta=22.0min
+[progress] epoch=0 opt_step=81/472 loss=2.7532 ce=2.7121 l1=41.1 temp=1.38e-03 lr=9.20e-04 elapsed=4.5min eta=21.9min
+[progress] epoch=0 opt_step=82/472 loss=3.7440 ce=3.7032 l1=40.8 temp=1.35e-03 lr=9.18e-04 elapsed=4.6min eta=21.9min
+[progress] epoch=0 opt_step=83/472 loss=3.4443 ce=3.4038 l1=40.5 temp=1.31e-03 lr=9.15e-04 elapsed=4.7min eta=21.8min
+[progress] epoch=0 opt_step=84/472 loss=3.3178 ce=3.2776 l1=40.2 temp=1.28e-03 lr=9.13e-04 elapsed=4.7min eta=21.8min
+[progress] epoch=0 opt_step=85/472 loss=2.7337 ce=2.6939 l1=39.8 temp=1.25e-03 lr=9.11e-04 elapsed=4.8min eta=21.7min
+[progress] epoch=0 opt_step=86/472 loss=3.8238 ce=3.7844 l1=39.4 temp=1.22e-03 lr=9.08e-04 elapsed=4.8min eta=21.7min
+[progress] epoch=0 opt_step=87/472 loss=3.4835 ce=3.4444 l1=39.1 temp=1.19e-03 lr=9.06e-04 elapsed=4.9min eta=21.6min
+[progress] epoch=0 opt_step=88/472 loss=3.5365 ce=3.4978 l1=38.7 temp=1.16e-03 lr=9.04e-04 elapsed=4.9min eta=21.5min
+[progress] epoch=0 opt_step=89/472 loss=3.1732 ce=3.1349 l1=38.3 temp=1.14e-03 lr=9.01e-04 elapsed=5.0min eta=21.5min
+[progress] epoch=0 opt_step=90/472 loss=3.3759 ce=3.3380 l1=38.0 temp=1.11e-03 lr=8.99e-04 elapsed=5.0min eta=21.4min
+[progress] epoch=0 opt_step=91/472 loss=3.3705 ce=3.3329 l1=37.6 temp=1.08e-03 lr=8.96e-04 elapsed=5.1min eta=21.4min
+[progress] epoch=0 opt_step=92/472 loss=3.0353 ce=2.9981 l1=37.2 temp=1.06e-03 lr=8.94e-04 elapsed=5.2min eta=21.3min
+[progress] epoch=0 opt_step=93/472 loss=3.9869 ce=3.9501 l1=36.8 temp=1.03e-03 lr=8.92e-04 elapsed=5.2min eta=21.3min
+[progress] epoch=0 opt_step=94/472 loss=2.9264 ce=2.8900 l1=36.5 temp=1.00e-03 lr=8.89e-04 elapsed=5.3min eta=21.2min
+[progress] epoch=0 opt_step=95/472 loss=2.7737 ce=2.7376 l1=36.1 temp=9.81e-04 lr=8.87e-04 elapsed=5.3min eta=21.1min
+[progress] epoch=0 opt_step=96/472 loss=2.5000 ce=2.4643 l1=35.7 temp=9.57e-04 lr=8.85e-04 elapsed=5.4min eta=21.1min
+[progress] epoch=0 opt_step=97/472 loss=3.2404 ce=3.2051 l1=35.3 temp=9.34e-04 lr=8.82e-04 elapsed=5.4min eta=21.0min
+[progress] epoch=0 opt_step=98/472 loss=2.9413 ce=2.9064 l1=34.9 temp=9.11e-04 lr=8.80e-04 elapsed=5.5min eta=21.0min
+[progress] epoch=0 opt_step=99/472 loss=3.0365 ce=3.0020 l1=34.5 temp=8.89e-04 lr=8.78e-04 elapsed=5.6min eta=20.9min
+[progress] epoch=0 opt_step=100/472 loss=3.5033 ce=3.4692 l1=34.1 temp=8.68e-04 lr=8.75e-04 elapsed=5.6min eta=20.9min
+[progress] epoch=0 opt_step=101/472 loss=4.0771 ce=4.0434 l1=33.7 temp=8.47e-04 lr=8.73e-04 elapsed=5.7min eta=20.8min
+[progress] epoch=0 opt_step=102/472 loss=3.1484 ce=3.1151 l1=33.3 temp=8.26e-04 lr=8.71e-04 elapsed=5.7min eta=20.8min
+[progress] epoch=0 opt_step=103/472 loss=3.4624 ce=3.4294 l1=33.0 temp=8.06e-04 lr=8.68e-04 elapsed=5.8min eta=20.7min
+[progress] epoch=0 opt_step=104/472 loss=3.8115 ce=3.7789 l1=32.6 temp=7.87e-04 lr=8.66e-04 elapsed=5.8min eta=20.6min
+[progress] epoch=0 opt_step=105/472 loss=3.6188 ce=3.5866 l1=32.2 temp=7.68e-04 lr=8.64e-04 elapsed=5.9min eta=20.6min
+[progress] epoch=0 opt_step=106/472 loss=3.1668 ce=3.1349 l1=31.9 temp=7.49e-04 lr=8.61e-04 elapsed=5.9min eta=20.5min
+[progress] epoch=0 opt_step=107/472 loss=4.2905 ce=4.2589 l1=31.5 temp=7.31e-04 lr=8.59e-04 elapsed=6.0min eta=20.5min
+[progress] epoch=0 opt_step=108/472 loss=3.5570 ce=3.5258 l1=31.2 temp=7.14e-04 lr=8.56e-04 elapsed=6.1min eta=20.4min
+[progress] epoch=0 opt_step=109/472 loss=4.0491 ce=4.0183 l1=30.8 temp=6.96e-04 lr=8.54e-04 elapsed=6.1min eta=20.3min
+[progress] epoch=0 opt_step=110/472 loss=3.6879 ce=3.6574 l1=30.5 temp=6.80e-04 lr=8.52e-04 elapsed=6.2min eta=20.3min
+[progress] epoch=0 opt_step=111/472 loss=3.4787 ce=3.4486 l1=30.1 temp=6.63e-04 lr=8.49e-04 elapsed=6.2min eta=20.2min
+[progress] epoch=0 opt_step=112/472 loss=3.7889 ce=3.7591 l1=29.8 temp=6.47e-04 lr=8.47e-04 elapsed=6.3min eta=20.2min
+[progress] epoch=0 opt_step=113/472 loss=2.3169 ce=2.2874 l1=29.4 temp=6.32e-04 lr=8.45e-04 elapsed=6.3min eta=20.1min
+[progress] epoch=0 opt_step=114/472 loss=3.3543 ce=3.3252 l1=29.1 temp=6.16e-04 lr=8.42e-04 elapsed=6.4min eta=20.1min
+[progress] epoch=0 opt_step=115/472 loss=3.6295 ce=3.6007 l1=28.7 temp=6.01e-04 lr=8.40e-04 elapsed=6.4min eta=20.0min
+[progress] epoch=0 opt_step=116/472 loss=2.4598 ce=2.4314 l1=28.4 temp=5.87e-04 lr=8.38e-04 elapsed=6.5min eta=19.9min
+[progress] epoch=0 opt_step=117/472 loss=3.0010 ce=2.9730 l1=28.1 temp=5.73e-04 lr=8.35e-04 elapsed=6.6min eta=19.9min
+[progress] epoch=0 opt_step=118/472 loss=3.4520 ce=3.4243 l1=27.7 temp=5.59e-04 lr=8.33e-04 elapsed=6.6min eta=19.8min
+[progress] epoch=0 opt_step=119/472 loss=3.7995 ce=3.7721 l1=27.4 temp=5.45e-04 lr=8.31e-04 elapsed=6.7min eta=19.8min
+[progress] epoch=0 opt_step=120/472 loss=4.3302 ce=4.3031 l1=27.1 temp=5.32e-04 lr=8.28e-04 elapsed=6.7min eta=19.7min
+[progress] epoch=0 opt_step=121/472 loss=2.8461 ce=2.8193 l1=26.8 temp=5.19e-04 lr=8.26e-04 elapsed=6.8min eta=19.7min
+[progress] epoch=0 opt_step=122/472 loss=3.0243 ce=2.9978 l1=26.5 temp=5.07e-04 lr=8.24e-04 elapsed=6.8min eta=19.6min
+[progress] epoch=0 opt_step=123/472 loss=3.1886 ce=3.1624 l1=26.2 temp=4.95e-04 lr=8.21e-04 elapsed=6.9min eta=19.6min
+[progress] epoch=0 opt_step=124/472 loss=2.9844 ce=2.9585 l1=25.9 temp=4.83e-04 lr=8.19e-04 elapsed=6.9min eta=19.5min
+[progress] epoch=0 opt_step=125/472 loss=3.1885 ce=3.1629 l1=25.6 temp=4.71e-04 lr=8.16e-04 elapsed=7.0min eta=19.4min
+[progress] epoch=0 opt_step=126/472 loss=4.2138 ce=4.1886 l1=25.3 temp=4.60e-04 lr=8.14e-04 elapsed=7.1min eta=19.4min
+[progress] epoch=0 opt_step=127/472 loss=2.9899 ce=2.9650 l1=25.0 temp=4.49e-04 lr=8.12e-04 elapsed=7.1min eta=19.3min
+[progress] epoch=0 opt_step=128/472 loss=3.4356 ce=3.4109 l1=24.7 temp=4.38e-04 lr=8.09e-04 elapsed=7.2min eta=19.3min
+[progress] epoch=0 opt_step=129/472 loss=3.2409 ce=3.2165 l1=24.4 temp=4.27e-04 lr=8.07e-04 elapsed=7.2min eta=19.2min
+[progress] epoch=0 opt_step=130/472 loss=3.4576 ce=3.4334 l1=24.2 temp=4.17e-04 lr=8.05e-04 elapsed=7.3min eta=19.2min
+[progress] epoch=0 opt_step=131/472 loss=2.8727 ce=2.8488 l1=23.9 temp=4.07e-04 lr=8.02e-04 elapsed=7.3min eta=19.1min
+[progress] epoch=0 opt_step=132/472 loss=4.1003 ce=4.0767 l1=23.6 temp=3.97e-04 lr=8.00e-04 elapsed=7.4min eta=19.0min
+[progress] epoch=0 opt_step=133/472 loss=3.4425 ce=3.4191 l1=23.4 temp=3.87e-04 lr=7.98e-04 elapsed=7.4min eta=19.0min
+[progress] epoch=0 opt_step=134/472 loss=4.4866 ce=4.4635 l1=23.2 temp=3.78e-04 lr=7.95e-04 elapsed=7.5min eta=18.9min
+[progress] epoch=0 opt_step=135/472 loss=2.9609 ce=2.9380 l1=22.9 temp=3.69e-04 lr=7.93e-04 elapsed=7.6min eta=18.9min
+[progress] epoch=0 opt_step=136/472 loss=3.4603 ce=3.4376 l1=22.7 temp=3.60e-04 lr=7.91e-04 elapsed=7.6min eta=18.8min
+[progress] epoch=0 opt_step=137/472 loss=3.9920 ce=3.9695 l1=22.5 temp=3.51e-04 lr=7.88e-04 elapsed=7.7min eta=18.8min
+[progress] epoch=0 opt_step=138/472 loss=2.9410 ce=2.9187 l1=22.3 temp=3.43e-04 lr=7.86e-04 elapsed=7.7min eta=18.7min
+[progress] epoch=0 opt_step=139/472 loss=3.3397 ce=3.3176 l1=22.1 temp=3.35e-04 lr=7.84e-04 elapsed=7.8min eta=18.6min
+[progress] epoch=0 opt_step=140/472 loss=3.0973 ce=3.0754 l1=21.9 temp=3.26e-04 lr=7.81e-04 elapsed=7.8min eta=18.6min
+[progress] epoch=0 opt_step=141/472 loss=3.9716 ce=3.9500 l1=21.7 temp=3.19e-04 lr=7.79e-04 elapsed=7.9min eta=18.5min
+[progress] epoch=0 opt_step=142/472 loss=3.0431 ce=3.0217 l1=21.4 temp=3.11e-04 lr=7.76e-04 elapsed=8.0min eta=18.5min
+[progress] epoch=0 opt_step=143/472 loss=3.6434 ce=3.6221 l1=21.2 temp=3.03e-04 lr=7.74e-04 elapsed=8.0min eta=18.4min
+[progress] epoch=0 opt_step=144/472 loss=3.2003 ce=3.1793 l1=21.0 temp=2.96e-04 lr=7.72e-04 elapsed=8.1min eta=18.4min
+[progress] epoch=0 opt_step=145/472 loss=2.7082 ce=2.6874 l1=20.8 temp=2.89e-04 lr=7.69e-04 elapsed=8.1min eta=18.3min
+[progress] epoch=0 opt_step=146/472 loss=3.5824 ce=3.5618 l1=20.6 temp=2.82e-04 lr=7.67e-04 elapsed=8.2min eta=18.2min
+[progress] epoch=0 opt_step=147/472 loss=3.0111 ce=2.9907 l1=20.4 temp=2.75e-04 lr=7.65e-04 elapsed=8.2min eta=18.2min
+[progress] epoch=0 opt_step=148/472 loss=3.0195 ce=2.9993 l1=20.2 temp=2.68e-04 lr=7.62e-04 elapsed=8.3min eta=18.1min
+[progress] epoch=0 opt_step=149/472 loss=3.3672 ce=3.3472 l1=20.0 temp=2.62e-04 lr=7.60e-04 elapsed=8.3min eta=18.1min
+[progress] epoch=0 opt_step=150/472 loss=3.8233 ce=3.8035 l1=19.8 temp=2.56e-04 lr=7.58e-04 elapsed=8.4min eta=18.0min
+[progress] epoch=0 opt_step=151/472 loss=3.6643 ce=3.6446 l1=19.7 temp=2.49e-04 lr=7.55e-04 elapsed=8.5min eta=18.0min
+[progress] epoch=0 opt_step=152/472 loss=2.7870 ce=2.7675 l1=19.5 temp=2.43e-04 lr=7.53e-04 elapsed=8.5min eta=17.9min
+[progress] epoch=0 opt_step=153/472 loss=2.9549 ce=2.9355 l1=19.3 temp=2.38e-04 lr=7.51e-04 elapsed=8.6min eta=17.9min
+[progress] epoch=0 opt_step=154/472 loss=3.4423 ce=3.4231 l1=19.2 temp=2.32e-04 lr=7.48e-04 elapsed=8.6min eta=17.8min
+[progress] epoch=0 opt_step=155/472 loss=3.0563 ce=3.0372 l1=19.0 temp=2.26e-04 lr=7.46e-04 elapsed=8.7min eta=17.7min
+[progress] epoch=0 opt_step=156/472 loss=3.7698 ce=3.7509 l1=18.9 temp=2.21e-04 lr=7.44e-04 elapsed=8.7min eta=17.7min
+[progress] epoch=0 opt_step=157/472 loss=3.1286 ce=3.1099 l1=18.8 temp=2.15e-04 lr=7.41e-04 elapsed=8.8min eta=17.6min
+[progress] epoch=0 opt_step=158/472 loss=3.2493 ce=3.2307 l1=18.6 temp=2.10e-04 lr=7.39e-04 elapsed=8.8min eta=17.6min
+[progress] epoch=0 opt_step=159/472 loss=3.6229 ce=3.6044 l1=18.5 temp=2.05e-04 lr=7.36e-04 elapsed=8.9min eta=17.5min
+[progress] epoch=0 opt_step=160/472 loss=3.7324 ce=3.7140 l1=18.4 temp=2.00e-04 lr=7.34e-04 elapsed=8.9min eta=17.5min
+[progress] epoch=0 opt_step=161/472 loss=3.0104 ce=2.9922 l1=18.2 temp=1.95e-04 lr=7.32e-04 elapsed=9.0min eta=17.4min
+[progress] epoch=0 opt_step=162/472 loss=3.3735 ce=3.3553 l1=18.1 temp=1.91e-04 lr=7.29e-04 elapsed=9.1min eta=17.3min
+[progress] epoch=0 opt_step=163/472 loss=3.0391 ce=3.0211 l1=18.0 temp=1.86e-04 lr=7.27e-04 elapsed=9.1min eta=17.3min
+[progress] epoch=0 opt_step=164/472 loss=2.7559 ce=2.7380 l1=17.9 temp=1.82e-04 lr=7.25e-04 elapsed=9.2min eta=17.2min
+[progress] epoch=0 opt_step=165/472 loss=2.9290 ce=2.9113 l1=17.8 temp=1.77e-04 lr=7.22e-04 elapsed=9.2min eta=17.2min
+[progress] epoch=0 opt_step=166/472 loss=3.8077 ce=3.7900 l1=17.7 temp=1.73e-04 lr=7.20e-04 elapsed=9.3min eta=17.1min
+[progress] epoch=0 opt_step=167/472 loss=2.7802 ce=2.7627 l1=17.5 temp=1.69e-04 lr=7.18e-04 elapsed=9.3min eta=17.1min
+[progress] epoch=0 opt_step=168/472 loss=4.0486 ce=4.0312 l1=17.4 temp=1.65e-04 lr=7.15e-04 elapsed=9.4min eta=17.0min
+[progress] epoch=0 opt_step=169/472 loss=4.0193 ce=4.0020 l1=17.4 temp=1.61e-04 lr=7.13e-04 elapsed=9.4min eta=16.9min
+[progress] epoch=0 opt_step=170/472 loss=2.9975 ce=2.9802 l1=17.3 temp=1.57e-04 lr=7.11e-04 elapsed=9.5min eta=16.9min
+[progress] epoch=0 opt_step=171/472 loss=2.9118 ce=2.8947 l1=17.2 temp=1.53e-04 lr=7.08e-04 elapsed=9.6min eta=16.8min
+[progress] epoch=0 opt_step=172/472 loss=2.5382 ce=2.5211 l1=17.1 temp=1.49e-04 lr=7.06e-04 elapsed=9.6min eta=16.8min
+[progress] epoch=0 opt_step=173/472 loss=3.1497 ce=3.1327 l1=17.0 temp=1.46e-04 lr=7.04e-04 elapsed=9.7min eta=16.7min
+[progress] epoch=0 opt_step=174/472 loss=3.6741 ce=3.6572 l1=16.9 temp=1.42e-04 lr=7.01e-04 elapsed=9.7min eta=16.7min
+[progress] epoch=0 opt_step=175/472 loss=2.7892 ce=2.7724 l1=16.8 temp=1.39e-04 lr=6.99e-04 elapsed=9.8min eta=16.6min
+[progress] epoch=0 opt_step=176/472 loss=3.3033 ce=3.2866 l1=16.8 temp=1.35e-04 lr=6.96e-04 elapsed=9.8min eta=16.6min
+[progress] epoch=0 opt_step=177/472 loss=3.7498 ce=3.7331 l1=16.7 temp=1.32e-04 lr=6.94e-04 elapsed=9.9min eta=16.5min
+[progress] epoch=0 opt_step=178/472 loss=3.8388 ce=3.8222 l1=16.6 temp=1.29e-04 lr=6.92e-04 elapsed=10.0min eta=16.4min
+[progress] epoch=0 opt_step=179/472 loss=2.7563 ce=2.7398 l1=16.6 temp=1.26e-04 lr=6.89e-04 elapsed=10.0min eta=16.4min
+[progress] epoch=0 opt_step=180/472 loss=3.5015 ce=3.4850 l1=16.5 temp=1.23e-04 lr=6.87e-04 elapsed=10.1min eta=16.3min
+[progress] epoch=0 opt_step=181/472 loss=3.0600 ce=3.0436 l1=16.5 temp=1.20e-04 lr=6.85e-04 elapsed=10.1min eta=16.3min
+[progress] epoch=0 opt_step=182/472 loss=3.6136 ce=3.5972 l1=16.4 temp=1.17e-04 lr=6.82e-04 elapsed=10.2min eta=16.2min
+[progress] epoch=0 opt_step=183/472 loss=3.5393 ce=3.5229 l1=16.3 temp=1.14e-04 lr=6.80e-04 elapsed=10.2min eta=16.2min
+[progress] epoch=0 opt_step=184/472 loss=3.5008 ce=3.4846 l1=16.3 temp=1.11e-04 lr=6.78e-04 elapsed=10.3min eta=16.1min
+[progress] epoch=0 opt_step=185/472 loss=2.9663 ce=2.9501 l1=16.2 temp=1.09e-04 lr=6.75e-04 elapsed=10.3min eta=16.0min
+[progress] epoch=0 opt_step=186/472 loss=3.1965 ce=3.1803 l1=16.2 temp=1.06e-04 lr=6.73e-04 elapsed=10.4min eta=16.0min
+[progress] epoch=0 opt_step=187/472 loss=2.9099 ce=2.8938 l1=16.1 temp=1.03e-04 lr=6.71e-04 elapsed=10.5min eta=15.9min
+[progress] epoch=0 opt_step=188/472 loss=3.2922 ce=3.2761 l1=16.1 temp=1.01e-04 lr=6.68e-04 elapsed=10.5min eta=15.9min
+[progress] epoch=0 opt_step=189/472 loss=3.8044 ce=3.7884 l1=16.0 temp=9.85e-05 lr=6.66e-04 elapsed=10.6min eta=15.8min
+[progress] epoch=0 opt_step=190/472 loss=3.3038 ce=3.2879 l1=16.0 temp=9.62e-05 lr=6.64e-04 elapsed=10.6min eta=15.8min
+[progress] epoch=0 opt_step=191/472 loss=3.4971 ce=3.4811 l1=15.9 temp=9.38e-05 lr=6.61e-04 elapsed=10.7min eta=15.7min
+[progress] epoch=0 opt_step=192/472 loss=4.0878 ce=4.0719 l1=15.9 temp=9.16e-05 lr=6.59e-04 elapsed=10.7min eta=15.7min
+[progress] epoch=0 opt_step=193/472 loss=3.3086 ce=3.2927 l1=15.9 temp=8.94e-05 lr=6.56e-04 elapsed=10.8min eta=15.6min
+[progress] epoch=0 opt_step=194/472 loss=3.5519 ce=3.5361 l1=15.8 temp=8.72e-05 lr=6.54e-04 elapsed=10.8min eta=15.5min
+[progress] epoch=0 opt_step=195/472 loss=4.2555 ce=4.2397 l1=15.8 temp=8.51e-05 lr=6.52e-04 elapsed=10.9min eta=15.5min
+[progress] epoch=0 opt_step=196/472 loss=3.9555 ce=3.9397 l1=15.8 temp=8.30e-05 lr=6.49e-04 elapsed=11.0min eta=15.4min
+[progress] epoch=0 opt_step=197/472 loss=3.8836 ce=3.8679 l1=15.8 temp=8.10e-05 lr=6.47e-04 elapsed=11.0min eta=15.4min
+[progress] epoch=0 opt_step=198/472 loss=3.0614 ce=3.0456 l1=15.7 temp=7.91e-05 lr=6.45e-04 elapsed=11.1min eta=15.3min
+[progress] epoch=0 opt_step=199/472 loss=3.4376 ce=3.4219 l1=15.7 temp=7.72e-05 lr=6.42e-04 elapsed=11.1min eta=15.3min
+[progress] epoch=0 opt_step=200/472 loss=2.8204 ce=2.8046 l1=15.7 temp=7.53e-05 lr=6.40e-04 elapsed=11.2min eta=15.2min
+[progress] epoch=0 opt_step=201/472 loss=2.9217 ce=2.9060 l1=15.7 temp=7.35e-05 lr=6.38e-04 elapsed=11.2min eta=15.1min
+[progress] epoch=0 opt_step=202/472 loss=2.9776 ce=2.9619 l1=15.8 temp=7.17e-05 lr=6.35e-04 elapsed=11.3min eta=15.1min
+[progress] epoch=0 opt_step=203/472 loss=2.9780 ce=2.9623 l1=15.8 temp=7.00e-05 lr=6.33e-04 elapsed=11.3min eta=15.0min
+[progress] epoch=0 opt_step=204/472 loss=4.2346 ce=4.2188 l1=15.8 temp=6.83e-05 lr=6.31e-04 elapsed=11.4min eta=15.0min
+[progress] epoch=0 opt_step=205/472 loss=4.6473 ce=4.6315 l1=15.8 temp=6.66e-05 lr=6.28e-04 elapsed=11.5min eta=14.9min
+[progress] epoch=0 opt_step=206/472 loss=3.4776 ce=3.4618 l1=15.8 temp=6.50e-05 lr=6.26e-04 elapsed=11.5min eta=14.9min
+[progress] epoch=0 opt_step=207/472 loss=4.0890 ce=4.0732 l1=15.8 temp=6.35e-05 lr=6.24e-04 elapsed=11.6min eta=14.8min
+[progress] epoch=0 opt_step=208/472 loss=3.6347 ce=3.6189 l1=15.8 temp=6.19e-05 lr=6.21e-04 elapsed=11.6min eta=14.8min
+[progress] epoch=0 opt_step=209/472 loss=3.3151 ce=3.2993 l1=15.8 temp=6.04e-05 lr=6.19e-04 elapsed=11.7min eta=14.7min
+[progress] epoch=0 opt_step=210/472 loss=4.2135 ce=4.1977 l1=15.8 temp=5.90e-05 lr=6.16e-04 elapsed=11.7min eta=14.6min
+[progress] epoch=0 opt_step=211/472 loss=3.2491 ce=3.2332 l1=15.9 temp=5.76e-05 lr=6.14e-04 elapsed=11.8min eta=14.6min
+[progress] epoch=0 opt_step=212/472 loss=3.9952 ce=3.9794 l1=15.8 temp=5.62e-05 lr=6.12e-04 elapsed=11.8min eta=14.5min
+[progress] epoch=0 opt_step=213/472 loss=4.1589 ce=4.1431 l1=15.9 temp=5.48e-05 lr=6.09e-04 elapsed=11.9min eta=14.5min
+[progress] epoch=0 opt_step=214/472 loss=2.8645 ce=2.8486 l1=15.9 temp=5.35e-05 lr=6.07e-04 elapsed=12.0min eta=14.4min
+[progress] epoch=0 opt_step=215/472 loss=3.7740 ce=3.7582 l1=15.9 temp=5.22e-05 lr=6.05e-04 elapsed=12.0min eta=14.4min
+[progress] epoch=0 opt_step=216/472 loss=3.7343 ce=3.7184 l1=15.9 temp=5.09e-05 lr=6.02e-04 elapsed=12.1min eta=14.3min
+[progress] epoch=0 opt_step=217/472 loss=3.2378 ce=3.2220 l1=15.9 temp=4.97e-05 lr=6.00e-04 elapsed=12.1min eta=14.2min
+[progress] epoch=0 opt_step=218/472 loss=3.4647 ce=3.4488 l1=15.9 temp=4.85e-05 lr=5.98e-04 elapsed=12.2min eta=14.2min
+[progress] epoch=0 opt_step=219/472 loss=3.7127 ce=3.6969 l1=15.9 temp=4.73e-05 lr=5.95e-04 elapsed=12.2min eta=14.1min
+[progress] epoch=0 opt_step=220/472 loss=2.6323 ce=2.6164 l1=15.9 temp=4.62e-05 lr=5.93e-04 elapsed=12.3min eta=14.1min
+[progress] epoch=0 opt_step=221/472 loss=2.6867 ce=2.6708 l1=15.9 temp=4.51e-05 lr=5.91e-04 elapsed=12.3min eta=14.0min
+[progress] epoch=0 opt_step=222/472 loss=2.9559 ce=2.9400 l1=15.9 temp=4.40e-05 lr=5.88e-04 elapsed=12.4min eta=14.0min
+[progress] epoch=0 opt_step=223/472 loss=2.8305 ce=2.8146 l1=15.9 temp=4.29e-05 lr=5.86e-04 elapsed=12.5min eta=13.9min
+[progress] epoch=0 opt_step=224/472 loss=4.0397 ce=4.0238 l1=15.9 temp=4.19e-05 lr=5.84e-04 elapsed=12.5min eta=13.9min
+[progress] epoch=0 opt_step=225/472 loss=2.8684 ce=2.8525 l1=16.0 temp=4.09e-05 lr=5.81e-04 elapsed=12.6min eta=13.8min
+[progress] epoch=0 opt_step=226/472 loss=3.6960 ce=3.6800 l1=16.0 temp=3.99e-05 lr=5.79e-04 elapsed=12.6min eta=13.7min
+[progress] epoch=0 opt_step=227/472 loss=3.4219 ce=3.4059 l1=16.0 temp=3.89e-05 lr=5.76e-04 elapsed=12.7min eta=13.7min
+[progress] epoch=0 opt_step=228/472 loss=2.8814 ce=2.8654 l1=16.0 temp=3.80e-05 lr=5.74e-04 elapsed=12.7min eta=13.6min
+[progress] epoch=0 opt_step=229/472 loss=3.7028 ce=3.6868 l1=16.0 temp=3.71e-05 lr=5.72e-04 elapsed=12.8min eta=13.6min
+[progress] epoch=0 opt_step=230/472 loss=4.3369 ce=4.3209 l1=16.0 temp=3.62e-05 lr=5.69e-04 elapsed=12.8min eta=13.5min
+[progress] epoch=0 opt_step=231/472 loss=3.8095 ce=3.7935 l1=16.1 temp=3.53e-05 lr=5.67e-04 elapsed=12.9min eta=13.5min
+[progress] epoch=0 opt_step=232/472 loss=3.7421 ce=3.7260 l1=16.1 temp=3.44e-05 lr=5.65e-04 elapsed=13.0min eta=13.4min
+[progress] epoch=0 opt_step=233/472 loss=3.8754 ce=3.8593 l1=16.1 temp=3.36e-05 lr=5.62e-04 elapsed=13.0min eta=13.3min
+[progress] epoch=0 opt_step=234/472 loss=3.7914 ce=3.7753 l1=16.1 temp=3.28e-05 lr=5.60e-04 elapsed=13.1min eta=13.3min
+[progress] epoch=0 opt_step=235/472 loss=3.2514 ce=3.2353 l1=16.1 temp=3.20e-05 lr=5.58e-04 elapsed=13.1min eta=13.2min
+[progress] epoch=0 opt_step=236/472 loss=4.5165 ce=4.5004 l1=16.1 temp=3.12e-05 lr=5.55e-04 elapsed=13.2min eta=13.2min
+[progress] epoch=0 opt_step=237/472 loss=2.6973 ce=2.6812 l1=16.2 temp=3.05e-05 lr=5.53e-04 elapsed=13.2min eta=13.1min
+[progress] epoch=0 opt_step=238/472 loss=3.5476 ce=3.5315 l1=16.2 temp=2.97e-05 lr=5.51e-04 elapsed=13.3min eta=13.1min
+[progress] epoch=0 opt_step=239/472 loss=3.4812 ce=3.4650 l1=16.2 temp=2.90e-05 lr=5.48e-04 elapsed=13.3min eta=13.0min
+[progress] epoch=0 opt_step=240/472 loss=3.3537 ce=3.3375 l1=16.2 temp=2.83e-05 lr=5.46e-04 elapsed=13.4min eta=13.0min
+[progress] epoch=0 opt_step=241/472 loss=3.5954 ce=3.5791 l1=16.2 temp=2.76e-05 lr=5.44e-04 elapsed=13.5min eta=12.9min
+[progress] epoch=0 opt_step=242/472 loss=3.9733 ce=3.9571 l1=16.2 temp=2.70e-05 lr=5.41e-04 elapsed=13.5min eta=12.8min
+[progress] epoch=0 opt_step=243/472 loss=3.1834 ce=3.1671 l1=16.3 temp=2.63e-05 lr=5.39e-04 elapsed=13.6min eta=12.8min
+[progress] epoch=0 opt_step=244/472 loss=3.3926 ce=3.3763 l1=16.3 temp=2.57e-05 lr=5.36e-04 elapsed=13.6min eta=12.7min
+[progress] epoch=0 opt_step=245/472 loss=3.2174 ce=3.2011 l1=16.3 temp=2.51e-05 lr=5.34e-04 elapsed=13.7min eta=12.7min
+[progress] epoch=0 opt_step=246/472 loss=3.6852 ce=3.6689 l1=16.3 temp=2.45e-05 lr=5.32e-04 elapsed=13.7min eta=12.6min
+[progress] epoch=0 opt_step=247/472 loss=3.8691 ce=3.8528 l1=16.3 temp=2.39e-05 lr=5.29e-04 elapsed=13.8min eta=12.6min
+[progress] epoch=0 opt_step=248/472 loss=3.7556 ce=3.7393 l1=16.3 temp=2.33e-05 lr=5.27e-04 elapsed=13.8min eta=12.5min
+[progress] epoch=0 opt_step=249/472 loss=4.1969 ce=4.1806 l1=16.3 temp=2.27e-05 lr=5.25e-04 elapsed=13.9min eta=12.4min
+[progress] epoch=0 opt_step=250/472 loss=3.4525 ce=3.4361 l1=16.4 temp=2.22e-05 lr=5.22e-04 elapsed=14.0min eta=12.4min
+[progress] epoch=0 opt_step=251/472 loss=3.8689 ce=3.8525 l1=16.4 temp=2.16e-05 lr=5.20e-04 elapsed=14.0min eta=12.3min
+[progress] epoch=0 opt_step=252/472 loss=2.9563 ce=2.9399 l1=16.4 temp=2.11e-05 lr=5.18e-04 elapsed=14.1min eta=12.3min
+[progress] epoch=0 opt_step=253/472 loss=3.9170 ce=3.9006 l1=16.4 temp=2.06e-05 lr=5.15e-04 elapsed=14.1min eta=12.2min
+[progress] epoch=0 opt_step=254/472 loss=2.8061 ce=2.7896 l1=16.4 temp=2.01e-05 lr=5.13e-04 elapsed=14.2min eta=12.2min
+[progress] epoch=0 opt_step=255/472 loss=2.7142 ce=2.6977 l1=16.5 temp=1.96e-05 lr=5.11e-04 elapsed=14.2min eta=12.1min
+[progress] epoch=0 opt_step=256/472 loss=3.6654 ce=3.6489 l1=16.5 temp=1.92e-05 lr=5.08e-04 elapsed=14.3min eta=12.1min
+[progress] epoch=0 opt_step=257/472 loss=4.3863 ce=4.3698 l1=16.5 temp=1.87e-05 lr=5.06e-04 elapsed=14.3min eta=12.0min
+[progress] epoch=0 opt_step=258/472 loss=3.2088 ce=3.1923 l1=16.6 temp=1.82e-05 lr=5.04e-04 elapsed=14.4min eta=11.9min
+[progress] epoch=0 opt_step=259/472 loss=3.5040 ce=3.4874 l1=16.6 temp=1.78e-05 lr=5.01e-04 elapsed=14.5min eta=11.9min
+[progress] epoch=0 opt_step=260/472 loss=3.9173 ce=3.9007 l1=16.6 temp=1.74e-05 lr=4.99e-04 elapsed=14.5min eta=11.8min
+[progress] epoch=0 opt_step=261/472 loss=3.3634 ce=3.3468 l1=16.6 temp=1.70e-05 lr=4.96e-04 elapsed=14.6min eta=11.8min
+[progress] epoch=0 opt_step=262/472 loss=3.3837 ce=3.3670 l1=16.7 temp=1.65e-05 lr=4.94e-04 elapsed=14.6min eta=11.7min
+[progress] epoch=0 opt_step=263/472 loss=3.1874 ce=3.1707 l1=16.7 temp=1.61e-05 lr=4.92e-04 elapsed=14.7min eta=11.7min
+[progress] epoch=0 opt_step=264/472 loss=2.8524 ce=2.8357 l1=16.8 temp=1.58e-05 lr=4.89e-04 elapsed=14.7min eta=11.6min
+[progress] epoch=0 opt_step=265/472 loss=3.1685 ce=3.1517 l1=16.8 temp=1.54e-05 lr=4.87e-04 elapsed=14.8min eta=11.6min
+[progress] epoch=0 opt_step=266/472 loss=3.1422 ce=3.1253 l1=16.8 temp=1.50e-05 lr=4.85e-04 elapsed=14.9min eta=11.5min
+[progress] epoch=0 opt_step=267/472 loss=3.0538 ce=3.0369 l1=16.9 temp=1.46e-05 lr=4.82e-04 elapsed=14.9min eta=11.4min
+[progress] epoch=0 opt_step=268/472 loss=3.5759 ce=3.5590 l1=16.9 temp=1.43e-05 lr=4.80e-04 elapsed=15.0min eta=11.4min
+[progress] epoch=0 opt_step=269/472 loss=3.5958 ce=3.5789 l1=16.9 temp=1.39e-05 lr=4.78e-04 elapsed=15.0min eta=11.3min
+[progress] epoch=0 opt_step=270/472 loss=3.1616 ce=3.1446 l1=17.0 temp=1.36e-05 lr=4.75e-04 elapsed=15.1min eta=11.3min
+[progress] epoch=0 opt_step=271/472 loss=3.1567 ce=3.1397 l1=17.0 temp=1.33e-05 lr=4.73e-04 elapsed=15.1min eta=11.2min
+[progress] epoch=0 opt_step=272/472 loss=3.5469 ce=3.5298 l1=17.0 temp=1.30e-05 lr=4.71e-04 elapsed=15.2min eta=11.2min
+[progress] epoch=0 opt_step=273/472 loss=4.1849 ce=4.1678 l1=17.1 temp=1.26e-05 lr=4.68e-04 elapsed=15.2min eta=11.1min
+[progress] epoch=0 opt_step=274/472 loss=4.0767 ce=4.0596 l1=17.1 temp=1.23e-05 lr=4.66e-04 elapsed=15.3min eta=11.1min
+[progress] epoch=0 opt_step=275/472 loss=3.4700 ce=3.4529 l1=17.2 temp=1.20e-05 lr=4.64e-04 elapsed=15.4min eta=11.0min
+[progress] epoch=0 opt_step=276/472 loss=3.8924 ce=3.8752 l1=17.2 temp=1.18e-05 lr=4.61e-04 elapsed=15.4min eta=10.9min
+[progress] epoch=0 opt_step=277/472 loss=3.9539 ce=3.9366 l1=17.2 temp=1.15e-05 lr=4.59e-04 elapsed=15.5min eta=10.9min
+[progress] epoch=0 opt_step=278/472 loss=3.0018 ce=2.9846 l1=17.3 temp=1.12e-05 lr=4.56e-04 elapsed=15.5min eta=10.8min
+[progress] epoch=0 opt_step=279/472 loss=3.0021 ce=2.9848 l1=17.3 temp=1.09e-05 lr=4.54e-04 elapsed=15.6min eta=10.8min
+[progress] epoch=0 opt_step=280/472 loss=2.5026 ce=2.4853 l1=17.3 temp=1.07e-05 lr=4.52e-04 elapsed=15.6min eta=10.7min
+[progress] epoch=0 opt_step=281/472 loss=3.9504 ce=3.9330 l1=17.4 temp=1.04e-05 lr=4.49e-04 elapsed=15.7min eta=10.7min
+[progress] epoch=0 opt_step=282/472 loss=3.4577 ce=3.4403 l1=17.4 temp=1.01e-05 lr=4.47e-04 elapsed=15.7min eta=10.6min
+[progress] epoch=0 opt_step=283/472 loss=3.8994 ce=3.8820 l1=17.4 temp=9.90e-06 lr=4.45e-04 elapsed=15.8min eta=10.6min
+[progress] epoch=0 opt_step=284/472 loss=3.6868 ce=3.6693 l1=17.5 temp=9.66e-06 lr=4.42e-04 elapsed=15.9min eta=10.5min
+[progress] epoch=0 opt_step=285/472 loss=2.9807 ce=2.9632 l1=17.5 temp=9.43e-06 lr=4.40e-04 elapsed=15.9min eta=10.4min
+[progress] epoch=0 opt_step=286/472 loss=3.3058 ce=3.2883 l1=17.5 temp=9.20e-06 lr=4.38e-04 elapsed=16.0min eta=10.4min
+[progress] epoch=0 opt_step=287/472 loss=3.1466 ce=3.1291 l1=17.5 temp=8.98e-06 lr=4.35e-04 elapsed=16.0min eta=10.3min
+[progress] epoch=0 opt_step=288/472 loss=4.3176 ce=4.3001 l1=17.5 temp=8.76e-06 lr=4.33e-04 elapsed=16.1min eta=10.3min
+[progress] epoch=0 opt_step=289/472 loss=3.6883 ce=3.6708 l1=17.5 temp=8.55e-06 lr=4.31e-04 elapsed=16.1min eta=10.2min
+[progress] epoch=0 opt_step=290/472 loss=3.9896 ce=3.9720 l1=17.5 temp=8.35e-06 lr=4.28e-04 elapsed=16.2min eta=10.2min
+[progress] epoch=0 opt_step=291/472 loss=3.6993 ce=3.6818 l1=17.5 temp=8.14e-06 lr=4.26e-04 elapsed=16.2min eta=10.1min
+[progress] epoch=0 opt_step=292/472 loss=2.8245 ce=2.8069 l1=17.6 temp=7.95e-06 lr=4.24e-04 elapsed=16.3min eta=10.0min
+[progress] epoch=0 opt_step=293/472 loss=2.7553 ce=2.7377 l1=17.6 temp=7.76e-06 lr=4.21e-04 elapsed=16.4min eta=10.0min
+[progress] epoch=0 opt_step=294/472 loss=3.0702 ce=3.0526 l1=17.6 temp=7.57e-06 lr=4.19e-04 elapsed=16.4min eta=9.9min
+[progress] epoch=0 opt_step=295/472 loss=2.5087 ce=2.4912 l1=17.6 temp=7.39e-06 lr=4.16e-04 elapsed=16.5min eta=9.9min
+[progress] epoch=0 opt_step=296/472 loss=3.4458 ce=3.4282 l1=17.6 temp=7.21e-06 lr=4.14e-04 elapsed=16.5min eta=9.8min
+[progress] epoch=0 opt_step=297/472 loss=3.4566 ce=3.4391 l1=17.6 temp=7.03e-06 lr=4.12e-04 elapsed=16.6min eta=9.8min
+[progress] epoch=0 opt_step=298/472 loss=3.4735 ce=3.4560 l1=17.6 temp=6.86e-06 lr=4.09e-04 elapsed=16.6min eta=9.7min
+[progress] epoch=0 opt_step=299/472 loss=3.9581 ce=3.9406 l1=17.6 temp=6.70e-06 lr=4.07e-04 elapsed=16.7min eta=9.7min
+[progress] epoch=0 opt_step=300/472 loss=2.3005 ce=2.2830 l1=17.6 temp=6.54e-06 lr=4.05e-04 elapsed=16.7min eta=9.6min
+[progress] epoch=0 opt_step=301/472 loss=2.9861 ce=2.9686 l1=17.6 temp=6.38e-06 lr=4.02e-04 elapsed=16.8min eta=9.5min
+[progress] epoch=0 opt_step=302/472 loss=3.4764 ce=3.4588 l1=17.6 temp=6.22e-06 lr=4.00e-04 elapsed=16.9min eta=9.5min
+[progress] epoch=0 opt_step=303/472 loss=3.8774 ce=3.8598 l1=17.6 temp=6.07e-06 lr=3.98e-04 elapsed=16.9min eta=9.4min
+[progress] epoch=0 opt_step=304/472 loss=3.4526 ce=3.4351 l1=17.6 temp=5.93e-06 lr=3.95e-04 elapsed=17.0min eta=9.4min
+[progress] epoch=0 opt_step=305/472 loss=3.2152 ce=3.1976 l1=17.6 temp=5.78e-06 lr=3.93e-04 elapsed=17.0min eta=9.3min
+[progress] epoch=0 opt_step=306/472 loss=2.9489 ce=2.9314 l1=17.6 temp=5.64e-06 lr=3.91e-04 elapsed=17.1min eta=9.3min
+[progress] epoch=0 opt_step=307/472 loss=3.7315 ce=3.7139 l1=17.6 temp=5.51e-06 lr=3.88e-04 elapsed=17.1min eta=9.2min
+[progress] epoch=0 opt_step=308/472 loss=4.0087 ce=3.9911 l1=17.6 temp=5.37e-06 lr=3.86e-04 elapsed=17.2min eta=9.2min
+[progress] epoch=0 opt_step=309/472 loss=3.3670 ce=3.3495 l1=17.6 temp=5.24e-06 lr=3.84e-04 elapsed=17.2min eta=9.1min
+[progress] epoch=0 opt_step=310/472 loss=3.4310 ce=3.4135 l1=17.6 temp=5.12e-06 lr=3.81e-04 elapsed=17.3min eta=9.0min
+[progress] epoch=0 opt_step=311/472 loss=2.7689 ce=2.7513 l1=17.6 temp=4.99e-06 lr=3.79e-04 elapsed=17.4min eta=9.0min
+[progress] epoch=0 opt_step=312/472 loss=3.1049 ce=3.0874 l1=17.6 temp=4.87e-06 lr=3.76e-04 elapsed=17.4min eta=8.9min
+[progress] epoch=0 opt_step=313/472 loss=3.5469 ce=3.5293 l1=17.6 temp=4.76e-06 lr=3.74e-04 elapsed=17.5min eta=8.9min
+[progress] epoch=0 opt_step=314/472 loss=3.9911 ce=3.9735 l1=17.6 temp=4.64e-06 lr=3.72e-04 elapsed=17.5min eta=8.8min
+[progress] epoch=0 opt_step=315/472 loss=4.0502 ce=4.0326 l1=17.6 temp=4.53e-06 lr=3.69e-04 elapsed=17.6min eta=8.8min
+[progress] epoch=0 opt_step=316/472 loss=3.1292 ce=3.1116 l1=17.6 temp=4.42e-06 lr=3.67e-04 elapsed=17.6min eta=8.7min
+[progress] epoch=0 opt_step=317/472 loss=2.5187 ce=2.5011 l1=17.6 temp=4.31e-06 lr=3.65e-04 elapsed=17.7min eta=8.6min
+[progress] epoch=0 opt_step=318/472 loss=4.4035 ce=4.3859 l1=17.6 temp=4.21e-06 lr=3.62e-04 elapsed=17.7min eta=8.6min
+[progress] epoch=0 opt_step=319/472 loss=3.4521 ce=3.4345 l1=17.6 temp=4.11e-06 lr=3.60e-04 elapsed=17.8min eta=8.5min
+[progress] epoch=0 opt_step=320/472 loss=4.1109 ce=4.0932 l1=17.6 temp=4.01e-06 lr=3.58e-04 elapsed=17.9min eta=8.5min
+[progress] epoch=0 opt_step=321/472 loss=2.5161 ce=2.4985 l1=17.6 temp=3.91e-06 lr=3.55e-04 elapsed=17.9min eta=8.4min
+[progress] epoch=0 opt_step=322/472 loss=3.4612 ce=3.4436 l1=17.6 temp=3.82e-06 lr=3.53e-04 elapsed=18.0min eta=8.4min
+[progress] epoch=0 opt_step=323/472 loss=4.0419 ce=4.0243 l1=17.6 temp=3.72e-06 lr=3.51e-04 elapsed=18.0min eta=8.3min
+[progress] epoch=0 opt_step=324/472 loss=3.3634 ce=3.3458 l1=17.6 temp=3.64e-06 lr=3.48e-04 elapsed=18.1min eta=8.3min
+[progress] epoch=0 opt_step=325/472 loss=3.9629 ce=3.9453 l1=17.6 temp=3.55e-06 lr=3.46e-04 elapsed=18.1min eta=8.2min
+[progress] epoch=0 opt_step=326/472 loss=3.2132 ce=3.1956 l1=17.6 temp=3.46e-06 lr=3.44e-04 elapsed=18.2min eta=8.1min
+[progress] epoch=0 opt_step=327/472 loss=2.8535 ce=2.8358 l1=17.6 temp=3.38e-06 lr=3.41e-04 elapsed=18.2min eta=8.1min
+[progress] epoch=0 opt_step=328/472 loss=4.5949 ce=4.5773 l1=17.6 temp=3.30e-06 lr=3.39e-04 elapsed=18.3min eta=8.0min
+[progress] epoch=0 opt_step=329/472 loss=2.8042 ce=2.7866 l1=17.6 temp=3.22e-06 lr=3.36e-04 elapsed=18.4min eta=8.0min
+[progress] epoch=0 opt_step=330/472 loss=3.1678 ce=3.1502 l1=17.6 temp=3.14e-06 lr=3.34e-04 elapsed=18.4min eta=7.9min
+[progress] epoch=0 opt_step=331/472 loss=2.8611 ce=2.8435 l1=17.6 temp=3.06e-06 lr=3.32e-04 elapsed=18.5min eta=7.9min
+[progress] epoch=0 opt_step=332/472 loss=2.8753 ce=2.8577 l1=17.6 temp=2.99e-06 lr=3.29e-04 elapsed=18.5min eta=7.8min
+[progress] epoch=0 opt_step=333/472 loss=3.7853 ce=3.7677 l1=17.6 temp=2.92e-06 lr=3.27e-04 elapsed=18.6min eta=7.8min
+[progress] epoch=0 opt_step=334/472 loss=3.2158 ce=3.1982 l1=17.6 temp=2.85e-06 lr=3.25e-04 elapsed=18.6min eta=7.7min
+[progress] epoch=0 opt_step=335/472 loss=3.4172 ce=3.3996 l1=17.6 temp=2.78e-06 lr=3.22e-04 elapsed=18.7min eta=7.6min
+[progress] epoch=0 opt_step=336/472 loss=3.8181 ce=3.8005 l1=17.6 temp=2.71e-06 lr=3.20e-04 elapsed=18.7min eta=7.6min
+[progress] epoch=0 opt_step=337/472 loss=3.8053 ce=3.7877 l1=17.6 temp=2.65e-06 lr=3.18e-04 elapsed=18.8min eta=7.5min
+[progress] epoch=0 opt_step=338/472 loss=1.9980 ce=1.9803 l1=17.6 temp=2.58e-06 lr=3.15e-04 elapsed=18.9min eta=7.5min
+[progress] epoch=0 opt_step=339/472 loss=4.0024 ce=3.9848 l1=17.6 temp=2.52e-06 lr=3.13e-04 elapsed=18.9min eta=7.4min
+[progress] epoch=0 opt_step=340/472 loss=4.3745 ce=4.3569 l1=17.6 temp=2.46e-06 lr=3.11e-04 elapsed=19.0min eta=7.4min
+[progress] epoch=0 opt_step=341/472 loss=3.4113 ce=3.3937 l1=17.6 temp=2.40e-06 lr=3.08e-04 elapsed=19.0min eta=7.3min
+[progress] epoch=0 opt_step=342/472 loss=4.2876 ce=4.2700 l1=17.6 temp=2.34e-06 lr=3.06e-04 elapsed=19.1min eta=7.3min
+[progress] epoch=0 opt_step=343/472 loss=3.4210 ce=3.4034 l1=17.6 temp=2.28e-06 lr=3.04e-04 elapsed=19.1min eta=7.2min
+[progress] epoch=0 opt_step=344/472 loss=2.9231 ce=2.9055 l1=17.6 temp=2.23e-06 lr=3.01e-04 elapsed=19.2min eta=7.1min
+[progress] epoch=0 opt_step=345/472 loss=3.5867 ce=3.5691 l1=17.6 temp=2.18e-06 lr=2.99e-04 elapsed=19.3min eta=7.1min
+[progress] epoch=0 opt_step=346/472 loss=4.8924 ce=4.8748 l1=17.6 temp=2.12e-06 lr=2.96e-04 elapsed=19.3min eta=7.0min
+[progress] epoch=0 opt_step=347/472 loss=3.1896 ce=3.1720 l1=17.6 temp=2.07e-06 lr=2.94e-04 elapsed=19.4min eta=7.0min
+[progress] epoch=0 opt_step=348/472 loss=4.3071 ce=4.2895 l1=17.6 temp=2.02e-06 lr=2.92e-04 elapsed=19.4min eta=6.9min
+[progress] epoch=0 opt_step=349/472 loss=3.5540 ce=3.5364 l1=17.6 temp=1.97e-06 lr=2.89e-04 elapsed=19.5min eta=6.9min
+[progress] epoch=0 opt_step=350/472 loss=4.1878 ce=4.1702 l1=17.6 temp=1.93e-06 lr=2.87e-04 elapsed=19.5min eta=6.8min
+[progress] epoch=0 opt_step=351/472 loss=3.3601 ce=3.3426 l1=17.6 temp=1.88e-06 lr=2.85e-04 elapsed=19.6min eta=6.8min
+[progress] epoch=0 opt_step=352/472 loss=3.2054 ce=3.1878 l1=17.6 temp=1.83e-06 lr=2.82e-04 elapsed=19.6min eta=6.7min
+[progress] epoch=0 opt_step=353/472 loss=2.9557 ce=2.9381 l1=17.6 temp=1.79e-06 lr=2.80e-04 elapsed=19.7min eta=6.6min
+[progress] epoch=0 opt_step=354/472 loss=3.1587 ce=3.1411 l1=17.6 temp=1.75e-06 lr=2.78e-04 elapsed=19.8min eta=6.6min
+[progress] epoch=0 opt_step=355/472 loss=3.0073 ce=2.9897 l1=17.6 temp=1.70e-06 lr=2.75e-04 elapsed=19.8min eta=6.5min
+[progress] epoch=0 opt_step=356/472 loss=3.2016 ce=3.1840 l1=17.6 temp=1.66e-06 lr=2.73e-04 elapsed=19.9min eta=6.5min
+[progress] epoch=0 opt_step=357/472 loss=3.8445 ce=3.8270 l1=17.6 temp=1.62e-06 lr=2.71e-04 elapsed=19.9min eta=6.4min
+[progress] epoch=0 opt_step=358/472 loss=3.1915 ce=3.1740 l1=17.6 temp=1.58e-06 lr=2.68e-04 elapsed=20.0min eta=6.4min
+[progress] epoch=0 opt_step=359/472 loss=3.7291 ce=3.7115 l1=17.6 temp=1.55e-06 lr=2.66e-04 elapsed=20.0min eta=6.3min
+[progress] epoch=0 opt_step=360/472 loss=3.4685 ce=3.4509 l1=17.5 temp=1.51e-06 lr=2.64e-04 elapsed=20.1min eta=6.3min
+[progress] epoch=0 opt_step=361/472 loss=3.2359 ce=3.2183 l1=17.5 temp=1.47e-06 lr=2.61e-04 elapsed=20.2min eta=6.2min
+[progress] epoch=0 opt_step=362/472 loss=2.4434 ce=2.4259 l1=17.5 temp=1.44e-06 lr=2.59e-04 elapsed=20.2min eta=6.1min
+[progress] epoch=0 opt_step=363/472 loss=3.0278 ce=3.0103 l1=17.5 temp=1.40e-06 lr=2.56e-04 elapsed=20.3min eta=6.1min
+[progress] epoch=0 opt_step=364/472 loss=3.8834 ce=3.8659 l1=17.5 temp=1.37e-06 lr=2.54e-04 elapsed=20.3min eta=6.0min
+[progress] epoch=0 opt_step=365/472 loss=3.7035 ce=3.6859 l1=17.5 temp=1.33e-06 lr=2.52e-04 elapsed=20.4min eta=6.0min
+[progress] epoch=0 opt_step=366/472 loss=3.0309 ce=3.0134 l1=17.5 temp=1.30e-06 lr=2.49e-04 elapsed=20.4min eta=5.9min
+[progress] epoch=0 opt_step=367/472 loss=2.9324 ce=2.9149 l1=17.5 temp=1.27e-06 lr=2.47e-04 elapsed=20.5min eta=5.9min
+[progress] epoch=0 opt_step=368/472 loss=3.5265 ce=3.5090 l1=17.5 temp=1.24e-06 lr=2.45e-04 elapsed=20.6min eta=5.8min
+[progress] epoch=0 opt_step=369/472 loss=4.1965 ce=4.1790 l1=17.5 temp=1.21e-06 lr=2.42e-04 elapsed=20.6min eta=5.8min
+[progress] epoch=0 opt_step=370/472 loss=3.2074 ce=3.1899 l1=17.5 temp=1.18e-06 lr=2.40e-04 elapsed=20.7min eta=5.7min
+[progress] epoch=0 opt_step=371/472 loss=3.1806 ce=3.1632 l1=17.5 temp=1.15e-06 lr=2.38e-04 elapsed=20.7min eta=5.6min
+[progress] epoch=0 opt_step=372/472 loss=3.4542 ce=3.4367 l1=17.5 temp=1.12e-06 lr=2.35e-04 elapsed=20.8min eta=5.6min
+[progress] epoch=0 opt_step=373/472 loss=3.2896 ce=3.2722 l1=17.4 temp=1.10e-06 lr=2.33e-04 elapsed=20.8min eta=5.5min
+[progress] epoch=0 opt_step=374/472 loss=3.6566 ce=3.6392 l1=17.4 temp=1.07e-06 lr=2.31e-04 elapsed=20.9min eta=5.5min
+[progress] epoch=0 opt_step=375/472 loss=3.6615 ce=3.6441 l1=17.4 temp=1.04e-06 lr=2.28e-04 elapsed=20.9min eta=5.4min
+[progress] epoch=0 opt_step=376/472 loss=3.5219 ce=3.5045 l1=17.4 temp=1.02e-06 lr=2.26e-04 elapsed=21.0min eta=5.4min
+[progress] epoch=0 opt_step=377/472 loss=3.2428 ce=3.2254 l1=17.4 temp=9.95e-07 lr=2.24e-04 elapsed=21.1min eta=5.3min
+[progress] epoch=0 opt_step=378/472 loss=2.4238 ce=2.4064 l1=17.4 temp=9.71e-07 lr=2.21e-04 elapsed=21.1min eta=5.3min
+[progress] epoch=0 opt_step=379/472 loss=3.6805 ce=3.6632 l1=17.4 temp=9.48e-07 lr=2.19e-04 elapsed=21.2min eta=5.2min
+[progress] epoch=0 opt_step=380/472 loss=4.4952 ce=4.4779 l1=17.3 temp=9.25e-07 lr=2.16e-04 elapsed=21.2min eta=5.1min
+[progress] epoch=0 opt_step=381/472 loss=2.2992 ce=2.2819 l1=17.3 temp=9.02e-07 lr=2.14e-04 elapsed=21.3min eta=5.1min
+[progress] epoch=0 opt_step=382/472 loss=3.7437 ce=3.7264 l1=17.3 temp=8.81e-07 lr=2.12e-04 elapsed=21.3min eta=5.0min
+[progress] epoch=0 opt_step=383/472 loss=3.1233 ce=3.1060 l1=17.3 temp=8.59e-07 lr=2.09e-04 elapsed=21.4min eta=5.0min
+[progress] epoch=0 opt_step=384/472 loss=3.1592 ce=3.1419 l1=17.3 temp=8.39e-07 lr=2.07e-04 elapsed=21.5min eta=4.9min
+[progress] epoch=0 opt_step=385/472 loss=3.4620 ce=3.4447 l1=17.3 temp=8.18e-07 lr=2.05e-04 elapsed=21.5min eta=4.9min
+[progress] epoch=0 opt_step=386/472 loss=3.0858 ce=3.0685 l1=17.3 temp=7.99e-07 lr=2.02e-04 elapsed=21.6min eta=4.8min
+[progress] epoch=0 opt_step=387/472 loss=3.0678 ce=3.0506 l1=17.2 temp=7.79e-07 lr=2.00e-04 elapsed=21.6min eta=4.7min
+[progress] epoch=0 opt_step=388/472 loss=4.2949 ce=4.2776 l1=17.2 temp=7.61e-07 lr=1.98e-04 elapsed=21.7min eta=4.7min
+[progress] epoch=0 opt_step=389/472 loss=4.7155 ce=4.6983 l1=17.2 temp=7.42e-07 lr=1.95e-04 elapsed=21.7min eta=4.6min
+[progress] epoch=0 opt_step=390/472 loss=3.3783 ce=3.3611 l1=17.2 temp=7.24e-07 lr=1.93e-04 elapsed=21.8min eta=4.6min
+[progress] epoch=0 opt_step=391/472 loss=3.6394 ce=3.6222 l1=17.2 temp=7.07e-07 lr=1.91e-04 elapsed=21.9min eta=4.5min
+[progress] epoch=0 opt_step=392/472 loss=3.1888 ce=3.1716 l1=17.2 temp=6.90e-07 lr=1.88e-04 elapsed=21.9min eta=4.5min
+[progress] epoch=0 opt_step=393/472 loss=3.5180 ce=3.5008 l1=17.2 temp=6.73e-07 lr=1.86e-04 elapsed=22.0min eta=4.4min
+[progress] epoch=0 opt_step=394/472 loss=3.1322 ce=3.1150 l1=17.1 temp=6.57e-07 lr=1.84e-04 elapsed=22.0min eta=4.4min
+[progress] epoch=0 opt_step=395/472 loss=3.7471 ce=3.7299 l1=17.1 temp=6.41e-07 lr=1.81e-04 elapsed=22.1min eta=4.3min
+[progress] epoch=0 opt_step=396/472 loss=3.0626 ce=3.0455 l1=17.1 temp=6.25e-07 lr=1.79e-04 elapsed=22.1min eta=4.2min
+[progress] epoch=0 opt_step=397/472 loss=2.8840 ce=2.8669 l1=17.1 temp=6.10e-07 lr=1.76e-04 elapsed=22.2min eta=4.2min
+[progress] epoch=0 opt_step=398/472 loss=3.2144 ce=3.1973 l1=17.1 temp=5.96e-07 lr=1.74e-04 elapsed=22.3min eta=4.1min
+[progress] epoch=0 opt_step=399/472 loss=2.8807 ce=2.8636 l1=17.1 temp=5.81e-07 lr=1.72e-04 elapsed=22.3min eta=4.1min
+[progress] epoch=0 opt_step=400/472 loss=3.3044 ce=3.2873 l1=17.1 temp=5.67e-07 lr=1.69e-04 elapsed=22.4min eta=4.0min
+[progress] epoch=0 opt_step=401/472 loss=2.7470 ce=2.7300 l1=17.1 temp=5.53e-07 lr=1.67e-04 elapsed=22.4min eta=4.0min
+[progress] epoch=0 opt_step=402/472 loss=3.3063 ce=3.2893 l1=17.0 temp=5.40e-07 lr=1.65e-04 elapsed=22.5min eta=3.9min
+[progress] epoch=0 opt_step=403/472 loss=3.8256 ce=3.8086 l1=17.0 temp=5.27e-07 lr=1.62e-04 elapsed=22.5min eta=3.9min
+[progress] epoch=0 opt_step=404/472 loss=3.4182 ce=3.4012 l1=17.0 temp=5.14e-07 lr=1.60e-04 elapsed=22.6min eta=3.8min
+[progress] epoch=0 opt_step=405/472 loss=3.3217 ce=3.3047 l1=17.0 temp=5.02e-07 lr=1.58e-04 elapsed=22.6min eta=3.7min
+[progress] epoch=0 opt_step=406/472 loss=3.5820 ce=3.5650 l1=17.0 temp=4.90e-07 lr=1.55e-04 elapsed=22.7min eta=3.7min
+[progress] epoch=0 opt_step=407/472 loss=2.9154 ce=2.8985 l1=17.0 temp=4.78e-07 lr=1.53e-04 elapsed=22.8min eta=3.6min
+[progress] epoch=0 opt_step=408/472 loss=3.2247 ce=3.2077 l1=17.0 temp=4.66e-07 lr=1.51e-04 elapsed=22.8min eta=3.6min
+[progress] epoch=0 opt_step=409/472 loss=3.4193 ce=3.4023 l1=17.0 temp=4.55e-07 lr=1.48e-04 elapsed=22.9min eta=3.5min
+[progress] epoch=0 opt_step=410/472 loss=4.1303 ce=4.1134 l1=16.9 temp=4.44e-07 lr=1.46e-04 elapsed=22.9min eta=3.5min
+[progress] epoch=0 opt_step=411/472 loss=3.9076 ce=3.8906 l1=16.9 temp=4.33e-07 lr=1.44e-04 elapsed=23.0min eta=3.4min
+[progress] epoch=0 opt_step=412/472 loss=3.5557 ce=3.5388 l1=16.9 temp=4.23e-07 lr=1.41e-04 elapsed=23.0min eta=3.4min
+[progress] epoch=0 opt_step=413/472 loss=2.9674 ce=2.9505 l1=16.9 temp=4.13e-07 lr=1.39e-04 elapsed=23.1min eta=3.3min
+[progress] epoch=0 opt_step=414/472 loss=3.5051 ce=3.4882 l1=16.9 temp=4.03e-07 lr=1.36e-04 elapsed=23.2min eta=3.2min
+[progress] epoch=0 opt_step=415/472 loss=2.9767 ce=2.9598 l1=16.9 temp=3.93e-07 lr=1.34e-04 elapsed=23.2min eta=3.2min
+[progress] epoch=0 opt_step=416/472 loss=4.1300 ce=4.1131 l1=16.9 temp=3.84e-07 lr=1.32e-04 elapsed=23.3min eta=3.1min
+[progress] epoch=0 opt_step=417/472 loss=3.2111 ce=3.1943 l1=16.9 temp=3.74e-07 lr=1.29e-04 elapsed=23.3min eta=3.1min
+[progress] epoch=0 opt_step=418/472 loss=3.7871 ce=3.7702 l1=16.8 temp=3.65e-07 lr=1.27e-04 elapsed=23.4min eta=3.0min
+[progress] epoch=0 opt_step=419/472 loss=3.1218 ce=3.1050 l1=16.8 temp=3.56e-07 lr=1.25e-04 elapsed=23.4min eta=3.0min
+[progress] epoch=0 opt_step=420/472 loss=2.8673 ce=2.8505 l1=16.8 temp=3.48e-07 lr=1.22e-04 elapsed=23.5min eta=2.9min
+[progress] epoch=0 opt_step=421/472 loss=3.8384 ce=3.8216 l1=16.8 temp=3.39e-07 lr=1.20e-04 elapsed=23.5min eta=2.9min
+[progress] epoch=0 opt_step=422/472 loss=4.3350 ce=4.3182 l1=16.8 temp=3.31e-07 lr=1.18e-04 elapsed=23.6min eta=2.8min
+[progress] epoch=0 opt_step=423/472 loss=3.3687 ce=3.3519 l1=16.8 temp=3.23e-07 lr=1.15e-04 elapsed=23.7min eta=2.7min
+[progress] epoch=0 opt_step=424/472 loss=3.8957 ce=3.8789 l1=16.8 temp=3.15e-07 lr=1.13e-04 elapsed=23.7min eta=2.7min
+[progress] epoch=0 opt_step=425/472 loss=3.0785 ce=3.0617 l1=16.8 temp=3.08e-07 lr=1.11e-04 elapsed=23.8min eta=2.6min
+[progress] epoch=0 opt_step=426/472 loss=3.2180 ce=3.2012 l1=16.8 temp=3.00e-07 lr=1.08e-04 elapsed=23.8min eta=2.6min
+[progress] epoch=0 opt_step=427/472 loss=4.1636 ce=4.1468 l1=16.8 temp=2.93e-07 lr=1.06e-04 elapsed=23.9min eta=2.5min
+[progress] epoch=0 opt_step=428/472 loss=3.1070 ce=3.0903 l1=16.7 temp=2.86e-07 lr=1.04e-04 elapsed=23.9min eta=2.5min
+[progress] epoch=0 opt_step=429/472 loss=2.9804 ce=2.9637 l1=16.7 temp=2.79e-07 lr=1.01e-04 elapsed=24.0min eta=2.4min
+[progress] epoch=0 opt_step=430/472 loss=3.9948 ce=3.9780 l1=16.7 temp=2.72e-07 lr=9.88e-05 elapsed=24.0min eta=2.3min
+[progress] epoch=0 opt_step=431/472 loss=4.0568 ce=4.0401 l1=16.7 temp=2.66e-07 lr=9.65e-05 elapsed=24.1min eta=2.3min
+[progress] epoch=0 opt_step=432/472 loss=3.6946 ce=3.6779 l1=16.7 temp=2.59e-07 lr=9.41e-05 elapsed=24.2min eta=2.2min
+[progress] epoch=0 opt_step=433/472 loss=5.0425 ce=5.0258 l1=16.7 temp=2.53e-07 lr=9.18e-05 elapsed=24.2min eta=2.2min
+[progress] epoch=0 opt_step=434/472 loss=4.0878 ce=4.0711 l1=16.7 temp=2.47e-07 lr=8.94e-05 elapsed=24.3min eta=2.1min
+[progress] epoch=0 opt_step=435/472 loss=3.5807 ce=3.5640 l1=16.7 temp=2.41e-07 lr=8.71e-05 elapsed=24.3min eta=2.1min
+[progress] epoch=0 opt_step=436/472 loss=2.9484 ce=2.9317 l1=16.7 temp=2.35e-07 lr=8.47e-05 elapsed=24.4min eta=2.0min
+[progress] epoch=0 opt_step=437/472 loss=3.9631 ce=3.9464 l1=16.7 temp=2.30e-07 lr=8.24e-05 elapsed=24.4min eta=2.0min
+[progress] epoch=0 opt_step=438/472 loss=3.5891 ce=3.5725 l1=16.7 temp=2.24e-07 lr=8.00e-05 elapsed=24.5min eta=1.9min
+[progress] epoch=0 opt_step=439/472 loss=3.3445 ce=3.3279 l1=16.6 temp=2.19e-07 lr=7.76e-05 elapsed=24.6min eta=1.8min
+[progress] epoch=0 opt_step=440/472 loss=3.3771 ce=3.3605 l1=16.6 temp=2.13e-07 lr=7.53e-05 elapsed=24.6min eta=1.8min
+[progress] epoch=0 opt_step=441/472 loss=3.3669 ce=3.3502 l1=16.6 temp=2.08e-07 lr=7.29e-05 elapsed=24.7min eta=1.7min
+[progress] epoch=0 opt_step=442/472 loss=2.8632 ce=2.8466 l1=16.6 temp=2.03e-07 lr=7.06e-05 elapsed=24.7min eta=1.7min
+[progress] epoch=0 opt_step=443/472 loss=3.1999 ce=3.1833 l1=16.6 temp=1.98e-07 lr=6.82e-05 elapsed=24.8min eta=1.6min
+[progress] epoch=0 opt_step=444/472 loss=3.1183 ce=3.1016 l1=16.6 temp=1.93e-07 lr=6.59e-05 elapsed=24.8min eta=1.6min
+[progress] epoch=0 opt_step=445/472 loss=3.3205 ce=3.3039 l1=16.6 temp=1.89e-07 lr=6.35e-05 elapsed=24.9min eta=1.5min
+[progress] epoch=0 opt_step=446/472 loss=2.7961 ce=2.7795 l1=16.6 temp=1.84e-07 lr=6.12e-05 elapsed=24.9min eta=1.5min
+[progress] epoch=0 opt_step=447/472 loss=2.1332 ce=2.1166 l1=16.6 temp=1.80e-07 lr=5.88e-05 elapsed=25.0min eta=1.4min
+[progress] epoch=0 opt_step=448/472 loss=2.9851 ce=2.9686 l1=16.6 temp=1.75e-07 lr=5.65e-05 elapsed=25.1min eta=1.3min
+[progress] epoch=0 opt_step=449/472 loss=4.3670 ce=4.3504 l1=16.6 temp=1.71e-07 lr=5.41e-05 elapsed=25.1min eta=1.3min
+[progress] epoch=0 opt_step=450/472 loss=2.4768 ce=2.4602 l1=16.6 temp=1.67e-07 lr=5.18e-05 elapsed=25.2min eta=1.2min
+[progress] epoch=0 opt_step=451/472 loss=2.8629 ce=2.8463 l1=16.6 temp=1.63e-07 lr=4.94e-05 elapsed=25.2min eta=1.2min
+[progress] epoch=0 opt_step=452/472 loss=2.0518 ce=2.0352 l1=16.5 temp=1.59e-07 lr=4.71e-05 elapsed=25.3min eta=1.1min
+[progress] epoch=0 opt_step=453/472 loss=2.9360 ce=2.9194 l1=16.5 temp=1.55e-07 lr=4.47e-05 elapsed=25.3min eta=1.1min
+[progress] epoch=0 opt_step=454/472 loss=3.6276 ce=3.6110 l1=16.5 temp=1.52e-07 lr=4.24e-05 elapsed=25.4min eta=1.0min
+[progress] epoch=0 opt_step=455/472 loss=3.6066 ce=3.5901 l1=16.5 temp=1.48e-07 lr=4.00e-05 elapsed=25.5min eta=1.0min
+[progress] epoch=0 opt_step=456/472 loss=3.4263 ce=3.4097 l1=16.5 temp=1.44e-07 lr=3.76e-05 elapsed=25.5min eta=0.9min
+[progress] epoch=0 opt_step=457/472 loss=3.4279 ce=3.4113 l1=16.5 temp=1.41e-07 lr=3.53e-05 elapsed=25.6min eta=0.8min
+[progress] epoch=0 opt_step=458/472 loss=3.7854 ce=3.7689 l1=16.5 temp=1.37e-07 lr=3.29e-05 elapsed=25.6min eta=0.8min
+[progress] epoch=0 opt_step=459/472 loss=3.9757 ce=3.9592 l1=16.5 temp=1.34e-07 lr=3.06e-05 elapsed=25.7min eta=0.7min
+[progress] epoch=0 opt_step=460/472 loss=3.7871 ce=3.7706 l1=16.5 temp=1.31e-07 lr=2.82e-05 elapsed=25.7min eta=0.7min
+[progress] epoch=0 opt_step=461/472 loss=3.1665 ce=3.1500 l1=16.5 temp=1.28e-07 lr=2.59e-05 elapsed=25.8min eta=0.6min
+[progress] epoch=0 opt_step=462/472 loss=3.7577 ce=3.7412 l1=16.5 temp=1.25e-07 lr=2.35e-05 elapsed=25.8min eta=0.6min
+[progress] epoch=0 opt_step=463/472 loss=3.1318 ce=3.1153 l1=16.5 temp=1.22e-07 lr=2.12e-05 elapsed=25.9min eta=0.5min
+[progress] epoch=0 opt_step=464/472 loss=4.5929 ce=4.5764 l1=16.5 temp=1.19e-07 lr=1.88e-05 elapsed=26.0min eta=0.4min
+[progress] epoch=0 opt_step=465/472 loss=3.2268 ce=3.2103 l1=16.5 temp=1.16e-07 lr=1.65e-05 elapsed=26.0min eta=0.4min
+[progress] epoch=0 opt_step=466/472 loss=2.9522 ce=2.9357 l1=16.5 temp=1.13e-07 lr=1.41e-05 elapsed=26.1min eta=0.3min
+[progress] epoch=0 opt_step=467/472 loss=3.6501 ce=3.6336 l1=16.5 temp=1.10e-07 lr=1.18e-05 elapsed=26.1min eta=0.3min
+[progress] epoch=0 opt_step=468/472 loss=3.3074 ce=3.2909 l1=16.5 temp=1.08e-07 lr=9.41e-06 elapsed=26.2min eta=0.2min
+[progress] epoch=0 opt_step=469/472 loss=2.9206 ce=2.9041 l1=16.5 temp=1.05e-07 lr=7.06e-06 elapsed=26.2min eta=0.2min
+[progress] epoch=0 opt_step=470/472 loss=4.0225 ce=4.0060 l1=16.5 temp=1.02e-07 lr=4.71e-06 elapsed=26.3min eta=0.1min
+[progress] epoch=0 opt_step=471/472 loss=2.7126 ce=2.6961 l1=16.5 temp=1.00e-07 lr=2.35e-06 elapsed=26.4min eta=0.1min
+[progress] epoch=0 opt_step=472/472 loss=3.0059 ce=2.9894 l1=16.5 temp=1.00e-07 lr=0.00e+00 elapsed=26.4min eta=0.0min
+epoch 0 done, elapsed=26.4min, last ce_loss=4.0209, temperature=1.00e-07
+mask: 1970/3584 dims selected at epsilon=0.01 (temperature=1.00e-07)
+DONE. wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer24_intervention.pt
+  wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer24_mask_stats.json
+  removed /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer24_checkpoint.pt (resume state no longer needed -- training finished)
+[dbm/eval] entity=flags attribute=language layer=24 site=residual embed_dim=3584 positions=flag_ring1 split=test: 13332 rows remaining of 13332
+  batch 20/834
+  batch 40/834
+  batch 60/834
+  batch 80/834
+  batch 100/834
+  batch 120/834
+  batch 140/834
+  batch 160/834
+  batch 180/834
+  batch 200/834
+  batch 220/834
+  batch 240/834
+  batch 260/834
+  batch 280/834
+  batch 300/834
+  batch 320/834
+  batch 340/834
+  batch 360/834
+  batch 380/834
+  batch 400/834
+  batch 420/834
+  batch 440/834
+  batch 460/834
+  batch 480/834
+  batch 500/834
+  batch 520/834
+  batch 540/834
+  batch 560/834
+  batch 580/834
+  batch 600/834
+  batch 620/834
+  batch 640/834
+  batch 660/834
+  batch 680/834
+  batch 700/834
+  batch 720/834
+  batch 740/834
+  batch 760/834
+  batch 780/834
+  batch 800/834
+  batch 820/834
+DONE. wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer24_predictions_test.jsonl
+wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer24_predictions_test_summary.json
+wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_pruned/layer24_predictions_test_summary.md
+layer 24: cause=2.4% iso_mean=94.8% final_score=48.6%
+
+=== layer 26 ===
+[dbm/train] entity=flags attribute=language layer=26 site=residual embed_dim=3584 l1_coef=0.001 temperature=0.01->1e-07 positions=flag_ring1 rows=30674 cause_only=False randomize_positions=False micro_batch=5 accum=13 (effective batch 65) epochs=1 total optimizer steps=472 (temperature schedule steps=472)
