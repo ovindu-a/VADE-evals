@@ -1,0 +1,65 @@
+{
+  "entity": "flags",
+  "attribute": "language",
+  "positions": "flag_ring1",
+  "split": "test",
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "sites": [
+    "residual"
+  ],
+  "unhooked_cause_matches_source": 0.0,
+  "unhooked_cause_matches_base": 0.953125,
+  "by_site_layer": {
+    "residual/0": {
+      "site": "residual",
+      "layer": 0,
+      "cause_ceiling": 0.65625,
+      "base_kept": 0.328125,
+      "iso_floor": 0.3125,
+      "width": 3584,
+      "n_cause": 64
+    },
+    "residual/1": {
+      "site": "residual",
+      "layer": 1,
+      "cause_ceiling": 0.65625,
+      "base_kept": 0.328125,
+      "iso_floor": 0.3125,
+      "width": 3584,
+      "n_cause": 64
+    },
+    "residual/2": {
+      "site": "residual",
+      "layer": 2,
+      "cause_ceiling": 0.65625,
+      "base_kept": 0.328125,
+      "iso_floor": 0.3125,
+      "width": 3584,
+      "n_cause": 64
+    },
+    "residual/3": {
+      "site": "residual",
+      "layer": 3,
+      "cause_ceiling": 0.671875,
+      "base_kept": 0.3125,
+      "iso_floor": 0.296875,
+      "width": 3584,
+      "n_cause": 64
+    },
+    "residual/4": {
+      "site": "residual",
+      "layer": 4,
+      "cause_ceiling": 0.671875,
+      "base_kept": 0.3125,
+      "iso_floor": 0.296875,
+      "width": 3584,
+      "n_cause": 64
+    }
+  }
+}
