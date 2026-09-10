@@ -230,12 +230,51 @@ python methods/dbm/layer_sweep.py --entity flags --attribute language \
 
 `--l1_coef` (default `0.001`) and `--temperature_start`/`--temperature_end`
 (default `1e-2`/`1e-7`) match RAVEL's own reported optimum/schedule for
-DBM (Appendix B.4) -- not re-derived here. `--positions` takes the same
-named sets as everything else in this project (`flag_only`/`flag_ring1`
-for flags, etc.) plus `last_token` -- the closest analogue of RAVEL's own
-*text-only* intervention site (the entity mention's single last token);
-`flag_only`/`flag_ring1` are this project's own extension into the
-image-object-span setting that PCA/SAE/DAS already use.
+DBM (Appendix B.4) -- not re-derived here. `--lr` (default `1e-3`), by
+contrast, is copied from DAS's `train.py` and is **not** validated for
+DBM -- DAS learns a `D x D`/`D x K` orthogonal rotation, a very different
+parametrization from DBM's unconstrained length-`H` mask vector, so
+there's no reason to assume the same learning rate suits both. Worth
+sweeping if training loss plateaus early relative to `--num_epochs` (see
+"first real training run" notes below) -- all three of `--l1_coef`/
+`--temperature_start`/`--temperature_end`/`--lr` are encoded in the
+results/logs directory's `config_tag`, so different values never collide.
+`--positions` takes the same named sets as everything else in this
+project (`flag_only`/`flag_ring1` for flags, etc.) plus `last_token` --
+the closest analogue of RAVEL's own *text-only* intervention site (the
+entity mention's single last token); `flag_only`/`flag_ring1` are this
+project's own extension into the image-object-span setting that
+PCA/SAE/DAS already use.
+
+**First real training run (flags/language/flag_ring1, layers 8/10/14/16/
+20/22) -- a cautionary note on trusting the mask itself.** Real
+`final_score`s ranged 47.1%-58.6% (best: layer 16), meaningfully beating
+the existing SAE `flag_ring1` result (41.9%, see RESULTS.md) -- the
+generation-time numbers are real and trustworthy. But every layer's
+`mask_stats.json` showed the SAME suspicious pattern: mask magnitudes
+maxing out around +/-0.02-0.03 (tiny), `sigmoid_mean` sitting near
+0.5-0.58 (barely different from a coin flip) at every layer, ~54-58% of
+dimensions "selected" everywhere -- looking less like a confident sparse
+selection and more like near-arbitrary sign noise getting locked in once
+temperature got small. The `layer{L}_train_log.jsonl`'s (properly
+averaged) `loss` column confirms why: it drops fast for the first ~60-90
+optimizer steps, then plateaus completely (bouncing flat, no further
+improvement) for the remaining ~400 steps of a 480-step, 1-epoch run --
+meaning temperature kept annealing all the way to `1e-7` long after the
+mask had stopped learning anything new, likely locking in noise for
+whatever dimensions hadn't been clearly decided by that early point. If
+you hit the same pattern: try `--num_epochs 3` (or more) on a **fresh**
+run (not a `--keep_checkpoint` resume) -- the temperature schedule is
+anchored to that run's own total optimizer-step count from the start
+(see `train.py`'s `temp_schedule_total_steps`), so more epochs means the
+*same* 1e-2->1e-7 range gets spread over proportionally more steps,
+giving the mask a longer smooth-gradient window before commitment is
+forced. Also worth sweeping `--lr` (e.g. `5e-3`, `1e-2`) for the reason
+above. Based on the actual loss composition observed (`l1_coef * l1_term`
+contributing roughly 0.02-0.05 to a total loss of ~1-2, i.e. a small
+fraction of it), lowering `--l1_coef` further looks like the *less*
+promising lever to try first -- L1 doesn't appear to be the dominant
+force keeping the mask near zero here.
 
 **Results always land in a file, not just stdout.** Per layer, `eval.py`
 (and `run_layer.py`/`layer_sweep.py`, which call the same code) write

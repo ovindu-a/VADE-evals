@@ -97,9 +97,13 @@ def mask_stats(intervention, epsilon=1e-2):
         }
 
 
-def dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned=False):
+def dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned=False):
     """Encodes every hyperparameter that changes the trained artifact -- NOT just l1_coef. An earlier
     version omitted temperature_start/temperature_end here, so two runs differing only in temperature
     schedule would collide into the same results/logs directory (the same class of gotcha this
-    project's own select_features.py already hit with --dictionaries_dir -- see its README section)."""
-    return f"L1_{l1_coef}_T{temperature_start:g}-{temperature_end:g}_{positions}" + ("_pruned" if pruned else "")
+    project's own select_features.py already hit with --dictionaries_dir -- see its README section).
+    lr was added for the same reason the moment --lr became a real, sweep-worthy flag (train.py's
+    LR=1e-3 default is copied from DAS, whose D x D/D x K orthogonal rotation is a very different
+    parametrization from DBM's plain mask vector -- worth sweeping, not assuming)."""
+    return f"L1_{l1_coef}_T{temperature_start:g}-{temperature_end:g}_LR{lr:g}_{positions}" + \
+        ("_pruned" if pruned else "")

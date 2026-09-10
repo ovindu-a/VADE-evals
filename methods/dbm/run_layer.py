@@ -26,13 +26,13 @@ from methods.common.run_logging import tee_to_log
 from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.eval import eval_layer
 from methods.dbm.train import (
-    DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir, train_layer,
+    LR, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir, train_layer,
 )
 
 
 def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, out_dir, vade_root,
                    positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START,
-                   temperature_end=TEMP_END, num_epochs=NUM_EPOCHS, batch_size=None, grad_accum_steps=None,
+                   temperature_end=TEMP_END, lr=LR, num_epochs=NUM_EPOCHS, batch_size=None, grad_accum_steps=None,
                    cause_only=False, randomize_positions=False, tuples_dir=None,
                    eval_split="test", eval_batch_size=16, cleanup_checkpoint=True, source_cache=None):
     """Train layer, then immediately eval it, then score. Raises on failure
@@ -52,7 +52,7 @@ def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, ou
     ckpt_path = train_layer(
         adapter, model, processor, entity_assets, attribute, layer, out_dir,
         positions=positions, l1_coef=l1_coef, temperature_start=temperature_start, temperature_end=temperature_end,
-        num_epochs=num_epochs, batch_size=batch_size, grad_accum_steps=grad_accum_steps,
+        lr=lr, num_epochs=num_epochs, batch_size=batch_size, grad_accum_steps=grad_accum_steps,
         cause_only=cause_only, randomize_positions=randomize_positions, tuples_dir=tuples_dir,
         cleanup_checkpoint=cleanup_checkpoint, source_cache=source_cache,
     )
@@ -89,6 +89,7 @@ def main():
     ap.add_argument("--l1_coef", type=float, default=DBM_L1_COEF)
     ap.add_argument("--temperature_start", type=float, default=TEMP_START)
     ap.add_argument("--temperature_end", type=float, default=TEMP_END)
+    ap.add_argument("--lr", type=float, default=LR, help="See train.py --lr.")
     ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
     ap.add_argument("--batch_size", type=int, default=None, help="Defaults to train.py's BATCH_SIZE constant.")
     ap.add_argument("--grad_accum_steps", type=int, default=None, help="Defaults to train.py's GRAD_ACCUM_STEPS.")
@@ -110,7 +111,8 @@ def main():
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if pruned else None)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
-                                          args.temperature_start, args.temperature_end, args.positions, pruned),
+                                          args.temperature_start, args.temperature_end, args.lr,
+                                          args.positions, pruned),
                              f"layer{args.layer}_run.log")
 
     with tee_to_log(log_path):
@@ -118,7 +120,8 @@ def main():
         model, processor = adapter.load()
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         out_dir = dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
-                                   args.temperature_start, args.temperature_end, args.positions, pruned)
+                                   args.temperature_start, args.temperature_end, args.lr,
+                                   args.positions, pruned)
 
         print(f"[run_layer] entity={args.entity} attribute={args.attribute} layer={args.layer} "
               f"l1_coef={args.l1_coef} positions={args.positions} pruned={pruned} -> {out_dir}")
@@ -131,7 +134,7 @@ def main():
         overall = run_one_layer(
             adapter, model, processor, entity_assets, args.attribute, args.layer, out_dir, args.vade_root,
             positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
-            temperature_end=args.temperature_end, num_epochs=args.num_epochs, batch_size=args.batch_size,
+            temperature_end=args.temperature_end, lr=args.lr, num_epochs=args.num_epochs, batch_size=args.batch_size,
             grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
             randomize_positions=args.randomize_positions, tuples_dir=tuples_dir,
             eval_split=args.eval_split, eval_batch_size=args.eval_batch_size,

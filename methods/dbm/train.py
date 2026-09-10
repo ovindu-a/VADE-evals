@@ -72,16 +72,16 @@ CHECKPOINT_EVERY_OPT_STEPS = 5
 PROGRESS_EVERY_OPT_STEPS = 1
 
 
-def dbm_results_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, positions,
+def dbm_results_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, lr, positions,
                      pruned=False):
     return results_dir(REPO_ROOT, model_slug, entity, "dbm", attribute,
-                        dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned))
+                        dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned))
 
 
-def dbm_logs_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, positions,
+def dbm_logs_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, lr, positions,
                   pruned=False):
     return logs_dir(REPO_ROOT, model_slug, entity, "dbm", attribute,
-                     dbm_config_tag(l1_coef, temperature_start, temperature_end, positions, pruned))
+                     dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned))
 
 
 def cache_source_layer_hidden(model, batch, layer_idx):
@@ -108,7 +108,7 @@ def run_intervened_forward(model, layers, batch, layer_idx, intervention, source
 
 def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_dir,
                  positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START, temperature_end=TEMP_END,
-                 num_epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, grad_accum_steps=GRAD_ACCUM_STEPS,
+                 lr=LR, num_epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, grad_accum_steps=GRAD_ACCUM_STEPS,
                  cause_only=False, randomize_positions=False, limit_rows=None, tuples_split="train",
                  tuples_dir=None, cleanup_checkpoint=True, source_cache=None):
     """Trains one (layer, attribute, positions, l1_coef) DBM run to
@@ -123,7 +123,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     batch_cache = BuildBatchCache()
 
     intervention = SigmoidMaskIntervention(embed_dim=hidden_size).to(model.device)
-    optimizer = torch.optim.Adam(intervention.parameters(), lr=LR)
+    optimizer = torch.optim.Adam(intervention.parameters(), lr=lr)
 
     rows = load_tuples(entity_assets, attribute, tuples_split, tuples_dir=tuples_dir)
     for r in rows:
@@ -225,7 +225,7 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
         intervention.set_temperature(temp_schedule[min(opt_steps_done, len(temp_schedule) - 1)])
         log_f.write(json.dumps({
             "epoch": epoch, "micro_step": global_micro_step, "opt_step": opt_steps_done,
-            "loss": accum_loss, "ce_loss": ce_loss.item(), "l1_term": accum_l1,
+            "loss": accum_loss, "ce_loss": accum_ce, "l1_term": accum_l1,
             "temperature": intervention.get_temperature().item(), "lr": scheduler.get_last_lr()[0],
         }) + "\n")
         log_f.flush()
@@ -353,6 +353,13 @@ def main():
                      help=f"Sparsity coefficient on the raw mask's L1 norm (RAVEL's reported optimum: {DBM_L1_COEF}).")
     ap.add_argument("--temperature_start", type=float, default=TEMP_START)
     ap.add_argument("--temperature_end", type=float, default=TEMP_END)
+    ap.add_argument("--lr", type=float, default=LR,
+                     help=f"Adam learning rate for the mask (default {LR}, copied from DAS's train.py -- DAS "
+                          "learns a D x D/D x K orthogonal rotation, a very different parametrization from DBM's "
+                          "unconstrained length-H mask vector, so this default isn't validated for DBM specifically. "
+                          "Worth sweeping (e.g. 5e-3, 1e-2) if training loss plateaus early relative to num_epochs "
+                          "-- ignored on --keep_checkpoint resume, where the checkpoint's own saved optimizer/"
+                          "scheduler state (including lr) takes over regardless of what's passed here.")
     ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
     ap.add_argument("--batch_size", type=int, default=BATCH_SIZE)
     ap.add_argument("--grad_accum_steps", type=int, default=GRAD_ACCUM_STEPS)
@@ -382,7 +389,8 @@ def main():
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if pruned else None)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
-                                          args.temperature_start, args.temperature_end, args.positions, pruned),
+                                          args.temperature_start, args.temperature_end, args.lr,
+                                          args.positions, pruned),
                              f"layer{args.layer}_train.log")
 
     with tee_to_log(log_path):
@@ -392,7 +400,7 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
 
         out_dir = args.out_dir or dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
-                                                    args.temperature_start, args.temperature_end,
+                                                    args.temperature_start, args.temperature_end, args.lr,
                                                     args.positions, pruned)
 
         source_cache = None
@@ -402,7 +410,8 @@ def main():
 
         train_layer(adapter, model, processor, entity_assets, args.attribute, args.layer, out_dir,
                     positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
-                    temperature_end=args.temperature_end, num_epochs=args.num_epochs, batch_size=args.batch_size,
+                    temperature_end=args.temperature_end, lr=args.lr, num_epochs=args.num_epochs,
+                    batch_size=args.batch_size,
                     grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
                     randomize_positions=args.randomize_positions, limit_rows=args.limit_rows, tuples_dir=tuples_dir,
                     cleanup_checkpoint=not args.keep_checkpoint, source_cache=source_cache)

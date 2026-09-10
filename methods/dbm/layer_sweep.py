@@ -26,7 +26,7 @@ from methods.common.entities import load_entity_assets, require_pruned_tuples
 from methods.common.run_logging import tee_to_log
 from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.run_layer import run_one_layer
-from methods.dbm.train import DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
+from methods.dbm.train import LR, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
 
 
 def run_sweep(adapter, model, processor, entity_assets, attribute, layers, out_dir, vade_root, **run_kwargs):
@@ -118,7 +118,7 @@ def write_sweep_summary(out_dir, layers, results, run_config):
     md_lines = [f"# DBM layer sweep -- entity={run_config['entity']} attribute={run_config['attribute']}", "",
                 f"positions={run_config['positions']} l1_coef={run_config['l1_coef']} "
                 f"temperature={run_config['temperature_start']}->{run_config['temperature_end']} "
-                f"pruned={run_config['pruned']} eval_split={run_config['eval_split']}", ""]
+                f"lr={run_config['lr']} pruned={run_config['pruned']} eval_split={run_config['eval_split']}", ""]
     if best_layer is not None:
         md_lines.append(f"**best layer: {best_layer} (final_score={best_score}%)**")
         md_lines.append("")
@@ -152,6 +152,7 @@ def main():
     ap.add_argument("--l1_coef", type=float, default=DBM_L1_COEF)
     ap.add_argument("--temperature_start", type=float, default=TEMP_START)
     ap.add_argument("--temperature_end", type=float, default=TEMP_END)
+    ap.add_argument("--lr", type=float, default=LR, help="See train.py --lr.")
     ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
     ap.add_argument("--batch_size", type=int, default=None, help="Defaults to train.py's BATCH_SIZE constant.")
     ap.add_argument("--grad_accum_steps", type=int, default=None, help="Defaults to train.py's GRAD_ACCUM_STEPS.")
@@ -177,7 +178,8 @@ def main():
                   if pruned else None)
     layers_tag = "-".join(str(l) for l in args.layers)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
-                                          args.temperature_start, args.temperature_end, args.positions, pruned),
+                                          args.temperature_start, args.temperature_end, args.lr,
+                                          args.positions, pruned),
                              f"sweep_layers{layers_tag}.log")
 
     with tee_to_log(log_path):
@@ -185,7 +187,8 @@ def main():
         model, processor = adapter.load()
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         out_dir = dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
-                                   args.temperature_start, args.temperature_end, args.positions, pruned)
+                                   args.temperature_start, args.temperature_end, args.lr,
+                                   args.positions, pruned)
 
         print(f"[layer_sweep] entity={args.entity} attribute={args.attribute} layers={args.layers} "
               f"l1_coef={args.l1_coef} positions={args.positions} pruned={pruned} -> {out_dir}")
@@ -198,7 +201,8 @@ def main():
         results = run_sweep(
             adapter, model, processor, entity_assets, args.attribute, args.layers, out_dir, args.vade_root,
             positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
-            temperature_end=args.temperature_end, num_epochs=args.num_epochs, batch_size=args.batch_size,
+            temperature_end=args.temperature_end, lr=args.lr, num_epochs=args.num_epochs,
+            batch_size=args.batch_size,
             grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
             randomize_positions=args.randomize_positions, tuples_dir=tuples_dir,
             eval_split=args.eval_split, eval_batch_size=args.eval_batch_size,
@@ -208,7 +212,8 @@ def main():
         write_sweep_summary(out_dir, args.layers, results, run_config={
             "entity": args.entity, "attribute": args.attribute, "positions": args.positions,
             "l1_coef": args.l1_coef, "temperature_start": args.temperature_start,
-            "temperature_end": args.temperature_end, "pruned": pruned, "eval_split": args.eval_split,
+            "temperature_end": args.temperature_end, "lr": args.lr, "pruned": pruned,
+            "eval_split": args.eval_split,
         })
 
 
