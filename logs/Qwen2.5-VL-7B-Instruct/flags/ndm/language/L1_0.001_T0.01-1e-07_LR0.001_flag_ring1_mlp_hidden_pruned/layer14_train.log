@@ -1,0 +1,20 @@
+
+=== logging to /workspace/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_mlp_hidden_pruned/layer14_train.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<02:15,  5.38it/s]Loading weights:   4%|3         | 28/729 [00:00<00:05, 116.90it/s]Loading weights:   7%|7         | 53/729 [00:00<00:04, 164.19it/s]Loading weights:  11%|#         | 78/729 [00:00<00:03, 191.11it/s]Loading weights:  15%|#5        | 112/729 [00:00<00:02, 232.18it/s]Loading weights:  19%|#8        | 137/729 [00:00<00:02, 232.59it/s]Loading weights:  22%|##2       | 162/729 [00:00<00:02, 233.94it/s]Loading weights:  26%|##6       | 191/729 [00:00<00:02, 250.52it/s]Loading weights:  30%|###       | 220/729 [00:01<00:02, 245.36it/s]Loading weights:  34%|###3      | 246/729 [00:01<00:01, 243.24it/s]Loading weights:  38%|###8      | 280/729 [00:01<00:01, 261.55it/s]Loading weights:  42%|####2     | 307/729 [00:01<00:01, 251.26it/s]Loading weights:  47%|####7     | 343/729 [00:01<00:01, 280.85it/s]Loading weights:  85%|########5 | 621/729 [00:01<00:00, 987.89it/s]Loading weights: 100%|##########| 729/729 [00:01<00:00, 446.12it/s]
+[ndm/train] site=mlp_hidden -> /workspace/fyp/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_mlp_hidden_pruned
+[site_source_cache] entity=flags site=mlp_hidden layer=14 positions=flag_ring1 n_pos=24 width=18944: 84 items to cache (of 84), projected size ~76MB -> /workspace/fyp/VADE/results/Qwen2.5-VL-7B-Instruct/flags/source_activation_cache/mlp_hidden_flag_ring1_layer14.pt
+  [site_source_cache] 20/84
+  [site_source_cache] 40/84
+  [site_source_cache] 60/84
+  [site_source_cache] 80/84
+  [site_source_cache] 84/84
+[site_source_cache] DONE: 84 items -> /workspace/fyp/VADE/results/Qwen2.5-VL-7B-Instruct/flags/source_activation_cache/mlp_hidden_flag_ring1_layer14.pt
+[ndm/train] entity=flags attribute=language layer=14 site=mlp_hidden embed_dim=18944 l1_coef=0.001 temperature=0.01->1e-07 positions=flag_ring1 rows=8 cause_only=False randomize_positions=False micro_batch=4 accum=16 (effective batch 64) epochs=1 total optimizer steps=1 (temperature schedule steps=1)
+/usr/local/lib/python3.11/dist-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+[progress] epoch=0 opt_step=1/1 loss=5.8689 ce=5.8689 l1=0.0 temp=1.00e-02 lr=0.00e+00 elapsed=0.0min eta=0.0min
+epoch 0 done, elapsed=0.0min, last ce_loss=2.4459, temperature=1.00e-02
+mask: 0/18944 dims selected at epsilon=0.01 (temperature=1.00e-02)
+DONE. wrote /workspace/fyp/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_mlp_hidden_pruned/layer14_intervention.pt
+  wrote /workspace/fyp/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_mlp_hidden_pruned/layer14_mask_stats.json
+  removed /workspace/fyp/VADE-evals/results/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.001_T0.01-1e-07_LR0.001_flag_ring1_mlp_hidden_pruned/layer14_checkpoint.pt (resume state no longer needed -- training finished)
