@@ -59,6 +59,24 @@ class ModelAdapter:
         Hooked (as a forward PRE-hook) for the `mlp_hidden` site."""
         raise NotImplementedError
 
+    def get_attn_block(self, model, block_idx):
+        """-> decoder block block_idx's self-attention submodule, whose
+        forward() OUTPUT[0] is that sublayer's contribution to the residual
+        stream ([B, T, hidden_size]). NOTE it returns a tuple, not a bare
+        tensor, unlike the MLP -- common/sites.py's hooks handle both.
+        Hooked for the `attn_output` site."""
+        raise NotImplementedError
+
+    def get_attn_head_output_module(self, model, block_idx):
+        """-> the submodule of decoder block block_idx's attention whose
+        forward() INPUT is the concatenated per-head attention outputs
+        ([B, T, num_attention_heads * head_dim]) -- i.e. the output
+        projection, whose input is the per-head `z` before heads are mixed.
+        Contiguous head_dim-sized blocks of that vector are individual
+        heads, which is what makes head-granular masking possible.
+        Hooked (as a forward PRE-hook) for the `attn_head_output` site."""
+        raise NotImplementedError
+
     def image_token_id(self, model, processor):
         """-> the image-placeholder token id, or None for a text-only model."""
         raise NotImplementedError

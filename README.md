@@ -400,16 +400,36 @@ comparable:
 
 | site | width | privileged basis? | what is swapped |
 |---|---|---|---|
-| `residual` (DBM, not an NDM site) | 3584 | no | everything accumulated through the block |
+| `residual` (DBM's site) | 3584 | no | everything accumulated through the block |
+| `attn_output` | 3584 | no | only attention's contribution to the residual stream |
 | `mlp_output` | 3584 | no | only that MLP's contribution to the residual stream |
-| `mlp_hidden` (default) | 18944 | **yes** | that MLP's post-SwiGLU neurons |
+| `attn_head_output` | 3584 | **yes, per head** | `o_proj`'s input: 28 heads x 128, so masks can select whole heads |
+| `mlp_hidden` (NDM's own site, default) | 18944 | **yes** | that MLP's post-SwiGLU neurons |
 
-`mlp_output` is the control arm. `residual` vs `mlp_output` isolates
-**locality** at matched width; `mlp_output` vs `mlp_hidden` isolates the
-**privileged basis**. Without it, a win for `mlp_hidden` over `residual`
-confounds the two explanations. (`mlp_output` has no privileged basis
-despite being an MLP tensor -- it is a linear image of one that does, and
-privilege does not survive a linear map.)
+Only `mlp_hidden`/`mlp_output` are NDM *training* sites (`NDM_SITES`); the
+other three exist for the diagnostics, which probe the whole site space.
+`methods/dbm/train.py`'s engine accepts any of them, so if a ceiling probe
+shows headroom at an attention site, only `NDM_SITES` needs widening (or a
+new thin CLI) -- no engine work.
+
+The extra sites are **control arms**, and each isolates one variable while
+holding the others fixed:
+
+- `residual` vs `attn_output`/`mlp_output` -- **locality**, at matched width.
+- `attn_output` vs `mlp_output` -- **which sublayer**. Without this, a dead
+  MLP site can't be distinguished from "any single sublayer's additive
+  contribution is too small."
+- `attn_output` vs `attn_head_output`, and `mlp_output` vs `mlp_hidden` --
+  the **privileged basis**, at matched locality. Both narrow sites are linear
+  images (`o_proj`, `down_proj`) of the wide ones, and privilege does not
+  survive a linear map.
+
+`attn_head_output` is the most promising of the additions: its units are
+both privileged (each head has its own softmax and OV circuit) and known to
+be functionally specialized in VLMs, and this repo's own
+`methods/attention_maps.py` already ranks image->text head conduits
+correlationally -- so a ceiling probe there causally tests heads that probe
+has already flagged.
 
 ### Usage
 

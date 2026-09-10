@@ -50,6 +50,16 @@ class Qwen25VLAdapter(ModelAdapter):
     def get_mlp_block(self, model, block_idx):
         return self.get_decoder_layers(model)[block_idx].mlp
 
+    def get_attn_block(self, model, block_idx):
+        return self.get_decoder_layers(model)[block_idx].self_attn
+
+    def get_attn_head_output_module(self, model, block_idx):
+        # o_proj's INPUT is the concatenated per-head outputs: num_attention_heads (28) * head_dim
+        # (128) = 3584 = hidden_size on Qwen2.5-VL-7B. Grouped-query attention reduces the number of
+        # KEY/VALUE heads (num_key_value_heads=4), not query heads, so o_proj's input width is
+        # unaffected by GQA and stays num_attention_heads * head_dim.
+        return self.get_attn_block(model, block_idx).o_proj
+
     def get_mlp_hidden_module(self, model, block_idx):
         # Qwen2.5-VL's decoder MLP is the gated (SwiGLU) shape -- Qwen2MLP.forward is
         # down_proj(act_fn(gate_proj(x)) * up_proj(x)), so down_proj's INPUT is precisely the

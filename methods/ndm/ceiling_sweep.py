@@ -41,6 +41,19 @@ works by replacing the entity wholesale rather than by isolating the
 attribute (what `residual` does at layer 14: it flips `capital` too), which
 a sparse mask might still be able to disentangle -- that IS worth training.
 
+The default --sites list is chosen so one run answers three questions at
+once, each holding the others fixed (see --sites' help): global-vs-local at
+matched width, which sublayer, and narrow-vs-wide pre-projection space. The
+layer-14 result that motivated this file had residual alive while BOTH
+mlp_output and mlp_hidden were dead, which isolated LOCALITY rather than the
+basis as the limiting variable -- but with only MLP sites probed it could not
+distinguish "MLPs specifically don't carry this" from "no single sublayer
+does". attn_output settles that; attn_head_output additionally tests the one
+site here whose units are both privileged (per-head softmax + OV circuit)
+and known to be functionally specialized in VLMs, and which this repo's own
+methods/attention_maps.py already ranks correlationally -- so a ceiling there
+causally tests heads that probe has already flagged.
+
 This is a filter, not a result: the real numbers still come from
 methods/ndm/eval.py + VADE's eval/score.py. Token-level exact_match here is a
 cheap proxy for score.py's text normalization, chosen so this stays fast
@@ -98,9 +111,14 @@ def main():
     ap.add_argument("--attribute", required=True)
     ap.add_argument("--layers", type=int, nargs="+", required=True,
                      help="Layers to probe. MLP sites need >=1 (layer L addresses block L-1's MLP).")
-    ap.add_argument("--sites", nargs="+", default=["mlp_hidden", "mlp_output", "residual"], choices=list(SITES),
-                     help="Default probes all three, so locality (residual vs mlp_output, matched width) and "
-                          "basis (mlp_output vs mlp_hidden) are separated in one run.")
+    ap.add_argument("--sites", nargs="+", choices=list(SITES),
+                     default=["residual", "attn_output", "mlp_output", "attn_head_output", "mlp_hidden"],
+                     help="Default probes all five, ordered so three comparisons fall out of one run: "
+                          "GLOBAL vs LOCAL (residual vs attn_output/mlp_output -- all width hidden_size, so "
+                          "width is controlled); WHICH SUBLAYER (attn_output vs mlp_output -- is a dead local "
+                          "site MLP-specific, or is any single sublayer too local?); and NARROW vs WIDE "
+                          "PRE-PROJECTION space (attn_output vs attn_head_output, mlp_output vs mlp_hidden -- "
+                          "the privileged-basis axis, since privilege does not survive o_proj/down_proj).")
     ap.add_argument("--positions", default="flag_ring1")
     ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)

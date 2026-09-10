@@ -33,6 +33,28 @@ its computation gets swapped:
                  (down_proj) of a space that does, and privilege does not
                  survive a linear map.
 
+    attn_output  block L-1's self_attn OUTPUT     width = hidden_size (3584)
+                 -- the attention sublayer's contribution to the residual
+                 stream, before it's added in. The exact analogue of
+                 mlp_output for the OTHER sublayer, so attn_output vs
+                 mlp_output asks "is a dead local site an MLP-specific fact,
+                 or is any single sublayer's additive contribution too small
+                 to carry a whole-entity attribute?" No privileged basis
+                 (o_proj is a linear map, and privilege does not survive one).
+
+    attn_head_output  block L-1's per-head z       width = hidden_size (3584)
+                 -- o_proj's INPUT, i.e. the concatenated per-head attention
+                 outputs (28 heads x 128 dims on Qwen2.5-VL-7B). Same width
+                 as attn_output but structured: contiguous 128-dim blocks are
+                 individual heads, so a mask here can select whole HEADS, and
+                 heads are a privileged unit in Elhage et al.'s sense (each
+                 has its own softmax and its own OV circuit). This is the one
+                 site in this file whose units are both privileged AND known
+                 to be functionally specialized in VLMs -- and it is where
+                 this repo's own methods/attention_maps.py already ranks
+                 image->text conduits correlationally, so a ceiling probe here
+                 causally tests heads that probe has already flagged.
+
     mlp_hidden   block L-1's post-SwiGLU neurons  width = intermediate_size (18944)
                  -- act_fn(gate_proj(x)) * up_proj(x), i.e. the vector
                  down_proj consumes. The elementwise nonlinearity and
@@ -56,7 +78,7 @@ import torch
 
 from .hooks import cache_layer_hidden, extra_to_device, forward_patched, generate_patched, register_patch_hook
 
-SITES = ("residual", "mlp_output", "mlp_hidden")
+SITES = ("residual", "attn_output", "attn_head_output", "mlp_output", "mlp_hidden")
 
 DEFAULT_SITE = "residual"
 
@@ -85,18 +107,25 @@ class InterventionSite:
         return adapter.hidden_size(model)
 
     def _module_and_hook_kind(self, adapter, model, layer_idx):
-        """-> (module_to_hook, "pre"|"post") for the MLP sites. "pre" means
-        the tensor we want is that module's INPUT (down_proj's input IS the
-        post-SwiGLU neuron vector, so hooking down_proj's input is how you
-        read/write MLP hidden state without recomputing the gate/up branches
-        by hand)."""
+        """-> (module_to_hook, "pre"|"post") for every non-residual site.
+        "pre" means the tensor we want is that module's INPUT: down_proj's
+        input IS the post-SwiGLU neuron vector, and o_proj's input IS the
+        concatenated per-head attention outputs -- so hooking a projection's
+        input is how you read/write the wide pre-projection space without
+        recomputing anything by hand."""
         assert layer_idx >= 1, (
-            f"site {self.name!r} needs layer_idx>=1 (it addresses decoder block layer_idx-1's MLP); "
-            f"layer_idx=0 is the embedding output, which has no MLP")
+            f"site {self.name!r} needs layer_idx>=1 (it addresses a sublayer of decoder block "
+            f"layer_idx-1); layer_idx=0 is the embedding output, which has no attention or MLP sublayer")
         block = layer_idx - 1
         if self.name == "mlp_output":
             return adapter.get_mlp_block(model, block), "post"
-        return adapter.get_mlp_hidden_module(model, block), "pre"
+        if self.name == "mlp_hidden":
+            return adapter.get_mlp_hidden_module(model, block), "pre"
+        if self.name == "attn_output":
+            return adapter.get_attn_block(model, block), "post"
+        if self.name == "attn_head_output":
+            return adapter.get_attn_head_output_module(model, block), "pre"
+        raise AssertionError(f"no module mapping for site {self.name!r}")
 
     # ---- patching (base side) -------------------------------------------------
 
@@ -109,6 +138,11 @@ class InterventionSite:
         module, kind = self._module_and_hook_kind(adapter, model, layer_idx)
         if kind == "post":
             def post_hook(mod, inputs, output):
+                # A self_attn module returns a TUPLE ((attn_output, attn_weights), and historically a
+                # past_key_value too), whereas an mlp module returns a bare tensor. Patch element 0 and
+                # hand the rest back untouched, so the site works for both without the caller caring.
+                if isinstance(output, tuple):
+                    return (patch_fn(output[0]),) + output[1:]
                 return patch_fn(output)
             return [module.register_forward_hook(post_hook)]
 
@@ -184,7 +218,9 @@ class InterventionSite:
             captured.append(torch.stack([t[i, positions[i]] for i in range(B)]).detach())
 
         if kind == "post":
-            handle = module.register_forward_hook(lambda mod, inputs, output: grab(output))
+            # Tuple-aware for the same reason as register()'s post_hook: self_attn returns a tuple.
+            handle = module.register_forward_hook(
+                lambda mod, inputs, output: grab(output[0] if isinstance(output, tuple) else output))
         else:
             handle = module.register_forward_pre_hook(lambda mod, args: grab(args[0]))
         try:

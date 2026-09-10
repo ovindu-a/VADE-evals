@@ -187,13 +187,19 @@ additive methods (`intermediate_size`/`get_mlp_block`/
 `get_mlp_hidden_module`) so `sites.py` never needs to know Qwen attribute
 names.
 
-**Three sites, all addressing the same block** (`--layer L` = block L-1, so
-`L` means the same block for every site): `residual` (3584, DBM's site, not
-an NDM site), `mlp_output` (3584, that MLP's contribution only), `mlp_hidden`
-(18944, default). `mlp_output` is the control arm -- `residual` vs
-`mlp_output` isolates locality at matched width, `mlp_output` vs `mlp_hidden`
-isolates the privileged basis. Without it, `mlp_hidden` beating `residual`
-confounds the two.
+**Five sites, all addressing the same block** (`--layer L` = block L-1, so
+`L` means the same block for every site): `residual` (3584, DBM's site),
+`attn_output` and `mlp_output` (3584, one sublayer's contribution each),
+`attn_head_output` (3584 = 28 heads x 128, `o_proj`'s input, privileged per
+head) and `mlp_hidden` (18944, NDM's own site, default). Only the two MLP
+sites are NDM *training* sites (`NDM_SITES`); the rest exist for the
+diagnostics, though `dbm/train.py`'s engine accepts any of them. The extras
+are control arms: `residual` vs `attn_output`/`mlp_output` isolates locality
+at matched width, `attn_output` vs `mlp_output` isolates which sublayer, and
+`*_output` vs `attn_head_output`/`mlp_hidden` isolates the privileged basis
+at matched locality. Without them a dead site can't be attributed to any one
+cause. Note `self_attn` returns a TUPLE, unlike `mlp` -- sites.py's hooks
+patch element 0 and pass the rest through.
 
 **Gotchas.** (1) `--l1_coef`'s default `0.001` is RAVEL's optimum for a
 ~4096-wide residual stream and is NOT calibrated for 18944 dims -- since
