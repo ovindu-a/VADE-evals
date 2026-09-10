@@ -32,6 +32,13 @@ The four checks, per site:
      indexing absolute `positions` into a 1-column tensor would be wrong
      rather than merely redundant. Pure function test, no model needed.
 
+  5. THE PATCH ACTUALLY WRITES -- a full source swap must move the logits.
+     Checks 2 and 3 are both satisfied by a hook that does NOTHING, so on
+     their own they cannot tell a correctly-wired site from a dead one. This
+     one can: a dead hook leaves the logit tensor bit-identical
+     (max|delta| == 0.0), whereas a site the model merely ignores still
+     perturbs the logits. Run this before believing any ceiling of 0%.
+
 A NOTE ON EXACTNESS. Checks 2 and 3 compare generated token ids, not raw
 activations, because batched matmul kernel selection makes even a
 mathematically exact identity drift in the last bits (see
@@ -169,6 +176,33 @@ def check_site(site_name, adapter, model, processor, batch, layer, pad_token_id,
     # common/targets.py). For a proper headroom NUMBER across many layers, use ceiling_sweep.py --
     # this line is a smoke signal, not a measurement.
     patch_fn_real = make_cache_aware_patch_hook(positions, lambda base_vals: one(base_vals, source_act))
+
+    # 5. THE PATCH ACTUALLY WRITES ---------------------------------------------
+    # Checks 2 and 3 both pass VACUOUSLY when the hook does nothing at all -- a dead hook trivially
+    # reproduces the unhooked generation, twice. That blind spot is not hypothetical: a ceiling sweep
+    # over attn_output came back as exactly 0.0% cause / 100.0% base_kept / 100.0% iso at every one of
+    # 19 layers probed, which is indistinguishable from a hook that never fires, and NOTHING above
+    # would have caught it. So compare LOGITS with and without a full source swap: a no-op gives a
+    # bit-identical logit tensor (max|delta| == 0.0 exactly), while a real-but-ignored site gives a
+    # small nonzero delta. This is the only check here that separates "the patch isn't landing" from
+    # "the patch lands and the model ignores it" -- which is exactly the distinction a ceiling of 0
+    # leaves open.
+    with torch.no_grad():
+        extra_dev = extra_to_device(batch["base_extra"], model.device, model.dtype)
+        clean_logits = model(input_ids=batch["base_input_ids"].to(model.device),
+                              attention_mask=batch["attention_mask"].to(model.device),
+                              **extra_dev, logits_to_keep=1).logits
+        patched_logits = site.forward_patched(adapter, model, layers, layer, patch_fn_real,
+                                               batch["base_input_ids"], batch["attention_mask"],
+                                               batch["base_extra"], logits_to_keep=1).logits
+    logit_delta = (patched_logits.float() - clean_logits.float()).abs().max().item()
+    if logit_delta > 0.0:
+        print(f"[ok]   5. patch writes: full source swap moves the logits by max|delta|={logit_delta:.4g}")
+    else:
+        failures.append("full source swap left the logits BIT-IDENTICAL -- the hook is not writing "
+                        "anything, so any ceiling/cause number for this site is meaningless")
+        print("[FAIL] 5. patch writes: full source swap left the logits bit-identical (dead hook)")
+
     gen_swapped = site.generate_patched(adapter, model, layers, layer, patch_fn_real, batch["base_input_ids"],
                                          batch["attention_mask"], batch["base_extra"], pad_token_id, max_new_tokens)
     clean_txt = processor.tokenizer.batch_decode(gen_clean, skip_special_tokens=True)

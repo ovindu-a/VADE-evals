@@ -66,6 +66,7 @@ Usage:
 import argparse
 import json
 import os
+import random
 import sys
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -124,8 +125,12 @@ def main():
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--split", default="test", choices=["test", "train"])
     ap.add_argument("--n_rows", type=int, default=32,
-                     help="Rows per pool (cause and iso probed separately). Default 32 -- enough for a filter; "
+                     help="Rows per pool (cause and iso probed separately), drawn as a SEEDED RANDOM sample "
+                          "rather than the first n (the files are row_index-ordered, which groups by base "
+                          "entity -- see the sampling comment in main). Default 32 -- enough for a filter; "
                           "raise it if two layers come out close and you need to separate them.")
+    ap.add_argument("--seed", type=int, default=0, help="Row-sampling seed. Same seed = same rows across runs, "
+                                                          "so two sites/layers are always compared on identical rows.")
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--max_new_tokens", type=int, default=MAX_ANSWER_TOKENS + 2)
     ap.add_argument("--allow_unpruned", action="store_true")
@@ -157,8 +162,19 @@ def main():
         rows = load_tuples(entity_assets, args.attribute, args.split, tuples_dir=tuples_dir)
         for r in rows:
             r.setdefault("target_attribute", args.attribute)
-        cause_rows = [r for r in rows if r["rule"] == "match_source"][:args.n_rows]
-        iso_rows = [r for r in rows if r["rule"] != "match_source"][:args.n_rows]
+        # SEEDED RANDOM sample, not rows[:n]. The tuples files are ordered by row_index, which groups
+        # rows by base entity -- so the first 32 cause rows of flags/language are ALL base=AO (Angola),
+        # six source flags between them. A "ceiling" measured on one base entity is not a ceiling for
+        # the entity set, and the bias is invisible in the output. Verified: rows[:32] gave
+        # Counter({'AO': 32}) for the base column.
+        all_cause = [r for r in rows if r["rule"] == "match_source"]
+        all_iso = [r for r in rows if r["rule"] != "match_source"]
+        rng = random.Random(args.seed)
+        cause_rows = rng.sample(all_cause, min(args.n_rows, len(all_cause)))
+        iso_rows = rng.sample(all_iso, min(args.n_rows, len(all_iso)))
+        n_bases = len({r["base"] for r in cause_rows})
+        print(f"[{METHOD_NAME}/ceiling_sweep] sampled {len(cause_rows)} cause rows (seed={args.seed}) "
+              f"spanning {n_bases} distinct base entities of {len({r['base'] for r in all_cause})} available")
         assert cause_rows, "no cause rows (rule == match_source) found"
         print(f"[{METHOD_NAME}/ceiling_sweep] entity={args.entity} attribute={args.attribute} "
               f"layers={args.layers} sites={args.sites} positions={args.positions} "
