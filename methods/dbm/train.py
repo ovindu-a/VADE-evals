@@ -35,7 +35,6 @@ sys.path.insert(0, REPO_ROOT)
 DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join(REPO_ROOT, "..", "VADE"))
 
 import torch
-from transformers import get_linear_schedule_with_warmup
 
 from methods.adapters.registry import get_adapter
 from methods.common.entities import BuildBatchCache, build_batch, load_entity_assets, load_tuples, require_pruned_tuples
@@ -70,7 +69,37 @@ TEMP_END = 1e-7
 # instability just changes which noisy snapshot the final checkpoint happens to land on, it doesn't
 # converge. Clipping the mask's gradient norm bounds exactly this blowup regardless of how small T
 # gets; see complete_opt_step below.
+#
+# NOTE this reasoning was WRONG as the primary explanation -- see the 2026-09-10 flat-temperature
+# result below. Kept here (not deleted) because clipping turned out to still matter, just not for
+# the reason first written: with a flat, non-annealed temperature, gradients stay alive (never fp32-
+# exact zero) but are also genuinely large -- a real layer 16 run logged grad_norm (pre-clip) with
+# mean=2.48, max=12.27, and clip_grad_norm_ engaged on 479/480 opt steps. So clipping is doing real,
+# continuous stabilizing work in the flat-temperature regime, just not the "amplified noise" role
+# originally hypothesized for the annealed regime (where it barely moved the needle -- see below).
 GRAD_CLIP_NORM = 1.0
+# See temperature_start/temperature_end's own history for the actual root-cause correction: annealing
+# T all the way to RAVEL's 1e-7 floor drives sigmoid(mask/T) into EXACT fp32 saturation
+# (verified: torch.sigmoid(x)==1.0 exactly once x>~16.7) for any dimension whose |mask| already
+# exceeds ~16.7*T -- which happens within the first ~15-20% of a run given how fast mask magnitude
+# grows early on, permanently zeroing that dimension's CE gradient for the remaining 80%+ of
+# training (only L1's constant sign(mask) gradient survives, slowly eroding it). A same-day A/B on
+# layer 16 (language attribute) isolated the two variables cleanly:
+#   annealed 1e-2->1e-7, no clip:    final_score=58.6%, mask coin-flip-like (|mask| ~0.02, ~54-58% "selected")
+#   annealed 1e-2->1e-7, +clip:      final_score=56.1%, mask STILL coin-flip-like -- clipping alone did ~nothing
+#   flat T=1e-2 (never anneals),
+#     +clip:                        final_score=60.7% (best yet), |mask| ~0.065 (3x bigger), only 11% "selected"
+#                                    -- l1_term grows smoothly for the FULL run instead of peaking ~step 200
+# i.e. the annealing schedule itself was the bug; gradient clipping was never the fix for THAT bug (it
+# can't be -- clipping a gradient that's already exactly 0.0 does nothing), though it earns its keep
+# once T stops annealing to a killing floor and gradients are real again. Two open follow-up
+# questions this file's flags below exist to let you test without another code change: (1) does the
+# tail-end plateau (l1_term flat, ce_loss no longer improving) in the flat-T run reflect real
+# convergence, or just the linear LR schedule decaying to ~0 by the last few opt steps regardless of
+# temperature (see MIN_LR_RATIO)? (2) does removing gradient clipping on top of the now-fixed flat
+# schedule reintroduce oscillation, or was clipping only ever masking the OLD bug (see GRAD_CLIP_NORM
+# above, now overridable via --grad_clip_norm <=0)?
+MIN_LR_RATIO = 0.0     # 0.0 == this project's pre-existing behavior: linear decay all the way to lr=0.
 # Same hardware-forced micro-batch/accum defaults as DAS's train.py (single 24GB card, no gradient
 # checkpointing -- conflicts with the forward hooks the intervention needs, so full activations for the
 # whole decoder stack are held for backprop). DBM has no D x D rotation matrix to hold, only a length-H
@@ -88,15 +117,17 @@ PROGRESS_EVERY_OPT_STEPS = 1
 
 
 def dbm_results_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, lr, positions,
-                     pruned=False):
+                     pruned=False, min_lr_ratio=MIN_LR_RATIO, grad_clip_norm=GRAD_CLIP_NORM):
     return results_dir(REPO_ROOT, model_slug, entity, "dbm", attribute,
-                        dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned))
+                        dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned,
+                                       min_lr_ratio, grad_clip_norm))
 
 
 def dbm_logs_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, lr, positions,
-                  pruned=False):
+                  pruned=False, min_lr_ratio=MIN_LR_RATIO, grad_clip_norm=GRAD_CLIP_NORM):
     return logs_dir(REPO_ROOT, model_slug, entity, "dbm", attribute,
-                     dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned))
+                     dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned,
+                                    min_lr_ratio, grad_clip_norm))
 
 
 def cache_source_layer_hidden(adapter, model, batch, layer_idx, site=RESIDUAL_SITE):
@@ -129,6 +160,7 @@ def run_intervened_forward(adapter, model, layers, batch, layer_idx, interventio
 def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_dir,
                  positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START, temperature_end=TEMP_END,
                  lr=LR, num_epochs=NUM_EPOCHS, batch_size=BATCH_SIZE, grad_accum_steps=GRAD_ACCUM_STEPS,
+                 min_lr_ratio=MIN_LR_RATIO, grad_clip_norm=GRAD_CLIP_NORM,
                  cause_only=False, randomize_positions=False, limit_rows=None, tuples_split="train",
                  tuples_dir=None, cleanup_checkpoint=True, source_cache=None, site=None, method_label="dbm"):
     """Trains one (layer, attribute, positions, l1_coef) DBM run to
@@ -144,6 +176,15 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     methods/ndm/ (Native Dictionary Masking) instead; nothing else in this
     loop changes, since the mask, the L1 term, the temperature anneal and
     mask_stats are all dimension-agnostic.
+
+    min_lr_ratio: floor for the linear LR decay, as a fraction of the (post-warmup) peak lr -- 0.0
+    (default) reproduces this project's original behavior (decays all the way to lr=0 by the final
+    opt step). Exists to test whether a flat-temperature run's late-training plateau (see
+    GRAD_CLIP_NORM's comment above) is real convergence or just the LR schedule running out.
+
+    grad_clip_norm: max grad norm passed to clip_grad_norm_ every opt step; <=0 or None disables
+    clipping (computed via max_norm=inf instead, so grad_norm is still logged either way -- see
+    complete_opt_step). Exists to let clipping's contribution be ablated without another code change.
 
     method_label: prefix for this run's progress prints only (so an NDM run
     doesn't announce itself as "[dbm/train]"). Affects no path or artifact.
@@ -176,7 +217,18 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
     steps_per_epoch = -(-n_micro_batches_per_epoch // grad_accum_steps)  # ceil division
     t_total = steps_per_epoch * num_epochs
     warmup_steps = int(0.1 * t_total)
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=warmup_steps, num_training_steps=t_total)
+    # Same shape as transformers.get_linear_schedule_with_warmup (in fact identical when
+    # min_lr_ratio=0.0 -- that function is itself just a LambdaLR under the hood, so this changes
+    # nothing about resume compatibility: both reconstruct their lr_lambda deterministically from
+    # scratch on every invocation, since LambdaLR.state_dict() never persists the lambda itself
+    # either way), except the decay floors at min_lr_ratio * lr instead of always bottoming out at
+    # exactly 0 by the final opt step -- see train_layer's docstring for why this exists.
+    def lr_lambda(current_step, _warmup=warmup_steps, _total=t_total, _floor=min_lr_ratio):
+        if current_step < _warmup:
+            return float(current_step) / float(max(1, _warmup))
+        progress = float(_total - current_step) / float(max(1, _total - _warmup))
+        return max(_floor, progress)
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda)
 
     log_path = os.path.join(out_dir, f"layer{layer}_train_log.jsonl")
     ckpt_path = os.path.join(out_dir, f"layer{layer}_checkpoint.pt")
@@ -250,7 +302,12 @@ def train_layer(adapter, model, processor, entity_assets, attribute, layer, out_
         group at an epoch's end (see steps_per_epoch's ceil-division comment above for why the latter
         matters: otherwise that partial group's already-computed gradient is silently discarded)."""
         nonlocal opt_steps_done, opt_steps_this_call
-        grad_norm = torch.nn.utils.clip_grad_norm_(intervention.parameters(), GRAD_CLIP_NORM)
+        # max_norm=inf when clipping is disabled (grad_clip_norm<=0/None) instead of skipping the
+        # call outright -- clip_grad_norm_ still COMPUTES and returns the true pre-clip norm at inf
+        # (nothing can exceed it, so no rescaling happens), keeping grad_norm logging identical
+        # either way rather than needing a separate no-clip codepath just for the diagnostic.
+        effective_max_norm = grad_clip_norm if grad_clip_norm and grad_clip_norm > 0 else float("inf")
+        grad_norm = torch.nn.utils.clip_grad_norm_(intervention.parameters(), effective_max_norm)
         optimizer.step()
         scheduler.step()
         optimizer.zero_grad()
@@ -410,6 +467,14 @@ def main():
     ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
     ap.add_argument("--batch_size", type=int, default=BATCH_SIZE)
     ap.add_argument("--grad_accum_steps", type=int, default=GRAD_ACCUM_STEPS)
+    ap.add_argument("--min_lr_ratio", type=float, default=MIN_LR_RATIO,
+                     help=f"Floor for the linear LR decay, as a fraction of peak lr (default {MIN_LR_RATIO} == "
+                          "decays all the way to lr=0 by the final opt step, this project's original behavior). "
+                          "Raise if training's tail (ce_loss/l1_term no longer moving) looks like it's running "
+                          "out of lr rather than actually converging.")
+    ap.add_argument("--grad_clip_norm", type=float, default=GRAD_CLIP_NORM,
+                     help=f"Max grad norm for clip_grad_norm_ on the mask, every opt step (default {GRAD_CLIP_NORM}). "
+                          "Pass <=0 to disable clipping entirely (grad_norm is still computed/logged either way).")
     ap.add_argument("--cause_only", action="store_true")
     ap.add_argument("--randomize_positions", action="store_true")
     ap.add_argument("--limit_rows", type=int, default=None)
@@ -437,7 +502,7 @@ def main():
                   if pruned else None)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                           args.temperature_start, args.temperature_end, args.lr,
-                                          args.positions, pruned),
+                                          args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm),
                              f"layer{args.layer}_train.log")
 
     with tee_to_log(log_path):
@@ -448,7 +513,7 @@ def main():
 
         out_dir = args.out_dir or dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                                     args.temperature_start, args.temperature_end, args.lr,
-                                                    args.positions, pruned)
+                                                    args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm)
 
         source_cache = None
         if not args.no_source_cache:
@@ -459,7 +524,8 @@ def main():
                     positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
                     temperature_end=args.temperature_end, lr=args.lr, num_epochs=args.num_epochs,
                     batch_size=args.batch_size,
-                    grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
+                    grad_accum_steps=args.grad_accum_steps, min_lr_ratio=args.min_lr_ratio,
+                    grad_clip_norm=args.grad_clip_norm, cause_only=args.cause_only,
                     randomize_positions=args.randomize_positions, limit_rows=args.limit_rows, tuples_dir=tuples_dir,
                     cleanup_checkpoint=not args.keep_checkpoint, source_cache=source_cache)
 

@@ -26,7 +26,9 @@ from methods.common.entities import load_entity_assets, require_pruned_tuples
 from methods.common.run_logging import tee_to_log
 from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.run_layer import run_one_layer
-from methods.dbm.train import LR, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
+from methods.dbm.train import (
+    GRAD_CLIP_NORM, LR, MIN_LR_RATIO, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir,
+)
 
 
 def run_sweep(adapter, model, processor, entity_assets, attribute, layers, out_dir, vade_root,
@@ -136,7 +138,9 @@ def write_sweep_summary(out_dir, layers, results, run_config, method_label="DBM"
                 f"attribute={run_config['attribute']}", "",
                 f"positions={run_config['positions']} {site_str}l1_coef={run_config['l1_coef']} "
                 f"temperature={run_config['temperature_start']}->{run_config['temperature_end']} "
-                f"lr={run_config['lr']} pruned={run_config['pruned']} eval_split={run_config['eval_split']}", ""]
+                f"lr={run_config['lr']} min_lr_ratio={run_config.get('min_lr_ratio', MIN_LR_RATIO)} "
+                f"grad_clip_norm={run_config.get('grad_clip_norm', GRAD_CLIP_NORM)} "
+                f"pruned={run_config['pruned']} eval_split={run_config['eval_split']}", ""]
     if best_layer is not None:
         md_lines.append(f"**best layer: {best_layer} (final_score={best_score}%)**")
         md_lines.append("")
@@ -174,6 +178,8 @@ def main():
     ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
     ap.add_argument("--batch_size", type=int, default=None, help="Defaults to train.py's BATCH_SIZE constant.")
     ap.add_argument("--grad_accum_steps", type=int, default=None, help="Defaults to train.py's GRAD_ACCUM_STEPS.")
+    ap.add_argument("--min_lr_ratio", type=float, default=MIN_LR_RATIO, help="See train.py --min_lr_ratio.")
+    ap.add_argument("--grad_clip_norm", type=float, default=GRAD_CLIP_NORM, help="See train.py --grad_clip_norm.")
     ap.add_argument("--cause_only", action="store_true")
     ap.add_argument("--randomize_positions", action="store_true")
     ap.add_argument("--allow_unpruned", action="store_true",
@@ -197,7 +203,7 @@ def main():
     layers_tag = "-".join(str(l) for l in args.layers)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                           args.temperature_start, args.temperature_end, args.lr,
-                                          args.positions, pruned),
+                                          args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm),
                              f"sweep_layers{layers_tag}.log")
 
     with tee_to_log(log_path):
@@ -206,7 +212,7 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         out_dir = dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                    args.temperature_start, args.temperature_end, args.lr,
-                                   args.positions, pruned)
+                                   args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm)
 
         print(f"[layer_sweep] entity={args.entity} attribute={args.attribute} layers={args.layers} "
               f"l1_coef={args.l1_coef} positions={args.positions} pruned={pruned} -> {out_dir}")
@@ -221,7 +227,8 @@ def main():
             positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
             temperature_end=args.temperature_end, lr=args.lr, num_epochs=args.num_epochs,
             batch_size=args.batch_size,
-            grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
+            grad_accum_steps=args.grad_accum_steps, min_lr_ratio=args.min_lr_ratio,
+            grad_clip_norm=args.grad_clip_norm, cause_only=args.cause_only,
             randomize_positions=args.randomize_positions, tuples_dir=tuples_dir,
             eval_split=args.eval_split, eval_batch_size=args.eval_batch_size,
             cleanup_checkpoint=not args.keep_checkpoint, source_cache=source_cache,
@@ -230,7 +237,8 @@ def main():
         write_sweep_summary(out_dir, args.layers, results, run_config={
             "entity": args.entity, "attribute": args.attribute, "positions": args.positions,
             "l1_coef": args.l1_coef, "temperature_start": args.temperature_start,
-            "temperature_end": args.temperature_end, "lr": args.lr, "pruned": pruned,
+            "temperature_end": args.temperature_end, "lr": args.lr, "min_lr_ratio": args.min_lr_ratio,
+            "grad_clip_norm": args.grad_clip_norm, "pruned": pruned,
             "eval_split": args.eval_split,
         })
 

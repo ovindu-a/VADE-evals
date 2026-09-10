@@ -30,7 +30,9 @@ from methods.common.run_logging import tee_to_log
 from methods.common.sites import RESIDUAL_SITE
 from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.intervention import SigmoidMaskIntervention
-from methods.dbm.train import LR, DBM_L1_COEF, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir
+from methods.dbm.train import (
+    GRAD_CLIP_NORM, LR, MIN_LR_RATIO, DBM_L1_COEF, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir,
+)
 
 
 def eval_layer(adapter, model, processor, entity_assets, attribute, layer, embed_dim, ckpt_path, out_path,
@@ -121,6 +123,10 @@ def main():
                      help="Must match the value train.py was run with -- only used to derive the default out_dir.")
     ap.add_argument("--lr", type=float, default=LR,
                      help="Must match the value train.py was run with -- only used to derive the default out_dir.")
+    ap.add_argument("--min_lr_ratio", type=float, default=MIN_LR_RATIO,
+                     help="Must match the value train.py was run with -- only used to derive the default out_dir.")
+    ap.add_argument("--grad_clip_norm", type=float, default=GRAD_CLIP_NORM,
+                     help="Must match the value train.py was run with -- only used to derive the default out_dir.")
     ap.add_argument("--split", default="test", choices=["test", "train"])
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--max_new_tokens", type=int, default=16)
@@ -141,7 +147,7 @@ def main():
                   if pruned else None)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                           args.temperature_start, args.temperature_end, args.lr,
-                                          args.positions, pruned),
+                                          args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm),
                              f"layer{args.layer}_eval_{args.split}.log")
 
     with tee_to_log(log_path):
@@ -157,7 +163,7 @@ def main():
 
         out_dir = args.out_dir or dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                                     args.temperature_start, args.temperature_end, args.lr,
-                                                    args.positions, pruned)
+                                                    args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm)
         ckpt_path = args.ckpt_path or os.path.join(out_dir, f"layer{args.layer}_intervention.pt")
         out_path = os.path.join(out_dir, f"layer{args.layer}_predictions_{args.split}.jsonl")
 

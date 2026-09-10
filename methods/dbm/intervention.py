@@ -97,13 +97,21 @@ def mask_stats(intervention, epsilon=1e-2):
         }
 
 
-def dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned=False):
+def dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned=False,
+                    min_lr_ratio=0.0, grad_clip_norm=1.0):
     """Encodes every hyperparameter that changes the trained artifact -- NOT just l1_coef. An earlier
     version omitted temperature_start/temperature_end here, so two runs differing only in temperature
     schedule would collide into the same results/logs directory (the same class of gotcha this
     project's own select_features.py already hit with --dictionaries_dir -- see its README section).
     lr was added for the same reason the moment --lr became a real, sweep-worthy flag (train.py's
     LR=1e-3 default is copied from DAS, whose D x D/D x K orthogonal rotation is a very different
-    parametrization from DBM's plain mask vector -- worth sweeping, not assuming)."""
-    return f"L1_{l1_coef}_T{temperature_start:g}-{temperature_end:g}_LR{lr:g}_{positions}" + \
-        ("_pruned" if pruned else "")
+    parametrization from DBM's plain mask vector -- worth sweeping, not assuming). min_lr_ratio/
+    grad_clip_norm added the same day both became real flags (see train.py's train_layer) -- default
+    values (0.0, 1.0) match this project's pre-existing hardcoded behavior exactly, so this alone
+    changes every existing tag's string (new MLR/CLIP segments appear even at defaults) -- deliberate,
+    not an oversight: it's the same "always include, never omit-at-default" convention l1_coef/lr
+    already follow here, and the alternative (omit at default) would mean a min_lr_ratio=0 run and a
+    min_lr_ratio=0.3 run silently colliding into the same directory the moment someone forgets which
+    one was the "default" at the time."""
+    return (f"L1_{l1_coef}_T{temperature_start:g}-{temperature_end:g}_LR{lr:g}_MLR{min_lr_ratio:g}_"
+            f"CLIP{grad_clip_norm:g}_{positions}") + ("_pruned" if pruned else "")

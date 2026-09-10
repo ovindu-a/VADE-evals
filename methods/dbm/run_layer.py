@@ -27,13 +27,15 @@ from methods.common.sites import RESIDUAL_SITE
 from methods.common.source_cache import get_or_build_source_cache
 from methods.dbm.eval import eval_layer
 from methods.dbm.train import (
-    LR, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir, train_layer,
+    GRAD_CLIP_NORM, LR, MIN_LR_RATIO, DBM_L1_COEF, NUM_EPOCHS, TEMP_END, TEMP_START, dbm_logs_dir, dbm_results_dir,
+    train_layer,
 )
 
 
 def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, out_dir, vade_root,
                    positions="flag_ring1", l1_coef=DBM_L1_COEF, temperature_start=TEMP_START,
                    temperature_end=TEMP_END, lr=LR, num_epochs=NUM_EPOCHS, batch_size=None, grad_accum_steps=None,
+                   min_lr_ratio=MIN_LR_RATIO, grad_clip_norm=GRAD_CLIP_NORM,
                    cause_only=False, randomize_positions=False, tuples_dir=None,
                    eval_split="test", eval_batch_size=16, cleanup_checkpoint=True, source_cache=None,
                    site=None, method_label="dbm"):
@@ -56,6 +58,7 @@ def run_one_layer(adapter, model, processor, entity_assets, attribute, layer, ou
         adapter, model, processor, entity_assets, attribute, layer, out_dir,
         positions=positions, l1_coef=l1_coef, temperature_start=temperature_start, temperature_end=temperature_end,
         lr=lr, num_epochs=num_epochs, batch_size=batch_size, grad_accum_steps=grad_accum_steps,
+        min_lr_ratio=min_lr_ratio, grad_clip_norm=grad_clip_norm,
         cause_only=cause_only, randomize_positions=randomize_positions, tuples_dir=tuples_dir,
         cleanup_checkpoint=cleanup_checkpoint, source_cache=source_cache, site=site, method_label=method_label,
     )
@@ -96,6 +99,8 @@ def main():
     ap.add_argument("--num_epochs", type=int, default=NUM_EPOCHS)
     ap.add_argument("--batch_size", type=int, default=None, help="Defaults to train.py's BATCH_SIZE constant.")
     ap.add_argument("--grad_accum_steps", type=int, default=None, help="Defaults to train.py's GRAD_ACCUM_STEPS.")
+    ap.add_argument("--min_lr_ratio", type=float, default=MIN_LR_RATIO, help="See train.py --min_lr_ratio.")
+    ap.add_argument("--grad_clip_norm", type=float, default=GRAD_CLIP_NORM, help="See train.py --grad_clip_norm.")
     ap.add_argument("--cause_only", action="store_true")
     ap.add_argument("--randomize_positions", action="store_true")
     ap.add_argument("--allow_unpruned", action="store_true",
@@ -115,7 +120,7 @@ def main():
                   if pruned else None)
     log_path = os.path.join(dbm_logs_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                           args.temperature_start, args.temperature_end, args.lr,
-                                          args.positions, pruned),
+                                          args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm),
                              f"layer{args.layer}_run.log")
 
     with tee_to_log(log_path):
@@ -124,7 +129,7 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         out_dir = dbm_results_dir(model_slug, args.entity, args.attribute, args.l1_coef,
                                    args.temperature_start, args.temperature_end, args.lr,
-                                   args.positions, pruned)
+                                   args.positions, pruned, args.min_lr_ratio, args.grad_clip_norm)
 
         print(f"[run_layer] entity={args.entity} attribute={args.attribute} layer={args.layer} "
               f"l1_coef={args.l1_coef} positions={args.positions} pruned={pruned} -> {out_dir}")
@@ -138,7 +143,8 @@ def main():
             adapter, model, processor, entity_assets, args.attribute, args.layer, out_dir, args.vade_root,
             positions=args.positions, l1_coef=args.l1_coef, temperature_start=args.temperature_start,
             temperature_end=args.temperature_end, lr=args.lr, num_epochs=args.num_epochs, batch_size=args.batch_size,
-            grad_accum_steps=args.grad_accum_steps, cause_only=args.cause_only,
+            grad_accum_steps=args.grad_accum_steps, min_lr_ratio=args.min_lr_ratio,
+            grad_clip_norm=args.grad_clip_norm, cause_only=args.cause_only,
             randomize_positions=args.randomize_positions, tuples_dir=tuples_dir,
             eval_split=args.eval_split, eval_batch_size=args.eval_batch_size,
             cleanup_checkpoint=not args.keep_checkpoint, source_cache=source_cache,
