@@ -276,6 +276,33 @@ while `residual` flipped the answer outright -- so at layer 14 the limiting
 variable is LOCALITY, not the basis: one block's additive down_proj update
 does not carry a whole-entity attribute.
 
+## methods/ndm/swap_trace.py -- what the model says INSTEAD (per-row, not rates)
+
+Same intervention as `ceiling_sweep.py` (full swap, any site, any position
+set); different reporting. Classifies every (row, layer) three ways with the
+trainer's own `exact_match`: `[HIT]` == source gold (the swap TRANSFERRED),
+`[base]` == base gold (did NOTHING), `[other]` == neither (DESTROYED). Writes
+a per-row log plus a `_TOKENS` variant showing each answer's actual token
+split -- Qwen splits digits one per token ('250' -> ['2','5','0']), so a
+half-right numeric answer is invisible in decoded text. Defaults to n_rows=384,
+not ceiling_sweep's 32, because one row is 3.1% at 32.
+
+**Why it exists (and why `other` now appears in ceiling_sweep too).**
+flags/calling_code @ last_token/residual/layer 24 reads cause=3.4%
+base_kept=14.3% -- and the sweep's own verdict line called it dead. It is the
+opposite of dead: the missing 82.3% is `other`, a THIRD country's dialing code
+(row 383: base GY '592' -> source ET '251', emitted '246'). The site destroys
+the answer without transferring the source's. Compare flags/language at the
+SAME site/position/layer: cause=100%, base_kept=0%, other=0%. Two rates cannot
+distinguish "inert" from "destructive"; only the generated text can.
+`ceiling_sweep` now derives and prints `other`, and its no-headroom verdict
+says so explicitly when `other` > 25% and points here.
+
+That language/calling_code split is unexplained and is the reason not to treat
+flags/language as representative: the last-token residual at L23+ is NOT
+simply "the answer" -- for a retrieved one-word answer a swap copies it, for a
+composed multi-digit one a swap corrupts it.
+
 ## methods/dla.py -- direct logit attribution (read-only, exact, one forward pass)
 
 "Which components help make the identification right", answered without
@@ -394,6 +421,8 @@ python methods/mech_probe.py --entity flags --attribute language --dry_run
 python methods/mech_probe.py --entity flags --attribute language
 python methods/dla.py --entity flags --attribute language --direction base_minus_source
 python methods/head_trace.py --entity flags --attribute language --patch_layer 21 --positions flag_ring1
+python methods/ndm/swap_trace.py --entity flags --attribute calling_code --positions last_token \
+    --site residual --layers 19 20 21 22 23 24 25 26 27 28      # what did it say INSTEAD
 
 # NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
 python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # 1. is the hook right

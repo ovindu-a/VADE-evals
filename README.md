@@ -91,6 +91,9 @@ VADE-evals/
                           same section below.
     mech_probe.py          runs all three probes above off ONE forward pass per row instead of
                           three -- same section below.
+    ndm/swap_trace.py      PER-ROW trace of a full swap -- what the model says INSTEAD, with a
+                          three-way HIT/base/other classification and a token-level log. The
+                          companion to ceiling_sweep's rates; see its section below.
     head_trace.py          TRACES the image->text handoff: which attention heads write the
                           object's information into the text stream (differential head trace
                           under an image patch), and which of them are load-bearing (cumulative
@@ -1113,6 +1116,53 @@ image-position column of `ceiling_sweep` is still large) -- patching where the
 effect is already 0 leaves nothing downstream to trace, and the script says so
 rather than reporting a flat curve. Blocks before `--patch_layer` are excluded
 by default since they cannot be affected by it.
+
+### 3c. `ndm/swap_trace.py` -- what the model says *instead*
+
+```bash
+python methods/ndm/swap_trace.py --entity flags --attribute calling_code \
+    --positions last_token --site residual --layers 19 20 21 22 23 24 25 26 27 28
+```
+
+Same intervention as `ceiling_sweep.py`, different reporting -- and the
+reporting is the point. Every (row, layer) is classified three ways using the
+trainer's own `exact_match`:
+
+| label | meaning |
+|---|---|
+| `[HIT]` | generation == the **source's** gold -- the swap **transferred** |
+| `[base]` | generation == the **base's** gold -- the swap did **nothing** |
+| `[other]` | neither -- the swap **destroyed** the answer |
+
+**Why `other` matters.** flags/`calling_code` at `last_token`, residual, layer
+24 reads `cause=3.4% base_kept=14.3%`, and the sweep's own verdict line called
+it dead. It is the opposite of dead -- the missing **82.3%** is a *third*
+country's dialing code:
+
+```
+row 383: base=GY (gold='592') -> source=ET (gold='251')
+  unhooked: '592. This corresponds to the'
+  L22:      '592. This corresponds to the'   [base]
+  L23:      '246. This corresponds to the'   [other]
+```
+
+Compare flags/`language` at the **same** site, position and layer:
+`cause=100%, base_kept=0%, other=0%`. Same instrument, same intervention,
+opposite outcome. Two rates cannot tell "inert" from "destructive"; only the
+generated text can. `ceiling_sweep` now derives and prints `other` as well,
+and its no-headroom verdict points here when `other` exceeds 25%.
+
+That split is **unexplained**, and it is the reason not to treat
+flags/`language` as representative: the last-token residual at L23+ is not
+simply "the answer". For a retrieved one-word answer a swap copies it; for a
+composed multi-digit one a swap corrupts it.
+
+Two logs are written. The main one shows decoded text; the `_TOKENS` one shows
+each answer's actual token sequence, because Qwen2.5-VL splits digits one per
+token (`'250'` -> `['2','5','0']`) and a half-right numeric answer is invisible
+in decoded text. `--n_rows` defaults to **384**, not `ceiling_sweep`'s 32 --
+at 32 rows a single row is 3.1%, which is the entire dynamic range of the
+effects this script exists to look at.
 
 ### 4. Reading the results
 

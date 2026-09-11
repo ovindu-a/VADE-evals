@@ -399,20 +399,30 @@ def main():
                             ib, m = ib + t * k, m + k
                         iso_floor = ib / m
 
+                    # `other` is the answer being DESTROYED without the source's being installed --
+                    # neither gold. Derived, not measured (a generation matching both golds would
+                    # need base_label == source_label, which pruned tuples exclude), but printing it
+                    # is not cosmetic: flags/calling_code at last_token reads 3.4%/14.3% at layer 24,
+                    # which looks like a dead site until you see that the remaining 82.3% is a THIRD
+                    # country's dialing code. That site is violently causal; it just does not
+                    # transfer. Without this column the run's own verdict line called it dead.
+                    other = max(0.0, 1.0 - cause_ceiling - base_kept)
                     results[f"{name}/{layer}"] = {
                         "site": name, "layer": layer, "cause_ceiling": cause_ceiling,
                         "blocks": site.blocks(layer) if site.is_joint else [layer - 1],
-                        "base_kept": base_kept, "iso_floor": iso_floor,
+                        "base_kept": base_kept, "other": other, "iso_floor": iso_floor,
                         "width": site.width(adapter, model), "n_cause": n,
                     }
                     print(f"  {name:>22} layer {layer:>2}: cause_ceiling={cause_ceiling:6.1%} "
-                          f"base_kept={base_kept:6.1%} iso_floor={iso_floor:6.1%}", flush=True)
+                          f"base_kept={base_kept:6.1%} other={other:6.1%} iso_floor={iso_floor:6.1%}",
+                          flush=True)
 
             print("\n=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===")
-            print(f"{'site':>22} {'layer':>6} {'width':>7} {'cause_ceiling':>14} {'base_kept':>10} {'iso_floor':>10}")
+            print(f"{'site':>22} {'layer':>6} {'width':>7} {'cause_ceiling':>14} {'base_kept':>10} "
+                  f"{'other':>8} {'iso_floor':>10}")
             for r in results.values():
                 print(f"{r['site']:>22} {r['layer']:>6} {r['width']:>7} {r['cause_ceiling']:>13.1%} "
-                      f"{r['base_kept']:>9.1%} {r['iso_floor']:>9.1%}")
+                      f"{r['base_kept']:>9.1%} {r['other']:>7.1%} {r['iso_floor']:>9.1%}")
             implied = [(pre, post) for pre, post in FULL_SWAP_EQUIVALENT.items()
                        if post in args.sites and pre not in args.sites]
             for pre, post in implied:
@@ -430,6 +440,17 @@ def main():
                 print(f"\nNo (site, layer) probed here has meaningful headroom above the "
                       f"{base_cause_ms:.1%} unhooked floor. Training any of them cannot produce a real "
                       f"`cause`; widen --layers or reconsider the site/positions before spending GPU.")
+                # ... unless the swap is destroying the answer rather than doing nothing. Those are
+                # opposite findings and the cause column alone cannot tell them apart.
+                destructive = max(results.values(), key=lambda r: r["other"], default=None)
+                if destructive is not None and destructive["other"] > 0.25:
+                    print(f"BUT NOTE: {destructive['site']} layer {destructive['layer']} has "
+                          f"other={destructive['other']:.1%} -- the swap is DESTROYING the base answer "
+                          f"without installing the source's, which is the opposite of an inert site. "
+                          f"A mask cannot fix that (it is a strict subset of a swap that already "
+                          f"fails), but 'no headroom' is the wrong reading: run "
+                          f"methods/ndm/swap_trace.py at this (site, layer) to see what it emits "
+                          f"instead before concluding anything.")
 
             with open(out_path, "w") as f:
                 json.dump({"entity": args.entity, "attribute": args.attribute, "positions": spec,
