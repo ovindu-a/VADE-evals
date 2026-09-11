@@ -256,7 +256,26 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         layers_stack = adapter.get_decoder_layers(model)
         pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
-        batch_cache = BuildBatchCache()
+
+        # One BuildBatchCache PER SPEC, not one shared across all of --positions_list.
+        # entities.py's BuildBatchCache.template caches pos_unpadded keyed on (queried, template_id)
+        # ONLY -- it does not include positions_name, even though pos_unpadded is computed FROM
+        # positions_name (kept byte-identical to the sibling VADE repo's copy, not patched here; see
+        # RESULTS.md). Sharing one instance across specs whose underlying positions_name differs
+        # (e.g. flag_ring1 then full_image) silently reuses the FIRST spec's stale, wrong-sized
+        # object-token positions for every later spec -- caught the hard way: it crashed ring:2 with
+        # an out-of-bounds grid index (24-token flag_ring1 positions reused for a 144-token full_image
+        # build), and, worse, did NOT crash for a plain full_image/last_token spec, which silently
+        # returned flag_ring1's positions instead of its own. image_extra/gold ARE positions-independent
+        # (image decode, gold token ids), so those two sub-caches stay shared across every spec for the
+        # reuse BuildBatchCache exists for; only `template` needs to be per-spec.
+        shared_image_extra, shared_gold = {}, {}
+
+        def cache_for_spec():
+            c = BuildBatchCache()
+            c.image_extra = shared_image_extra
+            c.gold = shared_gold
+            return c
 
         rows = load_tuples(entity_assets, args.attribute, args.split, tuples_dir=tuples_dir)
         for r in rows:
@@ -290,7 +309,8 @@ def main():
             print(f"\n{'='*78}\n=== positions={spec!r}"
                   + (f" -- {describe(spec, entity_assets)}" if is_extended(spec) else "")
                   + f"\n{'='*78}", flush=True)
-            def batches(pool):
+            batch_cache = cache_for_spec()
+            def batches(pool, batch_cache=batch_cache):
                 for i in range(0, len(pool), args.batch_size):
                     yield build_batch_at(spec, pool[i:i + args.batch_size], entity_assets, adapter,
                                           model, processor, batch_cache=batch_cache)

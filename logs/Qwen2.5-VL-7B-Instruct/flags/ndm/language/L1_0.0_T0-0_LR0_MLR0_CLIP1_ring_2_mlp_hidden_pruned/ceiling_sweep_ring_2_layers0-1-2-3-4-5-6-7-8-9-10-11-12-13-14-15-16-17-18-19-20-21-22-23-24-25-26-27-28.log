@@ -1,0 +1,249 @@
+
+=== logging to /workspace/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_ring_2_mlp_hidden_pruned/ceiling_sweep_ring_2_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<16:39,  1.37s/it]Loading weights:   0%|          | 2/729 [00:03<19:42,  1.63s/it]Loading weights:   1%|          | 4/729 [00:03<08:24,  1.44it/s]Loading weights:   1%|          | 5/729 [00:03<06:32,  1.84it/s]Loading weights:   1%|          | 6/729 [00:03<05:23,  2.23it/s]Loading weights:   2%|1         | 12/729 [00:04<01:41,  7.03it/s]Loading weights:   2%|2         | 16/729 [00:04<01:20,  8.83it/s]Loading weights:   2%|2         | 18/729 [00:04<01:29,  7.91it/s]Loading weights:   3%|3         | 22/729 [00:04<01:02, 11.30it/s]Loading weights:   3%|3         | 24/729 [00:04<00:56, 12.43it/s]Loading weights:   4%|3         | 28/729 [00:05<00:59, 11.81it/s]Loading weights:   4%|4         | 30/729 [00:05<01:22,  8.45it/s]Loading weights:   5%|4         | 34/729 [00:05<01:00, 11.50it/s]Loading weights:   5%|5         | 40/729 [00:06<01:04, 10.73it/s]Loading weights:   6%|5         | 42/729 [00:06<01:09,  9.82it/s]Loading weights:   7%|6         | 48/729 [00:06<00:47, 14.44it/s]Loading weights:   7%|7         | 52/729 [00:07<00:45, 14.93it/s]Loading weights:   7%|7         | 54/729 [00:07<00:58, 11.53it/s]Loading weights:   8%|7         | 58/729 [00:07<00:45, 14.67it/s]Loading weights:   9%|8         | 62/729 [00:07<00:36, 18.26it/s]Loading weights:   9%|8         | 65/729 [00:08<00:52, 12.54it/s]Loading weights:   9%|9         | 67/729 [00:08<00:54, 12.04it/s]Loading weights:  10%|9         | 70/729 [00:08<01:12,  9.07it/s]Loading weights:  10%|#         | 76/729 [00:09<00:53, 12.25it/s]Loading weights:  11%|#         | 78/729 [00:09<01:07,  9.69it/s]Loading weights:  11%|#1        | 82/729 [00:09<00:54, 11.79it/s]Loading weights:  12%|#1        | 84/729 [00:09<00:53, 12.02it/s]Loading weights:  12%|#2        | 88/729 [00:10<00:51, 12.34it/s]Loading weights:  12%|#2        | 90/729 [00:10<01:05,  9.81it/s]Loading weights:  13%|#3        | 95/729 [00:10<00:43, 14.63it/s]Loading weights:  14%|#3        | 100/729 [00:11<00:48, 13.01it/s]Loading weights:  14%|#3        | 102/729 [00:11<00:55, 11.39it/s]Loading weights:  15%|#4        | 106/729 [00:11<00:43, 14.20it/s]Loading weights:  15%|#4        | 108/729 [00:11<00:44, 14.04it/s]Loading weights:  15%|#5        | 112/729 [00:12<01:00, 10.19it/s]Loading weights:  16%|#5        | 114/729 [00:12<01:07,  9.11it/s]Loading weights:  16%|#6        | 120/729 [00:12<00:42, 14.35it/s]Loading weights:  17%|#7        | 124/729 [00:13<00:52, 11.44it/s]Loading weights:  17%|#7        | 126/729 [00:13<00:56, 10.65it/s]Loading weights:  18%|#7        | 130/729 [00:13<00:42, 14.07it/s]Loading weights:  19%|#8        | 136/729 [00:14<00:42, 13.89it/s]Loading weights:  19%|#8        | 138/729 [00:14<01:03,  9.33it/s]Loading weights:  19%|#9        | 142/729 [00:14<00:49, 11.90it/s]Loading weights:  20%|##        | 148/729 [00:15<00:43, 13.46it/s]Loading weights:  21%|##        | 150/729 [00:15<00:59,  9.72it/s]Loading weights:  21%|##1       | 154/729 [00:15<00:52, 10.99it/s]Loading weights:  21%|##1       | 156/729 [00:16<00:49, 11.64it/s]Loading weights:  22%|##1       | 160/729 [00:16<00:48, 11.76it/s]Loading weights:  22%|##2       | 162/729 [00:16<01:04,  8.85it/s]Loading weights:  23%|##2       | 166/729 [00:17<00:47, 11.87it/s]Loading weights:  24%|##3       | 172/729 [00:17<00:41, 13.47it/s]Loading weights:  24%|##3       | 174/729 [00:17<01:01,  9.08it/s]Loading weights:  24%|##4       | 178/729 [00:18<00:45, 11.99it/s]Loading weights:  25%|##5       | 184/729 [00:18<00:45, 12.04it/s]Loading weights:  26%|##5       | 186/729 [00:19<01:00,  9.04it/s]Loading weights:  26%|##6       | 190/729 [00:19<00:47, 11.42it/s]Loading weights:  27%|##6       | 196/729 [00:19<00:40, 13.31it/s]Loading weights:  27%|##7       | 198/729 [00:19<00:51, 10.39it/s]Loading weights:  28%|##7       | 202/729 [00:20<00:47, 11.15it/s]Loading weights:  29%|##8       | 208/729 [00:20<00:40, 12.91it/s]Loading weights:  29%|##8       | 210/729 [00:21<00:53,  9.66it/s]Loading weights:  29%|##9       | 214/729 [00:21<00:41, 12.52it/s]Loading weights:  30%|##9       | 218/729 [00:21<00:32, 15.86it/s]Loading weights:  30%|###       | 221/729 [00:21<00:47, 10.68it/s]Loading weights:  31%|###       | 223/729 [00:22<00:50,  9.95it/s]Loading weights:  31%|###1      | 226/729 [00:22<00:41, 12.06it/s]Loading weights:  32%|###1      | 231/729 [00:22<00:28, 17.49it/s]Loading weights:  32%|###2      | 234/729 [00:23<01:02,  7.89it/s]Loading weights:  33%|###2      | 238/729 [00:23<00:50,  9.79it/s]Loading weights:  33%|###3      | 244/729 [00:23<00:39, 12.14it/s]Loading weights:  34%|###3      | 246/729 [00:24<00:50,  9.65it/s]Loading weights:  34%|###4      | 250/729 [00:24<00:40, 11.94it/s]Loading weights:  35%|###4      | 252/729 [00:24<00:38, 12.34it/s]Loading weights:  35%|###5      | 256/729 [00:24<00:36, 12.85it/s]Loading weights:  35%|###5      | 258/729 [00:25<00:54,  8.62it/s]Loading weights:  36%|###5      | 262/729 [00:25<00:41, 11.29it/s]Loading weights:  36%|###6      | 264/729 [00:25<00:37, 12.37it/s]Loading weights:  37%|###6      | 268/729 [00:26<00:36, 12.61it/s]Loading weights:  37%|###7      | 270/729 [00:26<00:51,  8.95it/s]Loading weights:  38%|###7      | 274/729 [00:26<00:36, 12.36it/s]Loading weights:  38%|###7      | 276/729 [00:26<00:34, 13.20it/s]Loading weights:  38%|###8      | 280/729 [00:27<00:51,  8.78it/s]Loading weights:  39%|###8      | 282/729 [00:27<01:07,  6.66it/s]Loading weights:  39%|###9      | 286/729 [00:28<00:46,  9.61it/s]Loading weights:  40%|####      | 292/729 [00:28<00:37, 11.74it/s]Loading weights:  40%|####      | 294/729 [00:29<00:56,  7.64it/s]Loading weights:  41%|####      | 298/729 [00:29<00:43,  9.91it/s]Loading weights:  41%|####1     | 300/729 [00:29<00:39, 10.76it/s]Loading weights:  42%|####1     | 304/729 [00:29<00:37, 11.32it/s]Loading weights:  42%|####1     | 306/729 [00:30<00:50,  8.35it/s]Loading weights:  43%|####2     | 311/729 [00:30<00:33, 12.31it/s]Loading weights:  43%|####3     | 316/729 [00:30<00:31, 13.20it/s]Loading weights:  44%|####3     | 318/729 [00:31<00:43,  9.42it/s]Loading weights:  44%|####4     | 322/729 [00:31<00:32, 12.46it/s]Loading weights:  45%|####4     | 328/729 [00:32<00:45,  8.75it/s]Loading weights:  46%|####5     | 334/729 [00:32<00:31, 12.71it/s]Loading weights:  47%|####7     | 345/729 [00:32<00:17, 22.08it/s]Loading weights:  48%|####8     | 350/729 [00:32<00:14, 25.27it/s]Loading weights:  49%|####8     | 357/729 [00:32<00:12, 29.02it/s]Loading weights:  50%|####9     | 362/729 [00:32<00:11, 30.97it/s]Loading weights:  51%|#####     | 369/729 [00:33<00:10, 35.90it/s]Loading weights:  51%|#####1    | 374/729 [00:33<00:10, 35.21it/s]Loading weights:  52%|#####1    | 379/729 [00:33<00:09, 36.61it/s]Loading weights:  53%|#####2    | 384/729 [00:33<00:10, 33.21it/s]Loading weights:  53%|#####3    | 390/729 [00:33<00:09, 35.17it/s]Loading weights:  54%|#####4    | 395/729 [00:33<00:08, 37.76it/s]Loading weights:  55%|#####5    | 403/729 [00:33<00:07, 43.29it/s]Loading weights:  56%|#####5    | 408/729 [00:34<00:07, 41.00it/s]Loading weights:  57%|#####6    | 414/729 [00:34<00:06, 45.39it/s]Loading weights:  57%|#####7    | 419/729 [00:34<00:08, 36.60it/s]Loading weights:  58%|#####8    | 425/729 [00:34<00:09, 33.30it/s]Loading weights:  60%|######    | 439/729 [00:34<00:05, 48.34it/s]Loading weights:  61%|######1   | 445/729 [00:34<00:06, 46.60it/s]Loading weights:  62%|######1   | 451/729 [00:35<00:06, 45.88it/s]Loading weights:  63%|######3   | 460/729 [00:35<00:04, 55.38it/s]Loading weights:  64%|######3   | 466/729 [00:35<00:04, 53.64it/s]Loading weights:  65%|######4   | 473/729 [00:35<00:04, 56.38it/s]Loading weights:  66%|######5   | 479/729 [00:35<00:04, 50.24it/s]Loading weights:  67%|######6   | 487/729 [00:35<00:04, 51.23it/s]Loading weights:  68%|######7   | 493/729 [00:35<00:05, 45.82it/s]Loading weights:  69%|######8   | 501/729 [00:35<00:04, 49.05it/s]Loading weights:  70%|######9   | 507/729 [00:36<00:04, 50.81it/s]Loading weights:  70%|#######   | 513/729 [00:36<00:04, 51.65it/s]Loading weights:  71%|#######1  | 519/729 [00:36<00:04, 51.21it/s]Loading weights:  72%|#######2  | 525/729 [00:36<00:04, 45.29it/s]Loading weights:  73%|#######2  | 530/729 [00:36<00:04, 41.29it/s]Loading weights:  73%|#######3  | 535/729 [00:36<00:04, 40.87it/s]Loading weights:  75%|#######4  | 545/729 [00:36<00:03, 47.97it/s]Loading weights:  76%|#######5  | 553/729 [00:37<00:03, 50.46it/s]Loading weights:  77%|#######6  | 561/729 [00:37<00:03, 50.16it/s]Loading weights:  78%|#######7  | 567/729 [00:37<00:03, 49.62it/s]Loading weights:  79%|#######8  | 573/729 [00:37<00:03, 41.85it/s]Loading weights:  80%|#######9  | 581/729 [00:37<00:03, 41.65it/s]Loading weights:  81%|########  | 589/729 [00:37<00:03, 45.78it/s]Loading weights:  82%|########1 | 595/729 [00:38<00:02, 48.73it/s]Loading weights:  82%|########2 | 601/729 [00:38<00:03, 36.25it/s]Loading weights:  83%|########3 | 608/729 [00:38<00:03, 34.62it/s]Loading weights:  85%|########4 | 619/729 [00:38<00:02, 43.77it/s]Loading weights:  86%|########5 | 624/729 [00:38<00:02, 42.05it/s]Loading weights:  87%|########6 | 631/729 [00:38<00:02, 43.23it/s]Loading weights:  87%|########7 | 637/729 [00:39<00:02, 40.47it/s]Loading weights:  88%|########8 | 645/729 [00:39<00:01, 46.67it/s]Loading weights:  90%|########9 | 655/729 [00:39<00:01, 51.64it/s]Loading weights:  91%|######### | 661/729 [00:39<00:01, 47.18it/s]Loading weights:  92%|#########1| 669/729 [00:39<00:01, 50.37it/s]Loading weights:  93%|#########2| 675/729 [00:39<00:01, 44.93it/s]Loading weights:  93%|#########3| 680/729 [00:39<00:01, 45.54it/s]Loading weights:  94%|#########3| 685/729 [00:40<00:01, 39.14it/s]Loading weights:  95%|#########5| 693/729 [00:40<00:00, 44.24it/s]Loading weights:  96%|#########5| 698/729 [00:40<00:00, 40.48it/s]Loading weights:  97%|#########6| 704/729 [00:40<00:00, 44.73it/s]Loading weights:  97%|#########7| 709/729 [00:40<00:00, 40.20it/s]Loading weights:  98%|#########8| 717/729 [00:40<00:00, 45.63it/s]Loading weights:  99%|#########9| 722/729 [00:40<00:00, 44.50it/s]Loading weights: 100%|#########9| 727/729 [00:41<00:00, 39.49it/s]Loading weights: 100%|##########| 729/729 [00:41<00:00, 17.69it/s]
+[ndm/ceiling_sweep] sampled 32 cause rows (seed=0) spanning 19 distinct base entities of 25 available
+[ndm/ceiling_sweep] entity=flags attribute=language layers=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28] sites=['residual', 'attn_output', 'mlp_output', 'attn_output+mlp_output'] positions=['ring:2'] cause_rows=32 iso_rows=32
+
+==============================================================================
+=== positions='ring:2' -- ring:2 (24 image tokens)
+==============================================================================
+  unhooked baseline on cause rows: matches_source=0.0% matches_base=96.9%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+/usr/local/lib/python3.12/dist-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+                residual layer  0: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  1: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  2: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 90.6%
+                residual layer  3: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  4: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  5: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  6: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  7: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  8: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer  9: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer 10: cause_ceiling=  9.4% base_kept= 87.5% iso_floor= 93.8%
+                residual layer 11: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 12: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 13: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 14: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 15: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 16: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 17: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 18: cause_ceiling= 15.6% base_kept= 81.2% iso_floor= 93.8%
+                residual layer 19: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 20: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 21: cause_ceiling= 12.5% base_kept= 84.4% iso_floor= 93.8%
+                residual layer 22: cause_ceiling=  3.1% base_kept= 93.8% iso_floor= 96.9%
+                residual layer 23: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+                residual layer 24: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+                residual layer 25: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+                residual layer 26: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+                residual layer 27: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+                residual layer 28: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  skip attn_output layer 0: every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither an attention nor an MLP sublayer
+             attn_output layer  1: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  2: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  3: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  4: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  5: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  6: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  7: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  8: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer  9: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 10: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 11: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 12: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 13: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 14: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 15: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 16: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 17: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 18: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 19: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 20: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 21: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 22: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 23: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 24: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 25: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 26: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 27: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+             attn_output layer 28: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  skip mlp_output layer 0: every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither an attention nor an MLP sublayer
+              mlp_output layer  1: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  2: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  3: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  4: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  5: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  6: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  7: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  8: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer  9: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 10: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 11: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 12: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 13: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 14: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 15: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 16: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 17: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 18: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 19: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 20: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 21: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 22: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 23: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 24: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 25: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 26: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 27: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+              mlp_output layer 28: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  skip attn_output+mlp_output layer 0: every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither an attention nor an MLP sublayer
+  attn_output+mlp_output layer  1: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  2: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  3: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  4: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  5: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  6: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  7: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  8: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer  9: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 10: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 11: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 12: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 13: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 14: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 15: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 16: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 17: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 18: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 19: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 20: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 21: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 22: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 23: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 24: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 25: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 26: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 27: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+  attn_output+mlp_output layer 28: cause_ceiling=  0.0% base_kept= 96.9% iso_floor= 96.9%
+
+=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+                  site  layer   width  cause_ceiling  base_kept  iso_floor
+              residual      0    3584          9.4%     87.5%     93.8%
+              residual      1    3584          9.4%     87.5%     93.8%
+              residual      2    3584          9.4%     87.5%     90.6%
+              residual      3    3584          9.4%     87.5%     93.8%
+              residual      4    3584          9.4%     87.5%     93.8%
+              residual      5    3584          9.4%     87.5%     93.8%
+              residual      6    3584          9.4%     87.5%     93.8%
+              residual      7    3584          9.4%     87.5%     93.8%
+              residual      8    3584          9.4%     87.5%     93.8%
+              residual      9    3584          9.4%     87.5%     93.8%
+              residual     10    3584          9.4%     87.5%     93.8%
+              residual     11    3584         12.5%     84.4%     93.8%
+              residual     12    3584         12.5%     84.4%     93.8%
+              residual     13    3584         12.5%     84.4%     93.8%
+              residual     14    3584         12.5%     84.4%     93.8%
+              residual     15    3584         12.5%     84.4%     93.8%
+              residual     16    3584         12.5%     84.4%     93.8%
+              residual     17    3584         12.5%     84.4%     93.8%
+              residual     18    3584         15.6%     81.2%     93.8%
+              residual     19    3584         12.5%     84.4%     93.8%
+              residual     20    3584         12.5%     84.4%     93.8%
+              residual     21    3584         12.5%     84.4%     93.8%
+              residual     22    3584          3.1%     93.8%     96.9%
+              residual     23    3584          0.0%     96.9%     96.9%
+              residual     24    3584          0.0%     96.9%     96.9%
+              residual     25    3584          0.0%     96.9%     96.9%
+              residual     26    3584          0.0%     96.9%     96.9%
+              residual     27    3584          0.0%     96.9%     96.9%
+              residual     28    3584          0.0%     96.9%     96.9%
+           attn_output      1    3584          0.0%     96.9%     96.9%
+           attn_output      2    3584          0.0%     96.9%     96.9%
+           attn_output      3    3584          0.0%     96.9%     96.9%
+           attn_output      4    3584          0.0%     96.9%     96.9%
+           attn_output      5    3584          0.0%     96.9%     96.9%
+           attn_output      6    3584          0.0%     96.9%     96.9%
+           attn_output      7    3584          0.0%     96.9%     96.9%
+           attn_output      8    3584          0.0%     96.9%     96.9%
+           attn_output      9    3584          0.0%     96.9%     96.9%
+           attn_output     10    3584          0.0%     96.9%     96.9%
+           attn_output     11    3584          0.0%     96.9%     96.9%
+           attn_output     12    3584          0.0%     96.9%     96.9%
+           attn_output     13    3584          0.0%     96.9%     96.9%
+           attn_output     14    3584          0.0%     96.9%     96.9%
+           attn_output     15    3584          0.0%     96.9%     96.9%
+           attn_output     16    3584          0.0%     96.9%     96.9%
+           attn_output     17    3584          0.0%     96.9%     96.9%
+           attn_output     18    3584          0.0%     96.9%     96.9%
+           attn_output     19    3584          0.0%     96.9%     96.9%
+           attn_output     20    3584          0.0%     96.9%     96.9%
+           attn_output     21    3584          0.0%     96.9%     96.9%
+           attn_output     22    3584          0.0%     96.9%     96.9%
+           attn_output     23    3584          0.0%     96.9%     96.9%
+           attn_output     24    3584          0.0%     96.9%     96.9%
+           attn_output     25    3584          0.0%     96.9%     96.9%
+           attn_output     26    3584          0.0%     96.9%     96.9%
+           attn_output     27    3584          0.0%     96.9%     96.9%
+           attn_output     28    3584          0.0%     96.9%     96.9%
+            mlp_output      1    3584          0.0%     96.9%     96.9%
+            mlp_output      2    3584          0.0%     96.9%     96.9%
+            mlp_output      3    3584          0.0%     96.9%     96.9%
+            mlp_output      4    3584          0.0%     96.9%     96.9%
+            mlp_output      5    3584          0.0%     96.9%     96.9%
+            mlp_output      6    3584          0.0%     96.9%     96.9%
+            mlp_output      7    3584          0.0%     96.9%     96.9%
+            mlp_output      8    3584          0.0%     96.9%     96.9%
+            mlp_output      9    3584          0.0%     96.9%     96.9%
+            mlp_output     10    3584          0.0%     96.9%     96.9%
+            mlp_output     11    3584          0.0%     96.9%     96.9%
+            mlp_output     12    3584          0.0%     96.9%     96.9%
+            mlp_output     13    3584          0.0%     96.9%     96.9%
+            mlp_output     14    3584          0.0%     96.9%     96.9%
+            mlp_output     15    3584          0.0%     96.9%     96.9%
+            mlp_output     16    3584          0.0%     96.9%     96.9%
+            mlp_output     17    3584          0.0%     96.9%     96.9%
+            mlp_output     18    3584          0.0%     96.9%     96.9%
+            mlp_output     19    3584          0.0%     96.9%     96.9%
+            mlp_output     20    3584          0.0%     96.9%     96.9%
+            mlp_output     21    3584          0.0%     96.9%     96.9%
+            mlp_output     22    3584          0.0%     96.9%     96.9%
+            mlp_output     23    3584          0.0%     96.9%     96.9%
+            mlp_output     24    3584          0.0%     96.9%     96.9%
+            mlp_output     25    3584          0.0%     96.9%     96.9%
+            mlp_output     26    3584          0.0%     96.9%     96.9%
+            mlp_output     27    3584          0.0%     96.9%     96.9%
+            mlp_output     28    3584          0.0%     96.9%     96.9%
+attn_output+mlp_output      1    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      2    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      3    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      4    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      5    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      6    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      7    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      8    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output      9    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     10    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     11    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     12    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     13    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     14    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     15    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     16    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     17    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     18    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     19    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     20    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     21    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     22    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     23    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     24    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     25    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     26    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     27    7168          0.0%     96.9%     96.9%
+attn_output+mlp_output     28    7168          0.0%     96.9%     96.9%
+  (not probed: attn_head_output -- IDENTICAL to attn_output under a full swap, so the attn_output row above IS attn_head_output's ceiling at every layer)
+  (not probed: mlp_hidden -- IDENTICAL to mlp_output under a full swap, so the mlp_output row above IS mlp_hidden's ceiling at every layer)
+
+Most headroom: residual layer 18 (cause_ceiling=15.6%) -- train there.
+wrote /workspace/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_ring_2_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28.json
