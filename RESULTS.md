@@ -19,7 +19,11 @@ way and what the actual numbers came out to.
 - The root filesystem here is a small 20GB overlay (not the 407TB
   `/workspace` mount) — redirected `HF_HOME` to `/workspace/fyp/.hf_cache`
   before downloading model weights, after a first attempt filled the root
-  disk and crashed mid-download.
+  disk and crashed mid-download. (2026-09-11: this run had left behind a
+  second, incomplete cache at the container's preset `HF_HOME`, plus a third
+  stray one here — all three got consolidated into a single sibling
+  `hf_home/` next to `VADE/`/`VADE-evals/`, matching the `VADE_ROOT`
+  convention; see README's step 4. `.hf_cache` no longer exists.)
 
 ### Step 3 — Kaggle-pool SAE checkpoints via rclone
 - `rclone authorize "drive"` was run by the user on a browser-capable

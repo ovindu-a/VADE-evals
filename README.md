@@ -902,6 +902,20 @@ command below is meant to be run as-is, in order, from a clean checkout.
 - `rclone` installed (`wget -qO- cli.runpod.net | sudo bash` works, or your
   distro's package manager) if pulling the checkpoints from Google Drive.
 - Python 3.10+.
+- **Point `HF_HOME` at a sibling directory before downloading anything.**
+  Qwen2.5-VL-7B-Instruct is ~16GB, and many pod images put the default
+  `~/.cache/huggingface` on a small root-disk overlay (not the large data
+  mount) -- a first-run download there fills the root disk and crashes
+  mid-transfer. Use the same sibling convention as `VADE_ROOT`:
+  ```
+  export HF_HOME=$(realpath ../hf_home)
+  ```
+  run once per shell (add it to your shell rc to make it permanent), before
+  step 4 below or any script that loads the model. Don't rely on a pod's
+  preset `HF_HOME` even if `env | grep HF_HOME` already shows one -- verify
+  it resolves to spacious storage, since a stale or partial cache at a
+  *different* path than the one your shell/scripts actually use is how you
+  end up with several redundant multi-GB copies of the same model.
 
 ### 1. Clone both repos as siblings
 
@@ -967,7 +981,10 @@ report 59 objects / ~11.1 GiB, matching `find methods/dictionaries_kaggle_pool -
 
 ### 4. Pre-fetch the model weights (optional, but avoids a silent 16GB first-run download)
 
+Make sure `HF_HOME` is set per step 0 first, so this lands in one place:
+
 ```
+echo "HF_HOME=$HF_HOME"   # should print the sibling ../hf_home path, not a default
 python -c "from huggingface_hub import snapshot_download; \
     snapshot_download('Qwen/Qwen2.5-VL-7B-Instruct')"
 ```
