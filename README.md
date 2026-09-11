@@ -32,12 +32,21 @@ VADE-evals/
                           TWO FILES HERE ARE NOT VERBATIM COPIES, both added for ndm/ and both new
                           FILES rather than edits, so the copied ones stay byte-identical to VADE's
                           and keep taking upstream fixes cleanly:
-                            common/sites.py             the InterventionSite abstraction -- which
+                            common/sites.py             the InterventionSite abstraction -- WHICH
                                                         tensor inside a decoder block an intervention
-                                                        reads/patches (residual / mlp_output /
-                                                        mlp_hidden). The residual site DELEGATES to
+                                                        reads/patches (residual / attn_output /
+                                                        attn_head_output / mlp_output / mlp_hidden).
+                                                        The residual site DELEGATES to
                                                         common/hooks.py's own functions, so DBM/DAS
                                                         behavior is unchanged by its existence.
+                            common/position_sets.py     WHICH token columns a site is read/patched
+                                                        at, beyond the four entities.py knows --
+                                                        image-grid bands (ring:/side:/seq:/~),
+                                                        text windows (tok:/pre_image/vision_end),
+                                                        semantic tokens (phrase:), and A+B unions.
+                                                        A wrapper that re-selects columns from a
+                                                        batch build_batch already produced, so
+                                                        entities.py is never edited.
                             common/site_source_cache.py the MLP sites' source-activation cache (one
                                                         file per site/positions/layer). MLP internals
                                                         are absent from output_hidden_states, so
@@ -390,46 +399,207 @@ Two consequences:
 So NDM is "SAE-style encode -> mask -> decode patching, where the dictionary
 is the model's own MLP."
 
-### The three sites, and why `mlp_output` exists
+### The two axes: `--site` and `--positions`
 
-`--site` selects which tensor of decoder block `--layer`-1 is masked. All
-three describe the **same block** at the same `--layer` (layer L is the
-residual stream after block L-1, so an MLP site at L is block L-1's MLP --
-the one whose output lands in residual layer L), which is what makes them
-comparable:
+Every intervention run picks one of each. They are independent:
 
-| site | width | privileged basis? | what is swapped |
-|---|---|---|---|
-| `residual` (DBM's site) | 3584 | no | everything accumulated through the block |
-| `attn_output` | 3584 | no | only attention's contribution to the residual stream |
-| `mlp_output` | 3584 | no | only that MLP's contribution to the residual stream |
-| `attn_head_output` | 3584 | **yes, per head** | `o_proj`'s input: 28 heads x 128, so masks can select whole heads |
-| `mlp_hidden` (NDM's own site, default) | 18944 | **yes** | that MLP's post-SwiGLU neurons |
+- **`--site`** — *which tensor* inside a decoder block is read and patched.
+- **`--positions`** — *which token columns* that tensor is read and patched at.
 
-Only `mlp_hidden`/`mlp_output` are NDM *training* sites (`NDM_SITES`); the
-other three exist for the diagnostics, which probe the whole site space.
-`methods/dbm/train.py`'s engine accepts any of them, so if a ceiling probe
-shows headroom at an attention site, only `NDM_SITES` needs widening (or a
-new thin CLI) -- no engine work.
+A dead result means one of the two is wrong, and only varying them separately
+tells you which.
 
-The extra sites are **control arms**, and each isolates one variable while
-holding the others fixed:
+#### Sites (`--site`, `--sites`)
 
-- `residual` vs `attn_output`/`mlp_output` -- **locality**, at matched width.
-- `attn_output` vs `mlp_output` -- **which sublayer**. Without this, a dead
-  MLP site can't be distinguished from "any single sublayer's additive
-  contribution is too small."
-- `attn_output` vs `attn_head_output`, and `mlp_output` vs `mlp_hidden` --
-  the **privileged basis**, at matched locality. Both narrow sites are linear
-  images (`o_proj`, `down_proj`) of the wide ones, and privilege does not
-  survive a linear map.
+All five address the **same block**: `--layer L` means decoder block `L-1`, so
+the same `--layer` is comparable across every site.
 
-`attn_head_output` is the most promising of the additions: its units are
-both privileged (each head has its own softmax and OV circuit) and known to
-be functionally specialized in VLMs, and this repo's own
-`methods/attention_maps.py` already ranks image->text head conduits
-correlationally -- so a ceiling probe there causally tests heads that probe
-has already flagged.
+```
+  resid[L-1] ──────────────────────────────────────────────────┐
+      │                                                        │
+      ▼                                                        │
+  self_attn ──> [attn_head_output] ──o_proj──> [attn_output]    │
+                 o_proj's INPUT                     │          │
+                 28 heads x 128 = 3584              ▼          │
+                                                   (+) <───────┘   residual add
+                                                    │
+                                                    ▼
+                                                    h ─────────┐
+      ┌─────────────────────────────────────────────┘          │
+      ▼                                                        │
+     mlp ──────> [mlp_hidden] ────down_proj────> [mlp_output]   │
+                 down_proj's INPUT                  │          │
+                 intermediate_size = 18944          ▼          │
+                                                   (+) <───────┘   residual add
+                                                    │
+                                                    ▼
+                                        [residual]  =  resid[L]
+```
+
+The two sublayers run in **sequence**, not in parallel: `h = x + attn(x)`,
+then `out = h + mlp(h)`. That is why `residual` at layer L is exactly the
+embedding plus every `attn_output` and `mlp_output` before it -- an identity
+worth remembering, because it means a nonzero `residual` ceiling has to be
+accounted for by *something*, and if every sublayer reads zero then the
+content is in the embedding.
+
+| `--site` | hooked module | pre/post | width | what it swaps |
+|---|---|---|---|---|
+| `residual` | decoder block `L-1` | post | 3584 | everything accumulated through the block. `--layer 0` is the embedding output |
+| `attn_output` | `self_attn` | post | 3584 | attention's contribution only |
+| `attn_head_output` | `o_proj` | **pre** | 3584 | per-head `z`: 28 heads x 128, so masks can select whole heads |
+| `mlp_output` | `mlp` | post | 3584 | that MLP's contribution only |
+| `mlp_hidden` | `down_proj` | **pre** | **18944** | post-SwiGLU neurons -- NDM's own site |
+
+Three things that bite:
+
+- `--layer 0` is `residual`-only. There is no sublayer before the first block.
+- `self_attn` returns a **tuple**, `mlp` returns a bare tensor. The hooks in
+  `common/sites.py` patch element 0 and pass the rest through, so both work,
+  but a hand-rolled hook on `self_attn` that assumes a tensor will break.
+- **`ceiling_sweep.py` cannot distinguish a pre/post pair.**
+  `down_proj(h_source)` is exactly `mlp_out_source`, so under a FULL swap
+  `mlp_hidden` == `mlp_output` and `attn_head_output` == `attn_output` --
+  measured, identical in every cell of three full sweeps. They share one
+  ceiling. A privileged basis only buys anything for a SPARSE mask, so that
+  question can only be settled by training one.
+
+Only `mlp_hidden` and `mlp_output` are NDM **training** sites (`NDM_SITES`,
+default `mlp_hidden`); the other three exist for the diagnostics.
+`methods/dbm/train.py`'s engine accepts any of them, so enabling training at
+another site is a config change, not engine work.
+
+#### Position sets (`--positions`, `--positions_list`)
+
+VADE's own `entities.py` knows four; `methods/common/position_sets.py` adds
+the rest as a **wrapper** (it post-processes a batch `build_batch` already
+produced, so `entities.py` stays a byte-identical copy of VADE's).
+
+**Built in to VADE** — counts shown for `flags` (12x12 = 144 image tokens):
+
+| spec | n | what |
+|---|---|---|
+| `flag_only` | 8 | the flag's own tokens (per `object_location.json`) |
+| `flag_ring1` | 24 | `flag_only` dilated by one cell |
+| `full_image` | 144 | every image token |
+| `last_token` | 1 | the final prompt token, RAVEL's own site |
+
+**Image grid** — all derived from the object's token bbox, so they work for
+any entity (`logo_only` for brands, etc.), not just flags:
+
+| spec | n (flags) | what |
+|---|---|---|
+| `~<name>` | 120 for `~flag_ring1` | complement within the image span |
+| `ring:K[@base]` | 0:8, 1:16, 2:24, 3:32, 4:40, 5:24 | K-th Chebyshev band around the bbox. `ring:0` == `flag_only`; `ring:0`+`ring:1` == `flag_ring1`; rings 0-5 sum to 144 |
+| `side:left` / `side:right` | 8 / 8 | flanking the object on its **own rows** |
+| `side:beside` | 16 | `left` + `right` |
+| `side:above` / `side:below` | 60 / 60 | full-width bands |
+| `seq:before` / `seq:after` | 64 / 64 | background split by **raster = sequence = causal** order |
+| `seq:between` | 8 | same rows as the object, outside its columns |
+
+**Text**:
+
+| spec | n | what |
+|---|---|---|
+| `tok:-K[:N]` | N (default 1) | N tokens ending K back from the prompt end. `tok:-1` == `last_token` |
+| `pre_image[:N]` | N | tokens immediately **before** the image span |
+| `vision_end[:N]` | N | tokens immediately **after** the image span |
+| `phrase:attribute` | 1 | the token naming the **queried** attribute in the question |
+| `phrase:<lit>[,<alt>...]` | 1 | the token ending an arbitrary literal, alternatives tried in order |
+
+**Composition**:
+
+- `A+B+C` — union of any specs, including mixing image and text. Columns are
+  concatenated, deduped and sorted. `flag_ring1+~flag_ring1` reconstructs
+  `full_image` exactly, which is a free self-check of the machinery.
+- `--positions_list a b c` — probe several specs in **one model load**. The
+  model load (~2 min) dominates a ceiling run (~10s of forwards per spec), so
+  a dozen separate invocations spend most of their wall clock loading. Each
+  spec still gets its own JSON in its own directory, and the row sample
+  (`--seed`) is shared, so specs are always compared on identical rows.
+
+#### `seq:before` and `pre_image` are guaranteed NULLs -- run them
+
+Every image in a VADE entity is **one fixed canvas render** with only the
+object's pixels varying (`object_location.json` states this explicitly). So:
+
+- `pre_image` tokens precede the image entirely.
+- `seq:before` tokens are background tokens that precede the object in raster
+  order, and under causal attention can only attend to tokens at or before
+  themselves -- identical pixels, identical context.
+
+Both therefore have **bit-identical activations in base and source at every
+layer**, so patching them is provably a no-op and they MUST score 0%. Nothing
+else in the design is a guaranteed null, which makes these two the controls
+that license reading every other 0% as a real null rather than a measurement
+failure. `seq:after` is the informative twin: those tokens differ from base to
+source *only* via attention to the object, so their ceiling measures how far
+the object's information has leaked into the background by a given layer.
+
+#### `phrase:` mechanics
+
+`phrase:` reuses `methods/probe_common.py`'s `ATTRIBUTE_KEYWORDS` and the
+adapter's `find_last_phrase_token_col` -- the same machinery the read-only
+probes use, with its already-hardened synonym lists (validated 24/24 across
+every flags template, including `capital_prefill_v6`, which says "seat of
+government" and contains no "capital" at all).
+
+- It matches the **question only, never the prefill**. Prefill words are
+  reachable with `tok:-K` instead: flags' prefills are 4-5 tokens, so `tok:-2`
+  lands on "language" in "One official language is".
+- Literal alternatives matter because wording varies across templates:
+  `phrase:image` matches only 4 of 6 language templates, `phrase:image,flag`
+  matches 6/6.
+- A phrase that matches no template asserts loudly with the offending
+  question, rather than silently selecting the wrong token.
+
+#### Gotchas that apply to every position set
+
+1. **Fixed count per row.** `batch["positions"]` is a rectangular `[B, n_pos]`
+   tensor, so a set must yield the same *number* of positions for every row.
+   Fixed windows and grid subsets are fine; "all question tokens" is not,
+   because the six templates have different question lengths.
+2. **Columns may still vary per row.** Rows built from a shorter template get
+   more left padding, so the image span sits at a different absolute column.
+   `position_sets.py` resolves image- and phrase-anchored specs per row.
+   Only `tok:` is row-invariant (left-padding puts every row's last real
+   token in the same column).
+3. **Template variation blurs deep `tok:` offsets.** `tok:-1..-5` is the
+   prefill in every template and is comparable as-is; beyond that the offsets
+   land on different words. Use `--template_id` to pin one template.
+4. **Text sets disable the source cache.** They inherit `is_last_token=True`,
+   which is correct: their columns depend on the prompt, so the per-entity
+   cache (keyed by image alone) is invalid for them. `ceiling_sweep.py` never
+   caches, so this only matters for training runs.
+
+#### Worked examples
+
+```bash
+# Where does the attribute live in the image, by distance from the flag?
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers $(seq 0 28) --sites residual --n_rows 32 --seed 0 \
+    --positions_list ring:1 ring:2 ring:3 ring:4 ring:5
+
+# Does it leak into the background -- and are the controls really null?
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers $(seq 0 28) --sites residual --n_rows 32 --seed 0 \
+    --positions_list seq:before pre_image seq:after ~flag_ring1
+
+# Trace the handoff into the text stream, per token
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers $(seq 18 28) --sites residual --n_rows 32 --seed 0 \
+    --template_id language_prefill_v1 \
+    --positions_list phrase:attribute vision_end tok:-4 tok:-3 tok:-2 tok:-1
+
+# Union: is the flag plus its background more than the flag alone?
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers $(seq 0 28) --sites residual --n_rows 32 --seed 0 \
+    --positions_list flag_ring1 ~flag_ring1 flag_ring1+~flag_ring1
+
+# Train at a position set once a ceiling shows headroom there
+python methods/dbm/run_layer.py --entity flags --attribute language \
+    --layer 23 --positions last_token --temperature_start 1e-2 --temperature_end 1e-2
+```
 
 ### Usage
 

@@ -11,8 +11,8 @@ upstream fixes cleanly. The residual path here is a straight delegation to
 hooks.py's own functions, not a reimplementation -- so `residual` is
 guaranteed byte-identical to what DAS/DBM did before this module existed.
 
-The three sites, all at the SAME decoder block, differing in what part of
-its computation gets swapped:
+The five SINGLE sites, all at the SAME decoder block, differing in what part
+of its computation gets swapped (plus one JOINT site, described after them):
 
     residual     block L-1's OUTPUT              width = hidden_size (3584)
                  -- everything accumulated through the block: embeddings +
@@ -66,6 +66,26 @@ its computation gets swapped:
                  sparse-probing work gives for probing MLP activations
                  specifically). See methods/ndm/ for the method built on it.
 
+JOINT SITES patch several of the above IN THE SAME forward pass, at the same
+block. The one that exists, `attn_output+mlp_output`, patches BOTH of block
+L-1's sublayer contributions, which yields
+
+    resid_base@L-1 + attn_src@L + mlp_src@L
+
+i.e. exactly what a `residual`@L swap yields except that the ACCUMULATED
+prefix stays the base's (`resid_base@L-1` rather than `resid_src@L-1`). So
+`residual` minus `attn_output+mlp_output` isolates the prefix, and that
+difference is what tells apart "this block computes the answer" from "the
+answer was already accumulated and this block only refines it". Needed
+because the two single sublayer sites are NOT additive: a full swap of one
+sublayer INSERTS source evidence while leaving every bit of base evidence
+upstream intact, whereas a residual swap DELETES the base prefix as well --
+so `residual` can read 68.8% at a layer where both of its sublayers read
+0.0% each, with nothing wrong anywhere. Joint sites are DIAGNOSTIC ONLY
+(ceiling_sweep): a trained mask here would need one mask per part with its
+own width and its own L1 term, which is a different method, so train.py /
+eval.py reject them via ndm/config.py's NDM_SITES whitelist.
+
 LAYER INDEXING follows hooks.py's existing convention exactly: layer_idx=0
 is the embedding output and layer_idx=i is the residual stream AFTER decoder
 block i-1. An MLP site at layer_idx=i therefore means block i-1's MLP -- the
@@ -80,7 +100,35 @@ from .hooks import cache_layer_hidden, extra_to_device, forward_patched, generat
 
 SITES = ("residual", "attn_output", "attn_head_output", "mlp_output", "mlp_hidden")
 
+# name -> the SINGLE sites it patches simultaneously, at the same block. Kept
+# OUT of SITES on purpose: SITES is the set a mask can be TRAINED on, and
+# verify_sites.py / ndm/config.py both iterate it.
+JOINT_SITES = {
+    "attn_output+mlp_output": ("attn_output", "mlp_output"),
+}
+
+# Everything ceiling_sweep.py (the diagnostic) accepts.
+ALL_SITES = SITES + tuple(JOINT_SITES)
+
 DEFAULT_SITE = "residual"
+
+
+def _source_forward(model, input_ids, attention_mask, extra):
+    """The no-grad forward pass every capture hook rides on. logits_to_keep=1
+    because a capture only ever wants activations, never the full [B, T, V]
+    logit tensor."""
+    extra_dev = extra_to_device(extra, model.device, model.dtype)
+    with torch.no_grad():
+        model(input_ids=input_ids.to(model.device), attention_mask=attention_mask.to(model.device),
+              **extra_dev, logits_to_keep=1)
+
+
+def _assert_fired_once(name, captured):
+    assert len(captured) == 1, (
+        f"expected the {name!r} capture hook to fire exactly once per forward pass, got "
+        f"{len(captured)} -- the hooked module was called more than once (gradient checkpointing? "
+        f"a model that reuses the same MLP module across blocks?), which makes 'the' source "
+        f"activation ambiguous")
 
 
 class InterventionSite:
@@ -95,6 +143,11 @@ class InterventionSite:
 
     def __repr__(self):
         return f"InterventionSite({self.name!r})"
+
+    # Not a property, so `getattr(site, "is_joint", False)` and `site.is_joint`
+    # read the same on both classes -- callers branch on this rather than on
+    # isinstance, and JointSite deliberately duck-types InterventionSite.
+    is_joint = False
 
     @property
     def is_residual(self):
@@ -210,33 +263,34 @@ class InterventionSite:
         if self.is_residual:
             return cache_layer_hidden(model, input_ids, attention_mask, extra, positions, layer_idx)
 
+        captured = []
+        handle = self._register_capture(adapter, model, layer_idx, positions, captured)
+        try:
+            _source_forward(model, input_ids, attention_mask, extra)
+        finally:
+            handle.remove()
+        _assert_fired_once(self.name, captured)
+        return captured[0]
+
+    def _register_capture(self, adapter, model, layer_idx, positions, captured):
+        """Registers a hook that appends this site's [B, n_pos, width] slice
+        to `captured`, and returns the handle (caller must .remove() it).
+        Split out of capture() so JointSite can register EVERY part's capture
+        hook before a SINGLE source forward pass instead of paying one
+        forward per part. Non-residual sites only -- `residual` reads
+        output_hidden_states and needs no hook at all."""
+        assert not self.is_residual, "residual capture goes through cache_layer_hidden, not a hook"
         module, kind = self._module_and_hook_kind(adapter, model, layer_idx)
         B = positions.shape[0]
-        captured = []
 
         def grab(t):
             captured.append(torch.stack([t[i, positions[i]] for i in range(B)]).detach())
 
         if kind == "post":
             # Tuple-aware for the same reason as register()'s post_hook: self_attn returns a tuple.
-            handle = module.register_forward_hook(
+            return module.register_forward_hook(
                 lambda mod, inputs, output: grab(output[0] if isinstance(output, tuple) else output))
-        else:
-            handle = module.register_forward_pre_hook(lambda mod, args: grab(args[0]))
-        try:
-            extra_dev = extra_to_device(extra, model.device, model.dtype)
-            with torch.no_grad():
-                model(input_ids=input_ids.to(model.device), attention_mask=attention_mask.to(model.device),
-                      **extra_dev, logits_to_keep=1)
-        finally:
-            handle.remove()
-
-        assert len(captured) == 1, (
-            f"expected the {self.name!r} capture hook to fire exactly once per forward pass, got "
-            f"{len(captured)} -- the hooked module was called more than once (gradient checkpointing? "
-            f"a model that reuses the same MLP module across blocks?), which makes 'the' source "
-            f"activation ambiguous")
-        return captured[0]
+        return module.register_forward_pre_hook(lambda mod, args: grab(args[0]))
 
     def lookup_source(self, cache, batch, layer_idx, positions_name, device, dtype):
         """The cached counterpart of capture(): reads this site's source
@@ -263,6 +317,120 @@ class InterventionSite:
             return lookup_source_hidden(cache, batch, layer_idx, device, dtype)
         from .site_source_cache import lookup_site_source
         return lookup_site_source(cache, batch, self, layer_idx, positions_name, device, dtype)
+
+
+class JointSite:
+    """Several InterventionSites of the SAME block, patched in ONE forward
+    pass. Duck-types InterventionSite for the read-only/diagnostic surface
+    (`name`, `is_residual`, `is_joint`, `width`, `capture`, `register`,
+    `generate_patched`) and deliberately does NOT implement the training
+    surface -- see this module's docstring on why a joint site is not a
+    trainable site.
+
+    Where the signatures differ from InterventionSite, they differ PER PART:
+    `capture` returns a tuple of activations (one per part, in `self.parts`
+    order) and `register`/`generate_patched` take a SEQUENCE of patch_fns in
+    that same order. Each part has its own width, so one shared patch_fn
+    could not be correct anyway (attn_output is 3584 wide, mlp_hidden 18944).
+
+    Hook ordering inside the block is whatever the forward pass does -- for
+    attn_output+mlp_output the attention post-hook necessarily fires before
+    the MLP post-hook, so the MLP reads the ALREADY-PATCHED residual. That is
+    the intended semantics and it does not matter for a FULL swap (the MLP's
+    output is overwritten wholesale regardless of what it computed), but it
+    would matter for a partial one."""
+
+    is_residual = False
+    is_joint = True
+
+    def __init__(self, name):
+        assert name in JOINT_SITES, f"unknown joint site {name!r} -- expected one of {tuple(JOINT_SITES)}"
+        self.name = name
+        self.parts = tuple(InterventionSite(n) for n in JOINT_SITES[name])
+        assert not any(p.is_residual for p in self.parts), (
+            f"joint site {name!r} includes `residual`, which is the whole block's OUTPUT -- patching it "
+            f"alongside one of its own sublayer inputs would make the result depend on hook order and "
+            f"is not a meaningful decomposition")
+
+    def __repr__(self):
+        return f"JointSite({self.name!r})"
+
+    def widths(self, adapter, model):
+        """Per-part widths, in self.parts order."""
+        return [p.width(adapter, model) for p in self.parts]
+
+    def width(self, adapter, model) -> int:
+        """The TOTAL number of dimensions a full swap here replaces (the sum
+        over parts) -- reported in ceiling_sweep's `width` column so the
+        column keeps meaning "how much was swapped". It is NOT a mask
+        embed_dim; a joint site has no single mask."""
+        return sum(self.widths(adapter, model))
+
+    def register(self, adapter, model, layers, layer_idx, patch_fns):
+        """patch_fns: one per part, in self.parts order. Returns the handles
+        from every part -- caller must .remove() them all."""
+        patch_fns = list(patch_fns)
+        assert len(patch_fns) == len(self.parts), (
+            f"joint site {self.name!r} has {len(self.parts)} parts but got {len(patch_fns)} patch_fns")
+        handles = []
+        for part, fn in zip(self.parts, patch_fns):
+            handles.extend(part.register(adapter, model, layers, layer_idx, fn))
+        return handles
+
+    def capture(self, adapter, model, layer_idx, input_ids, attention_mask, extra, positions):
+        """-> tuple of [B, n_pos, width_i], one per part, from a SINGLE
+        source forward pass (every part's capture hook is registered before
+        it, rather than one forward per part)."""
+        sinks = [[] for _ in self.parts]
+        handles = [p._register_capture(adapter, model, layer_idx, positions, sink)
+                   for p, sink in zip(self.parts, sinks)]
+        try:
+            _source_forward(model, input_ids, attention_mask, extra)
+        finally:
+            for h in handles:
+                h.remove()
+        for part, sink in zip(self.parts, sinks):
+            _assert_fired_once(part.name, sink)
+        return tuple(sink[0] for sink in sinks)
+
+    def generate_patched(self, adapter, model, layers, layer_idx, patch_fns, input_ids, attention_mask, extra,
+                         pad_token_id, max_new_tokens):
+        """Free-running greedy generation with EVERY part patched. Returns
+        [B, max_new_tokens] generated ids (prompt stripped), on CPU. Same
+        prefill-only semantics as InterventionSite.generate_patched -- see
+        its docstring."""
+        handles = self.register(adapter, model, layers, layer_idx, patch_fns)
+        try:
+            extra_dev = extra_to_device(extra, model.device, model.dtype)
+            with torch.no_grad():
+                gen = model.generate(
+                    input_ids=input_ids.to(model.device), attention_mask=attention_mask.to(model.device),
+                    **extra_dev, max_new_tokens=max_new_tokens, do_sample=False, pad_token_id=pad_token_id,
+                )
+        finally:
+            for h in handles:
+                h.remove()
+        return gen[:, input_ids.shape[1]:].cpu()
+
+    def forward_patched(self, *a, **k):
+        raise NotImplementedError(
+            f"joint site {self.name!r} is diagnostic-only: forward_patched is the TRAINING path, and "
+            f"training here would need one mask (and one L1 term) per part. Train on a single site from "
+            f"SITES instead.")
+
+    def lookup_source(self, *a, **k):
+        raise NotImplementedError(
+            f"joint site {self.name!r} has no source cache -- ceiling_sweep calls capture() directly, "
+            f"which is a single extra forward pass per batch.")
+
+
+def resolve_site(name):
+    """name -> InterventionSite or JointSite. The one entry point that
+    accepts anything in ALL_SITES; callers that must have a trainable site
+    should keep using InterventionSite(name) so a joint name fails loudly."""
+    if name in JOINT_SITES:
+        return JointSite(name)
+    return InterventionSite(name)
 
 
 RESIDUAL_SITE = InterventionSite("residual")

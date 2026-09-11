@@ -195,11 +195,33 @@ head) and `mlp_hidden` (18944, NDM's own site, default). Only the two MLP
 sites are NDM *training* sites (`NDM_SITES`); the rest exist for the
 diagnostics, though `dbm/train.py`'s engine accepts any of them. The extras
 are control arms: `residual` vs `attn_output`/`mlp_output` isolates locality
-at matched width, `attn_output` vs `mlp_output` isolates which sublayer, and
-`*_output` vs `attn_head_output`/`mlp_hidden` isolates the privileged basis
-at matched locality. Without them a dead site can't be attributed to any one
-cause. Note `self_attn` returns a TUPLE, unlike `mlp` -- sites.py's hooks
+at matched width, and `attn_output` vs `mlp_output` isolates which sublayer.
+**A pre-projection site and its post-projection site are NOT separable by
+`ceiling_sweep.py`** -- `down_proj(h_source)` is exactly `mlp_out_source`, so
+a FULL swap of either produces the identical residual update; measured, and
+`mlp_output == mlp_hidden` / `attn_output == attn_head_output` in every cell
+of all three position sweeps. The privileged basis only buys anything for a
+SPARSE mask, so that question can only be settled by a trained mask. Note `self_attn` returns a TUPLE, unlike `mlp` -- sites.py's hooks
 patch element 0 and pass the rest through.
+
+**Position sets beyond VADE's own** (`methods/common/position_sets.py`, a
+WRAPPER around `build_batch` -- `entities.py` stays a verbatim copy): `~<name>`
+(complement within the image span), `ring:K[@base]` (K-th Chebyshev band around
+the object bbox; `ring:0`==`flag_only`, `ring:0|ring:1`==`flag_ring1`),
+`side:left|right|beside|above|below`, `seq:before|after|between` (raster =
+sequence = causal order), `tok:-K[:N]` (text window K back from the prompt end;
+`tok:-1`==`last_token`), `pre_image[:N]`, `vision_end[:N]`, and `A+B` unions
+(may mix image and text specs). `ceiling_sweep.py --positions_list` runs many
+specs in one model load, sharing the row sample.
+
+**`seq:before` is the only guaranteed NULL in the whole design, and is worth
+running before trusting any other zero.** Every image in an entity is one fixed
+canvas render with only the object's pixels varying, so background tokens that
+precede the object in raster order have bit-identical activations in base and
+source under causal attention -- patching them is provably a no-op and MUST
+score 0%. `seq:after` is its informative twin: those tokens can differ only via
+attention to the object, so their ceiling measures how far the object's
+information has leaked into the background by a given layer.
 
 **Gotchas.** (1) `--l1_coef`'s default `0.001` is RAVEL's optimum for a
 ~4096-wide residual stream and is NOT calibrated for 18944 dims -- since
