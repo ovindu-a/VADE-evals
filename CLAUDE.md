@@ -320,6 +320,39 @@ probes disagreeing is informative, not a bug in either.
 `logit_lens` and `attention_maps` (its capture hooks are live during that one
 pass; `--skip_dla` opts out, `--dla_direction`/`--dla_tolerance` configure it).
 
+## methods/head_trace.py -- tracing the image->text handoff
+
+`ceiling_sweep`'s two position sets BRACKET the handoff without locating it:
+on flags/language an image-position residual swap reads 100% through layer 22
+then 0% from 23, while `last_token` reads 0% through 21 then 68.8%/100% at
+23/24. The crossover IS the read (before it, editing the image propagates;
+after it, editing the image is too late and editing the destination is
+decisive), so the read sits in blocks ~21-23 -- from the table alone.
+
+Attention is the ONLY cross-position operation in a transformer (MLPs are
+position-wise; the residual stream never mixes tokens), so the whole transfer
+is some set of (block, head) pairs in that window. head_trace finds them in
+two phases, both patching the IMAGE side -- a per-head swap AT THE LAST TOKEN
+is a subset of `attn_output` there, which measured ~0, so it is dead on
+arrival. PHASE 1 (2 forwards/batch, no generation): capture per-head
+`attn_head_output` at the last token clean vs with the image residual patched
+to source at `--patch_layer`; rank by `delta_resid` = ||dz_h W_O_h^T|| (what
+actually lands in the residual -- `o_proj` weights heads very differently, so
+`delta_z` can disagree), with `delta_dla` (dla.py's exact per-head logit term,
+differenced, each run with its own frozen scale) as the answer-axis view.
+PHASE 2: keep the image patched and RESTORE the top-k heads at the last token
+to base; cumulative k because single-head knockout cannot see a conjunction,
+same reason `blocks:N` exists. `--n_random` is a built-in null control -- if
+random-k hurts as much as top-k the ranking is uninformative and the curve
+means nothing.
+
+`--patch_layer` MUST be below the handoff (where ceiling_sweep's image column
+is still large); the script warns rather than reporting a flat curve. Needs
+two batches per chunk (image positions to patch, `last_token` to read) and
+ASSERTS they agree on `base_input_ids`/`attention_mask` -- a silent mismatch
+would patch one prompt's image and read another's last token with every
+downstream number still plausible.
+
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
 The Phase B feature-selection proxy (a classifier reading the target attribute off
@@ -360,6 +393,7 @@ python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only
 python methods/mech_probe.py --entity flags --attribute language --dry_run
 python methods/mech_probe.py --entity flags --attribute language
 python methods/dla.py --entity flags --attribute language --direction base_minus_source
+python methods/head_trace.py --entity flags --attribute language --patch_layer 21 --positions flag_ring1
 
 # NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
 python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # 1. is the hook right

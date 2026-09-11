@@ -91,6 +91,10 @@ VADE-evals/
                           same section below.
     mech_probe.py          runs all three probes above off ONE forward pass per row instead of
                           three -- same section below.
+    head_trace.py          TRACES the image->text handoff: which attention heads write the
+                          object's information into the text stream (differential head trace
+                          under an image patch), and which of them are load-bearing (cumulative
+                          knockout / path patching) -- same section below.
     logit_lens/, attention_maps/, dla/   small JSON/JSONL reports from the probes above (not gitignored
                           -- human-inspectable, like selections/); attention_maps/raw/ (optional,
                           gitignored via *.pt) holds --dump_raw_rows' quantized attention tensors.
@@ -1046,6 +1050,69 @@ memory cost back down if a full sweep isn't needed; logit lens always also
 scores the final "real output" pseudo-layer on top of whatever `--layers`
 you pass, since it's free. Same `--dump_raw_rows`/`--top_k`/`--threshold`/
 etc. flags as the two standalone scripts (see `--help`).
+
+### 3b. `head_trace.py` -- which heads carry image -> text
+
+```bash
+python methods/head_trace.py --entity flags --attribute language \
+    --patch_layer 21 --positions flag_ring1
+```
+
+`ceiling_sweep.py`'s two position sets *bracket* the image->text handoff
+without locating it. On flags/language a full residual swap reads:
+
+| `--layer` | ≤21 | 22 | 23 | 24+ |
+|---|---|---|---|---|
+| image positions | **100%** | 100% | 0% | 0% |
+| `last_token` | 0% | 9.4% | 68.8% | **100%** |
+
+Patching the image stops mattering at exactly the layer patching the last
+token starts mattering. That crossover **is** the read: before it, editing the
+image still propagates; after it, editing the image is too late and editing
+the destination is decisive. So the read is in blocks ~21-23 -- which follows
+from the table alone, with no new experiment.
+
+From there the search space is tiny, because **the only operation in a
+transformer that moves information between positions is attention** (MLPs are
+position-wise; the residual stream never mixes tokens). Every bit of transfer
+is `Δresid[last] += Σ_h Σ_{j∈image} a[h,last,j]·(v[j]·W_O^h)` for some
+(block, head) -- a few dozen candidates.
+
+**Why this intervenes on the image side.** Swapping head *h*'s dims *at the
+last token* is a subset of swapping the whole `attn_output` there, which
+`ceiling_sweep` measured at 0.0% everywhere except 9.4% at layer 24. Anything
+bounded by that is dead on arrival. The leverage is on the source side, where
+an image swap at `--patch_layer` already produces a ~100% effect.
+
+**Phase 1 -- differential head trace** (2 forwards per batch, exact, no
+generation). Capture every block's per-head attention output at the last
+token, once clean and once with the image residual patched to the source. A
+head whose output changed is a head that *read* the patched image:
+
+| column | what it is |
+|---|---|
+| `delta_z` | `‖Δz_h‖` -- the raw per-head output change |
+| `delta_resid` | `‖Δz_h W_O_h^T‖` -- the change that actually lands in the residual stream. **The default ranking**: `o_proj` weights heads very differently, so a large `Δz` can land as nothing |
+| `delta_dla` | `dla.py`'s exact per-head logit term, differenced between the runs (each with its own frozen scale). Ranks by movement of the *answer*, but sees direct paths only |
+
+**Phase 2 -- cumulative knockout** (path patching; one generation per `k`).
+Keep the image patched (cause ~100%) and **restore** the top-*k* heads'
+outputs at the last token to their clean-base values. If cause collapses,
+those heads carry the signal. Cumulative (`k = 1, 2, 4, 8, 16`) rather than
+one head at a time, because single-head knockout will read ~0 for exactly the
+reason single-sublayer swaps do -- a marginal measurement cannot see a
+conjunction. This is the head-level analogue of `ceiling_sweep`'s `blocks:N`.
+
+**A null control is built in.** `--n_random` knocks out the same number of
+*randomly chosen* heads. If random-8 hurts cause as much as top-8, the phase-1
+ranking is not carrying information and the phase-2 curve says nothing. Read
+the two together or not at all.
+
+Gotchas: `--patch_layer` must be **below** the handoff (a layer where the
+image-position column of `ceiling_sweep` is still large) -- patching where the
+effect is already 0 leaves nothing downstream to trace, and the script says so
+rather than reporting a flat curve. Blocks before `--patch_layer` are excluded
+by default since they cannot be affected by it.
 
 ### 4. Reading the results
 

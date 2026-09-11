@@ -67,6 +67,13 @@ class ModelAdapter:
         Hooked for the `attn_output` site."""
         raise NotImplementedError
 
+    def n_attention_heads(self, model) -> int:
+        """Number of QUERY heads in a decoder block's self-attention. o_proj's input width is
+        n_attention_heads * head_dim == hidden_size, so head h occupies the contiguous dim range
+        [h*hidden_size//n, (h+1)*hidden_size//n) of the `attn_head_output` site. Grouped-query
+        attention reduces KEY/VALUE heads only and must NOT be reported here."""
+        raise NotImplementedError
+
     def get_attn_head_output_module(self, model, block_idx):
         """-> the submodule of decoder block block_idx's attention whose
         forward() INPUT is the concatenated per-head attention outputs

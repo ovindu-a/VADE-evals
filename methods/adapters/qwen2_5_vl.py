@@ -53,6 +53,15 @@ class Qwen25VLAdapter(ModelAdapter):
     def get_attn_block(self, model, block_idx):
         return self.get_decoder_layers(model)[block_idx].self_attn
 
+    def n_attention_heads(self, model):
+        # Same text_config-then-top-level lookup order as hidden_size/intermediate_size above.
+        # num_attention_heads is the QUERY head count; num_key_value_heads (4 on Qwen2.5-VL-7B) is
+        # the GQA-reduced KV count and would give the wrong head width here.
+        text_config = getattr(model.config, "text_config", None)
+        if text_config is not None and getattr(text_config, "num_attention_heads", None):
+            return text_config.num_attention_heads
+        return model.config.num_attention_heads
+
     def get_attn_head_output_module(self, model, block_idx):
         # o_proj's INPUT is the concatenated per-head outputs: num_attention_heads (28) * head_dim
         # (128) = 3584 = hidden_size on Qwen2.5-VL-7B. Grouped-query attention reduces the number of
