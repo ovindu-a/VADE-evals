@@ -35,7 +35,10 @@ VADE-evals/
                             common/sites.py             the InterventionSite abstraction -- WHICH
                                                         tensor inside a decoder block an intervention
                                                         reads/patches (residual / attn_output /
-                                                        attn_head_output / mlp_output / mlp_hidden).
+                                                        attn_head_output / mlp_output / mlp_hidden),
+                                                        plus the JOINT site attn_output+mlp_output,
+                                                        which patches both of a block's sublayer
+                                                        contributions in one pass (diagnostic only).
                                                         The residual site DELEGATES to
                                                         common/hooks.py's own functions, so DBM/DAS
                                                         behavior is unchanged by its existence.
@@ -411,8 +414,9 @@ tells you which.
 
 #### Sites (`--site`, `--sites`)
 
-All five address the **same block**: `--layer L` means decoder block `L-1`, so
-the same `--layer` is comparable across every site.
+Five single sites plus one joint site, all addressing the **same block**:
+`--layer L` means decoder block `L-1`, so the same `--layer` is comparable
+across every site.
 
 ```
   resid[L-1] ──────────────────────────────────────────────────┐
@@ -450,6 +454,14 @@ content is in the embedding.
 | `attn_head_output` | `o_proj` | **pre** | 3584 | per-head `z`: 28 heads x 128, so masks can select whole heads |
 | `mlp_output` | `mlp` | post | 3584 | that MLP's contribution only |
 | `mlp_hidden` | `down_proj` | **pre** | **18944** | post-SwiGLU neurons -- NDM's own site |
+| `attn_output+mlp_output` | both sublayers | post | 7168 (sum) | **joint**: both of the block's contributions at once. Diagnostic only |
+
+The default `--sites` for `ceiling_sweep.py` is all six, ordered
+`residual attn_output mlp_output attn_output+mlp_output attn_head_output
+mlp_hidden` so the three comparisons fall out of one run: global-vs-local
+(`residual` vs the two single sublayers, all at width 3584), which-sublayer
+(`attn_output` vs `mlp_output`), and sublayers-vs-prefix (the joint site --
+next subsection).
 
 Three things that bite:
 
@@ -465,9 +477,52 @@ Three things that bite:
   question can only be settled by training one.
 
 Only `mlp_hidden` and `mlp_output` are NDM **training** sites (`NDM_SITES`,
-default `mlp_hidden`); the other three exist for the diagnostics.
-`methods/dbm/train.py`'s engine accepts any of them, so enabling training at
-another site is a config change, not engine work.
+default `mlp_hidden`); the other three single sites exist for the
+diagnostics. `methods/dbm/train.py`'s engine accepts any of them, so enabling
+training at another single site is a config change, not engine work. The
+joint site is **not** trainable at all -- a mask there would need one mask
+and one L1 term per part, which is a different method, so `JointSite`
+raises on the training entry points and `ndm/config.py`'s `--site` choices
+never offer it.
+
+#### The joint site: `attn_output+mlp_output`
+
+The three same-block sites are **not additive**, and reading them as if they
+were manufactures a fake paradox. The identity is real:
+
+```
+residual@L  =  residual@L-1  +  attn_output@L  +  mlp_output@L
+```
+
+so a `residual` curve that climbs `0% -> 9.4% -> 68.8% -> 100%` across layers
+21-24 looks like it has to be *caused* by those blocks' sublayers -- which
+measure `0.0%` and `0.0%`. Both numbers are correct, because the two
+interventions do different things:
+
+- a **sublayer** swap only *inserts* source evidence. The entire accumulated
+  base prefix `resid_base@L-1` survives untouched.
+- a **residual** swap also *deletes* the base prefix.
+
+For an attribute that is encoded redundantly across depth, the deletion is
+the operative half, and no single-sublayer swap deletes anything.
+
+The joint site closes that gap. Patching both sublayers of one block at once
+yields `resid_base@L-1 + attn_src@L + mlp_src@L`, which differs from a
+`residual@L` swap in **exactly one term**, so the comparison is a clean
+subtraction:
+
+| result | reading |
+|---|---|
+| joint ≈ `residual@L` | the block's own sublayers do the work; the accumulated prefix is irrelevant |
+| joint ≈ 0 | neither half suffices alone -- the prefix is *necessary*. The attribute is encoded conjunctively/redundantly across depth, and the `residual` curve is measuring how much depth remains to **repair** the edit, not when information arrived |
+
+Nothing else in the site list separates those two. Mechanics: each part gets
+its own source capture, its own hard mask at its own width, and its own
+patch hook, and all of them are live in the same generation pass. The
+attention post-hook necessarily fires before the MLP post-hook, so the MLP
+reads the already-patched residual -- irrelevant under a *full* swap (its
+output is overwritten wholesale regardless of what it computed), but it
+would matter for a partial one.
 
 #### Position sets (`--positions`, `--positions_list`)
 
@@ -616,8 +671,14 @@ python methods/ndm/verify_sites.py --entity flags --attribute language --layer 1
 # A mask selects a SUBSET of what a full swap uses, so this is a hard upper
 # bound on `cause` for any amount of training there. Costs a couple of
 # forward passes per layer instead of a training run.
+# all six sites (the default -- no --sites needed)
 python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
-    --layers 2 6 10 14 18 22 26 --sites mlp_hidden mlp_output residual
+    --layers 2 6 10 14 18 22 26
+
+# just the sublayers-vs-prefix arm, where a residual curve turns over
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers 21 22 23 24 --positions last_token \
+    --sites residual attn_output mlp_output attn_output+mlp_output
 
 python methods/ndm/train.py --entity flags --attribute language --layer 16 \
     --positions flag_ring1 --site mlp_hidden

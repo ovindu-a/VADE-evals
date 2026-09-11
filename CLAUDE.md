@@ -187,15 +187,30 @@ additive methods (`intermediate_size`/`get_mlp_block`/
 `get_mlp_hidden_module`) so `sites.py` never needs to know Qwen attribute
 names.
 
-**Five sites, all addressing the same block** (`--layer L` = block L-1, so
-`L` means the same block for every site): `residual` (3584, DBM's site),
-`attn_output` and `mlp_output` (3584, one sublayer's contribution each),
-`attn_head_output` (3584 = 28 heads x 128, `o_proj`'s input, privileged per
-head) and `mlp_hidden` (18944, NDM's own site, default). Only the two MLP
-sites are NDM *training* sites (`NDM_SITES`); the rest exist for the
-diagnostics, though `dbm/train.py`'s engine accepts any of them. The extras
-are control arms: `residual` vs `attn_output`/`mlp_output` isolates locality
-at matched width, and `attn_output` vs `mlp_output` isolates which sublayer.
+**Five single sites + one joint site, all addressing the same block**
+(`--layer L` = block L-1, so `L` means the same block for every site):
+`residual` (3584, DBM's site), `attn_output` and `mlp_output` (3584, one
+sublayer's contribution each), `attn_head_output` (3584 = 28 heads x 128,
+`o_proj`'s input, privileged per head), `mlp_hidden` (18944, NDM's own site,
+default) and the JOINT `attn_output+mlp_output` (both sublayer contributions
+patched in ONE pass; `sites.py`'s `JointSite`, width reported as the 7168
+sum). Only the two MLP sites are NDM *training* sites (`NDM_SITES`); the
+other single sites exist for the diagnostics, though `dbm/train.py`'s engine
+accepts any of them. The joint site is diagnostic-ONLY -- training there
+would need one mask and one L1 term per part, so `JointSite.forward_patched`
+/`lookup_source` raise and `ndm/config.py`'s `--site` choices never offer it.
+`ceiling_sweep.py`'s `--sites` DEFAULTS to all six (`resolve_site()` accepts
+`ALL_SITES`; `InterventionSite()` still rejects joint names, so training
+paths fail loudly). The extras are control arms: `residual` vs
+`attn_output`/`mlp_output` isolates locality at matched width, `attn_output`
+vs `mlp_output` isolates which sublayer, and the joint site isolates the
+accumulated PREFIX. That last one matters because the three are **not
+additive**: `residual@L = residual@L-1 + attn_output@L + mlp_output@L`, but a
+sublayer swap only INSERTS source evidence while a residual swap also DELETES
+the base prefix -- so `residual` legitimately reads 68.8% at a layer where
+both its sublayers read 0.0% each. joint ~= residual means the block does the
+work; joint ~= 0 means the prefix is necessary and the residual curve is
+measuring remaining depth to REPAIR the edit, not information arrival.
 **A pre-projection site and its post-projection site are NOT separable by
 `ceiling_sweep.py`** -- `down_proj(h_source)` is exactly `mlp_out_source`, so
 a FULL swap of either produces the identical residual update; measured, and
