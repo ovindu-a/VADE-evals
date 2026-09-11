@@ -85,9 +85,13 @@ VADE-evals/
     attention_maps.py      per-(layer, head) attention-flow probe (image->text conduits ranked +
                           thresholded, answer/attribute-mention breakdowns, raw quantized attention
                           dumps) -- same section below.
-    mech_probe.py          runs both probes above off ONE forward pass per row instead of two --
+    dla.py                 DIRECT LOGIT ATTRIBUTION: exactly how many logits each component
+                          (embedding + every block's attention and MLP output) writes toward
+                          the answer, from ONE forward pass, with no patching and no gradient --
                           same section below.
-    logit_lens/, attention_maps/   small JSON/JSONL reports from the probes above (not gitignored
+    mech_probe.py          runs all three probes above off ONE forward pass per row instead of
+                          three -- same section below.
+    logit_lens/, attention_maps/, dla/   small JSON/JSONL reports from the probes above (not gitignored
                           -- human-inspectable, like selections/); attention_maps/raw/ (optional,
                           gitignored via *.pt) holds --dump_raw_rows' quantized attention tensors.
 ```
@@ -955,17 +959,87 @@ writes them to `methods/attention_maps/<entity>_<attribute>_<positions>_report.j
    -- already covered by the project's `*.pt` gitignore rule, same as
    activations/dictionaries.
 
-### 3. Running both at once (recommended if you want both anyway)
+### 2b. `dla.py` -- direct logit attribution
+
+```bash
+python methods/dla.py --entity flags --attribute language
+python methods/dla.py --entity flags --attribute language --direction base_minus_source
+```
+
+"Which components help make the identification right", answered **exactly**,
+from one forward pass. The residual stream is a sum
+
+```
+resid_final = embed + Σ_b (attn_output[b] + mlp_output[b])
+```
+
+and the head is a norm plus a bias-free linear map. The norm's only
+nonlinearity is a per-position **scalar**; freeze it at the value the real
+forward pass computed (from the *full* final residual) and the rest is
+linear, so the answer's logit splits into one exact term per component:
+
+```
+logit(t) = Σ_c  scale · ( component_c · (W_U[t] ⊙ final_norm.weight) )
+```
+
+No patching, no counterfactual, no gradient, no approximation -- this is the
+model's own logit, decomposed. Two adapter primitives carry the model-specific
+half (`final_norm_scale`, `logit_direction`), and the sublayer outputs come
+from `common/sites.py`'s own capture hook, i.e. the identical tensors the
+interventions read and patch.
+
+**`--direction` decides what "the answer's logit" means**, and it changes what
+the ranking means:
+
+| `--direction` | decomposes | use when |
+|---|---|---|
+| `gold_minus_mean` (default) | gold logit − mean logit over the vocabulary | general "what writes the answer"; a component that lifts every logit equally gets no credit |
+| `gold` | the raw gold logit | simplest; rewards components that just push the whole distribution up |
+| `base_minus_source` | base gold − **source** gold | the VADE-specific one, usually the most on-point: it is the exact axis `cause` moves along |
+
+**The self-checks are the point.** Every failure mode here (a hook on the
+wrong tensor, a double-applied final norm, an off-by-one over blocks, a head
+with a bias) yields plausible numbers rather than an error, so two things are
+verified per row and asserted, not assumed:
+
+- **reconstruction** -- `embed` plus every captured sublayer, against the
+  model's own `hidden_states[n_layers-1]`. Isolates hook correctness from the
+  algebra. (`hidden_states[-1]` is deliberately unused: in this project's
+  transformers it is tied to `last_hidden_state` and is therefore
+  *post*-final-norm -- the same trap `logit_lens.py` documents.)
+- **additivity** -- the per-component terms summed, against the real logit
+  read off `out.logits`. End to end.
+
+Both are reported as relative errors; `--tolerance` (default 2%) sets the bar.
+bf16 accumulation over ~57 components puts the honest floor near 1%, so a
+failure well above that is a wrong tensor, not rounding.
+
+**What it does and does not tell you.** DLA measures **direct** paths to the
+logit only: a component that matters by changing a later head's attention
+pattern is credited to that head, not to itself. A zero here means "writes
+nothing along the answer direction", *not* "causally irrelevant" -- that is
+what `ndm/ceiling_sweep.py` answers, and the two disagreeing is informative.
+It is also, like every per-component attribution, a **marginal** measure: one
+number per component, so it cannot represent a conjunction. Where an attribute
+is encoded redundantly across depth (the signature being a live `residual`
+ceiling at a layer whose individual sublayers all read 0), expect the DLA mass
+spread thin across many blocks rather than concentrated -- and read the
+spreading as the finding, not as a null.
+
+### 3. Running all three at once (recommended if you want more than one)
 
 ```bash
 python methods/mech_probe.py --entity flags --attribute language
+python methods/mech_probe.py --entity flags --attribute language --dla_direction base_minus_source
 ```
 
-Runs the exact same two scorers (`logit_lens.score_one_row`/
-`attention_maps.score_one_row`) off **one** forward pass per row
-(`output_hidden_states=True` AND `output_attentions=True` together)
-instead of two, and writes the *identical* two output files the standalone
-scripts would (tagged `"single_forward_pass": true`). Defaults to every
+Runs the exact same three scorers (`logit_lens.score_one_row`/
+`attention_maps.score_one_row`/`dla.score_one_row`) off **one** forward pass
+per row (`output_hidden_states=True` AND `output_attentions=True` together,
+with DLA's sublayer capture hooks live during it) instead of three, and writes
+the *identical* output files the standalone scripts would (tagged
+`"single_forward_pass": true`). `--skip_dla` drops the third; its only cost is
+one hook per sublayer and no extra forward. Defaults to every
 decoder layer for both probes (matching the "all-layer" runs this project
 has already done by hand) -- pass a smaller `--layers` to cut attention's
 memory cost back down if a full sweep isn't needed; logit lens always also

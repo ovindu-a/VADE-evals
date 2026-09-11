@@ -152,3 +152,27 @@ class ModelAdapter:
         last layer against the forward pass's own out.logits rather than trusting that invariant
         blindly)."""
         raise NotImplementedError
+
+    def final_norm_scale(self, model, hidden_states) -> "torch.Tensor":
+        """-> [..., 1] float32: the per-position SCALAR the model's final norm multiplies by at
+        these hidden states. For an RMSNorm that is rsqrt(mean(x^2) + eps); the learned gain is
+        NOT included (it is elementwise, not a scalar -- see logit_direction, which folds it in).
+
+        Exists for direct logit attribution (methods/dla.py). A norm is nonlinear, so
+        unembed(a + b) != unembed(a) + unembed(b) and the residual stream's additive structure
+        does not survive it. FREEZING the scale at the value the real forward pass computed --
+        from the FULL final residual, not from the component -- makes the remaining map linear,
+        which is what turns "logit of the answer" into an exact sum of per-component terms.
+        Pass the model's own final pre-norm residual stream here, nothing else."""
+        raise NotImplementedError
+
+    def logit_direction(self, model, token_ids) -> "torch.Tensor":
+        """-> [..., H] float32: the residual-stream direction whose dot product with a component,
+        times final_norm_scale, IS that component's contribution to token_ids' logit. For an
+        RMSNorm + linear head with no bias that is output_head_weight[token] * final_norm.weight
+        (the elementwise learned gain folded into the unembedding row).
+
+        Together: contribution = final_norm_scale(resid_final) * (component . logit_direction(t)),
+        and summing that over embed + every attn/mlp sublayer output reproduces the model's own
+        logit for t exactly -- which methods/dla.py asserts per row rather than assuming."""
+        raise NotImplementedError

@@ -276,6 +276,50 @@ while `residual` flipped the answer outright -- so at layer 14 the limiting
 variable is LOCALITY, not the basis: one block's additive down_proj update
 does not carry a whole-entity attribute.
 
+## methods/dla.py -- direct logit attribution (read-only, exact, one forward pass)
+
+"Which components help make the identification right", answered without
+patching, gradients, or approximation. The residual stream is a sum
+(`resid_final = embed + sum_b (attn_output[b] + mlp_output[b])`) and the head
+is an RMSNorm plus a bias-free linear map whose only nonlinearity is a
+per-position SCALAR -- freeze that at the value the real forward pass computed
+(from the FULL final residual, never per component) and the answer's logit
+splits exactly into one term per component:
+`logit(t) = sum_c scale * (component_c . (W_U[t] * final_norm.weight))`.
+Two additive adapter primitives carry the model-specific half
+(`final_norm_scale`, `logit_direction`, both asserting their assumptions --
+an `lm_head` bias or a renamed `variance_epsilon` fails loudly rather than
+silently changing the numbers). Sublayer outputs come from
+`common/sites.py`'s `register_capture` (made public for this), so DLA reads
+the IDENTICAL tensors the interventions patch.
+
+`--direction` chooses what is decomposed: `gold_minus_mean` (default),
+`gold`, or `base_minus_source` -- the VADE-specific one, and usually the most
+on-point since it is the exact axis `cause` moves along.
+
+**Two self-checks run per row and are asserted, not assumed** (every failure
+mode here -- wrong tensor, double-applied final norm, off-by-one over blocks,
+head bias -- produces plausible numbers rather than an error): RECONSTRUCTION
+(`embed` + every captured sublayer vs the model's own
+`hidden_states[n_layers-1]`; note `hidden_states[-1]` is POST-final-norm in
+this project's transformers, the same trap `logit_lens.py` documents) and
+ADDITIVITY (the terms summed vs the real logit off `out.logits`). Both are
+relative errors against `--tolerance` (default 2%); bf16 accumulation over ~57
+components puts the honest floor near 1%.
+
+**Read it alongside `ndm/ceiling_sweep.py`, not instead of it.** DLA measures
+DIRECT paths to the logit only (a component acting through a later head's
+attention pattern is credited to that head), and like every per-component
+attribution it is MARGINAL -- one number per component, so it cannot represent
+a conjunction. Where an attribute is encoded redundantly across depth (live
+`residual` ceiling at a layer whose sublayers all read 0), expect DLA mass
+spread thin rather than concentrated; that spreading IS the finding. The two
+probes disagreeing is informative, not a bug in either.
+
+`methods/mech_probe.py` runs `dla.score_one_row` off the SAME forward pass as
+`logit_lens` and `attention_maps` (its capture hooks are live during that one
+pass; `--skip_dla` opts out, `--dla_direction`/`--dla_tolerance` configure it).
+
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
 The Phase B feature-selection proxy (a classifier reading the target attribute off
@@ -311,6 +355,11 @@ python methods/intervene.py --entity flags --token_set flag_only --dict_method s
 # Scoring (in the sibling VADE repo)
 python ../VADE/eval/score.py --predictions methods/interventions/flags_flag_only_sae_predictions.jsonl \
     --entity flags --attribute all
+
+# Read-only probes (no training, no intervention) -- all three off ONE forward pass
+python methods/mech_probe.py --entity flags --attribute language --dry_run
+python methods/mech_probe.py --entity flags --attribute language
+python methods/dla.py --entity flags --attribute language --direction base_minus_source
 
 # NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
 python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # 1. is the hook right

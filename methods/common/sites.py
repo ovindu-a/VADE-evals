@@ -331,7 +331,7 @@ class InterventionSite:
             return cache_layer_hidden(model, input_ids, attention_mask, extra, positions, layer_idx)
 
         captured = []
-        handle = self._register_capture(adapter, model, layer_idx, positions, captured)
+        handle = self.register_capture(adapter, model, layer_idx, positions, captured)
         try:
             _source_forward(model, input_ids, attention_mask, extra)
         finally:
@@ -339,12 +339,14 @@ class InterventionSite:
         _assert_fired_once(self.name, captured)
         return captured[0]
 
-    def _register_capture(self, adapter, model, layer_idx, positions, captured):
+    def register_capture(self, adapter, model, layer_idx, positions, captured):
         """Registers a hook that appends this site's [B, n_pos, width] slice
         to `captured`, and returns the handle (caller must .remove() it).
         Split out of capture() so JointSite can register EVERY part's capture
         hook before a SINGLE source forward pass instead of paying one
-        forward per part. Non-residual sites only -- `residual` reads
+        forward per part, and public so methods/dla.py can reuse it to read
+        the same tensors the interventions patch (pass `positions` as a
+        contiguous column range to slice a window rather than a scatter). Non-residual sites only -- `residual` reads
         output_hidden_states and needs no hook at all."""
         assert not self.is_residual, "residual capture goes through cache_layer_hidden, not a hook"
         module, kind = self._module_and_hook_kind(adapter, model, layer_idx)
@@ -488,7 +490,7 @@ class JointSite:
         five-block span as cheap in model calls as a one-block one)."""
         self._check_layer(layer_idx)
         sinks = [[] for _ in self.parts]
-        handles = [p.site._register_capture(adapter, model, p.layer_idx(layer_idx), positions, sink)
+        handles = [p.site.register_capture(adapter, model, p.layer_idx(layer_idx), positions, sink)
                    for p, sink in zip(self.parts, sinks)]
         try:
             _source_forward(model, input_ids, attention_mask, extra)

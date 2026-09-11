@@ -37,6 +37,7 @@ Usage:
         --layers 4 10 14 18 24 --dump_raw_rows 3
 """
 import argparse
+import contextlib
 import json
 import os
 import sys
@@ -45,7 +46,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO_ROOT)
 DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join(REPO_ROOT, "..", "VADE"))
 
-from methods import attention_maps, logit_lens
+from methods import attention_maps, dla, logit_lens
 from methods.adapters.registry import get_adapter
 from methods.common.entities import load_entity_assets, require_pruned_tuples, resolve_position_set
 from methods.common.targets import MAX_ANSWER_TOKENS
@@ -58,6 +59,17 @@ def main():
     ap.add_argument("--attribute", default="language")
     ap.add_argument("--positions", default="flag_ring1")
     ap.add_argument("--split", default="test", choices=["test", "train"])
+    ap.add_argument("--skip_dla", action="store_true",
+                    help="Don't run methods/dla.py's direct-logit-attribution scorer off this pass. It "
+                         "costs one extra hook per sublayer and no extra forward, so the only reason to "
+                         "skip it is if its self-checks are failing and you want the other two probes "
+                         "anyway.")
+    ap.add_argument("--dla_direction", default=dla.DEFAULT_DIRECTION, choices=list(dla.DIRECTIONS),
+                    help="Which logit quantity DLA decomposes -- see methods/dla.py's docstring. "
+                         "base_minus_source is the VADE-specific one: the exact axis `cause` moves "
+                         "along.")
+    ap.add_argument("--dla_tolerance", type=float, default=dla.DEFAULT_TOLERANCE,
+                    help="Relative error allowed on DLA's two self-checks.")
     ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--limit", type=int, default=12, help="Number of DISTINCT example images.")
@@ -133,6 +145,10 @@ def main():
 
     ll_per_row_records = []
     ll_agg = logit_lens.init_agg(ll_layers)
+    dla_records, dla_agg = [], {}
+    # Computed ONCE for the whole run, not per row: it is a reduction over the entire vocabulary.
+    dla_mean_dir = (dla._mean_logit_direction(adapter, model, model.lm_head.weight.shape[0], model.device)
+                    if not args.skip_dla and args.dla_direction == "gold_minus_mean" else None)
     am_text_to_image, am_breakdown = attention_maps.init_accumulators(attn_layers, n_heads)
     am_n_mention_found = 0
     am_dumped_paths = []
@@ -143,8 +159,21 @@ def main():
     for row in rows:
         batch = build_probe_batch([row], entity_assets, adapter, model, processor, args.positions,
                                    batch_cache=batch_cache)
-        out = teacher_forced_forward(model, batch, output_hidden_states=True, output_attentions=True,
-                                      logits_to_keep=MAX_ANSWER_TOKENS)
+        # DLA's sublayer capture hooks must be live DURING the pass; every other probe reads
+        # `out` afterwards. nullcontext keeps the single-forward-pass structure identical when
+        # DLA is skipped, rather than duplicating the forward call under an if.
+        dla_ctx = (dla.capture_sublayers(adapter, model, n_layers, batch["readout_start_col"])
+                   if not args.skip_dla else contextlib.nullcontext(None))
+        with dla_ctx as dla_sinks:
+            out = teacher_forced_forward(model, batch, output_hidden_states=True, output_attentions=True,
+                                          logits_to_keep=MAX_ANSWER_TOKENS)
+
+        if not args.skip_dla:
+            dla_rec, dla_deltas = dla.score_one_row(
+                model, processor, adapter, entity_assets, row, batch, out, dla_sinks, n_layers,
+                direction=args.dla_direction, mean_dir=dla_mean_dir, tolerance=args.dla_tolerance)
+            dla_records.append(dla_rec)
+            dla.fold_deltas(dla_agg, dla_deltas)
 
         row_record, layer_deltas = logit_lens.score_one_row(
             model, processor, adapter, entity_assets, row, batch, out, ll_layers, n_layers,
@@ -182,6 +211,27 @@ def main():
             "n_rows": len(rows), "top_k": args.top_k, "single_forward_pass": True, "per_layer": ll_summary,
         }, f, indent=2)
     print(f"wrote {ll_out_stem}.jsonl and {ll_out_stem}_summary.json")
+
+    # --- dla output ---
+    if dla_records:
+        dla_summary = dla.finalize_summary(dla_agg, n_layers)
+        dla.print_summary(dla_summary, n_layers, args.dla_direction)
+        worst_recon = max(r["reconstruction_rel_err"] for r in dla_records)
+        worst_add = max(r["max_additivity_rel_err"] for r in dla_records)
+        print(f"\nself-checks (worst over {len(dla_records)} rows): reconstruction={worst_recon:.3%} "
+              f"additivity={worst_add:.3%}  (tolerance {args.dla_tolerance:.1%})")
+        dla_stem = os.path.join(REPO_ROOT, "methods", "dla",
+                                 f"{args.entity}_{args.attribute}_{args.positions}_{args.dla_direction}_report")
+        os.makedirs(os.path.dirname(dla_stem), exist_ok=True)
+        with open(dla_stem + ".jsonl", "w") as f:
+            for rec in dla_records:
+                f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+        with open(dla_stem + "_summary.json", "w") as f:
+            json.dump({"entity": args.entity, "attribute": args.attribute, "positions": args.positions,
+                       "direction": args.dla_direction, "n_rows": len(dla_records), "n_layers": n_layers,
+                       "single_forward_pass": True, "worst_reconstruction_rel_err": worst_recon,
+                       "worst_additivity_rel_err": worst_add, "by_component": dla_summary}, f, indent=2)
+        print(f"wrote {dla_stem}.jsonl and {dla_stem}_summary.json")
 
     # --- attention_maps output ---
     print(f"\n=== attention maps: text->image flow heads (score > {args.threshold}) ===")

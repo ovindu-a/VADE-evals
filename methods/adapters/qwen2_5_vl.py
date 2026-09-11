@@ -79,6 +79,33 @@ class Qwen25VLAdapter(ModelAdapter):
         # (see its module docstring for why that's the more robust choice regardless of this comment).
         return model.lm_head(model.model.language_model.norm(hidden_states))
 
+    def _final_norm(self, model):
+        return model.model.language_model.norm
+
+    def final_norm_scale(self, model, hidden_states):
+        # Qwen2RMSNorm.forward is
+        #   x * rsqrt(x.pow(2).mean(-1, keepdim=True) + self.variance_epsilon), then * self.weight
+        # so the SCALAR half is the rsqrt term and the elementwise half is self.weight (folded into
+        # logit_direction instead). Computed in float32 for the same reason Qwen2RMSNorm itself
+        # upcasts: the mean of squares over 3584 bf16 values loses too much precision otherwise.
+        norm = self._final_norm(model)
+        eps = getattr(norm, "variance_epsilon", None)
+        assert eps is not None, (
+            f"{type(norm).__name__} has no .variance_epsilon -- this adapter assumes the final norm is "
+            f"an RMSNorm with that attribute; a transformers version that renamed it would silently "
+            f"change the DLA scale, so this fails loudly instead")
+        x = hidden_states.float()
+        return torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + eps)
+
+    def logit_direction(self, model, token_ids):
+        # lm_head is Linear(hidden_size, vocab_size, bias=False) on every Qwen2 checkpoint; a bias
+        # would break the exact additivity DLA relies on, so assert rather than quietly drop it.
+        assert getattr(model.lm_head, "bias", None) is None, (
+            "lm_head has a bias -- direct logit attribution's per-component terms would no longer sum "
+            "to the model's own logit; add the bias as its own component before removing this check")
+        w = model.lm_head.weight[token_ids].float()          # [..., H]
+        return w * self._final_norm(model).weight.float()
+
     def image_token_id(self, model, processor):
         tok_id = getattr(model.config, "image_token_id", None)
         if tok_id is not None:
