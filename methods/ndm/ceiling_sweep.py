@@ -54,6 +54,17 @@ express, and a full swap is precisely the one case where that distinction
 collapses. Read the pair as sharing one ceiling (which it legitimately does),
 and settle the basis question with a trained mask, not here.
 
+BECAUSE OF THAT, --sites DEFAULTS to the four independent sites and OMITS
+attn_head_output and mlp_hidden. Probing all six spent a third of the sweep
+re-deriving two columns you can copy. Note what this does NOT mean: mlp_hidden
+is NDM's own training site, and its ceiling is still fully determined here --
+the mlp_output row IS the mlp_hidden ceiling. The run prints that mapping
+explicitly under the summary table so the absent row is not mistaken for an
+unprobed one. Pass the omitted sites explicitly when you want the identity
+spot-checked: agreement to the row is a real (if predictable) canary for a
+mis-hooked module or nondeterministic generation, and it is the only check
+attn_head_output has ever had.
+
 What the site list DOES separate: global-vs-local at matched width (residual
 vs attn_output/mlp_output), which sublayer (attn_output vs mlp_output --
 whether a dead local site is MLP-specific or true of any single sublayer),
@@ -87,7 +98,7 @@ cheap proxy for score.py's text normalization, chosen so this stays fast
 enough to sweep every layer.
 
 Usage:
-    # all six sites (the default), every layer
+    # the four independent sites (the default), every layer
     python methods/ndm/ceiling_sweep.py --entity flags --attribute language \\
         --layers $(seq 0 28) --positions last_token
 
@@ -113,7 +124,7 @@ from methods.common.entities import (  # noqa: E402
 from methods.common.position_sets import build_batch_at, describe, is_extended, path_safe  # noqa: E402
 from methods.common.hooks import make_cache_aware_patch_hook  # noqa: E402
 from methods.common.run_logging import tee_to_log  # noqa: E402
-from methods.common.sites import ALL_SITES, resolve_site  # noqa: E402
+from methods.common.sites import ALL_SITES, FULL_SWAP_EQUIVALENT, resolve_site  # noqa: E402
 from methods.common.targets import MAX_ANSWER_TOKENS, exact_match  # noqa: E402
 from methods.ndm.config import METHOD_NAME, ndm_logs_dir  # noqa: E402
 from methods.ndm.verify_sites import generate_unhooked, hard_mask  # noqa: E402
@@ -167,21 +178,24 @@ def main():
     ap.add_argument("--layers", type=int, nargs="+", required=True,
                      help="Layers to probe. MLP sites need >=1 (layer L addresses block L-1's MLP).")
     ap.add_argument("--sites", nargs="+", choices=list(ALL_SITES),
-                     default=["residual", "attn_output", "mlp_output", "attn_output+mlp_output",
-                              "attn_head_output", "mlp_hidden"],
-                     help="Default probes all five single sites PLUS the joint attn_output+mlp_output, "
-                          "ordered so three comparisons fall out of one run. (1) GLOBAL vs LOCAL: residual "
-                          "vs attn_output/mlp_output, all width hidden_size, so width is controlled. "
-                          "(2) WHICH SUBLAYER: attn_output vs mlp_output -- is a dead local site "
-                          "MLP-specific, or is any single sublayer too local? (3) SUBLAYERS vs PREFIX: "
-                          "attn_output+mlp_output swaps BOTH of the block's sublayer contributions at once, "
-                          "so residual minus that isolates the accumulated prefix resid@L-1 -- the arm that "
-                          "explains a residual curve rising through layers whose individual sublayers all "
-                          "read 0 (they are NOT additive: a sublayer swap only INSERTS source evidence, "
-                          "while a residual swap also DELETES the base prefix). NOTE the pre/post "
-                          "projection pairs (mlp_hidden/mlp_output, attn_head_output/attn_output) are "
-                          "MATHEMATICALLY IDENTICAL under a full swap and always return the same numbers -- "
-                          "they share one ceiling; see the module docstring.")
+                     default=["residual", "attn_output", "mlp_output", "attn_output+mlp_output"],
+                     help="Default probes the four sites that carry INDEPENDENT information under a full "
+                          "swap, ordered so three comparisons fall out of one run. (1) GLOBAL vs LOCAL: "
+                          "residual vs attn_output/mlp_output, all width hidden_size, so width is "
+                          "controlled. (2) WHICH SUBLAYER: attn_output vs mlp_output -- is a dead local "
+                          "site MLP-specific, or is any single sublayer too local? (3) SUBLAYERS vs "
+                          "PREFIX: attn_output+mlp_output swaps BOTH of the block's sublayer contributions "
+                          "at once, so residual minus that isolates the accumulated prefix resid@L-1 -- "
+                          "the arm that explains a residual curve rising through layers whose individual "
+                          "sublayers all read 0 (they are NOT additive: a sublayer swap only INSERTS "
+                          "source evidence, while a residual swap also DELETES the base prefix). "
+                          "DELIBERATELY OMITTED from the default: attn_head_output and mlp_hidden, which "
+                          "are MATHEMATICALLY IDENTICAL to attn_output and mlp_output under a full swap "
+                          "(measured: identical to the row in every cell of four sweeps) -- so reading "
+                          "mlp_output's row IS reading mlp_hidden's ceiling, including for the purpose of "
+                          "deciding whether to train NDM there. Pass them explicitly to spot-check that "
+                          "identity (a cheap hook/determinism canary), or to probe a site whose pre/post "
+                          "partner you are not also probing.")
     ap.add_argument("--positions", default="flag_ring1",
                      help="Any set entities.py knows (flag_only/flag_ring1/full_image/last_token) OR an "
                           "extended spec from common/position_sets.py: '~flag_ring1' (the 120 background "
@@ -342,6 +356,14 @@ def main():
             for r in results.values():
                 print(f"{r['site']:>22} {r['layer']:>6} {r['width']:>7} {r['cause_ceiling']:>13.1%} "
                       f"{r['base_kept']:>9.1%} {r['iso_floor']:>9.1%}")
+            implied = [(pre, post) for pre, post in FULL_SWAP_EQUIVALENT.items()
+                       if post in args.sites and pre not in args.sites]
+            for pre, post in implied:
+                r = results.get(f"{post}/{args.layers[0]}")
+                print(f"  (not probed: {pre} -- IDENTICAL to {post} under a full swap, so the {post} row "
+                      f"above IS {pre}'s ceiling at every layer" + (f"; e.g. layer {args.layers[0]} = "
+                      f"{r['cause_ceiling']:.1%}" if r else "") + ")")
+
             live = [r for r in results.values() if r["cause_ceiling"] > max(0.10, base_cause_ms + 0.05)]
             if live:
                 best = max(live, key=lambda r: r["cause_ceiling"])

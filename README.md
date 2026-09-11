@@ -456,12 +456,23 @@ content is in the embedding.
 | `mlp_hidden` | `down_proj` | **pre** | **18944** | post-SwiGLU neurons -- NDM's own site |
 | `attn_output+mlp_output` | both sublayers | post | 7168 (sum) | **joint**: both of the block's contributions at once. Diagnostic only |
 
-The default `--sites` for `ceiling_sweep.py` is all six, ordered
-`residual attn_output mlp_output attn_output+mlp_output attn_head_output
-mlp_hidden` so the three comparisons fall out of one run: global-vs-local
-(`residual` vs the two single sublayers, all at width 3584), which-sublayer
-(`attn_output` vs `mlp_output`), and sublayers-vs-prefix (the joint site --
-next subsection).
+The default `--sites` for `ceiling_sweep.py` is the **four independent**
+ones, `residual attn_output mlp_output attn_output+mlp_output`, so the three
+comparisons fall out of one run: global-vs-local (`residual` vs the two
+single sublayers, all at width 3584), which-sublayer (`attn_output` vs
+`mlp_output`), and sublayers-vs-prefix (the joint site -- next subsection).
+
+`attn_head_output` and `mlp_hidden` are **omitted from the default on
+purpose**: under a full swap they are mathematically identical to
+`attn_output` and `mlp_output` (see the third bullet below), so probing all
+six spent a third of the sweep re-deriving two columns you can copy.
+Crucially this does not leave NDM's own training site unmeasured -- **the
+`mlp_output` row *is* the `mlp_hidden` ceiling**, at every layer, and the run
+prints that mapping under the summary table so an absent row is never
+mistaken for an unprobed one. Pass them explicitly when you want the identity
+spot-checked: agreement to the row is a real canary for a mis-hooked module
+or nondeterministic generation, and it is the only check `attn_head_output`
+has ever had.
 
 Three things that bite:
 
@@ -472,9 +483,13 @@ Three things that bite:
 - **`ceiling_sweep.py` cannot distinguish a pre/post pair.**
   `down_proj(h_source)` is exactly `mlp_out_source`, so under a FULL swap
   `mlp_hidden` == `mlp_output` and `attn_head_output` == `attn_output` --
-  measured, identical in every cell of three full sweeps. They share one
-  ceiling. A privileged basis only buys anything for a SPARSE mask, so that
-  question can only be settled by training one.
+  measured, identical in every cell of four full sweeps. They share one
+  ceiling, which is why the default omits the pre-projection half of each
+  pair (`common/sites.py`'s `FULL_SWAP_EQUIVALENT` holds the mapping). A
+  privileged basis only buys anything for a SPARSE mask -- a subset of
+  neurons or heads decodes to a residual update no axis-aligned residual mask
+  can express -- so that question can only be settled by training one, or by
+  a partial (top-k / per-head) swap.
 
 Only `mlp_hidden` and `mlp_output` are NDM **training** sites (`NDM_SITES`,
 default `mlp_hidden`); the other three single sites exist for the
@@ -671,7 +686,7 @@ python methods/ndm/verify_sites.py --entity flags --attribute language --layer 1
 # A mask selects a SUBSET of what a full swap uses, so this is a hard upper
 # bound on `cause` for any amount of training there. Costs a couple of
 # forward passes per layer instead of a training run.
-# all six sites (the default -- no --sites needed)
+# the four independent sites (the default -- no --sites needed)
 python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
     --layers 2 6 10 14 18 22 26
 

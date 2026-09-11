@@ -110,6 +110,22 @@ JOINT_SITES = {
 # Everything ceiling_sweep.py (the diagnostic) accepts.
 ALL_SITES = SITES + tuple(JOINT_SITES)
 
+# pre-projection site -> the post-projection site it is INDISTINGUISHABLE from
+# under a FULL swap. down_proj(h_src) IS mlp_out_src and o_proj(z_src) IS
+# attn_out_src, so replacing the whole pre-projection vector produces the
+# identical residual-stream update as replacing the whole post-projection one.
+# Measured: identical to the row in every cell of four full sweeps. Hence
+# ceiling_sweep.py's default OMITS the keys -- their numbers are exactly their
+# values' numbers, so probing both spends a third of the sweep re-deriving a
+# column you can copy. The distinction is real only for a SPARSE mask (a
+# subset of neurons/heads decodes to a residual update no axis-aligned
+# residual mask can express), which is a trained-mask question, not a
+# full-swap one.
+FULL_SWAP_EQUIVALENT = {
+    "attn_head_output": "attn_output",
+    "mlp_hidden": "mlp_output",
+}
+
 DEFAULT_SITE = "residual"
 
 

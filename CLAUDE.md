@@ -199,9 +199,19 @@ other single sites exist for the diagnostics, though `dbm/train.py`'s engine
 accepts any of them. The joint site is diagnostic-ONLY -- training there
 would need one mask and one L1 term per part, so `JointSite.forward_patched`
 /`lookup_source` raise and `ndm/config.py`'s `--site` choices never offer it.
-`ceiling_sweep.py`'s `--sites` DEFAULTS to all six (`resolve_site()` accepts
-`ALL_SITES`; `InterventionSite()` still rejects joint names, so training
-paths fail loudly). The extras are control arms: `residual` vs
+`ceiling_sweep.py`'s `--sites` DEFAULTS to the FOUR independent ones
+(`residual attn_output mlp_output attn_output+mlp_output`) and deliberately
+OMITS `attn_head_output`/`mlp_hidden`, which a full swap cannot distinguish
+from their post-projection partners -- `common/sites.py`'s
+`FULL_SWAP_EQUIVALENT` holds that mapping, and the run prints it under the
+summary table so the absent rows are not mistaken for unprobed ones. **The
+`mlp_output` row IS `mlp_hidden`'s ceiling**, so the "run ceiling_sweep
+before training" rule below is still satisfied by a default run even though
+NDM trains on `mlp_hidden`. Pass the omitted sites explicitly to spot-check
+the identity (a hook/determinism canary, and the only check
+`attn_head_output` has ever had). `resolve_site()` accepts `ALL_SITES`;
+`InterventionSite()` still rejects joint names, so training paths fail
+loudly. The extras are control arms: `residual` vs
 `attn_output`/`mlp_output` isolates locality at matched width, `attn_output`
 vs `mlp_output` isolates which sublayer, and the joint site isolates the
 accumulated PREFIX. That last one matters because the three are **not
