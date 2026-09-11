@@ -214,7 +214,12 @@ the identity (a hook/determinism canary, and the only check
 loudly. The extras are control arms: `residual` vs
 `attn_output`/`mlp_output` isolates locality at matched width, `attn_output`
 vs `mlp_output` isolates which sublayer, and the joint site isolates the
-accumulated PREFIX. That last one matters because the three are **not
+accumulated PREFIX. `blocks:N` (parsed, not enumerated, so any N>=1; needs
+--layer>=N; `blocks:1` aliases `attn_output+mlp_output`) widens that to N
+CONSECUTIVE blocks ending at --layer L, swapping exactly what residual@L has
+that residual@(L-N) does not -- so sweeping blocks:1..5 measures HOW DEEP the
+redundancy goes. All 2N parts register before ONE source forward and ONE
+generate, so a five-block span costs the same model calls as a one-block one. That last one matters because the three are **not
 additive**: `residual@L = residual@L-1 + attn_output@L + mlp_output@L`, but a
 sublayer swap only INSERTS source evidence while a residual swap also DELETES
 the base prefix -- so `residual` legitimately reads 68.8% at a layer where

@@ -92,6 +92,23 @@ from residual@L in exactly one term, so:
 
 Nothing else in the site list can tell those two apart.
 
+BLOCK SPANS turn that yes/no into a dial. `blocks:N` patches BOTH sublayers of
+N CONSECUTIVE blocks ending at --layer L, which is exactly what residual@L has
+and residual@(L-N) does not:
+
+    residual@L = residual@(L-N) + sum_{i=L-N+1..L} (attn_output@i + mlp_output@i)
+                  ^ blocks:N keeps  ^ blocks:N swaps every one of these
+                    the BASE's
+
+so the retained prefix moves earlier as N grows and blocks:N converges on
+`residual`@L. Sweeping blocks:1..5 at a layer where residual is live measures
+HOW MANY consecutive blocks must be swapped before the prefix stops mattering
+-- i.e. how deep the redundancy goes. blocks:1 is an alias for
+attn_output+mlp_output; N is parsed, not enumerated, so any N >= 1 works (it
+needs --layer >= N, since the earliest block must exist). All 2N parts are
+still registered before a SINGLE source forward and a SINGLE generate, so a
+five-block span costs the same number of model calls as a one-block one.
+
 This is a filter, not a result: the real numbers still come from
 methods/ndm/eval.py + VADE's eval/score.py. Token-level exact_match here is a
 cheap proxy for score.py's text normalization, chosen so this stays fast
@@ -106,6 +123,11 @@ Usage:
     python methods/ndm/ceiling_sweep.py --entity flags --attribute language \\
         --layers 22 23 24 --positions last_token \\
         --sites residual attn_output mlp_output attn_output+mlp_output
+
+    # how deep is the redundancy: 1..5 consecutive blocks ending at layer 24
+    python methods/ndm/ceiling_sweep.py --entity flags --attribute language \\
+        --layers 24 --positions last_token \\
+        --sites residual blocks:1 blocks:2 blocks:3 blocks:4 blocks:5
 """
 import argparse
 import json
@@ -124,7 +146,9 @@ from methods.common.entities import (  # noqa: E402
 from methods.common.position_sets import build_batch_at, describe, is_extended, path_safe  # noqa: E402
 from methods.common.hooks import make_cache_aware_patch_hook  # noqa: E402
 from methods.common.run_logging import tee_to_log  # noqa: E402
-from methods.common.sites import ALL_SITES, FULL_SWAP_EQUIVALENT, resolve_site  # noqa: E402
+from methods.common.sites import (  # noqa: E402
+    ALL_SITES, BLOCK_SPAN_PREFIX, FULL_SWAP_EQUIVALENT, resolve_site, site_name,
+)
 from methods.common.targets import MAX_ANSWER_TOKENS, exact_match  # noqa: E402
 from methods.ndm.config import METHOD_NAME, ndm_logs_dir  # noqa: E402
 from methods.ndm.verify_sites import generate_unhooked, hard_mask  # noqa: E402
@@ -141,13 +165,16 @@ def full_swap_generation(site, adapter, model, layers, layer, batch, pad_token_i
     returns a tuple and `generate_patched` takes a list, which is the only
     place the two classes' signatures differ."""
     positions = batch["positions"]
-    parts = site.parts if site.is_joint else (site,)
+    # A joint site's parts each carry their own BLOCK OFFSET, so blocks:5 is ten
+    # parts across five blocks -- but still one source forward and one generate,
+    # because JointSite registers every hook before each.
+    part_sites = [p.site for p in site.parts] if site.is_joint else [site]
     captured = site.capture(adapter, model, layer, batch["source_input_ids"], batch["attention_mask"],
                              batch["source_extra"], positions)
     source_acts = captured if site.is_joint else (captured,)
 
     patch_fns = []
-    for part, source_act in zip(parts, source_acts):
+    for part, source_act in zip(part_sites, source_acts):
         one = hard_mask(part.width(adapter, model), 1.0, model.device)
         # _m/_s are DEFAULT ARGUMENTS, not closed-over names, on purpose: a plain
         # `lambda bv: one(bv, source_act)` built in this loop would capture the loop
@@ -177,7 +204,7 @@ def main():
     ap.add_argument("--attribute", required=True)
     ap.add_argument("--layers", type=int, nargs="+", required=True,
                      help="Layers to probe. MLP sites need >=1 (layer L addresses block L-1's MLP).")
-    ap.add_argument("--sites", nargs="+", choices=list(ALL_SITES),
+    ap.add_argument("--sites", nargs="+", type=site_name,
                      default=["residual", "attn_output", "mlp_output", "attn_output+mlp_output"],
                      help="Default probes the four sites that carry INDEPENDENT information under a full "
                           "swap, ordered so three comparisons fall out of one run. (1) GLOBAL vs LOCAL: "
@@ -195,7 +222,13 @@ def main():
                           "mlp_output's row IS reading mlp_hidden's ceiling, including for the purpose of "
                           "deciding whether to train NDM there. Pass them explicitly to spot-check that "
                           "identity (a cheap hook/determinism canary), or to probe a site whose pre/post "
-                          "partner you are not also probing.")
+                          f"partner you are not also probing. BLOCK SPANS: `{BLOCK_SPAN_PREFIX}N` (any "
+                          f"N >= 1) widens the joint site to N CONSECUTIVE blocks ending at --layer L, "
+                          f"swapping exactly what residual@L has that residual@(L-N) does not. "
+                          f"{BLOCK_SPAN_PREFIX}1 is an alias for attn_output+mlp_output. Sweeping "
+                          f"{BLOCK_SPAN_PREFIX}1..5 at a layer measures HOW MANY consecutive blocks must "
+                          f"be swapped before the retained prefix stops mattering -- i.e. how deep the "
+                          f"redundancy goes. Valid single sites: " + ", ".join(ALL_SITES) + ".")
     ap.add_argument("--positions", default="flag_ring1",
                      help="Any set entities.py knows (flag_only/flag_ring1/full_image/last_token) OR an "
                           "extended spec from common/position_sets.py: '~flag_ring1' (the 120 background "
@@ -335,14 +368,17 @@ def main():
                   f"accident' floor -- subtract it mentally when reading cause_ceiling)")
 
             results = {}
-            for site_name in args.sites:
-                site = resolve_site(site_name)
+            for name in args.sites:
+                site = resolve_site(name)
                 for layer in args.layers:
-                    if site_name != "residual" and layer < 1:
-                        print(f"  skip {site_name} layer {layer}: every site but `residual` addresses a "
-                              f"SUBLAYER of block layer-1, and layer 0 is the embedding output, which has "
-                              f"neither an attention nor an MLP sublayer")
+                    if layer < site.min_layer():
+                        print(f"  skip {name} layer {layer}: needs --layer >= {site.min_layer()} "
+                              f"(every site but `residual` addresses a SUBLAYER of block layer-1, and "
+                              f"layer 0 is the embedding output, which has neither; a span of N blocks "
+                              f"needs N of them to exist below the layer)")
                         continue
+                    if site.is_joint:
+                        print(f"  {name} layer {layer}: {site.describe(layer)}", flush=True)
                     cs, cb, n = 0.0, 0.0, 0
                     for b in cause_batches:
                         gen = full_swap_generation(site, adapter, model, layers_stack, layer, b, pad_token_id,
@@ -363,12 +399,13 @@ def main():
                             ib, m = ib + t * k, m + k
                         iso_floor = ib / m
 
-                    results[f"{site_name}/{layer}"] = {
-                        "site": site_name, "layer": layer, "cause_ceiling": cause_ceiling,
+                    results[f"{name}/{layer}"] = {
+                        "site": name, "layer": layer, "cause_ceiling": cause_ceiling,
+                        "blocks": site.blocks(layer) if site.is_joint else [layer - 1],
                         "base_kept": base_kept, "iso_floor": iso_floor,
                         "width": site.width(adapter, model), "n_cause": n,
                     }
-                    print(f"  {site_name:>22} layer {layer:>2}: cause_ceiling={cause_ceiling:6.1%} "
+                    print(f"  {name:>22} layer {layer:>2}: cause_ceiling={cause_ceiling:6.1%} "
                           f"base_kept={base_kept:6.1%} iso_floor={iso_floor:6.1%}", flush=True)
 
             print("\n=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===")

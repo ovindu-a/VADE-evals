@@ -100,12 +100,57 @@ from .hooks import cache_layer_hidden, extra_to_device, forward_patched, generat
 
 SITES = ("residual", "attn_output", "attn_head_output", "mlp_output", "mlp_hidden")
 
-# name -> the SINGLE sites it patches simultaneously, at the same block. Kept
-# OUT of SITES on purpose: SITES is the set a mask can be TRAINED on, and
-# verify_sites.py / ndm/config.py both iterate it.
+# name -> the parts it patches simultaneously, as (single site name, block
+# OFFSET from --layer). Offset 0 is the requested layer, -1 the block before
+# it, and so on. Kept OUT of SITES on purpose: SITES is the set a mask can be
+# TRAINED on, and verify_sites.py / ndm/config.py both iterate it.
 JOINT_SITES = {
-    "attn_output+mlp_output": ("attn_output", "mlp_output"),
+    "attn_output+mlp_output": (("attn_output", 0), ("mlp_output", 0)),
 }
+
+# blocks:N -- a whole BLOCK SPAN. attn_output + mlp_output IS a block's entire
+# contribution to the residual stream, so patching both for N consecutive
+# blocks ending at --layer L swaps exactly what residual@L has and
+# residual@(L-N) does not:
+#
+#   residual@L = residual@(L-N) + sum_{i=L-N+1..L} (attn_output@i + mlp_output@i)
+#                 ^ blocks:N keeps the BASE's      ^ blocks:N swaps all of these
+#
+# so `blocks:N`@L and `residual`@L differ in exactly one term, the retained
+# prefix, which moves earlier as N grows. That makes N a dial on the one
+# question a single-block joint site can only answer yes/no: HOW MANY
+# consecutive blocks must be swapped before the prefix stops mattering. If
+# blocks:1 reads 0 and blocks:5 reads what residual@L reads, the attribute is
+# recomputed redundantly across a ~5-block window; if even blocks:5 reads 0,
+# the prefix is necessary no matter how wide the window.
+#
+# Not enumerated in JOINT_SITES: N is unbounded (up to the layer itself), so
+# resolve_site() PARSES these rather than looking them up, exactly as
+# position_sets.py parses ring:K. blocks:1 is an alias for
+# attn_output+mlp_output.
+BLOCK_SPAN_PREFIX = "blocks:"
+BLOCK_SPAN_PARTS = ("attn_output", "mlp_output")
+
+
+class JointPart:
+    """One (single site, block offset) member of a JointSite. `offset` is
+    relative to the --layer the JointSite is invoked at: 0 is that layer,
+    -1 the block before it."""
+
+    __slots__ = ("site", "offset")
+
+    def __init__(self, site, offset):
+        self.site, self.offset = site, offset
+
+    @property
+    def label(self):
+        return f"{self.site.name}@L{self.offset:+d}" if self.offset else f"{self.site.name}@L"
+
+    def layer_idx(self, layer_idx):
+        return layer_idx + self.offset
+
+    def __repr__(self):
+        return f"JointPart({self.label})"
 
 # Everything ceiling_sweep.py (the diagnostic) accepts.
 ALL_SITES = SITES + tuple(JOINT_SITES)
@@ -168,6 +213,12 @@ class InterventionSite:
     @property
     def is_residual(self):
         return self.name == "residual"
+
+    def min_layer(self):
+        """The smallest --layer this site can be probed at. `residual` reaches
+        layer 0 (the embedding output); every other site addresses a SUBLAYER
+        of block layer_idx-1, which layer 0 does not have."""
+        return 0 if self.is_residual else 1
 
     def width(self, adapter, model) -> int:
         """The mask's embed_dim for this site."""
@@ -336,44 +387,72 @@ class InterventionSite:
 
 
 class JointSite:
-    """Several InterventionSites of the SAME block, patched in ONE forward
-    pass. Duck-types InterventionSite for the read-only/diagnostic surface
-    (`name`, `is_residual`, `is_joint`, `width`, `capture`, `register`,
-    `generate_patched`) and deliberately does NOT implement the training
-    surface -- see this module's docstring on why a joint site is not a
-    trainable site.
+    """Several InterventionSites patched in ONE forward pass, each at its own
+    block. Duck-types InterventionSite for the read-only/diagnostic surface
+    (`name`, `is_residual`, `is_joint`, `min_layer`, `width`, `capture`,
+    `register`, `generate_patched`) and deliberately does NOT implement the
+    training surface -- see this module's docstring on why a joint site is not
+    a trainable site.
 
     Where the signatures differ from InterventionSite, they differ PER PART:
     `capture` returns a tuple of activations (one per part, in `self.parts`
     order) and `register`/`generate_patched` take a SEQUENCE of patch_fns in
-    that same order. Each part has its own width, so one shared patch_fn
-    could not be correct anyway (attn_output is 3584 wide, mlp_hidden 18944).
+    that same order. Each part has its own width and its own block, so one
+    shared patch_fn could not be correct anyway.
 
-    Hook ordering inside the block is whatever the forward pass does -- for
-    attn_output+mlp_output the attention post-hook necessarily fires before
-    the MLP post-hook, so the MLP reads the ALREADY-PATCHED residual. That is
-    the intended semantics and it does not matter for a FULL swap (the MLP's
+    Every part is patched at `layer_idx + part.offset`, so a BLOCK SPAN
+    (blocks:N) is just a JointSite whose parts carry offsets 0..-(N-1). All of
+    them are still registered before a SINGLE forward pass -- spanning five
+    blocks costs the same number of model calls as spanning one.
+
+    Hook ordering inside a block is whatever the forward pass does -- for the
+    attn/mlp pair the attention post-hook necessarily fires before the MLP
+    post-hook, so the MLP reads the ALREADY-PATCHED residual. That is the
+    intended semantics and it does not matter for a FULL swap (the MLP's
     output is overwritten wholesale regardless of what it computed), but it
-    would matter for a partial one."""
+    would matter for a partial one. The same is true ACROSS blocks in a span:
+    block L-2's patched output is what block L-1 reads."""
 
     is_residual = False
     is_joint = True
 
     def __init__(self, name):
-        assert name in JOINT_SITES, f"unknown joint site {name!r} -- expected one of {tuple(JOINT_SITES)}"
         self.name = name
-        self.parts = tuple(InterventionSite(n) for n in JOINT_SITES[name])
-        assert not any(p.is_residual for p in self.parts), (
-            f"joint site {name!r} includes `residual`, which is the whole block's OUTPUT -- patching it "
-            f"alongside one of its own sublayer inputs would make the result depend on hook order and "
-            f"is not a meaningful decomposition")
+        self.parts = tuple(JointPart(InterventionSite(part), offset) for part, offset in _joint_parts(name))
+        assert not any(p.site.is_residual for p in self.parts), (
+            f"joint site {name!r} includes `residual`, which is a whole block's OUTPUT -- patching it "
+            f"alongside one of its own sublayers would make the result depend on hook order and is not "
+            f"a meaningful decomposition")
+        seen = [(p.site.name, p.offset) for p in self.parts]
+        assert len(set(seen)) == len(seen), (
+            f"joint site {name!r} names the same (site, offset) twice: {seen} -- it would be registered "
+            f"twice and the second patch would silently overwrite the first")
 
     def __repr__(self):
         return f"JointSite({self.name!r})"
 
+    def min_layer(self):
+        """The smallest --layer this site can be probed at. Every part
+        addresses a SUBLAYER of block layer_idx-1, so the earliest part's
+        layer must still be >= 1."""
+        return 1 - min(p.offset for p in self.parts)
+
+    def blocks(self, layer_idx):
+        """The decoder blocks this span covers at `layer_idx`, low to high --
+        for printing, so a span is never ambiguous in the output."""
+        # set(): a block contributes TWO parts (attn + mlp), and this answers
+        # "which blocks", not "which parts".
+        return sorted({p.layer_idx(layer_idx) - 1 for p in self.parts})
+
+    def describe(self, layer_idx):
+        b = self.blocks(layer_idx)
+        span = f"block {b[0]}" if b[0] == b[-1] else f"blocks {b[0]}-{b[-1]}"
+        return (f"{len(self.parts)} parts over {span} -- swaps everything residual@{layer_idx} has "
+                f"that residual@{layer_idx - (b[-1] - b[0] + 1)} does not")
+
     def widths(self, adapter, model):
         """Per-part widths, in self.parts order."""
-        return [p.width(adapter, model) for p in self.parts]
+        return [p.site.width(adapter, model) for p in self.parts]
 
     def width(self, adapter, model) -> int:
         """The TOTAL number of dimensions a full swap here replaces (the sum
@@ -382,23 +461,34 @@ class JointSite:
         embed_dim; a joint site has no single mask."""
         return sum(self.widths(adapter, model))
 
+    def _check_layer(self, layer_idx):
+        assert layer_idx >= self.min_layer(), (
+            f"joint site {self.name!r} spans {len(self.parts)} parts down to offset "
+            f"{min(p.offset for p in self.parts)}, so it needs --layer >= {self.min_layer()}; got "
+            f"{layer_idx}, whose earliest part would land on layer "
+            f"{layer_idx + min(p.offset for p in self.parts)} (layer 0 is the embedding output, which "
+            f"has neither an attention nor an MLP sublayer)")
+
     def register(self, adapter, model, layers, layer_idx, patch_fns):
         """patch_fns: one per part, in self.parts order. Returns the handles
         from every part -- caller must .remove() them all."""
         patch_fns = list(patch_fns)
         assert len(patch_fns) == len(self.parts), (
             f"joint site {self.name!r} has {len(self.parts)} parts but got {len(patch_fns)} patch_fns")
+        self._check_layer(layer_idx)
         handles = []
         for part, fn in zip(self.parts, patch_fns):
-            handles.extend(part.register(adapter, model, layers, layer_idx, fn))
+            handles.extend(part.site.register(adapter, model, layers, part.layer_idx(layer_idx), fn))
         return handles
 
     def capture(self, adapter, model, layer_idx, input_ids, attention_mask, extra, positions):
         """-> tuple of [B, n_pos, width_i], one per part, from a SINGLE
         source forward pass (every part's capture hook is registered before
-        it, rather than one forward per part)."""
+        it, rather than one forward per part -- which is what keeps a
+        five-block span as cheap in model calls as a one-block one)."""
+        self._check_layer(layer_idx)
         sinks = [[] for _ in self.parts]
-        handles = [p._register_capture(adapter, model, layer_idx, positions, sink)
+        handles = [p.site._register_capture(adapter, model, p.layer_idx(layer_idx), positions, sink)
                    for p, sink in zip(self.parts, sinks)]
         try:
             _source_forward(model, input_ids, attention_mask, extra)
@@ -406,7 +496,7 @@ class JointSite:
             for h in handles:
                 h.remove()
         for part, sink in zip(self.parts, sinks):
-            _assert_fired_once(part.name, sink)
+            _assert_fired_once(part.label, sink)
         return tuple(sink[0] for sink in sinks)
 
     def generate_patched(self, adapter, model, layers, layer_idx, patch_fns, input_ids, attention_mask, extra,
@@ -440,13 +530,48 @@ class JointSite:
             f"which is a single extra forward pass per batch.")
 
 
-def resolve_site(name):
-    """name -> InterventionSite or JointSite. The one entry point that
-    accepts anything in ALL_SITES; callers that must have a trainable site
-    should keep using InterventionSite(name) so a joint name fails loudly."""
+def _joint_parts(name):
+    """joint site name -> ((single site name, block offset), ...).
+    blocks:N is PARSED rather than enumerated, since N is bounded only by the
+    layer it is probed at."""
     if name in JOINT_SITES:
+        return JOINT_SITES[name]
+    assert name.startswith(BLOCK_SPAN_PREFIX), f"unknown joint site {name!r}"
+    body = name[len(BLOCK_SPAN_PREFIX):]
+    assert body.isdigit(), (
+        f"{name!r}: block span must be a positive integer, e.g. {BLOCK_SPAN_PREFIX}3")
+    n = int(body)
+    assert n >= 1, f"{name!r}: block span must be >= 1"
+    # Offsets descend from the requested layer: blocks:3 at --layer 24 covers
+    # site-layers 24, 23, 22 == decoder blocks 23, 22, 21.
+    return tuple((part, -d) for d in range(n) for part in BLOCK_SPAN_PARTS)
+
+
+def is_joint_name(name):
+    return name in JOINT_SITES or name.startswith(BLOCK_SPAN_PREFIX)
+
+
+def resolve_site(name):
+    """name -> InterventionSite or JointSite. The one entry point that accepts
+    joint names (anything in ALL_SITES, plus any blocks:N); callers that must
+    have a TRAINABLE site should keep using InterventionSite(name) directly so
+    a joint name fails loudly."""
+    if is_joint_name(name):
         return JointSite(name)
     return InterventionSite(name)
+
+
+def site_name(name):
+    """argparse `type=` validator. Exists instead of a `choices=` list because
+    blocks:N is an open family -- choices= would have to pick an arbitrary
+    ceiling and would print a wall of names in --help."""
+    import argparse
+    try:
+        resolve_site(name)
+    except AssertionError as e:
+        raise argparse.ArgumentTypeError(
+            f"{e}\n(valid sites: {', '.join(ALL_SITES)}, or {BLOCK_SPAN_PREFIX}N for any N >= 1)")
+    return name
 
 
 RESIDUAL_SITE = InterventionSite("residual")

@@ -454,7 +454,8 @@ content is in the embedding.
 | `attn_head_output` | `o_proj` | **pre** | 3584 | per-head `z`: 28 heads x 128, so masks can select whole heads |
 | `mlp_output` | `mlp` | post | 3584 | that MLP's contribution only |
 | `mlp_hidden` | `down_proj` | **pre** | **18944** | post-SwiGLU neurons -- NDM's own site |
-| `attn_output+mlp_output` | both sublayers | post | 7168 (sum) | **joint**: both of the block's contributions at once. Diagnostic only |
+| `attn_output+mlp_output` | both sublayers | post | 7168 (sum) | **joint**: the block's whole contribution. Diagnostic only |
+| `blocks:N` | both sublayers × N blocks | post | 7168·N | **joint span**: N consecutive blocks ending at `L`. `blocks:1` is an alias for the row above |
 
 The default `--sites` for `ceiling_sweep.py` is the **four independent**
 ones, `residual attn_output mlp_output attn_output+mlp_output`, so the three
@@ -531,13 +532,54 @@ subtraction:
 | joint ≈ `residual@L` | the block's own sublayers do the work; the accumulated prefix is irrelevant |
 | joint ≈ 0 | neither half suffices alone -- the prefix is *necessary*. The attribute is encoded conjunctively/redundantly across depth, and the `residual` curve is measuring how much depth remains to **repair** the edit, not when information arrived |
 
-Nothing else in the site list separates those two. Mechanics: each part gets
-its own source capture, its own hard mask at its own width, and its own
-patch hook, and all of them are live in the same generation pass. The
-attention post-hook necessarily fires before the MLP post-hook, so the MLP
-reads the already-patched residual -- irrelevant under a *full* swap (its
-output is overwritten wholesale regardless of what it computed), but it
-would matter for a partial one.
+Nothing else in the site list separates those two.
+
+#### Block spans: `blocks:N`
+
+`blocks:N` widens that arm from one block to **N consecutive blocks ending at
+`--layer L`**, which is exactly what `residual@L` has and `residual@(L-N)`
+does not:
+
+```
+residual@L  =  residual@(L-N)  +  Σ (attn_output@i + mlp_output@i)   i = L-N+1 … L
+                    ^ kept as base          ^ all swapped to source
+```
+
+So the retained prefix moves earlier as `N` grows, and `blocks:N` converges on
+`residual@L`. That turns the joint site's yes/no into a dial: sweeping
+`blocks:1 … blocks:5` at a layer where `residual` is live measures **how many
+consecutive blocks must be swapped before the prefix stops mattering** -- how
+deep the redundancy goes.
+
+```bash
+python methods/ndm/ceiling_sweep.py --entity flags --attribute language \
+    --layers 24 --positions last_token \
+    --sites residual blocks:1 blocks:2 blocks:3 blocks:4 blocks:5
+```
+
+Reading it: a curve that climbs from `blocks:1 ≈ 0` to `blocks:5 ≈ residual@L`
+localizes the computation to a ~5-block window *without ever deleting the
+prefix*. A curve that stays flat at 0 all the way to `blocks:5` says the
+prefix is necessary no matter how wide the window -- the attribute is not
+recomputed within any local span.
+
+Mechanics and constraints:
+
+- `N` is **parsed, not enumerated**, so any `N >= 1` works (the same way
+  `position_sets.py` parses `ring:K`). `--sites` therefore validates with a
+  `type=` function rather than a `choices=` list.
+- Needs `--layer >= N`; the earliest block has to exist. Shallower layers are
+  skipped with a message, and `JointSite` asserts rather than wrapping to a
+  negative block.
+- Each part gets its own source capture, its own hard mask at its own width,
+  and its own patch hook, but **all `2N` of them are registered before a
+  single source forward and a single generate** -- a five-block span costs the
+  same number of model calls as a one-block one.
+- Hook order is forward order: within a block the attention post-hook fires
+  before the MLP post-hook, and across a span block `L-2`'s patched output is
+  what block `L-1` reads. Irrelevant under a *full* swap (each output is
+  overwritten wholesale regardless of what it computed), but it would matter
+  for a partial one.
 
 #### Position sets (`--positions`, `--positions_list`)
 
