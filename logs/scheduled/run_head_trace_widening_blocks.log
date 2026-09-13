@@ -1,0 +1,9 @@
+[Sun Sep 13 16:21:56 UTC 2026] Waiting for PID 32545 (patch21 blocks21-24 rerun) to finish...
+[Sun Sep 13 16:24:56 UTC 2026] Driver finished. Starting widening-block head_trace runs.
+[Sun Sep 13 16:24:56 UTC 2026] START head_trace_flags_language_patch21_full_image_blocks21-25_n128k140: /workspace/VADE/.venv/bin/python methods/head_trace.py --entity flags --attribute language --patch_layer 21 --positions full_image --blocks 21 22 23 24 25 --n_rows 128 --knockout_ks 1 2 4 8 16 32 64 128 140
+[Sun Sep 13 16:30:17 UTC 2026] END head_trace_flags_language_patch21_full_image_blocks21-25_n128k140 (exit 0)
+[Sun Sep 13 16:30:17 UTC 2026] START head_trace_flags_language_patch21_full_image_blocks21-26_n128k168: /workspace/VADE/.venv/bin/python methods/head_trace.py --entity flags --attribute language --patch_layer 21 --positions full_image --blocks 21 22 23 24 25 26 --n_rows 128 --knockout_ks 1 2 4 8 16 32 64 128 168
+[Sun Sep 13 16:35:41 UTC 2026] END head_trace_flags_language_patch21_full_image_blocks21-26_n128k168 (exit 0)
+[Sun Sep 13 16:35:41 UTC 2026] START head_trace_flags_language_patch21_full_image_blocks21-27_n128k196: /workspace/VADE/.venv/bin/python methods/head_trace.py --entity flags --attribute language --patch_layer 21 --positions full_image --blocks 21 22 23 24 25 26 27 --n_rows 128 --knockout_ks 1 2 4 8 16 32 64 128 196
+[Sun Sep 13 16:41:00 UTC 2026] END head_trace_flags_language_patch21_full_image_blocks21-27_n128k196 (exit 0)
+[Sun Sep 13 16:41:00 UTC 2026] All widening-block head_trace runs complete.

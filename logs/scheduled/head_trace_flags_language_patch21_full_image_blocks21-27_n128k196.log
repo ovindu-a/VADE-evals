@@ -1,0 +1,72 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<02:17,  5.30it/s]Loading weights:   0%|          | 2/729 [00:00<03:47,  3.19it/s]Loading weights:   1%|1         | 10/729 [00:00<00:38, 18.47it/s]Loading weights:   4%|3         | 28/729 [00:00<00:13, 53.15it/s]Loading weights:   5%|5         | 39/729 [00:00<00:11, 58.49it/s]Loading weights:   7%|7         | 53/729 [00:01<00:09, 72.22it/s]Loading weights:   9%|8         | 65/729 [00:01<00:08, 80.15it/s]Loading weights:  11%|#         | 77/729 [00:01<00:07, 86.86it/s]Loading weights:  12%|#2        | 89/729 [00:01<00:06, 92.67it/s]Loading weights:  14%|#3        | 101/729 [00:01<00:07, 87.91it/s]Loading weights:  16%|#5        | 114/729 [00:01<00:06, 97.94it/s]Loading weights:  17%|#7        | 126/729 [00:01<00:06, 99.52it/s]Loading weights:  19%|#8        | 138/729 [00:01<00:06, 97.70it/s]Loading weights:  21%|##        | 150/729 [00:02<00:05, 100.31it/s]Loading weights:  22%|##2       | 162/729 [00:02<00:05, 103.46it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:05, 93.71it/s] Loading weights:  25%|##5       | 185/729 [00:02<00:05, 95.73it/s]Loading weights:  28%|##7       | 202/729 [00:02<00:04, 112.15it/s]Loading weights:  29%|##9       | 214/729 [00:02<00:05, 98.63it/s] Loading weights:  31%|###1      | 226/729 [00:02<00:04, 103.35it/s]Loading weights:  33%|###2      | 237/729 [00:02<00:04, 101.47it/s]Loading weights:  34%|###4      | 248/729 [00:03<00:04, 99.72it/s] Loading weights:  36%|###5      | 259/729 [00:03<00:04, 96.96it/s]Loading weights:  37%|###7      | 270/729 [00:03<00:04, 92.51it/s]Loading weights:  39%|###8      | 282/729 [00:03<00:04, 94.23it/s]Loading weights:  40%|####      | 294/729 [00:03<00:04, 98.66it/s]Loading weights:  42%|####1     | 305/729 [00:03<00:04, 98.43it/s]Loading weights:  43%|####3     | 315/729 [00:03<00:04, 93.36it/s]Loading weights:  45%|####5     | 330/729 [00:03<00:03, 102.27it/s]Loading weights:  59%|#####8    | 427/729 [00:03<00:00, 331.15it/s]Loading weights:  71%|#######   | 516/729 [00:04<00:00, 481.59it/s]Loading weights:  86%|########5 | 624/729 [00:04<00:00, 647.66it/s]Loading weights:  99%|#########9| 725/729 [00:04<00:00, 748.99it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 170.13it/s]
+[ndm/head_trace] entity=flags attribute=language patch_layer=21 positions=full_image blocks=21-27 heads=28x128 rows=128 (25 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/8 traced
+  batch 2/8 traced
+  batch 3/8 traced
+  batch 4/8 traced
+  batch 5/8 traced
+  batch 6/8 traced
+  batch 7/8 traced
+  batch 8/8 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+27.13              28.0464    18.8262     -0.0139
+27.10              28.0145    18.8447     -0.0140
+27.12              25.0814    17.9373     -0.0142
+26.15              22.9753    15.1223     -0.0168
+26.22              19.4955    13.3816      0.0134
+27.11              18.5068    14.4750     -0.0142
+23.20              18.3602    13.4901     -0.0027
+27.3               16.6472    12.3520     -0.3462
+27.2               15.8487    11.7608     -0.0338
+26.13              15.0329    10.3635     -0.0009
+23.8               14.6433     9.9370      0.0719
+26.25              14.1136     9.3646     -0.0176
+27.20              13.1471    10.8452     -0.0018
+27.0               12.4595     9.7450      0.0164
+21.6               11.4453     7.6506      0.0735
+26.24              11.0903     7.3740     -0.0290
+27.7               10.9154     9.0319     -0.0115
+27.24              10.6987     7.8231     -0.0357
+24.18              10.6267     8.2595     -0.0015
+24.7               10.2674     6.7529      0.0019
+
+per-block total |delta_resid| (where the read happens):
+  block 21:    96.6855
+  block 22:    79.0676
+  block 23:   151.0458
+  block 24:   114.8578
+  block 25:   110.3341
+  block 26:   238.6233
+  block 27:   309.1928
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  1.6% base_kept= 95.3%
+  image patch only (k=0):         cause= 98.4% base_kept=  0.8%   <-- the effect being traced
+  restore top-1   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-2   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-4   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-8   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-16  heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-32  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-64  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-128 heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-196 heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore 8 RANDOM heads (null):   cause= 98.4% base_kept=  0.8%
+
+  top-8 vs random-8 gap: +0.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json
