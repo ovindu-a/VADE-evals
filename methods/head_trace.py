@@ -94,6 +94,7 @@ from methods.ndm.config import METHOD_NAME, ndm_logs_dir  # noqa: E402
 from methods.ndm.verify_sites import HARD_TEMPERATURE, generate_unhooked  # noqa: E402
 
 HEAD_SITE = InterventionSite("attn_head_output")
+ATTN_OUT_SITE = InterventionSite("attn_output")
 RANK_BY = ("delta_resid", "delta_z", "delta_dla")
 
 
@@ -126,13 +127,14 @@ def head_mask(embed_dim, head_dim, heads, device):
     return iv
 
 
-def _final_residual_hook(adapter, model, positions, sink):
-    """Grabs the LAST decoder block's output -- the final PRE-norm residual
-    stream -- at `positions`. Deliberately not read off out.hidden_states[-1]:
-    in this project's transformers that entry is tied to last_hidden_state and
-    is therefore POST-final-norm (the trap methods/logit_lens.py documents),
-    which would make the frozen scale below wrong by exactly the factor it is
-    supposed to be."""
+def _residual_hook(adapter, model, block, positions, sink):
+    """Grabs decoder block `block`'s OUTPUT -- the PRE-norm residual stream
+    entering block block+1 -- at `positions`. Deliberately not read off
+    out.hidden_states: its last entry is tied to last_hidden_state and is
+    therefore POST-final-norm in this project's transformers (the trap
+    methods/logit_lens.py documents), which would make dla.py's frozen scale
+    wrong by exactly the factor it is supposed to be. A hook is also the only
+    way to read this under an active patch."""
     layers = adapter.get_decoder_layers(model)
     B = positions.shape[0]
 
@@ -140,7 +142,12 @@ def _final_residual_hook(adapter, model, positions, sink):
         t = output[0] if isinstance(output, tuple) else output
         sink.append(torch.stack([t[i, positions[i]] for i in range(B)]).detach())
 
-    return layers[-1].register_forward_hook(post)
+    return layers[block].register_forward_hook(post)
+
+
+def _final_residual_hook(adapter, model, positions, sink):
+    """The last block's output -- see _residual_hook."""
+    return _residual_hook(adapter, model, len(adapter.get_decoder_layers(model)) - 1, positions, sink)
 
 
 def capture_head_outputs(adapter, model, blocks, positions, input_ids, attention_mask, extra, patches=()):
@@ -279,6 +286,42 @@ def head_patches(selected_heads, z_by_block, last_positions, hidden, head_dim, d
             fn = traced
         out.append((HEAD_SITE, b + 1, fn))
     return out
+
+
+def probe_identity(adapter, model, blocks, entry_block, positions, input_ids, attention_mask, extra,
+                    patches=()):
+    """One forward pass under `patches`, capturing at `positions`: o_proj's
+    INPUT and o_proj's OUTPUT at every traced block, the residual entering
+    `entry_block`, and the final pre-norm residual.
+
+    Capturing BOTH sides of o_proj is the point. A forward PRE-hook that
+    rewrites a module's input and a capture pre-hook registered after it will
+    agree with each other whether or not the module ever consumes the rewrite
+    -- PyTorch threads `args` through the hook chain, so the second hook reads
+    the first hook's output, not the tensor the module is called with. Checking
+    o_proj's OUTPUT against W_O @ (its captured input) is what actually closes
+    that loop."""
+    layers = adapter.get_decoder_layers(model)
+    handles = []
+    for site, layer_idx, fn in patches:
+        handles.extend(site.register(adapter, model, layers, layer_idx, fn))
+    z_sinks, o_sinks = {b: [] for b in blocks}, {b: [] for b in blocks}
+    for b in blocks:
+        handles.append(HEAD_SITE.register_capture(adapter, model, b + 1, positions, z_sinks[b]))
+        handles.append(ATTN_OUT_SITE.register_capture(adapter, model, b + 1, positions, o_sinks[b]))
+    entry_sink, final_sink = [], []
+    handles.append(_residual_hook(adapter, model, entry_block - 1, positions, entry_sink))
+    handles.append(_final_residual_hook(adapter, model, positions, final_sink))
+    try:
+        extra_dev = extra_to_device(extra, model.device, model.dtype)
+        with torch.no_grad():
+            model(input_ids=input_ids.to(model.device), attention_mask=attention_mask.to(model.device),
+                  **extra_dev, logits_to_keep=1)
+    finally:
+        for h in handles:
+            h.remove()
+    return ({b: z_sinks[b][0] for b in blocks}, {b: o_sinks[b][0] for b in blocks},
+            entry_sink[0], final_sink[0])
 
 
 def per_head_delta(adapter, model, base_z, patched_z, block, n_heads, head_dim, direction, scale_base,
@@ -495,51 +538,100 @@ def main():
         # exactly and the final residual STILL diverges, the cause is --blocks coverage (or, with
         # complete coverage, a real bug). Costs one forward pass on one batch, and no generation.
         b_img0, b_last0 = batches[0]
+        pos0 = b_last0["positions"]
+        ids0, mask0, extra0 = b_img0["base_input_ids"], b_img0["attention_mask"], b_img0["base_extra"]
         every_head = [(b, h) for b in blocks for h in range(n_heads)]
-        read_z, read_final = capture_head_outputs(
-            adapter, model, blocks, b_last0["positions"], b_img0["base_input_ids"],
-            b_img0["attention_mask"], b_img0["base_extra"],
-            patches=head_patches(every_head, patched_z_per_batch[0], b_last0["positions"], hidden,
-                                 head_dim, model.device))
+        clean_z, clean_o, clean_entry, clean_final = probe_identity(
+            adapter, model, blocks, blocks[0], pos0, ids0, mask0, extra0)
+        pat_z, pat_o, pat_entry, pat_final = probe_identity(
+            adapter, model, blocks, blocks[0], pos0, ids0, mask0, extra0,
+            patches=[image_patch(adapter, model, b_img0, args.patch_layer, src=img_src[0])])
+        inst_z, inst_o, inst_entry, inst_final = probe_identity(
+            adapter, model, blocks, blocks[0], pos0, ids0, mask0, extra0,
+            patches=head_patches(every_head, pat_z, pos0, hidden, head_dim, model.device))
 
-        print(f"\n{'='*78}\n=== phase 1c: read-back identity (batch 1, no generation)\n{'='*78}")
-        worst, worst_b = 0.0, None
+        def _rel(got, want):
+            want = want.float()
+            return (got.float() - want).norm().item() / max(want.norm().item(), 1e-9)
+
+        def _o_proj_rel(run_z, run_o, b):
+            """o_proj's captured OUTPUT vs W_O @ its captured INPUT. ~0 means the module really was
+            called with the tensor we captured; large means it was not."""
+            mod = adapter.get_attn_head_output_module(model, b)
+            expect = run_z[b].float() @ mod.weight.float().T
+            if mod.bias is not None:
+                expect = expect + mod.bias.float()
+            return _rel(run_o[b], expect)
+
+        print(f"\n{'='*78}\n=== phase 1c: read-back identity (batch 1, 3 forwards, no generation)\n{'='*78}")
+
+        # (i) THE INDUCTION'S BASE CASE. The image patch is at image positions, so the read column's
+        #     residual entering the first traced block must be untouched by it. If this is not ~0 the
+        #     identity does not apply at all and nothing below it means anything.
+        entry_rel = _rel(pat_entry, clean_entry)
+        print(f"  residual entering block {blocks[0]} at the read column, image-patched vs clean: "
+              f"{entry_rel:.3%}"
+              f"{'  (as required)' if entry_rel < 0.01 else '   !! should be ~0 -- the patch reaches '
+                'the read column BEFORE the traced blocks, so the identity does not apply'}")
+
+        # (ii) READ-BACK, and (iii) the check that makes the read-back mean something. A forward
+        #      PRE-hook that rewrites o_proj's input and a capture pre-hook registered after it agree
+        #      with each other whether or not o_proj consumes the rewrite, because PyTorch threads
+        #      `args` down the hook chain. Comparing o_proj's OUTPUT against W_O @ (captured input)
+        #      is what closes that loop. The clean run is the control: it has no patch, so its
+        #      residual MUST be ~0, and a large value there means this check itself is wrong.
+        worst, worst_b = 0.0, blocks[0]
         for b in blocks:
-            want = patched_z_per_batch[0][b].float()
-            rel = (read_z[b].float() - want).norm().item() / max(want.norm().item(), 1e-9)
-            if rel > worst:
-                worst, worst_b = rel, b
-        assert worst < 1e-3, (
-            f"READ-BACK FAILED at block {worst_b} (relative error {worst:.1%}): the values installed "
-            f"into attn_head_output at the last token are not what the capture hook reads back from "
-            f"the same site. The patch and the capture are not addressing the same tensor/column, so "
-            f"every number in phases 2 and 3 is void.")
-        print(f"  every traced block reads back exactly what was installed "
-              f"(worst relative error {worst:.2e}, block {worst_b})")
+            r = _rel(inst_z[b], pat_z[b])
+            if r >= worst:
+                worst, worst_b = r, b
+        print(f"\n  o_proj INPUT reads back what was installed: worst {worst:.2e} (block {worst_b})")
+        print(f"  {'block':>7} {'clean run':>12} {'installed run':>15}   (o_proj OUTPUT vs W_O @ its captured INPUT)")
+        cons_clean = {b: _o_proj_rel(clean_z, clean_o, b) for b in blocks}
+        cons_inst = {b: _o_proj_rel(inst_z, inst_o, b) for b in blocks}
+        for b in blocks:
+            print(f"  {b:>7} {cons_clean[b]:>11.2%} {cons_inst[b]:>14.2%}")
+        control_ok = max(cons_clean.values()) < 0.05
+        consumed = max(cons_inst.values()) < 0.05
 
-        want_f = patched_final_per_batch[0].float()
-        fin_rel = (read_final.float() - want_f).norm().item() / max(want_f.norm().item(), 1e-9)
+        # (iv) The identity itself, stated numerically -- and the one comparison that separates
+        #      "the patch did the wrong thing" from "the patch did nothing".
+        to_patched, to_clean = _rel(inst_final, pat_final), _rel(inst_final, clean_final)
         downstream = set(range(args.patch_layer, n_layers))
         missing = sorted(downstream - set(blocks))
-        print(f"\n  final pre-norm residual at the last token -- installed-heads run vs image-patched "
-              f"run:\n    relative error {fin_rel:.3%}")
-        if fin_rel < 0.02:
-            print(f"    -> MATCHES. Installing the traced heads reproduces the image patch at the last "
-                  f"token, so the intervention in phases 2 and 3 is sound and their k=all arms MUST "
-                  f"reproduce the image patch's cause. If they do not, the fault is downstream of the "
-                  f"patch -- in generation or scoring -- not in the patch.")
+        print(f"\n  final pre-norm residual at the read column, installed-heads run vs:")
+        print(f"    the image-patched run: {to_patched:.3%}   <-- the identity; must be ~0")
+        print(f"    the CLEAN run:         {to_clean:.3%}   <-- ~0 means the patch changed NOTHING")
+
+        if not control_ok:
+            print(f"  -> the CLEAN control fails ({max(cons_clean.values()):.1%}), so this check is "
+                  f"itself wrong: o_proj's output is not W_O @ the tensor register_capture reads. "
+                  f"Fix the check before reading anything else.")
+        elif not consumed:
+            print(f"  -> FOUND IT: o_proj's input reads back perfectly but its OUTPUT does not match "
+                  f"W_O @ that input, while the unpatched control is exact. The block is NOT "
+                  f"consuming the rewritten input -- the forward PRE-hook's returned args reach the "
+                  f"later capture hook and nothing else. The read-back was fooled by hook ordering, "
+                  f"and every head-level number in phases 1b, 2 and 3 is void.")
+        elif to_clean < 0.01:
+            print(f"  -> the patch is CONSUMED by o_proj yet the final residual is unchanged from "
+                  f"clean. That cannot happen through this site alone; look for the head patch being "
+                  f"removed or overwritten before the blocks that matter run.")
+        elif to_patched < 0.02:
+            print(f"  -> MATCHES. The intervention is sound, so phases 2 and 3's k=all arms MUST "
+                  f"reproduce the image patch's cause; if they do not the fault is in generation or "
+                  f"scoring, not the patch.")
         elif missing:
-            print(f"    -> DIVERGES, and --blocks is missing downstream block(s) {missing}, which on "
-                  f"its own explains it: their attention at the last token still reads the CLEAN "
-                  f"image. Re-run with --blocks {' '.join(str(b) for b in sorted(downstream))} before "
-                  f"reading phases 2 and 3.")
+            print(f"  -> diverges, and --blocks is missing downstream block(s) {missing}, which "
+                  f"explains it: their attention at the read column still sees the CLEAN image. "
+                  f"Re-run with --blocks {' '.join(str(b) for b in sorted(downstream))}.")
         else:
-            print(f"    -> DIVERGES even though --blocks covers every downstream block "
-                  f"({args.patch_layer}..{n_layers - 1}), so coverage cannot explain it and the "
-                  f"identity above is exact. This is a BUG, and phases 2 and 3 are void. The "
-                  f"read-back passed, so the patch does land where the capture reads -- look instead "
-                  f"for a path from the image to the last token that is NOT this site.")
-        report["phase1c"] = {"readback_worst_rel": worst, "final_residual_rel": fin_rel,
+            print(f"  -> diverges with complete coverage ({args.patch_layer}..{n_layers - 1}) and a "
+                  f"consumed patch, so the installed values are being applied but are not the whole "
+                  f"of what the image patch changes at this column. Phases 2 and 3 are void.")
+        report["phase1c"] = {"entry_residual_rel": entry_rel, "readback_worst_rel": worst,
+                             "o_proj_consumption_clean": cons_clean, "o_proj_consumption_installed": cons_inst,
+                             "final_vs_patched_rel": to_patched, "final_vs_clean_rel": to_clean,
                              "blocks_missing_downstream": missing}
 
         if args.skip_knockout:
@@ -707,7 +799,7 @@ def main():
                       f"this MUST equal the image-patch-only cause ({full_ms:.1%})")
                 if abs(ceil_ms - full_ms) > 0.05:
                     print(f"  !! it does not ({ceil_ms:.1%} vs {full_ms:.1%}), and phase 1c says the "
-                          f"final residual at the last token {'matches' if fin_rel < 0.02 else 'does not match'}. "
+                          f"final residual at the last token {'matches' if to_patched < 0.02 else 'does not match'}. "
                           f"Every top-k row below is therefore meaningless -- fix this first.")
             suff.append({"k": len(all_heads), "kind": "all", "cause": ceil_ms, "base_kept": ceil_mb})
             for k in args.knockout_ks:
