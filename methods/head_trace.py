@@ -450,9 +450,6 @@ def main():
             print(f"\nwrote {out_path}  (phase 2 skipped)")
             return
 
-        # ---------------- phase 2: cumulative knockout ----------------
-        print(f"\n{'='*78}\n=== phase 2: cumulative knockout under the image patch (path patching)\n{'='*78}")
-
         def run_cause(selected_heads, z_per_batch, with_image_patch):
             """cause / base_kept with `selected_heads` overwritten at the last
             token from z_per_batch, optionally under the image patch.
@@ -475,6 +472,34 @@ def main():
                 k = len(b_img["rows"])
                 ms, mb, n = ms + s * k, mb + t * k, n + k
             return ms / n, mb / n
+
+        # ---------------- phase 1b: is the head patch even connected? ----------------
+        # A PRECONDITION, not a measurement. Forcing every traced head at the last token to ZERO
+        # deletes that position's entire attention input for those blocks; the generation MUST
+        # change. If it does not, the head-patch hook is not taking effect and every knockout or
+        # sufficiency number below would be a table of zeros that reads exactly like a real null.
+        # That is what happened in commit a97991a: 8 runs, both directions, every k identical to
+        # the do-nothing arm, because nothing was ever patched.
+        zero_z = [{b: z[b] * 0.0 for b in blocks} for z in base_z_per_batch]
+        all_heads = [(b, h) for b in blocks for h in range(n_heads)]
+        zero_ms, zero_mb = run_cause(all_heads, zero_z, False)
+        clean_ms, clean_mb = run_cause([], zero_z, False)
+        print(f"\n{'='*78}\n=== phase 1b: head-patch connectivity check\n{'='*78}")
+        print(f"  clean (no patches):             cause={clean_ms:6.1%} base_kept={clean_mb:6.1%}")
+        print(f"  ALL {len(all_heads)} heads ZEROED:          cause={zero_ms:6.1%} base_kept={zero_mb:6.1%}")
+        assert (zero_ms, zero_mb) != (clean_ms, clean_mb), (
+            f"HEAD PATCH IS NOT CONNECTED. Zeroing every attention head at the last token for blocks "
+            f"{blocks[0]}-{blocks[-1]} left the generation byte-identical ({zero_mb:.1%} base_kept "
+            f"either way). That is impossible if the patch is landing -- attention is the only "
+            f"cross-position operation, so deleting all of it at that position must change the "
+            f"answer. Phases 2 and 3 cannot mean anything until this passes; do not read them.")
+        print(f"  -> head patch is connected (zeroing moved base_kept "
+              f"{clean_mb:.1%} -> {zero_mb:.1%})")
+        report["phase1b_connectivity"] = {"clean_cause": clean_ms, "clean_base_kept": clean_mb,
+                                          "zeroed_cause": zero_ms, "zeroed_base_kept": zero_mb}
+
+        # ---------------- phase 2: cumulative knockout ----------------
+        print(f"\n{'='*78}\n=== phase 2: cumulative knockout under the image patch (path patching)\n{'='*78}")
 
         unhooked_ms, unhooked_mb, n = 0.0, 0.0, 0
         for b_img, _ in batches:
