@@ -393,11 +393,21 @@ to source at `--patch_layer`; rank by `delta_resid` = ||dz_h W_O_h^T|| (what
 actually lands in the residual -- `o_proj` weights heads very differently, so
 `delta_z` can disagree), with `delta_dla` (dla.py's exact per-head logit term,
 differenced, each run with its own frozen scale) as the answer-axis view.
-PHASE 2: keep the image patched and RESTORE the top-k heads at the last token
-to base; cumulative k because single-head knockout cannot see a conjunction,
-same reason `blocks:N` exists. `--n_random` is a built-in null control -- if
-random-k hurts as much as top-k the ranking is uninformative and the curve
-means nothing.
+PHASE 2 (NECESSITY): keep the image patched and RESTORE the top-k heads at the
+last token to base; cumulative k because single-head knockout cannot see a
+conjunction, same reason `blocks:N` exists. PHASE 3 (SUFFICIENCY, the mirror
+and the stronger of the two): do NOT patch the image, and INSTALL the patched
+values into only the top-k heads -- "is this set enough on its own". Necessity
+is exactly the question redundancy breaks, so a flat phase-2 curve proves
+little while a steep phase-3 one is localization regardless. Phase 3 reports
+its OWN ceiling (all traced heads patched), which is NOT 100%: the image patch
+also moves blocks outside `--blocks`, the MLPs, and the residual stream
+directly, so the top-k arms are normalized against what this intervention can
+reach rather than against the image patch. Its k=0 arm must reproduce the
+unhooked row exactly and says so if it does not. Both phases share one
+`head_patches` builder and one `run_cause(..., with_image_patch=)`, so the two
+curves cannot drift apart in rows, masks, scoring or generation, and
+`--n_random`'s null head set is drawn ONCE and used by both.
 
 `--patch_layer` MUST be below the handoff (where ceiling_sweep's image column
 is still large); the script warns rather than reporting a flat curve. Needs

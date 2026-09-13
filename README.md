@@ -1098,13 +1098,32 @@ head whose output changed is a head that *read* the patched image:
 | `delta_resid` | `‖Δz_h W_O_h^T‖` -- the change that actually lands in the residual stream. **The default ranking**: `o_proj` weights heads very differently, so a large `Δz` can land as nothing |
 | `delta_dla` | `dla.py`'s exact per-head logit term, differenced between the runs (each with its own frozen scale). Ranks by movement of the *answer*, but sees direct paths only |
 
-**Phase 2 -- cumulative knockout** (path patching; one generation per `k`).
-Keep the image patched (cause ~100%) and **restore** the top-*k* heads'
-outputs at the last token to their clean-base values. If cause collapses,
-those heads carry the signal. Cumulative (`k = 1, 2, 4, 8, 16`) rather than
-one head at a time, because single-head knockout will read ~0 for exactly the
-reason single-sublayer swaps do -- a marginal measurement cannot see a
-conjunction. This is the head-level analogue of `ceiling_sweep`'s `blocks:N`.
+**Phase 2 -- cumulative knockout / NECESSITY** (path patching; one generation
+per `k`). Keep the image patched (cause ~100%) and **restore** the top-*k*
+heads' outputs at the last token to their clean-base values. If cause
+collapses, those heads carry the signal. Cumulative (`k = 1, 2, 4, 8, 16`)
+rather than one head at a time, because single-head knockout will read ~0 for
+exactly the reason single-sublayer swaps do -- a marginal measurement cannot
+see a conjunction. This is the head-level analogue of `ceiling_sweep`'s
+`blocks:N`.
+
+**Phase 3 -- SUFFICIENCY**, the mirror, and the stronger of the two. Do *not*
+patch the image; instead **install** the patched values into only the top-*k*
+heads, and ask whether that alone reproduces the effect. Necessity is precisely
+the question redundancy breaks -- a genuinely load-bearing head looks
+unnecessary when three others can cover for it -- whereas a small set that
+reproduces the effect on its own is localization no matter how flat the
+knockout curve is.
+
+Phase 3 reports **its own ceiling** (all traced heads patched), which is *not*
+100%: the image patch also moves blocks outside `--blocks`, the MLPs, and the
+residual stream directly, so the top-*k* arms are normalized against what this
+intervention can actually reach. Its `k=0` arm must reproduce the unhooked row
+exactly, and the run says so if it doesn't. Both phases go through one
+`head_patches` builder and one `run_cause(..., with_image_patch=)`, so the
+curves cannot drift apart in rows, masks, scoring or generation, and
+`--n_random`'s null set is drawn once and shared. `--skip_sufficiency` drops
+phase 3 for the generation budget; `--skip_knockout` drops both.
 
 **A null control is built in.** `--n_random` knocks out the same number of
 *randomly chosen* heads. If random-8 hurts cause as much as top-8, the phase-1

@@ -202,18 +202,56 @@ def generate_with_patches(adapter, model, patches, input_ids, attention_mask, ex
     return gen[:, input_ids.shape[1]:].cpu()
 
 
-def image_patch(adapter, model, batch_img, patch_layer):
+def capture_image_source(adapter, model, batch_img, patch_layer):
+    """The source flag's residual stream at the image positions. Hoisted out of
+    image_patch so a run that builds the same patch for a dozen knockout
+    configurations pays for ONE source forward per batch instead of a dozen."""
+    return RESIDUAL_SITE.capture(adapter, model, patch_layer, batch_img["source_input_ids"],
+                                 batch_img["attention_mask"], batch_img["source_extra"],
+                                 batch_img["positions"])
+
+
+def image_patch(adapter, model, batch_img, patch_layer, src=None):
     """-> (site, layer, patch_fn) replacing the base's residual stream with the
     source's at the image positions -- the intervention ceiling_sweep already
-    measured at ~100% cause below the handoff, and the thing both phases
-    observe the downstream consequences of."""
+    measured at ~100% cause below the handoff, and the thing every phase
+    observes the downstream consequences of."""
     from methods.ndm.verify_sites import hard_mask
-    src = RESIDUAL_SITE.capture(adapter, model, patch_layer, batch_img["source_input_ids"],
-                                batch_img["attention_mask"], batch_img["source_extra"],
-                                batch_img["positions"])
+    if src is None:
+        src = capture_image_source(adapter, model, batch_img, patch_layer)
     one = hard_mask(RESIDUAL_SITE.width(adapter, model), 1.0, model.device)
     fn = make_cache_aware_patch_hook(batch_img["positions"], lambda base_vals: one(base_vals, src))
     return (RESIDUAL_SITE, patch_layer, fn)
+
+
+def head_patches(selected_heads, z_by_block, last_positions, hidden, head_dim, device):
+    """-> [(HEAD_SITE, block+1, patch_fn)] writing z_by_block[block]'s values
+    into exactly `selected_heads`' 128-dim slices at the last-token column,
+    leaving every other head of that block alone.
+
+    Used in BOTH directions, which is the whole point of it being one function:
+
+      KNOCKOUT (necessity)   image patched, z_by_block = the CLEAN base capture
+                             -> "make these heads behave as if the image had
+                             not been swapped". Does the effect survive?
+      SUFFICIENCY            image NOT patched, z_by_block = the PATCHED
+                             capture -> "make only these heads behave as if it
+                             had". Does the effect appear?
+
+    Necessity is the weaker question: redundancy makes genuinely important
+    heads look unnecessary, which is why the knockout has to be cumulative.
+    Sufficiency does not have that problem -- if a small set reproduces the
+    effect on its own, that is localization, whatever the knockout says."""
+    per_block = {}
+    for b, h in selected_heads:
+        per_block.setdefault(b, []).append(h)
+    out = []
+    for b, heads in per_block.items():
+        mask = head_mask(hidden, head_dim, heads, device)
+        vals = z_by_block[b].to(device)
+        out.append((HEAD_SITE, b + 1, make_cache_aware_patch_hook(
+            last_positions, lambda bv, _m=mask, _s=vals: _m(bv, _s))))
+    return out
 
 
 def per_head_delta(adapter, model, base_z, patched_z, block, n_heads, head_dim, direction, scale_base,
@@ -274,7 +312,12 @@ def main():
     ap.add_argument("--n_random", type=int, default=8,
                     help="Size of the RANDOM-head null control. 0 disables it, which you should not do: "
                          "without it a phase-2 curve is uninterpretable.")
-    ap.add_argument("--skip_knockout", action="store_true", help="Phase 1 only (no generation at all).")
+    ap.add_argument("--skip_knockout", action="store_true",
+                    help="Phase 1 only -- skips BOTH generation phases (2 and 3).")
+    ap.add_argument("--skip_sufficiency", action="store_true",
+                    help="Run the knockout (phase 2) but not the sufficiency arm (phase 3). Phase 3 is "
+                         "the stronger of the two -- necessity is what redundancy breaks -- so skip it "
+                         "only for the generation budget.")
     ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--split", default="test", choices=["test", "train"])
@@ -341,9 +384,13 @@ def main():
         print(f"\n{'='*78}\n=== phase 1: differential head trace (2 forwards per batch, no generation)\n{'='*78}")
         agg = {(b, h): {"delta_z": 0.0, "delta_resid": 0.0, "delta_dla": 0.0, "n": 0} for b in blocks
                for h in range(n_heads)}
+        # Retained per batch: phase 2 restores FROM base_z, phase 3 installs FROM patched_z, and
+        # img_src saves re-running the source forward for every later configuration.
+        base_z_per_batch, patched_z_per_batch, img_src = [], [], []
         for bi, (b_img, b_last) in enumerate(batches):
             last_pos = b_last["positions"]
-            patch = image_patch(adapter, model, b_img, args.patch_layer)
+            img_src.append(capture_image_source(adapter, model, b_img, args.patch_layer))
+            patch = image_patch(adapter, model, b_img, args.patch_layer, src=img_src[-1])
 
             base_z, base_final = capture_head_outputs(
                 adapter, model, blocks, last_pos, b_img["base_input_ids"], b_img["attention_mask"],
@@ -361,6 +408,8 @@ def main():
             scale_base = adapter.final_norm_scale(model, base_final.float())                     # [B,n_pos,1]
             scale_patched = adapter.final_norm_scale(model, patched_final.float())
 
+            base_z_per_batch.append(base_z)
+            patched_z_per_batch.append(patched_z)
             for b in blocks:
                 for h, dz, dr, dd in per_head_delta(adapter, model, base_z[b], patched_z[b], b, n_heads,
                                                     head_dim, d, scale_base, scale_patched):
@@ -404,20 +453,21 @@ def main():
         # ---------------- phase 2: cumulative knockout ----------------
         print(f"\n{'='*78}\n=== phase 2: cumulative knockout under the image patch (path patching)\n{'='*78}")
 
-        def run_cause(selected_heads, base_z_per_batch):
-            """cause rate with the image patched AND `selected_heads` restored to
-            their clean-base values at the last token. selected_heads: [(block, head)]."""
+        def run_cause(selected_heads, z_per_batch, with_image_patch):
+            """cause / base_kept with `selected_heads` overwritten at the last
+            token from z_per_batch, optionally under the image patch.
+
+              with_image_patch=True,  z = base_z    -> KNOCKOUT (necessity)
+              with_image_patch=False, z = patched_z -> SUFFICIENCY
+
+            One function for both so the two curves cannot drift apart in the
+            details -- same rows, same masks, same scoring, same generation."""
             ms, mb, n = 0.0, 0.0, 0
-            per_block = {}
-            for b, h in selected_heads:
-                per_block.setdefault(b, []).append(h)
-            for (b_img, b_last), base_z in zip(batches, base_z_per_batch):
-                patches = [image_patch(adapter, model, b_img, args.patch_layer)]
-                for b, heads in per_block.items():
-                    mask = head_mask(hidden, head_dim, heads, model.device)
-                    restore = base_z[b].to(model.device)
-                    patches.append((HEAD_SITE, b + 1, make_cache_aware_patch_hook(
-                        b_last["positions"], lambda bv, _m=mask, _s=restore: _m(bv, _s))))
+            for (b_img, b_last), z, src in zip(batches, z_per_batch, img_src):
+                patches = ([image_patch(adapter, model, b_img, args.patch_layer, src=src)]
+                           if with_image_patch else [])
+                patches += head_patches(selected_heads, z, b_last["positions"], hidden, head_dim,
+                                        model.device)
                 gen = generate_with_patches(adapter, model, patches, b_img["base_input_ids"],
                                             b_img["attention_mask"], b_img["base_extra"], pad_token_id,
                                             args.max_new_tokens)
@@ -425,14 +475,6 @@ def main():
                 k = len(b_img["rows"])
                 ms, mb, n = ms + s * k, mb + t * k, n + k
             return ms / n, mb / n
-
-        # Re-capture the clean base head outputs once, to restore FROM. (Phase 1's were per batch and
-        # not retained -- holding every batch's [B, 1, 3584] x n_blocks across phase 1 would be dead
-        # weight for a run using --skip_knockout.)
-        base_z_per_batch = [capture_head_outputs(adapter, model, blocks, b_last["positions"],
-                                                 b_img["base_input_ids"], b_img["attention_mask"],
-                                                 b_img["base_extra"])[0]
-                            for b_img, b_last in batches]
 
         unhooked_ms, unhooked_mb, n = 0.0, 0.0, 0
         for b_img, _ in batches:
@@ -442,7 +484,7 @@ def main():
             k = len(b_img["rows"])
             unhooked_ms, unhooked_mb, n = unhooked_ms + s * k, unhooked_mb + t * k, n + k
         print(f"  unhooked:                       cause={unhooked_ms / n:6.1%} base_kept={unhooked_mb / n:6.1%}")
-        full_ms, full_mb = run_cause([], base_z_per_batch)
+        full_ms, full_mb = run_cause([], base_z_per_batch, True)
         print(f"  image patch only (k=0):         cause={full_ms:6.1%} base_kept={full_mb:6.1%}"
               f"   <-- the effect being traced")
         if full_ms < 0.10:
@@ -450,20 +492,23 @@ def main():
                   f"nothing downstream to knock out. Pick a --patch_layer BELOW the handoff (check "
                   f"ceiling_sweep's image-position column) before reading anything below.")
 
+        # Drawn ONCE, before either phase, so phases 2 and 3 null against the identical head set.
+        rand_heads = (random.Random(args.seed + 1)
+                      .sample([(r["block"], r["head"]) for r in table], min(args.n_random, len(table)))
+                      if args.n_random else [])
+
         knock = []
         for k in args.knockout_ks:
             if k > len(ranked):
                 continue
             heads = [(r["block"], r["head"]) for r in ranked[:k]]
-            ms, mb = run_cause(heads, base_z_per_batch)
+            ms, mb = run_cause(heads, base_z_per_batch, True)
             knock.append({"k": k, "kind": "top", "heads": heads, "cause": ms, "base_kept": mb})
             print(f"  restore top-{k:<3} heads:            cause={ms:6.1%} base_kept={mb:6.1%}  "
                   f"(recovered {max(full_ms - ms, 0) / max(full_ms, 1e-9):5.1%} of the effect)", flush=True)
 
         if args.n_random:
-            rng = random.Random(args.seed + 1)
-            rand_heads = rng.sample([(r["block"], r["head"]) for r in table], min(args.n_random, len(table)))
-            ms, mb = run_cause(rand_heads, base_z_per_batch)
+            ms, mb = run_cause(rand_heads, base_z_per_batch, True)
             knock.append({"k": args.n_random, "kind": "random", "heads": rand_heads, "cause": ms,
                           "base_kept": mb})
             print(f"  restore {args.n_random} RANDOM heads (null):   cause={ms:6.1%} base_kept={mb:6.1%}")
@@ -476,6 +521,50 @@ def main():
 
         report["phase2"] = {"unhooked_cause": unhooked_ms / n, "image_patch_only_cause": full_ms,
                             "image_patch_only_base_kept": full_mb, "knockouts": knock}
+
+        # ---------------- phase 3: sufficiency ----------------
+        if not args.skip_sufficiency:
+            print(f"\n{'='*78}\n=== phase 3: sufficiency -- patch ONLY these heads, no image patch\n{'='*78}")
+            print(f"  The mirror of phase 2. Instead of removing a head's contribution from a fully "
+                  f"patched run, this INSTALLS it into an otherwise clean one: the image is NOT "
+                  f"swapped, and the selected heads are forced to the values they took when it was. "
+                  f"Necessity (phase 2) is the question redundancy breaks; sufficiency is not, so a "
+                  f"small set reproducing the effect here is localization even if the knockout curve "
+                  f"is flat.")
+            suff = []
+            z0_ms, z0_mb = run_cause([], patched_z_per_batch, False)
+            print(f"\n  nothing patched (k=0):          cause={z0_ms:6.1%} base_kept={z0_mb:6.1%}"
+                  f"   <-- must match the unhooked row above")
+            if abs(z0_ms - unhooked_ms / n) > 1e-9:
+                print(f"  !! k=0 differs from unhooked ({z0_ms:.1%} vs {unhooked_ms / n:.1%}) -- a patch "
+                      f"is leaking when no heads are selected; every number below is suspect.")
+            all_heads = [(r["block"], r["head"]) for r in table]
+            ceil_ms, ceil_mb = run_cause(all_heads, patched_z_per_batch, False)
+            print(f"  ALL {len(all_heads)} traced heads:           cause={ceil_ms:6.1%} "
+                  f"base_kept={ceil_mb:6.1%}   <-- this arm's own ceiling, NOT 100%: the image patch "
+                  f"also moves blocks outside --blocks, the MLPs, and the residual stream directly")
+            suff.append({"k": len(all_heads), "kind": "all", "cause": ceil_ms, "base_kept": ceil_mb})
+            for k in args.knockout_ks:
+                if k > len(ranked):
+                    continue
+                heads = [(r["block"], r["head"]) for r in ranked[:k]]
+                ms, mb = run_cause(heads, patched_z_per_batch, False)
+                suff.append({"k": k, "kind": "top", "heads": heads, "cause": ms, "base_kept": mb})
+                print(f"  patch top-{k:<3} heads:              cause={ms:6.1%} base_kept={mb:6.1%}  "
+                      f"({ms / max(ceil_ms, 1e-9):5.1%} of this arm's ceiling)", flush=True)
+            if args.n_random:
+                ms, mb = run_cause(rand_heads, patched_z_per_batch, False)
+                suff.append({"k": args.n_random, "kind": "random", "heads": rand_heads, "cause": ms,
+                             "base_kept": mb})
+                print(f"  patch {args.n_random} RANDOM heads (null):     cause={ms:6.1%} "
+                      f"base_kept={mb:6.1%}   <-- same heads as phase 2's null")
+                top_same = next((x for x in suff if x["kind"] == "top" and x["k"] == args.n_random), None)
+                if top_same is not None:
+                    print(f"\n  top-{args.n_random} vs random-{args.n_random}: "
+                          f"{top_same['cause']:.1%} vs {ms:.1%} of cause.")
+            report["phase3_sufficiency"] = {"ceiling_all_traced_heads": ceil_ms, "k0_cause": z0_ms,
+                                            "arms": suff}
+
         with open(out_path, "w") as f:
             json.dump(report, f, indent=2)
         print(f"\nwrote {out_path}")
