@@ -443,6 +443,22 @@ patch that was demonstrably live. It is the same failure as the calling_code
 "split" (see `swap_trace.py`), where `exact_match` over multi-token answers hid
 a 100% first-token effect.
 
+**Every head_trace result before the BuildBatchCache fix is VOID.** The script
+builds two batches per chunk sharing one cache -- the image spec, then
+`last_token` -- and `BuildBatchCache` keyed `pos_unpadded` on
+(queried, template_id) with no positions_name, so the second build came back
+carrying the FIRST spec's image columns. Every head was traced and patched at
+image positions while every printed line said "last token", and nothing
+downstream noticed: shapes broadcast, telemetry fired, the read-back was exact,
+o_proj consumed the patch. It also explains what those runs reported -- flat
+phase 2/3 curves (patching attention heads at image positions, which
+ceiling_sweep independently measures at 0.0% cause for `attn_output` at every
+layer), a 96.9% cause with all heads zeroed, and a phase-1 ranking whose
+per-block mass sat in blocks 26-27. The cause numbers themselves were never
+wrong: the image patch is a single-spec `residual` swap and still reads
+98-100%. Fixed in entities.py (positions get their own cache key); head_trace
+now asserts the two batches DISAGREE on positions.
+
 `--patch_layer` MUST be below the handoff (where ceiling_sweep's image column
 is still large); the script warns rather than reporting a flat curve. Needs
 two batches per chunk (image positions to patch, `last_token` to read) and
