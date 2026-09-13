@@ -1,0 +1,74 @@
+{
+  "entity": "flags",
+  "attribute": "language",
+  "positions": "last_token",
+  "site": "residual",
+  "layers": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "n_rows": 384,
+  "seed": 0,
+  "split": "test",
+  "gold_collisions": 20,
+  "per_layer": {
+    "19": {
+      "HIT": 8,
+      "base": 356,
+      "other": 20
+    },
+    "20": {
+      "HIT": 8,
+      "base": 354,
+      "other": 22
+    },
+    "21": {
+      "HIT": 8,
+      "base": 356,
+      "other": 20
+    },
+    "22": {
+      "HIT": 29,
+      "base": 327,
+      "other": 28
+    },
+    "23": {
+      "HIT": 267,
+      "base": 82,
+      "other": 35
+    },
+    "24": {
+      "HIT": 384,
+      "base": 0,
+      "other": 0
+    },
+    "25": {
+      "HIT": 384,
+      "base": 0,
+      "other": 0
+    },
+    "26": {
+      "HIT": 384,
+      "base": 0,
+      "other": 0
+    },
+    "27": {
+      "HIT": 384,
+      "base": 0,
+      "other": 0
+    },
+    "28": {
+      "HIT": 367,
+      "base": 0,
+      "other": 17
+    }
+  }
+}

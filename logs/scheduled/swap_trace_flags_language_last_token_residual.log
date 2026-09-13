@@ -1,0 +1,113 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<17:52,  1.47s/it]Loading weights:   1%|          | 6/729 [00:01<02:25,  4.97it/s]Loading weights:   2%|▏         | 18/729 [00:01<00:40, 17.41it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:24, 28.12it/s]Loading weights:   5%|▌         | 39/729 [00:02<00:19, 35.25it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:13, 49.42it/s]Loading weights:   8%|▊         | 61/729 [00:02<00:12, 52.48it/s]Loading weights:   9%|▉         | 69/729 [00:02<00:15, 41.44it/s]Loading weights:  10%|█         | 76/729 [00:02<00:14, 44.32it/s]Loading weights:  11%|█         | 82/729 [00:02<00:16, 40.13it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:15, 42.45it/s]Loading weights:  13%|█▎        | 96/729 [00:03<00:13, 46.30it/s]Loading weights:  14%|█▍        | 102/729 [00:03<00:15, 40.52it/s]Loading weights:  16%|█▌        | 113/729 [00:03<00:14, 43.53it/s]Loading weights:  17%|█▋        | 123/729 [00:03<00:11, 50.56it/s]Loading weights:  18%|█▊        | 129/729 [00:03<00:14, 40.32it/s]Loading weights:  19%|█▊        | 135/729 [00:04<00:14, 42.25it/s]Loading weights:  19%|█▉        | 140/729 [00:04<00:17, 34.44it/s]Loading weights:  20%|██        | 148/729 [00:04<00:16, 34.34it/s]Loading weights:  21%|██        | 152/729 [00:04<00:16, 35.16it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:20, 28.14it/s]Loading weights:  23%|██▎       | 171/729 [00:05<00:14, 39.15it/s]Loading weights:  24%|██▍       | 176/729 [00:05<00:19, 28.26it/s]Loading weights:  25%|██▌       | 183/729 [00:05<00:23, 23.36it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:19, 27.02it/s]Loading weights:  27%|██▋       | 200/729 [00:06<00:18, 28.03it/s]Loading weights:  29%|██▊       | 209/729 [00:06<00:20, 24.80it/s]Loading weights:  29%|██▉       | 214/729 [00:07<00:18, 27.52it/s]Loading weights:  30%|███       | 220/729 [00:07<00:24, 20.41it/s]Loading weights:  31%|███       | 223/729 [00:07<00:28, 17.90it/s]Loading weights:  32%|███▏      | 232/729 [00:08<00:21, 23.20it/s]Loading weights:  32%|███▏      | 235/729 [00:08<00:20, 23.76it/s]Loading weights:  33%|███▎      | 242/729 [00:08<00:16, 30.38it/s]Loading weights:  34%|███▎      | 246/729 [00:08<00:24, 19.95it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:18, 25.45it/s]Loading weights:  36%|███▌      | 263/729 [00:09<00:15, 30.65it/s]Loading weights:  37%|███▋      | 267/729 [00:09<00:15, 30.12it/s]Loading weights:  37%|███▋      | 271/729 [00:09<00:17, 25.96it/s]Loading weights:  38%|███▊      | 280/729 [00:09<00:15, 29.50it/s]Loading weights:  39%|███▉      | 284/729 [00:10<00:21, 20.25it/s]Loading weights:  40%|████      | 292/729 [00:10<00:15, 27.99it/s]Loading weights:  41%|████      | 297/729 [00:10<00:20, 21.46it/s]Loading weights:  41%|████▏     | 301/729 [00:10<00:18, 23.19it/s]Loading weights:  42%|████▏     | 305/729 [00:11<00:22, 18.88it/s]Loading weights:  42%|████▏     | 308/729 [00:11<00:25, 16.83it/s]Loading weights:  43%|████▎     | 316/729 [00:11<00:17, 23.19it/s]Loading weights:  44%|████▍     | 319/729 [00:11<00:19, 21.35it/s]Loading weights:  45%|████▍     | 326/729 [00:11<00:13, 29.15it/s]Loading weights:  45%|████▌     | 330/729 [00:12<00:20, 19.50it/s]Loading weights:  47%|████▋     | 343/729 [00:12<00:10, 35.11it/s]Loading weights:  59%|█████▉    | 430/729 [00:12<00:01, 176.31it/s]Loading weights:  71%|███████   | 515/729 [00:12<00:00, 307.36it/s]Loading weights:  82%|████████▏ | 595/729 [00:12<00:00, 413.64it/s]Loading weights:  93%|█████████▎| 679/729 [00:12<00:00, 511.64it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 56.90it/s] 
+[ndm/swap_trace] flags/language @ last_token, residual, layers 19-28: 384 cause rows (25 distinct bases), seed=0
+Traceback (most recent call last):
+  File "/workspace/VADE-evals/methods/ndm/swap_trace.py", line 266, in <module>
+    main()
+  File "/workspace/VADE-evals/methods/ndm/swap_trace.py", line 179, in main
+    g = full_swap_generation(site, adapter, model, layers_stack, layer, batch, pad_token_id,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/ndm/ceiling_sweep.py", line 172, in full_swap_generation
+    captured = site.capture(adapter, model, layer, batch["source_input_ids"], batch["attention_mask"],
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/common/sites.py", line 331, in capture
+    return cache_layer_hidden(model, input_ids, attention_mask, extra, positions, layer_idx)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/common/hooks.py", line 90, in cache_layer_hidden
+    out = forward_with_hidden_states(model, input_ids, attention_mask, extra, logits_to_keep=1)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/common/hooks.py", line 80, in forward_with_hidden_states
+    return model(
+           ^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 171, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 911, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 1404, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 171, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 911, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 1234, in forward
+    image_embeds = self.get_image_features(pixel_values, image_grid_thw, **kwargs).pooler_output
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    return func(*args, **translated)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 911, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 1106, in get_image_features
+    vision_outputs = self.visual(pixel_values, grid_thw=image_grid_thw, **kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 1040, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/output_capturing.py", line 262, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 453, in forward
+    hidden_states = blk(
+                    ^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/modeling_layers.py", line 110, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1885, in _call_impl
+    return inner()
+           ^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1833, in inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 171, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 316, in forward
+    hidden_states = hidden_states + self.attn(
+                                    ^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1885, in _call_impl
+    return inner()
+           ^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1833, in inner
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 171, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 239, in forward
+    query_states, key_states = apply_rotary_pos_emb_vision(query_states, key_states, cos, sin)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE/.venv/lib/python3.12/site-packages/transformers/models/qwen2_5_vl/modeling_qwen2_5_vl.py", line 169, in apply_rotary_pos_emb_vision
+    k_embed = (k * cos) + (rotate_half(k) * sin)
+                           ~~~~~~~~~~~~~~~^~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 360.00 MiB. GPU 0 has a total capacity of 23.68 GiB of which 300.94 MiB is free. Process 3076349 has 23.38 GiB memory in use. Of the allocated memory 21.83 GiB is allocated by PyTorch, and 1.24 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

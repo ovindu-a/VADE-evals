@@ -1,0 +1,169 @@
+[mech_probe] entity=flags attribute=language positions=flag_ring1: 72 example row(s)
+  row_index=6 base=AO template=language_prefill_v1 gold='Portuguese'
+  row_index=7 base=AO template=language_prefill_v2 gold='Portuguese'
+  row_index=8 base=AO template=language_prefill_v3 gold='Portuguese'
+  row_index=9 base=AO template=language_prefill_v4 gold='Portuguese'
+  row_index=10 base=AO template=language_prefill_v5 gold='Portuguese'
+  row_index=11 base=AO template=language_prefill_v6 gold='Portuguese'
+  row_index=132 base=AR template=language_prefill_v1 gold='Guaraní'
+  row_index=133 base=AR template=language_prefill_v2 gold='Guaraní'
+  row_index=134 base=AR template=language_prefill_v3 gold='Guaraní'
+  row_index=135 base=AR template=language_prefill_v4 gold='Guaraní'
+  row_index=136 base=AR template=language_prefill_v5 gold='Guaraní'
+  row_index=137 base=AR template=language_prefill_v6 gold='Guaraní'
+  row_index=270 base=BY template=language_prefill_v1 gold='Belarusian'
+  row_index=271 base=BY template=language_prefill_v2 gold='Belarusian'
+  row_index=272 base=BY template=language_prefill_v3 gold='Belarusian'
+  row_index=273 base=BY template=language_prefill_v4 gold='Belarusian'
+  row_index=274 base=BY template=language_prefill_v5 gold='Belarusian'
+  row_index=275 base=BY template=language_prefill_v6 gold='Belarusian'
+  row_index=414 base=CL template=language_prefill_v1 gold='Spanish'
+  row_index=415 base=CL template=language_prefill_v2 gold='Spanish'
+  row_index=416 base=CL template=language_prefill_v3 gold='Spanish'
+  row_index=417 base=CL template=language_prefill_v4 gold='Spanish'
+  row_index=418 base=CL template=language_prefill_v5 gold='Spanish'
+  row_index=419 base=CL template=language_prefill_v6 gold='Spanish'
+  row_index=540 base=CM template=language_prefill_v1 gold='French'
+  row_index=541 base=CM template=language_prefill_v2 gold='French'
+  row_index=542 base=CM template=language_prefill_v3 gold='French'
+  row_index=543 base=CM template=language_prefill_v4 gold='French'
+  row_index=544 base=CM template=language_prefill_v5 gold='French'
+  row_index=545 base=CM template=language_prefill_v6 gold='French'
+  row_index=660 base=CV template=language_prefill_v1 gold='Portuguese'
+  row_index=661 base=CV template=language_prefill_v2 gold='Portuguese'
+  row_index=662 base=CV template=language_prefill_v3 gold='Portuguese'
+  row_index=663 base=CV template=language_prefill_v4 gold='Portuguese'
+  row_index=664 base=CV template=language_prefill_v5 gold='Portuguese'
+  row_index=665 base=CV template=language_prefill_v6 gold='Portuguese'
+  row_index=786 base=FI template=language_prefill_v1 gold='Finnish'
+  row_index=787 base=FI template=language_prefill_v2 gold='Finnish'
+  row_index=788 base=FI template=language_prefill_v3 gold='Finnish'
+  row_index=789 base=FI template=language_prefill_v4 gold='Finnish'
+  row_index=790 base=FI template=language_prefill_v5 gold='Finnish'
+  row_index=791 base=FI template=language_prefill_v6 gold='Finnish'
+  row_index=930 base=GH template=language_prefill_v1 gold='English'
+  row_index=931 base=GH template=language_prefill_v2 gold='English'
+  row_index=932 base=GH template=language_prefill_v3 gold='English'
+  row_index=933 base=GH template=language_prefill_v4 gold='English'
+  row_index=934 base=GH template=language_prefill_v5 gold='English'
+  row_index=935 base=GH template=language_prefill_v6 gold='English'
+  row_index=1044 base=GR template=language_prefill_v1 gold='Greek'
+  row_index=1045 base=GR template=language_prefill_v2 gold='Greek'
+  row_index=1046 base=GR template=language_prefill_v3 gold='Greek'
+  row_index=1047 base=GR template=language_prefill_v4 gold='Greek'
+  row_index=1048 base=GR template=language_prefill_v5 gold='Greek'
+  row_index=1049 base=GR template=language_prefill_v6 gold='Greek'
+  row_index=1188 base=GT template=language_prefill_v1 gold='Spanish'
+  row_index=1189 base=GT template=language_prefill_v2 gold='Spanish'
+  row_index=1190 base=GT template=language_prefill_v3 gold='Spanish'
+  row_index=1191 base=GT template=language_prefill_v4 gold='Spanish'
+  row_index=1192 base=GT template=language_prefill_v5 gold='Spanish'
+  row_index=1193 base=GT template=language_prefill_v6 gold='Spanish'
+  row_index=1314 base=HN template=language_prefill_v1 gold='Spanish'
+  row_index=1315 base=HN template=language_prefill_v2 gold='Spanish'
+  row_index=1316 base=HN template=language_prefill_v3 gold='Spanish'
+  row_index=1317 base=HN template=language_prefill_v4 gold='Spanish'
+  row_index=1318 base=HN template=language_prefill_v5 gold='Spanish'
+  row_index=1319 base=HN template=language_prefill_v6 gold='Spanish'
+  row_index=1440 base=IN template=language_prefill_v1 gold='Hindi'
+  row_index=1441 base=IN template=language_prefill_v2 gold='Hindi'
+  row_index=1442 base=IN template=language_prefill_v3 gold='Hindi'
+  row_index=1443 base=IN template=language_prefill_v4 gold='Hindi'
+  row_index=1444 base=IN template=language_prefill_v5 gold='Hindi'
+  row_index=1445 base=IN template=language_prefill_v6 gold='Hindi'
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:54,  3.11it/s]Loading weights:   0%|          | 2/729 [00:01<09:54,  1.22it/s]Loading weights:   1%|          | 4/729 [00:01<04:12,  2.87it/s]Loading weights:   1%|          | 5/729 [00:01<03:36,  3.35it/s]Loading weights:   1%|          | 6/729 [00:01<02:59,  4.02it/s]Loading weights:   2%|▏         | 16/729 [00:02<00:46, 15.31it/s]Loading weights:   2%|▏         | 18/729 [00:02<00:58, 12.23it/s]Loading weights:   4%|▍         | 28/729 [00:02<00:34, 20.24it/s]Loading weights:   4%|▍         | 31/729 [00:02<00:36, 19.25it/s]Loading weights:   5%|▌         | 40/729 [00:03<00:27, 25.01it/s]Loading weights:   6%|▌         | 43/729 [00:03<00:37, 18.28it/s]Loading weights:   7%|▋         | 52/729 [00:03<00:34, 19.57it/s]Loading weights:   8%|▊         | 55/729 [00:04<00:34, 19.47it/s]Loading weights:   9%|▉         | 64/729 [00:04<00:28, 23.42it/s]Loading weights:   9%|▉         | 67/729 [00:04<00:27, 23.75it/s]Loading weights:  10%|▉         | 71/729 [00:04<00:25, 25.70it/s]Loading weights:  10%|█         | 76/729 [00:04<00:24, 26.70it/s]Loading weights:  11%|█         | 79/729 [00:05<00:31, 20.94it/s]Loading weights:  12%|█▏        | 88/729 [00:05<00:22, 28.90it/s]Loading weights:  13%|█▎        | 92/729 [00:05<00:26, 23.89it/s]Loading weights:  13%|█▎        | 96/729 [00:05<00:23, 26.49it/s]Loading weights:  14%|█▎        | 100/729 [00:05<00:29, 21.52it/s]Loading weights:  14%|█▍        | 103/729 [00:05<00:28, 22.32it/s]Loading weights:  15%|█▌        | 112/729 [00:06<00:20, 29.59it/s]Loading weights:  16%|█▌        | 116/729 [00:06<00:28, 21.53it/s]Loading weights:  17%|█▋        | 123/729 [00:06<00:21, 28.29it/s]Loading weights:  17%|█▋        | 127/729 [00:06<00:24, 24.84it/s]Loading weights:  19%|█▊        | 136/729 [00:07<00:19, 29.97it/s]Loading weights:  19%|█▉        | 140/729 [00:07<00:20, 28.66it/s]Loading weights:  20%|██        | 148/729 [00:07<00:17, 34.03it/s]Loading weights:  21%|██        | 152/729 [00:07<00:22, 25.51it/s]Loading weights:  22%|██▏       | 160/729 [00:08<00:23, 23.75it/s]Loading weights:  24%|██▎       | 172/729 [00:08<00:16, 34.12it/s]Loading weights:  24%|██▍       | 177/729 [00:08<00:23, 23.94it/s]Loading weights:  25%|██▌       | 184/729 [00:09<00:25, 21.19it/s]Loading weights:  26%|██▌       | 187/729 [00:09<00:25, 21.18it/s]Loading weights:  27%|██▋       | 196/729 [00:09<00:27, 19.26it/s]Loading weights:  27%|██▋       | 199/729 [00:10<00:29, 17.84it/s]Loading weights:  29%|██▊       | 208/729 [00:10<00:24, 20.88it/s]Loading weights:  30%|███       | 220/729 [00:10<00:16, 31.66it/s]Loading weights:  32%|███▏      | 231/729 [00:10<00:12, 41.29it/s]Loading weights:  33%|███▎      | 237/729 [00:10<00:14, 34.02it/s]Loading weights:  33%|███▎      | 243/729 [00:11<00:17, 27.52it/s]Loading weights:  34%|███▍      | 250/729 [00:11<00:14, 32.87it/s]Loading weights:  35%|███▌      | 256/729 [00:11<00:13, 36.13it/s]Loading weights:  36%|███▌      | 261/729 [00:11<00:13, 33.75it/s]Loading weights:  37%|███▋      | 268/729 [00:11<00:12, 36.75it/s]Loading weights:  38%|███▊      | 280/729 [00:11<00:08, 50.06it/s]Loading weights:  40%|████      | 292/729 [00:12<00:07, 60.46it/s]Loading weights:  41%|████      | 299/729 [00:12<00:06, 61.79it/s]Loading weights:  42%|████▏     | 306/729 [00:12<00:07, 54.72it/s]Loading weights:  43%|████▎     | 316/729 [00:12<00:07, 58.12it/s]Loading weights:  44%|████▍     | 323/729 [00:12<00:08, 50.75it/s]Loading weights:  45%|████▌     | 329/729 [00:12<00:09, 44.10it/s]Loading weights:  46%|████▌     | 334/729 [00:13<00:09, 41.84it/s]Loading weights:  50%|████▉     | 361/729 [00:13<00:04, 89.43it/s]Loading weights:  53%|█████▎    | 385/729 [00:13<00:02, 122.08it/s]Loading weights:  56%|█████▌    | 407/729 [00:13<00:02, 145.82it/s]Loading weights:  59%|█████▉    | 429/729 [00:13<00:01, 162.09it/s]Loading weights:  62%|██████▏   | 449/729 [00:13<00:01, 170.03it/s]Loading weights:  65%|██████▌   | 476/729 [00:13<00:01, 196.61it/s]Loading weights:  69%|██████▊   | 501/729 [00:13<00:01, 211.43it/s]Loading weights:  72%|███████▏  | 527/729 [00:13<00:00, 220.57it/s]Loading weights:  76%|███████▌  | 553/729 [00:13<00:00, 224.52it/s]Loading weights:  79%|███████▉  | 578/729 [00:14<00:00, 230.39it/s]Loading weights:  83%|████████▎ | 607/729 [00:14<00:00, 233.03it/s]Loading weights:  87%|████████▋ | 637/729 [00:14<00:00, 251.52it/s]Loading weights:  91%|█████████▏| 667/729 [00:14<00:00, 261.83it/s]Loading weights:  95%|█████████▌| 695/729 [00:14<00:00, 266.29it/s]Loading weights: 100%|█████████▉| 726/729 [00:14<00:00, 251.86it/s]Loading weights: 100%|██████████| 729/729 [00:14<00:00, 49.71it/s] 
+
+=== logit lens: per-layer curve ===
+layer  0: top1_match_rate=0.000  mean_gold_rank=52035.0  (n=90)  other_attr_rank[capital=52009, currency=30694, calling_code=6452]
+layer  1: top1_match_rate=0.000  mean_gold_rank=56088.4  (n=90)  other_attr_rank[capital=51733, currency=58677, calling_code=3484]
+layer  2: top1_match_rate=0.000  mean_gold_rank=54395.2  (n=90)  other_attr_rank[capital=50608, currency=48467, calling_code=10642]
+layer  3: top1_match_rate=0.000  mean_gold_rank=59996.0  (n=90)  other_attr_rank[capital=64403, currency=58109, calling_code=35888]
+layer  4: top1_match_rate=0.000  mean_gold_rank=66213.4  (n=90)  other_attr_rank[capital=84263, currency=63440, calling_code=89851]
+layer  5: top1_match_rate=0.000  mean_gold_rank=75162.2  (n=90)  other_attr_rank[capital=82502, currency=71737, calling_code=85394]
+layer  6: top1_match_rate=0.000  mean_gold_rank=70967.0  (n=90)  other_attr_rank[capital=73982, currency=62256, calling_code=47453]
+layer  7: top1_match_rate=0.000  mean_gold_rank=61021.1  (n=90)  other_attr_rank[capital=62908, currency=49198, calling_code=23290]
+layer  8: top1_match_rate=0.000  mean_gold_rank=51189.0  (n=90)  other_attr_rank[capital=63604, currency=54248, calling_code=33721]
+layer  9: top1_match_rate=0.000  mean_gold_rank=48955.8  (n=90)  other_attr_rank[capital=66334, currency=57976, calling_code=34153]
+layer 10: top1_match_rate=0.000  mean_gold_rank=36857.5  (n=90)  other_attr_rank[capital=60839, currency=51090, calling_code=16011]
+layer 11: top1_match_rate=0.000  mean_gold_rank=40314.4  (n=90)  other_attr_rank[capital=58033, currency=52567, calling_code=6850]
+layer 12: top1_match_rate=0.000  mean_gold_rank=36559.6  (n=90)  other_attr_rank[capital=57276, currency=55011, calling_code=11180]
+layer 13: top1_match_rate=0.000  mean_gold_rank=32416.6  (n=90)  other_attr_rank[capital=56470, currency=48852, calling_code=12805]
+layer 14: top1_match_rate=0.000  mean_gold_rank=34707.0  (n=90)  other_attr_rank[capital=64004, currency=54086, calling_code=31020]
+layer 15: top1_match_rate=0.000  mean_gold_rank=41393.3  (n=90)  other_attr_rank[capital=66315, currency=68169, calling_code=57668]
+layer 16: top1_match_rate=0.000  mean_gold_rank=42270.4  (n=90)  other_attr_rank[capital=70283, currency=68191, calling_code=38506]
+layer 17: top1_match_rate=0.000  mean_gold_rank=52455.6  (n=90)  other_attr_rank[capital=72873, currency=71056, calling_code=61928]
+layer 18: top1_match_rate=0.000  mean_gold_rank=53167.9  (n=90)  other_attr_rank[capital=76908, currency=78187, calling_code=76797]
+layer 19: top1_match_rate=0.000  mean_gold_rank=52643.0  (n=90)  other_attr_rank[capital=82835, currency=72830, calling_code=92016]
+layer 20: top1_match_rate=0.000  mean_gold_rank=40493.2  (n=90)  other_attr_rank[capital=77278, currency=69867, calling_code=84622]
+layer 21: top1_match_rate=0.000  mean_gold_rank=43192.6  (n=90)  other_attr_rank[capital=79650, currency=82686, calling_code=96908]
+layer 22: top1_match_rate=0.022  mean_gold_rank=14755.0  (n=90)  other_attr_rank[capital=62168, currency=77585, calling_code=85876]
+layer 23: top1_match_rate=0.056  mean_gold_rank=8792.6  (n=90)  other_attr_rank[capital=60337, currency=77899, calling_code=127715]
+layer 24: top1_match_rate=0.067  mean_gold_rank=4468.4  (n=90)  other_attr_rank[capital=31365, currency=53210, calling_code=84013]
+layer 25: top1_match_rate=0.156  mean_gold_rank=2590.9  (n=90)  other_attr_rank[capital=14764, currency=45247, calling_code=72482]
+layer 26: top1_match_rate=0.800  mean_gold_rank=1020.1  (n=90)  other_attr_rank[capital=8235, currency=31341, calling_code=29947]
+layer 27: top1_match_rate=0.756  mean_gold_rank=68.9  (n=90)  other_attr_rank[capital=2391, currency=21104, calling_code=117]
+layer 28: top1_match_rate=0.878  mean_gold_rank=10.5  (n=90)  other_attr_rank[capital=79, currency=4618, calling_code=131]
+wrote /workspace/VADE-evals/methods/logit_lens/flags_language_flag_ring1_report.jsonl and /workspace/VADE-evals/methods/logit_lens/flags_language_flag_ring1_report_summary.json
+
+=== direct logit attribution (direction=gold_minus_mean) ===
+ block       attn        mlp  block total   cumulative
+ embed                              0.002        0.002
+     0      0.033      0.004        0.038        0.040
+     1      0.009      0.004        0.013        0.053
+     2     -0.005      0.007        0.002        0.054
+     3     -0.009     -0.003       -0.011        0.043
+     4      0.004     -0.012       -0.007        0.036
+     5     -0.011      0.032        0.020        0.056
+     6      0.014      0.031        0.045        0.101
+     7      0.011      0.040        0.050        0.151
+     8      0.020      0.030        0.050        0.201
+     9      0.041      0.044        0.085        0.286
+    10      0.005     -0.002        0.003        0.288
+    11      0.004      0.021        0.025        0.314
+    12      0.010      0.019        0.029        0.343
+    13     -0.015     -0.014       -0.029        0.314
+    14     -0.038      0.031       -0.007        0.307
+    15     -0.011      0.016        0.005        0.312
+    16     -0.040     -0.009       -0.049        0.263
+    17     -0.007      0.024        0.016        0.279
+    18     -0.011      0.044        0.033        0.312
+    19      0.026      0.119        0.145        0.457
+    20      0.009      0.152        0.161        0.618
+    21      0.211      0.450        0.661        1.279
+    22      0.223      0.813        1.036        2.315
+    23      0.642      1.528        2.170        4.485
+    24      0.229      1.576        1.804        6.289
+    25      0.071      3.626        3.697        9.986
+    26      0.553      3.605        4.158       14.144
+    27      1.386      5.666        7.052       21.197
+
+top 12 components by |contribution|:
+       mlp27    +5.666
+       mlp25    +3.626
+       mlp26    +3.605
+       mlp24    +1.576
+       mlp23    +1.528
+      attn27    +1.386
+       mlp22    +0.813
+      attn23    +0.642
+      attn26    +0.553
+       mlp21    +0.450
+      attn24    +0.229
+      attn22    +0.223
+
+total (== the model's own gold_minus_mean value, averaged): +21.197
+
+self-checks (worst over 72 rows): reconstruction=0.818% additivity=0.681%  (tolerance 2.0%)
+wrote /workspace/VADE-evals/methods/dla/flags_language_flag_ring1_gold_minus_mean_report.jsonl and /workspace/VADE-evals/methods/dla/flags_language_flag_ring1_gold_minus_mean_report_summary.json
+
+=== attention maps: text->image flow heads (score > 0.2) ===
+text->image score for 14.11 = 0.214
+text->image score for 14.22 = 0.204
+text->image score for 16.1 = 0.200
+text->image score for 19.6 = 0.207
+text->image score for 19.17 = 0.267
+text->image score for 19.22 = 0.259
+flagged: ['14.11', '14.22', '16.1', '19.6', '19.17', '19.22']
+top 20 by text->image attention (ungated): 19.17=0.267, 19.22=0.259, 14.11=0.214, 19.6=0.207, 14.22=0.204, 16.1=0.200, 13.16=0.199, 10.6=0.192, 9.25=0.189, 19.18=0.188, 26.2=0.185, 14.23=0.184, 14.10=0.176, 21.5=0.174, 24.21=0.172, 19.26=0.159, 9.9=0.157, 18.19=0.157, 14.27=0.156, 23.6=0.155
+wrote /workspace/VADE-evals/methods/attention_maps/flags_language_flag_ring1_report.json

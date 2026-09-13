@@ -1,0 +1,109 @@
+{
+  "entity": "flags",
+  "attribute": "language",
+  "positions": "last_token",
+  "split": "test",
+  "layers": [
+    24
+  ],
+  "sites": [
+    "residual",
+    "blocks:1",
+    "blocks:2",
+    "blocks:3",
+    "blocks:4",
+    "blocks:5"
+  ],
+  "unhooked_cause_matches_source": 0.0,
+  "unhooked_cause_matches_base": 0.96875,
+  "by_site_layer": {
+    "residual/24": {
+      "site": "residual",
+      "layer": 24,
+      "cause_ceiling": 1.0,
+      "blocks": [
+        23
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "iso_floor": 0.09375,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "blocks:1/24": {
+      "site": "blocks:1",
+      "layer": 24,
+      "cause_ceiling": 0.75,
+      "blocks": [
+        23
+      ],
+      "base_kept": 0.1875,
+      "other": 0.0625,
+      "iso_floor": 0.28125,
+      "width": 7168,
+      "n_cause": 32
+    },
+    "blocks:2/24": {
+      "site": "blocks:2",
+      "layer": 24,
+      "cause_ceiling": 1.0,
+      "blocks": [
+        22,
+        23
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "iso_floor": 0.09375,
+      "width": 14336,
+      "n_cause": 32
+    },
+    "blocks:3/24": {
+      "site": "blocks:3",
+      "layer": 24,
+      "cause_ceiling": 1.0,
+      "blocks": [
+        21,
+        22,
+        23
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "iso_floor": 0.09375,
+      "width": 21504,
+      "n_cause": 32
+    },
+    "blocks:4/24": {
+      "site": "blocks:4",
+      "layer": 24,
+      "cause_ceiling": 1.0,
+      "blocks": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "iso_floor": 0.09375,
+      "width": 28672,
+      "n_cause": 32
+    },
+    "blocks:5/24": {
+      "site": "blocks:5",
+      "layer": 24,
+      "cause_ceiling": 1.0,
+      "blocks": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "iso_floor": 0.09375,
+      "width": 35840,
+      "n_cause": 32
+    }
+  }
+}

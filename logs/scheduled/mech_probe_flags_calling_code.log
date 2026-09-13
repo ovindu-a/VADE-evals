@@ -1,0 +1,165 @@
+[mech_probe] entity=flags attribute=calling_code positions=flag_ring1: 72 example row(s)
+  row_index=0 base=AO template=calling_code_prefill_v1 gold='244'
+  row_index=1 base=AO template=calling_code_prefill_v2 gold='244'
+  row_index=2 base=AO template=calling_code_prefill_v3 gold='244'
+  row_index=3 base=AO template=calling_code_prefill_v4 gold='244'
+  row_index=4 base=AO template=calling_code_prefill_v5 gold='244'
+  row_index=5 base=AO template=calling_code_prefill_v6 gold='244'
+  row_index=144 base=AR template=calling_code_prefill_v1 gold='54'
+  row_index=145 base=AR template=calling_code_prefill_v2 gold='54'
+  row_index=146 base=AR template=calling_code_prefill_v3 gold='54'
+  row_index=147 base=AR template=calling_code_prefill_v4 gold='54'
+  row_index=148 base=AR template=calling_code_prefill_v5 gold='54'
+  row_index=149 base=AR template=calling_code_prefill_v6 gold='54'
+  row_index=288 base=BY template=calling_code_prefill_v1 gold='375'
+  row_index=289 base=BY template=calling_code_prefill_v2 gold='375'
+  row_index=290 base=BY template=calling_code_prefill_v3 gold='375'
+  row_index=291 base=BY template=calling_code_prefill_v4 gold='375'
+  row_index=292 base=BY template=calling_code_prefill_v5 gold='375'
+  row_index=293 base=BY template=calling_code_prefill_v6 gold='375'
+  row_index=432 base=CL template=calling_code_prefill_v1 gold='56'
+  row_index=433 base=CL template=calling_code_prefill_v2 gold='56'
+  row_index=434 base=CL template=calling_code_prefill_v3 gold='56'
+  row_index=435 base=CL template=calling_code_prefill_v4 gold='56'
+  row_index=436 base=CL template=calling_code_prefill_v5 gold='56'
+  row_index=437 base=CL template=calling_code_prefill_v6 gold='56'
+  row_index=576 base=CM template=calling_code_prefill_v1 gold='237'
+  row_index=577 base=CM template=calling_code_prefill_v2 gold='237'
+  row_index=578 base=CM template=calling_code_prefill_v3 gold='237'
+  row_index=579 base=CM template=calling_code_prefill_v4 gold='237'
+  row_index=580 base=CM template=calling_code_prefill_v5 gold='237'
+  row_index=581 base=CM template=calling_code_prefill_v6 gold='237'
+  row_index=720 base=CV template=calling_code_prefill_v1 gold='238'
+  row_index=721 base=CV template=calling_code_prefill_v2 gold='238'
+  row_index=722 base=CV template=calling_code_prefill_v3 gold='238'
+  row_index=723 base=CV template=calling_code_prefill_v4 gold='238'
+  row_index=724 base=CV template=calling_code_prefill_v5 gold='238'
+  row_index=725 base=CV template=calling_code_prefill_v6 gold='238'
+  row_index=864 base=FI template=calling_code_prefill_v1 gold='358'
+  row_index=865 base=FI template=calling_code_prefill_v2 gold='358'
+  row_index=866 base=FI template=calling_code_prefill_v3 gold='358'
+  row_index=867 base=FI template=calling_code_prefill_v4 gold='358'
+  row_index=868 base=FI template=calling_code_prefill_v5 gold='358'
+  row_index=869 base=FI template=calling_code_prefill_v6 gold='358'
+  row_index=1008 base=GH template=calling_code_prefill_v1 gold='233'
+  row_index=1009 base=GH template=calling_code_prefill_v2 gold='233'
+  row_index=1010 base=GH template=calling_code_prefill_v3 gold='233'
+  row_index=1011 base=GH template=calling_code_prefill_v4 gold='233'
+  row_index=1012 base=GH template=calling_code_prefill_v5 gold='233'
+  row_index=1013 base=GH template=calling_code_prefill_v6 gold='233'
+  row_index=1152 base=GR template=calling_code_prefill_v1 gold='30'
+  row_index=1153 base=GR template=calling_code_prefill_v2 gold='30'
+  row_index=1154 base=GR template=calling_code_prefill_v3 gold='30'
+  row_index=1155 base=GR template=calling_code_prefill_v4 gold='30'
+  row_index=1156 base=GR template=calling_code_prefill_v5 gold='30'
+  row_index=1157 base=GR template=calling_code_prefill_v6 gold='30'
+  row_index=1296 base=GT template=calling_code_prefill_v1 gold='502'
+  row_index=1297 base=GT template=calling_code_prefill_v2 gold='502'
+  row_index=1298 base=GT template=calling_code_prefill_v3 gold='502'
+  row_index=1299 base=GT template=calling_code_prefill_v4 gold='502'
+  row_index=1300 base=GT template=calling_code_prefill_v5 gold='502'
+  row_index=1301 base=GT template=calling_code_prefill_v6 gold='502'
+  row_index=1440 base=HN template=calling_code_prefill_v1 gold='504'
+  row_index=1441 base=HN template=calling_code_prefill_v2 gold='504'
+  row_index=1442 base=HN template=calling_code_prefill_v3 gold='504'
+  row_index=1443 base=HN template=calling_code_prefill_v4 gold='504'
+  row_index=1444 base=HN template=calling_code_prefill_v5 gold='504'
+  row_index=1445 base=HN template=calling_code_prefill_v6 gold='504'
+  row_index=1584 base=IN template=calling_code_prefill_v1 gold='91'
+  row_index=1585 base=IN template=calling_code_prefill_v2 gold='91'
+  row_index=1586 base=IN template=calling_code_prefill_v3 gold='91'
+  row_index=1587 base=IN template=calling_code_prefill_v4 gold='91'
+  row_index=1588 base=IN template=calling_code_prefill_v5 gold='91'
+  row_index=1589 base=IN template=calling_code_prefill_v6 gold='91'
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:28,  8.21it/s]Loading weights:   0%|          | 2/729 [00:00<02:17,  5.28it/s]Loading weights:   2%|▏         | 16/729 [00:00<00:16, 43.94it/s]Loading weights:   4%|▍         | 29/729 [00:00<00:10, 65.42it/s]Loading weights:   6%|▌         | 41/729 [00:00<00:09, 75.31it/s]Loading weights:   7%|▋         | 53/729 [00:00<00:07, 87.02it/s]Loading weights:  10%|▉         | 71/729 [00:00<00:05, 111.52it/s]Loading weights:  12%|█▏        | 84/729 [00:01<00:05, 111.52it/s]Loading weights:  14%|█▎        | 99/729 [00:01<00:05, 114.92it/s]Loading weights:  15%|█▌        | 111/729 [00:01<00:05, 115.75it/s]Loading weights:  17%|█▋        | 124/729 [00:01<00:06, 96.01it/s] Loading weights:  19%|█▊        | 136/729 [00:01<00:06, 91.19it/s]Loading weights:  21%|██        | 150/729 [00:01<00:06, 91.48it/s]Loading weights:  22%|██▏       | 162/729 [00:01<00:05, 95.11it/s]Loading weights:  24%|██▍       | 174/729 [00:01<00:05, 95.78it/s]Loading weights:  26%|██▌       | 186/729 [00:02<00:05, 101.33it/s]Loading weights:  27%|██▋       | 198/729 [00:02<00:05, 105.03it/s]Loading weights:  29%|██▉       | 210/729 [00:02<00:04, 108.24it/s]Loading weights:  30%|███       | 222/729 [00:02<00:04, 105.64it/s]Loading weights:  32%|███▏      | 234/729 [00:02<00:04, 107.86it/s]Loading weights:  34%|███▎      | 246/729 [00:02<00:04, 104.05it/s]Loading weights:  35%|███▌      | 257/729 [00:02<00:04, 98.81it/s] Loading weights:  37%|███▋      | 269/729 [00:02<00:04, 94.10it/s]Loading weights:  39%|███▊      | 282/729 [00:03<00:04, 97.97it/s]Loading weights:  40%|████      | 293/729 [00:03<00:04, 97.80it/s]Loading weights:  42%|████▏     | 303/729 [00:03<00:04, 94.34it/s]Loading weights:  44%|████▎     | 318/729 [00:03<00:04, 99.99it/s]Loading weights:  45%|████▍     | 328/729 [00:03<00:04, 98.39it/s]Loading weights:  53%|█████▎    | 384/729 [00:03<00:01, 220.28it/s]Loading weights:  65%|██████▍   | 473/729 [00:03<00:00, 399.57it/s]Loading weights:  76%|███████▋  | 557/729 [00:03<00:00, 519.99it/s]Loading weights:  90%|████████▉ | 654/729 [00:03<00:00, 647.06it/s]Loading weights: 100%|██████████| 729/729 [00:04<00:00, 181.57it/s]
+
+=== logit lens: per-layer curve ===
+layer  0: top1_match_rate=0.000  mean_gold_rank=37516.8  (n=192)  other_attr_rank[capital=42659, currency=78132, language=68908]
+layer  1: top1_match_rate=0.000  mean_gold_rank=12710.9  (n=192)  other_attr_rank[capital=28431, currency=31474, language=48801]
+layer  2: top1_match_rate=0.000  mean_gold_rank=28649.4  (n=192)  other_attr_rank[capital=38335, currency=30885, language=43132]
+layer  3: top1_match_rate=0.000  mean_gold_rank=54917.7  (n=192)  other_attr_rank[capital=42209, currency=29103, language=60685]
+layer  4: top1_match_rate=0.000  mean_gold_rank=97486.0  (n=192)  other_attr_rank[capital=48622, currency=34036, language=64364]
+layer  5: top1_match_rate=0.000  mean_gold_rank=105403.4  (n=192)  other_attr_rank[capital=66116, currency=49942, language=65963]
+layer  6: top1_match_rate=0.000  mean_gold_rank=91826.4  (n=192)  other_attr_rank[capital=60734, currency=44768, language=59049]
+layer  7: top1_match_rate=0.000  mean_gold_rank=90495.4  (n=192)  other_attr_rank[capital=74654, currency=50513, language=64380]
+layer  8: top1_match_rate=0.000  mean_gold_rank=64635.0  (n=192)  other_attr_rank[capital=53267, currency=53399, language=52365]
+layer  9: top1_match_rate=0.000  mean_gold_rank=70288.1  (n=192)  other_attr_rank[capital=54187, currency=48909, language=52893]
+layer 10: top1_match_rate=0.000  mean_gold_rank=113313.4  (n=192)  other_attr_rank[capital=63016, currency=51622, language=68418]
+layer 11: top1_match_rate=0.000  mean_gold_rank=118737.5  (n=192)  other_attr_rank[capital=62991, currency=60510, language=61016]
+layer 12: top1_match_rate=0.000  mean_gold_rank=106791.2  (n=192)  other_attr_rank[capital=68906, currency=56804, language=61553]
+layer 13: top1_match_rate=0.000  mean_gold_rank=115591.4  (n=192)  other_attr_rank[capital=67657, currency=65791, language=67115]
+layer 14: top1_match_rate=0.000  mean_gold_rank=111582.4  (n=192)  other_attr_rank[capital=56766, currency=58429, language=48078]
+layer 15: top1_match_rate=0.000  mean_gold_rank=100835.8  (n=192)  other_attr_rank[capital=48644, currency=49300, language=45142]
+layer 16: top1_match_rate=0.000  mean_gold_rank=101841.7  (n=192)  other_attr_rank[capital=43579, currency=50660, language=49877]
+layer 17: top1_match_rate=0.000  mean_gold_rank=98632.6  (n=192)  other_attr_rank[capital=50508, currency=50119, language=50263]
+layer 18: top1_match_rate=0.000  mean_gold_rank=87107.5  (n=192)  other_attr_rank[capital=51796, currency=59610, language=48680]
+layer 19: top1_match_rate=0.000  mean_gold_rank=98997.5  (n=192)  other_attr_rank[capital=68083, currency=58920, language=57718]
+layer 20: top1_match_rate=0.000  mean_gold_rank=74008.1  (n=192)  other_attr_rank[capital=63607, currency=69221, language=53920]
+layer 21: top1_match_rate=0.000  mean_gold_rank=70364.4  (n=192)  other_attr_rank[capital=76099, currency=67948, language=55844]
+layer 22: top1_match_rate=0.000  mean_gold_rank=72357.2  (n=192)  other_attr_rank[capital=89320, currency=78102, language=45779]
+layer 23: top1_match_rate=0.000  mean_gold_rank=45863.3  (n=192)  other_attr_rank[capital=69447, currency=68655, language=35731]
+layer 24: top1_match_rate=0.000  mean_gold_rank=39001.4  (n=192)  other_attr_rank[capital=64402, currency=59694, language=40429]
+layer 25: top1_match_rate=0.000  mean_gold_rank=37027.1  (n=192)  other_attr_rank[capital=50283, currency=52323, language=43404]
+layer 26: top1_match_rate=0.021  mean_gold_rank=624.7  (n=192)  other_attr_rank[capital=35438, currency=38139, language=37284]
+layer 27: top1_match_rate=0.969  mean_gold_rank=1.5  (n=192)  other_attr_rank[capital=6340, currency=25763, language=18616]
+layer 28: top1_match_rate=0.969  mean_gold_rank=1.5  (n=192)  other_attr_rank[capital=1298, currency=3522, language=3763]
+wrote /workspace/VADE-evals/methods/logit_lens/flags_calling_code_flag_ring1_report.jsonl and /workspace/VADE-evals/methods/logit_lens/flags_calling_code_flag_ring1_report_summary.json
+
+=== direct logit attribution (direction=gold_minus_mean) ===
+ block       attn        mlp  block total   cumulative
+ embed                              0.002        0.002
+     0      0.069      0.001        0.070        0.073
+     1      0.007     -0.017       -0.010        0.063
+     2      0.006     -0.029       -0.024        0.039
+     3     -0.070     -0.004       -0.074       -0.035
+     4     -0.002     -0.027       -0.030       -0.064
+     5     -0.013      0.047        0.033       -0.031
+     6      0.020     -0.017        0.003       -0.028
+     7      0.016      0.075        0.092        0.064
+     8     -0.025      0.013       -0.011        0.052
+     9     -0.015     -0.169       -0.184       -0.132
+    10      0.063     -0.118       -0.055       -0.187
+    11     -0.049      0.108        0.059       -0.128
+    12     -0.010     -0.039       -0.050       -0.178
+    13     -0.066      0.047       -0.019       -0.196
+    14     -0.066      0.130        0.065       -0.132
+    15     -0.051      0.047       -0.004       -0.136
+    16     -0.014      0.028        0.014       -0.121
+    17     -0.029      0.084        0.054       -0.067
+    18     -0.012     -0.056       -0.068       -0.135
+    19      0.075      0.062        0.137        0.003
+    20     -0.020      0.058        0.038        0.041
+    21      0.079     -0.052        0.027        0.067
+    22      0.032      0.274        0.306        0.373
+    23      0.043      0.233        0.276        0.649
+    24      0.088      0.097        0.185        0.834
+    25      0.321      2.791        3.113        3.947
+    26      1.820      6.247        8.068       12.015
+    27      2.257     10.076       12.333       24.348
+
+top 12 components by |contribution|:
+       mlp27   +10.076
+       mlp26    +6.247
+       mlp25    +2.791
+      attn27    +2.257
+      attn26    +1.820
+      attn25    +0.321
+       mlp22    +0.274
+       mlp23    +0.233
+        mlp9    -0.169
+       mlp14    +0.130
+       mlp10    -0.118
+       mlp11    +0.108
+
+total (== the model's own gold_minus_mean value, averaged): +24.348
+
+self-checks (worst over 72 rows): reconstruction=1.020% additivity=0.664%  (tolerance 2.0%)
+wrote /workspace/VADE-evals/methods/dla/flags_calling_code_flag_ring1_gold_minus_mean_report.jsonl and /workspace/VADE-evals/methods/dla/flags_calling_code_flag_ring1_gold_minus_mean_report_summary.json
+
+=== attention maps: text->image flow heads (score > 0.2) ===
+text->image score for 14.22 = 0.201
+text->image score for 19.17 = 0.264
+flagged: ['14.22', '19.17']
+top 20 by text->image attention (ungated): 19.17=0.264, 14.22=0.201, 26.2=0.191, 19.22=0.187, 14.10=0.184, 10.6=0.182, 19.18=0.172, 14.11=0.171, 24.21=0.167, 16.1=0.165, 0.14=0.160, 3.14=0.156, 12.12=0.155, 21.5=0.150, 19.6=0.146, 14.23=0.144, 23.6=0.144, 14.24=0.143, 13.16=0.141, 9.2=0.137
+wrote /workspace/VADE-evals/methods/attention_maps/flags_calling_code_flag_ring1_report.json

@@ -1,0 +1,89 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 2/729 [00:00<02:07,  5.70it/s]Loading weights:   2%|▏         | 16/729 [00:00<00:18, 37.79it/s]Loading weights:   4%|▍         | 29/729 [00:00<00:11, 60.99it/s]Loading weights:   5%|▌         | 39/729 [00:00<00:11, 62.52it/s]Loading weights:   7%|▋         | 54/729 [00:00<00:08, 84.10it/s]Loading weights:   9%|▉         | 66/729 [00:00<00:07, 87.97it/s]Loading weights:  11%|█         | 77/729 [00:01<00:07, 89.06it/s]Loading weights:  13%|█▎        | 92/729 [00:01<00:06, 104.88it/s]Loading weights:  15%|█▍        | 106/729 [00:01<00:05, 111.28it/s]Loading weights:  16%|█▌        | 118/729 [00:01<00:05, 105.60it/s]Loading weights:  18%|█▊        | 130/729 [00:01<00:05, 109.41it/s]Loading weights:  19%|█▉        | 142/729 [00:01<00:05, 110.49it/s]Loading weights:  21%|██        | 154/729 [00:01<00:05, 103.87it/s]Loading weights:  23%|██▎       | 165/729 [00:01<00:05, 103.93it/s]Loading weights:  24%|██▍       | 176/729 [00:02<00:05, 103.87it/s]Loading weights:  26%|██▌       | 187/729 [00:02<00:05, 103.15it/s]Loading weights:  28%|██▊       | 202/729 [00:02<00:04, 115.85it/s]Loading weights:  30%|██▉       | 216/729 [00:02<00:04, 120.34it/s]Loading weights:  31%|███▏      | 229/729 [00:02<00:04, 116.90it/s]Loading weights:  33%|███▎      | 241/729 [00:02<00:04, 116.85it/s]Loading weights:  35%|███▍      | 253/729 [00:02<00:04, 113.04it/s]Loading weights:  36%|███▋      | 265/729 [00:02<00:04, 114.27it/s]Loading weights:  38%|███▊      | 280/729 [00:02<00:03, 118.76it/s]Loading weights:  40%|████      | 293/729 [00:02<00:03, 115.10it/s]Loading weights:  42%|████▏     | 305/729 [00:03<00:03, 110.43it/s]Loading weights:  43%|████▎     | 317/729 [00:03<00:03, 106.78it/s]Loading weights:  45%|████▌     | 330/729 [00:03<00:03, 111.04it/s]Loading weights:  58%|█████▊    | 424/729 [00:03<00:00, 337.31it/s]Loading weights:  74%|███████▎  | 537/729 [00:03<00:00, 558.10it/s]Loading weights:  88%|████████▊ | 643/729 [00:03<00:00, 698.18it/s]Loading weights: 100%|██████████| 729/729 [00:03<00:00, 194.81it/s]
+[verify_sites] entity=flags attribute=language layer=22 positions=flag_ring1 rows=2 n_pos=24
+[verify_sites] hidden_size=3584 intermediate_size=18944
+
+=== site=residual layer=22 expected_width=3584 ===
+[ok]   1. width: captured source activation (2, 24, 3584)
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+[ok]   2. null patch (sigma=0) reproduces the unhooked generation exactly
+       (base vs source activation max|diff| = 97 -- should be clearly nonzero, else the two inputs aren't actually different)
+[ok]   3. full swap (sigma=1) of base-into-base reproduces the unhooked generation exactly
+[ok]   4. decode-step guard: [B, 1, width] tensor passes through untouched
+[ok]   5. patch writes: full source swap moves the logits by max|delta|=11.56
+       (info) full swap of the REAL source, per row:
+         row 0: ANSWER CHANGED (first diff at token 0)
+           unhooked   : ' Arabic.'
+           full source: ' English.'
+         row 1: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Singapore. The flag in the image features'
+           full source: ' Singapore. The flag in the image features'
+
+=== site=attn_output layer=22 expected_width=3584 ===
+[ok]   1. width: captured source activation (2, 24, 3584)
+[ok]   2. null patch (sigma=0) reproduces the unhooked generation exactly
+       (base vs source activation max|diff| = 12.12 -- should be clearly nonzero, else the two inputs aren't actually different)
+[ok]   3. full swap (sigma=1) of base-into-base reproduces the unhooked generation exactly
+[ok]   4. decode-step guard: [B, 1, width] tensor passes through untouched
+[ok]   5. patch writes: full source swap moves the logits by max|delta|=0.25
+       (info) full swap of the REAL source, per row:
+         row 0: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Arabic.'
+           full source: ' Arabic.'
+         row 1: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Singapore. The flag in the image features'
+           full source: ' Singapore. The flag in the image features'
+
+=== site=attn_head_output layer=22 expected_width=3584 ===
+[ok]   1. width: captured source activation (2, 24, 3584)
+[ok]   2. null patch (sigma=0) reproduces the unhooked generation exactly
+       (base vs source activation max|diff| = 5.242 -- should be clearly nonzero, else the two inputs aren't actually different)
+[ok]   3. full swap (sigma=1) of base-into-base reproduces the unhooked generation exactly
+[ok]   4. decode-step guard: [B, 1, width] tensor passes through untouched
+[ok]   5. patch writes: full source swap moves the logits by max|delta|=0.25
+       (info) full swap of the REAL source, per row:
+         row 0: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Arabic.'
+           full source: ' Arabic.'
+         row 1: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Singapore. The flag in the image features'
+           full source: ' Singapore. The flag in the image features'
+
+=== site=mlp_output layer=22 expected_width=3584 ===
+[ok]   1. width: captured source activation (2, 24, 3584)
+[ok]   2. null patch (sigma=0) reproduces the unhooked generation exactly
+       (base vs source activation max|diff| = 43.12 -- should be clearly nonzero, else the two inputs aren't actually different)
+[ok]   3. full swap (sigma=1) of base-into-base reproduces the unhooked generation exactly
+[ok]   4. decode-step guard: [B, 1, width] tensor passes through untouched
+[ok]   5. patch writes: full source swap moves the logits by max|delta|=0.375
+       (info) full swap of the REAL source, per row:
+         row 0: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Arabic.'
+           full source: ' Arabic.'
+         row 1: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Singapore. The flag in the image features'
+           full source: ' Singapore. The flag in the image features'
+
+=== site=mlp_hidden layer=22 expected_width=18944 ===
+[ok]   1. width: captured source activation (2, 24, 18944)
+[ok]   2. null patch (sigma=0) reproduces the unhooked generation exactly
+       (base vs source activation max|diff| = 32.12 -- should be clearly nonzero, else the two inputs aren't actually different)
+[ok]   3. full swap (sigma=1) of base-into-base reproduces the unhooked generation exactly
+[ok]   4. decode-step guard: [B, 1, width] tensor passes through untouched
+[ok]   5. patch writes: full source swap moves the logits by max|delta|=0.375
+       (info) full swap of the REAL source, per row:
+         row 0: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Arabic.'
+           full source: ' Arabic.'
+         row 1: IDENTICAL -- this site/layer has no causal effect on this row at all
+           unhooked   : ' Singapore. The flag in the image features'
+           full source: ' Singapore. The flag in the image features'
+
+================ SUMMARY ================
+residual: all checks passed
+attn_output: all checks passed
+attn_head_output: all checks passed
+mlp_output: all checks passed
+mlp_hidden: all checks passed

@@ -1,0 +1,267 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<02:18,  5.24it/s]Loading weights:   0%|          | 2/729 [00:00<03:14,  3.73it/s]Loading weights:   1%|          | 4/729 [00:00<01:35,  7.59it/s]Loading weights:   2%|▏         | 16/729 [00:00<00:20, 35.64it/s]Loading weights:   3%|▎         | 22/729 [00:00<00:17, 40.81it/s]Loading weights:   4%|▍         | 30/729 [00:00<00:14, 48.01it/s]Loading weights:   6%|▌         | 42/729 [00:01<00:11, 58.63it/s]Loading weights:   7%|▋         | 53/729 [00:01<00:10, 67.37it/s]Loading weights:   9%|▊         | 63/729 [00:01<00:09, 72.41it/s]Loading weights:  11%|█         | 78/729 [00:01<00:07, 82.63it/s]Loading weights:  12%|█▏        | 89/729 [00:01<00:07, 89.23it/s]Loading weights:  14%|█▎        | 100/729 [00:01<00:07, 86.63it/s]Loading weights:  16%|█▌        | 113/729 [00:01<00:06, 91.25it/s]Loading weights:  17%|█▋        | 124/729 [00:01<00:06, 95.26it/s]Loading weights:  18%|█▊        | 134/729 [00:02<00:07, 84.84it/s]Loading weights:  20%|██        | 148/729 [00:02<00:06, 93.76it/s]Loading weights:  22%|██▏       | 159/729 [00:02<00:07, 79.28it/s]Loading weights:  23%|██▎       | 171/729 [00:02<00:06, 86.90it/s]Loading weights:  25%|██▌       | 183/729 [00:02<00:05, 93.06it/s]Loading weights:  26%|██▋       | 193/729 [00:02<00:05, 93.94it/s]Loading weights:  28%|██▊       | 203/729 [00:02<00:06, 85.75it/s]Loading weights:  29%|██▉       | 212/729 [00:03<00:06, 82.84it/s]Loading weights:  30%|███       | 221/729 [00:03<00:06, 82.86it/s]Loading weights:  32%|███▏      | 233/729 [00:03<00:05, 87.10it/s]Loading weights:  33%|███▎      | 244/729 [00:03<00:05, 83.72it/s]Loading weights:  35%|███▍      | 253/729 [00:03<00:05, 85.11it/s]Loading weights:  37%|███▋      | 268/729 [00:03<00:04, 99.81it/s]Loading weights:  38%|███▊      | 280/729 [00:03<00:05, 79.30it/s]Loading weights:  40%|████      | 293/729 [00:03<00:04, 89.91it/s]Loading weights:  42%|████▏     | 304/729 [00:04<00:05, 79.45it/s]Loading weights:  44%|████▎     | 318/729 [00:04<00:04, 87.78it/s]Loading weights:  45%|████▌     | 330/729 [00:04<00:04, 89.74it/s]Loading weights:  56%|█████▌    | 409/729 [00:04<00:01, 255.40it/s]Loading weights:  67%|██████▋   | 489/729 [00:04<00:00, 392.33it/s]Loading weights:  78%|███████▊  | 572/729 [00:04<00:00, 506.77it/s]Loading weights:  89%|████████▉ | 649/729 [00:04<00:00, 576.75it/s]Loading weights: 100%|█████████▉| 728/729 [00:04<00:00, 612.58it/s]Loading weights: 100%|██████████| 729/729 [00:04<00:00, 149.45it/s]
+[ndm/swap_trace] flags/language @ last_token, residual, layers 19-28: 384 cause rows (25 distinct bases), seed=0
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  rows 0-15 layer 19: HIT=0 base=15 other=1
+  rows 0-15 layer 20: HIT=0 base=15 other=1
+  rows 0-15 layer 21: HIT=0 base=15 other=1
+  rows 0-15 layer 22: HIT=0 base=14 other=2
+  rows 0-15 layer 23: HIT=11 base=3 other=2
+  rows 0-15 layer 24: HIT=16 base=0 other=0
+  rows 0-15 layer 25: HIT=16 base=0 other=0
+  rows 0-15 layer 26: HIT=16 base=0 other=0
+  rows 0-15 layer 27: HIT=16 base=0 other=0
+  rows 0-15 layer 28: HIT=14 base=0 other=2
+  rows 16-31 layer 19: HIT=0 base=16 other=0
+  rows 16-31 layer 20: HIT=0 base=16 other=0
+  rows 16-31 layer 21: HIT=0 base=16 other=0
+  rows 16-31 layer 22: HIT=3 base=13 other=0
+  rows 16-31 layer 23: HIT=11 base=5 other=0
+  rows 16-31 layer 24: HIT=16 base=0 other=0
+  rows 16-31 layer 25: HIT=16 base=0 other=0
+  rows 16-31 layer 26: HIT=16 base=0 other=0
+  rows 16-31 layer 27: HIT=16 base=0 other=0
+  rows 16-31 layer 28: HIT=15 base=0 other=1
+  rows 32-47 layer 19: HIT=0 base=15 other=1
+  rows 32-47 layer 20: HIT=0 base=15 other=1
+  rows 32-47 layer 21: HIT=0 base=16 other=0
+  rows 32-47 layer 22: HIT=1 base=15 other=0
+  rows 32-47 layer 23: HIT=14 base=2 other=0
+  rows 32-47 layer 24: HIT=16 base=0 other=0
+  rows 32-47 layer 25: HIT=16 base=0 other=0
+  rows 32-47 layer 26: HIT=16 base=0 other=0
+  rows 32-47 layer 27: HIT=16 base=0 other=0
+  rows 32-47 layer 28: HIT=16 base=0 other=0
+  rows 48-63 layer 19: HIT=0 base=15 other=1
+  rows 48-63 layer 20: HIT=0 base=15 other=1
+  rows 48-63 layer 21: HIT=0 base=15 other=1
+  rows 48-63 layer 22: HIT=1 base=13 other=2
+  rows 48-63 layer 23: HIT=7 base=5 other=4
+  rows 48-63 layer 24: HIT=16 base=0 other=0
+  rows 48-63 layer 25: HIT=16 base=0 other=0
+  rows 48-63 layer 26: HIT=16 base=0 other=0
+  rows 48-63 layer 27: HIT=16 base=0 other=0
+  rows 48-63 layer 28: HIT=16 base=0 other=0
+  rows 64-79 layer 19: HIT=1 base=15 other=0
+  rows 64-79 layer 20: HIT=1 base=15 other=0
+  rows 64-79 layer 21: HIT=1 base=15 other=0
+  rows 64-79 layer 22: HIT=1 base=14 other=1
+  rows 64-79 layer 23: HIT=11 base=3 other=2
+  rows 64-79 layer 24: HIT=16 base=0 other=0
+  rows 64-79 layer 25: HIT=16 base=0 other=0
+  rows 64-79 layer 26: HIT=16 base=0 other=0
+  rows 64-79 layer 27: HIT=16 base=0 other=0
+  rows 64-79 layer 28: HIT=16 base=0 other=0
+  rows 80-95 layer 19: HIT=0 base=16 other=0
+  rows 80-95 layer 20: HIT=0 base=16 other=0
+  rows 80-95 layer 21: HIT=0 base=16 other=0
+  rows 80-95 layer 22: HIT=0 base=16 other=0
+  rows 80-95 layer 23: HIT=9 base=6 other=1
+  rows 80-95 layer 24: HIT=16 base=0 other=0
+  rows 80-95 layer 25: HIT=16 base=0 other=0
+  rows 80-95 layer 26: HIT=16 base=0 other=0
+  rows 80-95 layer 27: HIT=16 base=0 other=0
+  rows 80-95 layer 28: HIT=16 base=0 other=0
+  rows 96-111 layer 19: HIT=1 base=14 other=1
+  rows 96-111 layer 20: HIT=1 base=13 other=2
+  rows 96-111 layer 21: HIT=1 base=13 other=2
+  rows 96-111 layer 22: HIT=2 base=12 other=2
+  rows 96-111 layer 23: HIT=12 base=4 other=0
+  rows 96-111 layer 24: HIT=16 base=0 other=0
+  rows 96-111 layer 25: HIT=16 base=0 other=0
+  rows 96-111 layer 26: HIT=16 base=0 other=0
+  rows 96-111 layer 27: HIT=16 base=0 other=0
+  rows 96-111 layer 28: HIT=16 base=0 other=0
+  rows 112-127 layer 19: HIT=0 base=15 other=1
+  rows 112-127 layer 20: HIT=0 base=15 other=1
+  rows 112-127 layer 21: HIT=0 base=15 other=1
+  rows 112-127 layer 22: HIT=1 base=14 other=1
+  rows 112-127 layer 23: HIT=15 base=1 other=0
+  rows 112-127 layer 24: HIT=16 base=0 other=0
+  rows 112-127 layer 25: HIT=16 base=0 other=0
+  rows 112-127 layer 26: HIT=16 base=0 other=0
+  rows 112-127 layer 27: HIT=16 base=0 other=0
+  rows 112-127 layer 28: HIT=15 base=0 other=1
+  rows 128-143 layer 19: HIT=0 base=16 other=0
+  rows 128-143 layer 20: HIT=0 base=16 other=0
+  rows 128-143 layer 21: HIT=0 base=16 other=0
+  rows 128-143 layer 22: HIT=0 base=15 other=1
+  rows 128-143 layer 23: HIT=7 base=7 other=2
+  rows 128-143 layer 24: HIT=16 base=0 other=0
+  rows 128-143 layer 25: HIT=16 base=0 other=0
+  rows 128-143 layer 26: HIT=16 base=0 other=0
+  rows 128-143 layer 27: HIT=16 base=0 other=0
+  rows 128-143 layer 28: HIT=12 base=0 other=4
+  rows 144-159 layer 19: HIT=0 base=13 other=3
+  rows 144-159 layer 20: HIT=0 base=13 other=3
+  rows 144-159 layer 21: HIT=0 base=13 other=3
+  rows 144-159 layer 22: HIT=2 base=11 other=3
+  rows 144-159 layer 23: HIT=13 base=2 other=1
+  rows 144-159 layer 24: HIT=16 base=0 other=0
+  rows 144-159 layer 25: HIT=16 base=0 other=0
+  rows 144-159 layer 26: HIT=16 base=0 other=0
+  rows 144-159 layer 27: HIT=16 base=0 other=0
+  rows 144-159 layer 28: HIT=15 base=0 other=1
+  rows 160-175 layer 19: HIT=0 base=15 other=1
+  rows 160-175 layer 20: HIT=0 base=15 other=1
+  rows 160-175 layer 21: HIT=0 base=15 other=1
+  rows 160-175 layer 22: HIT=2 base=13 other=1
+  rows 160-175 layer 23: HIT=11 base=4 other=1
+  rows 160-175 layer 24: HIT=16 base=0 other=0
+  rows 160-175 layer 25: HIT=16 base=0 other=0
+  rows 160-175 layer 26: HIT=16 base=0 other=0
+  rows 160-175 layer 27: HIT=16 base=0 other=0
+  rows 160-175 layer 28: HIT=15 base=0 other=1
+  rows 176-191 layer 19: HIT=0 base=15 other=1
+  rows 176-191 layer 20: HIT=0 base=15 other=1
+  rows 176-191 layer 21: HIT=0 base=15 other=1
+  rows 176-191 layer 22: HIT=0 base=15 other=1
+  rows 176-191 layer 23: HIT=13 base=2 other=1
+  rows 176-191 layer 24: HIT=16 base=0 other=0
+  rows 176-191 layer 25: HIT=16 base=0 other=0
+  rows 176-191 layer 26: HIT=16 base=0 other=0
+  rows 176-191 layer 27: HIT=16 base=0 other=0
+  rows 176-191 layer 28: HIT=16 base=0 other=0
+  rows 192-207 layer 19: HIT=0 base=15 other=1
+  rows 192-207 layer 20: HIT=0 base=15 other=1
+  rows 192-207 layer 21: HIT=0 base=15 other=1
+  rows 192-207 layer 22: HIT=1 base=13 other=2
+  rows 192-207 layer 23: HIT=12 base=2 other=2
+  rows 192-207 layer 24: HIT=16 base=0 other=0
+  rows 192-207 layer 25: HIT=16 base=0 other=0
+  rows 192-207 layer 26: HIT=16 base=0 other=0
+  rows 192-207 layer 27: HIT=16 base=0 other=0
+  rows 192-207 layer 28: HIT=16 base=0 other=0
+  rows 208-223 layer 19: HIT=0 base=15 other=1
+  rows 208-223 layer 20: HIT=0 base=14 other=2
+  rows 208-223 layer 21: HIT=0 base=14 other=2
+  rows 208-223 layer 22: HIT=1 base=12 other=3
+  rows 208-223 layer 23: HIT=10 base=3 other=3
+  rows 208-223 layer 24: HIT=16 base=0 other=0
+  rows 208-223 layer 25: HIT=16 base=0 other=0
+  rows 208-223 layer 26: HIT=16 base=0 other=0
+  rows 208-223 layer 27: HIT=16 base=0 other=0
+  rows 208-223 layer 28: HIT=15 base=0 other=1
+  rows 224-239 layer 19: HIT=1 base=15 other=0
+  rows 224-239 layer 20: HIT=1 base=15 other=0
+  rows 224-239 layer 21: HIT=1 base=15 other=0
+  rows 224-239 layer 22: HIT=1 base=14 other=1
+  rows 224-239 layer 23: HIT=13 base=2 other=1
+  rows 224-239 layer 24: HIT=16 base=0 other=0
+  rows 224-239 layer 25: HIT=16 base=0 other=0
+  rows 224-239 layer 26: HIT=16 base=0 other=0
+  rows 224-239 layer 27: HIT=16 base=0 other=0
+  rows 224-239 layer 28: HIT=16 base=0 other=0
+  rows 240-255 layer 19: HIT=0 base=15 other=1
+  rows 240-255 layer 20: HIT=0 base=15 other=1
+  rows 240-255 layer 21: HIT=0 base=15 other=1
+  rows 240-255 layer 22: HIT=2 base=13 other=1
+  rows 240-255 layer 23: HIT=7 base=5 other=4
+  rows 240-255 layer 24: HIT=16 base=0 other=0
+  rows 240-255 layer 25: HIT=16 base=0 other=0
+  rows 240-255 layer 26: HIT=16 base=0 other=0
+  rows 240-255 layer 27: HIT=16 base=0 other=0
+  rows 240-255 layer 28: HIT=16 base=0 other=0
+  rows 256-271 layer 19: HIT=0 base=15 other=1
+  rows 256-271 layer 20: HIT=0 base=15 other=1
+  rows 256-271 layer 21: HIT=0 base=16 other=0
+  rows 256-271 layer 22: HIT=2 base=14 other=0
+  rows 256-271 layer 23: HIT=13 base=2 other=1
+  rows 256-271 layer 24: HIT=16 base=0 other=0
+  rows 256-271 layer 25: HIT=16 base=0 other=0
+  rows 256-271 layer 26: HIT=16 base=0 other=0
+  rows 256-271 layer 27: HIT=16 base=0 other=0
+  rows 256-271 layer 28: HIT=16 base=0 other=0
+  rows 272-287 layer 19: HIT=0 base=14 other=2
+  rows 272-287 layer 20: HIT=0 base=14 other=2
+  rows 272-287 layer 21: HIT=0 base=14 other=2
+  rows 272-287 layer 22: HIT=0 base=14 other=2
+  rows 272-287 layer 23: HIT=11 base=4 other=1
+  rows 272-287 layer 24: HIT=16 base=0 other=0
+  rows 272-287 layer 25: HIT=16 base=0 other=0
+  rows 272-287 layer 26: HIT=16 base=0 other=0
+  rows 272-287 layer 27: HIT=16 base=0 other=0
+  rows 272-287 layer 28: HIT=16 base=0 other=0
+  rows 288-303 layer 19: HIT=1 base=13 other=2
+  rows 288-303 layer 20: HIT=1 base=13 other=2
+  rows 288-303 layer 21: HIT=1 base=13 other=2
+  rows 288-303 layer 22: HIT=1 base=13 other=2
+  rows 288-303 layer 23: HIT=12 base=1 other=3
+  rows 288-303 layer 24: HIT=16 base=0 other=0
+  rows 288-303 layer 25: HIT=16 base=0 other=0
+  rows 288-303 layer 26: HIT=16 base=0 other=0
+  rows 288-303 layer 27: HIT=16 base=0 other=0
+  rows 288-303 layer 28: HIT=15 base=0 other=1
+  rows 304-319 layer 19: HIT=0 base=16 other=0
+  rows 304-319 layer 20: HIT=0 base=16 other=0
+  rows 304-319 layer 21: HIT=0 base=16 other=0
+  rows 304-319 layer 22: HIT=2 base=14 other=0
+  rows 304-319 layer 23: HIT=11 base=3 other=2
+  rows 304-319 layer 24: HIT=16 base=0 other=0
+  rows 304-319 layer 25: HIT=16 base=0 other=0
+  rows 304-319 layer 26: HIT=16 base=0 other=0
+  rows 304-319 layer 27: HIT=16 base=0 other=0
+  rows 304-319 layer 28: HIT=16 base=0 other=0
+  rows 320-335 layer 19: HIT=0 base=16 other=0
+  rows 320-335 layer 20: HIT=0 base=16 other=0
+  rows 320-335 layer 21: HIT=0 base=16 other=0
+  rows 320-335 layer 22: HIT=0 base=16 other=0
+  rows 320-335 layer 23: HIT=10 base=4 other=2
+  rows 320-335 layer 24: HIT=16 base=0 other=0
+  rows 320-335 layer 25: HIT=16 base=0 other=0
+  rows 320-335 layer 26: HIT=16 base=0 other=0
+  rows 320-335 layer 27: HIT=16 base=0 other=0
+  rows 320-335 layer 28: HIT=15 base=0 other=1
+  rows 336-351 layer 19: HIT=3 base=13 other=0
+  rows 336-351 layer 20: HIT=3 base=13 other=0
+  rows 336-351 layer 21: HIT=3 base=13 other=0
+  rows 336-351 layer 22: HIT=4 base=12 other=0
+  rows 336-351 layer 23: HIT=9 base=6 other=1
+  rows 336-351 layer 24: HIT=16 base=0 other=0
+  rows 336-351 layer 25: HIT=16 base=0 other=0
+  rows 336-351 layer 26: HIT=16 base=0 other=0
+  rows 336-351 layer 27: HIT=16 base=0 other=0
+  rows 336-351 layer 28: HIT=15 base=0 other=1
+  rows 352-367 layer 19: HIT=0 base=15 other=1
+  rows 352-367 layer 20: HIT=0 base=15 other=1
+  rows 352-367 layer 21: HIT=0 base=15 other=1
+  rows 352-367 layer 22: HIT=1 base=13 other=2
+  rows 352-367 layer 23: HIT=14 base=2 other=0
+  rows 352-367 layer 24: HIT=16 base=0 other=0
+  rows 352-367 layer 25: HIT=16 base=0 other=0
+  rows 352-367 layer 26: HIT=16 base=0 other=0
+  rows 352-367 layer 27: HIT=16 base=0 other=0
+  rows 352-367 layer 28: HIT=16 base=0 other=0
+  rows 368-383 layer 19: HIT=1 base=14 other=1
+  rows 368-383 layer 20: HIT=1 base=14 other=1
+  rows 368-383 layer 21: HIT=1 base=14 other=1
+  rows 368-383 layer 22: HIT=1 base=14 other=1
+  rows 368-383 layer 23: HIT=11 base=4 other=1
+  rows 368-383 layer 24: HIT=16 base=0 other=0
+  rows 368-383 layer 25: HIT=16 base=0 other=0
+  rows 368-383 layer 26: HIT=16 base=0 other=0
+  rows 368-383 layer 27: HIT=16 base=0 other=0
+  rows 368-383 layer 28: HIT=13 base=0 other=3
+
+!! 20 (row, layer) generations matched BOTH golds -- base_label == source_label for those rows, which pruned tuples are supposed to exclude. They are counted as HIT; treat that rate as an upper bound.
+
+====================================================================================================
+SUMMARY: per-layer cause_hit / base_kept / other, over 384 rows
+====================================================================================================
+ layer        cause_hit        base_kept        other
+    19     8/384 (  2.1%)   356/384 ( 92.7%)    20 (  5.2%)
+    20     8/384 (  2.1%)   354/384 ( 92.2%)    22 (  5.7%)
+    21     8/384 (  2.1%)   356/384 ( 92.7%)    20 (  5.2%)
+    22    29/384 (  7.6%)   327/384 ( 85.2%)    28 (  7.3%)
+    23   267/384 ( 69.5%)    82/384 ( 21.4%)    35 (  9.1%)
+    24   384/384 (100.0%)     0/384 (  0.0%)     0 (  0.0%)
+    25   384/384 (100.0%)     0/384 (  0.0%)     0 (  0.0%)
+    26   384/384 (100.0%)     0/384 (  0.0%)     0 (  0.0%)
+    27   384/384 (100.0%)     0/384 (  0.0%)     0 (  0.0%)
+    28   367/384 ( 95.6%)     0/384 (  0.0%)    17 (  4.4%)
+
+wrote /workspace/VADE-evals/logs/adhoc_probes/flags_language_last_token_residual_n384_layers19-28.log
+      /workspace/VADE-evals/logs/adhoc_probes/flags_language_last_token_residual_n384_layers19-28_TOKENS.log
+      /workspace/VADE-evals/logs/adhoc_probes/flags_language_last_token_residual_n384_layers19-28.json
