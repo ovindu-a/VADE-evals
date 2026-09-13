@@ -384,9 +384,14 @@ def main():
                          "without it a phase-2 curve is uninterpretable.")
     ap.add_argument("--skip_knockout", action="store_true",
                     help="Phase 1 only -- skips BOTH generation phases (2 and 3).")
-    ap.add_argument("--control_k", type=int, default=8,
-                    help="k for phase 4's shuffled-donor control -- set it to the smallest k whose "
-                         "phase-3 arm already reaches the ceiling, i.e. the claim being tested.")
+    ap.add_argument("--control_k", type=int, nargs="+", default=[8],
+                    help="k value(s) for phase 4's shuffled-donor control. A list is usually what you "
+                         "want: one k only tells you whether a claim survives the control, a curve "
+                         "tells you where it STARTS to -- and the smallest k whose donor rate rises "
+                         "is the real localization number, not the smallest k whose cause moves. "
+                         "Each k costs one extra generation pass per batch. Values above the number "
+                         "of traced heads are clamped, duplicates and any k that reduces to the "
+                         "ALL-heads set are dropped, and the ALL-heads arm always runs.")
     ap.add_argument("--skip_sufficiency", action="store_true",
                     help="Run the knockout (phase 2) but not the sufficiency arm (phase 3). Phase 3 is "
                          "the stronger of the two -- necessity is what redundancy breaks -- so skip it "
@@ -910,12 +915,18 @@ def main():
                   f"and its base gold (`kept`). If these heads carry the source's identity, `own` "
                   f"must collapse and `donor` must rise. `own` staying high would mean the effect "
                   f"never depended on which image was patched in.")
-            ctrl = []
-            for label, heads in (("top-%d" % args.control_k,
-                                  [(r["block"], r["head"]) for r in ranked[:args.control_k]]),
-                                 ("ALL %d" % len(all_heads), all_heads)):
-                if not heads:
+            # Clamp before labelling: ranked[:k] silently returns everything for k > len(ranked),
+            # so an unclamped label would print "top-64" for what is really all 28 heads of a
+            # single-block window -- and duplicate the ALL arm at full price.
+            ks = sorted({min(k, len(ranked)) for k in args.control_k if k > 0})
+            arms = [(f"top-{k}", [(r["block"], r["head"]) for r in ranked[:k]]) for k in ks]
+            arms.append((f"ALL {len(all_heads)}", all_heads))
+            ctrl, seen_sets = [], set()
+            for label, heads in arms:
+                key = frozenset(heads)
+                if not heads or key in seen_sets:
                     continue
+                seen_sets.add(key)
                 own, donor, kept = run_cause_shuffled(heads, patched_z_per_batch, False)
                 straight = next((x["cause"] for x in suff
                                  if x.get("k") == len(heads) and x["kind"] in ("top", "all")), None)
@@ -923,22 +934,27 @@ def main():
                       + (f"   (unshuffled cause was {straight:.1%})" if straight is not None else ""))
                 ctrl.append({"label": label, "n_heads": len(heads), "own": own, "donor": donor,
                              "base_kept": kept, "unshuffled_cause": straight})
-            top_ctrl = ctrl[0] if ctrl else None
-            if top_ctrl is not None:
-                if top_ctrl["donor"] > 0.5 and top_ctrl["own"] < 0.2:
-                    print(f"\n  -> CONFIRMED. Rolling the donor moves the answer WITH it, so these "
-                          f"heads carry the source image's identity and the sufficiency result is "
-                          f"about the model, not the plumbing.")
-                elif top_ctrl["own"] > 0.5:
+            confirmed = next((c for c in ctrl if c["donor"] > 0.5 and c["own"] < 0.2), None)
+            smallest = ctrl[0] if ctrl else None
+            if smallest is not None:
+                if confirmed is not None:
+                    print(f"\n  -> CONFIRMED at {confirmed['label']}: rolling the donor moves the "
+                          f"answer WITH it (own={confirmed['own']:.1%}, donor={confirmed['donor']:.1%}), "
+                          f"so these heads carry the source image's identity and the sufficiency "
+                          f"result is about the model, not the plumbing. THIS k, not the smallest k "
+                          f"whose phase-3 cause moved, is the localization number worth quoting.")
+                elif smallest["own"] > 0.5:
                     print(f"\n  !! the answer did NOT follow the donor -- `own` stayed at "
-                          f"{top_ctrl['own']:.1%} while receiving a DIFFERENT flag's head outputs. "
+                          f"{smallest['own']:.1%} while receiving a DIFFERENT flag's head outputs. "
                           f"The effect does not depend on which image was patched, so phase 3's "
                           f"curve is an artefact of perturbing this site, not transfer.")
                 else:
-                    print(f"\n  -> partial: `own` collapsed to {top_ctrl['own']:.1%} but `donor` only "
-                          f"reached {top_ctrl['donor']:.1%}. These heads are necessary carriers of "
-                          f"source-specific content but do not reconstruct the donor's answer alone "
-                          f"-- report it as 'carries identity', not 'sufficient'.")
+                    best = max(ctrl, key=lambda c: c["donor"])
+                    print(f"\n  -> partial: no arm reached the confirmation bar. Best donor rate was "
+                          f"{best['donor']:.1%} at {best['label']} (own={best['own']:.1%}). These "
+                          f"heads carry source-specific content -- the answer stopped being the "
+                          f"row's own -- but do not reconstruct the donor's answer, so report it as "
+                          f"'carries identity', not 'sufficient'.")
             report["phase4_shuffled_donor"] = ctrl
 
         with open(out_path, "w") as f:
