@@ -1,0 +1,312 @@
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:27,  8.31it/s]Loading weights:   0%|          | 2/729 [00:00<02:30,  4.83it/s]Loading weights:   2%|2         | 16/729 [00:00<00:17, 41.79it/s]Loading weights:   4%|3         | 29/729 [00:00<00:11, 61.09it/s]Loading weights:   5%|5         | 40/729 [00:00<00:09, 72.59it/s]Loading weights:   7%|7         | 53/729 [00:00<00:07, 85.28it/s]Loading weights:   9%|8         | 65/729 [00:01<00:08, 80.75it/s]Loading weights:  11%|#         | 78/729 [00:01<00:07, 88.54it/s]Loading weights:  12%|#2        | 90/729 [00:01<00:06, 94.98it/s]Loading weights:  14%|#3        | 101/729 [00:01<00:07, 88.46it/s]Loading weights:  17%|#6        | 122/729 [00:01<00:05, 118.09it/s]Loading weights:  19%|#8        | 136/729 [00:01<00:05, 117.67it/s]Loading weights:  20%|##        | 149/729 [00:01<00:06, 95.65it/s] Loading weights:  22%|##2       | 162/729 [00:01<00:05, 96.82it/s]Loading weights:  24%|##3       | 174/729 [00:02<00:05, 95.37it/s]Loading weights:  26%|##5       | 186/729 [00:02<00:05, 100.01it/s]Loading weights:  27%|##7       | 197/729 [00:02<00:05, 101.16it/s]Loading weights:  29%|##8       | 210/729 [00:02<00:05, 103.72it/s]Loading weights:  30%|###       | 222/729 [00:02<00:05, 96.59it/s] Loading weights:  32%|###2      | 234/729 [00:02<00:05, 95.11it/s]Loading weights:  34%|###3      | 245/729 [00:02<00:05, 91.29it/s]Loading weights:  36%|###5      | 262/729 [00:02<00:04, 109.45it/s]Loading weights:  38%|###7      | 274/729 [00:03<00:04, 106.75it/s]Loading weights:  39%|###9      | 285/729 [00:03<00:04, 105.23it/s]Loading weights:  41%|####      | 296/729 [00:03<00:04, 102.77it/s]Loading weights:  42%|####2     | 307/729 [00:03<00:04, 92.17it/s] Loading weights:  44%|####3     | 318/729 [00:03<00:04, 88.35it/s]Loading weights:  45%|####5     | 329/729 [00:03<00:04, 83.11it/s]Loading weights:  59%|#####8    | 427/729 [00:03<00:01, 295.93it/s]Loading weights:  70%|#######   | 512/729 [00:03<00:00, 435.86it/s]Loading weights:  84%|########3 | 611/729 [00:04<00:00, 580.56it/s]Loading weights:  96%|#########6| 702/729 [00:04<00:00, 667.36it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 175.31it/s]
+[ndm/head_trace] entity=flags attribute=language patch_layer=21 positions=full_image blocks=22-25 heads=28x128 rows=32 (19 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/2 traced
+  batch 2/2 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+23.20              18.1919    13.3748      0.0002
+23.8               14.3568     9.7311      0.0720
+24.18              10.6026     8.2437      0.0014
+24.7               10.0647     6.6240      0.0007
+23.7                9.8237     8.0550     -0.0021
+24.24               9.6661     6.7599      0.0403
+25.13               9.5085     7.4345     -0.0023
+25.24               9.4230     7.4986     -0.0487
+23.6                9.4052     6.7827     -0.1751
+23.9                9.0999     7.2637     -0.0026
+24.21               8.6608     7.1077     -0.0185
+23.11               7.5564     7.1786     -0.0218
+25.4                7.5006     5.1580      0.0005
+24.27               7.4923     6.3334     -0.0104
+23.16               6.9365     5.6071     -0.0022
+23.15               6.9163     5.5147     -0.0029
+22.13               6.9068     5.3223     -0.0013
+24.23               6.8365     5.6705     -0.0451
+25.26               6.6789     5.1978      0.0332
+23.4                6.4969     4.5149     -0.1793
+
+per-block total |delta_resid| (where the read happens):
+  block 22:    79.0329
+  block 23:   149.4149
+  block 24:   113.5102
+  block 25:   108.5964
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  0.0% base_kept= 96.9%
+  image patch only (k=0):         cause=100.0% base_kept=  0.0%   <-- the effect being traced
+  restore top-1   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-2   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-4   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-8   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-16  heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore 8 RANDOM heads (null):   cause=100.0% base_kept=  0.0%
+
+  top-8 vs random-8 gap: +0.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<02:48,  4.31it/s]Loading weights:   0%|          | 2/729 [00:00<04:04,  2.97it/s]Loading weights:   2%|2         | 16/729 [00:00<00:25, 28.01it/s]Loading weights:   3%|2         | 21/729 [00:00<00:22, 31.73it/s]Loading weights:   4%|3         | 29/729 [00:01<00:17, 40.08it/s]Loading weights:   5%|5         | 39/729 [00:01<00:14, 46.52it/s]Loading weights:   7%|6         | 48/729 [00:01<00:13, 51.94it/s]Loading weights:   9%|8         | 64/729 [00:01<00:10, 63.76it/s]Loading weights:  10%|#         | 76/729 [00:01<00:10, 61.33it/s]Loading weights:  12%|#2        | 89/729 [00:01<00:08, 73.71it/s]Loading weights:  14%|#3        | 101/729 [00:01<00:07, 79.00it/s]Loading weights:  16%|#5        | 113/729 [00:02<00:07, 84.87it/s]Loading weights:  17%|#7        | 125/729 [00:02<00:07, 82.51it/s]Loading weights:  18%|#8        | 134/729 [00:02<00:07, 78.34it/s]Loading weights:  20%|##        | 148/729 [00:02<00:06, 91.61it/s]Loading weights:  22%|##2       | 161/729 [00:02<00:06, 93.16it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:06, 85.97it/s]Loading weights:  26%|##5       | 186/729 [00:02<00:06, 86.09it/s]Loading weights:  28%|##8       | 207/729 [00:03<00:04, 105.80it/s]Loading weights:  30%|###       | 220/729 [00:03<00:05, 97.05it/s] Loading weights:  32%|###1      | 232/729 [00:03<00:04, 100.69it/s]Loading weights:  34%|###3      | 245/729 [00:03<00:04, 100.78it/s]Loading weights:  35%|###5      | 257/729 [00:03<00:04, 96.43it/s] Loading weights:  37%|###7      | 270/729 [00:03<00:04, 102.14it/s]Loading weights:  39%|###8      | 281/729 [00:03<00:04, 94.82it/s] Loading weights:  40%|####      | 293/729 [00:03<00:04, 99.82it/s]Loading weights:  42%|####1     | 305/729 [00:04<00:04, 98.10it/s]Loading weights:  43%|####3     | 317/729 [00:04<00:04, 98.77it/s]Loading weights:  45%|####5     | 329/729 [00:04<00:04, 98.37it/s]Loading weights:  53%|#####3    | 390/729 [00:04<00:01, 229.22it/s]Loading weights:  67%|######7   | 489/729 [00:04<00:00, 431.62it/s]Loading weights:  80%|#######9  | 581/729 [00:04<00:00, 565.97it/s]Loading weights:  93%|#########2| 677/729 [00:04<00:00, 671.32it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 151.75it/s]
+[ndm/head_trace] entity=flags attribute=language patch_layer=21 positions=full_image blocks=22-25 heads=28x128 rows=32 (19 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/2 traced
+  batch 2/2 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+23.20              18.1919    13.3748      0.0002
+23.8               14.3568     9.7311      0.0720
+24.18              10.6026     8.2437      0.0014
+24.7               10.0647     6.6240      0.0007
+23.7                9.8237     8.0550     -0.0021
+24.24               9.6661     6.7599      0.0403
+25.13               9.5085     7.4345     -0.0023
+25.24               9.4230     7.4986     -0.0487
+23.6                9.4052     6.7827     -0.1751
+23.9                9.0999     7.2637     -0.0026
+24.21               8.6608     7.1077     -0.0185
+23.11               7.5564     7.1786     -0.0218
+25.4                7.5006     5.1580      0.0005
+24.27               7.4923     6.3334     -0.0104
+23.16               6.9365     5.6071     -0.0022
+23.15               6.9163     5.5147     -0.0029
+22.13               6.9068     5.3223     -0.0013
+24.23               6.8365     5.6705     -0.0451
+25.26               6.6789     5.1978      0.0332
+23.4                6.4969     4.5149     -0.1793
+
+per-block total |delta_resid| (where the read happens):
+  block 22:    79.0329
+  block 23:   149.4149
+  block 24:   113.5102
+  block 25:   108.5964
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  0.0% base_kept= 96.9%
+  image patch only (k=0):         cause=100.0% base_kept=  0.0%   <-- the effect being traced
+  restore top-1   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-2   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-4   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-8   heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-16  heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore top-32  heads:            cause=100.0% base_kept=  0.0%  (recovered  0.0% of the effect)
+  restore 8 RANDOM heads (null):   cause=100.0% base_kept=  0.0%
+
+  top-8 vs random-8 gap: +0.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:56,  6.27it/s]Loading weights:   0%|          | 2/729 [00:00<03:03,  3.95it/s]Loading weights:   2%|2         | 16/729 [00:00<00:19, 35.94it/s]Loading weights:   4%|3         | 29/729 [00:00<00:11, 59.12it/s]Loading weights:   5%|5         | 40/729 [00:00<00:11, 61.82it/s]Loading weights:   7%|7         | 54/729 [00:00<00:08, 78.72it/s]Loading weights:   9%|9         | 66/729 [00:01<00:08, 80.56it/s]Loading weights:  11%|#         | 78/729 [00:01<00:07, 83.19it/s]Loading weights:  12%|#2        | 89/729 [00:01<00:07, 88.78it/s]Loading weights:  14%|#3        | 102/729 [00:01<00:06, 96.98it/s]Loading weights:  16%|#5        | 114/729 [00:01<00:06, 99.99it/s]Loading weights:  17%|#7        | 125/729 [00:01<00:06, 96.21it/s]Loading weights:  19%|#8        | 135/729 [00:01<00:07, 78.19it/s]Loading weights:  21%|##        | 152/729 [00:02<00:05, 96.82it/s]Loading weights:  22%|##2       | 163/729 [00:02<00:05, 98.71it/s]Loading weights:  24%|##3       | 174/729 [00:02<00:05, 99.28it/s]Loading weights:  25%|##5       | 185/729 [00:02<00:05, 98.50it/s]Loading weights:  27%|##6       | 196/729 [00:02<00:05, 100.36it/s]Loading weights:  29%|##8       | 208/729 [00:02<00:05, 99.70it/s] Loading weights:  30%|###       | 219/729 [00:02<00:06, 75.68it/s]Loading weights:  32%|###2      | 234/729 [00:02<00:05, 89.29it/s]Loading weights:  34%|###3      | 245/729 [00:03<00:05, 93.07it/s]Loading weights:  35%|###5      | 258/729 [00:03<00:05, 94.16it/s]Loading weights:  37%|###7      | 270/729 [00:03<00:05, 87.59it/s]Loading weights:  39%|###8      | 282/729 [00:03<00:04, 91.27it/s]Loading weights:  40%|####      | 294/729 [00:03<00:04, 94.46it/s]Loading weights:  42%|####1     | 306/729 [00:03<00:04, 97.10it/s]Loading weights:  43%|####3     | 317/729 [00:03<00:04, 92.53it/s]Loading weights:  45%|####5     | 329/729 [00:03<00:04, 93.34it/s]Loading weights:  52%|#####1    | 379/729 [00:04<00:01, 195.41it/s]Loading weights:  66%|######6   | 483/729 [00:04<00:00, 418.84it/s]Loading weights:  78%|#######8  | 569/729 [00:04<00:00, 536.23it/s]Loading weights:  88%|########8 | 645/729 [00:04<00:00, 597.27it/s]Loading weights:  98%|#########7| 712/729 [00:04<00:00, 617.51it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 164.39it/s]
+[ndm/head_trace] entity=flags attribute=language patch_layer=21 positions=full_image blocks=22-25 heads=28x128 rows=128 (25 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/8 traced
+  batch 2/8 traced
+  batch 3/8 traced
+  batch 4/8 traced
+  batch 5/8 traced
+  batch 6/8 traced
+  batch 7/8 traced
+  batch 8/8 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+23.20              18.3602    13.4901     -0.0027
+23.8               14.6433     9.9370      0.0719
+24.18              10.6267     8.2595     -0.0015
+24.7               10.2674     6.7529      0.0019
+23.7                9.8750     8.0882     -0.0058
+24.24               9.7392     6.8081      0.0409
+25.13               9.6707     7.5630     -0.0002
+23.6                9.5067     6.8526     -0.1771
+25.24               9.4864     7.5594     -0.0492
+23.9                9.2920     7.4151     -0.0058
+24.21               8.8362     7.2566     -0.0216
+23.11               7.7183     7.3357     -0.0216
+24.27               7.6216     6.4440     -0.0086
+25.4                7.5024     5.1684     -0.0010
+23.16               7.0417     5.6891     -0.0018
+23.15               6.9741     5.5579     -0.0010
+24.23               6.9663     5.7867     -0.0493
+22.13               6.8718     5.2911     -0.0051
+25.26               6.6656     5.1888      0.0291
+23.4                6.3662     4.4238     -0.1843
+
+per-block total |delta_resid| (where the read happens):
+  block 22:    79.0676
+  block 23:   151.0458
+  block 24:   114.8578
+  block 25:   110.3341
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  1.6% base_kept= 95.3%
+  image patch only (k=0):         cause= 98.4% base_kept=  0.8%   <-- the effect being traced
+  restore top-1   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-2   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-4   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-8   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-16  heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-32  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-64  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore 8 RANDOM heads (null):   cause= 98.4% base_kept=  0.8%
+
+  top-8 vs random-8 gap: +0.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:54,  6.33it/s]Loading weights:   0%|          | 2/729 [00:00<03:01,  4.00it/s]Loading weights:   1%|          | 6/729 [00:00<00:56, 12.81it/s]Loading weights:   2%|2         | 18/729 [00:00<00:18, 38.88it/s]Loading weights:   4%|4         | 30/729 [00:00<00:12, 55.64it/s]Loading weights:   6%|5         | 41/729 [00:00<00:11, 62.48it/s]Loading weights:   7%|7         | 53/729 [00:01<00:09, 74.36it/s]Loading weights:   9%|8         | 65/729 [00:01<00:08, 74.95it/s]Loading weights:  11%|#         | 77/729 [00:01<00:07, 83.75it/s]Loading weights:  12%|#2        | 88/729 [00:01<00:08, 78.29it/s]Loading weights:  14%|#3        | 102/729 [00:01<00:07, 87.07it/s]Loading weights:  16%|#5        | 114/729 [00:01<00:06, 91.34it/s]Loading weights:  17%|#7        | 125/729 [00:01<00:06, 89.60it/s]Loading weights:  19%|#8        | 137/729 [00:02<00:06, 91.26it/s]Loading weights:  20%|##        | 149/729 [00:02<00:06, 84.02it/s]Loading weights:  22%|##2       | 162/729 [00:02<00:06, 92.73it/s]Loading weights:  24%|##3       | 172/729 [00:02<00:05, 93.26it/s]Loading weights:  25%|##5       | 183/729 [00:02<00:06, 79.12it/s]Loading weights:  27%|##7       | 198/729 [00:02<00:06, 88.44it/s]Loading weights:  29%|##8       | 209/729 [00:02<00:06, 86.34it/s]Loading weights:  30%|###       | 221/729 [00:02<00:05, 91.40it/s]Loading weights:  32%|###1      | 233/729 [00:03<00:05, 93.24it/s]Loading weights:  34%|###3      | 245/729 [00:03<00:05, 94.86it/s]Loading weights:  35%|###5      | 256/729 [00:03<00:05, 83.55it/s]Loading weights:  37%|###6      | 268/729 [00:03<00:05, 89.17it/s]Loading weights:  39%|###8      | 281/729 [00:03<00:04, 94.02it/s]Loading weights:  40%|####      | 294/729 [00:03<00:04, 95.98it/s]Loading weights:  42%|####1     | 306/729 [00:03<00:04, 99.42it/s]Loading weights:  44%|####3     | 318/729 [00:04<00:04, 95.61it/s]Loading weights:  45%|####5     | 330/729 [00:04<00:04, 96.90it/s]Loading weights:  58%|#####8    | 425/729 [00:04<00:00, 313.91it/s]Loading weights:  70%|######9   | 510/729 [00:04<00:00, 454.86it/s]Loading weights:  81%|########  | 589/729 [00:04<00:00, 544.59it/s]Loading weights:  94%|#########3| 683/729 [00:04<00:00, 654.74it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 158.83it/s]
+[ndm/head_trace] entity=flags attribute=language patch_layer=21 positions=full_image blocks=22-25 heads=28x128 rows=128 (25 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/8 traced
+  batch 2/8 traced
+  batch 3/8 traced
+  batch 4/8 traced
+  batch 5/8 traced
+  batch 6/8 traced
+  batch 7/8 traced
+  batch 8/8 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+23.20              18.3602    13.4901     -0.0027
+23.8               14.6433     9.9370      0.0719
+24.18              10.6267     8.2595     -0.0015
+24.7               10.2674     6.7529      0.0019
+23.7                9.8750     8.0882     -0.0058
+24.24               9.7392     6.8081      0.0409
+25.13               9.6707     7.5630     -0.0002
+23.6                9.5067     6.8526     -0.1771
+25.24               9.4864     7.5594     -0.0492
+23.9                9.2920     7.4151     -0.0058
+24.21               8.8362     7.2566     -0.0216
+23.11               7.7183     7.3357     -0.0216
+24.27               7.6216     6.4440     -0.0086
+25.4                7.5024     5.1684     -0.0010
+23.16               7.0417     5.6891     -0.0018
+23.15               6.9741     5.5579     -0.0010
+24.23               6.9663     5.7867     -0.0493
+22.13               6.8718     5.2911     -0.0051
+25.26               6.6656     5.1888      0.0291
+23.4                6.3662     4.4238     -0.1843
+
+per-block total |delta_resid| (where the read happens):
+  block 22:    79.0676
+  block 23:   151.0458
+  block 24:   114.8578
+  block 25:   110.3341
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  1.6% base_kept= 95.3%
+  image patch only (k=0):         cause= 98.4% base_kept=  0.8%   <-- the effect being traced
+  restore top-1   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-2   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-4   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-8   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-16  heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-32  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-64  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-112 heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore 8 RANDOM heads (null):   cause= 98.4% base_kept=  0.8%
+
+  top-8 vs random-8 gap: +0.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<05:25,  2.24it/s]Loading weights:   1%|          | 6/729 [00:00<00:52, 13.74it/s]Loading weights:   2%|2         | 17/729 [00:00<00:19, 35.77it/s]Loading weights:   4%|4         | 30/729 [00:00<00:12, 54.32it/s]Loading weights:   5%|5         | 39/729 [00:00<00:12, 57.15it/s]Loading weights:   7%|7         | 54/729 [00:01<00:08, 79.19it/s]Loading weights:   9%|9         | 66/729 [00:01<00:08, 81.48it/s]Loading weights:  11%|#         | 78/729 [00:01<00:07, 82.24it/s]Loading weights:  12%|#2        | 88/729 [00:01<00:08, 76.58it/s]Loading weights:  14%|#3        | 102/729 [00:01<00:07, 86.07it/s]Loading weights:  15%|#5        | 112/729 [00:01<00:06, 89.38it/s]Loading weights:  17%|#7        | 124/729 [00:01<00:06, 92.76it/s]Loading weights:  19%|#8        | 136/729 [00:01<00:06, 91.87it/s]Loading weights:  20%|##        | 148/729 [00:02<00:06, 90.73it/s]Loading weights:  22%|##1       | 158/729 [00:02<00:06, 89.87it/s]Loading weights:  23%|##3       | 168/729 [00:02<00:06, 89.63it/s]Loading weights:  24%|##4       | 178/729 [00:02<00:06, 84.06it/s]Loading weights:  26%|##5       | 187/729 [00:02<00:06, 81.44it/s]Loading weights:  27%|##7       | 198/729 [00:02<00:06, 82.77it/s]Loading weights:  29%|##8       | 210/729 [00:02<00:05, 87.79it/s]Loading weights:  30%|###       | 220/729 [00:03<00:06, 76.78it/s]Loading weights:  32%|###2      | 234/729 [00:03<00:05, 88.66it/s]Loading weights:  34%|###3      | 246/729 [00:03<00:05, 93.24it/s]Loading weights:  35%|###5      | 257/729 [00:03<00:05, 91.59it/s]Loading weights:  37%|###6      | 269/729 [00:03<00:05, 86.87it/s]Loading weights:  39%|###8      | 281/729 [00:03<00:05, 86.48it/s]Loading weights:  40%|####      | 293/729 [00:03<00:05, 84.81it/s]Loading weights:  42%|####1     | 306/729 [00:03<00:04, 92.55it/s]Loading weights:  43%|####3     | 316/729 [00:04<00:04, 83.51it/s]Loading weights:  45%|####4     | 328/729 [00:04<00:04, 90.56it/s]Loading weights:  51%|#####     | 371/729 [00:04<00:02, 175.20it/s]Loading weights:  62%|######1   | 451/729 [00:04<00:00, 339.04it/s]Loading weights:  72%|#######2  | 525/729 [00:04<00:00, 446.98it/s]Loading weights:  83%|########2 | 605/729 [00:04<00:00, 543.36it/s]Loading weights:  93%|#########3| 679/729 [00:04<00:00, 598.43it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 152.42it/s]
+[ndm/head_trace] entity=flags attribute=language patch_layer=21 positions=full_image blocks=21-24 heads=28x128 rows=128 (25 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/8 traced
+  batch 2/8 traced
+  batch 3/8 traced
+  batch 4/8 traced
+  batch 5/8 traced
+  batch 6/8 traced
+  batch 7/8 traced
+  batch 8/8 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+23.20              18.3602    13.4901     -0.0027
+23.8               14.6433     9.9370      0.0719
+21.6               11.4453     7.6506      0.0735
+24.18              10.6267     8.2595     -0.0015
+24.7               10.2674     6.7529      0.0019
+23.7                9.8750     8.0882     -0.0058
+24.24               9.7392     6.8081      0.0409
+21.5                9.6875     8.6126     -0.0320
+23.6                9.5067     6.8526     -0.1771
+23.9                9.2920     7.4151     -0.0058
+24.21               8.8362     7.2566     -0.0216
+21.23               8.0211     5.9789      0.0010
+23.11               7.7183     7.3357     -0.0216
+24.27               7.6216     6.4440     -0.0086
+23.16               7.0417     5.6891     -0.0018
+23.15               6.9741     5.5579     -0.0010
+24.23               6.9663     5.7867     -0.0493
+22.13               6.8718     5.2911     -0.0051
+23.4                6.3662     4.4238     -0.1843
+23.17               6.3564     5.1173     -0.0005
+
+per-block total |delta_resid| (where the read happens):
+  block 21:    96.6855
+  block 22:    79.0676
+  block 23:   151.0458
+  block 24:   114.8578
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  1.6% base_kept= 95.3%
+  image patch only (k=0):         cause= 98.4% base_kept=  0.8%   <-- the effect being traced
+  restore top-1   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-2   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-4   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-8   heads:            cause= 98.4% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-16  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-32  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-64  heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore top-112 heads:            cause= 99.2% base_kept=  0.8%  (recovered  0.0% of the effect)
+  restore 8 RANDOM heads (null):   cause= 98.4% base_kept=  0.8%
+
+  top-8 vs random-8 gap: +0.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json
