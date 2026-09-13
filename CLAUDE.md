@@ -258,7 +258,19 @@ information has leaked into the background by a given layer.
 `l1_penalty` is a plain `mask.abs().sum()`, the term is ~5.3x larger at equal
 per-dim magnitude. Sweep it and read `mask_stats.json`'s `n_selected`
 alongside `final_score`. (2) `--layer 0` is invalid for MLP sites (the
-embedding output has no MLP). (3) The site IS encoded in the config tag, so
+embedding output has no MLP). (2b) **`--layer 28` (== n_layers) with
+`site=residual` was WRONG before commit-with-this-note**: hooks.py's
+`cache_layer_hidden` returns `out.hidden_states[layer_idx]`, whose LAST entry
+is tied to `last_hidden_state` and is POST-final-norm, while
+`register_patch_hook(n_layers)` writes PRE-norm at the last block's output --
+so the source got normalized twice. `sites.py`'s `_capture_block_output` now
+special-cases it (hooks.py stays byte-identical); the residual SOURCE CACHE
+still stores the raw post-norm entry and `lookup_source` refuses it, pointing
+at `--no_source_cache`. It never failed loudly (RMSNorm is a rescale, so the
+direction mostly survives): flags/language @ last_token n=384 reads 100.0% at
+layers 24-27 and 95.6% at 28, with the 17 failures matching NEITHER gold
+(' Spanish' -> ' Tatar') rather than being truncations. Only `residual`, only
+that one row -- the attn/mlp sites capture through module hooks. (3) The site IS encoded in the config tag, so
 `mlp_hidden`/`mlp_output` runs don't collide. (4) Run
 `methods/ndm/verify_sites.py` before any real run -- a hook on the wrong
 tensor trains fine and produces plausible numbers; it also covers `residual`,
@@ -298,10 +310,24 @@ distinguish "inert" from "destructive"; only the generated text can.
 `ceiling_sweep` now derives and prints `other`, and its no-headroom verdict
 says so explicitly when `other` > 25% and points here.
 
-That language/calling_code split is unexplained and is the reason not to treat
-flags/language as representative: the last-token residual at L23+ is NOT
-simply "the answer" -- for a retrieved one-word answer a swap copies it, for a
-composed multi-digit one a swap corrupts it.
+**That split turned out to be a MEASUREMENT ARTIFACT, not a fact about the
+model.** Every one of the 316 `[other]` rows at calling_code L24 carries the
+SOURCE's first token. Scoring only the first token, the two attributes are
+identical: language 100.0% / calling_code 99.7% at L24, 69.5% / 82.8% at L23.
+The cause is answer length -- language golds are 366/384 SINGLE-token,
+calling-code golds are 0/384 single-token (2-3 digit tokens each). Patching
+the last token's residual controls what THAT position predicts, i.e. the first
+answer token; every later token is generated against a KV cache that still
+belongs to the base, so you get the source's first digit and then
+base-context digits, which lands as a third country's code.
+
+**The general rule, which matters beyond flags:** a `last_token` intervention
+is STRUCTURALLY unable to steer an answer longer than one token, for every
+method, so `cause` there is capped near the single-token fraction of an
+attribute's answers (~0 for calling_code and capital). Image-position patches
+do not have this problem -- they land in the prefill and are baked into the
+KV cache for all downstream positions. It also means teacher-forced CE at
+`last_token` trains against tokens the intervention cannot reach.
 
 ## methods/dla.py -- direct logit attribution (read-only, exact, one forward pass)
 

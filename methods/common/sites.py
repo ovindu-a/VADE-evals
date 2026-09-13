@@ -322,12 +322,19 @@ class InterventionSite:
         per row. positions: [B, n_pos]. Returns [B, n_pos, width], detached.
 
         For `residual` this delegates to hooks.py's cache_layer_hidden,
-        which gets it free from output_hidden_states. MLP internals are NOT
+        which gets it free from output_hidden_states -- EXCEPT at
+        layer_idx == n_layers, see _capture_block_output below for why. MLP internals are NOT
         in output_hidden_states, so the MLP sites need a capture hook -- it
         indexes `positions` INSIDE the hook rather than stashing the whole
         [B, T, 18944] tensor (which for B=4/T~1500 would be ~227MB held per
         call, vs ~3.6MB for the [B, n_pos, 18944] slice we actually want)."""
         if self.is_residual:
+            n_layers = len(adapter.get_decoder_layers(model))
+            assert layer_idx <= n_layers, (
+                f"layer_idx={layer_idx} exceeds the model's {n_layers} decoder blocks")
+            if layer_idx == n_layers:
+                return _capture_block_output(adapter, model, layer_idx, input_ids, attention_mask,
+                                              extra, positions)
             return cache_layer_hidden(model, input_ids, attention_mask, extra, positions, layer_idx)
 
         captured = []
@@ -383,6 +390,20 @@ class InterventionSite:
         cache have identical shapes)."""
         if self.is_residual:
             from .source_cache import lookup_source_hidden
+            # The cache stores out.hidden_states VERBATIM, so its LAST entry carries the same
+            # post-final-norm problem _capture_block_output exists to avoid -- and unlike capture(),
+            # there is no model here to re-run it. Refuse rather than hand back a source that will be
+            # normalized twice. (source_cache.py is a byte-identical copy of VADE's own, so the fix
+            # cannot live there.)
+            any_item = next(iter(cache.values()), None)
+            if any_item is not None and layer_idx == any_item.shape[0] - 1:
+                raise AssertionError(
+                    f"layer_idx={layer_idx} is the LAST entry of the residual source cache, which stores "
+                    f"out.hidden_states unmodified -- and that entry is POST-final-norm in this "
+                    f"transformers version (it is tied to last_hidden_state), while the patch hook writes "
+                    f"PRE-final-norm at the last block's output. Using it would apply the final norm "
+                    f"twice. Re-run with --no_source_cache, which routes through capture() and takes the "
+                    f"correct pre-norm value.")
             return lookup_source_hidden(cache, batch, layer_idx, device, dtype)
         from .site_source_cache import lookup_site_source
         return lookup_site_source(cache, batch, self, layer_idx, positions_name, device, dtype)
@@ -574,6 +595,45 @@ def site_name(name):
         raise argparse.ArgumentTypeError(
             f"{e}\n(valid sites: {', '.join(ALL_SITES)}, or {BLOCK_SPAN_PREFIX}N for any N >= 1)")
     return name
+
+
+def _capture_block_output(adapter, model, layer_idx, input_ids, attention_mask, extra, positions):
+    """The residual stream at layer_idx == n_layers, read as the LAST DECODER
+    BLOCK'S OUTPUT rather than out.hidden_states[-1].
+
+    WHY THIS EXISTS. hooks.py's cache_layer_hidden returns
+    out.hidden_states[layer_idx], and for every layer_idx < n_layers that IS
+    exactly the raw block output the patch hook writes into. The LAST entry is
+    not: in this project's transformers it is tied to last_hidden_state and is
+    therefore POST-final-norm (the same fact methods/logit_lens.py documents
+    and methods/dla.py routes around), while register_patch_hook(n_layers)
+    patches layers[n_layers-1]'s output, which is PRE-norm. Capturing one and
+    injecting it as the other applies the final RMSNorm TWICE.
+
+    That does not fail loudly -- RMSNorm is a rescale, so a double-normalized
+    source keeps roughly the right direction and mostly still works, which is
+    why this survived every sweep. Measured on flags/language at last_token,
+    n=384: layers 24-27 score 100.0% cause and layer 28 scores 95.6%, and the
+    17 failures are NOT truncation (zero overlap with the multi-token golds)
+    but answers matching NEITHER gold -- ' Spanish' coming out as ' Tatar'.
+    Every `--layers ...28` residual row recorded before this fix is affected,
+    only that row, and only for `residual`: the attn/mlp sites capture through
+    module hooks and were never exposed to it."""
+    layers = adapter.get_decoder_layers(model)
+    B = positions.shape[0]
+    captured = []
+
+    def post(mod, inputs, output):
+        t = output[0] if isinstance(output, tuple) else output
+        captured.append(torch.stack([t[i, positions[i]] for i in range(B)]).detach())
+
+    handle = layers[layer_idx - 1].register_forward_hook(post)
+    try:
+        _source_forward(model, input_ids, attention_mask, extra)
+    finally:
+        handle.remove()
+    _assert_fired_once(f"residual@{layer_idx} (last decoder block's output)", captured)
+    return captured[0]
 
 
 RESIDUAL_SITE = InterventionSite("residual")
