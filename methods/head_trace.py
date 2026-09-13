@@ -412,9 +412,20 @@ def main():
     log_dir = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
                            args.positions, "attn_head_output", pruned, diagnostic=True)
     os.makedirs(log_dir, exist_ok=True)
-    out_path = args.out or os.path.join(log_dir, f"head_trace_patch{args.patch_layer}.json")
+    # The block span is part of the run's identity, not a detail: sweeping windows at ONE
+    # --patch_layer is the main way this script gets used, and naming files by --patch_layer alone
+    # made every window in such a sweep overwrite the previous one's JSON and log.
+    def _span(bs):
+        if bs == list(range(bs[0], bs[-1] + 1)):
+            return str(bs[0]) if len(bs) == 1 else f"{bs[0]}-{bs[-1]}"
+        return ".".join(str(b) for b in bs)
 
-    with tee_to_log(os.path.join(log_dir, f"head_trace_patch{args.patch_layer}.log")):
+    blocks_preview = args.blocks if args.blocks is not None else None
+    tag = f"head_trace_patch{args.patch_layer}" + (f"_blocks{_span(blocks_preview)}"
+                                                    if blocks_preview else "_blocksdefault")
+    out_path = args.out or os.path.join(log_dir, f"{tag}.json")
+
+    with tee_to_log(os.path.join(log_dir, f"{tag}.log")):
         adapter = get_adapter(args.model_id)
         model, processor = adapter.load()
         entity_assets = load_entity_assets(args.vade_root, args.entity)
