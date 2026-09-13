@@ -400,14 +400,48 @@ and the stronger of the two): do NOT patch the image, and INSTALL the patched
 values into only the top-k heads -- "is this set enough on its own". Necessity
 is exactly the question redundancy breaks, so a flat phase-2 curve proves
 little while a steep phase-3 one is localization regardless. Phase 3 reports
-its OWN ceiling (all traced heads patched), which is NOT 100%: the image patch
-also moves blocks outside `--blocks`, the MLPs, and the residual stream
-directly, so the top-k arms are normalized against what this intervention can
-reach rather than against the image patch. Its k=0 arm must reproduce the
-unhooked row exactly and says so if it does not. Both phases share one
+its own ceiling (all traced heads patched); what that ceiling SHOULD be depends
+entirely on `--blocks`, and conflating the two cases is how a broken run reads
+as a finding. With block(s) missing it is a genuine PARTIAL ceiling -- the
+untraced blocks' attention still reads the clean image -- so the top-k arms are
+normalized against what this intervention can reach. With EVERY block from
+`--patch_layer` to the last traced, it is not a ceiling at all but a closed
+IDENTITY that must equal the image patch's own cause: the patch is at IMAGE
+positions, so the last token's residual entering the first traced block is
+bit-identical either way; attention is the only cross-position operation, so
+every downstream write at that position is exactly what gets installed; and
+MLPs are position-wise, so they recompute correctly from the updated residual.
+Anything short of the image patch's cause there is a FAULT, not a ceiling --
+and the same identity run backwards means phase 2's restore-everything arm must
+fall to base. Its k=0 arm must reproduce the unhooked row exactly and says so
+if it does not. Both phases share one
 `head_patches` builder and one `run_cause(..., with_image_patch=)`, so the two
 curves cannot drift apart in rows, masks, scoring or generation, and
 `--n_random`'s null head set is drawn ONCE and used by both.
+
+PHASE 1c (READ-BACK IDENTITY) is the self-test that decides whether phases 2
+and 3 mean anything, and the only exact (non-thresholded) check here. It
+installs every traced head's patched value at the last token, then reads the
+SAME site back through the SAME capture hook, and asserts it returns what was
+installed -- if it does not, the patch and the capture are not addressing the
+same tensor/column and both later phases are void. It then compares the final
+pre-norm residual at the last token against the image-patched run's, which is
+the identity above stated numerically, and separates its two failure modes: a
+divergence WITH blocks missing is explained by coverage, a divergence with
+COMPLETE coverage is a bug. One forward pass on one batch, no generation.
+Note `capture_head_outputs` registers patches BEFORE capture hooks for this
+reason: PyTorch runs a module's forward pre-hooks in registration order, so a
+capture registered first silently reads the tensor the patch is about to
+overwrite.
+
+**Measure logits or residuals, not generated text, for any connectivity or
+sanity check here.** Generated text is a thresholded readout that absorbs large
+perturbations without moving -- `verify_sites` records a FULL `attn_head_output`
+swap shifting the logits by 0.25 while leaving both generations identical --
+and asserting on it produced a confident "the head patch is not connected" for a
+patch that was demonstrably live. It is the same failure as the calling_code
+"split" (see `swap_trace.py`), where `exact_match` over multi-token answers hid
+a 100% first-token effect.
 
 `--patch_layer` MUST be below the handoff (where ceiling_sweep's image column
 is still large); the script warns rather than reporting a flat curve. Needs

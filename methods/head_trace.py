@@ -154,13 +154,20 @@ def capture_head_outputs(adapter, model, blocks, positions, input_ids, attention
     the norm's scalar FROZEN at what the real pass computed from the FULL
     residual -- and that scalar differs between the clean and patched runs, so
     each run must carry its own."""
-    sinks = {b: [] for b in blocks}
-    handles = [HEAD_SITE.register_capture(adapter, model, b + 1, positions, sinks[b]) for b in blocks]
-    final_sink = []
-    handles.append(_final_residual_hook(adapter, model, positions, final_sink))
+    # Patches register BEFORE the capture hooks, deliberately: PyTorch runs a module's forward
+    # pre-hooks in registration order, so a capture registered first would read the very tensor the
+    # patch is about to overwrite. That is invisible while the patch sits on a different module (the
+    # image patch is a post-hook on an earlier block, so it has already run either way), but it is
+    # the whole point the moment something captures at the SAME site it patches -- which is exactly
+    # what the read-back identity below does.
     layers = adapter.get_decoder_layers(model)
+    handles = []
     for site, layer_idx, fn in patches:
         handles.extend(site.register(adapter, model, layers, layer_idx, fn))
+    sinks = {b: [] for b in blocks}
+    handles += [HEAD_SITE.register_capture(adapter, model, b + 1, positions, sinks[b]) for b in blocks]
+    final_sink = []
+    handles.append(_final_residual_hook(adapter, model, positions, final_sink))
     try:
         extra_dev = extra_to_device(extra, model.device, model.dtype)
         with torch.no_grad():
@@ -409,6 +416,7 @@ def main():
         # Retained per batch: phase 2 restores FROM base_z, phase 3 installs FROM patched_z, and
         # img_src saves re-running the source forward for every later configuration.
         base_z_per_batch, patched_z_per_batch, img_src = [], [], []
+        patched_final_per_batch = []
         for bi, (b_img, b_last) in enumerate(batches):
             last_pos = b_last["positions"]
             img_src.append(capture_image_source(adapter, model, b_img, args.patch_layer))
@@ -432,6 +440,7 @@ def main():
 
             base_z_per_batch.append(base_z)
             patched_z_per_batch.append(patched_z)
+            patched_final_per_batch.append(patched_final)
             for b in blocks:
                 for h, dz, dr, dd in per_head_delta(adapter, model, base_z[b], patched_z[b], b, n_heads,
                                                     head_dim, d, scale_base, scale_patched):
@@ -465,6 +474,73 @@ def main():
                   "positions": args.positions, "blocks": blocks, "n_heads": n_heads, "head_dim": head_dim,
                   "n_rows": len(cause_rows), "rank_by": args.rank_by, "seed": args.seed,
                   "phase1": table, "phase1_ranked": [(r["block"], r["head"]) for r in ranked[:64]]}
+
+        # ---------------- phase 1c: the read-back identity ----------------
+        # The self-test that decides whether phases 2 and 3 mean anything, and the only one here that
+        # is EXACT rather than thresholded. When --blocks covers every block from --patch_layer to the
+        # last, installing the patched per-head values at the last token is not an approximation of the
+        # image patch -- at that position it is algebraically THE SAME RUN:
+        #
+        #   * the image patch is at IMAGE positions, so the last token's residual entering the first
+        #     traced block is bit-identical in both runs (earlier blocks read unpatched image K/V);
+        #   * attention is the only cross-position operation, and each downstream block's attention
+        #     write at the last token is exactly the value being installed;
+        #   * MLPs are position-wise, so they recompute correctly from the updated residual.
+        #
+        # So the final residual at the last token MUST match, and phases 2/3's k=all arms must
+        # reproduce the image patch's own cause. Two different faults can break that, and the
+        # per-block read-back separates them cleanly: install v at block b, then read block b back
+        # through the SAME capture hook. If it does not return v, the capture and the patch are not
+        # addressing the same tensor/column -- plumbing, phases 2-3 void. If every block reads back
+        # exactly and the final residual STILL diverges, the cause is --blocks coverage (or, with
+        # complete coverage, a real bug). Costs one forward pass on one batch, and no generation.
+        b_img0, b_last0 = batches[0]
+        every_head = [(b, h) for b in blocks for h in range(n_heads)]
+        read_z, read_final = capture_head_outputs(
+            adapter, model, blocks, b_last0["positions"], b_img0["base_input_ids"],
+            b_img0["attention_mask"], b_img0["base_extra"],
+            patches=head_patches(every_head, patched_z_per_batch[0], b_last0["positions"], hidden,
+                                 head_dim, model.device))
+
+        print(f"\n{'='*78}\n=== phase 1c: read-back identity (batch 1, no generation)\n{'='*78}")
+        worst, worst_b = 0.0, None
+        for b in blocks:
+            want = patched_z_per_batch[0][b].float()
+            rel = (read_z[b].float() - want).norm().item() / max(want.norm().item(), 1e-9)
+            if rel > worst:
+                worst, worst_b = rel, b
+        assert worst < 1e-3, (
+            f"READ-BACK FAILED at block {worst_b} (relative error {worst:.1%}): the values installed "
+            f"into attn_head_output at the last token are not what the capture hook reads back from "
+            f"the same site. The patch and the capture are not addressing the same tensor/column, so "
+            f"every number in phases 2 and 3 is void.")
+        print(f"  every traced block reads back exactly what was installed "
+              f"(worst relative error {worst:.2e}, block {worst_b})")
+
+        want_f = patched_final_per_batch[0].float()
+        fin_rel = (read_final.float() - want_f).norm().item() / max(want_f.norm().item(), 1e-9)
+        downstream = set(range(args.patch_layer, n_layers))
+        missing = sorted(downstream - set(blocks))
+        print(f"\n  final pre-norm residual at the last token -- installed-heads run vs image-patched "
+              f"run:\n    relative error {fin_rel:.3%}")
+        if fin_rel < 0.02:
+            print(f"    -> MATCHES. Installing the traced heads reproduces the image patch at the last "
+                  f"token, so the intervention in phases 2 and 3 is sound and their k=all arms MUST "
+                  f"reproduce the image patch's cause. If they do not, the fault is downstream of the "
+                  f"patch -- in generation or scoring -- not in the patch.")
+        elif missing:
+            print(f"    -> DIVERGES, and --blocks is missing downstream block(s) {missing}, which on "
+                  f"its own explains it: their attention at the last token still reads the CLEAN "
+                  f"image. Re-run with --blocks {' '.join(str(b) for b in sorted(downstream))} before "
+                  f"reading phases 2 and 3.")
+        else:
+            print(f"    -> DIVERGES even though --blocks covers every downstream block "
+                  f"({args.patch_layer}..{n_layers - 1}), so coverage cannot explain it and the "
+                  f"identity above is exact. This is a BUG, and phases 2 and 3 are void. The "
+                  f"read-back passed, so the patch does land where the capture reads -- look instead "
+                  f"for a path from the image to the last token that is NOT this site.")
+        report["phase1c"] = {"readback_worst_rel": worst, "final_residual_rel": fin_rel,
+                             "blocks_missing_downstream": missing}
 
         if args.skip_knockout:
             with open(out_path, "w") as f:
@@ -616,9 +692,23 @@ def main():
                       f"is leaking when no heads are selected; every number below is suspect.")
             all_heads = [(r["block"], r["head"]) for r in table]
             ceil_ms, ceil_mb = run_cause(all_heads, patched_z_per_batch, False)
-            print(f"  ALL {len(all_heads)} traced heads:           cause={ceil_ms:6.1%} "
-                  f"base_kept={ceil_mb:6.1%}   <-- this arm's own ceiling, NOT 100%: the image patch "
-                  f"also moves blocks outside --blocks, the MLPs, and the residual stream directly")
+            # What this arm SHOULD read depends entirely on coverage, and conflating the two cases
+            # is how a broken run reads as a finding. With every downstream block traced it is the
+            # closed identity phase 1c checks -- it must reproduce the image patch's own cause, so
+            # anything less is a fault, not a ceiling. With blocks missing it is a genuine partial
+            # ceiling, because the untraced blocks' attention still reads the clean image.
+            if missing:
+                print(f"  ALL {len(all_heads)} traced heads:           cause={ceil_ms:6.1%} "
+                      f"base_kept={ceil_mb:6.1%}   <-- a PARTIAL ceiling: downstream block(s) "
+                      f"{missing} are not traced, so their attention still reads the clean image")
+            else:
+                print(f"  ALL {len(all_heads)} traced heads:           cause={ceil_ms:6.1%} "
+                      f"base_kept={ceil_mb:6.1%}   <-- --blocks covers every downstream block, so "
+                      f"this MUST equal the image-patch-only cause ({full_ms:.1%})")
+                if abs(ceil_ms - full_ms) > 0.05:
+                    print(f"  !! it does not ({ceil_ms:.1%} vs {full_ms:.1%}), and phase 1c says the "
+                          f"final residual at the last token {'matches' if fin_rel < 0.02 else 'does not match'}. "
+                          f"Every top-k row below is therefore meaningless -- fix this first.")
             suff.append({"k": len(all_heads), "kind": "all", "cause": ceil_ms, "base_kept": ceil_mb})
             for k in args.knockout_ks:
                 if k > len(ranked):
