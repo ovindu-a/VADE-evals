@@ -334,8 +334,10 @@ def main():
     pruned = not args.allow_unpruned
     tuples_dir = (require_pruned_tuples(args.vade_root, model_slug, args.entity, args.attribute)
                   if pruned else None)
+    # diagnostic=True: attn_head_output is not a trainable NDM site, and this is a read-only probe.
+    # Without it this crashed on the NDM_SITES assert before loading the model.
     log_dir = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
-                           args.positions, "attn_head_output", pruned)
+                           args.positions, "attn_head_output", pruned, diagnostic=True)
     os.makedirs(log_dir, exist_ok=True)
     out_path = args.out or os.path.join(log_dir, f"head_trace_patch{args.patch_layer}.json")
 

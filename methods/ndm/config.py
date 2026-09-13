@@ -92,7 +92,8 @@ NDM_SITES = ("mlp_hidden", "mlp_output")
 DEFAULT_SITE = "mlp_hidden"
 
 
-def ndm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, site, pruned=False):
+def ndm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, site, pruned=False,
+                    diagnostic=False):
     """DBM's tag plus the site, which MUST be encoded: mlp_hidden and
     mlp_output runs are different artifacts and would otherwise collide in
     one directory. This repo has now been bitten by exactly this class of
@@ -101,8 +102,19 @@ def ndm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, s
     site goes in from the start rather than after a run overwrites another.
 
     Reads <hparams>_<positions>_<site>[_pruned] -- site before the pruned
-    marker, so the pruned suffix stays last as it is everywhere else."""
-    assert site in NDM_SITES, f"site {site!r} is not an NDM site -- expected one of {NDM_SITES}"
+    marker, so the pruned suffix stays last as it is everywhere else.
+
+    diagnostic=True lifts the NDM_SITES check for read-only probes, which
+    legitimately address sites no mask can be TRAINED on (head_trace works at
+    attn_head_output; ceiling_sweep at joint sites). Without it those probes
+    have two bad options: crash, or launder their site through a trainable
+    name and write results into a directory labelled with a site they never
+    touched -- which is how head_trace's runs ended up under
+    `..._mlp_hidden_pruned/`. The assert still guards every TRAINING path,
+    where a collision between two artifacts is the real risk."""
+    assert diagnostic or site in NDM_SITES, (
+        f"site {site!r} is not an NDM site -- expected one of {NDM_SITES}. If this is a read-only "
+        f"probe rather than a training run, pass diagnostic=True.")
     return dbm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, pruned=False) + \
         f"_{site}" + ("_pruned" if pruned else "")
 
@@ -114,9 +126,10 @@ def ndm_results_dir(model_slug, entity, attribute, l1_coef, temperature_start, t
 
 
 def ndm_logs_dir(model_slug, entity, attribute, l1_coef, temperature_start, temperature_end, lr, positions,
-                  site, pruned=False):
+                  site, pruned=False, diagnostic=False):
     return logs_dir(REPO_ROOT, model_slug, entity, METHOD_NAME, attribute,
-                     ndm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, site, pruned))
+                     ndm_config_tag(l1_coef, temperature_start, temperature_end, lr, positions, site, pruned,
+                                     diagnostic=diagnostic))
 
 
 def add_shared_args(ap):

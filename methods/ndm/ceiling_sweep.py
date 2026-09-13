@@ -275,6 +275,11 @@ def main():
     # Logs dir, not results: this is a diagnostic filter, and its numbers are a token-level proxy rather
     # than score.py output -- keeping it out of results/ avoids it being mistaken for a scored run.
     def dirs_for(spec):
+        # "mlp_hidden" here is a FIXED namespace marker, not a claim about what was probed -- one
+        # run spans many sites, so no single site name would be right, and the sites are recorded
+        # per row inside the JSON. Kept as-is rather than made honest because a large body of
+        # existing logs already lives under this path. head_trace, which probes exactly one
+        # non-trainable site, passes its real one with diagnostic=True instead.
         d = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
                           path_safe(spec), "mlp_hidden", pruned)
         os.makedirs(d, exist_ok=True)
