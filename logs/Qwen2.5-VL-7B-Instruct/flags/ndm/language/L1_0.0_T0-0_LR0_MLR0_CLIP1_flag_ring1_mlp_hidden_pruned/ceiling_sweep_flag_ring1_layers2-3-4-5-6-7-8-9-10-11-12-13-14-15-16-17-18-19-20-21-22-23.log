@@ -1,0 +1,380 @@
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_flag_ring1_mlp_hidden_pruned/ceiling_sweep_flag_ring1_layers2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<12:08,  1.00s/it]Loading weights:   0%|          | 2/729 [00:01<08:30,  1.42it/s]Loading weights:   1%|          | 4/729 [00:01<03:47,  3.18it/s]Loading weights:   2%|1         | 12/729 [00:01<00:56, 12.62it/s]Loading weights:   2%|2         | 17/729 [00:01<00:39, 18.21it/s]Loading weights:   3%|2         | 21/729 [00:02<00:36, 19.23it/s]Loading weights:   4%|3         | 29/729 [00:02<00:28, 24.61it/s]Loading weights:   5%|4         | 33/729 [00:02<00:25, 27.00it/s]Loading weights:   6%|5         | 41/729 [00:02<00:20, 33.56it/s]Loading weights:   7%|7         | 52/729 [00:02<00:18, 36.47it/s]Loading weights:   9%|8         | 62/729 [00:02<00:15, 41.87it/s]Loading weights:  10%|9         | 70/729 [00:03<00:13, 48.64it/s]Loading weights:  10%|#         | 76/729 [00:03<00:17, 37.81it/s]Loading weights:  12%|#2        | 89/729 [00:03<00:11, 53.87it/s]Loading weights:  14%|#3        | 100/729 [00:03<00:10, 60.10it/s]Loading weights:  15%|#4        | 108/729 [00:03<00:11, 52.46it/s]Loading weights:  16%|#5        | 115/729 [00:04<00:13, 44.35it/s]Loading weights:  17%|#7        | 125/729 [00:04<00:11, 52.79it/s]Loading weights:  18%|#8        | 132/729 [00:04<00:11, 51.91it/s]Loading weights:  19%|#8        | 138/729 [00:04<00:15, 38.57it/s]Loading weights:  20%|##        | 148/729 [00:04<00:12, 46.78it/s]Loading weights:  22%|##1       | 160/729 [00:04<00:10, 55.81it/s]Loading weights:  23%|##2       | 167/729 [00:05<00:11, 47.43it/s]Loading weights:  24%|##3       | 173/729 [00:05<00:13, 39.98it/s]Loading weights:  24%|##4       | 178/729 [00:05<00:14, 37.05it/s]Loading weights:  25%|##5       | 185/729 [00:05<00:16, 33.15it/s]Loading weights:  27%|##6       | 196/729 [00:05<00:12, 41.86it/s]Loading weights:  28%|##7       | 201/729 [00:06<00:13, 40.20it/s]Loading weights:  29%|##8       | 208/729 [00:06<00:11, 45.13it/s]Loading weights:  29%|##9       | 213/729 [00:06<00:12, 41.45it/s]Loading weights:  30%|###       | 221/729 [00:06<00:11, 43.78it/s]Loading weights:  32%|###1      | 232/729 [00:06<00:09, 53.71it/s]Loading weights:  33%|###2      | 238/729 [00:06<00:09, 53.51it/s]Loading weights:  34%|###3      | 245/729 [00:06<00:08, 56.13it/s]Loading weights:  35%|###5      | 256/729 [00:07<00:08, 58.51it/s]Loading weights:  37%|###6      | 269/729 [00:07<00:06, 70.22it/s]Loading weights:  38%|###8      | 279/729 [00:07<00:06, 72.31it/s]Loading weights:  40%|####      | 294/729 [00:07<00:05, 84.56it/s]Loading weights:  42%|####1     | 306/729 [00:07<00:04, 87.59it/s]Loading weights:  44%|####3     | 318/729 [00:07<00:04, 93.41it/s]Loading weights:  45%|####5     | 330/729 [00:07<00:04, 90.07it/s]Loading weights:  59%|#####8    | 429/729 [00:07<00:00, 310.85it/s]Loading weights:  73%|#######2  | 529/729 [00:07<00:00, 489.48it/s]Loading weights:  85%|########4 | 617/729 [00:08<00:00, 590.35it/s]Loading weights:  95%|#########5| 693/729 [00:08<00:00, 636.10it/s]Loading weights: 100%|##########| 729/729 [00:08<00:00, 88.28it/s] 
+[ndm/ceiling_sweep] sampled 32 cause rows (seed=0) spanning 19 distinct base entities of 25 available
+[ndm/ceiling_sweep] entity=flags attribute=language layers=[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23] sites=['residual', 'blocks:1', 'blocks:2', 'blocks:3', 'blocks:4', 'blocks:5'] positions=['flag_ring1'] cause_rows=32 iso_rows=32
+
+==============================================================================
+=== positions='flag_ring1'
+==============================================================================
+  unhooked baseline on cause rows: matches_source=0.0% matches_base=96.9%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+/workspace/VADE/.venv/lib/python3.12/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+                residual layer  2: cause_ceiling= 62.5% base_kept= 34.4% other=  3.1% iso_floor= 21.9%
+                residual layer  3: cause_ceiling= 62.5% base_kept= 34.4% other=  3.1% iso_floor= 21.9%
+                residual layer  4: cause_ceiling= 65.6% base_kept= 31.2% other=  3.1% iso_floor= 21.9%
+                residual layer  5: cause_ceiling= 68.8% base_kept= 28.1% other=  3.1% iso_floor= 21.9%
+                residual layer  6: cause_ceiling= 71.9% base_kept= 25.0% other=  3.1% iso_floor= 15.6%
+                residual layer  7: cause_ceiling= 71.9% base_kept= 25.0% other=  3.1% iso_floor= 15.6%
+                residual layer  8: cause_ceiling= 75.0% base_kept= 25.0% other=  0.0% iso_floor= 15.6%
+                residual layer  9: cause_ceiling= 65.6% base_kept= 31.2% other=  3.1% iso_floor= 18.8%
+                residual layer 10: cause_ceiling= 62.5% base_kept= 34.4% other=  3.1% iso_floor= 18.8%
+                residual layer 11: cause_ceiling= 59.4% base_kept= 37.5% other=  3.1% iso_floor= 18.8%
+                residual layer 12: cause_ceiling= 62.5% base_kept= 34.4% other=  3.1% iso_floor= 18.8%
+                residual layer 13: cause_ceiling= 56.2% base_kept= 40.6% other=  3.1% iso_floor= 18.8%
+                residual layer 14: cause_ceiling= 50.0% base_kept= 43.8% other=  6.2% iso_floor= 28.1%
+                residual layer 15: cause_ceiling= 43.8% base_kept= 50.0% other=  6.2% iso_floor= 25.0%
+                residual layer 16: cause_ceiling= 31.2% base_kept= 65.6% other=  3.1% iso_floor= 53.1%
+                residual layer 17: cause_ceiling= 31.2% base_kept= 65.6% other=  3.1% iso_floor= 53.1%
+                residual layer 18: cause_ceiling= 31.2% base_kept= 65.6% other=  3.1% iso_floor= 53.1%
+                residual layer 19: cause_ceiling= 31.2% base_kept= 65.6% other=  3.1% iso_floor= 53.1%
+                residual layer 20: cause_ceiling= 31.2% base_kept= 65.6% other=  3.1% iso_floor= 62.5%
+                residual layer 21: cause_ceiling= 31.2% base_kept= 65.6% other=  3.1% iso_floor= 59.4%
+                residual layer 22: cause_ceiling= 15.6% base_kept= 78.1% other=  6.2% iso_floor= 81.2%
+                residual layer 23: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:1 layer 2: 2 parts over block 1 -- swaps everything residual@2 has that residual@1 does not
+                blocks:1 layer  2: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 3: 2 parts over block 2 -- swaps everything residual@3 has that residual@2 does not
+                blocks:1 layer  3: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 4: 2 parts over block 3 -- swaps everything residual@4 has that residual@3 does not
+                blocks:1 layer  4: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 5: 2 parts over block 4 -- swaps everything residual@5 has that residual@4 does not
+                blocks:1 layer  5: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 6: 2 parts over block 5 -- swaps everything residual@6 has that residual@5 does not
+                blocks:1 layer  6: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 7: 2 parts over block 6 -- swaps everything residual@7 has that residual@6 does not
+                blocks:1 layer  7: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:1 layer 8: 2 parts over block 7 -- swaps everything residual@8 has that residual@7 does not
+                blocks:1 layer  8: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 9: 2 parts over block 8 -- swaps everything residual@9 has that residual@8 does not
+                blocks:1 layer  9: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 10: 2 parts over block 9 -- swaps everything residual@10 has that residual@9 does not
+                blocks:1 layer 10: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:1 layer 11: 2 parts over block 10 -- swaps everything residual@11 has that residual@10 does not
+                blocks:1 layer 11: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 12: 2 parts over block 11 -- swaps everything residual@12 has that residual@11 does not
+                blocks:1 layer 12: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 13: 2 parts over block 12 -- swaps everything residual@13 has that residual@12 does not
+                blocks:1 layer 13: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 14: 2 parts over block 13 -- swaps everything residual@14 has that residual@13 does not
+                blocks:1 layer 14: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 15: 2 parts over block 14 -- swaps everything residual@15 has that residual@14 does not
+                blocks:1 layer 15: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 16: 2 parts over block 15 -- swaps everything residual@16 has that residual@15 does not
+                blocks:1 layer 16: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 17: 2 parts over block 16 -- swaps everything residual@17 has that residual@16 does not
+                blocks:1 layer 17: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 18: 2 parts over block 17 -- swaps everything residual@18 has that residual@17 does not
+                blocks:1 layer 18: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 19: 2 parts over block 18 -- swaps everything residual@19 has that residual@18 does not
+                blocks:1 layer 19: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 20: 2 parts over block 19 -- swaps everything residual@20 has that residual@19 does not
+                blocks:1 layer 20: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 21: 2 parts over block 20 -- swaps everything residual@21 has that residual@20 does not
+                blocks:1 layer 21: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 22: 2 parts over block 21 -- swaps everything residual@22 has that residual@21 does not
+                blocks:1 layer 22: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:1 layer 23: 2 parts over block 22 -- swaps everything residual@23 has that residual@22 does not
+                blocks:1 layer 23: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 2: 4 parts over blocks 0-1 -- swaps everything residual@2 has that residual@0 does not
+                blocks:2 layer  2: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 3: 4 parts over blocks 1-2 -- swaps everything residual@3 has that residual@1 does not
+                blocks:2 layer  3: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 4: 4 parts over blocks 2-3 -- swaps everything residual@4 has that residual@2 does not
+                blocks:2 layer  4: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:2 layer 5: 4 parts over blocks 3-4 -- swaps everything residual@5 has that residual@3 does not
+                blocks:2 layer  5: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:2 layer 6: 4 parts over blocks 4-5 -- swaps everything residual@6 has that residual@4 does not
+                blocks:2 layer  6: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 7: 4 parts over blocks 5-6 -- swaps everything residual@7 has that residual@5 does not
+                blocks:2 layer  7: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:2 layer 8: 4 parts over blocks 6-7 -- swaps everything residual@8 has that residual@6 does not
+                blocks:2 layer  8: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 93.8%
+  blocks:2 layer 9: 4 parts over blocks 7-8 -- swaps everything residual@9 has that residual@7 does not
+                blocks:2 layer  9: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 10: 4 parts over blocks 8-9 -- swaps everything residual@10 has that residual@8 does not
+                blocks:2 layer 10: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:2 layer 11: 4 parts over blocks 9-10 -- swaps everything residual@11 has that residual@9 does not
+                blocks:2 layer 11: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:2 layer 12: 4 parts over blocks 10-11 -- swaps everything residual@12 has that residual@10 does not
+                blocks:2 layer 12: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 13: 4 parts over blocks 11-12 -- swaps everything residual@13 has that residual@11 does not
+                blocks:2 layer 13: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 14: 4 parts over blocks 12-13 -- swaps everything residual@14 has that residual@12 does not
+                blocks:2 layer 14: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 15: 4 parts over blocks 13-14 -- swaps everything residual@15 has that residual@13 does not
+                blocks:2 layer 15: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 16: 4 parts over blocks 14-15 -- swaps everything residual@16 has that residual@14 does not
+                blocks:2 layer 16: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 17: 4 parts over blocks 15-16 -- swaps everything residual@17 has that residual@15 does not
+                blocks:2 layer 17: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 18: 4 parts over blocks 16-17 -- swaps everything residual@18 has that residual@16 does not
+                blocks:2 layer 18: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 19: 4 parts over blocks 17-18 -- swaps everything residual@19 has that residual@17 does not
+                blocks:2 layer 19: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 20: 4 parts over blocks 18-19 -- swaps everything residual@20 has that residual@18 does not
+                blocks:2 layer 20: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 21: 4 parts over blocks 19-20 -- swaps everything residual@21 has that residual@19 does not
+                blocks:2 layer 21: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 22: 4 parts over blocks 20-21 -- swaps everything residual@22 has that residual@20 does not
+                blocks:2 layer 22: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:2 layer 23: 4 parts over blocks 21-22 -- swaps everything residual@23 has that residual@21 does not
+                blocks:2 layer 23: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  skip blocks:3 layer 2: needs --layer >= 3 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:3 layer 3: 6 parts over blocks 0-2 -- swaps everything residual@3 has that residual@0 does not
+                blocks:3 layer  3: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:3 layer 4: 6 parts over blocks 1-3 -- swaps everything residual@4 has that residual@1 does not
+                blocks:3 layer  4: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:3 layer 5: 6 parts over blocks 2-4 -- swaps everything residual@5 has that residual@2 does not
+                blocks:3 layer  5: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:3 layer 6: 6 parts over blocks 3-5 -- swaps everything residual@6 has that residual@3 does not
+                blocks:3 layer  6: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:3 layer 7: 6 parts over blocks 4-6 -- swaps everything residual@7 has that residual@4 does not
+                blocks:3 layer  7: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:3 layer 8: 6 parts over blocks 5-7 -- swaps everything residual@8 has that residual@5 does not
+                blocks:3 layer  8: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:3 layer 9: 6 parts over blocks 6-8 -- swaps everything residual@9 has that residual@6 does not
+                blocks:3 layer  9: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 93.8%
+  blocks:3 layer 10: 6 parts over blocks 7-9 -- swaps everything residual@10 has that residual@7 does not
+                blocks:3 layer 10: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:3 layer 11: 6 parts over blocks 8-10 -- swaps everything residual@11 has that residual@8 does not
+                blocks:3 layer 11: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:3 layer 12: 6 parts over blocks 9-11 -- swaps everything residual@12 has that residual@9 does not
+                blocks:3 layer 12: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:3 layer 13: 6 parts over blocks 10-12 -- swaps everything residual@13 has that residual@10 does not
+                blocks:3 layer 13: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 14: 6 parts over blocks 11-13 -- swaps everything residual@14 has that residual@11 does not
+                blocks:3 layer 14: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 15: 6 parts over blocks 12-14 -- swaps everything residual@15 has that residual@12 does not
+                blocks:3 layer 15: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 16: 6 parts over blocks 13-15 -- swaps everything residual@16 has that residual@13 does not
+                blocks:3 layer 16: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 17: 6 parts over blocks 14-16 -- swaps everything residual@17 has that residual@14 does not
+                blocks:3 layer 17: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 18: 6 parts over blocks 15-17 -- swaps everything residual@18 has that residual@15 does not
+                blocks:3 layer 18: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 19: 6 parts over blocks 16-18 -- swaps everything residual@19 has that residual@16 does not
+                blocks:3 layer 19: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 20: 6 parts over blocks 17-19 -- swaps everything residual@20 has that residual@17 does not
+                blocks:3 layer 20: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 21: 6 parts over blocks 18-20 -- swaps everything residual@21 has that residual@18 does not
+                blocks:3 layer 21: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 22: 6 parts over blocks 19-21 -- swaps everything residual@22 has that residual@19 does not
+                blocks:3 layer 22: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:3 layer 23: 6 parts over blocks 20-22 -- swaps everything residual@23 has that residual@20 does not
+                blocks:3 layer 23: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  skip blocks:4 layer 2: needs --layer >= 4 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  skip blocks:4 layer 3: needs --layer >= 4 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:4 layer 4: 8 parts over blocks 0-3 -- swaps everything residual@4 has that residual@0 does not
+                blocks:4 layer  4: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:4 layer 5: 8 parts over blocks 1-4 -- swaps everything residual@5 has that residual@1 does not
+                blocks:4 layer  5: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:4 layer 6: 8 parts over blocks 2-5 -- swaps everything residual@6 has that residual@2 does not
+                blocks:4 layer  6: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:4 layer 7: 8 parts over blocks 3-6 -- swaps everything residual@7 has that residual@3 does not
+                blocks:4 layer  7: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:4 layer 8: 8 parts over blocks 4-7 -- swaps everything residual@8 has that residual@4 does not
+                blocks:4 layer  8: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 90.6%
+  blocks:4 layer 9: 8 parts over blocks 5-8 -- swaps everything residual@9 has that residual@5 does not
+                blocks:4 layer  9: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 93.8%
+  blocks:4 layer 10: 8 parts over blocks 6-9 -- swaps everything residual@10 has that residual@6 does not
+                blocks:4 layer 10: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 87.5%
+  blocks:4 layer 11: 8 parts over blocks 7-10 -- swaps everything residual@11 has that residual@7 does not
+                blocks:4 layer 11: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 12: 8 parts over blocks 8-11 -- swaps everything residual@12 has that residual@8 does not
+                blocks:4 layer 12: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:4 layer 13: 8 parts over blocks 9-12 -- swaps everything residual@13 has that residual@9 does not
+                blocks:4 layer 13: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:4 layer 14: 8 parts over blocks 10-13 -- swaps everything residual@14 has that residual@10 does not
+                blocks:4 layer 14: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 15: 8 parts over blocks 11-14 -- swaps everything residual@15 has that residual@11 does not
+                blocks:4 layer 15: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 16: 8 parts over blocks 12-15 -- swaps everything residual@16 has that residual@12 does not
+                blocks:4 layer 16: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 17: 8 parts over blocks 13-16 -- swaps everything residual@17 has that residual@13 does not
+                blocks:4 layer 17: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 18: 8 parts over blocks 14-17 -- swaps everything residual@18 has that residual@14 does not
+                blocks:4 layer 18: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 19: 8 parts over blocks 15-18 -- swaps everything residual@19 has that residual@15 does not
+                blocks:4 layer 19: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 20: 8 parts over blocks 16-19 -- swaps everything residual@20 has that residual@16 does not
+                blocks:4 layer 20: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 21: 8 parts over blocks 17-20 -- swaps everything residual@21 has that residual@17 does not
+                blocks:4 layer 21: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 22: 8 parts over blocks 18-21 -- swaps everything residual@22 has that residual@18 does not
+                blocks:4 layer 22: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:4 layer 23: 8 parts over blocks 19-22 -- swaps everything residual@23 has that residual@19 does not
+                blocks:4 layer 23: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  skip blocks:5 layer 2: needs --layer >= 5 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  skip blocks:5 layer 3: needs --layer >= 5 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  skip blocks:5 layer 4: needs --layer >= 5 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:5 layer 5: 10 parts over blocks 0-4 -- swaps everything residual@5 has that residual@0 does not
+                blocks:5 layer  5: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 87.5%
+  blocks:5 layer 6: 10 parts over blocks 1-5 -- swaps everything residual@6 has that residual@1 does not
+                blocks:5 layer  6: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 90.6%
+  blocks:5 layer 7: 10 parts over blocks 2-6 -- swaps everything residual@7 has that residual@2 does not
+                blocks:5 layer  7: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 87.5%
+  blocks:5 layer 8: 10 parts over blocks 3-7 -- swaps everything residual@8 has that residual@3 does not
+                blocks:5 layer  8: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 90.6%
+  blocks:5 layer 9: 10 parts over blocks 4-8 -- swaps everything residual@9 has that residual@4 does not
+                blocks:5 layer  9: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 90.6%
+  blocks:5 layer 10: 10 parts over blocks 5-9 -- swaps everything residual@10 has that residual@5 does not
+                blocks:5 layer 10: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 90.6%
+  blocks:5 layer 11: 10 parts over blocks 6-10 -- swaps everything residual@11 has that residual@6 does not
+                blocks:5 layer 11: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 84.4%
+  blocks:5 layer 12: 10 parts over blocks 7-11 -- swaps everything residual@12 has that residual@7 does not
+                blocks:5 layer 12: cause_ceiling=  0.0% base_kept= 93.8% other=  6.2% iso_floor= 90.6%
+  blocks:5 layer 13: 10 parts over blocks 8-12 -- swaps everything residual@13 has that residual@8 does not
+                blocks:5 layer 13: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 93.8%
+  blocks:5 layer 14: 10 parts over blocks 9-13 -- swaps everything residual@14 has that residual@9 does not
+                blocks:5 layer 14: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor=100.0%
+  blocks:5 layer 15: 10 parts over blocks 10-14 -- swaps everything residual@15 has that residual@10 does not
+                blocks:5 layer 15: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 16: 10 parts over blocks 11-15 -- swaps everything residual@16 has that residual@11 does not
+                blocks:5 layer 16: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 17: 10 parts over blocks 12-16 -- swaps everything residual@17 has that residual@12 does not
+                blocks:5 layer 17: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 18: 10 parts over blocks 13-17 -- swaps everything residual@18 has that residual@13 does not
+                blocks:5 layer 18: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 19: 10 parts over blocks 14-18 -- swaps everything residual@19 has that residual@14 does not
+                blocks:5 layer 19: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 20: 10 parts over blocks 15-19 -- swaps everything residual@20 has that residual@15 does not
+                blocks:5 layer 20: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 21: 10 parts over blocks 16-20 -- swaps everything residual@21 has that residual@16 does not
+                blocks:5 layer 21: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 22: 10 parts over blocks 17-21 -- swaps everything residual@22 has that residual@17 does not
+                blocks:5 layer 22: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+  blocks:5 layer 23: 10 parts over blocks 18-22 -- swaps everything residual@23 has that residual@18 does not
+                blocks:5 layer 23: cause_ceiling=  0.0% base_kept= 96.9% other=  3.1% iso_floor= 96.9%
+
+=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+                  site  layer   width  cause_ceiling  base_kept    other  iso_floor
+              residual      2    3584         62.5%     34.4%    3.1%     21.9%
+              residual      3    3584         62.5%     34.4%    3.1%     21.9%
+              residual      4    3584         65.6%     31.2%    3.1%     21.9%
+              residual      5    3584         68.8%     28.1%    3.1%     21.9%
+              residual      6    3584         71.9%     25.0%    3.1%     15.6%
+              residual      7    3584         71.9%     25.0%    3.1%     15.6%
+              residual      8    3584         75.0%     25.0%    0.0%     15.6%
+              residual      9    3584         65.6%     31.2%    3.1%     18.8%
+              residual     10    3584         62.5%     34.4%    3.1%     18.8%
+              residual     11    3584         59.4%     37.5%    3.1%     18.8%
+              residual     12    3584         62.5%     34.4%    3.1%     18.8%
+              residual     13    3584         56.2%     40.6%    3.1%     18.8%
+              residual     14    3584         50.0%     43.8%    6.2%     28.1%
+              residual     15    3584         43.8%     50.0%    6.2%     25.0%
+              residual     16    3584         31.2%     65.6%    3.1%     53.1%
+              residual     17    3584         31.2%     65.6%    3.1%     53.1%
+              residual     18    3584         31.2%     65.6%    3.1%     53.1%
+              residual     19    3584         31.2%     65.6%    3.1%     53.1%
+              residual     20    3584         31.2%     65.6%    3.1%     62.5%
+              residual     21    3584         31.2%     65.6%    3.1%     59.4%
+              residual     22    3584         15.6%     78.1%    6.2%     81.2%
+              residual     23    3584          0.0%     96.9%    3.1%     93.8%
+              blocks:1      2    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1      3    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1      4    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1      5    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1      6    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1      7    7168          0.0%     96.9%    3.1%     93.8%
+              blocks:1      8    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1      9    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     10    7168          0.0%     96.9%    3.1%    100.0%
+              blocks:1     11    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     12    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     13    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     14    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     15    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     16    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     17    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     18    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     19    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     20    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     21    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     22    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:1     23    7168          0.0%     96.9%    3.1%     96.9%
+              blocks:2      2   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2      3   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2      4   14336          0.0%     96.9%    3.1%     93.8%
+              blocks:2      5   14336          0.0%     96.9%    3.1%     90.6%
+              blocks:2      6   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2      7   14336          0.0%     96.9%    3.1%     93.8%
+              blocks:2      8   14336          0.0%     93.8%    6.2%     93.8%
+              blocks:2      9   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     10   14336          0.0%     96.9%    3.1%    100.0%
+              blocks:2     11   14336          0.0%     96.9%    3.1%    100.0%
+              blocks:2     12   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     13   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     14   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     15   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     16   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     17   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     18   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     19   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     20   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     21   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     22   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:2     23   14336          0.0%     96.9%    3.1%     96.9%
+              blocks:3      3   21504          0.0%     96.9%    3.1%     93.8%
+              blocks:3      4   21504          0.0%     96.9%    3.1%     93.8%
+              blocks:3      5   21504          0.0%     96.9%    3.1%     90.6%
+              blocks:3      6   21504          0.0%     96.9%    3.1%     93.8%
+              blocks:3      7   21504          0.0%     96.9%    3.1%     90.6%
+              blocks:3      8   21504          0.0%     96.9%    3.1%     93.8%
+              blocks:3      9   21504          0.0%     93.8%    6.2%     93.8%
+              blocks:3     10   21504          0.0%     96.9%    3.1%    100.0%
+              blocks:3     11   21504          0.0%     96.9%    3.1%    100.0%
+              blocks:3     12   21504          0.0%     96.9%    3.1%    100.0%
+              blocks:3     13   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     14   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     15   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     16   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     17   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     18   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     19   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     20   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     21   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     22   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:3     23   21504          0.0%     96.9%    3.1%     96.9%
+              blocks:4      4   28672          0.0%     96.9%    3.1%     90.6%
+              blocks:4      5   28672          0.0%     96.9%    3.1%     90.6%
+              blocks:4      6   28672          0.0%     96.9%    3.1%     90.6%
+              blocks:4      7   28672          0.0%     96.9%    3.1%     90.6%
+              blocks:4      8   28672          0.0%     93.8%    6.2%     90.6%
+              blocks:4      9   28672          0.0%     93.8%    6.2%     93.8%
+              blocks:4     10   28672          0.0%     93.8%    6.2%     87.5%
+              blocks:4     11   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     12   28672          0.0%     96.9%    3.1%    100.0%
+              blocks:4     13   28672          0.0%     96.9%    3.1%    100.0%
+              blocks:4     14   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     15   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     16   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     17   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     18   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     19   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     20   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     21   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     22   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:4     23   28672          0.0%     96.9%    3.1%     96.9%
+              blocks:5      5   35840          0.0%     96.9%    3.1%     87.5%
+              blocks:5      6   35840          0.0%     96.9%    3.1%     90.6%
+              blocks:5      7   35840          0.0%     96.9%    3.1%     87.5%
+              blocks:5      8   35840          0.0%     93.8%    6.2%     90.6%
+              blocks:5      9   35840          0.0%     93.8%    6.2%     90.6%
+              blocks:5     10   35840          0.0%     93.8%    6.2%     90.6%
+              blocks:5     11   35840          0.0%     93.8%    6.2%     84.4%
+              blocks:5     12   35840          0.0%     93.8%    6.2%     90.6%
+              blocks:5     13   35840          0.0%     96.9%    3.1%     93.8%
+              blocks:5     14   35840          0.0%     96.9%    3.1%    100.0%
+              blocks:5     15   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     16   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     17   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     18   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     19   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     20   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     21   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     22   35840          0.0%     96.9%    3.1%     96.9%
+              blocks:5     23   35840          0.0%     96.9%    3.1%     96.9%
+
+Most headroom: residual layer 8 (cause_ceiling=75.0%) -- train there.
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_flag_ring1_mlp_hidden_pruned/ceiling_sweep_layers2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23.json
