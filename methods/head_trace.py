@@ -384,6 +384,9 @@ def main():
                          "without it a phase-2 curve is uninterpretable.")
     ap.add_argument("--skip_knockout", action="store_true",
                     help="Phase 1 only -- skips BOTH generation phases (2 and 3).")
+    ap.add_argument("--control_k", type=int, default=8,
+                    help="k for phase 4's shuffled-donor control -- set it to the smallest k whose "
+                         "phase-3 arm already reaches the ceiling, i.e. the claim being tested.")
     ap.add_argument("--skip_sufficiency", action="store_true",
                     help="Run the knockout (phase 2) but not the sufficiency arm (phase 3). Phase 3 is "
                          "the stronger of the two -- necessity is what redundancy breaks -- so skip it "
@@ -523,6 +526,16 @@ def main():
         for r in table:
             by_block.setdefault(r["block"], 0.0)
             by_block[r["block"]] += abs(r[args.rank_by])
+        for k in sorted({min(kk, len(ranked)) for kk in args.knockout_ks}):
+            comp = {}
+            for r in ranked[:k]:
+                comp[r["block"]] = comp.get(r["block"], 0) + 1
+            print(f"  top-{k:<3} heads sit in blocks: "
+                  + ", ".join(f"{b}x{c}" for b, c in sorted(comp.items())))
+        print(f"  (a top-k drawn only from the LAST block(s) localizes the final WRITE, not the "
+              f"image->text read -- installing it is close to writing the answer into the residual "
+              f"one block before the unembedding. Re-run with --blocks restricted to the early "
+              f"window to test the read itself.)")
         print(f"\nper-block total |{args.rank_by}| (where the read happens):")
         for b in blocks:
             print(f"  block {b:>2}: {by_block[b]:>10.4f}")
@@ -676,6 +689,42 @@ def main():
                 k = len(b_img["rows"])
                 ms, mb, n = ms + s * k, mb + t * k, n + k
             return ms / n, mb / n
+
+        def run_cause_shuffled(selected_heads, z_per_batch, with_image_patch):
+            """The same arm with the installed values ROLLED one row across the batch, so each row
+            receives the head outputs another row's SOURCE image produced. Scored three ways.
+
+            This is the control a plumbing artefact cannot pass. Every "too good" failure mode --
+            a mask that is not really restricted to k heads, a patch that happens to knock the
+            residual into a generic off-distribution state, a scorer counting the wrong thing --
+            is INDIFFERENT to which row the installed values came from, so it keeps whatever cause
+            it had. Genuine transfer is not indifferent: if these heads carry the source flag's
+            identity, feeding row i the values row i-1's flag produced must make row i answer with
+            row i-1's SOURCE gold. `donor` rising while `own` collapses is information moving
+            through the model; both collapsing means the heads carry identity but this set is not
+            sufficient on its own; `own` staying high means the effect never depended on the
+            source image at all and the arm above is measuring an artefact."""
+            own, donor, kept, n = 0.0, 0.0, 0.0, 0
+            for (b_img, b_last), z, src in zip(batches, z_per_batch, img_src):
+                if len(b_img["rows"]) < 2:
+                    continue  # a 1-row batch rolls onto itself, which is not a control
+                rolled = {blk: torch.roll(v, shifts=1, dims=0) for blk, v in z.items()}
+                patches = ([image_patch(adapter, model, b_img, args.patch_layer, src=src)]
+                           if with_image_patch else [])
+                patches += head_patches(selected_heads, rolled, b_last["positions"], hidden, head_dim,
+                                        model.device)
+                gen = generate_with_patches(adapter, model, patches, b_img["base_input_ids"],
+                                            b_img["attention_mask"], b_img["base_extra"], pad_token_id,
+                                            args.max_new_tokens)
+                s_own, t = score_generation(gen, b_img)
+                # Roll the gold the SAME way the values were rolled, so row i is scored against the
+                # gold of the row whose head outputs it actually received.
+                s_donor, _ = score_generation(gen, {**b_img,
+                    "source_gold_toks": torch.roll(b_img["source_gold_toks"], shifts=1, dims=0),
+                    "source_gold_len": torch.roll(b_img["source_gold_len"], shifts=1, dims=0)})
+                k = len(b_img["rows"])
+                own, donor, kept, n = own + s_own * k, donor + s_donor * k, kept + t * k, n + k
+            return (own / n, donor / n, kept / n) if n else (float("nan"),) * 3
 
         # ---------------- phase 1b: connectivity + the block-everything arm ----------------
         # TWO different questions, which an earlier version of this conflated into one bad test.
@@ -836,6 +885,50 @@ def main():
                           f"{top_same['cause']:.1%} vs {ms:.1%} of cause.")
             report["phase3_sufficiency"] = {"ceiling_all_traced_heads": ceil_ms, "k0_cause": z0_ms,
                                             "arms": suff}
+
+            # ---------------- phase 4: shuffled-donor control ----------------
+            # Where a small-k result is confirmed or killed. A steep phase-3 curve is necessary for
+            # localization but not sufficient as EVIDENCE, because every way the arm could be
+            # artefactual -- a mask not really restricted to k heads, a patch that knocks the
+            # residual into a generic off-distribution state, a scorer counting the wrong thing --
+            # survives replacing the installed values with another row's. Real transfer does not.
+            print(f"\n{'='*78}\n=== phase 4: shuffled-donor control (is the content row-specific?)"
+                  f"\n{'='*78}")
+            print(f"  Each row is given the head outputs ANOTHER row's source flag produced, and "
+                  f"scored against its own source gold (`own`), the donor's source gold (`donor`), "
+                  f"and its base gold (`kept`). If these heads carry the source's identity, `own` "
+                  f"must collapse and `donor` must rise. `own` staying high would mean the effect "
+                  f"never depended on which image was patched in.")
+            ctrl = []
+            for label, heads in (("top-%d" % args.control_k,
+                                  [(r["block"], r["head"]) for r in ranked[:args.control_k]]),
+                                 ("ALL %d" % len(all_heads), all_heads)):
+                if not heads:
+                    continue
+                own, donor, kept = run_cause_shuffled(heads, patched_z_per_batch, False)
+                straight = next((x["cause"] for x in suff
+                                 if x.get("k") == len(heads) and x["kind"] in ("top", "all")), None)
+                print(f"  {label:>10} shuffled:  own={own:6.1%} donor={donor:6.1%} kept={kept:6.1%}"
+                      + (f"   (unshuffled cause was {straight:.1%})" if straight is not None else ""))
+                ctrl.append({"label": label, "n_heads": len(heads), "own": own, "donor": donor,
+                             "base_kept": kept, "unshuffled_cause": straight})
+            top_ctrl = ctrl[0] if ctrl else None
+            if top_ctrl is not None:
+                if top_ctrl["donor"] > 0.5 and top_ctrl["own"] < 0.2:
+                    print(f"\n  -> CONFIRMED. Rolling the donor moves the answer WITH it, so these "
+                          f"heads carry the source image's identity and the sufficiency result is "
+                          f"about the model, not the plumbing.")
+                elif top_ctrl["own"] > 0.5:
+                    print(f"\n  !! the answer did NOT follow the donor -- `own` stayed at "
+                          f"{top_ctrl['own']:.1%} while receiving a DIFFERENT flag's head outputs. "
+                          f"The effect does not depend on which image was patched, so phase 3's "
+                          f"curve is an artefact of perturbing this site, not transfer.")
+                else:
+                    print(f"\n  -> partial: `own` collapsed to {top_ctrl['own']:.1%} but `donor` only "
+                          f"reached {top_ctrl['donor']:.1%}. These heads are necessary carriers of "
+                          f"source-specific content but do not reconstruct the donor's answer alone "
+                          f"-- report it as 'carries identity', not 'sufficient'.")
+            report["phase4_shuffled_donor"] = ctrl
 
         with open(out_path, "w") as f:
             json.dump(report, f, indent=2)
