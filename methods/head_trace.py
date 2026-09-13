@@ -495,52 +495,59 @@ def main():
                 ms, mb, n = ms + s * k, mb + t * k, n + k
             return ms / n, mb / n
 
-        # ---------------- phase 1b: is the head patch even connected? ----------------
-        # A PRECONDITION, not a measurement. Forcing every traced head at the last token to ZERO
-        # deletes that position's entire attention input for those blocks; the generation MUST
-        # change. If it does not, the head-patch hook is not taking effect and every knockout or
-        # sufficiency number below would be a table of zeros that reads exactly like a real null.
-        # That is what happened in commit a97991a: 8 runs, both directions, every k identical to
-        # the do-nothing arm, because nothing was ever patched.
+        # ---------------- phase 1b: connectivity + the block-everything arm ----------------
+        # TWO different questions, which an earlier version of this conflated into one bad test.
+        #
+        # (1) CONNECTIVITY is about the hook, and the only honest evidence is the telemetry below:
+        #     did the patch fn get reached on a multi-token tensor, and did it change the tensor.
+        #     Generated TEXT is a thresholded readout and absorbs large perturbations without
+        #     moving -- verify_sites already showed a full attn_head_output swap shifting the
+        #     logits by 0.25 while leaving the generation identical. Asserting on text here
+        #     produced a confident "HEAD PATCH IS NOT CONNECTED" for a patch that was working.
+        #
+        # (2) The BLOCK-EVERYTHING arm is a finding, not a precondition. With the image patched and
+        #     every traced head zeroed at the last token, no image information can reach that
+        #     position after the patch layer -- attention is the only cross-position operation and
+        #     MLPs are position-wise. So cause SHOULD collapse to the unhooked floor. If it does
+        #     not, the read is happening somewhere --blocks does not cover (widen it), or it is
+        #     not happening through the last token's attention at all, which would be the real
+        #     result and would overturn the handoff picture.
+        tel = {}
         zero_z = [{b: z[b] * 0.0 for b in blocks} for z in base_z_per_batch]
         all_heads = [(b, h) for b in blocks for h in range(n_heads)]
-        tel = {}
-        zero_ms, zero_mb = run_cause(all_heads, zero_z, False, telemetry=tel)
-        clean_ms, clean_mb = run_cause([], zero_z, False)
-        print(f"\n{'='*78}\n=== phase 1b: head-patch connectivity check\n{'='*78}")
-        print(f"  clean (no patches):             cause={clean_ms:6.1%} base_kept={clean_mb:6.1%}")
-        print(f"  ALL {len(all_heads)} heads ZEROED:          cause={zero_ms:6.1%} base_kept={zero_mb:6.1%}")
+        print(f"\n{'='*78}\n=== phase 1b: connectivity + block-everything\n{'='*78}")
+        blocked_ms, blocked_mb = run_cause(all_heads, zero_z, True, telemetry=tel)
+
         print(f"  patch telemetry (did the hook fire, and did it write anything?):")
         for b in blocks:
             r = tel.get(b)
             if r is None:
-                print(f"    block {b:>2}: PATCH FN NEVER CALLED -- the hook was never even reached")
+                print(f"    block {b:>2}: PATCH FN NEVER CALLED -- the hook was never reached")
             else:
                 print(f"    block {b:>2}: prefill_calls={r['prefill_calls']} "
                       f"decode_skips={r['decode_skips']} seq_len={r['seq_len']} "
                       f"max|delta|={r['max_delta']:.4f}")
         reached = sum(r["prefill_calls"] for r in tel.values())
         wrote = sum(1 for r in tel.values() if r["max_delta"] > 0)
-        if reached == 0:
-            print("  DIAGNOSIS: the patch fn is never called on a multi-token tensor -- the hook is "
-                  "not attached to a module that runs during prefill, or generate() bypasses it.")
-        elif wrote == 0:
-            print("  DIAGNOSIS: the patch fn runs but changes nothing -- it is writing values "
-                  "identical to what is already at those columns (check `positions`).")
-        else:
-            print(f"  DIAGNOSIS: the patch fn runs on {reached} prefill call(s) and DOES change the "
-                  f"tensor, yet the generation is unmoved -- the tensor being patched is not the one "
-                  f"the block consumes.")
-        assert (zero_ms, zero_mb) != (clean_ms, clean_mb), (
-            f"HEAD PATCH IS NOT CONNECTED. Zeroing every attention head at the last token for blocks "
-            f"{blocks[0]}-{blocks[-1]} left the generation byte-identical ({zero_mb:.1%} base_kept "
-            f"either way). That is impossible if the patch is landing -- attention is the only "
-            f"cross-position operation, so deleting all of it at that position must change the "
-            f"answer. Phases 2 and 3 cannot mean anything until this passes; do not read them.")
-        print(f"  -> head patch is connected (zeroing moved base_kept "
-              f"{clean_mb:.1%} -> {zero_mb:.1%})")
-        report["phase1b_connectivity"] = {"clean_cause": clean_ms, "clean_base_kept": clean_mb,
-                                          "zeroed_cause": zero_ms, "zeroed_base_kept": zero_mb}
+        assert reached > 0, (
+            "HEAD PATCH NEVER REACHED: the patch fn was not called on a multi-token tensor, so the "
+            "hook is not attached to a module that runs during prefill. Phases 2 and 3 are void.")
+        assert wrote == len(tel), (
+            f"HEAD PATCH WROTE NOTHING at {len(tel) - wrote} of {len(tel)} blocks -- it ran but "
+            f"returned the tensor unchanged, so `positions` is pointing at columns that already "
+            f"hold these values. Phases 2 and 3 are void.")
+        print(f"  -> connected: reached on {reached} prefill call(s), changed the tensor at all "
+              f"{wrote} blocks")
+
+        print(f"\n  image patch + ALL {len(all_heads)} heads ZEROED: cause={blocked_ms:6.1%} "
+              f"base_kept={blocked_mb:6.1%}")
+        print(f"  (compare against the image-patch-only row in phase 2. Zeroing every traced head "
+              f"at the last token severs every path by which the patched image can reach that "
+              f"position after block {blocks[0]}, so cause here SHOULD fall to the unhooked floor. "
+              f"If it does not, either --blocks is too narrow or the read does not go through the "
+              f"last token's attention -- and that would be the finding.)")
+        report["phase1b"] = {"telemetry": {str(b): tel.get(b) for b in blocks},
+                             "blocked_all_cause": blocked_ms, "blocked_all_base_kept": blocked_mb}
 
         # ---------------- phase 2: cumulative knockout ----------------
         print(f"\n{'='*78}\n=== phase 2: cumulative knockout under the image patch (path patching)\n{'='*78}")
