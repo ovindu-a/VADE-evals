@@ -260,6 +260,15 @@ def build_batch(rows, entity_assets, adapter, model, processor, positions_name, 
                 pos_unpadded = object_token_positions(entry["input_ids"], image_token_id, flat_indices,
                                                       n_image_tokens)
             cache.positions[pkey] = pos_unpadded
+        # Cheap invariant at the source. The bug this replaced was a cache entry built for a
+        # DIFFERENT positions_name, and its most common shape is a size mismatch -- 144 image
+        # columns handed to a last_token build, or a 24-token flag_ring1 set handed to full_image.
+        # Sizes are fixed per spec (positions must be a rectangular [B, n_pos] tensor), so this is
+        # exact, and it fails loudly where the old behavior silently returned the wrong columns.
+        want_n = 1 if is_last_token else len(flat_indices)
+        assert len(pos_unpadded) == want_n, (
+            f"positions for {positions_name!r} resolved to {len(pos_unpadded)} column(s), expected "
+            f"{want_n} -- a cache entry built for a different position set has leaked into this build")
         return {**entry, "pos_unpadded": pos_unpadded}
 
     def get_gold(queried, template_id, prefill, label):
