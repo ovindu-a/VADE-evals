@@ -170,7 +170,8 @@ class BuildBatchCache:
       image is somebody's base in some rows and somebody's source in
       others), so this collapses a PIL.Image.open + vision-preprocess PER
       ROW into one per unique image.
-    - template: (queried, template_id) -> {input_ids, pos_unpadded}, and
+    - template: (queried, template_id) -> {input_ids, prefill}, and
+      positions: (queried, template_id, positions_name) -> pos_unpadded, and
       gold: (queried, template_id, label) -> gold token ids. Valid because
       every image in a VADE entity shares one fixed canvas size (see
       _validated_n_image_tokens), so the fully-tokenized prompt (image
@@ -180,11 +181,28 @@ class BuildBatchCache:
     Pass ONE instance into every build_batch call across a training/eval
     run (see train.py/eval.py) to actually get the reuse -- a fresh
     instance per call (the default) just reproduces the old per-call
-    behavior with no cross-call caching."""
+    behavior with no cross-call caching.
+
+    DIVERGENCE FROM THE SIBLING VADE REPO'S COPY (the one deliberate one in
+    this file): `pos_unpadded` used to live in the `template` entry, i.e. keyed
+    on (queried, template_id) with NO positions_name -- even though it is
+    computed FROM positions_name. Sharing one instance across two specs then
+    silently handed the FIRST spec's positions to every later build. It crashed
+    loudly in one shape (24-token flag_ring1 positions reused for a 144-token
+    full_image build -> out-of-bounds grid index) and, far worse, did NOT crash
+    in the shape that matters: a full_image build followed by a last_token
+    build returned the IMAGE columns for the last_token batch, with every
+    downstream number still plausible. That cost a full head_trace result set,
+    which reported "the last token" throughout while tracing and patching image
+    columns. Positions now have their own key; the expensive part (tokenizing
+    the template) is still shared, since input_ids do not depend on the spec.
+    Worth upstreaming to VADE.
+    """
 
     def __init__(self):
         self.image_extra = {}
         self.template = {}
+        self.positions = {}
         self.gold = {}
 
 
@@ -229,13 +247,20 @@ def build_batch(rows, entity_assets, adapter, model, processor, positions_name, 
             tmpl = entity_assets.template_lookup[queried][template_id]
             question, prefill = tmpl["question"], tmpl["prefill"]
             input_ids = adapter.tokenize_template(processor, question, prefill, n_image_tokens_real)
-            if is_last_token:
-                pos_unpadded = [input_ids.shape[0] - 1]
-            else:
-                pos_unpadded = object_token_positions(input_ids, image_token_id, flat_indices, n_image_tokens)
-            entry = {"input_ids": input_ids, "pos_unpadded": pos_unpadded, "prefill": prefill}
+            entry = {"input_ids": input_ids, "prefill": prefill}
             cache.template[key] = entry
-        return entry
+        # pos_unpadded depends on positions_name as well as the template, so it gets its OWN key --
+        # see BuildBatchCache's docstring for what folding it into `template` silently did.
+        pkey = (queried, template_id, positions_name)
+        pos_unpadded = cache.positions.get(pkey)
+        if pos_unpadded is None:
+            if is_last_token:
+                pos_unpadded = [entry["input_ids"].shape[0] - 1]
+            else:
+                pos_unpadded = object_token_positions(entry["input_ids"], image_token_id, flat_indices,
+                                                      n_image_tokens)
+            cache.positions[pkey] = pos_unpadded
+        return {**entry, "pos_unpadded": pos_unpadded}
 
     def get_gold(queried, template_id, prefill, label):
         key = (queried, template_id, label)

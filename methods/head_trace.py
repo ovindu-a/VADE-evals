@@ -450,6 +450,20 @@ def main():
                 "image-position and last_token batches disagree on base_input_ids"
             assert torch.equal(b_img["attention_mask"], b_last["attention_mask"]), \
                 "image-position and last_token batches disagree on attention_mask"
+            # And they must DISAGREE on `positions`, which is the only thing that should differ
+            # between them. Asserted because entities.py's BuildBatchCache keyed pos_unpadded on
+            # (queried, template_id) alone until the fix noted in its docstring: one cache shared
+            # across these two calls silently handed the image spec's columns to the last_token
+            # build, so every head in this file was traced and patched at IMAGE positions while
+            # every printed message said "last token". Nothing downstream noticed -- shapes,
+            # telemetry and read-backs were all consistent, just about the wrong columns.
+            assert b_last["positions"].shape[1] == 1, (
+                f"the last_token batch resolved to {b_last['positions'].shape[1]} columns, not 1 -- "
+                f"it is not a last_token build (stale cached positions?)")
+            overlap = sorted(set(b_last["positions"][0].tolist()) & set(b_img["positions"][0].tolist()))
+            assert not overlap, (
+                f"the last_token column(s) {overlap} lie INSIDE the {args.positions!r} span, so the "
+                f"image patch would write directly onto the column being read")
             batches.append((b_img, b_last))
 
         # ---------------- phase 1: differential head trace ----------------
