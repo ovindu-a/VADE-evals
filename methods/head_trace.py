@@ -224,7 +224,7 @@ def image_patch(adapter, model, batch_img, patch_layer, src=None):
     return (RESIDUAL_SITE, patch_layer, fn)
 
 
-def head_patches(selected_heads, z_by_block, last_positions, hidden, head_dim, device):
+def head_patches(selected_heads, z_by_block, last_positions, hidden, head_dim, device, telemetry=None):
     """-> [(HEAD_SITE, block+1, patch_fn)] writing z_by_block[block]'s values
     into exactly `selected_heads`' 128-dim slices at the last-token column,
     leaving every other head of that block alone.
@@ -249,8 +249,28 @@ def head_patches(selected_heads, z_by_block, last_positions, hidden, head_dim, d
     for b, heads in per_block.items():
         mask = head_mask(hidden, head_dim, heads, device)
         vals = z_by_block[b].to(device)
-        out.append((HEAD_SITE, b + 1, make_cache_aware_patch_hook(
-            last_positions, lambda bv, _m=mask, _s=vals: _m(bv, _s))))
+        fn = make_cache_aware_patch_hook(last_positions, lambda bv, _m=mask, _s=vals: _m(bv, _s))
+        if telemetry is not None:
+            # Wraps the patch to record whether it is ever REACHED and whether it actually CHANGES
+            # anything. Three outcomes, three different bugs:
+            #   prefill_calls == 0  -> the hook is not firing on a multi-token tensor at all
+            #   max_delta == 0      -> it fires and writes values identical to what is already there
+            #   both nonzero        -> it fires and writes, and the output still does not move,
+            #                          i.e. the patched tensor is not the one the block consumes
+            def traced(hs, _f=fn, _b=b):
+                rec = telemetry.setdefault(_b, {"prefill_calls": 0, "decode_skips": 0,
+                                                 "max_delta": 0.0, "seq_len": None})
+                out_hs = _f(hs)
+                if hs.shape[1] == 1:
+                    rec["decode_skips"] += 1
+                else:
+                    rec["prefill_calls"] += 1
+                    rec["seq_len"] = int(hs.shape[1])
+                    rec["max_delta"] = max(rec["max_delta"],
+                                            float((out_hs - hs).abs().max().item()))
+                return out_hs
+            fn = traced
+        out.append((HEAD_SITE, b + 1, fn))
     return out
 
 
@@ -452,7 +472,7 @@ def main():
             print(f"\nwrote {out_path}  (phase 2 skipped)")
             return
 
-        def run_cause(selected_heads, z_per_batch, with_image_patch):
+        def run_cause(selected_heads, z_per_batch, with_image_patch, telemetry=None):
             """cause / base_kept with `selected_heads` overwritten at the last
             token from z_per_batch, optionally under the image patch.
 
@@ -466,7 +486,7 @@ def main():
                 patches = ([image_patch(adapter, model, b_img, args.patch_layer, src=src)]
                            if with_image_patch else [])
                 patches += head_patches(selected_heads, z, b_last["positions"], hidden, head_dim,
-                                        model.device)
+                                        model.device, telemetry=telemetry)
                 gen = generate_with_patches(adapter, model, patches, b_img["base_input_ids"],
                                             b_img["attention_mask"], b_img["base_extra"], pad_token_id,
                                             args.max_new_tokens)
@@ -484,11 +504,33 @@ def main():
         # the do-nothing arm, because nothing was ever patched.
         zero_z = [{b: z[b] * 0.0 for b in blocks} for z in base_z_per_batch]
         all_heads = [(b, h) for b in blocks for h in range(n_heads)]
-        zero_ms, zero_mb = run_cause(all_heads, zero_z, False)
+        tel = {}
+        zero_ms, zero_mb = run_cause(all_heads, zero_z, False, telemetry=tel)
         clean_ms, clean_mb = run_cause([], zero_z, False)
         print(f"\n{'='*78}\n=== phase 1b: head-patch connectivity check\n{'='*78}")
         print(f"  clean (no patches):             cause={clean_ms:6.1%} base_kept={clean_mb:6.1%}")
         print(f"  ALL {len(all_heads)} heads ZEROED:          cause={zero_ms:6.1%} base_kept={zero_mb:6.1%}")
+        print(f"  patch telemetry (did the hook fire, and did it write anything?):")
+        for b in blocks:
+            r = tel.get(b)
+            if r is None:
+                print(f"    block {b:>2}: PATCH FN NEVER CALLED -- the hook was never even reached")
+            else:
+                print(f"    block {b:>2}: prefill_calls={r['prefill_calls']} "
+                      f"decode_skips={r['decode_skips']} seq_len={r['seq_len']} "
+                      f"max|delta|={r['max_delta']:.4f}")
+        reached = sum(r["prefill_calls"] for r in tel.values())
+        wrote = sum(1 for r in tel.values() if r["max_delta"] > 0)
+        if reached == 0:
+            print("  DIAGNOSIS: the patch fn is never called on a multi-token tensor -- the hook is "
+                  "not attached to a module that runs during prefill, or generate() bypasses it.")
+        elif wrote == 0:
+            print("  DIAGNOSIS: the patch fn runs but changes nothing -- it is writing values "
+                  "identical to what is already at those columns (check `positions`).")
+        else:
+            print(f"  DIAGNOSIS: the patch fn runs on {reached} prefill call(s) and DOES change the "
+                  f"tensor, yet the generation is unmoved -- the tensor being patched is not the one "
+                  f"the block consumes.")
         assert (zero_ms, zero_mb) != (clean_ms, clean_mb), (
             f"HEAD PATCH IS NOT CONNECTED. Zeroing every attention head at the last token for blocks "
             f"{blocks[0]}-{blocks[-1]} left the generation byte-identical ({zero_mb:.1%} base_kept "
