@@ -613,9 +613,23 @@ def main():
         #     identity does not apply at all and nothing below it means anything.
         entry_rel = _rel(pat_entry, clean_entry)
         print(f"  residual entering block {blocks[0]} at the read column, image-patched vs clean: "
-              f"{entry_rel:.3%}"
-              f"{'  (as required)' if entry_rel < 0.01 else '   !! should be ~0 -- the patch reaches '
-                'the read column BEFORE the traced blocks, so the identity does not apply'}")
+              f"{entry_rel:.3%}")
+        if blocks[0] == args.patch_layer:
+            # The window opens exactly at the patch, so nothing upstream of it can have carried the
+            # image edit to the read column yet. This MUST be ~0; anything else and the identity
+            # does not apply and no arm below means what it says.
+            print(f"    {'-> as required' if entry_rel < 0.01 else '!! should be ~0 -- the patch is '
+                  'reaching the read column before the first traced block, so the identity does not '
+                  'apply and nothing below is interpretable'}")
+        else:
+            # The window opens ABOVE the patch, so blocks patch_layer..blocks[0]-1 have already had
+            # their turn. Nonzero is expected, and the number is worth reading on its own: it is how
+            # much of the image edit has ALREADY arrived at the read column by this block. Large
+            # here with a dead sufficiency arm below means those writes are downstream consequences,
+            # not the read.
+            print(f"    -> expected to be nonzero: blocks {args.patch_layer}..{blocks[0] - 1} run "
+                  f"before this window and are not traced. Read it as how much of the image edit "
+                  f"has already reached the read column by block {blocks[0]}.")
 
         # (ii) READ-BACK, and (iii) the check that makes the read-back mean something. A forward
         #      PRE-hook that rewrites o_proj's input and a capture pre-hook registered after it agree
