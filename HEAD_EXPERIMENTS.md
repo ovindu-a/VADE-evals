@@ -1,5 +1,8 @@
 # Head-trace follow-up experiments
 
+For same-image, different-attribute prompt interventions, see
+[ATTRIBUTE_SWITCH_SWEEP.md](ATTRIBUTE_SWITCH_SWEEP.md).
+
 For the subsequent cross-attribute head matrix and learned selective masks, see
 [HEAD_ATTRIBUTE_EDITING.md](HEAD_ATTRIBUTE_EDITING.md).
 
