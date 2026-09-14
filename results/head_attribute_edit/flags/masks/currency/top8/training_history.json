@@ -1,0 +1,1154 @@
+[
+  {
+    "step": 1,
+    "epoch": 0,
+    "pair_id": 3,
+    "answer_ce": {
+      "calling_code": 0.3603471890091896,
+      "currency": 3.1638324856758118,
+      "capital": 0.5113023221492767,
+      "language": 0.6541624516248703
+    },
+    "mean_gate": 0.5
+  },
+  {
+    "step": 2,
+    "epoch": 0,
+    "pair_id": 7,
+    "answer_ce": {
+      "calling_code": 0.17186796478927135,
+      "currency": 7.103141903877258,
+      "capital": 0.06100718607194722,
+      "language": 0.1195308337919414
+    },
+    "mean_gate": 0.5029289722442627
+  },
+  {
+    "step": 3,
+    "epoch": 0,
+    "pair_id": 29,
+    "answer_ce": {
+      "calling_code": 0.026807134971022606,
+      "currency": 3.3717708587646484,
+      "capital": 0.14843159168958664,
+      "language": 0.30439061019569635
+    },
+    "mean_gate": 0.5069557428359985
+  },
+  {
+    "step": 4,
+    "epoch": 0,
+    "pair_id": 20,
+    "answer_ce": {
+      "calling_code": 1.9807694554328918,
+      "currency": 2.4341477751731873,
+      "capital": 0.08871546946465969,
+      "language": 1.2066622972488403
+    },
+    "mean_gate": 0.5110683441162109
+  },
+  {
+    "step": 5,
+    "epoch": 0,
+    "pair_id": 19,
+    "answer_ce": {
+      "calling_code": 0.37623877823352814,
+      "currency": 4.308420181274414,
+      "capital": 0.03985185548663139,
+      "language": 1.2497468292713165
+    },
+    "mean_gate": 0.5140871405601501
+  },
+  {
+    "step": 6,
+    "epoch": 0,
+    "pair_id": 5,
+    "answer_ce": {
+      "calling_code": 2.8919017612934113,
+      "currency": 3.42878258228302,
+      "capital": 0.4080508090555668,
+      "language": 0.4618368372321129
+    },
+    "mean_gate": 0.5166776180267334
+  },
+  {
+    "step": 7,
+    "epoch": 0,
+    "pair_id": 0,
+    "answer_ce": {
+      "calling_code": 0.02182519296184182,
+      "currency": 4.980869770050049,
+      "capital": 0.5112418681383133,
+      "language": 1.7815267443656921
+    },
+    "mean_gate": 0.519221305847168
+  },
+  {
+    "step": 8,
+    "epoch": 0,
+    "pair_id": 10,
+    "answer_ce": {
+      "calling_code": 0.2617519684135914,
+      "currency": 4.596651196479797,
+      "capital": 2.0242152214050293,
+      "language": 5.649442076683044
+    },
+    "mean_gate": 0.5223550796508789
+  },
+  {
+    "step": 9,
+    "epoch": 0,
+    "pair_id": 14,
+    "answer_ce": {
+      "calling_code": 0.8705825209617615,
+      "currency": 4.969155550003052,
+      "capital": 0.0964132584631443,
+      "language": 0.7178226858377457
+    },
+    "mean_gate": 0.5257187485694885
+  },
+  {
+    "step": 10,
+    "epoch": 0,
+    "pair_id": 26,
+    "answer_ce": {
+      "calling_code": 0.5274089649319649,
+      "currency": 5.926815509796143,
+      "capital": 0.044054105412214994,
+      "language": 0.3574686534702778
+    },
+    "mean_gate": 0.5294148921966553
+  },
+  {
+    "step": 11,
+    "epoch": 0,
+    "pair_id": 17,
+    "answer_ce": {
+      "calling_code": 0.07420445699244738,
+      "currency": 6.738923907279968,
+      "capital": 0.4294649437069893,
+      "language": 0.537420466542244
+    },
+    "mean_gate": 0.533019483089447
+  },
+  {
+    "step": 12,
+    "epoch": 0,
+    "pair_id": 21,
+    "answer_ce": {
+      "calling_code": 0.10546340420842171,
+      "currency": 6.793501257896423,
+      "capital": 0.022038707276806235,
+      "language": 0.15554726007394493
+    },
+    "mean_gate": 0.5365612506866455
+  },
+  {
+    "step": 13,
+    "epoch": 0,
+    "pair_id": 27,
+    "answer_ce": {
+      "calling_code": 0.04207367729395628,
+      "currency": 0.8342460691928864,
+      "capital": 0.02277146722190082,
+      "language": 0.1349215731024742
+    },
+    "mean_gate": 0.540604293346405
+  },
+  {
+    "step": 14,
+    "epoch": 0,
+    "pair_id": 23,
+    "answer_ce": {
+      "calling_code": 0.06958343088626862,
+      "currency": 5.053220629692078,
+      "capital": 0.02196945040486753,
+      "language": 0.13117823284119368
+    },
+    "mean_gate": 0.5444568991661072
+  },
+  {
+    "step": 15,
+    "epoch": 0,
+    "pair_id": 2,
+    "answer_ce": {
+      "calling_code": 0.01656271773390472,
+      "currency": 6.660543441772461,
+      "capital": 0.06295026978477836,
+      "language": 0.3185324128717184
+    },
+    "mean_gate": 0.5482702255249023
+  },
+  {
+    "step": 16,
+    "epoch": 0,
+    "pair_id": 22,
+    "answer_ce": {
+      "calling_code": 0.660199798643589,
+      "currency": 5.658278226852417,
+      "capital": 0.04548767302185297,
+      "language": 0.12767307460308075
+    },
+    "mean_gate": 0.5520881414413452
+  },
+  {
+    "step": 17,
+    "epoch": 0,
+    "pair_id": 4,
+    "answer_ce": {
+      "calling_code": 0.3067537695169449,
+      "currency": 3.938446044921875,
+      "capital": 0.19278553500771523,
+      "language": 0.14181236177682877
+    },
+    "mean_gate": 0.555997371673584
+  },
+  {
+    "step": 18,
+    "epoch": 0,
+    "pair_id": 25,
+    "answer_ce": {
+      "calling_code": 0.5875925049185753,
+      "currency": 1.9810541570186615,
+      "capital": 0.08891084976494312,
+      "language": 1.2556267082691193
+    },
+    "mean_gate": 0.5599813461303711
+  },
+  {
+    "step": 19,
+    "epoch": 0,
+    "pair_id": 6,
+    "answer_ce": {
+      "calling_code": 0.01369693165179342,
+      "currency": 3.5491390228271484,
+      "capital": 0.46511873975396156,
+      "language": 0.45172885060310364
+    },
+    "mean_gate": 0.5636804103851318
+  },
+  {
+    "step": 20,
+    "epoch": 0,
+    "pair_id": 18,
+    "answer_ce": {
+      "calling_code": 0.07060953788459301,
+      "currency": 2.921152651309967,
+      "capital": 0.6032435297966003,
+      "language": 0.5358726345002651
+    },
+    "mean_gate": 0.5675915479660034
+  },
+  {
+    "step": 21,
+    "epoch": 0,
+    "pair_id": 11,
+    "answer_ce": {
+      "calling_code": 1.0408379584550858,
+      "currency": 0.34233569353818893,
+      "capital": 0.14489679411053658,
+      "language": 0.07185459835454822
+    },
+    "mean_gate": 0.5715095400810242
+  },
+  {
+    "step": 22,
+    "epoch": 0,
+    "pair_id": 30,
+    "answer_ce": {
+      "calling_code": 0.9668228030204773,
+      "currency": 7.634989976882935,
+      "capital": 0.2697470337152481,
+      "language": 0.5290643032640219
+    },
+    "mean_gate": 0.5751931667327881
+  },
+  {
+    "step": 23,
+    "epoch": 0,
+    "pair_id": 9,
+    "answer_ce": {
+      "calling_code": 0.24072175845503807,
+      "currency": 5.624513030052185,
+      "capital": 0.021605307003483176,
+      "language": 0.0772794660879299
+    },
+    "mean_gate": 0.578957736492157
+  },
+  {
+    "step": 24,
+    "epoch": 0,
+    "pair_id": 12,
+    "answer_ce": {
+      "calling_code": 0.4163255840539932,
+      "currency": 2.071120947599411,
+      "capital": 3.731547474861145,
+      "language": 0.6364807449281216
+    },
+    "mean_gate": 0.5828151106834412
+  },
+  {
+    "step": 25,
+    "epoch": 0,
+    "pair_id": 15,
+    "answer_ce": {
+      "calling_code": 0.40791451930999756,
+      "currency": 4.108847379684448,
+      "capital": 0.021825722185894847,
+      "language": 0.2210442367941141
+    },
+    "mean_gate": 0.5862503051757812
+  },
+  {
+    "step": 26,
+    "epoch": 0,
+    "pair_id": 16,
+    "answer_ce": {
+      "calling_code": 0.27944331988692284,
+      "currency": 5.296497702598572,
+      "capital": 1.4847248494625092,
+      "language": 1.0239089280366898
+    },
+    "mean_gate": 0.5895723700523376
+  },
+  {
+    "step": 27,
+    "epoch": 0,
+    "pair_id": 8,
+    "answer_ce": {
+      "calling_code": 0.3604145608842373,
+      "currency": 1.7010984420776367,
+      "capital": 0.18190732598304749,
+      "language": 0.7322638630867004
+    },
+    "mean_gate": 0.5929684638977051
+  },
+  {
+    "step": 28,
+    "epoch": 0,
+    "pair_id": 1,
+    "answer_ce": {
+      "calling_code": 0.5891989544034004,
+      "currency": 3.460838556289673,
+      "capital": 0.33675677329301834,
+      "language": 1.0858767926692963
+    },
+    "mean_gate": 0.5961703062057495
+  },
+  {
+    "step": 29,
+    "epoch": 0,
+    "pair_id": 13,
+    "answer_ce": {
+      "calling_code": 1.464802771806717,
+      "currency": 0.34301045164465904,
+      "capital": 1.1877719312906265,
+      "language": 0.7467476427555084
+    },
+    "mean_gate": 0.5992348790168762
+  },
+  {
+    "step": 30,
+    "epoch": 0,
+    "pair_id": 28,
+    "answer_ce": {
+      "calling_code": 1.2352988868951797,
+      "currency": 4.426500558853149,
+      "capital": 0.6731512472033501,
+      "language": 0.26969001442193985
+    },
+    "mean_gate": 0.602088212966919
+  },
+  {
+    "step": 31,
+    "epoch": 0,
+    "pair_id": 31,
+    "answer_ce": {
+      "calling_code": 0.2862027920782566,
+      "currency": 2.6556797921657562,
+      "capital": 0.6879993677139282,
+      "language": 0.3838999308645725
+    },
+    "mean_gate": 0.6049045324325562
+  },
+  {
+    "step": 32,
+    "epoch": 0,
+    "pair_id": 24,
+    "answer_ce": {
+      "calling_code": 0.10400664806365967,
+      "currency": 4.223666846752167,
+      "capital": 0.22978273779153824,
+      "language": 0.6852412223815918
+    },
+    "mean_gate": 0.6077523827552795
+  },
+  {
+    "step": 33,
+    "epoch": 1,
+    "pair_id": 26,
+    "answer_ce": {
+      "calling_code": 1.4536944925785065,
+      "currency": 4.741081237792969,
+      "capital": 0.375136885792017,
+      "language": 1.0519906729459763
+    },
+    "mean_gate": 0.6108388900756836
+  },
+  {
+    "step": 34,
+    "epoch": 1,
+    "pair_id": 17,
+    "answer_ce": {
+      "calling_code": 0.14852110855281353,
+      "currency": 5.103167653083801,
+      "capital": 0.8148404955863953,
+      "language": 1.0836594849824905
+    },
+    "mean_gate": 0.6137237548828125
+  },
+  {
+    "step": 35,
+    "epoch": 1,
+    "pair_id": 11,
+    "answer_ce": {
+      "calling_code": 1.3064421713352203,
+      "currency": 0.21483074501156807,
+      "capital": 0.22807326540350914,
+      "language": 0.09905431605875492
+    },
+    "mean_gate": 0.6165221929550171
+  },
+  {
+    "step": 36,
+    "epoch": 1,
+    "pair_id": 10,
+    "answer_ce": {
+      "calling_code": 0.5493976175785065,
+      "currency": 3.7140056490898132,
+      "capital": 2.0652348697185516,
+      "language": 5.360213041305542
+    },
+    "mean_gate": 0.6190309524536133
+  },
+  {
+    "step": 37,
+    "epoch": 1,
+    "pair_id": 28,
+    "answer_ce": {
+      "calling_code": 1.2875043451786041,
+      "currency": 4.181065201759338,
+      "capital": 0.7467519044876099,
+      "language": 0.30547599866986275
+    },
+    "mean_gate": 0.6217483282089233
+  },
+  {
+    "step": 38,
+    "epoch": 1,
+    "pair_id": 1,
+    "answer_ce": {
+      "calling_code": 0.7316507548093796,
+      "currency": 2.897545278072357,
+      "capital": 0.6676386818289757,
+      "language": 1.6755059361457825
+    },
+    "mean_gate": 0.624396800994873
+  },
+  {
+    "step": 39,
+    "epoch": 1,
+    "pair_id": 5,
+    "answer_ce": {
+      "calling_code": 3.1895942091941833,
+      "currency": 2.3072629570961,
+      "capital": 1.3602735996246338,
+      "language": 2.114980861544609
+    },
+    "mean_gate": 0.6266182661056519
+  },
+  {
+    "step": 40,
+    "epoch": 1,
+    "pair_id": 4,
+    "answer_ce": {
+      "calling_code": 0.6050634160637856,
+      "currency": 3.0360586643218994,
+      "capital": 0.36108481884002686,
+      "language": 0.361188568174839
+    },
+    "mean_gate": 0.6284111738204956
+  },
+  {
+    "step": 41,
+    "epoch": 1,
+    "pair_id": 7,
+    "answer_ce": {
+      "calling_code": 1.4910259246826172,
+      "currency": 4.001772165298462,
+      "capital": 0.7922777161002159,
+      "language": 0.7814217805862427
+    },
+    "mean_gate": 0.6302950382232666
+  },
+  {
+    "step": 42,
+    "epoch": 1,
+    "pair_id": 16,
+    "answer_ce": {
+      "calling_code": 0.3855109140276909,
+      "currency": 4.616617321968079,
+      "capital": 1.6754018068313599,
+      "language": 1.223708763718605
+    },
+    "mean_gate": 0.6324646472930908
+  },
+  {
+    "step": 43,
+    "epoch": 1,
+    "pair_id": 9,
+    "answer_ce": {
+      "calling_code": 0.4530240148305893,
+      "currency": 5.053907155990601,
+      "capital": 0.048966777976602316,
+      "language": 0.09362369822338223
+    },
+    "mean_gate": 0.6347396969795227
+  },
+  {
+    "step": 44,
+    "epoch": 1,
+    "pair_id": 19,
+    "answer_ce": {
+      "calling_code": 0.8586030006408691,
+      "currency": 3.0418428778648376,
+      "capital": 0.2932487018406391,
+      "language": 4.360646605491638
+    },
+    "mean_gate": 0.6370964646339417
+  },
+  {
+    "step": 45,
+    "epoch": 1,
+    "pair_id": 30,
+    "answer_ce": {
+      "calling_code": 1.040760800242424,
+      "currency": 6.263334631919861,
+      "capital": 0.5945645421743393,
+      "language": 1.6794916093349457
+    },
+    "mean_gate": 0.6390882134437561
+  },
+  {
+    "step": 46,
+    "epoch": 1,
+    "pair_id": 13,
+    "answer_ce": {
+      "calling_code": 1.5570383667945862,
+      "currency": 0.2191770039498806,
+      "capital": 1.3586634546518326,
+      "language": 0.9748016744852066
+    },
+    "mean_gate": 0.6410351991653442
+  },
+  {
+    "step": 47,
+    "epoch": 1,
+    "pair_id": 22,
+    "answer_ce": {
+      "calling_code": 1.2644952535629272,
+      "currency": 4.29611611366272,
+      "capital": 0.14491172693669796,
+      "language": 0.3241741880774498
+    },
+    "mean_gate": 0.6427287459373474
+  },
+  {
+    "step": 48,
+    "epoch": 1,
+    "pair_id": 0,
+    "answer_ce": {
+      "calling_code": 0.04654772253707051,
+      "currency": 2.4113221764564514,
+      "capital": 0.9147700667381287,
+      "language": 1.9312157332897186
+    },
+    "mean_gate": 0.6445786952972412
+  },
+  {
+    "step": 49,
+    "epoch": 1,
+    "pair_id": 21,
+    "answer_ce": {
+      "calling_code": 0.5766645222902298,
+      "currency": 3.934649169445038,
+      "capital": 0.08812487032264471,
+      "language": 0.3694707527756691
+    },
+    "mean_gate": 0.6467446088790894
+  },
+  {
+    "step": 50,
+    "epoch": 1,
+    "pair_id": 29,
+    "answer_ce": {
+      "calling_code": 0.6711999848484993,
+      "currency": 1.21213498711586,
+      "capital": 0.815290704369545,
+      "language": 1.043169267475605
+    },
+    "mean_gate": 0.649232029914856
+  },
+  {
+    "step": 51,
+    "epoch": 1,
+    "pair_id": 6,
+    "answer_ce": {
+      "calling_code": 0.026423525530844927,
+      "currency": 2.094892829656601,
+      "capital": 1.5751318633556366,
+      "language": 0.868598148226738
+    },
+    "mean_gate": 0.6515589356422424
+  },
+  {
+    "step": 52,
+    "epoch": 1,
+    "pair_id": 12,
+    "answer_ce": {
+      "calling_code": 0.5401465967297554,
+      "currency": 1.8170726597309113,
+      "capital": 4.1380455493927,
+      "language": 1.089615747332573
+    },
+    "mean_gate": 0.6538257002830505
+  },
+  {
+    "step": 53,
+    "epoch": 1,
+    "pair_id": 20,
+    "answer_ce": {
+      "calling_code": 3.30757212638855,
+      "currency": 0.5622652173042297,
+      "capital": 0.8265711218118668,
+      "language": 5.934079706668854
+    },
+    "mean_gate": 0.6557655334472656
+  },
+  {
+    "step": 54,
+    "epoch": 1,
+    "pair_id": 23,
+    "answer_ce": {
+      "calling_code": 0.24829527735710144,
+      "currency": 4.306762337684631,
+      "capital": 0.026222134474664927,
+      "language": 0.15296531142666936
+    },
+    "mean_gate": 0.6570261716842651
+  },
+  {
+    "step": 55,
+    "epoch": 1,
+    "pair_id": 14,
+    "answer_ce": {
+      "calling_code": 1.483467310667038,
+      "currency": 2.2621260285377502,
+      "capital": 1.3337642550468445,
+      "language": 2.4339335560798645
+    },
+    "mean_gate": 0.658411979675293
+  },
+  {
+    "step": 56,
+    "epoch": 1,
+    "pair_id": 15,
+    "answer_ce": {
+      "calling_code": 0.6946073919534683,
+      "currency": 3.587143838405609,
+      "capital": 0.059018807485699654,
+      "language": 0.3294520527124405
+    },
+    "mean_gate": 0.659731388092041
+  },
+  {
+    "step": 57,
+    "epoch": 1,
+    "pair_id": 3,
+    "answer_ce": {
+      "calling_code": 1.4048232436180115,
+      "currency": 1.3715650737285614,
+      "capital": 1.9178349077701569,
+      "language": 1.8194429874420166
+    },
+    "mean_gate": 0.6610334515571594
+  },
+  {
+    "step": 58,
+    "epoch": 1,
+    "pair_id": 31,
+    "answer_ce": {
+      "calling_code": 0.430054746568203,
+      "currency": 1.4485976099967957,
+      "capital": 1.19092658162117,
+      "language": 0.5042080767452717
+    },
+    "mean_gate": 0.6620398163795471
+  },
+  {
+    "step": 59,
+    "epoch": 1,
+    "pair_id": 2,
+    "answer_ce": {
+      "calling_code": 0.03713450510986149,
+      "currency": 5.620816349983215,
+      "capital": 0.13564168708398938,
+      "language": 0.41391028091311455
+    },
+    "mean_gate": 0.6630395650863647
+  },
+  {
+    "step": 60,
+    "epoch": 1,
+    "pair_id": 24,
+    "answer_ce": {
+      "calling_code": 0.3175629898905754,
+      "currency": 3.066745638847351,
+      "capital": 0.46329522132873535,
+      "language": 1.0381283462047577
+    },
+    "mean_gate": 0.6642732620239258
+  },
+  {
+    "step": 61,
+    "epoch": 1,
+    "pair_id": 25,
+    "answer_ce": {
+      "calling_code": 0.9176513701677322,
+      "currency": 1.2679781019687653,
+      "capital": 0.2828243039548397,
+      "language": 2.4318399131298065
+    },
+    "mean_gate": 0.66579270362854
+  },
+  {
+    "step": 62,
+    "epoch": 1,
+    "pair_id": 27,
+    "answer_ce": {
+      "calling_code": 0.19825340807437897,
+      "currency": 0.2078487742692232,
+      "capital": 0.09326413366943598,
+      "language": 0.2447269782423973
+    },
+    "mean_gate": 0.6671537160873413
+  },
+  {
+    "step": 63,
+    "epoch": 1,
+    "pair_id": 18,
+    "answer_ce": {
+      "calling_code": 0.4263085797429085,
+      "currency": 1.9798075258731842,
+      "capital": 1.512443721294403,
+      "language": 1.4937908947467804
+    },
+    "mean_gate": 0.668352484703064
+  },
+  {
+    "step": 64,
+    "epoch": 1,
+    "pair_id": 8,
+    "answer_ce": {
+      "calling_code": 0.6701689511537552,
+      "currency": 1.0306721925735474,
+      "capital": 0.7150964662432671,
+      "language": 1.6187910437583923
+    },
+    "mean_gate": 0.6691771745681763
+  },
+  {
+    "step": 65,
+    "epoch": 2,
+    "pair_id": 16,
+    "answer_ce": {
+      "calling_code": 0.49667172133922577,
+      "currency": 4.1510385274887085,
+      "capital": 1.8010947704315186,
+      "language": 1.339821606874466
+    },
+    "mean_gate": 0.6697303056716919
+  },
+  {
+    "step": 66,
+    "epoch": 2,
+    "pair_id": 25,
+    "answer_ce": {
+      "calling_code": 0.9204947799444199,
+      "currency": 1.2347311079502106,
+      "capital": 0.28479481115937233,
+      "language": 2.3871470987796783
+    },
+    "mean_gate": 0.6704428195953369
+  },
+  {
+    "step": 67,
+    "epoch": 2,
+    "pair_id": 18,
+    "answer_ce": {
+      "calling_code": 0.37943965941667557,
+      "currency": 1.9432831406593323,
+      "capital": 1.4842164516448975,
+      "language": 1.428628385066986
+    },
+    "mean_gate": 0.6710732579231262
+  },
+  {
+    "step": 68,
+    "epoch": 2,
+    "pair_id": 31,
+    "answer_ce": {
+      "calling_code": 0.4302666261792183,
+      "currency": 1.258621335029602,
+      "capital": 1.2144295573234558,
+      "language": 0.5516956448554993
+    },
+    "mean_gate": 0.6714175939559937
+  },
+  {
+    "step": 69,
+    "epoch": 2,
+    "pair_id": 29,
+    "answer_ce": {
+      "calling_code": 1.0383394211530685,
+      "currency": 0.8008957952260971,
+      "capital": 0.9018028825521469,
+      "language": 1.3139045536518097
+    },
+    "mean_gate": 0.6717661619186401
+  },
+  {
+    "step": 70,
+    "epoch": 2,
+    "pair_id": 20,
+    "answer_ce": {
+      "calling_code": 3.2573840618133545,
+      "currency": 0.5377570688724518,
+      "capital": 0.7557563036680222,
+      "language": 5.673198223114014
+    },
+    "mean_gate": 0.671905517578125
+  },
+  {
+    "step": 71,
+    "epoch": 2,
+    "pair_id": 0,
+    "answer_ce": {
+      "calling_code": 0.05576450377702713,
+      "currency": 1.6869759261608124,
+      "capital": 1.0565579980611801,
+      "language": 1.8960400223731995
+    },
+    "mean_gate": 0.6715668439865112
+  },
+  {
+    "step": 72,
+    "epoch": 2,
+    "pair_id": 4,
+    "answer_ce": {
+      "calling_code": 0.8251167833805084,
+      "currency": 2.5030956864356995,
+      "capital": 0.5316513776779175,
+      "language": 0.6087125390768051
+    },
+    "mean_gate": 0.6716146469116211
+  },
+  {
+    "step": 73,
+    "epoch": 2,
+    "pair_id": 10,
+    "answer_ce": {
+      "calling_code": 0.7335275709629059,
+      "currency": 3.2198134660720825,
+      "capital": 2.1275341510772705,
+      "language": 5.234096050262451
+    },
+    "mean_gate": 0.6717857122421265
+  },
+  {
+    "step": 74,
+    "epoch": 2,
+    "pair_id": 7,
+    "answer_ce": {
+      "calling_code": 1.9782994091510773,
+      "currency": 2.6659279465675354,
+      "capital": 1.9712945222854614,
+      "language": 1.674145869910717
+    },
+    "mean_gate": 0.6722946763038635
+  },
+  {
+    "step": 75,
+    "epoch": 2,
+    "pair_id": 14,
+    "answer_ce": {
+      "calling_code": 1.5350643992424011,
+      "currency": 2.1109988689422607,
+      "capital": 1.3632560670375824,
+      "language": 2.556295156478882
+    },
+    "mean_gate": 0.6727509498596191
+  },
+  {
+    "step": 76,
+    "epoch": 2,
+    "pair_id": 17,
+    "answer_ce": {
+      "calling_code": 0.29578494653105736,
+      "currency": 3.8704484701156616,
+      "capital": 1.0995661318302155,
+      "language": 1.5770478248596191
+    },
+    "mean_gate": 0.673214852809906
+  },
+  {
+    "step": 77,
+    "epoch": 2,
+    "pair_id": 22,
+    "answer_ce": {
+      "calling_code": 1.4902103543281555,
+      "currency": 3.805173933506012,
+      "capital": 0.19362648949027061,
+      "language": 0.3848540708422661
+    },
+    "mean_gate": 0.6737082600593567
+  },
+  {
+    "step": 78,
+    "epoch": 2,
+    "pair_id": 28,
+    "answer_ce": {
+      "calling_code": 1.4690613448619843,
+      "currency": 3.6752873063087463,
+      "capital": 0.9536314308643341,
+      "language": 0.4975644499063492
+    },
+    "mean_gate": 0.6743940114974976
+  },
+  {
+    "step": 79,
+    "epoch": 2,
+    "pair_id": 15,
+    "answer_ce": {
+      "calling_code": 0.6844949573278427,
+      "currency": 3.44048148393631,
+      "capital": 0.06726456247270107,
+      "language": 0.290701013058424
+    },
+    "mean_gate": 0.6750990152359009
+  },
+  {
+    "step": 80,
+    "epoch": 2,
+    "pair_id": 12,
+    "answer_ce": {
+      "calling_code": 0.5044015571475029,
+      "currency": 1.7123808562755585,
+      "capital": 4.1952784061431885,
+      "language": 1.1561227440834045
+    },
+    "mean_gate": 0.6758214831352234
+  },
+  {
+    "step": 81,
+    "epoch": 2,
+    "pair_id": 13,
+    "answer_ce": {
+      "calling_code": 1.6386058330535889,
+      "currency": 0.17299426533281803,
+      "capital": 1.5074928104877472,
+      "language": 1.080814704298973
+    },
+    "mean_gate": 0.6763639450073242
+  },
+  {
+    "step": 82,
+    "epoch": 2,
+    "pair_id": 27,
+    "answer_ce": {
+      "calling_code": 0.19257336109876633,
+      "currency": 0.15206059627234936,
+      "capital": 0.10719801113009453,
+      "language": 0.2677046209573746
+    },
+    "mean_gate": 0.6767510771751404
+  },
+  {
+    "step": 83,
+    "epoch": 2,
+    "pair_id": 1,
+    "answer_ce": {
+      "calling_code": 0.9158691465854645,
+      "currency": 2.0728306770324707,
+      "capital": 1.520758479833603,
+      "language": 2.4874908924102783
+    },
+    "mean_gate": 0.6770585775375366
+  },
+  {
+    "step": 84,
+    "epoch": 2,
+    "pair_id": 24,
+    "answer_ce": {
+      "calling_code": 0.39728690683841705,
+      "currency": 2.6227434873580933,
+      "capital": 0.4604179188609123,
+      "language": 1.0946027487516403
+    },
+    "mean_gate": 0.6768621206283569
+  },
+  {
+    "step": 85,
+    "epoch": 2,
+    "pair_id": 6,
+    "answer_ce": {
+      "calling_code": 0.02956659928895533,
+      "currency": 1.8227333724498749,
+      "capital": 1.79687038064003,
+      "language": 0.9670568853616714
+    },
+    "mean_gate": 0.6770092248916626
+  },
+  {
+    "step": 86,
+    "epoch": 2,
+    "pair_id": 19,
+    "answer_ce": {
+      "calling_code": 0.9174723327159882,
+      "currency": 2.7835230827331543,
+      "capital": 0.3682430312037468,
+      "language": 4.801715731620789
+    },
+    "mean_gate": 0.6772221326828003
+  },
+  {
+    "step": 87,
+    "epoch": 2,
+    "pair_id": 8,
+    "answer_ce": {
+      "calling_code": 0.6055231988430023,
+      "currency": 0.9628261625766754,
+      "capital": 0.6530411168932915,
+      "language": 1.5358801782131195
+    },
+    "mean_gate": 0.6773016452789307
+  },
+  {
+    "step": 88,
+    "epoch": 2,
+    "pair_id": 9,
+    "answer_ce": {
+      "calling_code": 0.6700574830174446,
+      "currency": 4.494527101516724,
+      "capital": 0.08740238472819328,
+      "language": 0.13222440145909786
+    },
+    "mean_gate": 0.6771801114082336
+  },
+  {
+    "step": 89,
+    "epoch": 2,
+    "pair_id": 21,
+    "answer_ce": {
+      "calling_code": 0.7863133400678635,
+      "currency": 3.2465893030166626,
+      "capital": 0.1476780092343688,
+      "language": 0.4674793481826782
+    },
+    "mean_gate": 0.677269458770752
+  },
+  {
+    "step": 90,
+    "epoch": 2,
+    "pair_id": 23,
+    "answer_ce": {
+      "calling_code": 0.24243639968335629,
+      "currency": 4.239150762557983,
+      "capital": 0.024183364817872643,
+      "language": 0.1638464080169797
+    },
+    "mean_gate": 0.6776697635650635
+  },
+  {
+    "step": 91,
+    "epoch": 2,
+    "pair_id": 5,
+    "answer_ce": {
+      "calling_code": 3.2581775784492493,
+      "currency": 1.9872756600379944,
+      "capital": 1.5581019222736359,
+      "language": 2.7470585703849792
+    },
+    "mean_gate": 0.6782543659210205
+  },
+  {
+    "step": 92,
+    "epoch": 2,
+    "pair_id": 26,
+    "answer_ce": {
+      "calling_code": 1.9305285215377808,
+      "currency": 3.6861627101898193,
+      "capital": 1.0135178118944168,
+      "language": 1.8268833309412003
+    },
+    "mean_gate": 0.6785736083984375
+  },
+  {
+    "step": 93,
+    "epoch": 2,
+    "pair_id": 11,
+    "answer_ce": {
+      "calling_code": 1.5381880402565002,
+      "currency": 0.12120763584971428,
+      "capital": 0.4059489667415619,
+      "language": 0.17071159183979034
+    },
+    "mean_gate": 0.6788644194602966
+  },
+  {
+    "step": 94,
+    "epoch": 2,
+    "pair_id": 30,
+    "answer_ce": {
+      "calling_code": 0.9227054268121719,
+      "currency": 5.428438901901245,
+      "capital": 0.8207913786172867,
+      "language": 2.4077985286712646
+    },
+    "mean_gate": 0.6789931058883667
+  },
+  {
+    "step": 95,
+    "epoch": 2,
+    "pair_id": 2,
+    "answer_ce": {
+      "calling_code": 0.04316936992108822,
+      "currency": 5.342840313911438,
+      "capital": 0.1578178619965911,
+      "language": 0.3931717351078987
+    },
+    "mean_gate": 0.6791607141494751
+  },
+  {
+    "step": 96,
+    "epoch": 2,
+    "pair_id": 3,
+    "answer_ce": {
+      "calling_code": 1.3429090678691864,
+      "currency": 1.2056905329227448,
+      "capital": 1.881041795015335,
+      "language": 1.7898778915405273
+    },
+    "mean_gate": 0.6796264052391052
+  }
+]

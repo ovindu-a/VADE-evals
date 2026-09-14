@@ -1,0 +1,44 @@
+{
+  "manifest_hash": "ce53b896819248619d04a6cfaa7ce320f1ba0a73c9dbd3fe12a7de42d88bfc9c",
+  "target": "language",
+  "heads": [
+    [
+      23,
+      4
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      23,
+      3
+    ],
+    [
+      22,
+      19
+    ],
+    [
+      23,
+      6
+    ],
+    [
+      21,
+      5
+    ],
+    [
+      22,
+      17
+    ],
+    [
+      22,
+      15
+    ]
+  ],
+  "epochs": 3,
+  "lr": 0.05,
+  "isolation_weight": 1.0,
+  "sparsity": 0.01,
+  "temperature": 1.0,
+  "max_new_tokens": 12
+}
