@@ -1,5 +1,9 @@
 # VADE-evals
 
+The latest head-trace follow-ups—continuous answer-token substitution and
+two-phase token identification/knockout—are documented in
+[HEAD_EXPERIMENTS.md](HEAD_EXPERIMENTS.md).
+
 Execution repo for the [VADE](https://github.com/Shaveen12/VADE) benchmark
 (Visual Attribute DisEntanglement). VADE itself stays a pure benchmark --
 data, ground truth, prompt templates, object-token geometry, and a
