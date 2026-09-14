@@ -1,0 +1,100 @@
+{
+  "clean": {
+    "n": 4,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 4,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 4,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 4,
+        "accuracy": 0.25
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "2": {
+        "n": 4,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 4,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 4,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 4,
+            "accuracy": 0.25
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    },
+    "paired_baseline": "image_patch",
+    "paired_baseline_full_match_drop": 0.75,
+    "paired_first_source_logprob_drop": 10.478276887442917
+  },
+  "image_patch": {
+    "n": 4,
+    "first_token": 1.0,
+    "prefix3_match": 0.75,
+    "full_match": 0.75,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 4,
+    "first_token_accuracy_distinct_gold": 1.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 4,
+        "accuracy": 1.0
+      },
+      {
+        "position": 2,
+        "n": 4,
+        "accuracy": 0.75
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "2": {
+        "n": 4,
+        "first_token": 1.0,
+        "prefix3_match": 0.75,
+        "full_match": 0.75,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 4,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 4,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 4,
+            "accuracy": 0.75
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    },
+    "paired_baseline": "image_patch",
+    "paired_baseline_full_match_drop": 0.0,
+    "paired_first_source_logprob_drop": 0.0
+  }
+}
