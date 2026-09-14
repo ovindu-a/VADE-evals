@@ -1,5 +1,8 @@
 # Head-trace follow-up experiments
 
+For the subsequent cross-attribute head matrix and learned selective masks, see
+[HEAD_ATTRIBUTE_EDITING.md](HEAD_ATTRIBUTE_EDITING.md).
+
 These experiments use a saved `head_trace` ranking without fitting or re-ranking
 heads. They address two questions: whether continuing head substitution fixes
 multi-token answers, and which prompt-token reads of the selected heads matter.
