@@ -62,6 +62,9 @@ def prepare(args):
             groups = {}
             for line in raw.splitlines():
                 r = json.loads(line)
+                allowed_items = getattr(args, f'{split}_items', None)
+                if allowed_items is not None and (r['base'] not in allowed_items or r['source'] not in allowed_items):
+                    continue
                 if (r['queried'] == attr and r['rule'] == 'match_source'
                         and r['base_label'] != r['source_label']
                         and any(r['template_id'].endswith('_' + s) for s in suffixes)):
@@ -89,7 +92,9 @@ def prepare(args):
     entity_dir = Path(args.vade_root) / 'data' / trace['entity']
     gt_path = entity_dir / 'ground_truth.json'
     gt = json.loads(gt_path.read_text())
-    key = {'flags': 'countries', 'brands': 'brands', 'animals': 'species'}[trace['entity']]
+    key = {'flags': 'countries', 'brands': 'brands', 'animals': 'species'}.get(trace['entity'])
+    if key not in gt:
+        key = next(k for k, v in gt.items() if isinstance(v, dict) and k != 'coverage')
     for r in rows['train'] + rows['test']:
         for role in ('base', 'source'):
             if not (entity_dir / gt[key][r[role]]['image']).is_file():

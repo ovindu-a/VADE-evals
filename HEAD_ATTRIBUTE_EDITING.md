@@ -1,5 +1,8 @@
 # Attribute editing through the selected image heads
 
+For learned rotated subspaces and same-item contrastive direction baselines, see
+[HEAD_DIRECTIONS.md](HEAD_DIRECTIONS.md).
+
 These are the two stages following the head sufficiency and token-knockout runs.
 They test whether the selected heads support selective attribute transfer. They
 do not assume that head necessity establishes attribute-specific information.
