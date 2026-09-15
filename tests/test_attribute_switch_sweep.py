@@ -7,7 +7,8 @@ import torch
 from PIL import Image
 
 from test_head_followups import tiny
-from methods.attribute_switch_sweep import SwitchRunner, alignment, execute, sweep_arms, patch_positions
+from methods.attribute_switch_sweep import (SwitchRunner, alignment, execute, sweep_arms,
+                                          patch_positions, multimodal_position_kwargs)
 from methods.head_followup_common import Results
 
 
@@ -195,3 +196,50 @@ def test_all_text_residual_and_attention_window_match_direct_hooks(tiny):
         single, _ = runner.step(batch, f'{scope}/attention', 3, 'continuous')(ids)
         window, _ = runner.step(batch, f'{scope}/attention_blocks:1', 3, 'continuous')(ids)
         torch.testing.assert_close(single, window)
+
+
+def test_multitoken_image_positions_match_explicit_rope_and_cached_generation(tiny):
+    from transformers import GenerationConfig
+    runner, batch = setup(tiny)
+    # Four merged image tokens have genuinely spatial positions, unlike the
+    # single-image-token fixture where text and multimodal positions coincide.
+    ids = torch.tensor([[1, 2, 2, 2, 2, 3, 12, 13, 14]])
+    batch['base_input_ids'] = ids
+    batch['base_extra'] = {'pixel_values': torch.randn(16, 24),
+                           'image_grid_thw': torch.tensor([[1, 4, 4]])}
+    kwargs = multimodal_position_kwargs(runner.model, ids)
+    with torch.no_grad():
+        positions, _ = runner.model.model.get_rope_index(
+            ids, image_grid_thw=batch['base_extra']['image_grid_thw'],
+            attention_mask=torch.ones_like(ids), **kwargs)
+        expected = runner.model(input_ids=ids, attention_mask=torch.ones_like(ids),
+                                position_ids=positions, **batch['base_extra'],
+                                use_cache=False).logits[:, -1]
+        actual = runner.run(ids, batch)
+        torch.testing.assert_close(actual, expected)
+        if kwargs:
+            runner.model.model.rope_deltas = None
+            missing = runner.model(input_ids=ids, attention_mask=torch.ones_like(ids),
+                                   **batch['base_extra'], use_cache=False).logits[:, -1]
+            assert not torch.allclose(missing, expected, atol=1e-6, rtol=1e-5)
+        cached = runner.model.generate(input_ids=ids, attention_mask=torch.ones_like(ids),
+                                       **batch['base_extra'], **kwargs,
+                                       generation_config=GenerationConfig(max_new_tokens=3,
+                                           do_sample=False, eos_token_id=None, pad_token_id=0),
+                                       return_dict_in_generate=True, output_scores=True)
+        for offset, score in enumerate(cached.scores):
+            prefix = cached.sequences[:, :ids.shape[1] + offset]
+            torch.testing.assert_close(runner.run(prefix, batch), score, atol=1e-6, rtol=1e-5)
+
+
+def test_modality_labels_extend_over_answer_prefix_and_support_older_api():
+    ids = torch.tensor([[1, 2, 2, 3, 12, 22, 23]])
+    def modern(input_ids, mm_token_type_ids):
+        pass
+    def legacy(input_ids):
+        pass
+    model = SimpleNamespace(model=SimpleNamespace(get_rope_index=modern),
+                            config=SimpleNamespace(image_token_id=2, video_token_id=4))
+    assert multimodal_position_kwargs(model, ids)['mm_token_type_ids'].tolist() == [[0, 1, 1, 0, 0, 0, 0]]
+    model.model.get_rope_index = legacy
+    assert multimodal_position_kwargs(model, ids) == {}

@@ -47,6 +47,27 @@ currency`, `--countries FR DE`, `--sites last_residual last_joint`, or
 same seed/countries when comparing runs. Rerun an identical command to resume;
 use another output directory when changing configuration or code.
 
+### Malformed clean answers and multimodal positions
+
+The runner supplies `mm_token_type_ids` when the installed Qwen implementation
+requires them for multimodal rotary positions. The shared input adapter's
+historical pixel/grid-only output omitted these labels; newer Transformers can
+silently fall back to text positions in their absence. Labels are rebuilt for
+every full prefix, including generated text. Older implementations continue
+using their own token-ID inference.
+
+After this fix, rerun clean baselines in a **new output directory** before the
+sweep. Existing results cannot be resumed across the code change. This corrects
+position handling, but clean answer quality must still be checked on the actual
+pretrained model and prompts. Offline multi-image-token tests compare the runner
+with explicit spatial positions and cached generation; self-swap identity alone
+would not detect a position bug shared by clean and patched forwards.
+
+Console `first` and `full` score the donor answer. `base_full` scores the
+recipient answer, so a correct self-swap normally has `full=0 base_full=1` when
+the two answers differ. Code-like output in a clean run is a separate problem
+from those donor scores being zero.
+
 ## Controlled questions and alignment
 
 Every question shares field definitions, including three-letter currency codes

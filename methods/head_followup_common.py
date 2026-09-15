@@ -197,6 +197,7 @@ class Results:
         scores = record['source_score']
         print(f'  row={record["row_index"]} {record["arm"]}: '
               f'first={int(scores["first_token"])} full={int(scores["full_match"])} '
+              f'base_full={int(record["base_score"]["full_match"])} '
               f'answer={record["generated_text"]!r}', flush=True)
 
     def finish(self):

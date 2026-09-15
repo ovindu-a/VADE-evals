@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import itertools
+import inspect
 import json
 import os
 from pathlib import Path
@@ -65,6 +66,26 @@ def patch_positions(batch, scope, length, mode):
     return sorted(set(positions))
 
 
+def multimodal_position_kwargs(model, ids):
+    """Supply modality labels required by newer Qwen position computation.
+
+    The shared adapter historically kept only pixels/grid from the processor.
+    New Transformers needs modality labels too, or silently falls back to text
+    positions. Derive them over the CURRENT full prefix, including decode steps.
+    Older Qwen implementations infer these labels from IDs themselves.
+    """
+    import torch
+    rope_index = getattr(model.model, 'get_rope_index', None)
+    if rope_index is None or 'mm_token_type_ids' not in inspect.signature(rope_index).parameters:
+        return {}
+    types = torch.zeros_like(ids)
+    types[ids == model.config.image_token_id] = 1
+    video_id = getattr(model.config, 'video_token_id', None)
+    if video_id is not None:
+        types[ids == video_id] = 2
+    return {'mm_token_type_ids': types}
+
+
 def parts(name, layer):
     from methods.common.sites import resolve_site
     _, kind = intervention(name)
@@ -116,9 +137,11 @@ class SwitchRunner(Runner):
             for site, layer, fn in hooks:
                 handles.extend(site.register(self.adapter, self.model, self.layers, layer, fn))
             with torch.no_grad():
-                return self.model(input_ids=ids.to(self.model.device),
+                model_ids = ids.to(self.model.device)
+                return self.model(input_ids=model_ids,
                     attention_mask=torch.ones_like(ids, device=self.model.device),
                     **extra_to_device(batch['base_extra'], self.model.device, self.model.dtype),
+                    **multimodal_position_kwargs(self.model, model_ids),
                     use_cache=False, logits_to_keep=1).logits[:, -1].detach()
         finally:
             for h in handles:
