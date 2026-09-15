@@ -14,6 +14,9 @@ from methods.head_followup_common import ROOT, Results, Runner
 ATTRIBUTES = ['capital', 'currency', 'language', 'calling_code']
 FIELDS = dict(capital='capital', currency='currency', language='language', calling_code='calling')
 SITES = ['earlier_text', 'last_residual', 'last_attention', 'last_mlp', 'last_joint']
+SCOPES = ['earlier_text', 'last_token', 'all_text']
+SITE_ALIASES = {'earlier_text': 'residual', 'last_residual': 'residual',
+                'last_attention': 'attention', 'last_mlp': 'mlp', 'last_joint': 'joint'}
 PREFILL = 'Answer:'
 INSTRUCTION = ('For the country shown, capital means its capital city; currency means its '
                'three-letter currency code; language means one official language; calling '
@@ -43,12 +46,35 @@ def alignment(base, donor, image_id, special_ids=()):
     return positions
 
 
+def intervention(name):
+    """Resolve explicit scope/site names and retain legacy CLI semantics."""
+    if '/' in name:
+        scope, site = name.split('/', 1)
+        if scope not in SCOPES:
+            raise ValueError(f'Unknown position scope: {scope}')
+        return scope, site
+    return ('earlier_text' if name == 'earlier_text' else 'last_token',
+            SITE_ALIASES.get(name, name))
+
+
+def patch_positions(batch, scope, length, mode):
+    prompt_length = batch['base_input_ids'].shape[1]
+    positions = list(batch['earlier_positions']) if scope != 'last_token' else []
+    if scope != 'earlier_text':
+        positions.extend(range(prompt_length - 1, length if mode == 'continuous' else prompt_length))
+    return sorted(set(positions))
+
+
 def parts(name, layer):
     from methods.common.sites import resolve_site
-    mapped = {'earlier_text': 'residual', 'last_residual': 'residual',
-              'last_attention': 'attn_output', 'last_mlp': 'mlp_output',
-              'last_joint': 'attn_output+mlp_output'}
-    site = resolve_site(mapped.get(name, name))
+    _, kind = intervention(name)
+    if kind.startswith('attention_blocks:'):
+        width = int(kind.split(':')[1])
+        if not 1 <= width <= layer:
+            raise ValueError(f'{name} cannot end at layer {layer}')
+        return [(resolve_site('attn_output'), at) for at in range(layer - width + 1, layer + 1)]
+    mapped = {'attention': 'attn_output', 'mlp': 'mlp_output', 'joint': 'attn_output+mlp_output'}
+    site = resolve_site(mapped.get(kind, kind))
     if layer < site.min_layer():
         raise ValueError(f'{name} cannot end at layer {layer}')
     return [(p.site, p.layer_idx(layer)) for p in site.parts] if site.is_joint else [(site, layer)]
@@ -104,15 +130,11 @@ class SwitchRunner(Runner):
         donor_prompt = batch[{'switch': 'source_input_ids', 'self': 'base_input_ids',
                              'paraphrase': 'paraphrase_ids'}[donor_kind]]
         site_parts = parts(name, layer)
+        scope, kind = intervention(name)
         def step(ids):
             # Donor question plus recipient's free-generated suffix, never a gold answer.
             donor_ids = torch.cat((donor_prompt.to(ids.device), ids[:, prompt_length:]), dim=1)
-            if name == 'earlier_text':
-                # Scope stays earlier prompt text in both modes: never silently add readout positions.
-                positions = batch['earlier_positions']
-            else:
-                positions = list(range(prompt_length - 1,
-                                       ids.shape[1] if mode == 'continuous' else prompt_length))
+            positions = patch_positions(batch, scope, ids.shape[1], mode)
             captured = {}
             capture_hooks = []
             for index, (site, at) in enumerate(site_parts):
@@ -131,7 +153,7 @@ class SwitchRunner(Runner):
             logits = self.run(ids, batch, patch_hooks)
             # Self-patching must be a no-op. Replacing the final residual at
             # the current readout must reproduce the donor's next-token logits.
-            if donor_kind == 'self' or (name == 'last_residual' and layer == len(self.layers)
+            if donor_kind == 'self' or (kind == 'residual' and layer == len(self.layers)
                                        and ids.shape[1] - 1 in positions):
                 tolerance = 1e-5 if logits.dtype == torch.float32 else .02
                 if not torch.allclose(logits.float(), donor_logits.float(), atol=tolerance, rtol=tolerance):
@@ -171,13 +193,20 @@ def sweep_arms(args):
     if getattr(args, 'baselines_only', False):
         return []
     requested = list(dict.fromkeys(args.sites + ['last_joint' if n == 1 else f'blocks:{n}'
-                                                 for n in args.block_spans]))
+                                                 for n in args.block_spans]
+                                  + ['last_attention' if n == 1 else f'attention_blocks:{n}'
+                                     for n in getattr(args, 'attention_spans', [])]))
+    scopes = getattr(args, 'scopes', None)
+    if scopes:
+        requested = list(dict.fromkeys(f'{scope}/{intervention(site)[1]}'
+                                      for scope in scopes for site in requested))
     arms = []
     for layer in args.layers:
         for site in requested:
-            if site.startswith('blocks:') and int(site.split(':')[1]) > layer:
+            scope, kind = intervention(site)
+            if ':' in kind and int(kind.split(':')[1]) > layer:
                 continue
-            for mode in (['prefill'] if site == 'earlier_text' else args.modes):
+            for mode in (['prefill'] if scope == 'earlier_text' else dict.fromkeys(args.modes)):
                 for control in ['switch'] + args.controls:
                     arms.append((f'{site}/L{layer}/{mode}/{control}', site, layer, mode, control))
     return arms
@@ -215,7 +244,9 @@ def execute(runner, args, rows, items, entity_dir, results):
                                                             ids[:, p:]), dim=1), batch), {}))
         for arm, site, layer, mode, control in arms:
             save(arm, runner.step(batch, site, layer, mode, control), site=site, layer=layer,
-                 mode=mode, control=control)
+                 mode=mode, control=control, scope=intervention(site)[0],
+                 prompt_positions=patch_positions(batch, intervention(site)[0], p, mode),
+                 blocks=sorted({at - 1 for _, at in parts(site, layer)}))
         summarize_switch(results)
     # Also rebuild a missing summary after an interruption following the last row write.
     summarize_switch(results)
@@ -230,8 +261,12 @@ def main(argv=None):
     ap.add_argument('--n_countries', type=int, default=8)
     ap.add_argument('--attributes', nargs='+', choices=ATTRIBUTES, default=ATTRIBUTES)
     ap.add_argument('--layers', nargs='+', type=int, default=list(range(1, 29)))
-    ap.add_argument('--sites', nargs='+', choices=SITES, default=SITES)
+    ap.add_argument('--sites', nargs='+', choices=SITES + ['residual', 'attention', 'mlp', 'joint'], default=SITES)
+    ap.add_argument('--scopes', nargs='+', choices=SCOPES,
+                    help='Cross every requested site/window with these text scopes; omitted preserves legacy scopes')
     ap.add_argument('--block_spans', nargs='*', type=int, default=[2, 4, 8])
+    ap.add_argument('--attention_spans', nargs='*', type=int, default=[],
+                    help='Attention-only consecutive windows; recipient MLPs run naturally')
     ap.add_argument('--modes', nargs='+', choices=['prefill', 'continuous'], default=['prefill'])
     ap.add_argument('--controls', nargs='*', choices=['self', 'paraphrase'], default=['self', 'paraphrase'])
     ap.add_argument('--seed', type=int, default=0)
@@ -242,7 +277,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
     if (len(set(args.attributes)) < 2 or len(set(args.attributes)) != len(args.attributes)
             or args.n_countries < 1 or args.max_new_tokens < 1 or any(n < 1 for n in args.layers)
-            or any(n < 1 for n in args.block_spans)):
+            or any(n < 1 for n in args.block_spans + args.attention_spans)):
         ap.error('Need at least two attributes and positive counts/spans')
     entity_dir = Path(args.vade_root) / 'data/flags'
     raw = (entity_dir / 'ground_truth.json').read_bytes()

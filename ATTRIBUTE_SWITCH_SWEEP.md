@@ -25,6 +25,18 @@ python methods/attribute_switch_sweep.py --out_dir results/attribute_switch/pref
 
 # Compare prefill and continuous interventions at interesting layers.
 python methods/attribute_switch_sweep.py --layers 16 20 24 28 --modes prefill continuous --out_dir results/attribute_switch/continuous
+
+# New text-swap smoke run: all three scopes, all four sites, both window families.
+python methods/attribute_switch_sweep.py --n_countries 2 --attributes capital currency \
+  --scopes earlier_text last_token all_text --sites residual attention mlp joint \
+  --layers 8 16 20 24 28 --block_spans 2 4 --attention_spans 2 4 \
+  --out_dir results/attribute_switch/text_smoke
+
+# Full depth, all attributes, independent single layers and consecutive windows.
+python methods/attribute_switch_sweep.py \
+  --scopes earlier_text last_token all_text --sites residual attention mlp joint \
+  --block_spans 1 2 3 4 5 8 --attention_spans 1 2 3 4 5 8 \
+  --out_dir results/attribute_switch/text_full
 ```
 
 Defaults include self-patching and same-attribute paraphrase controls at every
@@ -61,6 +73,16 @@ for inspection. Every country gets every directed pair of selected attributes.
 | `last_mlp` | MLP output at the final prompt token |
 | `last_joint` | Both attention and MLP outputs at that token in the same block |
 | `--block_spans N` | Both sublayer outputs across N consecutive blocks ending at the selected layer |
+| `--attention_spans N` | Only attention outputs across N consecutive blocks; recipient MLPs compute normally |
+
+Use `--scopes earlier_text last_token all_text` to cross each requested site and
+window with explicit position scopes. `earlier_text` excludes the final prompt
+token; `all_text` includes it. Both exclude image and tokenizer special tokens.
+With explicit scopes, use the generic site names `residual attention mlp joint`;
+legacy site names are also accepted and reduced to their tensor type. Without
+`--scopes`, old commands retain their existing position semantics. Generic site
+names without scopes default to the last token. Width-1 windows and duplicate
+site aliases are evaluated only once.
 
 Layer L means after block L−1, consistent with the existing ceiling sweep. Spans
 longer than L are skipped; span 1 aliases `last_joint`. All contributions in a
@@ -68,7 +90,7 @@ joint/span arm come from one unpatched donor forward and are installed together.
 Only the selected tensors are changed; the recipient input IDs stay unchanged.
 
 Prefill mode patches only the original prompt positions. Continuous mode adds
-every answer position to last-token interventions. Earlier-text scope stays
+every answer position to last-token and all-text interventions. Earlier-text scope stays
 fixed and is evaluated once, since both modes would perform the same operation
 there. Every generation step recomputes the full prefix with caching disabled,
 so previous edits remain in force. The donor sees its own question followed by
@@ -95,6 +117,9 @@ a mathematical upper bound on every possible selective edit.
 - `rows.jsonl`: generated IDs/text, full gold suffixes, first/per-token/full scores,
   country, switch direction, site, layer, scope, and control. Clean rows also save
   prompt IDs and intervention positions.
+  Intervention rows include the position scope, original prompt positions, and
+  exact zero-based decoder block list; continuous generated positions are added
+  dynamically to last-token/all-text scopes.
 - `switch_summary.json`: one cell per arm and directed switch, with donor-answer,
   original-answer, neither-answer, and donor first-token rates. Reports both all
   examples and the subset where **both clean answers are correct**; an empty

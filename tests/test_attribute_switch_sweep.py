@@ -7,7 +7,7 @@ import torch
 from PIL import Image
 
 from test_head_followups import tiny
-from methods.attribute_switch_sweep import SwitchRunner, alignment, execute, sweep_arms
+from methods.attribute_switch_sweep import SwitchRunner, alignment, execute, sweep_arms, patch_positions
 from methods.head_followup_common import Results
 
 
@@ -93,7 +93,8 @@ def test_joint_alias_and_donor_prefix_alignment(tiny):
     assert torch.equal(calls[1], ids)
 
 
-def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path):
+@pytest.mark.parametrize('explicit_scopes', [False, True])
+def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path, explicit_scopes):
     runner, batch = setup(tiny)
     class Tokenizer:
         def __call__(self, text, **kwargs):
@@ -108,14 +109,89 @@ def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path):
     Image.new('RGB', (4, 4)).save(tmp_path / 'flag.png')
     args = SimpleNamespace(sites=['last_residual', 'earlier_text'], block_spans=[], layers=[4],
                            modes=['prefill', 'continuous'], controls=['self', 'paraphrase'], max_new_tokens=4)
+    if explicit_scopes:
+        args.scopes = ['earlier_text', 'last_token', 'all_text']
+        args.attention_spans = [2]
     row = dict(row_index=0, base='FR', source='FR', base_attribute='capital', donor_attribute='currency',
                base_label='Paris', source_label='EUR', template_id='controlled')
     results = Results(tmp_path / 'results', {})
     execute(runner, args, [row], {'FR': {'image': 'flag.png'}}, tmp_path, results)
-    assert len(results.records) == 11
+    assert len(results.records) == 2 + len(sweep_arms(args))
+    for record in results.records[2:]:
+        assert record['blocks'] in ([3], [2, 3])
+        assert 1 not in record['prompt_positions']
     cells = json.loads((results.path / 'switch_summary.json').read_text())
     assert all(c['all']['country_count'] == 1 for c in cells)
     assert all(c['both_clean_correct'] is None for c in cells)
     stamp = (results.path / 'rows.jsonl').stat().st_mtime_ns
     execute(runner, args, [row], {'FR': {'image': 'flag.png'}}, tmp_path, Results(results.path, {}))
     assert (results.path / 'rows.jsonl').stat().st_mtime_ns == stamp
+
+
+def test_explicit_scope_sweep_deduplicates_and_bounds_windows():
+    args = SimpleNamespace(sites=['earlier_text', 'last_residual', 'last_attention', 'last_joint'],
+                           scopes=['earlier_text', 'last_token', 'all_text'],
+                           block_spans=[1, 2, 4], attention_spans=[1, 2, 4], layers=[2],
+                           modes=['prefill', 'continuous'], controls=['self'])
+    arms = sweep_arms(args)
+    # Five unique sites, five scope/mode combinations, two donor kinds.
+    assert len(arms) == 50
+    assert len({a[0] for a in arms}) == len(arms)
+    assert all(a[3] == 'prefill' for a in arms if a[1].startswith('earlier_text/'))
+    assert not any(':4' in a[1] for a in arms)
+
+
+@pytest.mark.parametrize('scope', ['earlier_text', 'last_token', 'all_text'])
+@pytest.mark.parametrize('site', ['residual', 'attention', 'mlp', 'joint', 'blocks:2', 'attention_blocks:2'])
+def test_explicit_scopes_self_identity_and_position_boundaries(tiny, scope, site):
+    runner, batch = setup(tiny)
+    ids = torch.cat((batch['base_input_ids'], torch.tensor([[22, 23]])), dim=1)
+    clean = runner.run(ids, batch)
+    for mode in ['prefill', 'continuous']:
+        positions = patch_positions(batch, scope, ids.shape[1], mode)
+        assert 1 not in positions  # The actual image token is never patched.
+        assert 0 not in positions and 2 not in positions  # Vision delimiters.
+        assert (7 in positions) == (scope != 'earlier_text' and mode == 'continuous')
+        patched, _ = runner.step(batch, f'{scope}/{site}', 3, mode, 'self')(ids)
+        torch.testing.assert_close(patched, clean)
+
+
+def test_all_text_residual_and_attention_window_match_direct_hooks(tiny):
+    runner, batch = setup(tiny)
+    ids = torch.cat((batch['base_input_ids'], torch.tensor([[22, 23]])), dim=1)
+    donor_ids = torch.cat((batch['source_input_ids'], ids[:, 6:]), dim=1)
+    # Replacing all ordinary text states before the final block supplies the
+    # donor trajectory: the remaining image/special states precede the change.
+    patched, _ = runner.step(batch, 'all_text/residual', 3, 'continuous')(ids)
+    torch.testing.assert_close(patched, runner.run(donor_ids, batch))
+
+    # Independent module-hook oracle: capture and replace only attention outputs
+    # in two blocks, preserving image/special positions and all MLP computations.
+    donor_values, handles = {}, []
+    for block in [1, 2]:
+        def capture(module, inputs, output, b=block):
+            donor_values[b] = output[0].detach().clone()
+        handles.append(runner.adapter.get_attn_block(runner.model, block).register_forward_hook(capture))
+    try:
+        runner.run(donor_ids, batch)
+    finally:
+        for handle in handles:
+            handle.remove()
+    handles = []
+    for block in [1, 2]:
+        def replace(module, inputs, output, b=block):
+            value = output[0].clone()
+            value[:, [3, 4, 5, 6, 7]] = donor_values[b][:, [3, 4, 5, 6, 7]]
+            return (value,) + output[1:]
+        handles.append(runner.adapter.get_attn_block(runner.model, block).register_forward_hook(replace))
+    try:
+        expected = runner.run(ids, batch)
+    finally:
+        for handle in handles:
+            handle.remove()
+    actual, _ = runner.step(batch, 'all_text/attention_blocks:2', 3, 'continuous')(ids)
+    torch.testing.assert_close(actual, expected)
+    for scope in ['earlier_text', 'last_token', 'all_text']:
+        single, _ = runner.step(batch, f'{scope}/attention', 3, 'continuous')(ids)
+        window, _ = runner.step(batch, f'{scope}/attention_blocks:1', 3, 'continuous')(ids)
+        torch.testing.assert_close(single, window)
