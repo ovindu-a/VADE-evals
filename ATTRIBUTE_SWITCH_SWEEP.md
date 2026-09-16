@@ -76,9 +76,13 @@ The default remains `--execution serial` for reference comparisons.
 
 The cached engine:
 
-- Captures each needed donor question variant once per row, storing only the
-  requested text positions/sites on CPU. Donor values at prompt positions cannot
+- Captures each needed donor question variant per row and active batch size,
+  storing only the requested text positions/sites on CPU. Donor values at prompt positions cannot
   depend on subsequent generated tokens, so they are reused across arms/steps.
+  Donor prefills use the same batch size, cache settings, and position construction
+  as recipients; each lane's activations are retained separately. A shorter final
+  batch rebuilds the bank at that size. Comparing batch-one donor activations to
+  batched BF16 recipients can otherwise fail self-swap identity checks.
 - Runs multiple recipient arms in one batched prefill. Each batch element has
   its own interventions, including when scopes, layers, sites, or donors differ.
 - Builds recipient KV caches while the patches are active, removes hooks after
@@ -95,6 +99,11 @@ The cached engine:
 First verify the GPU runtime on a small configuration. This diagnostic checks
 every cached next-token logit and greedy choice against full-prefix serial
 execution. It intentionally removes the speed benefit:
+
+Identity/verification tolerances follow the model's computation dtype, not a
+possibly upcast logit tensor. A changed greedy token always fails. Failures report
+the arm, batch lane (for prefill identity), dtypes, absolute errors, and top-token
+IDs; they do not silently discard a failed arm or substitute a serial result.
 
 ```bash
 python methods/attribute_switch_sweep.py \

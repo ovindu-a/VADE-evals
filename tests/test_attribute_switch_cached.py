@@ -76,7 +76,7 @@ def test_batch_lanes_stop_at_their_own_eos(tiny, monkeypatch):
     runner, batch = spatial_setup(tiny)
     arms = [arm('all_text/attention', 2), arm('last_token/mlp', 3)]
     cached = CachedPrefill(runner, batch, arms)
-    cached.prepare()
+    cached.prepare(len(arms))
     runner.model.generation_config.eos_token_id = [5]
     original = runner.model.forward
     calls = []
@@ -105,3 +105,53 @@ def test_continuous_is_rejected_and_hooks_removed_on_error(tiny, monkeypatch):
     with pytest.raises(RuntimeError, match='simulated OOM'):
         cached.generate(arms)
     assert all(not module._forward_hooks for module in runner.model.modules())
+
+
+def test_donor_geometry_matches_recipient_and_retains_each_lane(tiny):
+    runner, batch = spatial_setup(tiny)
+    arms = [arm('earlier_text/residual', 2, 'self'), arm('all_text/attention', 3, 'self')]
+    # Simulate numerical effects depending on batch shape/lane. Comparing with
+    # a batch-one donor or broadcasting lane zero must not pass this regression.
+    def perturb(module, inputs, output):
+        z = output[0] if isinstance(output, tuple) else output
+        lane = torch.arange(1, z.shape[0] + 1, device=z.device).reshape(-1, 1, 1)
+        direction = torch.linspace(-1, 1, z.shape[-1], device=z.device)
+        shifted = z + .1 * z.shape[0] * lane * direction
+        return (shifted,) + output[1:] if isinstance(output, tuple) else shifted
+    hook = runner.layers[0].register_forward_hook(perturb)
+    try:
+        cached = CachedPrefill(runner, batch, arms)
+        cached.generate(arms)
+        assert cached.donor_batch_size == 2
+        assert all(z.shape[0] == 2 for z in cached.donors.values())
+        assert any(not torch.equal(z[0], z[1]) for z in cached.donors.values())
+        cached.generate(arms[:1])
+        assert cached.donor_batch_size == 1
+        assert all(z.shape[0] == 1 for z in cached.donors.values())
+    finally:
+        hook.remove()
+
+
+def test_identity_failure_reports_arm_precision_error_and_top_tokens(tiny):
+    runner, batch = spatial_setup(tiny)
+    cached = CachedPrefill(runner, batch, [])
+    with pytest.raises(AssertionError, match='test-arm; model_dtype=.*max_abs=.*actual_top=.*expected_top='):
+        cached._assert_logits(torch.tensor([[1., 2.]]), torch.tensor([[2., 1.]]), 'test-arm')
+
+
+def test_bfloat16_model_with_upcast_logits_matches_reference(tiny):
+    runner, batch = spatial_setup(tiny)
+    runner.model.to(dtype=torch.bfloat16)
+    # Reproduce versions that expose FP32 logits despite lower-precision matmuls.
+    hook = runner.model.lm_head.register_forward_hook(lambda module, inputs, output: output.float())
+    arms = [arm('all_text/residual', 4, 'self'), arm('last_token/attention_blocks:3', 3),
+            arm('earlier_text/joint', 2, 'paraphrase')]
+    try:
+        cached = CachedPrefill(runner, batch, arms)
+        cached.generate(arms, verify=True)
+        assert cached.donor_logits['self'].dtype == torch.float32
+        cached._assert_logits(torch.tensor([[0.01, 1.]]), torch.tensor([[0., 1.]]), 'BF16 rounding')
+        with pytest.raises(AssertionError, match='max_abs='):
+            cached._assert_logits(torch.tensor([[0.5, 1.]]), torch.tensor([[0., 1.]]), 'large error')
+    finally:
+        hook.remove()
