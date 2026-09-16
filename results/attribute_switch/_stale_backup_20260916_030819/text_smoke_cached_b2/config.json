@@ -1,0 +1,109 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "countries": null,
+  "n_countries": 2,
+  "attributes": [
+    "capital",
+    "currency"
+  ],
+  "layers": [
+    8,
+    16,
+    20,
+    24,
+    28
+  ],
+  "sites": [
+    "residual",
+    "attention",
+    "mlp",
+    "joint"
+  ],
+  "scopes": [
+    "earlier_text",
+    "last_token",
+    "all_text"
+  ],
+  "block_spans": [
+    2,
+    4
+  ],
+  "attention_spans": [
+    2,
+    4
+  ],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "execution": "cached",
+  "batch_size": 4,
+  "verify_cached": false,
+  "baselines_only": false,
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Luxembourg",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "EUR",
+      "source_label": "Luxembourg",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 2,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Port Louis",
+      "source_label": "MUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 3,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "MUR",
+      "source_label": "Port Louis",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "capital": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the capital of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the capital of this country."
+    ],
+    "currency": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the currency of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the currency of this country."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "image_sha256": {
+    "LU": "06b0a771dcdcb83d83bdc0220e6cffb79070eb861be894776ff14dead1451cbf",
+    "MU": "562ce0a0e5c9ead4eb58a4a7f87d62f45d609f5d774f5fe54760d00ebdac384d"
+  },
+  "implementation_sha256": "e07880e63e8d768a98c95363e59f3856d18c9c770400a76f5ee847399c0c809f"
+}

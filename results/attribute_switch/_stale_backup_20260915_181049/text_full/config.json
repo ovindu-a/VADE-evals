@@ -1,0 +1,1073 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "countries": null,
+  "n_countries": 8,
+  "attributes": [
+    "capital",
+    "currency",
+    "language",
+    "calling_code"
+  ],
+  "layers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "sites": [
+    "residual",
+    "attention",
+    "mlp",
+    "joint"
+  ],
+  "scopes": [
+    "earlier_text",
+    "last_token",
+    "all_text"
+  ],
+  "block_spans": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8
+  ],
+  "attention_spans": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8
+  ],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "baselines_only": false,
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Luxembourg",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Luxembourg",
+      "source_label": "Luxembourgish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 2,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Luxembourg",
+      "source_label": "352",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 3,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "EUR",
+      "source_label": "Luxembourg",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 4,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "EUR",
+      "source_label": "Luxembourgish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 5,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "EUR",
+      "source_label": "352",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 6,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Luxembourgish",
+      "source_label": "Luxembourg",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 7,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Luxembourgish",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 8,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Luxembourgish",
+      "source_label": "352",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 9,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "352",
+      "source_label": "Luxembourg",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 10,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "352",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 11,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "352",
+      "source_label": "Luxembourgish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 12,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Port Louis",
+      "source_label": "MUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 13,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Port Louis",
+      "source_label": "French",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 14,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Port Louis",
+      "source_label": "230",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 15,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "MUR",
+      "source_label": "Port Louis",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 16,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "MUR",
+      "source_label": "French",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 17,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "MUR",
+      "source_label": "230",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 18,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "French",
+      "source_label": "Port Louis",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 19,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "French",
+      "source_label": "MUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 20,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "French",
+      "source_label": "230",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 21,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "230",
+      "source_label": "Port Louis",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 22,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "230",
+      "source_label": "MUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 23,
+      "base": "MU",
+      "source": "MU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "230",
+      "source_label": "French",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 24,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Canberra",
+      "source_label": "AUD",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 25,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Canberra",
+      "source_label": "English",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 26,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Canberra",
+      "source_label": "61",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 27,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "AUD",
+      "source_label": "Canberra",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 28,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "AUD",
+      "source_label": "English",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 29,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "AUD",
+      "source_label": "61",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 30,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "English",
+      "source_label": "Canberra",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 31,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "English",
+      "source_label": "AUD",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 32,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "English",
+      "source_label": "61",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 33,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "61",
+      "source_label": "Canberra",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 34,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "61",
+      "source_label": "AUD",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 35,
+      "base": "AU",
+      "source": "AU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "61",
+      "source_label": "English",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 36,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Budapest",
+      "source_label": "HUF",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 37,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Budapest",
+      "source_label": "Hungarian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 38,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Budapest",
+      "source_label": "36",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 39,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "HUF",
+      "source_label": "Budapest",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 40,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "HUF",
+      "source_label": "Hungarian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 41,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "HUF",
+      "source_label": "36",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 42,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Hungarian",
+      "source_label": "Budapest",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 43,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Hungarian",
+      "source_label": "HUF",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 44,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Hungarian",
+      "source_label": "36",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 45,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "36",
+      "source_label": "Budapest",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 46,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "36",
+      "source_label": "HUF",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 47,
+      "base": "HU",
+      "source": "HU",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "36",
+      "source_label": "Hungarian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 48,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Doha",
+      "source_label": "QAR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 49,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Doha",
+      "source_label": "Arabic",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 50,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Doha",
+      "source_label": "974",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 51,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "QAR",
+      "source_label": "Doha",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 52,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "QAR",
+      "source_label": "Arabic",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 53,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "QAR",
+      "source_label": "974",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 54,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Arabic",
+      "source_label": "Doha",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 55,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Arabic",
+      "source_label": "QAR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 56,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Arabic",
+      "source_label": "974",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 57,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "974",
+      "source_label": "Doha",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 58,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "974",
+      "source_label": "QAR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 59,
+      "base": "QA",
+      "source": "QA",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "974",
+      "source_label": "Arabic",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 60,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Islamabad",
+      "source_label": "PKR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 61,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Islamabad",
+      "source_label": "Urdu",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 62,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Islamabad",
+      "source_label": "92",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 63,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "PKR",
+      "source_label": "Islamabad",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 64,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "PKR",
+      "source_label": "Urdu",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 65,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "PKR",
+      "source_label": "92",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 66,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Urdu",
+      "source_label": "Islamabad",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 67,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Urdu",
+      "source_label": "PKR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 68,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Urdu",
+      "source_label": "92",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 69,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "92",
+      "source_label": "Islamabad",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 70,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "92",
+      "source_label": "PKR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 71,
+      "base": "PK",
+      "source": "PK",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "92",
+      "source_label": "Urdu",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 72,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Rabat",
+      "source_label": "MAD",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 73,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Rabat",
+      "source_label": "Arabic",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 74,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Rabat",
+      "source_label": "212",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 75,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "MAD",
+      "source_label": "Rabat",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 76,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "MAD",
+      "source_label": "Arabic",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 77,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "MAD",
+      "source_label": "212",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 78,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Arabic",
+      "source_label": "Rabat",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 79,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Arabic",
+      "source_label": "MAD",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 80,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Arabic",
+      "source_label": "212",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 81,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "212",
+      "source_label": "Rabat",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 82,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "212",
+      "source_label": "MAD",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 83,
+      "base": "MA",
+      "source": "MA",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "212",
+      "source_label": "Arabic",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 84,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Rome",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 85,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Rome",
+      "source_label": "Italian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 86,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Rome",
+      "source_label": "39",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 87,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "EUR",
+      "source_label": "Rome",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 88,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "EUR",
+      "source_label": "Italian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 89,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "EUR",
+      "source_label": "39",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 90,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Italian",
+      "source_label": "Rome",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 91,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Italian",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 92,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Italian",
+      "source_label": "39",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 93,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "39",
+      "source_label": "Rome",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 94,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "39",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 95,
+      "base": "IT",
+      "source": "IT",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "39",
+      "source_label": "Italian",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "capital": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the capital of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the capital of this country."
+    ],
+    "currency": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the currency of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the currency of this country."
+    ],
+    "language": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the language of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the language of this country."
+    ],
+    "calling_code": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the calling of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the calling of this country."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "image_sha256": {
+    "LU": "06b0a771dcdcb83d83bdc0220e6cffb79070eb861be894776ff14dead1451cbf",
+    "MU": "562ce0a0e5c9ead4eb58a4a7f87d62f45d609f5d774f5fe54760d00ebdac384d",
+    "AU": "e619ed4e11892deed8966f0a0290c070e223ee034043051a86209408cce48297",
+    "HU": "b94f9e1f399b49ff5a76efa835e8d7a824e920e5ebc981c018061d01411a76d9",
+    "QA": "6c87c08d6ef0824cf533bc473512fa788228a90f36fb12fad253ee241db7116f",
+    "PK": "4e0539612222cdb95fb138d1f0d0635b36c18a0eff8294e8cea72ea3898c484a",
+    "MA": "cd597133443b9545545cf9c26088a400e8e4114ecac577db4b6d9dac91ee4666",
+    "IT": "12390aee910f87a14a672573ba4b4a0620002404060bdb4c203888e4a2969f5c"
+  },
+  "implementation_sha256": "29e7afd62c053b1a4d341227d322f66228080f45f494cec0a81fca4fb3d64289"
+}

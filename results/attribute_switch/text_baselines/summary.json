@@ -1,0 +1,266 @@
+{
+  "clean": {
+    "n": 96,
+    "first_token": 0.020833333333333332,
+    "prefix3_match": 0.010416666666666666,
+    "full_match": 0.010416666666666666,
+    "base_full_match": 0.8125,
+    "distinct_first_token_n": 94,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 96,
+        "accuracy": 0.020833333333333332
+      },
+      {
+        "position": 2,
+        "n": 48,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 12,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 48,
+        "first_token": 0.020833333333333332,
+        "prefix3_match": 0.020833333333333332,
+        "full_match": 0.020833333333333332,
+        "base_full_match": 0.8125,
+        "distinct_first_token_n": 47,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 48,
+            "accuracy": 0.020833333333333332
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 24,
+        "first_token": 0.041666666666666664,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.7916666666666666,
+        "distinct_first_token_n": 23,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 24,
+            "accuracy": 0.041666666666666664
+          },
+          {
+            "position": 2,
+            "n": 24,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "3": {
+        "n": 12,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.75,
+        "distinct_first_token_n": 12,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 12,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 12,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 12,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "4": {
+        "n": 12,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.9166666666666666,
+        "distinct_first_token_n": 12,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 12,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 12,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 12,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 12,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "donor_clean": {
+    "n": 96,
+    "first_token": 0.875,
+    "prefix3_match": 0.84375,
+    "full_match": 0.8125,
+    "base_full_match": 0.010416666666666666,
+    "distinct_first_token_n": 94,
+    "first_token_accuracy_distinct_gold": 0.8723404255319149,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 96,
+        "accuracy": 0.875
+      },
+      {
+        "position": 2,
+        "n": 48,
+        "accuracy": 0.9375
+      },
+      {
+        "position": 3,
+        "n": 24,
+        "accuracy": 0.875
+      },
+      {
+        "position": 4,
+        "n": 12,
+        "accuracy": 0.75
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 48,
+        "first_token": 0.8125,
+        "prefix3_match": 0.8125,
+        "full_match": 0.8125,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 47,
+        "first_token_accuracy_distinct_gold": 0.8085106382978723,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 48,
+            "accuracy": 0.8125
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 24,
+        "first_token": 0.875,
+        "prefix3_match": 0.875,
+        "full_match": 0.875,
+        "base_full_match": 0.041666666666666664,
+        "distinct_first_token_n": 23,
+        "first_token_accuracy_distinct_gold": 0.8695652173913043,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 24,
+            "accuracy": 0.875
+          },
+          {
+            "position": 2,
+            "n": 24,
+            "accuracy": 0.875
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "3": {
+        "n": 12,
+        "first_token": 1.0,
+        "prefix3_match": 0.75,
+        "full_match": 0.75,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 12,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 12,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 12,
+            "accuracy": 1.0
+          },
+          {
+            "position": 3,
+            "n": 12,
+            "accuracy": 0.75
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "4": {
+        "n": 12,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 0.75,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 12,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 12,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 12,
+            "accuracy": 1.0
+          },
+          {
+            "position": 3,
+            "n": 12,
+            "accuracy": 1.0
+          },
+          {
+            "position": 4,
+            "n": 12,
+            "accuracy": 0.75
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  }
+}
