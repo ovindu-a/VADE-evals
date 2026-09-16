@@ -68,6 +68,69 @@ recipient answer, so a correct self-swap normally has `full=0 base_full=1` when
 the two answers differ. Code-like output in a clean run is a separate problem
 from those donor scores being zero.
 
+## Faster prefill sweeps on a 24 GB GPU
+
+Add `--execution cached --batch_size 2` to batch independent prefill arms on one
+model instance. Try 4 only after measuring memory and throughput on your GPU.
+The default remains `--execution serial` for reference comparisons.
+
+The cached engine:
+
+- Captures each needed donor question variant once per row, storing only the
+  requested text positions/sites on CPU. Donor values at prompt positions cannot
+  depend on subsequent generated tokens, so they are reused across arms/steps.
+- Runs multiple recipient arms in one batched prefill. Each batch element has
+  its own interventions, including when scopes, layers, sites, or donors differ.
+- Builds recipient KV caches while the patches are active, removes hooks after
+  prefill, and decodes one new token per step. It does not rerun the vision tower
+  during decoding. Explicit multimodal rotary positions prevent donor forwards
+  from contaminating cached position state.
+- Stops recording each arm independently at EOS. Finished batch lanes stay
+  inactive until the batch finishes. This is fixed-size batching, not a serving
+  scheduler that continuously refills lanes.
+- Still executes every self and paraphrase control. Clean baselines and any
+  continuous intervention arms use the serial reference path. Cached execution
+  currently supports the runner's image-only Qwen inputs.
+
+First verify the GPU runtime on a small configuration. This diagnostic checks
+every cached next-token logit and greedy choice against full-prefix serial
+execution. It intentionally removes the speed benefit:
+
+```bash
+python methods/attribute_switch_sweep.py \
+  --n_countries 1 --attributes capital currency \
+  --scopes last_token --sites attention --layers 22 \
+  --block_spans --attention_spans 3 \
+  --execution cached --batch_size 2 --verify_cached \
+  --out_dir results/attribute_switch/cached_verify
+```
+
+Then run the focused overnight sweep **without** `--verify_cached`:
+
+```bash
+mkdir -p logs
+nohup python -u methods/attribute_switch_sweep.py \
+  --n_countries 8 \
+  --attributes capital currency language calling_code \
+  --scopes earlier_text last_token --sites attention \
+  --layers 18 19 20 21 22 23 24 \
+  --block_spans --attention_spans 1 2 3 4 5 6 \
+  --modes prefill --execution cached --batch_size 2 \
+  --out_dir results/attribute_switch/attention_18_24_cached_b2 \
+  > logs/attribute_switch_attention_18_24_cached_b2.log 2>&1 &
+```
+
+Use a new output directory when changing code, execution engine, verification,
+or batch size. Old serial records are not silently mixed into a cached run.
+Identical commands resume at the completed-arm level, including an interrupted
+batch. Records store the execution engine and actual batch size. Reducing to
+`--batch_size 1` retains donor reuse and KV caching if VRAM is tight.
+
+CPU tests cover batch sizes 1/2/4, all sites/scopes/controls, spatial image tokens,
+individual EOS, interrupted resumption, and hook cleanup. They establish
+mechanical equivalence; actual speed, memory use, and BF16 numerical agreement
+must be measured on the pretrained GPU model. No speedup factor is assumed.
+
 ## Controlled questions and alignment
 
 Every question shares field definitions, including three-letter currency codes
@@ -113,10 +176,12 @@ Only the selected tensors are changed; the recipient input IDs stay unchanged.
 Prefill mode patches only the original prompt positions. Continuous mode adds
 every answer position to last-token and all-text interventions. Earlier-text scope stays
 fixed and is evaluated once, since both modes would perform the same operation
-there. Every generation step recomputes the full prefix with caching disabled,
-so previous edits remain in force. The donor sees its own question followed by
+there. In serial execution every generation step recomputes the full prefix with
+caching disabled, so previous edits remain in force. The donor sees its own question followed by
 the recipient's freely generated suffix, never the gold answer or an independent
-donor rollout. Gold answers are used for scoring only.
+donor rollout. Cached prefill execution uses the equivalent prompt-only donor
+activations and retains edited history in recipient KV caches as described above.
+Gold answers are used for scoring only.
 
 ## Controls and interpretation
 

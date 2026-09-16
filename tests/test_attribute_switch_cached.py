@@ -1,0 +1,107 @@
+"""Cached/batched interventions must match the full-prefix reference VLM."""
+import pytest
+import torch
+
+from test_head_followups import tiny
+from test_attribute_switch_sweep import setup
+from methods.attribute_switch_sweep import alignment
+from methods.attribute_switch_cached import CachedPrefill
+
+
+def spatial_setup(tiny):
+    runner, batch = setup(tiny)
+    ids = torch.tensor([[1, 2, 2, 2, 2, 3, 12, 13, 14]])
+    batch['base_input_ids'] = ids
+    batch['source_input_ids'] = ids.clone()
+    batch['source_input_ids'][0, 7] = 15
+    batch['paraphrase_ids'] = ids.clone()
+    batch['paraphrase_ids'][0, 6] = 16
+    batch['earlier_positions'] = alignment(ids, batch['source_input_ids'], 2, [1, 3])
+    batch['base_extra'] = {'pixel_values': torch.randn(16, 24),
+                           'image_grid_thw': torch.tensor([[1, 4, 4]])}
+    return runner, batch
+
+
+def arm(site, layer=3, control='switch', mode='prefill'):
+    return (f'{site}/L{layer}/{mode}/{control}', site, layer, mode, control)
+
+
+@pytest.mark.parametrize('batch_size', [1, 2, 4])
+def test_every_site_scope_and_control_matches_reference_per_token(tiny, batch_size):
+    runner, batch = spatial_setup(tiny)
+    arms = [arm(f'{scope}/{site}', 4, control)
+            for scope in ['earlier_text', 'last_token', 'all_text']
+            for site in ['residual', 'attention', 'mlp', 'joint', 'blocks:3', 'attention_blocks:3']
+            for control in ['switch', 'self', 'paraphrase']]
+    # Include heterogeneous layers within the same chunk, not only donor kinds.
+    arms += [arm('all_text/residual', 1), arm('last_token/attention_blocks:2', 2),
+             arm('earlier_text/joint', 3)]
+    cached = CachedPrefill(runner, batch, arms)
+    for start in range(0, len(arms), batch_size):
+        chunk = arms[start:start + batch_size]
+        outputs = cached.generate(chunk, verify=True)
+        assert len(outputs) == len(chunk)
+        assert all(len(tokens) == runner.args.max_new_tokens for tokens in outputs)
+    assert all(value.device.type == 'cpu' for value in cached.donors.values())
+    assert all(not module._forward_hooks for module in runner.model.modules())
+
+
+def test_donors_reused_and_only_prefill_encodes_images(tiny):
+    runner, batch = spatial_setup(tiny)
+    arms = [arm('all_text/attention', 2, c) for c in ['switch', 'self', 'paraphrase']]
+    cached = CachedPrefill(runner, batch, arms)
+    calls, vision_calls = [], []
+    def observe(module, args, kwargs):
+        calls.append((kwargs['input_ids'].shape, 'pixel_values' in kwargs,
+                      kwargs.get('past_key_values') is not None))
+    h = runner.model.register_forward_pre_hook(observe, with_kwargs=True)
+    v = runner.model.model.visual.register_forward_hook(lambda *args: vision_calls.append(True))
+    try:
+        first = cached.generate(arms)
+        second = cached.generate(arms)
+    finally:
+        h.remove()
+        v.remove()
+    assert first == second
+    # Three donors ONCE, then two batched prefills. Subsequent steps decode one
+    # token with caches and never rerun the vision tower.
+    assert len(vision_calls) == 5
+    assert sum(has_pixels for _, has_pixels, _ in calls) == 5
+    incremental = [(shape, has_cache) for shape, pixels, has_cache in calls if not pixels]
+    assert len(incremental) == 2 * (runner.args.max_new_tokens - 1)
+    assert all(shape == (3, 1) and has_cache for shape, has_cache in incremental)
+
+
+def test_batch_lanes_stop_at_their_own_eos(tiny, monkeypatch):
+    runner, batch = spatial_setup(tiny)
+    arms = [arm('all_text/attention', 2), arm('last_token/mlp', 3)]
+    cached = CachedPrefill(runner, batch, arms)
+    cached.prepare()
+    runner.model.generation_config.eos_token_id = [5]
+    original = runner.model.forward
+    calls = []
+    def forward(*args, **kwargs):
+        output = original(*args, **kwargs)
+        output.logits.fill_(-100)
+        output.logits[0, -1, 5] = 100
+        output.logits[1, -1, 6 if not calls else 5] = 100
+        calls.append(True)
+        return output
+    monkeypatch.setattr(runner.model, 'forward', forward)
+    assert cached.generate(arms) == [[5], [6, 5]]
+    assert len(calls) == 2
+
+
+def test_continuous_is_rejected_and_hooks_removed_on_error(tiny, monkeypatch):
+    runner, batch = spatial_setup(tiny)
+    with pytest.raises(ValueError, match='only prefill'):
+        CachedPrefill(runner, batch, [arm('last_token/residual', mode='continuous')])
+    arms = [arm('all_text/attention_blocks:3')]
+    cached = CachedPrefill(runner, batch, arms)
+    cached.prepare()
+    def fail(*args, **kwargs):
+        raise RuntimeError('simulated OOM')
+    monkeypatch.setattr(runner.model, 'forward', fail)
+    with pytest.raises(RuntimeError, match='simulated OOM'):
+        cached.generate(arms)
+    assert all(not module._forward_hooks for module in runner.model.modules())

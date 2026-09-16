@@ -95,7 +95,8 @@ def test_joint_alias_and_donor_prefix_alignment(tiny):
 
 
 @pytest.mark.parametrize('explicit_scopes', [False, True])
-def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path, explicit_scopes):
+@pytest.mark.parametrize('execution', ['serial', 'cached'])
+def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path, explicit_scopes, execution):
     runner, batch = setup(tiny)
     class Tokenizer:
         def __call__(self, text, **kwargs):
@@ -109,7 +110,8 @@ def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path, explicit_sco
     runner.batch = lambda image, base, donor: batch
     Image.new('RGB', (4, 4)).save(tmp_path / 'flag.png')
     args = SimpleNamespace(sites=['last_residual', 'earlier_text'], block_spans=[], layers=[4],
-                           modes=['prefill', 'continuous'], controls=['self', 'paraphrase'], max_new_tokens=4)
+                           modes=['prefill', 'continuous'], controls=['self', 'paraphrase'], max_new_tokens=4,
+                           execution=execution, batch_size=2, verify_cached=True)
     if explicit_scopes:
         args.scopes = ['earlier_text', 'last_token', 'all_text']
         args.attention_spans = [2]
@@ -127,6 +129,21 @@ def test_end_to_end_records_conditioning_and_resume(tiny, tmp_path, explicit_sco
     stamp = (results.path / 'rows.jsonl').stat().st_mtime_ns
     execute(runner, args, [row], {'FR': {'image': 'flag.png'}}, tmp_path, Results(results.path, {}))
     assert (results.path / 'rows.jsonl').stat().st_mtime_ns == stamp
+    if execution == 'cached':
+        interventions = [r for r in results.records if 'execution' in r]
+        assert {r['execution'] for r in interventions} == {'serial', 'cached'}
+        assert all(r['execution'] == ('cached' if r['mode'] == 'prefill' else 'serial')
+                   for r in interventions)
+        # Resume an interrupted chunk: existing rows remain untouched, missing
+        # arms get their own cache batch, and no completed record is duplicated.
+        truncated = [r for i, r in enumerate(results.records) if i not in {2, 3, len(results.records) - 1}]
+        (results.path / 'rows.jsonl').write_text(''.join(json.dumps(r) + '\n' for r in truncated))
+        resumed = Results(results.path, {})
+        execute(runner, args, [row], {'FR': {'image': 'flag.png'}}, tmp_path, resumed)
+        assert len(resumed.records) == len(results.records)
+        assert len({r['arm'] for r in resumed.records}) == len(results.records)
+        assert {r['arm']: r['generated_ids'] for r in resumed.records} == {
+            r['arm']: r['generated_ids'] for r in results.records}
 
 
 def test_explicit_scope_sweep_deduplicates_and_bounds_windows():

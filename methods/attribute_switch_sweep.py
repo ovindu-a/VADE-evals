@@ -265,11 +265,30 @@ def execute(runner, args, rows, items, entity_dir, results):
              earlier_positions=batch['earlier_positions'])
         save('donor_clean', lambda ids: (runner.run(torch.cat((batch['source_input_ids'].to(ids.device),
                                                             ids[:, p:]), dim=1), batch), {}))
-        for arm, site, layer, mode, control in arms:
-            save(arm, runner.step(batch, site, layer, mode, control), site=site, layer=layer,
-                 mode=mode, control=control, scope=intervention(site)[0],
-                 prompt_positions=patch_positions(batch, intervention(site)[0], p, mode),
-                 blocks=sorted({at - 1 for _, at in parts(site, layer)}))
+        def metadata(site, layer, mode, control):
+            return dict(site=site, layer=layer, mode=mode, control=control,
+                        scope=intervention(site)[0],
+                        prompt_positions=patch_positions(batch, intervention(site)[0], p, mode),
+                        blocks=sorted({at - 1 for _, at in parts(site, layer)}))
+        pending = [a for a in arms if not results.has(row, a[0])]
+        if getattr(args, 'execution', 'serial') == 'cached':
+            from methods.attribute_switch_cached import CachedPrefill
+            prefill = [a for a in pending if a[3] == 'prefill']
+            if prefill:
+                cached = CachedPrefill(runner, batch, prefill)
+                for start in range(0, len(prefill), args.batch_size):
+                    chunk = prefill[start:start + args.batch_size]
+                    generated = cached.generate(chunk, verify=getattr(args, 'verify_cached', False))
+                    for (arm, site, layer, mode, control), tokens in zip(chunk, generated):
+                        results.add(runner.record(row, arm, tokens, gold,
+                            base_attribute=row['base_attribute'], donor_attribute=row['donor_attribute'],
+                            execution='cached', batch_size=len(chunk),
+                            **metadata(site, layer, mode, control)))
+                del cached
+            pending = [a for a in pending if a[3] != 'prefill']
+        for arm, site, layer, mode, control in pending:
+            save(arm, runner.step(batch, site, layer, mode, control),
+                 execution='serial', **metadata(site, layer, mode, control))
         summarize_switch(results)
     # Also rebuild a missing summary after an interruption following the last row write.
     summarize_switch(results)
@@ -295,13 +314,22 @@ def main(argv=None):
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--device', default='cuda:0')
     ap.add_argument('--max_new_tokens', type=int, default=12)
+    ap.add_argument('--execution', choices=['serial', 'cached'], default='serial',
+                    help='Cached: reuse donor activations and batch KV-cached prefill arms; continuous stays serial')
+    ap.add_argument('--batch_size', type=int, default=2,
+                    help='Parallel prefill arms in cached mode; start at 2 on a 24GB GPU')
+    ap.add_argument('--verify_cached', action='store_true',
+                    help='Slow diagnostic: compare every cached token logit/argmax with the serial reference')
     ap.add_argument('--baselines_only', action='store_true', help='Check clean controlled-prompt accuracy before sweeping')
     ap.add_argument('--dry_run', action='store_true', help='Validate metadata only; runtime checks token alignment')
     args = ap.parse_args(argv)
     if (len(set(args.attributes)) < 2 or len(set(args.attributes)) != len(args.attributes)
-            or args.n_countries < 1 or args.max_new_tokens < 1 or any(n < 1 for n in args.layers)
+            or args.n_countries < 1 or args.max_new_tokens < 1 or args.batch_size < 1
+            or any(n < 1 for n in args.layers)
             or any(n < 1 for n in args.block_spans + args.attention_spans)):
         ap.error('Need at least two attributes and positive counts/spans')
+    if args.verify_cached and args.execution != 'cached':
+        ap.error('--verify_cached requires --execution cached')
     entity_dir = Path(args.vade_root) / 'data/flags'
     raw = (entity_dir / 'ground_truth.json').read_bytes()
     items = json.loads(raw)['countries']
@@ -323,10 +351,15 @@ def main(argv=None):
         image_sha256={c: hashlib.sha256((entity_dir / items[c]['image']).read_bytes()).hexdigest()
                       for c in countries},
         implementation_sha256=hashlib.sha256(b''.join((ROOT / 'methods' / p).read_bytes() for p in
-            ['attribute_switch_sweep.py', 'head_followup_common.py', 'common/sites.py', 'common/hooks.py',
+            ['attribute_switch_sweep.py', 'attribute_switch_cached.py', 'head_followup_common.py', 'common/sites.py', 'common/hooks.py',
              'adapters/qwen2_5_vl.py'])).hexdigest())
     print(f'{len(countries)} countries, {len(rows)} directed question pairs, layers={args.layers}; '
           f'{len(rows) * (2 + len(sweep_arms(args)))} generation runs', flush=True)
+    if args.execution == 'cached':
+        print(f'Cached prefill: batch_size={args.batch_size}, CPU donor bank, per-arm KV cache; '
+              'continuous arms and clean baselines use serial execution.', flush=True)
+        if args.verify_cached:
+            print('Reference verification enabled: this diagnostic intentionally removes the speed benefit.', flush=True)
     if args.dry_run:
         print('Metadata valid. Token alignment and clean answer accuracy require a model run.')
         return
