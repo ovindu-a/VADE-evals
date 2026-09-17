@@ -82,9 +82,18 @@ def gold_labels_from_lens(target_toks, target_len, k=MAX_ANSWER_TOKENS):
 def exact_match(pred_toks, gold_toks, gold_len, k=MAX_ANSWER_TOKENS):
     """pred_toks/gold_toks: [B, k] token ids. Returns [B] bool: True iff
     every valid position (j < gold_len[i]) matches -- a full up-to-k-token
-    exact match, not just the first token."""
+    exact match, not just the first token.
+
+    pred_toks may have FEWER than k columns: greedy generation stops early
+    once every row in the batch has emitted EOS (e.g. a degenerate knockout
+    that collapses the answer to one token), so a short generation simply
+    cannot match a gold needing more tokens than were produced -- score it
+    as a miss at those positions rather than indexing out of bounds."""
     ok = torch.ones(pred_toks.shape[0], dtype=torch.bool)
     for j in range(k):
         valid = gold_len > j
+        if j >= pred_toks.shape[1]:
+            ok = ok & ~valid
+            continue
         ok = ok & (~valid | (pred_toks[:, j] == gold_toks[:, j]))
     return ok
