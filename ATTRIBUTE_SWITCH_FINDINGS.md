@@ -159,7 +159,158 @@ the `full` spread being answer length again.
   reported for a fixed entity. The window here (19-21) and the image->text
   handoff window are not the same claim and should not be quoted as one.
 
-## 5. A structural property of the prompts, worth knowing
+## 5. Attention moves it; the late MLPs write it out
+
+The `mlp` column above is at floor through the crossover, and the earlier version
+of this document stopped there. Comparing the two SPAN families at matched width
+says something much stronger. `attention_blocks:N` patches N blocks' attention
+contributions; `blocks:N` patches the same N blocks' attention AND MLP
+contributions, so the difference is what the MLP outputs add:
+
+| covered blocks | attention only | attention + MLP | delta |
+|---|---:|---:|---:|
+| 16..18 | 44.0 | 40.5 | −3.6 |
+| 18..20 | 86.9 | 83.3 | −3.6 |
+| **19..21** | **97.6** | **100.0** | +2.4 |
+| 20..22 | 75.0 | 97.6 | +22.6 |
+| 21..23 | 11.9 | 97.6 | **+85.7** |
+| 22..24 | 2.4 | 67.9 | +65.5 |
+| 22..26 | 2.4 | 98.8 | +96.4 |
+| 25..27 | 1.2 | 76.2 | +75.0 |
+
+Below block 21 the MLPs add nothing — the delta is zero or slightly negative.
+From block 21 on it is everything: attention-only spans are dead at 2.4% while
+the same blocks with their MLPs read 68-99%.
+
+This is the standard division of labour, and it sharpens the head advice rather
+than changing it. **Attention moves the attribute selection to the readout
+position in blocks 19-21; the MLPs of blocks 21-27 turn it into the emitted
+token.** The late blocks are a write-out path reachable only through MLPs, so
+there are no attribute-routing heads to find there — exactly as the
+attention-only column says.
+
+Two caveats. The sweep has no `mlp_blocks:N` family, so this is a subtraction of
+two arms rather than an isolation; a one-command follow-up patching MLP outputs
+alone would settle it. And single-block `joint` at block 21 reads 45.2% where its
+attention (9.5%) and MLP (8.3%) each read under 10% — the two sublayers are
+strongly super-additive there, which a subtraction cannot represent.
+
+## 6. The scopes are super-additive exactly in the handoff
+
+`all_text` patches the question columns and the readout column together. Outside
+the handoff it is simply whichever of the two works; inside it, it is much more
+than both.
+
+| block | question | last token | all_text | max of the two | excess |
+|---:|---:|---:|---:|---:|---:|
+| 16 | 98.8 | 2.4 | 100.0 | 98.8 | +1.2 |
+| **17** | 78.6 | 13.1 | 100.0 | 78.6 | **+21.4** |
+| **18** | 28.6 | 50.0 | 100.0 | 50.0 | **+50.0** |
+| **19** | 13.1 | 65.5 | 100.0 | 65.5 | **+34.5** |
+| 20 | 2.4 | 97.6 | 100.0 | 97.6 | +2.4 |
+| 21+ | 2.4 | 100.0 | 100.0 | 100.0 | +0.0 |
+
+The excess is zero everywhere except blocks 17-19, where it reaches +50 points.
+That is what "in transit" looks like: the attribute identity is split across the
+question columns and the readout column, and neither half alone is sufficient.
+It localizes the handoff from a completely different measurement than the span
+table, and to the same blocks.
+
+## 7. `language` is hard to switch TO; the rest of the asymmetry is weaker
+
+At a saturated site every cell reads ~100%, so the directed matrix is only
+readable where there is headroom. At the 2-block attention span over blocks
+19-20 (72.6% pooled, 84 observations over 8 countries, **6-8 per cell**):
+
+| from \\ to | capital | currency | language | calling_code |
+|---|---:|---:|---:|---:|
+| capital | — | 5/7 | 6/8 | 7/7 |
+| currency | 6/7 | — | **0/7** | 3/6 |
+| language | 8/8 | 6/7 | — | 7/7 |
+| calling_code | 7/7 | 4/6 | **2/7** | — |
+
+That operating point was chosen AFTER seeing which sites had spread, so the
+matrix alone proves nothing. Three tests decide what survives.
+
+**1. Is there an asymmetry at all?** Within-country permutation (outcomes
+shuffled inside each country, so each country's own hit rate is preserved and
+the clustering is respected), statistic = spread of the four margins:
+
+| margin | observed | null 95th pct | p |
+|---|---:|---:|---:|
+| FROM | 0.505 | 0.355 | **0.0007** |
+| TO | 0.591 | 0.355 | **<0.0001** |
+
+**2. Does it replicate?** The same arm in `attention_18_24_64_cached_b96`
+(118 observations, 13 different countries):
+
+| | capital | currency | language | calling_code | |
+|---|---:|---:|---:|---:|---|
+| FROM (8-country / 64-country) | 82 / 77 | 45 / 31 | **95 / 94** | 65 / 57 | rank order identical, r = 1.000 |
+| TO (8-country / 64-country) | 95 / 89 | 75 / 80 | **36 / 19** | 85 / 79 | r = 0.974, top two swap |
+
+**3. Does it hold away from the chosen site?** Over all 43 `last_token/switch`
+arms with headroom (pooled rate 25-90%):
+
+| claim | holds at | mean r vs reference |
+|---|---:|---:|
+| FROM ordering | 40/43 above +0.5, 1 negative | **+0.846** |
+| TO ordering | 31/43 above +0.5, 2 negative | +0.657 |
+| `language` is the hardest to switch TO | **37/43 (86%)** | mean gap **+44.2 pp** |
+| `language` is the easiest to switch AWAY from | 32/43 (74%) | |
+| `currency` is the hardest to switch away from | 27/43 (63%) | |
+
+### What that licenses
+
+- **Established**: `language` is the hardest attribute to switch TO, by about 44
+  points. Replicated on different countries, stable at 86% of operating points,
+  and far larger than the sample can manufacture.
+- **Established**: an overall FROM/TO asymmetry exists (p <= 0.0007, clustered).
+- **Supported**: the FROM ordering `language > capital > calling_code > currency`.
+  It replicates with identical rank order, but the gaps between the middle two
+  are within noise at many operating points.
+- **NOT established**: the ordering of capital/currency/calling_code as switch-TO
+  targets. Across the 43 operating points it comes out four different ways
+  (17/12/8/4), and the two country samples disagree. Do not quote those three
+  against each other.
+
+The `language` result is the same fact as section 3's per-attribute table seen
+from another angle: `language` has no single-block peak and needs blocks 19-21
+together, so its selection is the most distributed of the four and a partial
+intervention reaches it last.
+
+**Sample limit.** 84 observations, 8 countries, 6-8 per cell and ~21 per margin.
+That supports a 44-point effect and does not support 10-point differences between
+neighbours.
+
+## 8. Reproducibility of individual rows, and two data-hygiene notes
+
+`text_full` (serial) and `text_full_cached_b64` (cached) overlap on 16 rows =
+48,896 arm-rows, which bounds how far an individual number can be trusted:
+
+- arms both runs execute on the **same** serial path (`clean`, `donor_clean`):
+  **32/32 identical**. The environment is deterministic; there is no run-to-run
+  noise to explain anything else.
+- `self` control arms, which are provable no-ops: **98.9% identical**. That is
+  the pure bf16 batch-geometry floor.
+- `switch` arms: **88.2%** identical token sequences, **96.9%** identical scores.
+
+So the engines agree on pooled rates (r = 0.99 across 3,222 arms even at n=14 vs
+n=84) but an individual arm-row is reproducible only to ~3%. Interventions push
+the model near a decision boundary, where a different batch geometry flips the
+greedy token; 42.6% of the disagreements begin at the very first token, which is
+the prefill, not decode drift. Quote pooled cells, never single rows.
+
+Two things to know about the runs themselves:
+
+- **`text_full` covered only 16 of 96 rows** and carries a different
+  `implementation_sha256`, so it is not an independent replication of
+  `text_full_cached_b64` and should not be quoted alongside it.
+- **`text_continuous_cached_b2` ran on transformers 5.17.0**, every other run on
+  5.14.1. Its internal prefill-vs-continuous comparison is sound (both arms share
+  the version); comparing its absolute rates against the other runs is not.
+
+## 9. A structural property of the prompts, worth knowing
 
 Across all 96 rows the base and donor prompts are token-identical except for
 **one token at index 207** (paraphrase differs at 205), out of 219 tokens, with
