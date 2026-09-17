@@ -1,0 +1,69 @@
+
+=== logging to /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_question_L8-16_add-project_train32.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:42,  3.28it/s]Loading weights:   2%|2         | 15/729 [00:00<00:16, 43.10it/s]Loading weights:   4%|3         | 27/729 [00:00<00:12, 56.09it/s]Loading weights:   6%|5         | 41/729 [00:00<00:10, 68.39it/s]Loading weights:   7%|7         | 54/729 [00:00<00:08, 79.74it/s]Loading weights:   9%|9         | 66/729 [00:00<00:07, 85.40it/s]Loading weights:  11%|#         | 78/729 [00:01<00:07, 90.42it/s]Loading weights:  12%|#2        | 90/729 [00:01<00:06, 92.86it/s]Loading weights:  14%|#3        | 100/729 [00:01<00:07, 89.70it/s]Loading weights:  15%|#5        | 111/729 [00:01<00:06, 89.99it/s]Loading weights:  17%|#7        | 126/729 [00:01<00:06, 99.96it/s]Loading weights:  19%|#8        | 137/729 [00:01<00:06, 97.74it/s]Loading weights:  21%|##        | 150/729 [00:01<00:05, 101.60it/s]Loading weights:  22%|##2       | 162/729 [00:01<00:05, 101.15it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:05, 97.93it/s] Loading weights:  25%|##5       | 184/729 [00:02<00:05, 99.82it/s]Loading weights:  27%|##6       | 196/729 [00:02<00:05, 99.76it/s]Loading weights:  28%|##8       | 207/729 [00:02<00:05, 97.13it/s]Loading weights:  30%|###       | 220/729 [00:02<00:05, 95.34it/s]Loading weights:  32%|###1      | 230/729 [00:02<00:05, 89.56it/s]Loading weights:  33%|###2      | 240/729 [00:02<00:05, 87.63it/s]Loading weights:  34%|###4      | 249/729 [00:02<00:05, 86.19it/s]Loading weights:  35%|###5      | 258/729 [00:03<00:05, 83.40it/s]Loading weights:  37%|###6      | 269/729 [00:03<00:05, 77.83it/s]Loading weights:  39%|###8      | 282/729 [00:03<00:05, 85.34it/s]Loading weights:  40%|####      | 294/729 [00:03<00:04, 89.81it/s]Loading weights:  42%|####1     | 306/729 [00:03<00:04, 93.34it/s]Loading weights:  43%|####3     | 317/729 [00:03<00:04, 94.75it/s]Loading weights:  45%|####4     | 328/729 [00:03<00:04, 89.43it/s]Loading weights:  53%|#####2    | 385/729 [00:03<00:01, 210.86it/s]Loading weights:  68%|######7   | 493/729 [00:04<00:00, 440.13it/s]Loading weights:  82%|########2 | 599/729 [00:04<00:00, 608.66it/s]Loading weights:  97%|#########6| 707/729 [00:04<00:00, 739.99it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 171.58it/s]
+
+==============================================================================
+=== phase 1: estimating directions on 32 held-out-from-test items
+==============================================================================
+    8/128 training forwards
+    16/128 training forwards
+    24/128 training forwards
+    32/128 training forwards
+    40/128 training forwards
+    48/128 training forwards
+    56/128 training forwards
+    64/128 training forwards
+    72/128 training forwards
+    80/128 training forwards
+    88/128 training forwards
+    96/128 training forwards
+    104/128 training forwards
+    112/128 training forwards
+    120/128 training forwards
+    128/128 training forwards
+  per-attribute means over 32 items each
+  layer block      ||d(capi)||     ||d(curr)||     ||d(lang)||     ||d(call)||
+      8     7            1.136           0.982           1.452           1.188
+     10     9            2.411           2.082           3.388           2.553
+     12    11            3.064           2.410           3.809           2.992
+     14    13            4.939           3.469           5.459           4.430
+     16    15            7.066           5.364           7.279           6.272
+
+==============================================================================
+=== phase 2: steering the held-out items
+==============================================================================
+  unsteered                          first=  0.0% full=  0.0% base_kept= 90.6%   <-- floor; base_kept is the ceiling for a no-op
+  L8 (block 7) add a=1.0             first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 (block 7) add a=2.0             first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 (block 7) project a=1.0         first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 (block 7) project a=2.0         first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 RANDOM direction #1             first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L8 RANDOM direction #2             first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L10 (block 9) add a=1.0            first=  0.0% full=  0.0% base_kept= 90.6%
+  L10 (block 9) add a=2.0            first=  0.0% full=  0.0% base_kept= 90.6%
+  L10 (block 9) project a=1.0        first=  0.0% full=  0.0% base_kept= 91.1%
+  L10 (block 9) project a=2.0        first=  0.0% full=  0.0% base_kept= 91.1%
+  L10 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L10 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L12 (block 11) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L12 (block 11) add a=2.0           first=  0.0% full=  0.0% base_kept= 90.1%
+  L12 (block 11) project a=1.0       first=  0.0% full=  0.0% base_kept= 88.5%
+  L12 (block 11) project a=2.0       first=  0.0% full=  0.0% base_kept= 89.6%
+  L12 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L12 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L14 (block 13) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) add a=2.0           first=  0.0% full=  0.0% base_kept= 87.5%
+  L14 (block 13) project a=1.0       first=  0.0% full=  0.0% base_kept= 89.6%
+  L14 (block 13) project a=2.0       first=  0.0% full=  0.0% base_kept= 88.5%
+  L14 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L14 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L16 (block 15) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.1%
+  L16 (block 15) add a=2.0           first=  0.0% full=  0.0% base_kept= 89.1%
+  L16 (block 15) project a=1.0       first=  0.0% full=  0.0% base_kept= 89.6%
+  L16 (block 15) project a=2.0       first=  0.0% full=  0.0% base_kept= 87.5%
+  L16 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 89.1%   <-- null
+  L16 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 87.5%   <-- null
+
+  Read the attribute arms AGAINST the random arms at the same layer. A random direction of matched norm should leave `first` at the unsteered floor (0.0%); if it does not, this layer is simply fragile and its attribute arm proves nothing.
+
+wrote /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_question_L8-16_add-project_train32.json

@@ -1,0 +1,461 @@
+{
+  "experiment": "attr_steer",
+  "entity": "flags",
+  "attributes": [
+    "capital",
+    "currency",
+    "language",
+    "calling_code"
+  ],
+  "layers": [
+    8,
+    10,
+    12,
+    14,
+    16
+  ],
+  "modes": [
+    "add",
+    "project"
+  ],
+  "alphas": [
+    1.0,
+    2.0
+  ],
+  "positions": "question",
+  "train_items": [
+    "LU",
+    "MU",
+    "AU",
+    "HU",
+    "QA",
+    "PK",
+    "MA",
+    "IT",
+    "PE",
+    "KW",
+    "GH",
+    "PY",
+    "CV",
+    "IQ",
+    "SE",
+    "BZ",
+    "HT",
+    "CY",
+    "JO",
+    "RW",
+    "BH",
+    "NP",
+    "MX",
+    "KP",
+    "DZ",
+    "GY",
+    "IN",
+    "AZ",
+    "EG",
+    "SN",
+    "DK",
+    "UY"
+  ],
+  "test_items": [
+    "JP",
+    "CL",
+    "UG",
+    "NZ",
+    "GR",
+    "UZ",
+    "CU",
+    "AO",
+    "ZM",
+    "AF",
+    "VN",
+    "FI",
+    "KH",
+    "HN",
+    "OM",
+    "CO"
+  ],
+  "n_rows": 192,
+  "seed": 0,
+  "direction_norms": {
+    "8": {
+      "capital": 1.1359202861785889,
+      "currency": 0.9815954566001892,
+      "language": 1.4518357515335083,
+      "calling_code": 1.1878520250320435
+    },
+    "10": {
+      "capital": 2.411464214324951,
+      "currency": 2.0816028118133545,
+      "language": 3.3880176544189453,
+      "calling_code": 2.5534613132476807
+    },
+    "12": {
+      "capital": 3.063612937927246,
+      "currency": 2.409576892852783,
+      "language": 3.8086414337158203,
+      "calling_code": 2.9918267726898193
+    },
+    "14": {
+      "capital": 4.938614845275879,
+      "currency": 3.469174861907959,
+      "language": 5.459434509277344,
+      "calling_code": 4.430448055267334
+    },
+    "16": {
+      "capital": 7.065820217132568,
+      "currency": 5.363861083984375,
+      "language": 7.279018402099609,
+      "calling_code": 6.272313117980957
+    }
+  },
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "arms": [
+    {
+      "layer": 8,
+      "block": 7,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 8,
+      "block": 7,
+      "mode": "add",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 8,
+      "block": 7,
+      "mode": "project",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 8,
+      "block": 7,
+      "mode": "project",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 8,
+      "block": 7,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 8,
+      "block": 7,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 10,
+      "block": 9,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 10,
+      "block": 9,
+      "mode": "add",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 10,
+      "block": 9,
+      "mode": "project",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.9114583333333334,
+      "n": 192
+    },
+    {
+      "layer": 10,
+      "block": 9,
+      "mode": "project",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.9114583333333334,
+      "n": 192
+    },
+    {
+      "layer": 10,
+      "block": 9,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 10,
+      "block": 9,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 12,
+      "block": 11,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 12,
+      "block": 11,
+      "mode": "add",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.9010416666666666,
+      "n": 192
+    },
+    {
+      "layer": 12,
+      "block": 11,
+      "mode": "project",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.8854166666666666,
+      "n": 192
+    },
+    {
+      "layer": 12,
+      "block": 11,
+      "mode": "project",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.8958333333333334,
+      "n": 192
+    },
+    {
+      "layer": 12,
+      "block": 11,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 12,
+      "block": 11,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 14,
+      "block": 13,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 14,
+      "block": 13,
+      "mode": "add",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.875,
+      "n": 192
+    },
+    {
+      "layer": 14,
+      "block": 13,
+      "mode": "project",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.8958333333333334,
+      "n": 192
+    },
+    {
+      "layer": 14,
+      "block": 13,
+      "mode": "project",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.8854166666666666,
+      "n": 192
+    },
+    {
+      "layer": 14,
+      "block": 13,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 14,
+      "block": 13,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.90625,
+      "n": 192
+    },
+    {
+      "layer": 16,
+      "block": 15,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.9010416666666666,
+      "n": 192
+    },
+    {
+      "layer": 16,
+      "block": 15,
+      "mode": "add",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.890625,
+      "n": 192
+    },
+    {
+      "layer": 16,
+      "block": 15,
+      "mode": "project",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.8958333333333334,
+      "n": 192
+    },
+    {
+      "layer": 16,
+      "block": 15,
+      "mode": "project",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.875,
+      "n": 192
+    },
+    {
+      "layer": 16,
+      "block": 15,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.890625,
+      "n": 192
+    },
+    {
+      "layer": 16,
+      "block": 15,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.875,
+      "n": 192
+    }
+  ],
+  "clean": {
+    "first": 0.0,
+    "full": 0.0,
+    "kept": 0.90625,
+    "n": 192
+  }
+}

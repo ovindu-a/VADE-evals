@@ -3665,89 +3665,135 @@
       "rms": 0.42825760744657143
     }
   ],
-  "vs_causal": {
-    "trace": "logs/attr_head_trace/flags/attr_head_trace_patch15_blocks15-22_all_text.json",
-    "rank_by": "delta_resid",
-    "rank_correlation": 0.22753576767029685,
-    "top_k_overlap": 8,
-    "top_k": 16,
-    "n_shared": 224
-  },
   "image_heads": {
-    "trace": "logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21.json",
+    "trace": "logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json",
     "rank_by": "delta_resid",
     "heads": [
       {
-        "block": 21,
-        "head": 1,
-        "landed_scale": 17.296698140966033,
-        "item": 0.9298482535920172,
-        "attribute": 0.02177716164369368,
-        "interaction": 0.04837458476428914,
-        "ss_total": 40563.283552582085
+        "block": 27,
+        "head": 13,
+        "landed_scale": 19.814369528715886,
+        "item": 0.19221836181974203,
+        "attribute": 0.6297398784568133,
+        "interaction": 0.17804175972344458,
+        "ss_total": 30654.996229758653
       },
       {
-        "block": 21,
-        "head": 5,
-        "landed_scale": 12.419564354133804,
-        "item": 0.49475245902593373,
-        "attribute": 0.36082486877521447,
-        "interaction": 0.14442267219885177,
-        "ss_total": 23604.084837787395
+        "block": 27,
+        "head": 10,
+        "landed_scale": 19.791934151951203,
+        "item": 0.19223010850041483,
+        "attribute": 0.6297293474488088,
+        "interaction": 0.1780405440507764,
+        "ss_total": 30652.298128609236
       },
       {
-        "block": 21,
-        "head": 4,
-        "landed_scale": 10.578671259475115,
-        "item": 0.01599915299222586,
-        "attribute": 0.9592438980194317,
-        "interaction": 0.024756948988342416,
-        "ss_total": 12184.062509909165
+        "block": 27,
+        "head": 12,
+        "landed_scale": 19.185521784097606,
+        "item": 0.1922237796393288,
+        "attribute": 0.6297354746187037,
+        "interaction": 0.17804074574196752,
+        "ss_total": 30647.721440233447
       },
       {
-        "block": 21,
-        "head": 14,
-        "landed_scale": 2.673545874408185,
-        "item": 0.27375766266763435,
-        "attribute": 0.6174324391912365,
-        "interaction": 0.10880989814112926,
-        "ss_total": 506.3226501265534
+        "block": 26,
+        "head": 15,
+        "landed_scale": 8.218924403000248,
+        "item": 0.35480556861831036,
+        "attribute": 0.4260763160133123,
+        "interaction": 0.21911811536837725,
+        "ss_total": 6211.8219197748795
       },
       {
-        "block": 21,
-        "head": 24,
-        "landed_scale": 1.8764012184614784,
-        "item": 0.31471152894500365,
-        "attribute": 0.3172686246717386,
-        "interaction": 0.36801984638325763,
-        "ss_total": 231.61137235701506
-      },
-      {
-        "block": 21,
-        "head": 3,
-        "landed_scale": 2.7401101725982073,
-        "item": 0.07280289500290966,
-        "attribute": 0.8729216760939359,
-        "interaction": 0.05427542890315448,
-        "ss_total": 194.60761427788663
-      },
-      {
-        "block": 21,
-        "head": 27,
-        "landed_scale": 1.6585298150498493,
-        "item": 0.2048591964578803,
-        "attribute": 0.6251311877174294,
-        "interaction": 0.17000961582469043,
-        "ss_total": 142.416208062078
-      },
-      {
-        "block": 21,
+        "block": 26,
         "head": 22,
-        "landed_scale": 5.39045876096031,
-        "item": 0.018898644656181483,
-        "attribute": 0.9619756054491546,
-        "interaction": 0.019125749894663882,
-        "ss_total": 3314.074738583949
+        "landed_scale": 17.66044795223942,
+        "item": 0.3398918882768245,
+        "attribute": 0.40604541157208923,
+        "interaction": 0.2540627001510863,
+        "ss_total": 43618.9732343749
+      },
+      {
+        "block": 27,
+        "head": 11,
+        "landed_scale": 19.146092277000207,
+        "item": 0.19347093586686231,
+        "attribute": 0.6276778516015619,
+        "interaction": 0.178851212531576,
+        "ss_total": 29833.66063690841
+      },
+      {
+        "block": 23,
+        "head": 20,
+        "landed_scale": 2.3286260743676634,
+        "item": 0.28933902467681444,
+        "attribute": 0.6155791739484998,
+        "interaction": 0.09508180137468576,
+        "ss_total": 321.7248629507795
+      },
+      {
+        "block": 27,
+        "head": 3,
+        "landed_scale": 14.507381246278667,
+        "item": 0.7339322736554326,
+        "attribute": 0.06328703843862081,
+        "interaction": 0.20278068790594675,
+        "ss_total": 25904.880356803435
+      },
+      {
+        "block": 27,
+        "head": 2,
+        "landed_scale": 15.55824544562336,
+        "item": 0.1361206284556207,
+        "attribute": 0.7302753714672131,
+        "interaction": 0.13360400007716625,
+        "ss_total": 22131.096883165872
+      },
+      {
+        "block": 26,
+        "head": 13,
+        "landed_scale": 9.501038138152264,
+        "item": 0.1974234956835974,
+        "attribute": 0.6117023360888768,
+        "interaction": 0.19087416822752573,
+        "ss_total": 3073.376480097494
+      },
+      {
+        "block": 23,
+        "head": 8,
+        "landed_scale": 2.2547115576275534,
+        "item": 0.2036218142464609,
+        "attribute": 0.6765296519994127,
+        "interaction": 0.11984853375412635,
+        "ss_total": 270.1799202378399
+      },
+      {
+        "block": 26,
+        "head": 25,
+        "landed_scale": 13.228397982851929,
+        "item": 0.27139013264720013,
+        "attribute": 0.3597175222635931,
+        "interaction": 0.3688923450892066,
+        "ss_total": 16430.082562279953
+      },
+      {
+        "block": 27,
+        "head": 20,
+        "landed_scale": 8.52113700191018,
+        "item": 0.38561786288722366,
+        "attribute": 0.38200217062170283,
+        "interaction": 0.23237996649107356,
+        "ss_total": 7662.040499157573
+      },
+      {
+        "block": 27,
+        "head": 0,
+        "landed_scale": 7.9244001269461,
+        "item": 0.5367795458232696,
+        "attribute": 0.1977831930106087,
+        "interaction": 0.2654372611661217,
+        "ss_total": 7662.300931625656
       },
       {
         "block": 21,
@@ -3759,74 +3805,20 @@
         "ss_total": 1966.7961460296467
       },
       {
-        "block": 21,
-        "head": 18,
-        "landed_scale": 3.354453239511176,
-        "item": 0.1038675651710004,
-        "attribute": 0.8628510559283346,
-        "interaction": 0.0332813789006651,
-        "ss_total": 714.9864511654927
-      },
-      {
-        "block": 21,
-        "head": 2,
-        "landed_scale": 2.781387185347711,
-        "item": 0.13879908444208452,
-        "attribute": 0.7914839791795534,
-        "interaction": 0.06971693637836214,
-        "ss_total": 576.9511304855988
-      },
-      {
-        "block": 21,
-        "head": 25,
-        "landed_scale": 11.175997119768002,
-        "item": 0.006172831873505094,
-        "attribute": 0.9810683803839483,
-        "interaction": 0.012758787742546606,
-        "ss_total": 13354.230754637263
-      },
-      {
-        "block": 21,
-        "head": 26,
-        "landed_scale": 5.722548443595224,
-        "item": 0.058529408752443016,
-        "attribute": 0.9011438110643878,
-        "interaction": 0.04032678018316921,
-        "ss_total": 1953.5192216587063
-      },
-      {
-        "block": 21,
-        "head": 21,
-        "landed_scale": 9.642958631277532,
-        "item": 0.011293169689342434,
-        "attribute": 0.9765649881071095,
-        "interaction": 0.012141842203548133,
-        "ss_total": 6038.802427641244
-      },
-      {
-        "block": 21,
-        "head": 19,
-        "landed_scale": 8.504215876045965,
-        "item": 0.05821511698426374,
-        "attribute": 0.9185244383570504,
-        "interaction": 0.023260444658685767,
-        "ss_total": 5711.91421908788
-      },
-      {
-        "block": 21,
-        "head": 0,
-        "landed_scale": 15.079469593442717,
-        "item": 0.005925474704355079,
-        "attribute": 0.9844824256125665,
-        "interaction": 0.009592099683078508,
-        "ss_total": 25308.624170166997
+        "block": 26,
+        "head": 24,
+        "landed_scale": 23.050132829141578,
+        "item": 0.3733786798385568,
+        "attribute": 0.3555967665141006,
+        "interaction": 0.2710245536473425,
+        "ss_total": 52369.30593652488
       }
     ],
     "skipped_outside_blocks": [],
     "mean": {
-      "item": 0.17880901180055925,
-      "attribute": 0.7478188670415332,
-      "interaction": 0.07337212115790752
+      "item": 0.29655974028048915,
+      "attribute": 0.5096178022833541,
+      "interaction": 0.19382245743615684
     },
     "all_heads_mean": {
       "item": 0.2984822348531484,

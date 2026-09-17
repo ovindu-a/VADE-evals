@@ -1,0 +1,336 @@
+{"row": 0, "item": "LU", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [64871]}
+{"row": 1, "item": "LU", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 2, "item": "LU", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [64871, 812]}
+{"row": 3, "item": "LU", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 17]}
+{"row": 4, "item": "MU", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [5776, 11876]}
+{"row": 5, "item": "MU", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [386, 1511]}
+{"row": 6, "item": "MU", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [8585]}
+{"row": 7, "item": "MU", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 18, 15]}
+{"row": 8, "item": "AU", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [68790]}
+{"row": 9, "item": "AU", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [57580]}
+{"row": 10, "item": "AU", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 11, "item": "AU", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 21, 16]}
+{"row": 12, "item": "HU", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [69595]}
+{"row": 13, "item": "HU", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [472, 20538]}
+{"row": 14, "item": "HU", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [56769]}
+{"row": 15, "item": "HU", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 21]}
+{"row": 16, "item": "QA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [422, 65083]}
+{"row": 17, "item": "QA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [1207, 934]}
+{"row": 18, "item": "QA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 19, "item": "QA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 22, 19]}
+{"row": 20, "item": "PK", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [91432]}
+{"row": 21, "item": "PK", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [24826, 49]}
+{"row": 22, "item": "PK", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [93335]}
+{"row": 23, "item": "PK", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 17]}
+{"row": 24, "item": "MA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [35724, 266]}
+{"row": 25, "item": "MA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [75373]}
+{"row": 26, "item": "MA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 27, "item": "MA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 16, 17]}
+{"row": 28, "item": "IT", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [21718]}
+{"row": 29, "item": "IT", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 30, "item": "IT", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [14811]}
+{"row": 31, "item": "IT", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 24]}
+{"row": 32, "item": "PE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [61953]}
+{"row": 33, "item": "PE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [80670]}
+{"row": 34, "item": "PE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 35, "item": "PE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 16]}
+{"row": 36, "item": "KW", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [56011, 4311]}
+{"row": 37, "item": "KW", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 17563]}
+{"row": 38, "item": "KW", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 39, "item": "KW", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 20]}
+{"row": 40, "item": "GH", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [11429, 956]}
+{"row": 41, "item": "GH", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [479, 11961]}
+{"row": 42, "item": "GH", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 43, "item": "GH", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 18, 18]}
+{"row": 44, "item": "PY", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [1634, 1347, 3655]}
+{"row": 45, "item": "PY", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [42760, 38]}
+{"row": 46, "item": "PY", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 47, "item": "PY", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 24, 20]}
+{"row": 48, "item": "CV", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [40365, 685]}
+{"row": 49, "item": "CV", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [45769]}
+{"row": 50, "item": "CV", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [42188]}
+{"row": 51, "item": "CV", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 18, 23]}
+{"row": 52, "item": "IQ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [55218]}
+{"row": 53, "item": "IQ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [36711, 35]}
+{"row": 54, "item": "IQ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 55, "item": "IQ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 19]}
+{"row": 56, "item": "SE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [52082]}
+{"row": 57, "item": "SE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [5052, 42]}
+{"row": 58, "item": "SE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [30109]}
+{"row": 59, "item": "SE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 19, 21]}
+{"row": 60, "item": "BZ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [7828, 76, 453, 276]}
+{"row": 61, "item": "BZ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [425, 57, 35]}
+{"row": 62, "item": "BZ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [97004, 276, 7792, 1263]}
+{"row": 63, "item": "BZ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 15, 16]}
+{"row": 64, "item": "HT", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [5776, 81997, 12, 67932]}
+{"row": 65, "item": "HT", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [5260, 38]}
+{"row": 66, "item": "HT", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [42402, 1103, 7792, 1263]}
+{"row": 67, "item": "HT", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 15, 24]}
+{"row": 68, "item": "CY", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [451, 16627, 685]}
+{"row": 69, "item": "CY", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 70, "item": "CY", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [17860]}
+{"row": 71, "item": "CY", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 22]}
+{"row": 72, "item": "JO", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [3303, 1515]}
+{"row": 73, "item": "JO", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [619, 2069]}
+{"row": 74, "item": "JO", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 75, "item": "JO", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 17]}
+{"row": 76, "item": "RW", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 343, 7956]}
+{"row": 77, "item": "RW", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [431, 32131]}
+{"row": 78, "item": "RW", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 6441, 277, 86, 9817]}
+{"row": 79, "item": "RW", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 20, 15]}
+{"row": 80, "item": "BH", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [2363, 3029]}
+{"row": 81, "item": "BH", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [425, 19147]}
+{"row": 82, "item": "BH", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 83, "item": "BH", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 22, 18]}
+{"row": 84, "item": "NP", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [32895, 1928, 84]}
+{"row": 85, "item": "NP", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [44200]}
+{"row": 86, "item": "NP", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [36569, 7956]}
+{"row": 87, "item": "NP", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 22, 22]}
+{"row": 88, "item": "MX", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [12270, 4311]}
+{"row": 89, "item": "MX", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [27585, 45]}
+{"row": 90, "item": "MX", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 91, "item": "MX", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 17]}
+{"row": 92, "item": "KP", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [60059]}
+{"row": 93, "item": "KP", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 68123]}
+{"row": 94, "item": "KP", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [16134]}
+{"row": 95, "item": "KP", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 20, 15]}
+{"row": 96, "item": "DZ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [81199, 4813]}
+{"row": 97, "item": "DZ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [422, 57, 35]}
+{"row": 98, "item": "DZ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 99, "item": "DZ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 16, 18]}
+{"row": 100, "item": "GY", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [64939]}
+{"row": 101, "item": "GY", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [479, 56, 35]}
+{"row": 102, "item": "GY", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 103, "item": "GY", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 24, 17]}
+{"row": 104, "item": "IN", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [1532, 21996]}
+{"row": 105, "item": "IN", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [1964, 49]}
+{"row": 106, "item": "IN", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [43980]}
+{"row": 107, "item": "IN", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 16]}
+{"row": 108, "item": "AZ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [425, 23557]}
+{"row": 109, "item": "AZ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [30876, 45]}
+{"row": 110, "item": "AZ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [64323, 73, 5559]}
+{"row": 111, "item": "AZ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 24, 19]}
+{"row": 112, "item": "EG", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [52550]}
+{"row": 113, "item": "EG", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [468, 24430]}
+{"row": 114, "item": "EG", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 115, "item": "EG", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 15]}
+{"row": 116, "item": "SN", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [24648, 277]}
+{"row": 117, "item": "SN", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [1599, 12483]}
+{"row": 118, "item": "SN", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [8585]}
+{"row": 119, "item": "SN", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 17, 16]}
+{"row": 120, "item": "DK", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [63061]}
+{"row": 121, "item": "DK", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [422, 50457]}
+{"row": 122, "item": "DK", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [43680]}
+{"row": 123, "item": "DK", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 19, 20]}
+{"row": 124, "item": "UY", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [9795, 5120, 1888]}
+{"row": 125, "item": "UY", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [547, 56, 52]}
+{"row": 126, "item": "UY", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 127, "item": "UY", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 24, 23]}
+{"row": 128, "item": "JP", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [26194]}
+{"row": 129, "item": "JP", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [619, 37881]}
+{"row": 130, "item": "JP", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [10769]}
+{"row": 131, "item": "JP", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 16]}
+{"row": 132, "item": "CL", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [54578]}
+{"row": 133, "item": "CL", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [6976, 47]}
+{"row": 134, "item": "CL", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 135, "item": "CL", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 21]}
+{"row": 136, "item": "UG", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [70944, 6053]}
+{"row": 137, "item": "UG", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [547, 84432]}
+{"row": 138, "item": "UG", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 139, "item": "UG", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 20, 21]}
+{"row": 140, "item": "NZ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [56004]}
+{"row": 141, "item": "NZ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [41757, 35]}
+{"row": 142, "item": "NZ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 143, "item": "NZ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 21, 19]}
+{"row": 144, "item": "GR", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [45826]}
+{"row": 145, "item": "GR", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 146, "item": "GR", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [17860]}
+{"row": 147, "item": "GR", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 15]}
+{"row": 148, "item": "UZ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [350, 988, 74, 306]}
+{"row": 149, "item": "UZ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [547, 57, 50]}
+{"row": 150, "item": "UZ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [8522]}
+{"row": 151, "item": "UZ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 24, 23]}
+{"row": 152, "item": "CU", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [85875]}
+{"row": 153, "item": "CU", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [356, 5459]}
+{"row": 154, "item": "CU", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 155, "item": "CU", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 18]}
+{"row": 156, "item": "AO", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [18360, 9817]}
+{"row": 157, "item": "AO", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [362, 41339]}
+{"row": 158, "item": "AO", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [42188]}
+{"row": 159, "item": "AO", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 19, 19]}
+{"row": 160, "item": "ZM", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [444, 355, 13334]}
+{"row": 161, "item": "ZM", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [1863, 54173]}
+{"row": 162, "item": "ZM", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 163, "item": "ZM", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 21, 15]}
+{"row": 164, "item": "AF", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [86545]}
+{"row": 165, "item": "AF", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [19885, 45]}
+{"row": 166, "item": "AF", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [422, 2780]}
+{"row": 167, "item": "AF", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 18]}
+{"row": 168, "item": "VN", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [472, 72703]}
+{"row": 169, "item": "VN", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [647, 8065]}
+{"row": 170, "item": "VN", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [48477]}
+{"row": 171, "item": "VN", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 19]}
+{"row": 172, "item": "FI", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [76334]}
+{"row": 173, "item": "FI", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 174, "item": "FI", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [57853]}
+{"row": 175, "item": "FI", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 23]}
+{"row": 176, "item": "KH", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [2350, 16687, 13294, 71]}
+{"row": 177, "item": "KH", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 17088]}
+{"row": 178, "item": "KH", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [20165, 1174]}
+{"row": 179, "item": "KH", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 20, 20]}
+{"row": 180, "item": "HN", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [350, 791, 1754, 343, 278, 6595]}
+{"row": 181, "item": "HN", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [472, 30042]}
+{"row": 182, "item": "HN", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 183, "item": "HN", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 15, 19]}
+{"row": 184, "item": "OM", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [5331, 4616]}
+{"row": 185, "item": "OM", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [506, 18446]}
+{"row": 186, "item": "OM", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 187, "item": "OM", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 23]}
+{"row": 188, "item": "CO", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [41548, 354, 1953]}
+{"row": 189, "item": "CO", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [67572]}
+{"row": 190, "item": "CO", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 191, "item": "CO", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 22]}
+{"row": 192, "item": "YE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [328, 3362, 25184]}
+{"row": 193, "item": "YE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [809, 640]}
+{"row": 194, "item": "YE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 195, "item": "YE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 22]}
+{"row": 196, "item": "AR", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [68073, 64617]}
+{"row": 197, "item": "AR", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [6261, 50]}
+{"row": 198, "item": "AR", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [4570, 21320, 2426]}
+{"row": 199, "item": "AR", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 19]}
+{"row": 200, "item": "SG", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [20539]}
+{"row": 201, "item": "SG", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [93983]}
+{"row": 202, "item": "SG", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 203, "item": "SG", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 21, 20]}
+{"row": 204, "item": "CM", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [39384, 795, 963]}
+{"row": 205, "item": "CM", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [1599, 8276]}
+{"row": 206, "item": "CM", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [8585]}
+{"row": 207, "item": "CM", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 18, 22]}
+{"row": 208, "item": "SD", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [20165, 471, 283, 76]}
+{"row": 209, "item": "SD", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [8030, 38]}
+{"row": 210, "item": "SD", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 211, "item": "SD", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 19, 24]}
+{"row": 212, "item": "UA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [22878, 344]}
+{"row": 213, "item": "UA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [547, 29923]}
+{"row": 214, "item": "UA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [33625]}
+{"row": 215, "item": "UA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 23, 15]}
+{"row": 216, "item": "IE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [32877]}
+{"row": 217, "item": "IE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 218, "item": "IE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [17623]}
+{"row": 219, "item": "IE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 18]}
+{"row": 220, "item": "LR", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [3128, 299, 20105]}
+{"row": 221, "item": "LR", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [444, 36690]}
+{"row": 222, "item": "LR", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 223, "item": "LR", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 18, 16]}
+{"row": 224, "item": "SA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [89790]}
+{"row": 225, "item": "SA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [68778]}
+{"row": 226, "item": "SA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 227, "item": "SA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 21]}
+{"row": 228, "item": "RS", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [7828, 6937]}
+{"row": 229, "item": "RS", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [431, 5491]}
+{"row": 230, "item": "RS", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [87164]}
+{"row": 231, "item": "RS", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 23, 16]}
+{"row": 232, "item": "AM", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [809, 485, 15649]}
+{"row": 233, "item": "AM", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [24311]}
+{"row": 234, "item": "AM", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [66742]}
+{"row": 235, "item": "AM", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 22, 19]}
+{"row": 236, "item": "LB", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [94311]}
+{"row": 237, "item": "LB", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [444, 26095]}
+{"row": 238, "item": "LB", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 239, "item": "LB", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 24, 21, 16]}
+{"row": 240, "item": "BR", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [61124, 75372]}
+{"row": 241, "item": "BR", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [425, 4728]}
+{"row": 242, "item": "BR", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [42188]}
+{"row": 243, "item": "BR", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 20]}
+{"row": 244, "item": "TH", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [59016]}
+{"row": 245, "item": "TH", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [4434, 33]}
+{"row": 246, "item": "TH", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [26392]}
+{"row": 247, "item": "TH", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 21, 21]}
+{"row": 248, "item": "TZ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [35868, 7786]}
+{"row": 249, "item": "TZ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [87105, 50]}
+{"row": 250, "item": "TZ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [4492, 1466, 3921]}
+{"row": 251, "item": "TZ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 20, 20]}
+{"row": 252, "item": "KR", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [50189]}
+{"row": 253, "item": "KR", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 56368]}
+{"row": 254, "item": "KR", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [16134]}
+{"row": 255, "item": "KR", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 17]}
+{"row": 256, "item": "PT", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [80701]}
+{"row": 257, "item": "PT", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 258, "item": "PT", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [42188]}
+{"row": 259, "item": "PT", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 16]}
+{"row": 260, "item": "TN", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [94677]}
+{"row": 261, "item": "TN", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [350, 8065]}
+{"row": 262, "item": "TN", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 263, "item": "TN", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 16, 21]}
+{"row": 264, "item": "DE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [19846]}
+{"row": 265, "item": "DE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 266, "item": "DE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [5938]}
+{"row": 267, "item": "DE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 19, 24]}
+{"row": 268, "item": "PA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [48036, 4311]}
+{"row": 269, "item": "PA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [393, 1867]}
+{"row": 270, "item": "PA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 271, "item": "PA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 15, 22]}
+{"row": 272, "item": "ES", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [24081]}
+{"row": 273, "item": "ES", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 274, "item": "ES", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 275, "item": "ES", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 19]}
+{"row": 276, "item": "LY", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [26754, 14225]}
+{"row": 277, "item": "LY", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [86005, 35]}
+{"row": 278, "item": "LY", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [34117]}
+{"row": 279, "item": "LY", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 16, 23]}
+{"row": 280, "item": "BE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [37169]}
+{"row": 281, "item": "BE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [37088]}
+{"row": 282, "item": "BE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [23234]}
+{"row": 283, "item": "BE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 17]}
+{"row": 284, "item": "NA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [22087, 6161, 1225]}
+{"row": 285, "item": "NA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [451, 1808]}
+{"row": 286, "item": "NA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [12907, 40454, 596]}
+{"row": 287, "item": "NA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 21, 19]}
+{"row": 288, "item": "RO", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [33278, 15432]}
+{"row": 289, "item": "RO", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [431, 711]}
+{"row": 290, "item": "RO", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [73597]}
+{"row": 291, "item": "RO", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 19, 15]}
+{"row": 292, "item": "FJ", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [16931, 6586]}
+{"row": 293, "item": "FJ", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [434, 49915]}
+{"row": 294, "item": "FJ", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [6364]}
+{"row": 295, "item": "FJ", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 21, 22, 24]}
+{"row": 296, "item": "BY", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [386, 88392]}
+{"row": 297, "item": "BY", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [7710, 45]}
+{"row": 298, "item": "BY", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [69506, 1103]}
+{"row": 299, "item": "BY", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 22, 20]}
+{"row": 300, "item": "GT", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [61978, 4311]}
+{"row": 301, "item": "GT", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [11911, 48]}
+{"row": 302, "item": "GT", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 303, "item": "GT", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 15, 17]}
+{"row": 304, "item": "BD", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [43227, 13334]}
+{"row": 305, "item": "BD", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [425, 10599]}
+{"row": 306, "item": "BD", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [16914, 4260]}
+{"row": 307, "item": "BD", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 23, 15]}
+{"row": 308, "item": "MK", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [4818, 453, 3756]}
+{"row": 309, "item": "MK", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [26859, 35]}
+{"row": 310, "item": "MK", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [56452, 75491]}
+{"row": 311, "item": "MK", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 23, 24]}
+{"row": 312, "item": "IS", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [48212, 74, 61459, 1579]}
+{"row": 313, "item": "IS", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [3424, 42]}
+{"row": 314, "item": "IS", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [99148]}
+{"row": 315, "item": "IS", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 19]}
+{"row": 316, "item": "LA", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [647, 1167, 35035]}
+{"row": 317, "item": "LA", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [444, 11907]}
+{"row": 318, "item": "LA", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [444, 3441]}
+{"row": 319, "item": "LA", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 23, 20, 21]}
+{"row": 320, "item": "ET", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [2691, 285, 3680, 12004]}
+{"row": 321, "item": "ET", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [17768, 33]}
+{"row": 322, "item": "ET", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [3303, 12982, 292]}
+{"row": 323, "item": "ET", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 20, 16]}
+{"row": 324, "item": "KE", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [96525]}
+{"row": 325, "item": "KE", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [730, 1570]}
+{"row": 326, "item": "KE", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [4492, 1466, 3921]}
+{"row": 327, "item": "KE", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 17, 20, 19]}
+{"row": 328, "item": "NI", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [2363, 54648]}
+{"row": 329, "item": "NI", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [451, 3810]}
+{"row": 330, "item": "NI", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [15154]}
+{"row": 331, "item": "NI", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 20, 15, 20]}
+{"row": 332, "item": "AL", "attribute": "capital", "condition": "clean", "prompt_length": 219, "gold_ids": [82555, 3362]}
+{"row": 333, "item": "AL", "attribute": "currency", "condition": "clean", "prompt_length": 219, "gold_ids": [13097]}
+{"row": 334, "item": "AL", "attribute": "language", "condition": "clean", "prompt_length": 219, "gold_ids": [56891, 1103]}
+{"row": 335, "item": "AL", "attribute": "calling_code", "condition": "clean", "prompt_length": 219, "gold_ids": [220, 18, 20, 20]}

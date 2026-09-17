@@ -1,0 +1,472 @@
+[32mActivated conda/uv virtual environment at [36m/venv/main[0m
++ echo '=== attr_steer cmd2: generation-only alpha sweep ==='
+=== attr_steer cmd2: generation-only alpha sweep ===
++ python -u methods/attr_steer.py --layers 14 16 18 20 21 22 23 24 26 28 --mode both --alpha 0.5 1.0 2.0 --n_train_items 32 --n_test_items 16 --n_random 2
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+[attr_steer] flags: directions from 32 TRAIN items, scored on 16 disjoint TEST items = 192 directed rows; layers 14-28; modes=['add', 'project']; alphas=[0.5, 1.0, 2.0]; positions=last_token -> /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L14-28_add-project_train32.json
+
+=== logging to /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L14-28_add-project_train32.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 2/729 [00:00<01:46,  6.84it/s]Loading weights:   2%|2         | 16/729 [00:00<00:15, 47.10it/s]Loading weights:   4%|3         | 28/729 [00:00<00:10, 66.88it/s]Loading weights:   5%|5         | 40/729 [00:00<00:08, 80.07it/s]Loading weights:   7%|7         | 52/729 [00:00<00:07, 86.61it/s]Loading weights:   9%|8         | 64/729 [00:00<00:07, 93.03it/s]Loading weights:  10%|#         | 76/729 [00:01<00:07, 87.12it/s]Loading weights:  12%|#2        | 89/729 [00:01<00:06, 93.67it/s]Loading weights:  14%|#3        | 100/729 [00:01<00:06, 92.62it/s]Loading weights:  16%|#5        | 113/729 [00:01<00:06, 97.31it/s]Loading weights:  17%|#7        | 124/729 [00:01<00:06, 95.63it/s]Loading weights:  19%|#8        | 137/729 [00:01<00:05, 99.75it/s]Loading weights:  20%|##        | 148/729 [00:01<00:05, 97.87it/s]Loading weights:  22%|##2       | 161/729 [00:01<00:06, 92.88it/s]Loading weights:  24%|##3       | 172/729 [00:02<00:06, 86.12it/s]Loading weights:  26%|##5       | 186/729 [00:02<00:05, 94.21it/s]Loading weights:  27%|##7       | 198/729 [00:02<00:05, 95.88it/s]Loading weights:  29%|##8       | 210/729 [00:02<00:05, 98.97it/s]Loading weights:  30%|###       | 221/729 [00:02<00:05, 97.58it/s]Loading weights:  32%|###1      | 232/729 [00:02<00:05, 98.18it/s]Loading weights:  33%|###3      | 244/729 [00:02<00:04, 101.30it/s]Loading weights:  35%|###5      | 257/729 [00:02<00:04, 105.39it/s]Loading weights:  37%|###6      | 269/729 [00:02<00:04, 97.03it/s] Loading weights:  39%|###8      | 281/729 [00:03<00:04, 95.03it/s]Loading weights:  40%|####      | 293/729 [00:03<00:04, 95.97it/s]Loading weights:  42%|####1     | 305/729 [00:03<00:04, 97.53it/s]Loading weights:  43%|####3     | 316/729 [00:03<00:04, 89.61it/s]Loading weights:  45%|####4     | 328/729 [00:03<00:04, 95.65it/s]Loading weights:  48%|####7     | 349/729 [00:03<00:03, 124.53it/s]Loading weights:  63%|######2   | 459/729 [00:03<00:00, 385.16it/s]Loading weights:  77%|#######7  | 563/729 [00:03<00:00, 562.99it/s]Loading weights:  92%|#########1| 670/729 [00:04<00:00, 704.29it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 177.78it/s]
+
+==============================================================================
+=== phase 1: estimating directions on 32 held-out-from-test items
+==============================================================================
+    8/128 training forwards
+    16/128 training forwards
+    24/128 training forwards
+    32/128 training forwards
+    40/128 training forwards
+    48/128 training forwards
+    56/128 training forwards
+    64/128 training forwards
+    72/128 training forwards
+    80/128 training forwards
+    88/128 training forwards
+    96/128 training forwards
+    104/128 training forwards
+    112/128 training forwards
+    120/128 training forwards
+    128/128 training forwards
+  per-attribute means over 32 items each
+  layer block      ||d(capi)||     ||d(curr)||     ||d(lang)||     ||d(call)||
+     14    13            4.939           3.469           5.459           4.430
+     16    15            7.066           5.364           7.279           6.272
+     18    17           11.957          10.790          12.900          11.714
+     20    19           21.035          21.890          18.873          23.360
+     21    20           38.110          33.765          35.995          44.723
+     22    21           67.273          71.665          59.997          85.468
+     23    22           97.249         104.388          99.929         124.711
+     24    23          162.080         153.467         148.449         167.941
+     26    25          234.167         341.142         246.108         225.117
+     28    27          355.144         478.716         349.195         392.598
+
+==============================================================================
+=== phase 2: steering the held-out items
+==============================================================================
+  unsteered                          first=  0.0% full=  0.0% base_kept= 90.6%   <-- floor; base_kept is the ceiling for a no-op
+  L14 (block 13) add a=0.5           first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) add a=2.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) project a=0.5       first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) project a=1.0       first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) project a=2.0       first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L14 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L16 (block 15) add a=0.5           first=  0.0% full=  0.0% base_kept= 90.6%
+  L16 (block 15) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L16 (block 15) add a=2.0           first=  0.0% full=  0.0% base_kept= 90.1%
+  L16 (block 15) project a=0.5       first=  0.0% full=  0.0% base_kept= 90.6%
+  L16 (block 15) project a=1.0       first=  0.0% full=  0.0% base_kept= 90.6%
+  L16 (block 15) project a=2.0       first=  0.0% full=  0.0% base_kept= 91.1%
+  L16 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L16 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L18 (block 17) add a=0.5           first=  0.0% full=  0.0% base_kept= 90.6%
+  L18 (block 17) add a=1.0           first=  0.0% full=  0.0% base_kept= 88.5%
+  L18 (block 17) add a=2.0           first= 38.5% full= 20.3% base_kept= 43.8%
+  L18 (block 17) project a=0.5       first=  0.0% full=  0.0% base_kept= 90.6%
+  L18 (block 17) project a=1.0       first=  0.0% full=  0.0% base_kept= 91.7%
+  L18 (block 17) project a=2.0       first=  0.0% full=  0.0% base_kept= 90.1%
+  L18 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 89.1%   <-- null
+  L18 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L20 (block 19) add a=0.5           first= 14.1% full=  8.3% base_kept= 73.4%
+  L20 (block 19) add a=1.0           first= 68.2% full= 42.7% base_kept= 22.4%
+  L20 (block 19) add a=2.0           first= 88.0% full= 73.4% base_kept=  0.0%
+  L20 (block 19) project a=0.5       first= 42.7% full= 24.5% base_kept= 49.0%
+  L20 (block 19) project a=1.0       first= 67.2% full= 43.2% base_kept= 13.5%
+  L20 (block 19) project a=2.0       first= 90.1% full= 68.2% base_kept=  0.0%
+  L20 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 87.5%   <-- null
+  L20 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 89.1%   <-- null
+  L21 (block 20) add a=0.5           first= 34.9% full= 18.2% base_kept= 51.0%
+  L21 (block 20) add a=1.0           first= 94.8% full= 64.6% base_kept=  0.0%
+  L21 (block 20) add a=2.0           first= 91.1% full= 66.1% base_kept=  0.0%
+  L21 (block 20) project a=0.5       first= 67.7% full= 39.6% base_kept= 21.4%
+  L21 (block 20) project a=1.0       first= 92.2% full= 60.4% base_kept=  0.0%
+  L21 (block 20) project a=2.0       first= 92.7% full= 64.1% base_kept=  0.0%
+  L21 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L21 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 92.2%   <-- null
+  L22 (block 21) add a=0.5           first= 39.1% full= 16.1% base_kept= 46.4%
+  L22 (block 21) add a=1.0           first= 95.8% full= 58.3% base_kept=  0.0%
+  L22 (block 21) add a=2.0           first= 89.6% full= 55.2% base_kept=  0.0%
+  L22 (block 21) project a=0.5       first= 91.7% full= 54.2% base_kept=  0.5%
+  L22 (block 21) project a=1.0       first= 94.8% full= 57.8% base_kept=  0.0%
+  L22 (block 21) project a=2.0       first= 93.2% full= 56.8% base_kept=  0.0%
+  L22 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 85.9%   <-- null
+  L22 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 89.1%   <-- null
+  L23 (block 22) add a=0.5           first= 33.9% full= 13.5% base_kept= 47.4%
+  L23 (block 22) add a=1.0           first= 95.3% full= 57.3% base_kept=  0.0%
+  L23 (block 22) add a=2.0           first= 85.4% full= 50.0% base_kept=  0.0%
+  L23 (block 22) project a=0.5       first= 90.6% full= 52.1% base_kept=  0.5%
+  L23 (block 22) project a=1.0       first= 95.3% full= 58.3% base_kept=  0.0%
+  L23 (block 22) project a=2.0       first= 92.2% full= 55.2% base_kept=  0.0%
+  L23 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 87.5%   <-- null
+  L23 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 82.8%   <-- null
+  L24 (block 23) add a=0.5           first= 29.7% full= 13.0% base_kept= 54.2%
+  L24 (block 23) add a=1.0           first= 91.7% full= 55.2% base_kept=  0.0%
+  L24 (block 23) add a=2.0           first= 79.7% full= 46.9% base_kept=  0.5%
+  L24 (block 23) project a=0.5       first= 84.4% full= 47.4% base_kept=  2.6%
+  L24 (block 23) project a=1.0       first= 92.2% full= 55.7% base_kept=  0.0%
+  L24 (block 23) project a=2.0       first= 89.6% full= 54.7% base_kept=  0.0%
+  L24 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 75.0%   <-- null
+  L24 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 76.6%   <-- null
+  L26 (block 25) add a=0.5           first= 14.1% full=  2.1% base_kept= 67.7%
+  L26 (block 25) add a=1.0           first= 78.6% full= 37.0% base_kept=  4.2%
+  L26 (block 25) add a=2.0           first= 67.7% full= 33.3% base_kept=  0.5%
+  L26 (block 25) project a=0.5       first= 62.5% full= 24.5% base_kept= 19.3%
+  L26 (block 25) project a=1.0       first= 77.6% full= 35.9% base_kept=  5.2%
+  L26 (block 25) project a=2.0       first= 79.2% full= 39.6% base_kept=  0.0%
+  L26 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 78.1%   <-- null
+  L26 RANDOM direction #2            first=  1.6% full=  0.0% base_kept= 71.9%   <-- null
+  L28 (block 27) add a=0.5           first= 13.0% full=  2.1% base_kept= 71.4%
+  L28 (block 27) add a=1.0           first= 44.3% full= 16.1% base_kept= 14.6%
+  L28 (block 27) add a=2.0           first= 30.2% full= 16.7% base_kept=  0.5%
+  L28 (block 27) project a=0.5       first= 28.6% full=  7.3% base_kept= 43.2%
+  L28 (block 27) project a=1.0       first= 41.1% full= 14.1% base_kept= 16.7%
+  L28 (block 27) project a=2.0       first= 45.3% full= 20.8% base_kept=  5.2%
+  L28 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 67.2%   <-- null
+  L28 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 71.9%   <-- null
+
+  Read the attribute arms AGAINST the random arms at the same layer. A random direction of matched norm should leave `first` at the unsteered floor (0.0%); if it does not, this layer is simply fragile and its attribute arm proves nothing.
+
+wrote /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L14-28_add-project_train32.json
++ echo '=== attr_steer cmd3: image-head attention phase (eager) ==='
+=== attr_steer cmd3: image-head attention phase (eager) ===
++ python -u methods/attr_steer.py --layers 20 21 22 24 --mode project --alpha 1.0 --n_train_items 32 --n_test_items 16 --image_trace logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json --top_k 16 --attention_batch_size 2
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+[attr_steer] flags: directions from 32 TRAIN items, scored on 16 disjoint TEST items = 192 directed rows; layers 20-24; modes=['project']; alphas=[1.0]; positions=last_token -> /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L20-24_project_train32.json
+
+=== logging to /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L20-24_project_train32.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:56,  3.07it/s]Loading weights:   2%|2         | 16/729 [00:00<00:15, 46.09it/s]Loading weights:   4%|3         | 28/729 [00:00<00:12, 56.31it/s]Loading weights:   6%|5         | 41/729 [00:00<00:09, 71.74it/s]Loading weights:   7%|7         | 53/729 [00:00<00:08, 79.27it/s]Loading weights:   9%|8         | 65/729 [00:00<00:07, 86.61it/s]Loading weights:  11%|#         | 77/729 [00:01<00:07, 90.55it/s]Loading weights:  12%|#2        | 89/729 [00:01<00:06, 92.89it/s]Loading weights:  14%|#3        | 101/729 [00:01<00:06, 94.31it/s]Loading weights:  15%|#5        | 112/729 [00:01<00:07, 85.55it/s]Loading weights:  17%|#7        | 126/729 [00:01<00:06, 93.90it/s]Loading weights:  19%|#8        | 136/729 [00:01<00:06, 92.37it/s]Loading weights:  21%|##        | 150/729 [00:01<00:05, 99.51it/s]Loading weights:  22%|##2       | 162/729 [00:01<00:05, 99.36it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:05, 95.29it/s]Loading weights:  25%|##5       | 184/729 [00:02<00:05, 97.16it/s]Loading weights:  27%|##7       | 197/729 [00:02<00:05, 97.99it/s]Loading weights:  29%|##8       | 209/729 [00:02<00:05, 99.18it/s]Loading weights:  30%|###       | 220/729 [00:02<00:05, 98.82it/s]Loading weights:  32%|###1      | 230/729 [00:02<00:05, 92.15it/s]Loading weights:  33%|###2      | 240/729 [00:02<00:05, 87.37it/s]Loading weights:  34%|###4      | 249/729 [00:02<00:05, 84.54it/s]Loading weights:  35%|###5      | 258/729 [00:03<00:05, 80.31it/s]Loading weights:  37%|###6      | 269/729 [00:03<00:05, 83.32it/s]Loading weights:  38%|###8      | 280/729 [00:03<00:05, 88.81it/s]Loading weights:  40%|###9      | 291/729 [00:03<00:04, 89.26it/s]Loading weights:  42%|####1     | 304/729 [00:03<00:04, 87.92it/s]Loading weights:  43%|####3     | 316/729 [00:03<00:05, 75.78it/s]Loading weights:  45%|####5     | 330/729 [00:03<00:04, 84.44it/s]Loading weights:  59%|#####8    | 427/729 [00:04<00:01, 285.97it/s]Loading weights:  72%|#######2  | 527/729 [00:04<00:00, 459.69it/s]Loading weights:  87%|########6 | 631/729 [00:04<00:00, 609.21it/s]Loading weights: 100%|#########9| 728/729 [00:04<00:00, 699.87it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 169.28it/s]
+
+==============================================================================
+=== phase 1: estimating directions on 32 held-out-from-test items
+==============================================================================
+    8/128 training forwards
+    16/128 training forwards
+    24/128 training forwards
+    32/128 training forwards
+    40/128 training forwards
+    48/128 training forwards
+    56/128 training forwards
+    64/128 training forwards
+    72/128 training forwards
+    80/128 training forwards
+    88/128 training forwards
+    96/128 training forwards
+    104/128 training forwards
+    112/128 training forwards
+    120/128 training forwards
+    128/128 training forwards
+  per-attribute means over 32 items each
+  layer block      ||d(capi)||     ||d(curr)||     ||d(lang)||     ||d(call)||
+     20    19           22.098          25.388          19.354          28.946
+     21    20           39.255          36.069          32.906          46.001
+     22    21           68.272          72.150          51.439          81.014
+     24    23          167.780         148.875         139.878         166.047
+
+==============================================================================
+=== phase 2: steering the held-out items
+==============================================================================
+  unsteered                          first=  0.0% full=  0.0% base_kept= 78.1%   <-- floor; base_kept is the ceiling for a no-op
+  L20 (block 19) project a=1.0       first= 58.9% full= 42.2% base_kept= 26.6%
+  L20 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 76.6%   <-- null
+  L20 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 75.0%   <-- null
+  L21 (block 20) project a=1.0       first= 81.8% full= 53.1% base_kept=  4.7%
+  L21 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 81.2%   <-- null
+  L21 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 82.8%   <-- null
+  L22 (block 21) project a=1.0       first= 91.7% full= 56.8% base_kept=  0.0%
+  L22 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 76.6%   <-- null
+  L22 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 78.1%   <-- null
+  L24 (block 23) project a=1.0       first= 86.5% full= 51.0% base_kept=  0.5%
+  L24 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 64.1%   <-- null
+  L24 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 71.9%   <-- null
+
+  Read the attribute arms AGAINST the random arms at the same layer. A random direction of matched norm should leave `first` at the unsteered floor (0.0%); if it does not, this layer is simply fragile and its attribute arm proves nothing.
+
+==============================================================================
+=== phase 3: image-head attention, clean vs steered
+==============================================================================
+  top-16 heads of head_trace_patch21.json by delta_resid; steering layers [22, 24, 21]
+  Attention is a distribution over the image columns at the readout position. `mass` is how much of it lands on the image at all; `cosine` compares the clean and steered patterns. Steering that changes the ANSWER without changing `cosine` means the model looked at the same pixels and reported something else -- selection happening downstream of the image read, not inside it.
+
+  steering at L22 (block 21), mode=project:
+      block.head  mass clean  mass steer   cosine  L1 shift
+    27.13              0.0000      0.0498   0.0000    0.0498
+    27.10              0.0000      0.0000   0.0000    0.0000
+    27.12              0.3335      0.0442   0.1670    0.3072
+    26.15              0.0494      0.0578   0.7435    0.0424
+    26.22              0.0128      0.0156   0.8422    0.0179
+    27.11              0.0006      0.0005   0.4109    0.0011
+    23.20              0.0351      0.0366   0.8718    0.0241
+    27.3               0.3833      0.4240   0.9009    0.3030
+    27.2               0.1668      0.1756   0.5837    0.1770
+    26.13              0.0759      0.0812   0.8521    0.0479
+    23.8               0.0243      0.0238   0.7787    0.0232
+    26.25              0.0816      0.0848   0.5746    0.0922
+    27.20              0.1138      0.1191   0.7157    0.0926
+    27.0               0.0894      0.0919   0.7489    0.0743
+    21.6               0.0150      0.0150   1.0000    0.0000
+    26.24              0.0494      0.0737   0.4919    0.0930
+
+  steering at L24 (block 23), mode=project:
+      block.head  mass clean  mass steer   cosine  L1 shift
+    27.13              0.0000      0.0000   0.0000    0.0000
+    27.10              0.0000      0.0000   0.0000    0.0000
+    27.12              0.3335      0.0770   0.1820    0.3493
+    26.15              0.0494      0.0534   0.7584    0.0386
+    26.22              0.0128      0.0157   0.8371    0.0176
+    27.11              0.0006      0.0009   0.3509    0.0015
+    23.20              0.0351      0.0351   1.0000    0.0000
+    27.3               0.3833      0.4015   0.9048    0.2591
+    27.2               0.1668      0.1703   0.6008    0.1731
+    26.13              0.0759      0.0793   0.8553    0.0462
+    23.8               0.0243      0.0243   1.0000    0.0000
+    26.25              0.0816      0.0793   0.5799    0.0887
+    27.20              0.1138      0.1127   0.7105    0.0917
+    27.0               0.0894      0.0873   0.7404    0.0726
+    21.6               0.0150      0.0150   1.0000    0.0000
+    26.24              0.0494      0.0779   0.5069    0.0974
+
+  steering at L21 (block 20), mode=project:
+      block.head  mass clean  mass steer   cosine  L1 shift
+    27.13              0.0000      0.0000   0.0000    0.0000
+    27.10              0.0000      0.0000   0.0000    0.0000
+    27.12              0.3335      0.0856   0.3401    0.3076
+    26.15              0.0494      0.0605   0.7998    0.0400
+    26.22              0.0128      0.0121   0.8676    0.0148
+    27.11              0.0006      0.0004   0.2910    0.0010
+    23.20              0.0351      0.0377   0.8938    0.0222
+    27.3               0.3833      0.4543   0.9128    0.2795
+    27.2               0.1668      0.1659   0.6521    0.1541
+    26.13              0.0759      0.0772   0.8651    0.0435
+    23.8               0.0243      0.0237   0.8171    0.0201
+    26.25              0.0816      0.0873   0.6285    0.0859
+    27.20              0.1138      0.1226   0.7680    0.0843
+    27.0               0.0894      0.0961   0.8145    0.0674
+    21.6               0.0150      0.0170   0.8845    0.0107
+    26.24              0.0494      0.0515   0.5644    0.0699
+
+wrote /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L20-24_project_train32.json
++ echo '=== attr_steer cmd4: question-side steering ==='
+=== attr_steer cmd4: question-side steering ===
++ python -u methods/attr_steer.py --positions question --layers 8 10 12 14 16 --mode both --alpha 1.0 2.0 --n_train_items 32 --n_test_items 16
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+[attr_steer] flags: directions from 32 TRAIN items, scored on 16 disjoint TEST items = 192 directed rows; layers 8-16; modes=['add', 'project']; alphas=[1.0, 2.0]; positions=question -> /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_question_L8-16_add-project_train32.json
+
+=== logging to /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_question_L8-16_add-project_train32.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:42,  3.28it/s]Loading weights:   2%|2         | 15/729 [00:00<00:16, 43.10it/s]Loading weights:   4%|3         | 27/729 [00:00<00:12, 56.09it/s]Loading weights:   6%|5         | 41/729 [00:00<00:10, 68.39it/s]Loading weights:   7%|7         | 54/729 [00:00<00:08, 79.74it/s]Loading weights:   9%|9         | 66/729 [00:00<00:07, 85.40it/s]Loading weights:  11%|#         | 78/729 [00:01<00:07, 90.42it/s]Loading weights:  12%|#2        | 90/729 [00:01<00:06, 92.86it/s]Loading weights:  14%|#3        | 100/729 [00:01<00:07, 89.70it/s]Loading weights:  15%|#5        | 111/729 [00:01<00:06, 89.99it/s]Loading weights:  17%|#7        | 126/729 [00:01<00:06, 99.96it/s]Loading weights:  19%|#8        | 137/729 [00:01<00:06, 97.74it/s]Loading weights:  21%|##        | 150/729 [00:01<00:05, 101.60it/s]Loading weights:  22%|##2       | 162/729 [00:01<00:05, 101.15it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:05, 97.93it/s] Loading weights:  25%|##5       | 184/729 [00:02<00:05, 99.82it/s]Loading weights:  27%|##6       | 196/729 [00:02<00:05, 99.76it/s]Loading weights:  28%|##8       | 207/729 [00:02<00:05, 97.13it/s]Loading weights:  30%|###       | 220/729 [00:02<00:05, 95.34it/s]Loading weights:  32%|###1      | 230/729 [00:02<00:05, 89.56it/s]Loading weights:  33%|###2      | 240/729 [00:02<00:05, 87.63it/s]Loading weights:  34%|###4      | 249/729 [00:02<00:05, 86.19it/s]Loading weights:  35%|###5      | 258/729 [00:03<00:05, 83.40it/s]Loading weights:  37%|###6      | 269/729 [00:03<00:05, 77.83it/s]Loading weights:  39%|###8      | 282/729 [00:03<00:05, 85.34it/s]Loading weights:  40%|####      | 294/729 [00:03<00:04, 89.81it/s]Loading weights:  42%|####1     | 306/729 [00:03<00:04, 93.34it/s]Loading weights:  43%|####3     | 317/729 [00:03<00:04, 94.75it/s]Loading weights:  45%|####4     | 328/729 [00:03<00:04, 89.43it/s]Loading weights:  53%|#####2    | 385/729 [00:03<00:01, 210.86it/s]Loading weights:  68%|######7   | 493/729 [00:04<00:00, 440.13it/s]Loading weights:  82%|########2 | 599/729 [00:04<00:00, 608.66it/s]Loading weights:  97%|#########6| 707/729 [00:04<00:00, 739.99it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 171.58it/s]
+
+==============================================================================
+=== phase 1: estimating directions on 32 held-out-from-test items
+==============================================================================
+    8/128 training forwards
+    16/128 training forwards
+    24/128 training forwards
+    32/128 training forwards
+    40/128 training forwards
+    48/128 training forwards
+    56/128 training forwards
+    64/128 training forwards
+    72/128 training forwards
+    80/128 training forwards
+    88/128 training forwards
+    96/128 training forwards
+    104/128 training forwards
+    112/128 training forwards
+    120/128 training forwards
+    128/128 training forwards
+  per-attribute means over 32 items each
+  layer block      ||d(capi)||     ||d(curr)||     ||d(lang)||     ||d(call)||
+      8     7            1.136           0.982           1.452           1.188
+     10     9            2.411           2.082           3.388           2.553
+     12    11            3.064           2.410           3.809           2.992
+     14    13            4.939           3.469           5.459           4.430
+     16    15            7.066           5.364           7.279           6.272
+
+==============================================================================
+=== phase 2: steering the held-out items
+==============================================================================
+  unsteered                          first=  0.0% full=  0.0% base_kept= 90.6%   <-- floor; base_kept is the ceiling for a no-op
+  L8 (block 7) add a=1.0             first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 (block 7) add a=2.0             first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 (block 7) project a=1.0         first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 (block 7) project a=2.0         first=  0.0% full=  0.0% base_kept= 90.6%
+  L8 RANDOM direction #1             first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L8 RANDOM direction #2             first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L10 (block 9) add a=1.0            first=  0.0% full=  0.0% base_kept= 90.6%
+  L10 (block 9) add a=2.0            first=  0.0% full=  0.0% base_kept= 90.6%
+  L10 (block 9) project a=1.0        first=  0.0% full=  0.0% base_kept= 91.1%
+  L10 (block 9) project a=2.0        first=  0.0% full=  0.0% base_kept= 91.1%
+  L10 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L10 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L12 (block 11) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L12 (block 11) add a=2.0           first=  0.0% full=  0.0% base_kept= 90.1%
+  L12 (block 11) project a=1.0       first=  0.0% full=  0.0% base_kept= 88.5%
+  L12 (block 11) project a=2.0       first=  0.0% full=  0.0% base_kept= 89.6%
+  L12 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L12 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L14 (block 13) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L14 (block 13) add a=2.0           first=  0.0% full=  0.0% base_kept= 87.5%
+  L14 (block 13) project a=1.0       first=  0.0% full=  0.0% base_kept= 89.6%
+  L14 (block 13) project a=2.0       first=  0.0% full=  0.0% base_kept= 88.5%
+  L14 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L14 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L16 (block 15) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.1%
+  L16 (block 15) add a=2.0           first=  0.0% full=  0.0% base_kept= 89.1%
+  L16 (block 15) project a=1.0       first=  0.0% full=  0.0% base_kept= 89.6%
+  L16 (block 15) project a=2.0       first=  0.0% full=  0.0% base_kept= 87.5%
+  L16 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 89.1%   <-- null
+  L16 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 87.5%   <-- null
+
+  Read the attribute arms AGAINST the random arms at the same layer. A random direction of matched norm should leave `first` at the unsteered floor (0.0%); if it does not, this layer is simply fragile and its attribute arm proves nothing.
+
+wrote /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_question_L8-16_add-project_train32.json
++ echo '=== re-running attr_capture at max available items (flags caps at 84) ==='
+=== re-running attr_capture at max available items (flags caps at 84) ===
++ python -u methods/attr_capture.py --entity flags --n_items 84 --batch_size 8 --blocks 15 16 17 18 19 20 21 22 23 24 25 26 27 --out_dir results/attr_capture/flags/blocks15-27_n84
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+[attr_capture] flags: 84 items x 4 attributes = 336 clean runs; blocks 15-27; -> results/attr_capture/flags/blocks15-27_n84
+
+=== logging to results/attr_capture/flags/blocks15-27_n84/capture.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:46,  3.22it/s]Loading weights:   2%|2         | 16/729 [00:00<00:15, 45.62it/s]Loading weights:   4%|3         | 28/729 [00:00<00:11, 58.49it/s]Loading weights:   5%|5         | 40/729 [00:00<00:09, 71.38it/s]Loading weights:   7%|7         | 53/729 [00:00<00:08, 83.54it/s]Loading weights:   9%|8         | 65/729 [00:00<00:07, 88.07it/s]Loading weights:  11%|#         | 77/729 [00:01<00:07, 84.19it/s]Loading weights:  12%|#2        | 90/729 [00:01<00:07, 91.18it/s]Loading weights:  14%|#3        | 102/729 [00:01<00:06, 93.81it/s]Loading weights:  16%|#5        | 114/729 [00:01<00:06, 99.58it/s]Loading weights:  17%|#7        | 126/729 [00:01<00:05, 101.89it/s]Loading weights:  19%|#8        | 137/729 [00:01<00:05, 100.68it/s]Loading weights:  21%|##        | 150/729 [00:01<00:05, 105.74it/s]Loading weights:  22%|##2       | 162/729 [00:01<00:05, 103.83it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:05, 103.60it/s]Loading weights:  25%|##5       | 184/729 [00:02<00:05, 102.60it/s]Loading weights:  27%|##6       | 196/729 [00:02<00:05, 92.87it/s] Loading weights:  29%|##8       | 209/729 [00:02<00:05, 98.53it/s]Loading weights:  30%|###       | 220/729 [00:02<00:05, 87.52it/s]Loading weights:  32%|###1      | 232/729 [00:02<00:05, 94.86it/s]Loading weights:  33%|###3      | 244/729 [00:02<00:05, 94.71it/s]Loading weights:  35%|###5      | 256/729 [00:02<00:05, 82.98it/s]Loading weights:  37%|###6      | 269/729 [00:03<00:05, 89.98it/s]Loading weights:  38%|###8      | 280/729 [00:03<00:05, 87.46it/s]Loading weights:  40%|####      | 293/729 [00:03<00:04, 93.79it/s]Loading weights:  42%|####1     | 305/729 [00:03<00:04, 96.67it/s]Loading weights:  43%|####3     | 317/729 [00:03<00:04, 96.69it/s]Loading weights:  45%|####4     | 328/729 [00:03<00:04, 94.13it/s]Loading weights:  55%|#####5    | 403/729 [00:03<00:01, 260.78it/s]Loading weights:  71%|#######   | 515/729 [00:03<00:00, 487.60it/s]Loading weights:  88%|########8 | 645/729 [00:04<00:00, 710.01it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 178.74it/s]
+  8/336 runs captured
+  16/336 runs captured
+  24/336 runs captured
+  32/336 runs captured
+  40/336 runs captured
+  48/336 runs captured
+  56/336 runs captured
+  64/336 runs captured
+  72/336 runs captured
+  80/336 runs captured
+  88/336 runs captured
+  96/336 runs captured
+  104/336 runs captured
+  112/336 runs captured
+  120/336 runs captured
+  128/336 runs captured
+  136/336 runs captured
+  144/336 runs captured
+  152/336 runs captured
+  160/336 runs captured
+  168/336 runs captured
+  176/336 runs captured
+  184/336 runs captured
+  192/336 runs captured
+  200/336 runs captured
+  208/336 runs captured
+  216/336 runs captured
+  224/336 runs captured
+  232/336 runs captured
+  240/336 runs captured
+  248/336 runs captured
+  256/336 runs captured
+  264/336 runs captured
+  272/336 runs captured
+  280/336 runs captured
+  288/336 runs captured
+  296/336 runs captured
+  304/336 runs captured
+  312/336 runs captured
+  320/336 runs captured
+  328/336 runs captured
+  336/336 runs captured
+
+wrote results/attr_capture/flags/blocks15-27_n84  (4 arrays, 336 runs)
++ echo '=== attr_directions on the n84 capture ==='
+=== attr_directions on the n84 capture ===
++ python3 -u methods/attr_directions.py results/attr_capture/flags/blocks15-27_n84 --trace logs/attr_head_trace/flags/attr_head_trace_patch15_blocks15-22_all_text_n84.json --image_trace logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/head_trace_patch21.json --top_k 16 --json_out results/attr_capture/flags/directions_n84.json
+results/attr_capture/flags/blocks15-27_n84
+  84 items x 4 attributes ['capital', 'currency', 'language', 'calling_code'], blocks 15-27, sites ['residual', 'attn_output', 'mlp_output', 'attn_head_output']
+
+==============================================================================
+=== attribute separability after removing each item's own mean
+==============================================================================
+  chance LOO accuracy = 0.250
+  block                   residual               attn_output                mlp_output          attn_head_output
+                var_expl / LOO acc        var_expl / LOO acc        var_expl / LOO acc        var_expl / LOO acc
+     15        0.975 /       1.000       0.980 /       1.000       0.968 /       1.000       0.984 /       1.000
+     16        0.981 /       1.000       0.984 /       1.000       0.974 /       1.000       0.985 /       1.000
+     17        0.977 /       1.000       0.972 /       1.000       0.966 /       1.000       0.977 /       1.000
+     18        0.971 /       1.000       0.951 /       1.000       0.956 /       1.000       0.970 /       1.000
+     19        0.965 /       1.000       0.962 /       1.000       0.942 /       1.000       0.959 /       1.000
+     20        0.973 /       1.000       0.978 /       1.000       0.964 /       1.000       0.975 /       1.000
+     21        0.966 /       1.000       0.927 /       1.000       0.962 /       1.000       0.926 /       1.000
+     22        0.960 /       1.000       0.512 /       1.000       0.947 /       1.000       0.580 /       1.000
+     23        0.923 /       1.000       0.410 /       1.000       0.869 /       1.000       0.439 /       1.000
+     24        0.843 /       1.000       0.552 /       1.000       0.627 /       1.000       0.650 /       1.000
+     25        0.749 /       1.000       0.798 /       1.000       0.650 /       1.000       0.802 /       1.000
+     26        0.658 /       1.000       0.650 /       1.000       0.470 /       1.000       0.591 /       1.000
+     27        0.686 /       1.000       0.680 /       1.000       0.755 /       1.000       0.695 /       1.000
+
+==============================================================================
+=== direction geometry: residual at block 16 (most separable)
+==============================================================================
+                      capital      currency      language  calling_code
+        capital         1.000        -0.449        -0.347        -0.199
+       currency        -0.449         1.000        -0.288        -0.129
+       language        -0.347        -0.288         1.000        -0.565
+   calling_code        -0.199        -0.129        -0.565         1.000
+  centroid norms: capital=10.17, currency=9.21, language=11.75, calling_code=9.84
+  singular values: 13.89, 11.79, 9.56, 0.00
+  effective rank 2.93 of at most 3 (centering forces the centroids to sum to zero, so 3 is the ceiling, not a finding; well below it means the attributes share one axis)
+
+==============================================================================
+=== per-head attribute separability (attn_head_output, correlational)
+==============================================================================
+    block.head   var_expl   LOO acc  landed_scale
+  20.18              0.994     1.000         12.06
+  19.21              0.993     1.000         10.61
+  20.17              0.991     1.000         12.62
+  16.20              0.991     1.000          7.06
+  21.0               0.991     1.000         15.07
+  15.27              0.990     1.000          3.89
+  18.21              0.990     1.000          4.56
+  16.6               0.990     1.000          6.87
+  15.17              0.989     1.000          2.61
+  16.15              0.989     1.000          7.09
+  21.21              0.988     1.000          9.63
+  21.25              0.988     1.000         11.17
+  18.27              0.987     1.000          3.61
+  16.7               0.987     1.000          3.20
+  15.21              0.987     1.000          2.67
+  17.24              0.986     1.000          6.72
+
+  mean var_expl per block: 15=0.968, 16=0.970, 17=0.955, 18=0.943, 19=0.852, 20=0.923, 21=0.899, 22=0.709, 23=0.637, 24=0.648, 25=0.694, 26=0.554, 27=0.509
+
+  vs the CAUSAL ranking in attr_head_trace_patch15_blocks15-22_all_text_n84.json (by delta_resid): rank correlation +0.220 over 224 shared heads; top-16 overlap 8/16
+  (low overlap is a result, not an error: linear separability is not the same claim as the model reading the head out -- the same gap RESULTS.md records between the Phase B proxy and real interventions.)
+
+==============================================================================
+=== image heads under a changing question (variance decomposition)
+==============================================================================
+  top-16 heads of head_trace_patch21.json by delta_resid (image->text trace, patch_layer=21, attribute=language)
+
+    block.head     item  attribute  interaction  landed_scale
+  27.13            0.194      0.628        0.178         19.80
+  27.10            0.194      0.628        0.178         19.77
+  27.12            0.194      0.628        0.178         19.17
+  26.15            0.368      0.418        0.214          8.04
+  26.22            0.344      0.402        0.254         17.62
+  27.11            0.195      0.626        0.179         19.14
+  23.20            0.289      0.617        0.094          2.32
+  27.3             0.726      0.063        0.211         14.30
+  27.2             0.130      0.739        0.131         15.54
+  26.13            0.197      0.610        0.193          9.46
+  23.8             0.204      0.676        0.120          2.24
+  26.25            0.273      0.357        0.370         13.21
+  27.20            0.388      0.385        0.227          8.44
+  27.0             0.551      0.190        0.259          8.09
+  21.6             0.145      0.821        0.034          8.56
+  26.24            0.379      0.344        0.277         22.92
+
+  mean over these heads: item=0.298 attribute=0.508 interaction=0.193
+  Reading: item ~1 means these heads ferry the SAME image content whatever is asked. A large ATTRIBUTE term means they carry a question-dependent component that is the same for every flag (so: not image data at all). A large INTERACTION term is the interesting one -- the head reads THIS flag differently depending on what was asked, which is attribute-selective image reading.
+  ALL 364 captured heads, for reference: item=0.296 attribute=0.595 interaction=0.109
+
+wrote results/attr_capture/flags/directions_n84.json
++ echo '=== ALL QUEUED WORK FINISHED ==='
+=== ALL QUEUED WORK FINISHED ===

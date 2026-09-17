@@ -1,0 +1,113 @@
+
+=== logging to /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L20-24_project_train32.log ===
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<03:56,  3.07it/s]Loading weights:   2%|2         | 16/729 [00:00<00:15, 46.09it/s]Loading weights:   4%|3         | 28/729 [00:00<00:12, 56.31it/s]Loading weights:   6%|5         | 41/729 [00:00<00:09, 71.74it/s]Loading weights:   7%|7         | 53/729 [00:00<00:08, 79.27it/s]Loading weights:   9%|8         | 65/729 [00:00<00:07, 86.61it/s]Loading weights:  11%|#         | 77/729 [00:01<00:07, 90.55it/s]Loading weights:  12%|#2        | 89/729 [00:01<00:06, 92.89it/s]Loading weights:  14%|#3        | 101/729 [00:01<00:06, 94.31it/s]Loading weights:  15%|#5        | 112/729 [00:01<00:07, 85.55it/s]Loading weights:  17%|#7        | 126/729 [00:01<00:06, 93.90it/s]Loading weights:  19%|#8        | 136/729 [00:01<00:06, 92.37it/s]Loading weights:  21%|##        | 150/729 [00:01<00:05, 99.51it/s]Loading weights:  22%|##2       | 162/729 [00:01<00:05, 99.36it/s]Loading weights:  24%|##3       | 173/729 [00:02<00:05, 95.29it/s]Loading weights:  25%|##5       | 184/729 [00:02<00:05, 97.16it/s]Loading weights:  27%|##7       | 197/729 [00:02<00:05, 97.99it/s]Loading weights:  29%|##8       | 209/729 [00:02<00:05, 99.18it/s]Loading weights:  30%|###       | 220/729 [00:02<00:05, 98.82it/s]Loading weights:  32%|###1      | 230/729 [00:02<00:05, 92.15it/s]Loading weights:  33%|###2      | 240/729 [00:02<00:05, 87.37it/s]Loading weights:  34%|###4      | 249/729 [00:02<00:05, 84.54it/s]Loading weights:  35%|###5      | 258/729 [00:03<00:05, 80.31it/s]Loading weights:  37%|###6      | 269/729 [00:03<00:05, 83.32it/s]Loading weights:  38%|###8      | 280/729 [00:03<00:05, 88.81it/s]Loading weights:  40%|###9      | 291/729 [00:03<00:04, 89.26it/s]Loading weights:  42%|####1     | 304/729 [00:03<00:04, 87.92it/s]Loading weights:  43%|####3     | 316/729 [00:03<00:05, 75.78it/s]Loading weights:  45%|####5     | 330/729 [00:03<00:04, 84.44it/s]Loading weights:  59%|#####8    | 427/729 [00:04<00:01, 285.97it/s]Loading weights:  72%|#######2  | 527/729 [00:04<00:00, 459.69it/s]Loading weights:  87%|########6 | 631/729 [00:04<00:00, 609.21it/s]Loading weights: 100%|#########9| 728/729 [00:04<00:00, 699.87it/s]Loading weights: 100%|##########| 729/729 [00:04<00:00, 169.28it/s]
+
+==============================================================================
+=== phase 1: estimating directions on 32 held-out-from-test items
+==============================================================================
+    8/128 training forwards
+    16/128 training forwards
+    24/128 training forwards
+    32/128 training forwards
+    40/128 training forwards
+    48/128 training forwards
+    56/128 training forwards
+    64/128 training forwards
+    72/128 training forwards
+    80/128 training forwards
+    88/128 training forwards
+    96/128 training forwards
+    104/128 training forwards
+    112/128 training forwards
+    120/128 training forwards
+    128/128 training forwards
+  per-attribute means over 32 items each
+  layer block      ||d(capi)||     ||d(curr)||     ||d(lang)||     ||d(call)||
+     20    19           22.098          25.388          19.354          28.946
+     21    20           39.255          36.069          32.906          46.001
+     22    21           68.272          72.150          51.439          81.014
+     24    23          167.780         148.875         139.878         166.047
+
+==============================================================================
+=== phase 2: steering the held-out items
+==============================================================================
+  unsteered                          first=  0.0% full=  0.0% base_kept= 78.1%   <-- floor; base_kept is the ceiling for a no-op
+  L20 (block 19) project a=1.0       first= 58.9% full= 42.2% base_kept= 26.6%
+  L20 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 76.6%   <-- null
+  L20 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 75.0%   <-- null
+  L21 (block 20) project a=1.0       first= 81.8% full= 53.1% base_kept=  4.7%
+  L21 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 81.2%   <-- null
+  L21 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 82.8%   <-- null
+  L22 (block 21) project a=1.0       first= 91.7% full= 56.8% base_kept=  0.0%
+  L22 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 76.6%   <-- null
+  L22 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 78.1%   <-- null
+  L24 (block 23) project a=1.0       first= 86.5% full= 51.0% base_kept=  0.5%
+  L24 RANDOM direction #1            first=  0.5% full=  0.0% base_kept= 64.1%   <-- null
+  L24 RANDOM direction #2            first=  0.5% full=  0.0% base_kept= 71.9%   <-- null
+
+  Read the attribute arms AGAINST the random arms at the same layer. A random direction of matched norm should leave `first` at the unsteered floor (0.0%); if it does not, this layer is simply fragile and its attribute arm proves nothing.
+
+==============================================================================
+=== phase 3: image-head attention, clean vs steered
+==============================================================================
+  top-16 heads of head_trace_patch21.json by delta_resid; steering layers [22, 24, 21]
+  Attention is a distribution over the image columns at the readout position. `mass` is how much of it lands on the image at all; `cosine` compares the clean and steered patterns. Steering that changes the ANSWER without changing `cosine` means the model looked at the same pixels and reported something else -- selection happening downstream of the image read, not inside it.
+
+  steering at L22 (block 21), mode=project:
+      block.head  mass clean  mass steer   cosine  L1 shift
+    27.13              0.0000      0.0498   0.0000    0.0498
+    27.10              0.0000      0.0000   0.0000    0.0000
+    27.12              0.3335      0.0442   0.1670    0.3072
+    26.15              0.0494      0.0578   0.7435    0.0424
+    26.22              0.0128      0.0156   0.8422    0.0179
+    27.11              0.0006      0.0005   0.4109    0.0011
+    23.20              0.0351      0.0366   0.8718    0.0241
+    27.3               0.3833      0.4240   0.9009    0.3030
+    27.2               0.1668      0.1756   0.5837    0.1770
+    26.13              0.0759      0.0812   0.8521    0.0479
+    23.8               0.0243      0.0238   0.7787    0.0232
+    26.25              0.0816      0.0848   0.5746    0.0922
+    27.20              0.1138      0.1191   0.7157    0.0926
+    27.0               0.0894      0.0919   0.7489    0.0743
+    21.6               0.0150      0.0150   1.0000    0.0000
+    26.24              0.0494      0.0737   0.4919    0.0930
+
+  steering at L24 (block 23), mode=project:
+      block.head  mass clean  mass steer   cosine  L1 shift
+    27.13              0.0000      0.0000   0.0000    0.0000
+    27.10              0.0000      0.0000   0.0000    0.0000
+    27.12              0.3335      0.0770   0.1820    0.3493
+    26.15              0.0494      0.0534   0.7584    0.0386
+    26.22              0.0128      0.0157   0.8371    0.0176
+    27.11              0.0006      0.0009   0.3509    0.0015
+    23.20              0.0351      0.0351   1.0000    0.0000
+    27.3               0.3833      0.4015   0.9048    0.2591
+    27.2               0.1668      0.1703   0.6008    0.1731
+    26.13              0.0759      0.0793   0.8553    0.0462
+    23.8               0.0243      0.0243   1.0000    0.0000
+    26.25              0.0816      0.0793   0.5799    0.0887
+    27.20              0.1138      0.1127   0.7105    0.0917
+    27.0               0.0894      0.0873   0.7404    0.0726
+    21.6               0.0150      0.0150   1.0000    0.0000
+    26.24              0.0494      0.0779   0.5069    0.0974
+
+  steering at L21 (block 20), mode=project:
+      block.head  mass clean  mass steer   cosine  L1 shift
+    27.13              0.0000      0.0000   0.0000    0.0000
+    27.10              0.0000      0.0000   0.0000    0.0000
+    27.12              0.3335      0.0856   0.3401    0.3076
+    26.15              0.0494      0.0605   0.7998    0.0400
+    26.22              0.0128      0.0121   0.8676    0.0148
+    27.11              0.0006      0.0004   0.2910    0.0010
+    23.20              0.0351      0.0377   0.8938    0.0222
+    27.3               0.3833      0.4543   0.9128    0.2795
+    27.2               0.1668      0.1659   0.6521    0.1541
+    26.13              0.0759      0.0772   0.8651    0.0435
+    23.8               0.0243      0.0237   0.8171    0.0201
+    26.25              0.0816      0.0873   0.6285    0.0859
+    27.20              0.1138      0.1226   0.7680    0.0843
+    27.0               0.0894      0.0961   0.8145    0.0674
+    21.6               0.0150      0.0170   0.8845    0.0107
+    26.24              0.0494      0.0515   0.5644    0.0699
+
+wrote /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L20-24_project_train32.json
