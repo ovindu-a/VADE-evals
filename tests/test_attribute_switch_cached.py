@@ -46,16 +46,17 @@ def test_every_site_scope_and_control_matches_reference_per_token(tiny, batch_si
     assert all(not module._forward_hooks for module in runner.model.modules())
 
 
-def test_donors_reused_and_only_prefill_encodes_images(tiny):
+def test_donors_reused_and_only_the_shared_prefix_encodes_images(tiny):
     runner, batch = spatial_setup(tiny)
     arms = [arm('all_text/attention', 2, c) for c in ['switch', 'self', 'paraphrase']]
     cached = CachedPrefill(runner, batch, arms)
+    assert cached.prefix_length == 6            # base/source differ at 7, base/paraphrase at 6
     calls, vision_calls = [], []
     def observe(module, args, kwargs):
-        calls.append((kwargs['input_ids'].shape, 'pixel_values' in kwargs,
+        calls.append((tuple(kwargs['input_ids'].shape), 'pixel_values' in kwargs,
                       kwargs.get('past_key_values') is not None))
     h = runner.model.register_forward_pre_hook(observe, with_kwargs=True)
-    v = runner.model.model.visual.register_forward_hook(lambda *args: vision_calls.append(True))
+    v = runner.model.model.visual.register_forward_hook(lambda *a: vision_calls.append(True))
     try:
         first = cached.generate(arms)
         second = cached.generate(arms)
@@ -63,13 +64,47 @@ def test_donors_reused_and_only_prefill_encodes_images(tiny):
         h.remove()
         v.remove()
     assert first == second
-    # Three donors ONCE, then two batched prefills. Subsequent steps decode one
-    # token with caches and never rerun the vision tower.
-    assert len(vision_calls) == 5
-    assert sum(has_pixels for _, has_pixels, _ in calls) == 5
-    incremental = [(shape, has_cache) for shape, pixels, has_cache in calls if not pixels]
+    # The image is inside the shared prefix, so the vision tower runs ONCE for the whole row --
+    # not once per donor and once per recipient chunk, which is what it cost before.
+    assert len(vision_calls) == 1
+    assert sum(has_pixels for _, has_pixels, _ in calls) == 1
+    prefix = [c for c in calls if c[1]]
+    assert prefix[0] == ((3, cached.prefix_length), True, False)
+    # Every later forward is a suffix or a decode step: no pixels, and a cache underneath it.
+    assert all(has_cache for _, has_pixels, has_cache in calls if not has_pixels)
+    suffix_len = batch['base_input_ids'].shape[1] - cached.prefix_length
+    tails = [shape for shape, pixels, _ in calls if not pixels and shape[1] == suffix_len]
+    assert len(tails) == 5          # 3 donors (once, reused) + 2 recipient prefills
+    incremental = [shape for shape, pixels, _ in calls if not pixels and shape[1] == 1]
     assert len(incremental) == 2 * (runner.args.max_new_tokens - 1)
-    assert all(shape == (3, 1) and has_cache for shape, has_cache in incremental)
+    assert all(shape == (3, 1) for shape in incremental)
+
+
+def test_share_prefix_can_be_disabled_and_matches(tiny):
+    """The opt-out path must stay live: it is the A/B reference for the shared one."""
+    runner, batch = spatial_setup(tiny)
+    arms = [arm('all_text/attention', 2, c) for c in ['switch', 'self', 'paraphrase']]
+    shared = CachedPrefill(runner, batch, arms).generate(arms)
+    plain = CachedPrefill(runner, batch, arms, share_prefix=False)
+    assert plain.prefix_length == 0 and plain.positions_dropped_inert == 0
+    assert plain.generate(arms) == shared
+
+
+def test_inert_positions_are_dropped_not_patched(tiny):
+    """Positions below the divergence hold identical values in donor and recipient,
+    so they are dropped from the plan. The count is recorded, and the arm must
+    still agree token-for-token with the reference that does patch them."""
+    runner, batch = spatial_setup(tiny)
+    # Move the paraphrase divergence later so that column 6 sits BELOW the shared prefix and is
+    # therefore droppable; spatial_setup's default puts both divergences at/after every patch column.
+    batch['paraphrase_ids'] = batch['base_input_ids'].clone()
+    batch['paraphrase_ids'][0, 8] = 16
+    arms = [arm('earlier_text/residual', 4, 'switch')]
+    cached = CachedPrefill(runner, batch, arms)
+    assert cached.prefix_length == 7
+    kept = cached.plan[arms[0][0]][1]
+    assert cached.positions_dropped_inert == 1 and kept == [7]
+    cached.generate(arms, verify=True)
 
 
 def test_batch_lanes_stop_at_their_own_eos(tiny, monkeypatch):

@@ -154,6 +154,7 @@ class Results:
             raise ValueError(f'{self.path} belongs to a different configuration; use another --out_dir')
         meta.write_text(json.dumps(config, indent=2) + '\n')
         self.records = []
+        self._handle = None
         dest = self.path / 'rows.jsonl'
         if dest.exists():
             # Discard only an incomplete final write after interruption, never a corrupt interior row.
@@ -176,9 +177,14 @@ class Results:
     def check_runtime(self, runner):
         import torch
         import transformers
+        # Read the backend off the loaded model rather than hardcoding it: callers may now choose
+        # it (attribute_switch_sweep's --attn_impl). A run that changes kernel therefore refuses to
+        # resume into an existing directory, which is the intended behaviour -- different kernels
+        # are the same computation in a different reduction order, not the same numbers.
+        backend = getattr(runner.model.config, '_attn_implementation', None) or 'eager'
         runtime = {'torch': torch.__version__, 'transformers': transformers.__version__,
                    'model_config': runner.model.config.to_dict(), 'dtype': str(runner.model.dtype),
-                   'attention_backend': 'eager'}
+                   'attention_backend': backend}
         runtime = json.loads(json.dumps(runtime))
         path = self.path / 'runtime.json'
         if path.exists() and json.loads(path.read_text()) != runtime:
@@ -189,9 +195,12 @@ class Results:
         key = record['row_index'], record['arm']
         if key in self.done:
             return
-        with (self.path / 'rows.jsonl').open('a') as f:
-            f.write(json.dumps(record, allow_nan=False) + '\n')
-            f.flush()
+        # One long-lived append handle instead of an open/close per record: a full sweep writes
+        # ~300k records, and the flush (which is what makes an interrupted run resumable) is kept.
+        if self._handle is None:
+            self._handle = (self.path / 'rows.jsonl').open('a')
+        self._handle.write(json.dumps(record, allow_nan=False) + '\n')
+        self._handle.flush()
         self.records.append(record)
         self.done.add(key)
         scores = record['source_score']

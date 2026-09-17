@@ -70,11 +70,58 @@ from those donor scores being zero.
 
 ## Faster prefill sweeps on a 24 GB GPU
 
-Add `--execution cached --batch_size 2` to batch independent prefill arms on one
-model instance. Try 4 only after measuring memory and throughput on your GPU.
+Add `--execution cached` to batch independent prefill arms on one model instance.
 The default remains `--execution serial` for reference comparisons.
 
-The cached engine:
+Three things make the cached engine fast, and only the first is old:
+
+1. **Batched arms + per-arm KV caches** (`--batch_size`). Independent arms share
+   one prefill; each keeps its own cache through decoding.
+2. **A shared prompt prefix** (on by default; `--no_share_prefix` opts out).
+   Every prompt variant of a row agrees on a long token prefix -- on the flag
+   task 205 of 219 tokens, with the whole image inside it. That prefix's KV
+   cache is built once per row and per batch size and reused by every donor and
+   every arm, so each prefill computes only the divergent tail and the vision
+   tower runs **once per row** instead of once per lane per chunk. Patch columns
+   below the divergence are dropped: donor and recipient read the same cache
+   entries there, so writing one onto the other is a no-op by construction.
+3. **SDPA attention** (`--attn_impl`, default `sdpa`). Nothing in this script
+   reads attention weights, and `eager` materializes a `[batch, heads, T, T]`
+   tensor per layer. Pass `--attn_impl eager` to reproduce pre-2026-09 runs.
+
+`--summary_every N` (default 16) controls how often `switch_summary.json` is
+rebuilt. It used to be rewritten after every row over every record written so
+far, which made the CPU side quadratic in rows while the GPU idled; the summary
+is a pure function of `rows.jsonl`, so the cadence only affects how stale an
+interrupted run's summary is.
+
+**These changes invalidate resume into existing directories.** `config.json`
+records `attn_impl`/`no_share_prefix`, `runtime.json` now records the actual
+attention backend, and `implementation_sha256` covers both edited modules. The
+partially complete `attention_18_24_64_cached_b96` and `text_continuous_cached_b2`
+runs therefore need a new `--out_dir` (or `--attn_impl eager --no_share_prefix`,
+which restores the old identity on everything except the implementation hash).
+
+Verify before trusting a long run -- this compares every cached token logit and
+greedy choice against full-prefix serial execution, and intentionally removes the
+speed benefit:
+
+```bash
+python methods/attribute_switch_sweep.py \
+  --n_countries 1 --attributes capital currency \
+  --scopes last_token --sites attention --layers 22 \
+  --block_spans --attention_spans 3 \
+  --execution cached --batch_size 2 --verify_cached \
+  --out_dir results/attribute_switch/cached_verify
+```
+
+The CPU test suite (`python -m pytest tests/`) covers the same equivalence on a
+tiny randomly-initialized VLM at batch sizes 1/2/4 across every site, scope and
+control, plus the shared-prefix path, its opt-out, and the dropped-column
+bookkeeping. It establishes mechanical equivalence; actual speed, memory use and
+BF16 numerical agreement still need measuring on the real model.
+
+The cached engine, in detail:
 
 - Captures each needed donor question variant per row and active batch size,
   storing only the requested text positions/sites on CPU. Donor values at prompt positions cannot

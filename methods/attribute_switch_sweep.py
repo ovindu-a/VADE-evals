@@ -107,8 +107,14 @@ class SwitchRunner(Runner):
         from methods.adapters.registry import get_adapter
         self.args = args
         self.adapter = get_adapter(args.model_id)
+        # 'eager' is inherited from the head experiments, which need attn_weights for
+        # output_attentions=True. Nothing in THIS script reads attention weights, and eager
+        # materializes a [batch, heads, T, T] tensor per layer -- at batch 64 over a 219-token
+        # prompt that is both the slowest and the most memory-hungry way to run it. 'sdpa' is the
+        # default here for that reason; --attn_impl eager reproduces earlier runs bit-for-bit.
         self.model, self.processor = self.adapter.load(device=args.device,
-            dtype=torch.float32 if args.device == 'cpu' else torch.bfloat16, attn_implementation='eager')
+            dtype=torch.float32 if args.device == 'cpu' else torch.bfloat16,
+            attn_implementation=getattr(args, 'attn_impl', 'eager'))
         self.model.eval().requires_grad_(False)
         self.layers = self.adapter.get_decoder_layers(self.model)
 
@@ -242,6 +248,7 @@ def execute(runner, args, rows, items, entity_dir, results):
     if any(not 1 <= layer <= len(runner.layers) for layer in args.layers):
         raise ValueError(f'Layer must be in 1..{len(runner.layers)}')
     arms = sweep_arms(args)
+    done = 0
     for row in rows:
         if all(results.has(row, a) for a in ['clean', 'donor_clean'] + [x[0] for x in arms]):
             continue
@@ -275,7 +282,8 @@ def execute(runner, args, rows, items, entity_dir, results):
             from methods.attribute_switch_cached import CachedPrefill
             prefill = [a for a in pending if a[3] == 'prefill']
             if prefill:
-                cached = CachedPrefill(runner, batch, prefill)
+                cached = CachedPrefill(runner, batch, prefill,
+                                       share_prefix=not getattr(args, 'no_share_prefix', False))
                 for start in range(0, len(prefill), args.batch_size):
                     chunk = prefill[start:start + args.batch_size]
                     generated = cached.generate(chunk, verify=getattr(args, 'verify_cached', False))
@@ -283,13 +291,21 @@ def execute(runner, args, rows, items, entity_dir, results):
                         results.add(runner.record(row, arm, tokens, gold,
                             base_attribute=row['base_attribute'], donor_attribute=row['donor_attribute'],
                             execution='cached', batch_size=len(chunk),
+                            shared_prefix_length=cached.prefix_length,
                             **metadata(site, layer, mode, control)))
                 del cached
             pending = [a for a in pending if a[3] != 'prefill']
         for arm, site, layer, mode, control in pending:
             save(arm, runner.step(batch, site, layer, mode, control),
                  execution='serial', **metadata(site, layer, mode, control))
-        summarize_switch(results)
+        # summarize_switch is O(every record written so far) and rewrites two multi-megabyte
+        # JSONs, so running it after every row made the whole sweep O(rows^2) on the CPU side
+        # while the GPU idled. The cadence only affects how stale an INTERRUPTED run's summary
+        # is; rows.jsonl is still flushed per record and the summary is rebuilt from it below.
+        done += 1
+        every = getattr(args, 'summary_every', 0)
+        if every and done % every == 0:
+            summarize_switch(results)
     # Also rebuild a missing summary after an interruption following the last row write.
     summarize_switch(results)
 
@@ -318,6 +334,18 @@ def main(argv=None):
                     help='Cached: reuse donor activations and batch KV-cached prefill arms; continuous stays serial')
     ap.add_argument('--batch_size', type=int, default=2,
                     help='Parallel prefill arms in cached mode; start at 2 on a 24GB GPU')
+    ap.add_argument('--attn_impl', default='sdpa', choices=['sdpa', 'eager', 'flash_attention_2'],
+                    help='Attention kernel. Nothing here reads attention weights, so eager only '
+                         'costs speed and memory; pass eager to reproduce pre-2026-09 runs.')
+    ap.add_argument('--no_share_prefix', action='store_true',
+                    help='Disable the shared prompt-prefix KV cache in cached mode. The prefix is '
+                         'the token span every prompt variant of a row agrees on (the image lives '
+                         'inside it), so sharing it is exact; use this to A/B it or if a prompt '
+                         'set diverges before the image ends.')
+    ap.add_argument('--summary_every', type=int, default=16,
+                    help='Rebuild switch_summary.json every N rows (0 = only at the end). The '
+                         'summary is a pure function of rows.jsonl, so this trades summary '
+                         'freshness during a run for CPU time, nothing else.')
     ap.add_argument('--verify_cached', action='store_true',
                     help='Slow diagnostic: compare every cached token logit/argmax with the serial reference')
     ap.add_argument('--baselines_only', action='store_true', help='Check clean controlled-prompt accuracy before sweeping')
@@ -345,7 +373,9 @@ def main(argv=None):
             rows.append(dict(row_index=len(rows), base=country, source=country, base_attribute=base,
                 donor_attribute=donor, base_label=item[base], source_label=item[donor],
                 template_id='controlled_report_v1'))
-    config = {k: v for k, v in vars(args).items() if k not in ('dry_run', 'out_dir')}
+    # summary_every only changes how often a derived file is rewritten, so it is kept out of
+    # the run identity -- changing it must not refuse a resume.
+    config = {k: v for k, v in vars(args).items() if k not in ('dry_run', 'out_dir', 'summary_every')}
     config.update(rows=rows, prompts={a: [question(a), question(a, True)] for a in args.attributes},
         prefill=PREFILL, ground_truth_sha256=hashlib.sha256(raw).hexdigest(),
         image_sha256={c: hashlib.sha256((entity_dir / items[c]['image']).read_bytes()).hexdigest()

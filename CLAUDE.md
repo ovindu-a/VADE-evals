@@ -466,6 +466,29 @@ ASSERTS they agree on `base_input_ids`/`attention_mask` -- a silent mismatch
 would patch one prompt's image and read another's last token with every
 downstream number still plausible.
 
+## The question->readout path: methods/attr_head_trace.py, attr_capture.py, attr_directions.py
+
+`methods/attribute_switch_sweep.py` holds the IMAGE fixed and swaps the QUESTION,
+which localizes a different circuit from `head_trace.py`'s image->text read: which
+heads carry WHICH ATTRIBUTE was asked. Its results are analysed by
+`methods/attribute_switch_report.py` and written up in ATTRIBUTE_SWITCH_FINDINGS.md
+-- the handoff is blocks 17-21, any attention span covering blocks 19-21 reads
+96.6-100%, and eight blocks 20..27 (missing only 19) cap at 79.8%. Report
+`donor_first`, not `donor_full`: a `last_token` patch cannot steer past the first
+answer token, which the prefill-vs-continuous run measures directly.
+
+The three follow-ups live in ATTRIBUTE_HEAD_EXPERIMENTS.md. `attr_head_trace.py`
+IMPORTS head_trace's phase machinery rather than copying it, so the image and
+attribute traces stay comparable; `attr_capture.py` writes a crossed
+items x attributes grid of clean activations as memmapped .npy;
+`attr_directions.py` reads it with no model at all. **Do not fork head_trace's
+phases** -- add a patch builder, as attr_head_trace does.
+
+The cached sweep engine now shares a prompt-prefix KV cache across every arm of a
+row (the prompt variants agree on 205 of 219 tokens, image included) and defaults
+to `--attn_impl sdpa`; both change run identity, so earlier partial runs need a
+new `--out_dir`.
+
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
 The Phase B feature-selection proxy (a classifier reading the target attribute off

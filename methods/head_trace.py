@@ -618,9 +618,12 @@ def main():
             # The window opens exactly at the patch, so nothing upstream of it can have carried the
             # image edit to the read column yet. This MUST be ~0; anything else and the identity
             # does not apply and no arm below means what it says.
-            print(f"    {'-> as required' if entry_rel < 0.01 else '!! should be ~0 -- the patch is '
-                  'reaching the read column before the first traced block, so the identity does not '
-                  'apply and nothing below is interpretable'}")
+            # Split out of the f-string: a nested multi-line quote inside {} only parses on
+            # Python 3.12+ (PEP 701), which made this module import-fail on 3.11 toolchains.
+            verdict = ("-> as required" if entry_rel < 0.01 else
+                       "!! should be ~0 -- the patch is reaching the read column before the first "
+                       "traced block, so the identity does not apply and nothing below is interpretable")
+            print(f"    {verdict}")
         else:
             # The window opens ABOVE the patch, so blocks patch_layer..blocks[0]-1 have already had
             # their turn. Nonzero is expected, and the number is worth reading on its own: it is how
