@@ -11,8 +11,10 @@ import pytest
 import torch
 
 from test_head_followups import tiny                                    # noqa: F401
-from methods.head_swap_vade import (capture_donor, head_columns, heads_from_trace, parse_heads,
-                                    patched_generate, plain_generate, verify_readback)
+from methods.head_swap_vade import (all_blocks, batches_by_donor_attribute, capture_donor,
+                                    head_columns, heads_for, heads_from_trace, parse_heads,
+                                    patched_generate, plain_generate, resolve_head_sets,
+                                    verify_readback)
 
 HEADS = [(1, 0), (2, 3)]          # tiny model: 4 blocks, 4 heads, head_dim 8, hidden 32
 HEAD_DIM = 8
@@ -158,18 +160,62 @@ def _in_patch():
     return any(f.function == "patched_generate" for f in inspect.stack()[:6])
 
 
-def test_void_pre_fix_traces_are_refused(tmp_path):
-    """A pre-518cf31 trace ranks heads that were traced at image columns. Its
-    signature is a phase-3 ceiling near zero against a live image patch."""
-    void = tmp_path / "void.json"
-    void.write_text(json.dumps({"phase1_ranked": [[27, 13], [27, 10]],
-                                "phase2": {"image_patch_only_cause": 0.984},
-                                "phase3_sufficiency": {"ceiling_all_traced_heads": 0.0156}}))
-    with pytest.raises(SystemExit, match="REFUSING"):
-        heads_from_trace(str(void), 2)
+def test_void_traces_are_refused_but_a_metric_capped_one_is_not(tmp_path):
+    """The guard must separate two different low-cause failures: a pre-518cf31
+    ranking that is INERT (base answers survive untouched), and a valid trace
+    whose ceiling is capped by answer length (base answers destroyed, just not
+    transferred). Judging on `cause` alone rejects calling_code's good trace."""
+    def write(name, cause, base_kept):
+        f = tmp_path / name
+        f.write_text(json.dumps({
+            "phase1_ranked": [[23, 4], [21, 1], [23, 3]],
+            "phase2": {"image_patch_only_cause": 0.95},
+            "phase3_sufficiency": {"ceiling_all_traced_heads": cause,
+                                   "arms": [{"k": 84, "kind": "all",
+                                             "cause": cause, "base_kept": base_kept}]}}))
+        return str(f)
 
-    good = tmp_path / "good.json"
-    good.write_text(json.dumps({"phase1_ranked": [[23, 4], [21, 1], [23, 3]],
-                                "phase2": {"image_patch_only_cause": 0.984},
-                                "phase3_sufficiency": {"ceiling_all_traced_heads": 0.984}}))
-    assert heads_from_trace(str(good), 2) == [(23, 4), (21, 1)]
+    # The real void trace's numbers: patching 196 heads changed nothing.
+    with pytest.raises(SystemExit, match="inert"):
+        heads_from_trace(write("void.json", 0.0156, 0.953), 2)
+
+    # calling_code's real numbers: low cause, but the patch DID dislodge the answer.
+    assert heads_from_trace(write("capped.json", 0.0625, 0.266), 2) == [(23, 4), (21, 1)]
+    # language's real numbers.
+    assert heads_from_trace(write("good.json", 0.984, 0.0), 3) == [(23, 4), (21, 1), (23, 3)]
+
+
+def test_head_sets_resolve_from_lists_and_traces(tmp_path):
+    trace = tmp_path / "t.json"
+    trace.write_text(json.dumps({
+        "phase1_ranked": [[23, 4], [21, 1], [23, 3], [22, 19]],
+        "phase3_sufficiency": {"arms": [{"k": 84, "kind": "all", "cause": 0.98, "base_kept": 0.0}]}}))
+    sets = resolve_head_sets([f"a=21.1,23.4", f"b={trace}#2", f"c={trace}#4"], "flags", top_k=3)
+    assert sets["a"] == [(21, 1), (23, 4)]
+    assert sets["b"] == [(23, 4), (21, 1)]          # trace order, not sorted
+    assert len(resolve_head_sets([f"c={trace}"], "flags", top_k=3)["c"]) == 3   # falls back to --top_k
+    assert all_blocks(sets) == [21, 22, 23]         # union across sets, so 22.19 counts
+    with pytest.raises(AssertionError, match="NAME=SPEC"):
+        resolve_head_sets(["21.1,23.4"], "flags", 3)
+
+
+def test_per_attribute_sets_expand_and_are_keyed_by_donor_attribute(tmp_path):
+    for a in ("capital", "currency", "language", "calling_code"):
+        d = tmp_path / a
+        d.mkdir()
+        (d / "t.json").write_text(json.dumps({
+            "phase1_ranked": [[21, hash(a) % 4], [23, 4]],
+            "phase3_sufficiency": {"arms": [{"k": 84, "kind": "all", "cause": 0.9, "base_kept": 0.0}]}}))
+    sets = resolve_head_sets([f"p={tmp_path}/{{attribute}}/t.json#1"], "flags", top_k=1)
+    assert set(sets["p"]) == {"capital", "currency", "language", "calling_code"}
+    assert heads_for(sets["p"], "language") == sets["p"]["language"]
+    assert heads_for([(21, 1)], "language") == [(21, 1)], "a flat set ignores the attribute"
+
+
+def test_batches_never_mix_donor_attributes():
+    jobs = [{"donor_attribute": a, "n": i} for i in range(7) for a in ("capital", "language")]
+    seen = []
+    for attribute, chunk in batches_by_donor_attribute(jobs, 4):
+        assert all(j["donor_attribute"] == attribute for j in chunk)
+        seen += chunk
+    assert len(seen) == len(jobs)

@@ -627,6 +627,23 @@ last real prompt token is the final column, and a decode step has exactly one
 column — one rule covering prefill and decode, which is what keeps step
 alignment checkable.
 
+**Several head sets in one run.** `--head_sets NAME=SPEC ...` scores each set as
+its own arm and its own predictions file. SPEC is a `BLOCK.HEAD` list, or a
+`head_trace` JSON path with an optional `#k` for its top-k; a path containing
+`{attribute}` expands per attribute. Every set shares ONE donor capture because
+they all live in blocks 21-23, so k=8 and k=16 cost extra generations only:
+
+```bash
+T='logs/Qwen2.5-VL-7B-Instruct/{entity}/ndm/{attribute}/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21_blocks21-23.json'
+python methods/head_swap_vade.py --batch_size 16 \
+    --head_sets "common5=21.1,22.19,23.3,23.4,23.6" "top8=$T#8" "top16=$T#16"
+```
+
+Each set gets its OWN size-matched random null -- 16 random heads is a bigger
+perturbation than 5, so a single shared null would under-control the large sets.
+Batches never mix donor attributes, because a per-attribute set installs a
+different mask per attribute and the hook applies one mask per batch.
+
 **Cost.** Under `--donor_question queried` the edit does not depend on
 `target_attribute`, so one generation answers one row in each of the four target
 files: the 56,208-row test split costs **14,052 generations**. `target` freezes
@@ -651,9 +668,14 @@ which corner it lands in and the distance from 50%.
 
 Both 50% corners are measured, so any deviation is readable against them.
 
-**Two guards.** `heads_from_trace` **refuses** a trace whose phase-3 ceiling is
-near zero against a live image patch — the signature of the two pre-`518cf31`
-runs whose rankings are void (R5). And the run opens with a **read-back check**:
+**Two guards.** `heads_from_trace` **refuses** a trace whose ranking is inert —
+judged by whether patching EVERY traced head DISLODGED the base answer, not by
+whether it transferred. Those are different failures and only the first indicts
+the ranking: the void trace reads cause 1.6% / base_kept **95.3%** (the patch did
+nothing), while `calling_code`'s perfectly valid trace reads cause 6.2% /
+base_kept **26.6%** (the patch destroyed the answer without transferring — the
+answer-length artefact). A guard on `cause` alone rejects the good trace. And the
+run opens with a **read-back check**:
 one generation with an observer registered AFTER the patch, asserting the site
 returns what was installed at every step. Observers register last for the reason
 `head_trace` documents — a hook added before the patch reads the tensor the patch

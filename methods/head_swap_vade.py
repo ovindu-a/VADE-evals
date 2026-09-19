@@ -94,8 +94,14 @@ Usage
     # Smoke test: 20 pairs, all arms.
     python methods/head_swap_vade.py --limit_pairs 20 --out_dir results/head_swap_vade/smoke
 
-    # The real run: entire flags test split, default head set.
+    # The real run: entire flags test split, the two attribute-independent sets.
     python methods/head_swap_vade.py --batch_size 16
+
+    # ALSO the per-attribute top-8 and top-16 straight off the traces. Four head
+    # sets, ONE donor capture -- they all live in blocks 21-23.
+    T='logs/Qwen2.5-VL-7B-Instruct/{entity}/ndm/{attribute}/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21_blocks21-23.json'
+    python methods/head_swap_vade.py --batch_size 16 \\
+        --head_sets "common5=21.1,22.19,23.3,23.4,23.6" "top8=$T#8" "top16=$T#16"
 
     # The arm that can beat the null.
     python methods/head_swap_vade.py --donor_question target --arms clean heads
@@ -117,9 +123,17 @@ if REPO_ROOT not in sys.path:
 DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join(REPO_ROOT, "..", "VADE"))
 MODEL_ID = "Qwen/Qwen2.5-VL-7B-Instruct"
 
-# R8: the five heads in ALL FOUR attributes' top-8 of the blocks 21-23 image trace.
-DEFAULT_HEADS = "21.1,22.19,23.3,23.4,23.6"
+# R8's two attribute-INDEPENDENT sets, from the blocks 21-23 image trace.
+COMMON5 = "21.1,22.19,23.3,23.4,23.6"                      # in all four attributes' top-8
+COMMON10 = "21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17"   # ... top-16
+DEFAULT_SETS = [f"common5={COMMON5}", f"common10={COMMON10}"]
 ATTRIBUTES = ("capital", "currency", "language", "calling_code")
+
+# Where head_trace.py's valid per-attribute traces live. '{attribute}' in a
+# --head_sets path expands to each of ATTRIBUTES, giving a per-attribute set.
+TRACE_GLOB = ("logs/Qwen2.5-VL-7B-Instruct/{entity}/ndm/{attribute}/"
+              "L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/"
+              "head_trace_patch21_blocks21-23.json")
 
 
 def parse_heads(spec):
@@ -141,21 +155,80 @@ def parse_heads(spec):
 def heads_from_trace(path, top_k):
     """The top-k of a head_trace.py run's phase-1 ranking.
 
-    Refuses a trace whose phase-3 ceiling is degenerate. Two of the 55 traces on
-    disk predate commit 518cf31 (BuildBatchCache returning another spec's
-    positions) and rank heads that were traced at IMAGE columns while every
-    printed line said last token; their signature is a phase-3 ceiling near zero
-    against a ~98% image patch, and using one silently selects inert heads."""
+    REFUSES a trace whose ranking is inert. Two of the 55 traces on disk predate
+    commit 518cf31 (BuildBatchCache returning another spec's positions): they
+    ranked heads traced at IMAGE columns while every printed line said last
+    token, so the ranking points at heads the readout never reads.
+
+    The discriminator is whether patching EVERY traced head DISLODGED the base
+    answer -- not whether it transferred the source's. Those are different
+    failures and only the first one indicts the ranking:
+
+      void trace          cause 1.6%,  base_kept 95.3%  -> patch did nothing
+      valid calling_code  cause 6.2%,  base_kept 26.6%  -> patch destroyed the
+                          answer without transferring; that is the ANSWER-LENGTH
+                          artefact (0% of its golds are single-token and
+                          head_trace scores full matches), a live site whose
+                          ceiling is capped by the metric
+      valid language      cause 98.4%, base_kept  0.0%  -> full transfer
+
+    Scoring on `cause` alone would reject calling_code's perfectly good trace."""
     d = json.load(open(path))
     p3 = d.get("phase3_sufficiency") or {}
-    ceiling = p3.get("ceiling_all_traced_heads")
-    ref = (d.get("phase2") or {}).get("image_patch_only_cause")
-    if ceiling is not None and ref and ceiling < 0.25 * ref:
-        raise SystemExit(
-            f"REFUSING {path}: phase-3 ceiling {ceiling:.3f} against an image patch of {ref:.3f}. "
-            f"This is the signature of a pre-518cf31 trace whose ranking is void "
-            f"(see ATTRIBUTE_HEAD_EXPERIMENTS.md R5/R8). Pick a blocks21-23 trace.")
+    all_arm = next((a for a in p3.get("arms", []) if a.get("kind") == "all"), None)
+    if all_arm is not None and all_arm.get("base_kept") is not None:
+        moved = 1.0 - float(all_arm["base_kept"])
+        if moved < 0.25:
+            raise SystemExit(
+                f"REFUSING {path}: patching ALL {all_arm.get('k')} traced heads left "
+                f"{all_arm['base_kept']:.1%} of base answers intact (cause {all_arm.get('cause', 0):.1%}). "
+                f"The ranking is inert -- the signature of a pre-518cf31 trace "
+                f"(see ATTRIBUTE_HEAD_EXPERIMENTS.md R5/R8). Use a blocks21-23 trace.")
     return [tuple(h) for h in d["phase1_ranked"][:top_k]]
+
+
+def resolve_head_sets(specs, entity, top_k):
+    """['name=21.1,23.4', 'name=path/to/trace.json#16'] -> {name: heads}.
+
+    `heads` is either a flat list, or a {attribute: list} dict when the path
+    contained '{attribute}' -- a PER-ATTRIBUTE set, keyed by the attribute the
+    donor was captured under. Several sets run in ONE invocation because they
+    all live in blocks 21-23 and therefore share a single donor capture: adding
+    k=8 and k=16 costs extra generations, not extra donor passes."""
+    out = {}
+    for spec in specs:
+        assert "=" in spec, f"--head_sets entry {spec!r} must be NAME=SPEC"
+        name, body = spec.split("=", 1)
+        assert name not in out, f"duplicate head-set name {name!r}"
+        if ".json" not in body:
+            out[name] = parse_heads(body)
+            continue
+        path, _, k = body.partition("#")
+        k = int(k) if k else top_k
+        if "{attribute}" in path:
+            out[name] = {a: heads_from_trace(path.format(entity=entity, attribute=a), k)
+                         for a in ATTRIBUTES}
+        else:
+            out[name] = heads_from_trace(path.format(entity=entity), k)
+    return out
+
+
+def heads_for(head_set, attribute):
+    """A per-attribute set is keyed by the attribute the DONOR was captured
+    under -- `queried` under donor_question='queried', `target_attribute` under
+    'target'. One rule, so the head set always matches the question that
+    produced the values being installed."""
+    return head_set[attribute] if isinstance(head_set, dict) else head_set
+
+
+def all_blocks(head_sets):
+    """Union over every set. The donor capture must cover all of them or a set
+    would silently index a block that was never recorded."""
+    blocks = set()
+    for hs in head_sets.values():
+        for heads in (hs.values() if isinstance(hs, dict) else [hs]):
+            blocks |= {b for b, _ in heads}
+    return sorted(blocks)
 
 
 # ---------------------------------------------------------------------------
@@ -457,6 +530,22 @@ def decode(processor, toks):
     return [processor.tokenizer.decode(t, skip_special_tokens=True) for t in toks]
 
 
+def batches_by_donor_attribute(jobs, batch_size):
+    """Chunk within one donor_attribute at a time.
+
+    Required, not cosmetic: a PER-ATTRIBUTE head set installs a different mask
+    per attribute, and the hook applies one mask to the whole batch. Grouping
+    makes a mixed batch impossible rather than silently patching one attribute's
+    heads with another's."""
+    groups = {}
+    for j in jobs:
+        groups.setdefault(j["donor_attribute"], []).append(j)
+    for attribute in sorted(groups):
+        rows = groups[attribute]
+        for start in range(0, len(rows), batch_size):
+            yield attribute, rows[start:start + batch_size]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -464,18 +553,21 @@ def main():
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--split", default="test")
     ap.add_argument("--model_id", default=MODEL_ID)
-    ap.add_argument("--heads", default=DEFAULT_HEADS,
-                    help=f"BLOCK.HEAD list. Default {DEFAULT_HEADS} -- R8's five heads "
-                         f"common to all four attributes' top-8 of the blocks 21-23 trace.")
-    ap.add_argument("--head_trace", help="Take heads from this head_trace.py JSON's top-k instead. "
-                                          "Refuses a pre-518cf31 trace (see R5).")
-    ap.add_argument("--top_k", type=int, default=8)
+    ap.add_argument("--head_sets", nargs="+", default=DEFAULT_SETS, metavar="NAME=SPEC",
+                    help="One or more named head sets, each scored as its own arm and its own "
+                         "predictions file. SPEC is either a BLOCK.HEAD list (21.1,23.4) or a "
+                         "head_trace.py JSON path with an optional '#k' for its top-k. A path "
+                         "containing '{attribute}' expands per attribute, giving a per-attribute "
+                         "set. Every set shares ONE donor capture, so extra sets cost generations "
+                         f"only. Default: {' '.join(DEFAULT_SETS)}")
+    ap.add_argument("--top_k", type=int, default=8, help="Default k for a trace SPEC with no '#k'.")
     ap.add_argument("--donor_question", choices=["queried", "target"], default="queried",
                     help="Which question the donor runs. 'queried' is the attribute-agnostic entity "
                          "edit (4x cheaper, pinned near 50%% by construction); 'target' freezes the "
                          "target attribute's read and is the only arm that can beat the null.")
     ap.add_argument("--arms", nargs="+", default=["clean", "heads", "random_heads", "full_image"],
-                    choices=["clean", "heads", "random_heads", "full_image"])
+                    choices=["clean", "heads", "random_heads", "full_image"],
+                    help="'heads' and 'random_heads' each expand to one arm PER head set.")
     ap.add_argument("--patch_layer", type=int, default=21, help="full_image arm only.")
     ap.add_argument("--max_new_tokens", type=int, default=12)
     ap.add_argument("--batch_size", type=int, default=16)
@@ -487,8 +579,8 @@ def main():
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
 
-    heads = heads_from_trace(args.head_trace, args.top_k) if args.head_trace else parse_heads(args.heads)
-    blocks = sorted({b for b, _ in heads})
+    head_sets = resolve_head_sets(args.head_sets, args.entity, args.top_k)
+    blocks = all_blocks(head_sets)
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_swap_vade", args.entity)
 
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
@@ -496,14 +588,30 @@ def main():
                                args.donor_question, args.limit_pairs, args.seed)
     n_emitted = sum(len(j["rows"]) for j in jobs)
 
+    arm_names = []
+    for arm in args.arms:
+        arm_names += ([f"{arm}_{n}" for n in head_sets] if arm in ("heads", "random_heads") else [arm])
+
     print(f"[head_swap_vade] {args.entity}/{args.split}: {len(jobs)} generations -> {n_emitted} scored "
           f"rows (full split is {n_scored}); donor_question={args.donor_question}")
-    print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads) + f"   blocks {blocks}")
-    print(f"  arms: {args.arms};  {len(jobs) * (1 + len(args.arms))} model passes at batch {args.batch_size}")
+    for name, hs in head_sets.items():
+        if isinstance(hs, dict):
+            sizes = {a: len(v) for a, v in hs.items()}
+            print(f"  {name}: per-attribute, {sizes}")
+            for a, v in sorted(hs.items()):
+                print(f"      {a:13} " + ", ".join(f"{b}.{h}" for b, h in v))
+        else:
+            print(f"  {name} ({len(hs)}): " + ", ".join(f"{b}.{h}" for b, h in hs))
+    print(f"  blocks captured: {blocks}")
+    print(f"  arms ({len(arm_names)}): {arm_names}")
+    print(f"  {len(jobs)} donor passes + {len(jobs) * len(arm_names)} scored generations "
+          f"at batch {args.batch_size}")
     print(f"  -> {out_dir}")
     if args.dry_run:
         missing = [j for j in jobs if j["base"] not in items or j["source"] not in items]
         assert not missing, f"{len(missing)} jobs reference an unknown item, e.g. {missing[0]}"
+        sizes = [len(c) for _, c in batches_by_donor_attribute(jobs, args.batch_size)]
+        print(f"    {len(sizes)} batches, none mixing donor attributes (max {max(sizes)} rows)")
         for j in jobs[:3]:
             bt = lookup[j["queried"]][j["template_id"]]
             print(f"    {j['base']}->{j['source']} q={j['queried']} donor_q={j['donor_attribute']} "
@@ -511,7 +619,6 @@ def main():
         print("Grid valid.")
         return
 
-    import torch
     from methods.adapters.registry import get_adapter
 
     adapter = get_adapter(args.model_id)
@@ -522,61 +629,77 @@ def main():
     head_dim = hidden // n_heads
     n_layers = len(adapter.get_decoder_layers(model))
     assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
-    assert all(0 <= h < n_heads for _, h in heads), f"head index out of range (0..{n_heads - 1})"
+    for name, hs in head_sets.items():
+        for heads in (hs.values() if isinstance(hs, dict) else [hs]):
+            assert all(0 <= h < n_heads for _, h in heads), f"{name}: head index out of 0..{n_heads - 1}"
     pad_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
     image_token_id = adapter.image_token_id(model, processor)
 
+    # One null PER head set, matched in size: 16 random heads is a bigger
+    # perturbation than 5, so a single shared null would under-control the
+    # larger sets and over-control the smaller ones.
     rng = random.Random(args.seed)
-    all_heads = [(b, h) for b in blocks for h in range(n_heads)]
-    random_heads = sorted(rng.sample([x for x in all_heads if x not in set(heads)], len(heads)))
-    print(f"  random-head null: " + ", ".join(f"{b}.{h}" for b, h in random_heads))
+    pool = [(b, h) for b in blocks for h in range(n_heads)]
+    nulls = {}
+    for name, hs in head_sets.items():
+        k = max(len(heads) for heads in (hs.values() if isinstance(hs, dict) else [hs]))
+        used = {x for heads in (hs.values() if isinstance(hs, dict) else [hs]) for x in heads}
+        nulls[name] = sorted(rng.sample([x for x in pool if x not in used], k))
+        print(f"  null for {name} ({k}): " + ", ".join(f"{b}.{h}" for b, h in nulls[name]))
 
     os.makedirs(out_dir, exist_ok=True)
-    files = {arm: open(os.path.join(out_dir, f"{arm}.jsonl"), "w") for arm in args.arms}
+    files = {arm: open(os.path.join(out_dir, f"{arm}.jsonl"), "w") for arm in arm_names}
     stats = {}
 
     # The gate. If the patch and the read disagree, every number below is void --
-    # so pay one generation to find out before paying 14,052.
+    # so pay one generation to find out before paying len(jobs).
     if "heads" in args.arms:
-        probe = build_batch(jobs[:min(4, len(jobs))], processor, items, entity_dir, lookup, pad_id)
+        first_attr, probe_jobs = next(batches_by_donor_attribute(jobs, 4))
+        probe = build_batch(probe_jobs, processor, items, entity_dir, lookup, pad_id)
         pz = capture_donor(adapter, model, blocks, probe["donor_ids"], probe["donor_mask"],
                            probe["donor_extra"], args.max_new_tokens, pad_id)
-        worst = verify_readback(adapter, model, heads, pz, probe["base_ids"], probe["base_mask"],
-                                probe["base_extra"], args.max_new_tokens, pad_id, head_dim)
-        print(f"  read-back check: worst |installed - read| = {worst:.2e} across all "
-              f"{args.max_new_tokens} steps -- patch and capture address the same tensor")
+        for name, hs in head_sets.items():
+            worst = verify_readback(adapter, model, heads_for(hs, first_attr), pz, probe["base_ids"],
+                                    probe["base_mask"], probe["base_extra"], args.max_new_tokens,
+                                    pad_id, head_dim)
+            print(f"  read-back check [{name}]: worst |installed - read| = {worst:.2e} over "
+                  f"{args.max_new_tokens} steps")
 
+    done = 0
     try:
-        for start in range(0, len(jobs), args.batch_size):
-            chunk = jobs[start:start + args.batch_size]
+        for attribute, chunk in batches_by_donor_attribute(jobs, args.batch_size):
             batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
             need_donor = any(a in ("heads", "random_heads") for a in args.arms)
             donor_z = (capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
                                      batch["donor_extra"], args.max_new_tokens, pad_id)
                        if need_donor else None)
-            for arm in args.arms:
-                if arm == "clean":
-                    toks = plain_generate(model, batch["base_ids"], batch["base_mask"],
-                                          batch["base_extra"], args.max_new_tokens, pad_id)
-                elif arm == "full_image":
-                    patches = full_image_patch(adapter, model, batch, args.patch_layer, image_token_id)
-                    toks = patched_generate(adapter, model, [], {}, batch["base_ids"], batch["base_mask"],
-                                            batch["base_extra"], args.max_new_tokens, pad_id, head_dim,
-                                            extra_patches=patches)
-                else:
-                    use = heads if arm == "heads" else random_heads
-                    toks = patched_generate(adapter, model, use, donor_z,
-                                            batch["base_ids"], batch["base_mask"],
-                                            batch["base_extra"], args.max_new_tokens, pad_id, head_dim,
-                                            stats=stats)
-                texts = decode(processor, toks)
-                for j, text in zip(chunk, texts):
+
+            def emit(arm, toks):
+                for j, text in zip(chunk, decode(processor, toks)):
                     for target, row_index in j["rows"]:
                         files[arm].write(json.dumps({"attribute": target, "row_index": row_index,
                                                      "generated_text": text}) + "\n")
                 files[arm].flush()
-            done = min(start + args.batch_size, len(jobs))
-            print(f"  {done}/{len(jobs)} generations", flush=True)
+
+            for arm in args.arms:
+                if arm == "clean":
+                    emit(arm, plain_generate(model, batch["base_ids"], batch["base_mask"],
+                                             batch["base_extra"], args.max_new_tokens, pad_id))
+                elif arm == "full_image":
+                    patches = full_image_patch(adapter, model, batch, args.patch_layer, image_token_id)
+                    emit(arm, patched_generate(adapter, model, [], {}, batch["base_ids"],
+                                               batch["base_mask"], batch["base_extra"],
+                                               args.max_new_tokens, pad_id, head_dim,
+                                               extra_patches=patches))
+                else:
+                    for name, hs in head_sets.items():
+                        use = heads_for(hs, attribute) if arm == "heads" else nulls[name]
+                        emit(f"{arm}_{name}",
+                             patched_generate(adapter, model, use, donor_z, batch["base_ids"],
+                                              batch["base_mask"], batch["base_extra"],
+                                              args.max_new_tokens, pad_id, head_dim, stats=stats))
+            done += len(chunk)
+            print(f"  {done}/{len(jobs)} generations ({attribute})", flush=True)
     finally:
         for f in files.values():
             f.close()
@@ -585,7 +708,7 @@ def main():
         print(f"  note: {stats['steps_beyond_donor']} hook calls ran past the donor's recorded steps "
               f"(donor hit EOS first); the last donor step was held.")
     print("\nScore each arm with:")
-    for arm in args.arms:
+    for arm in arm_names:
         print(f"  python {os.path.join(args.vade_root, 'eval', 'score.py')} --entity {args.entity} "
               f"--attribute all --predictions {os.path.join(out_dir, arm + '.jsonl')}")
 
