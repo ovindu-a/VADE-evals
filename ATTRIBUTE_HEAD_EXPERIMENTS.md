@@ -686,30 +686,40 @@ together: replaying a run's own capture into itself is bit-identical, while a
 different donor changes the answer. Neither alone is sufficient — a completely
 dead patch passes the first.
 
-## R10. On the benchmark: 10 heads ARE the entity, and that is worth 50% (PARTIAL)
+## R10. On the benchmark: 10 heads ARE the entity, and that is worth 50%
 
-> **PARTIAL RUN — 20,288 of 56,208 scored rows (36.1%).** Batches run grouped by
-> donor attribute in alphabetical order, so `calling_code` is complete (3600/3600
-> queried rows), `capital` reached 1472/3600, and **`currency` and `language`
-> never started**. Consequences: those two target attributes have NO cause rows
-> and get no `final_score`; and `iso_mean` is currently an average over ONE
-> attribute rather than three. Every number below is stable in direction but not
-> final. Artifacts: `results/head_swap_vade/flags/partial_scores/`.
+> **RUN STATUS — 39,552 of 56,208 scored rows (70.4%).** All four *target*
+> attributes are present; the gap is one whole *queried* column: **`language` was
+> never asked**. Consequences: `target=language` has no cause row and no
+> `final_score`, and every other target's `iso_mean` averages two attributes
+> rather than three. Numbers below are re-scored from the committed JSONLs with
+> `VADE/eval/score.py`. The committed `results/head_swap_vade/flags/partial_scores/`
+> summaries are STALE (they describe the earlier 20,288-row state) and should be
+> regenerated before being quoted.
 
 `methods/head_swap_vade.py`, `--donor_question queried`, continuous patching.
-Percentages are `matches_source` on the cause pool and `pct_accuracy` (= stayed
-at base) on the iso pool.
+`cause` is `matches_source` on the cause pool; `iso keep` is `pct_accuracy` (=
+stayed at base) averaged over the iso pool; `final` is `score.py`'s own
+`final_score`. Columns cc / cap / cur = calling_code / capital / currency.
 
-| arm | heads | cause cc | cause cap | iso keep | iso -> SOURCE | final cc | final cap |
-|---|---|---|---|---|---|---|---|
-| clean | — | 0.0 | 0.0 | 100.0 | 0.0 | 50.0 | 50.0 |
-| random_heads_common5 | 5 rnd | 0.0 | 0.0 | 98.6 / 100.0 | 0.0 | 50.0 | 49.3 |
-| random_heads_top8 | 8 rnd | 0.0 | 0.0 | 100.0 / 100.0 | 0.0 | 50.0 | 50.0 |
-| random_heads_common10 | 10 rnd | 0.0 | 0.0 | 99.2 / 100.0 | 0.0 | 50.0 | 49.6 |
-| heads_common5 | 5 | 69.4 | 91.8 | 5.3 / 3.2 | 69.4 / 91.8 | 36.3 | 48.5 |
-| heads_top8 | 8/attr | 87.4 | 96.7 | 1.2 / 0.1 | 87.4 / 96.7 | 43.8 | 49.0 |
-| **heads_common10** | **10** | **95.5** | **98.6** | 0.2 / 0.0 | 95.5 / 98.6 | 47.8 | 49.4 |
-| full_image | all image | 97.1 | 97.6 | 0.0 / 0.0 | 97.1 / 97.6 | 48.5 | 48.8 |
+| arm | heads | cause cc | cause cap | cause cur | iso keep (cc/cap/cur) | final cc | final cap | final cur |
+|---|---|---|---|---|---|---|---|---|
+| clean | — | 0.0 | 0.0 | 0.0 | 91.3 / 91.3 / 100.0 | 45.6 | 45.6 | 50.0 |
+| random_heads_common5 | 5 rnd | 0.0 | 0.0 | 0.0 | 91.3 / 90.6 / 99.3 | 45.6 | 45.3 | 49.6 |
+| random_heads_top8 | 8 rnd | 0.0 | 0.0 | 0.0 | 91.4 / 91.4 / 100.0 | 45.7 | 45.7 | 50.0 |
+| random_heads_common10 | 10 rnd | 0.0 | 0.0 | 0.0 | 91.5 / 91.1 / 99.6 | 45.8 | 45.5 | 49.8 |
+| heads_common5 | 5 | 69.4 | 92.0 | 49.1 | 9.2 / 10.7 / 3.8 | 39.3 | 51.3 | 26.5 |
+| heads_top8 | 8/attr | 87.4 | 96.5 | 70.7 | 2.9 / 3.3 / 0.8 | 45.1 | 49.9 | 35.7 |
+| **heads_common10** | **10** | **95.5** | **98.0** | **72.1** | 2.1 / 2.2 / 0.2 | 48.8 | 50.1 | 36.1 |
+| full_image | all image | 97.1 | 97.3 | 84.4 | 0.2 / 0.1 / 0.1 | 48.6 | 48.7 | 42.2 |
+
+Mean cause over the three measurable attributes: `heads_common10` **88.5%** vs
+`full_image` **93.0%**, `heads_top8` 84.9%, `heads_common5` 70.2%, every random
+arm **0.0%**.
+
+> `clean` does not read 100% iso keep because the model is only **82.6% correct
+> on `currency` unintervened**. Every `currency` number in this table — cause and
+> iso alike — is against that degraded ceiling, not against 100.
 
 ### R10.1 `calling_code`'s 6.2% was the metric, exactly as suspected
 
@@ -721,9 +731,10 @@ carries all of them.
 
 ### R10.2 Ten heads out of 784 reproduce a whole-image swap
 
-Cause rises 69.4 -> 87.4 -> 95.5 (cc) and 91.8 -> 96.7 -> 98.6 (cap) as the set
-grows 5 -> 8 -> 10, and `heads_common10` **matches `full_image`** — slightly
-exceeding it on `capital` (98.6 vs 97.6). The conduit is ~10 heads wide, and the
+Cause rises 69.4 -> 87.4 -> 95.5 (cc), 92.0 -> 96.5 -> 98.0 (cap) and
+49.1 -> 70.7 -> 72.1 (cur) as the set grows 5 -> 8 -> 10, and `heads_common10`
+**matches `full_image`** — slightly exceeding it on `capital` (98.0 vs 97.3),
+and reaching 95% of it in mean cause (88.5 vs 93.0). The conduit is ~10 heads wide, and the
 10 attribute-INDEPENDENT heads beat the 8 per-attribute ones, consistent with R8's
 finding that the per-attribute rankings are near-identical.
 
@@ -733,7 +744,7 @@ The size-matched random nulls read **0.0% cause at every size**, with base kept
 ### R10.3 iso does not degrade — it LEAKS
 
 The `iso -> SOURCE` column is the one to read. Target `calling_code`, then ask
-for the capital, and the model returns the SOURCE country's capital **98.6%** of
+for the capital, and the model returns the SOURCE country's capital **98.0%** of
 the time. The base answer is not destroyed or confused; it is replaced by the
 donor country's. R9 predicted exactly this from `item` = 0.61-0.69, and this is
 its causal confirmation.
@@ -742,8 +753,19 @@ its causal confirmation.
 
 Under `--donor_question queried` the edit is attribute-agnostic, so ONE generation
 serves the cause row of one target file and an iso row of another — the identical
-text, scored against opposite rules. That is visible as an identity in the table:
-**`iso -> SOURCE` equals the cause rate, to the decimal, in every arm.** Hence
+text, scored against opposite rules. The full grid now shows this as an exact
+identity rather than an approximation: **for a fixed queried attribute,
+`matches_source` is the same number in all four target files**, whether that row
+is scored as a cause or as an iso. For `heads_common10`:
+
+| queried | target=cc | target=cap | target=cur | target=lang |
+|---|---|---|---|---|
+| calling_code | **95.5** (cause) | 95.5 (iso) | 95.5 (iso) | 95.5 (iso) |
+| capital | 98.0 (iso) | **98.0** (cause) | 98.0 (iso) | 98.0 (iso) |
+| currency | 72.1 (iso) | 72.1 (iso) | **72.1** (cause) | 72.1 (iso) |
+
+One generation per (queried, row); the target column only changes the scoring
+rule applied to it. Hence
 
 ```
 final_score = 1/2( cause_T + mean_{q != T} keep_q ),   keep_q ~= 1 - cause_q
@@ -761,20 +783,29 @@ the finding, not a failed run.
 
 ### R10.5 A real difficulty gradient between attributes
 
-`capital` transfers more readily than `calling_code` at small k (91.8 vs 69.4 at
-k=5), and the gap closes by k=10 (98.6 vs 95.5). This is NOT the old last-token
+`capital` transfers more readily than `calling_code` at small k (92.0 vs 69.4 at
+k=5), and the gap closes by k=10 (98.0 vs 95.5). This is NOT the old last-token
 artefact — that is gone. The plausible cause is answer length still costing
 something: `calling_code` averages 2.68 tokens to `capital`'s 2.01, so the donor
 must stay correct for more consecutive steps.
 
-### R10.6 What the remaining 64% changes
+`currency` is the hard one at every k (49.1 / 70.7 / 72.1) and the only attribute
+where `heads_common10` falls clearly short of `full_image` (72.1 vs 84.4) — but
+its unintervened ceiling is 82.6%, so the 10 heads recover 87% of what the whole
+image recovers, in line with the other two.
 
-`language` and `currency` cause rows are missing. `language` had the 100%
-`head_trace` sufficiency and is the attribute where the last-token measurement was
-ALREADY accurate (78.6% single-token golds), so it is the clean control that
-continuous patching did not change something it should not have. Adding the
-missing iso rows turns `iso_mean` into an average over three attributes rather
-than one; with iso at 0.0-0.2% throughout, little movement is expected.
+### R10.6 What the remaining 30% changes
+
+The whole `language` **queried** column is missing, so `target=language` has no
+cause row and the other three targets each average iso over two attributes rather
+than three. `language` had the 100% `head_trace` sufficiency and is the attribute
+where the last-token measurement was ALREADY accurate (78.6% single-token golds),
+so it is the clean control that continuous patching did not change something it
+should not have. It is also the only attribute with a predominantly single-token
+gold, which makes it the least contaminated cause measurement available — worth
+finishing for that reason alone. Adding it moves `iso_mean` by at most a third of
+whatever `language`'s own keep rate is; with iso at 0.1-4.2% throughout, little
+movement is expected.
 
 Do not quote `overall accuracy` from the summaries — it pools cause and iso rows
 into one number, which is why `score.py` reports `final_score` separately.
@@ -836,3 +867,233 @@ apply — 56,208 generations instead of 14,052.
 python methods/head_swap_vade.py --donor_question target --arms clean heads \
     --head_sets "common10=21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17"
 ```
+
+## 6. `methods/head_cross.py` — the cross-prompt design
+
+R10 establishes that ~10 heads carry *something* that determines all four
+answers. It cannot say **what**, because in `head_swap_vade` the donor and the
+receiving run are always asked the same question. Two hypotheses survive it:
+
+* **ENTITY** — the heads write "this is Cambodia", and every attribute is
+  recomputed downstream from that.
+* **ATTRIBUTE** — the heads write "the capital is Phnom Penh", i.e. an answer
+  already selected by the question that produced it.
+
+`head_cross.py` separates them by crossing the two things the donor can differ
+in. For a flag pair (A = base, B = source) and a question pair (Q1 = what the
+receiving run is asked, Q2 = what the donor was asked) it runs both donors:
+
+|  | donor Q = Q1 | donor Q = Q2 |
+|---|---|---|
+| **donor flag = A (base)** | `self` | `question` |
+| **donor flag = B (source)** | `flag` | `both` |
+
+Each generation is classified against four golds — `base_q1` (A,Q1),
+`source_q1` (B,Q1), `source_q2` (B,Q2), `base_q2` (A,Q2) — plus `other` and
+`ambiguous`. It imports the machinery from `head_swap_vade` (capture, patch,
+read-back, batching) rather than forking it, and loads VADE's own
+`contains_label` for matching so the labels agree with `eval/score.py`.
+
+**Only `both` has four distinct golds.** This is the key structural fact and the
+reason the other three cells are controls, not results:
+
+| cell | A vs B | Q1 vs Q2 | distinct golds | what it can possibly distinguish |
+|---|---|---|---|---|
+| `self` | same | same | 1 | only "did anything change at all" |
+| `flag` | differ | same | 2 | entity transfer; blind to the question axis |
+| `question` | same | differ | 2 | question transfer; blind to the entity axis |
+| `both` | differ | differ | **4** | all four hypotheses simultaneously |
+
+`classify()` collapses golds that resolve to the same string before calling
+anything ambiguous, so a `source_q1` of 0.0% in the `self`/`question` cells is an
+*identity*, not a measurement — in those cells `donor_flag == base`, so
+`source_q1` and `base_q1` are literally the same gold. Do not read those two
+zeros as evidence of anything.
+
+```bash
+# the full 2x2
+python methods/head_cross.py --n_pairs 64 --batch_size 64
+
+# only the cells that carry information (saves the two diagonal cells)
+python methods/head_cross.py --n_pairs 64 --batch_size 64 --cells flag question both
+
+# same design, but patch only a k-dim subspace of the head columns
+python methods/head_cross.py --n_pairs 16 --batch_size 64 --subspace_dim 7
+```
+
+Cost is `n_pairs x 4 x 4 x 2` rows and ~3 model passes per row (donor capture,
+patched generation, clean reference). At `n_pairs=64` that is 2,048 rows.
+
+## R11. The heads carry the ENTITY, not the answer
+
+`methods/head_cross.py`, flags, `common10` (21.1, 21.5, 22.13, 22.15, 22.17,
+22.19, 23.3, 23.4, 23.6, 23.17), continuous patching, read-back exact at
+`0.00e+00`. n = 64 flag pairs x 16 question pairs x 2 donors = **2,048
+generations** (`results/head_cross/flags/cross_n64.jsonl`).
+
+### R11.1 The four cells
+
+| cell | donor flag | donor question | n | base_q1 | source_q1 | source_q2 | base_q2 | other |
+|---|---|---|---|---|---|---|---|---|
+| `self` | base | same | 256 | 93.0 | — | — | — | 7.0 |
+| `flag` | **source** | same | 256 | 5.1 | **81.2** | — | — | 13.7 |
+| `question` | base | **different** | 768 | 83.2 | — | — | 0.0 | 16.7 |
+| `both` | **source** | **different** | 768 | 5.2 | **65.1** | **0.0** | 0.0 | 29.7 |
+
+(— marks a gold that coincides with another in that cell and is therefore
+unreachable by construction; `question` also carries 0.1% ambiguous.)
+
+Reading the cells in order:
+
+* `self` is a **no-op**, as it must be — 93.0% unchanged. The 7.0% `other` is the
+  noise floor of this pipeline and recurs, to the tenth of a percent, in every
+  inert arm below.
+* `flag` is **cross-prompt transfer**: capture A's heads, install them into a
+  *different prompt about B*, and B's run answers about A, 81.2% of the time.
+  R10's result was within one prompt; this shows the payload is portable.
+* `question` is the first real finding. Same flag, donor captured while a
+  **different** question was being asked: **83.2% unchanged, 0.0% `base_q2`**.
+  Swapping which question produced the head outputs changes nothing. The heads
+  carry no question identity whatsoever.
+
+### R11.2 `both`: an answer that existed in neither prompt
+
+The receiving run is asked Q1. The donor was asked Q2 about a different flag.
+The output is **the donor's flag answered for Q1** — a combination present in
+neither prompt, at 65.1%, with **`source_q2` at exactly 0.0%**.
+
+That last zero is only measurable in this cell, and it is the load-bearing one.
+The model did not copy the donor's answer; it *recomputed* an answer from the
+donor's entity against the receiving prompt's question. Rejecting three
+hypotheses at once:
+
+| observed | rejects |
+|---|---|
+| `base_q1` 5.2% | "nothing transfers" |
+| `base_q2` 0.0% | "the donor's question transfers" |
+| `source_q2` **0.0%** | "the donor's whole prompt/answer transfers" |
+| `source_q1` **65.1%** | leaves only: the donor's **entity** transfers |
+
+### R11.3 The -16.1pp CONTENT SHIFT is a decode artefact, not question-conditioning
+
+The script's headline contrast is `flag` (81.2%) vs `both` (65.1%) = **-16.1pp**,
+which it interprets as question-conditioned content. Broken out by the question
+the receiving run was asked, that shift lives in exactly one attribute:
+
+| Q1 | `flag` | `both` | shift |
+|---|---|---|---|
+| capital | 98.4 | 95.3 | -3.1 |
+| language | 85.9 | 85.4 | -0.5 |
+| currency | 46.9 | 47.9 | **+1.0** |
+| **calling_code** | **93.8** | **31.8** | **-62.0** |
+| all four | 81.2 | 65.1 | **-16.1** |
+| **excluding calling_code** | **77.1** | **76.2** | **-0.9** |
+
+`calling_code` is the attribute with **0/384 single-token golds**. Its failures
+are not wrong countries — against the same-question donor's own output for the
+same pair, the `both` rows agree on the **first digit in 191/192 = 99.5%** of
+cases (and on the *base's* first digit in only 17.7%):
+
+```
+UY->KH  q2=capital    got '856.'   same-question donor said '855.'
+FI->AZ  q2=currency   got '998.'   same-question donor said '994.'
+PY->AM  q2=language   got '359.'   same-question donor said '374.'
+```
+
+Same source country, trailing digits drifting. This is the continuous-patch
+version of the multi-token artefact `swap_trace.py` documents: the donor's
+step-2+ head outputs were captured while it answered a *different* question, so
+after the first token the installed sequence no longer tracks the digits being
+emitted. **The corrected content shift is -0.9pp.**
+
+### R11.4 The `question` cell's zeros, and what they are worth
+
+`question` reads 83.2% `base_q1` / 0.0% `base_q2`: a donor captured under a
+different question, same flag, moves nothing. Note this cell **cannot** show
+`source_q1` — `donor_flag == base` there, so that gold is the same string as
+`base_q1`. The cell is a control establishing the floor (9.9% `other` excluding
+`calling_code`, against `self`'s 8.9%), not an independent result.
+
+Excluding `calling_code` throughout, the whole design reads:
+
+| cell | n | base_q1 | source_q1 | source_q2 | base_q2 | other |
+|---|---|---|---|---|---|---|
+| `self` | 192 | 91.1 | — | — | — | 8.9 |
+| `flag` | 192 | 6.8 | **77.1** | — | — | 16.1 |
+| `question` | 576 | 89.9 | — | — | 0.0 | 9.9 |
+| `both` | 576 | 6.6 | **76.2** | **0.0** | 0.0 | 17.2 |
+
+`both`'s 17.2% `other` is ~7pp above the inert floor — the real cost of the
+mismatched continuation, and small.
+
+Replicated independently at n=16 (`cross_n16.jsonl`): `flag` 85.9%, `both`
+71.9%, shift -14.1pp, same shape.
+
+### R11.5 The 7-dim value subspace is causally dead — two independent tests
+
+R9's decomposition gave a 7-dim per-block subspace spanning `language`'s value
+centroids, and a decoding check put language recovery from those 7 dims at 100%.
+Both causal tests of it come back null.
+
+**(a) `head_cross --subspace_dim 7`** (n=16, `cross_n16_sub7.jsonl`). All four
+cells become indistinguishable:
+
+| cell | base_q1 | source_q1 | other |
+|---|---|---|---|
+| `self` | 92.2 | — | 7.8 |
+| `flag` | **92.2** | **0.0** | 7.8 |
+| `question` | 92.2 | — | 7.8 |
+| `both` | 91.7 | **0.0** | 8.3 |
+
+The `flag` cell — which transfers at 81.2% with the full head columns —
+transfers **0.0%**. 472/512 generations are bit-identical to clean, and the 40
+that differ match `self`'s noise rate exactly.
+
+**(b) `head_swap_vade --subspace_dim 7 --subspace_attribute language`**
+(`results/head_swap_vade/flags_sub7/`, target=language, n=1434):
+
+| arm | cause | generations differing from clean |
+|---|---|---|
+| `clean` | 1.7 | — |
+| `sub7_heads_common10` | **1.7** | 4.2% |
+| `sub7_random_heads_common10` | 1.7 | **6.6%** |
+| `full_image` | — | 99.6% |
+
+The selected-head subspace patch perturbs **fewer** generations than the
+random-head subspace patch. Its read-back check passes at `0.00e+00`, so the
+patch is genuinely applied — it simply carries nothing.
+
+**What this does and does not mean.** It does not refute DAS. It kills one
+shortcut: a subspace read off capture-time *variance* is not the causal carrier,
+and the precondition test we used to justify it (7 dims -> 100% language
+decoding) is **not predictive of causal sufficiency**. That is the same failure
+`RESULTS.md` already records for the Phase B selection proxy, now reproduced at
+the head site. A subspace that steers has to be found *against the generation
+objective*, not against a decoder — which is exactly what DAS does and what this
+test was not.
+
+### R11.6 Summary of the head-site account
+
+Six results, in the order they constrain each other:
+
+1. **R8** — the image->text read is ~10 attention heads in blocks 21-23, and the
+   same set serves all four attributes.
+2. **R9** — those heads are image-*rich* (`item` 0.61-0.69), not
+   attribute-selective; R5's opposite claim came from a void trace.
+3. **R10** — on the benchmark, 10 of 784 head-slots (1.3%) reproduce a whole-image
+   swap: 88.5% mean cause vs `full_image`'s 93.0%, with size-matched random head
+   sets at 0.0%. Dose-response is monotone in k.
+4. **R10.3/R10.4** — iso does not degrade, it **leaks to the source**, and
+   `final_score` is pinned at 50% by arithmetic: one generation is scored as a
+   required flip in one target file and a required non-flip in another.
+5. **R11** — the payload is the **entity**, not the answer. It is portable across
+   prompts (81.2%), carries no question identity (`question` inert,
+   `source_q2` = 0.0%), and gets recomputed against whatever question the
+   receiving prompt asks. The apparent -16.1pp question-dependence is -0.9pp
+   once `calling_code`'s multi-token decode artefact is removed.
+6. **R11.5** — a variance-derived 7-dim subspace of those heads transfers 0.0%.
+
+Taken together: these heads are a high-bandwidth entity conduit, VADE's metric
+punishes exactly that, and separating "which attribute" out of the conduit — if
+it is separable at all — requires a subspace learned against generation. That is
+the motivation for the two training experiments that follow.

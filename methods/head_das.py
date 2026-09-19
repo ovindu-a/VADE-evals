@@ -1,0 +1,612 @@
+"""Train a subspace intervention ON the entity heads, scored by VADE.
+
+WHY THIS EXISTS
+
+R10/R11 of ATTRIBUTE_HEAD_EXPERIMENTS.md establish two things about the ten
+blocks-21-23 heads (21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6,
+23.17):
+
+  * swapping their FULL 128-dim columns reproduces a whole-image swap
+    (88.5% mean cause vs full_image's 93.0%, random heads 0.0%), and
+  * what crosses is the ENTITY, not the answer -- `head_cross`'s `both` cell
+    returns the donor's flag answered for the RECEIVING prompt's question,
+    with the donor's own answer at exactly 0.0%.
+
+So the conduit moves every attribute together, which is precisely what VADE's
+`final_score` punishes: cause ~100 / iso ~0 averages to the 50% null. The open
+question is whether the entity payload DECOMPOSES -- whether some subspace of
+those 1,280 columns carries "which language" separably from "which country".
+
+R11.5 shows the obvious shortcut fails: a 7-dim subspace read off the value
+centroids' variance transfers 0.0%, less than a random-head control, despite
+decoding `language` at 100%. Linear decodability is not causal sufficiency --
+the same failure RESULTS.md records for the Phase B selection proxy.
+
+This script does it the only way left: learn the subspace AGAINST THE
+GENERATION OBJECTIVE, which is what DAS is.
+
+WHAT IS TRAINED
+
+One intervention per (entity, attribute) -- a `language` rotation is a
+different object from a `capital` rotation, and must be, since the two make
+opposite demands of the same activations. Each is block-diagonal by necessity:
+blocks run sequentially, so patching block 21 changes what block 22 computes and
+a single joint rotation across all three is not expressible in one hook. Widths
+are n_heads_in_block * head_dim (common10: 256 / 512 / 512).
+
+    das_fixed     FixedSubspaceIntervention -- a D x K semi-orthogonal R,
+                  K fixed up front. output = base + R^T (R source - R base).
+    das_rotated   RotatedSpaceIntervention -- a full D x D learned rotation
+                  plus a sigmoid mask annealed over training, so K is learned.
+    dbm           SigmoidMaskIntervention -- no rotation at all, an
+                  axis-aligned mask over the raw head dimensions, + L1.
+                  The privileged-basis hypothesis: are head dims themselves
+                  the right coordinates?
+
+All three are the SAME loop with a different nn.Module in the middle; the
+modules are imported, not reimplemented (DAS's from the sibling VADE repo,
+DBM's from methods/dbm/, which wraps pyvene's own class).
+
+THE OBJECTIVE IS ALREADY VADE'S METRIC
+
+`targets.target_gold_toks_and_len` supervises each row toward the SOURCE gold
+when `rule == match_source` (the cause pool) and toward the BASE gold when
+`rule == match_base` (the iso pool). VADE's train tuples for an attribute
+contain both, so cross-entropy over them IS `final_score` made differentiable.
+A cause-only objective would simply relearn the full swap -- R10 shows cause is
+free at this site and iso is the entire difficulty.
+
+  NOTE ON POOL BALANCE. The train split is ~57% cause / 43% iso, while the
+  metric weights cause 1/2 and the iso MEAN 1/2. `--iso_weight` rescales the
+  iso rows' loss to correct for that; 1.0 leaves the natural mixture.
+
+THE PATCH COVERS EVERY ANSWER TOKEN, NOT JUST THE LAST PROMPT TOKEN
+
+A last-prompt-token patch cannot steer past the first answer token (see
+head_swap_vade.py's header and ndm/swap_trace.py), which is fatal for
+`calling_code` and `capital`. `build_teacher_forced_extension` appends the true
+answer tokens so that the last MAX_ANSWER_TOKENS columns of one forward are
+exactly [last prompt token, answer tok 0, ... answer tok K-2], predicting answer
+tokens 0..K-1. The hook patches ALL of those columns, with donor column j
+aligned to donor answer step j -- the differentiable equivalent of the
+step-by-step replay that `patched_generate` does at eval time.
+
+The donor's own trajectory is captured the same way: one teacher-forced forward
+of the SOURCE image asking the SAME question, extended by the SOURCE's gold, so
+its columns are "the source emitting its own correct answer" step for step. That
+is one forward instead of K, and it removes a train/eval mismatch -- pass
+`--donor_capture generate` to reproduce head_swap_vade's generation-time capture
+instead.
+
+WHAT A RESULT MEANS
+
+  final_score > 50%     the entity payload decomposes: a subspace moves the
+                        queried attribute without dragging the country along.
+                        This is the result the whole head line of work is for.
+  final_score ~ 50%     it does not decompose at this site, under this
+                        hypothesis class. Check WHICH corner: cause ~100/iso ~0
+                        means the rotation just relearned the full swap
+                        (raise --iso_weight, lower K); cause ~0/iso ~100 means
+                        it learned to do nothing (K too small, or lr/epochs).
+  cause ~0 AND iso ~0   broken, not a finding. Check the read-back gate.
+
+Train on VADE's `train` split, evaluate on `test`. These are split by ITEM, not
+by row: on flags, 59 countries train and a disjoint 25 test (0 overlap, asserted
+in --dry_run). So a rotation that scores here has generalized to flags it never
+saw, which is the claim worth making -- and a much harder one than a row split
+would support. `--train_rows`/`--eval_rows` cap each independently; subsampling
+is stratified by cause/iso, never by item, so the disjointness survives it.
+
+Usage
+-----
+    # sanity: no model, validates rows/heads/widths/splits
+    python methods/head_das.py --attribute language --dry_run
+
+    # train + evaluate, K=8 per block
+    python methods/head_das.py --attribute language --method das_fixed \
+        --subspace_dim 8 --train_rows 4000 --eval_rows 4000
+
+    # the learned-K variant, and the axis-aligned control
+    python methods/head_das.py --attribute language --method das_rotated --train_rows 4000
+    python methods/head_das.py --attribute language --method dbm --l1_coef 1e-3 --train_rows 4000
+
+    # score (sibling VADE repo)
+    python ../VADE/eval/score.py --entity flags --attribute language \
+        --predictions results/head_das/flags/language_das_fixed_k8/predictions.jsonl
+"""
+import argparse
+import json
+import os
+import random
+import sys
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
+
+from methods.head_swap_vade import (  # noqa: E402
+    ATTRIBUTES, COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, build_prompt, capture_donor, decode,
+    head_columns, load_assets, parse_heads, patched_generate, to_device,
+)
+from methods.common.targets import (  # noqa: E402
+    MAX_ANSWER_TOKENS, build_teacher_forced_extension, derive_gold_token_ids,
+    gold_labels_from_lens, pad_gold_toks,
+)
+
+METHODS = ("das_fixed", "das_rotated", "dbm")
+
+
+# ---------------------------------------------------------------------------
+# Interventions -- imported, never reimplemented
+# ---------------------------------------------------------------------------
+
+def load_das_module(vade_root):
+    """VADE's own das/intervention.py, loaded by path.
+
+    It is pure nn.Module code on hidden-state tensors with zero model or entity
+    dependency (its own docstring says so), but it lives in the sibling repo and
+    this one pins no dependency on VADE's package layout -- so load it the way
+    head_cross.py loads VADE's `contains_label`, rather than copying a second
+    divergent copy into this tree."""
+    import importlib.util
+    path = os.path.join(vade_root, "methods", "das", "intervention.py")
+    assert os.path.exists(path), f"VADE DAS intervention not found at {path} (--vade_root)"
+    spec = importlib.util.spec_from_file_location("_vade_das_intervention", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def make_intervention(method, dim, subspace_dim, vade_root):
+    """One intervention for one block's head columns."""
+    if method == "dbm":
+        from methods.dbm.intervention import SigmoidMaskIntervention
+        return SigmoidMaskIntervention(embed_dim=dim)
+    das = load_das_module(vade_root)
+    if method == "das_fixed":
+        k = min(subspace_dim, dim)
+        assert k > 0, "--subspace_dim must be > 0 for das_fixed"
+        return das.FixedSubspaceIntervention(dim, k)
+    if method == "das_rotated":
+        return das.RotatedSpaceIntervention(dim)
+    raise ValueError(f"unknown method {method!r} (expected one of {METHODS})")
+
+
+def temperature_schedule_for(method, n_steps, vade_root):
+    """-> [n_steps] temperatures, or None for a method with no mask to anneal."""
+    if method == "dbm":
+        from methods.dbm.intervention import temperature_schedule
+        return temperature_schedule(n_steps)                 # RAVEL's 1e-2 -> 1e-7
+    if method == "das_rotated":
+        return load_das_module(vade_root).temperature_schedule(n_steps)   # 50 -> 0.1
+    return None
+
+
+def intervention_stats(method, interventions):
+    """JSON-able summary of what training actually selected, per block."""
+    import torch
+    out = {}
+    for b, iv in sorted(interventions.items()):
+        with torch.no_grad():
+            if method == "das_fixed":
+                out[b] = {"kind": "fixed_subspace", "dim": int(iv.proj.weight.shape[1]),
+                          "subspace_dim": int(iv.subspace_dim)}
+            elif method == "das_rotated":
+                m = torch.sigmoid(iv.masks / iv.temperature)
+                out[b] = {"kind": "rotated_mask", "dim": int(iv.masks.shape[0]),
+                          "temperature": float(iv.temperature),
+                          "mask_sum": float(m.sum()), "n_above_0.5": int((m > 0.5).sum())}
+            else:
+                from methods.dbm.intervention import mask_stats
+                s = mask_stats(iv)
+                s.pop("selected_indices", None)              # can be thousands of ints
+                out[b] = {"kind": "sigmoid_mask", **s}
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Rows and batches
+# ---------------------------------------------------------------------------
+
+def load_rows(vade_root, entity, attribute, split, n_rows, seed):
+    """VADE tuple rows for ONE attribute (that file's `target_attribute`).
+
+    Subsampling is stratified by `rule` so a small --train_rows never drops one
+    of the two pools entirely -- which would silently turn this into the
+    cause-only training the docstring warns about."""
+    path = os.path.join(vade_root, "data", entity, "tuples", attribute, f"{split}.jsonl")
+    assert os.path.exists(path), f"no tuples at {path}"
+    with open(path) as f:
+        rows = [json.loads(l) for l in f]
+    if n_rows and n_rows < len(rows):
+        rng = random.Random(seed)
+        cause = [r for r in rows if r["rule"] == "match_source"]
+        iso = [r for r in rows if r["rule"] != "match_source"]
+        frac = n_rows / len(rows)
+        keep = (rng.sample(cause, max(1, round(len(cause) * frac)))
+                + rng.sample(iso, max(1, round(len(iso) * frac))))
+        rows = sorted(keep, key=lambda r: r["row_index"])
+    return rows
+
+
+def build_batch(rows, processor, items, entity_dir, lookup, pad_id):
+    """Base and donor prompts plus both golds, for one chunk.
+
+    The donor asks the SAME question as the base (head_swap_vade's
+    `donor_question=queried`): the edit must not be told which attribute the
+    VADE row targets, or the intervention could satisfy iso by reading the
+    label rather than by isolating a subspace."""
+    import torch
+    from PIL import Image
+
+    tok = processor.tokenizer
+    base_seqs, donor_seqs = [], []
+    base_px, donor_px, base_thw, donor_thw = [], [], [], []
+    base_golds, source_golds = [], []
+    for r in rows:
+        t = lookup[r["queried"]][r["template_id"]]
+        with Image.open(os.path.join(entity_dir, items[r["base"]]["image"])) as im:
+            bp = build_prompt(processor, im.convert("RGB"), t["question"], t["prefill"])
+        with Image.open(os.path.join(entity_dir, items[r["source"]]["image"])) as im:
+            dp = build_prompt(processor, im.convert("RGB"), t["question"], t["prefill"])
+        base_seqs.append(bp["input_ids"][0]); donor_seqs.append(dp["input_ids"][0])
+        base_px.append(bp["pixel_values"]); donor_px.append(dp["pixel_values"])
+        base_thw.append(bp["image_grid_thw"]); donor_thw.append(dp["image_grid_thw"])
+        base_golds.append(derive_gold_token_ids(tok, t["prefill"], str(r["base_label"])))
+        source_golds.append(derive_gold_token_ids(tok, t["prefill"], str(r["source_label"])))
+
+    def pack(seqs):
+        n = max(len(s) for s in seqs)
+        ids = torch.full((len(seqs), n), pad_id, dtype=torch.long)
+        mask = torch.zeros((len(seqs), n), dtype=torch.long)
+        for i, s in enumerate(seqs):
+            ids[i, n - len(s):] = s
+            mask[i, n - len(s):] = 1
+        return ids, mask
+
+    base_ids, base_mask = pack(base_seqs)
+    donor_ids, donor_mask = pack(donor_seqs)
+    bg, bl = pad_gold_toks(base_golds, pad_id)
+    sg, sl = pad_gold_toks(source_golds, pad_id)
+    is_cause = torch.tensor([r["rule"] == "match_source" for r in rows])
+    return {
+        "rows": rows,
+        "base_ids": base_ids, "base_mask": base_mask,
+        "base_extra": {"pixel_values": torch.cat(base_px), "image_grid_thw": torch.cat(base_thw)},
+        "donor_ids": donor_ids, "donor_mask": donor_mask,
+        "donor_extra": {"pixel_values": torch.cat(donor_px), "image_grid_thw": torch.cat(donor_thw)},
+        "base_gold_toks": bg, "base_gold_len": bl,
+        "source_gold_toks": sg, "source_gold_len": sl,
+        "is_cause": is_cause,
+        # Supervision target: source gold on cause rows, base gold on iso rows.
+        "target_toks": torch.where(is_cause.unsqueeze(1), sg, bg),
+        "target_len": torch.where(is_cause, sl, bl),
+    }
+
+
+# ---------------------------------------------------------------------------
+# The donor's answer-token trajectory
+# ---------------------------------------------------------------------------
+
+def capture_donor_columns(adapter, model, blocks, batch, pad_id):
+    """-> {block: [B, K, hidden]} of attn_head_output at the LAST K columns of
+    ONE teacher-forced donor forward.
+
+    The donor is extended by its OWN gold (the SOURCE's label), so column j is
+    the source's state while emitting its answer token j -- the same alignment
+    `capture_donor`'s step j has, at 1 forward instead of K."""
+    import torch
+    ext_ids, ext_mask = build_teacher_forced_extension(
+        batch["donor_ids"], batch["donor_mask"], batch["source_gold_toks"], batch["source_gold_len"])
+    sinks, handles = {}, []
+    for b in blocks:
+        sinks[b] = []
+
+        def grab(_mod, args, _sink=sinks[b]):
+            _sink.append(args[0][:, -MAX_ANSWER_TOKENS:, :].detach().float())
+        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(grab))
+    try:
+        with torch.no_grad():
+            model(input_ids=ext_ids.to(model.device), attention_mask=ext_mask.to(model.device),
+                  **to_device(batch["donor_extra"], model.device, model.dtype),
+                  logits_to_keep=MAX_ANSWER_TOKENS)
+    finally:
+        for h in handles:
+            h.remove()
+    for b, v in sinks.items():
+        assert len(v) == 1, f"block {b} o_proj fired {len(v)} times in one forward, expected 1"
+    return {b: v[0] for b, v in sinks.items()}
+
+
+# ---------------------------------------------------------------------------
+# The intervened teacher-forced forward
+# ---------------------------------------------------------------------------
+
+def intervened_logits(adapter, model, interventions, colmap, donor_cols, batch):
+    """Teacher-forced forward with every block's intervention live at the last
+    MAX_ANSWER_TOKENS columns. Returns [B, K, vocab] aligned 1:1 with
+    target_toks. Differentiable through the interventions."""
+    import torch
+    ext_ids, ext_mask = build_teacher_forced_extension(
+        batch["base_ids"], batch["base_mask"], batch["target_toks"], batch["target_len"])
+    handles = []
+    for b, iv in interventions.items():
+        cols = colmap[b].to(model.device)
+        z = donor_cols[b].index_select(-1, cols)             # [B, K, d_b]
+
+        def patch(_mod, args, _iv=iv, _cols=cols, _z=z):
+            t = args[0]
+            have = t[:, -MAX_ANSWER_TOKENS:, :].index_select(-1, _cols)
+            new = _iv(have, _z.to(have.dtype))
+            patched = t.clone()
+            patched[:, -MAX_ANSWER_TOKENS:, _cols] = new.to(t.dtype)
+            return (patched,) + tuple(args[1:])
+        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(patch))
+    try:
+        out = model(input_ids=ext_ids.to(model.device), attention_mask=ext_mask.to(model.device),
+                    **to_device(batch["base_extra"], model.device, model.dtype),
+                    logits_to_keep=MAX_ANSWER_TOKENS)
+    finally:
+        for h in handles:
+            h.remove()
+    return out.logits[:, -MAX_ANSWER_TOKENS:, :]
+
+
+def weighted_ce(logits, batch, iso_weight):
+    """Per-row CE against each row's own gold, with the iso pool rescaled.
+
+    VADE weights `cause` 1/2 and the MEAN over iso attributes 1/2, but the train
+    split is cause-heavy, so the natural mixture over-weights the objective that
+    is already free at this site."""
+    import torch
+    labels = gold_labels_from_lens(batch["target_toks"], batch["target_len"]).to(logits.device)
+    per_tok = torch.nn.functional.cross_entropy(
+        logits.reshape(-1, logits.shape[-1]).float(), labels.reshape(-1),
+        ignore_index=-100, reduction="none").view(labels.shape)
+    valid = (labels != -100).float()
+    per_row = (per_tok * valid).sum(1) / valid.sum(1).clamp(min=1)
+    w = torch.where(batch["is_cause"].to(logits.device), 1.0, float(iso_weight))
+    return (per_row * w).sum() / w.sum()
+
+
+# ---------------------------------------------------------------------------
+# Train
+# ---------------------------------------------------------------------------
+
+def chunks(seq, n):
+    for i in range(0, len(seq), n):
+        yield seq[i:i + n]
+
+
+def train(adapter, model, processor, args, heads, colmap, items, entity_dir, lookup, pad_id, log_path):
+    import torch
+
+    blocks = sorted(colmap)
+    interventions = {b: make_intervention(args.method, len(colmap[b]), args.subspace_dim, args.vade_root)
+                     .to(model.device) for b in blocks}
+    params = [p for iv in interventions.values() for p in iv.parameters() if p.requires_grad]
+    n_params = sum(p.numel() for p in params)
+    opt = torch.optim.Adam(params, lr=args.lr)
+
+    rows = load_rows(args.vade_root, args.entity, args.attribute, args.train_split,
+                     args.train_rows, args.seed)
+    batches = list(chunks(rows, args.batch_size))
+    n_opt_steps = args.epochs * max(1, (len(batches) + args.grad_accum_steps - 1) // args.grad_accum_steps)
+    temps = temperature_schedule_for(args.method, n_opt_steps, args.vade_root)
+    n_cause = sum(r["rule"] == "match_source" for r in rows)
+    print(f"  train: {len(rows)} rows ({n_cause} cause / {len(rows) - n_cause} iso), "
+          f"{len(batches)} batches x {args.epochs} epochs = {n_opt_steps} opt steps")
+    print(f"  params: {n_params:,} over blocks {blocks} "
+          f"(dims {[len(colmap[b]) for b in blocks]})")
+
+    log = open(log_path, "w")
+    step = 0
+    for epoch in range(args.epochs):
+        accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+        for i, chunk in enumerate(batches):
+            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
+            donor_cols = capture_donor_columns(adapter, model, blocks, batch, pad_id)
+            logits = intervened_logits(adapter, model, interventions, colmap, donor_cols, batch)
+            ce = weighted_ce(logits, batch, args.iso_weight)
+            loss = ce
+            l1 = 0.0
+            if args.method == "dbm" and args.l1_coef:
+                from methods.dbm.intervention import l1_penalty
+                l1_term = sum(l1_penalty(iv) for iv in interventions.values())
+                l1 = float(l1_term)
+                loss = ce + args.l1_coef * l1_term
+            (loss / args.grad_accum_steps).backward()
+            accum += float(loss); accum_ce += float(ce); accum_l1 += l1
+            if (i + 1) % args.grad_accum_steps == 0 or i == len(batches) - 1:
+                if args.grad_clip_norm > 0:
+                    torch.nn.utils.clip_grad_norm_(params, args.grad_clip_norm)
+                opt.step(); opt.zero_grad(set_to_none=True)
+                if temps is not None:
+                    t = float(temps[min(step, len(temps) - 1)])
+                    for iv in interventions.values():
+                        iv.set_temperature(t)
+                step += 1
+                rec = {"epoch": epoch, "opt_step": step, "loss": accum, "ce": accum_ce,
+                       "l1": accum_l1, "temperature": None if temps is None
+                       else float(temps[min(step - 1, len(temps) - 1)])}
+                log.write(json.dumps(rec) + "\n"); log.flush()
+                print(f"    epoch {epoch} step {step}/{n_opt_steps} loss={accum:.4f} ce={accum_ce:.4f}"
+                      + (f" l1={accum_l1:.1f}" if args.method == "dbm" else ""), flush=True)
+                accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+    log.close()
+    return interventions
+
+
+# ---------------------------------------------------------------------------
+# Evaluate -- free generation, scored by VADE
+# ---------------------------------------------------------------------------
+
+def evaluate(adapter, model, processor, args, heads, colmap, items, entity_dir, lookup,
+             pad_id, head_dim, interventions, out_path):
+    """Writes predictions in VADE/eval/score.py's format.
+
+    Generation goes through head_swap_vade.patched_generate with
+    `transform=`, NOT a local copy: the generate path that produced R10 and R11
+    is the one this is measured on, so a difference between arms cannot be a
+    difference between two generation loops."""
+    import torch
+
+    blocks = sorted(colmap)
+    for iv in interventions.values():
+        iv.eval()
+    rows = load_rows(args.vade_root, args.entity, args.attribute, args.eval_split,
+                     args.eval_rows, args.seed + 1)
+    print(f"  eval: {len(rows)} rows from {args.eval_split} -> {out_path}")
+
+    def transform_for(b):
+        iv = interventions[b]
+
+        def fn(have, want):
+            with torch.no_grad():
+                return iv(have, want.to(have.dtype))
+        return fn
+    transform = {b: transform_for(b) for b in blocks}
+
+    n = 0
+    with open(out_path, "w") as f:
+        for chunk in chunks(rows, args.batch_size):
+            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
+            if args.donor_capture == "generate":
+                dz = capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
+                                   batch["donor_extra"], args.max_new_tokens, pad_id)
+            else:
+                cols = capture_donor_columns(adapter, model, blocks, batch, pad_id)
+                dz = {b: v.cpu() for b, v in cols.items()}
+            toks = patched_generate(adapter, model, heads, dz, batch["base_ids"], batch["base_mask"],
+                                    batch["base_extra"], args.max_new_tokens, pad_id, head_dim,
+                                    transform=transform)
+            for r, text in zip(chunk, decode(processor, toks)):
+                f.write(json.dumps({"attribute": r["target_attribute"],
+                                    "row_index": r["row_index"],
+                                    "generated_text": text}) + "\n")
+                n += 1
+            print(f"    {n}/{len(rows)}", flush=True)
+    return n
+
+
+# ---------------------------------------------------------------------------
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--entity", default="flags")
+    ap.add_argument("--attribute", default="language", choices=list(ATTRIBUTES),
+                    help="One intervention is trained PER attribute -- a `language` rotation is a "
+                         "different object from a `capital` one and must be.")
+    ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
+    ap.add_argument("--model_id", default=MODEL_ID)
+    ap.add_argument("--method", default="das_fixed", choices=list(METHODS))
+    ap.add_argument("--subspace_dim", type=int, default=8, metavar="K",
+                    help="das_fixed only: the FIXED subspace width, per block. das_rotated and dbm "
+                         "learn their own width via an annealed mask.")
+    ap.add_argument("--heads", default=COMMON10,
+                    help="BLOCK.HEAD list. Default is R8/R10's common10.")
+    ap.add_argument("--train_split", default="train")
+    ap.add_argument("--eval_split", default="test")
+    ap.add_argument("--train_rows", type=int, default=0, metavar="N",
+                    help="Cap training rows (0 = the whole split, ~33-36k). Subsampling is "
+                         "stratified by cause/iso so a small N keeps both pools.")
+    ap.add_argument("--eval_rows", type=int, default=0, metavar="N",
+                    help="Cap eval rows (0 = the whole test split, 14,052). score.py EXCLUDES "
+                         "missing rows rather than scoring them wrong, so a capped eval is a "
+                         "valid partial score, not a penalized one.")
+    ap.add_argument("--epochs", type=int, default=1)
+    ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--batch_size", type=int, default=4)
+    ap.add_argument("--grad_accum_steps", type=int, default=16)
+    ap.add_argument("--grad_clip_norm", type=float, default=1.0)
+    ap.add_argument("--iso_weight", type=float, default=1.0,
+                    help="Multiplier on iso rows' loss. The train split is ~57%% cause but the "
+                         "metric weights cause 1/2 and the iso mean 1/2; raise this if training "
+                         "lands in the cause~100/iso~0 corner (i.e. relearned the full swap).")
+    ap.add_argument("--l1_coef", type=float, default=1e-3, help="dbm only.")
+    ap.add_argument("--donor_capture", choices=["teacher_forced", "generate"], default="teacher_forced",
+                    help="teacher_forced matches training exactly (1 forward); generate reproduces "
+                         "head_swap_vade's R10 capture (K forwards).")
+    ap.add_argument("--max_new_tokens", type=int, default=12)
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--out_dir", default=None)
+    ap.add_argument("--skip_eval", action="store_true")
+    ap.add_argument("--dry_run", action="store_true")
+    args = ap.parse_args()
+
+    heads = parse_heads(args.heads)
+    blocks = sorted({b for b, _ in heads})
+    tag = f"{args.attribute}_{args.method}" + (f"_k{args.subspace_dim}"
+                                               if args.method == "das_fixed" else "")
+    out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_das", args.entity, tag)
+    entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
+
+    train_rows = load_rows(args.vade_root, args.entity, args.attribute, args.train_split,
+                           args.train_rows, args.seed)
+    eval_rows = load_rows(args.vade_root, args.entity, args.attribute, args.eval_split,
+                          args.eval_rows, args.seed + 1)
+    n_cause = sum(r["rule"] == "match_source" for r in train_rows)
+    print(f"[head_das] {args.entity}/{args.attribute} method={args.method}"
+          + (f" K={args.subspace_dim}/block" if args.method == "das_fixed" else ""))
+    print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads))
+    print(f"  train {args.train_split}: {len(train_rows)} rows "
+          f"({n_cause} cause / {len(train_rows) - n_cause} iso), iso_weight={args.iso_weight}")
+    print(f"  eval  {args.eval_split}: {len(eval_rows)} rows")
+    print(f"  patch columns per forward: last {MAX_ANSWER_TOKENS} (answer tokens 0..{MAX_ANSWER_TOKENS - 1})")
+    print(f"  -> {out_dir}")
+
+    if args.dry_run:
+        assert not (set(r["base"] for r in train_rows + eval_rows) - set(items)), "unknown base item"
+        assert not (set(r["source"] for r in train_rows + eval_rows) - set(items)), "unknown source item"
+        tr_items = {c for r in train_rows for c in (r["base"], r["source"])}
+        ev_items = {c for r in eval_rows for c in (r["base"], r["source"])}
+        assert n_cause and n_cause < len(train_rows), "train rows lost one of the two pools"
+        print(f"    items: {len(tr_items)} train / {len(ev_items)} eval, "
+              f"overlap {len(tr_items & ev_items)} -- VADE splits by ITEM, so eval is on flags "
+              f"the rotation has never seen")
+        assert not (tr_items & ev_items), (
+            "train and eval share items -- the generalization claim below does not hold; "
+            "check --train_split/--eval_split")
+        print(f"    blocks {blocks}; head columns per block "
+              f"{ {b: 128 * sum(1 for x, _ in heads if x == b) for b in blocks} } (assuming head_dim=128)")
+        print("Grid valid.")
+        return
+
+    from methods.adapters.registry import get_adapter
+
+    adapter = get_adapter(args.model_id)
+    model, processor = adapter.load()
+    model.requires_grad_(False)                # only the intervention trains
+    hidden = adapter.hidden_size(model)
+    n_heads = adapter.n_attention_heads(model)
+    head_dim = hidden // n_heads
+    n_layers = len(adapter.get_decoder_layers(model))
+    assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
+    assert all(0 <= h < n_heads for _, h in heads), f"head index out of 0..{n_heads - 1}"
+    pad_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
+    colmap = {b: head_columns(heads, b, head_dim) for b in blocks}
+
+    os.makedirs(out_dir, exist_ok=True)
+    interventions = train(adapter, model, processor, args, heads, colmap, items, entity_dir,
+                          lookup, pad_id, os.path.join(out_dir, "train_log.jsonl"))
+
+    import torch
+    torch.save({b: iv.state_dict() for b, iv in interventions.items()},
+               os.path.join(out_dir, "intervention.pt"))
+    stats = intervention_stats(args.method, interventions)
+    json.dump({"args": vars(args), "heads": [[b, h] for b, h in heads], "stats": stats},
+              open(os.path.join(out_dir, "summary.json"), "w"), indent=2)
+    print("  " + json.dumps(stats))
+
+    if not args.skip_eval:
+        out_path = os.path.join(out_dir, "predictions.jsonl")
+        n = evaluate(adapter, model, processor, args, heads, colmap, items, entity_dir, lookup,
+                     pad_id, head_dim, interventions, out_path)
+        print(f"wrote {n} predictions -> {out_path}")
+        print(f"score with:\n  python {os.path.join(args.vade_root, 'eval', 'score.py')} "
+              f"--entity {args.entity} --attribute {args.attribute} --predictions {out_path}")
+
+
+if __name__ == "__main__":
+    main()
