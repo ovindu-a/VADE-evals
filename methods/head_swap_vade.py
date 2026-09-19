@@ -202,6 +202,7 @@ def build_value_subspace(capture_dir, heads, attribute, dim, vade_root, entity):
     is just an entity subspace under another name. On flags that means
     `language` (8 classes over 49 countries) and nothing else."""
     import numpy as np
+    import torch
     meta = json.load(open(os.path.join(capture_dir, "meta.json")))
     rows = [json.loads(l) for l in open(os.path.join(capture_dir, "index.jsonl"))]
     attrs, blocks_cap, head_dim = meta["attributes"], meta["blocks"], meta["head_dim"]
@@ -232,7 +233,7 @@ def build_value_subspace(capture_dir, heads, attribute, dim, vade_root, entity):
                          for L in classes])
         U, _, _ = np.linalg.svd((cent - cent.mean(0)).T, full_matrices=False)
         k = min(dim, len(classes) - 1, U.shape[1])
-        out[b] = U[:, :k]
+        out[b] = torch.from_numpy(np.ascontiguousarray(U[:, :k]))
     return out, len(classes), len(keep)
 
 
@@ -513,21 +514,32 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
 
 
 def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                    head_dim, tol=1e-3, subspace=None):
+                    head_dim, tol=1e-3, rel_tol=0.01, subspace=None):
     """Read the patched site back through a hook registered AFTER the patch and
     assert it returns what was installed, at EVERY step.
 
     This is head_trace.py's phase-1c applied to the continuous case, and it is
     the check that licenses the rest: if the patch and the read disagree, the
     hook is not addressing o_proj's input at the column it claims and every
-    benchmark number downstream is void. Costs one generation."""
+    benchmark number downstream is void. Costs one generation.
+
+    Tolerance is `max(tol, rel_tol * |want|)`, not a bare absolute `tol`: the
+    subspace path (`--subspace_dim`) adds a `have.float() + shift` float32
+    accumulation before the final downcast to the model's bf16 dtype, so its
+    round-trip error scales with the activation's own magnitude rather than
+    sitting at a fixed floor. Measured on flags/language common10 sub7: worst
+    absolute error 4e-3 at |want|_max 2.2, i.e. ~0.18% relative -- consistent
+    with bf16's ~0.4% epsilon (dla.py's docstring notes the same ~1% floor for
+    bf16 accumulation), not an addressing bug. An addressing bug produces `g`
+    and `w` reading DIFFERENT tensors, which lands at O(1) relative error, so
+    1% still catches that case."""
     import torch
     seen = {b: [] for b in sorted({b for b, _ in heads})}
     observers = [(b, (lambda t, _b=b: seen[_b].append(t[:, -1, :].detach().float().cpu())))
                  for b in seen]
     patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
                      head_dim, observers=observers, subspace=subspace)
-    worst = 0.0
+    worst, worst_allowed = 0.0, tol
     for b, steps in seen.items():
         cols = head_columns(heads, b, head_dim)
         for t, got in enumerate(steps):
@@ -538,9 +550,13 @@ def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_to
                 # read back. Checking the full vector would fail by construction.
                 P = subspace[b].cpu().to(g.dtype)
                 g, w = g @ P, w @ P
-            worst = max(worst, float((g - w).abs().max()))
-    assert worst <= tol, (f"read-back mismatch {worst:.3e} > {tol}: the patch and the capture are not "
-                          f"addressing the same tensor/column -- every result below would be void")
+            err = float((g - w).abs().max())
+            allowed = max(tol, rel_tol * float(w.abs().max()))
+            if err - allowed > worst - worst_allowed:
+                worst, worst_allowed = err, allowed
+    assert worst <= worst_allowed, (
+        f"read-back mismatch {worst:.3e} > {worst_allowed:.3e} (tol={tol}, rel_tol={rel_tol}): the patch "
+        f"and the capture are not addressing the same tensor/column -- every result below would be void")
     return worst
 
 

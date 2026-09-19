@@ -1,0 +1,36 @@
+[head_cross] flags: 16 flag pairs x 4x4 question pairs x 2 donors = 512 generations
+  cells: {'flag': 64, 'self': 64, 'both': 192, 'question': 192}
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  -> /workspace/VADE-evals/results/head_cross/flags/cross_n16_sub7.jsonl
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:22,  8.78it/s]Loading weights:   0%|          | 2/729 [00:00<02:05,  5.80it/s]Loading weights:   2%|▏         | 12/729 [00:00<00:19, 36.50it/s]Loading weights:   2%|▏         | 18/729 [00:00<00:16, 43.15it/s]Loading weights:   4%|▍         | 30/729 [00:00<00:11, 60.39it/s]Loading weights:   6%|▌         | 42/729 [00:00<00:09, 69.88it/s]Loading weights:   7%|▋         | 54/729 [00:00<00:08, 76.24it/s]Loading weights:   9%|▉         | 66/729 [00:01<00:08, 79.36it/s]Loading weights:  11%|█         | 78/729 [00:01<00:07, 81.42it/s]Loading weights:  12%|█▏        | 90/729 [00:01<00:07, 83.80it/s]Loading weights:  14%|█▍        | 102/729 [00:01<00:07, 87.66it/s]Loading weights:  16%|█▌        | 114/729 [00:01<00:06, 88.71it/s]Loading weights:  17%|█▋        | 126/729 [00:01<00:06, 89.13it/s]Loading weights:  19%|█▉        | 138/729 [00:01<00:06, 90.02it/s]Loading weights:  20%|██        | 149/729 [00:02<00:06, 87.62it/s]Loading weights:  22%|██▏       | 162/729 [00:02<00:06, 90.02it/s]Loading weights:  24%|██▎       | 173/729 [00:02<00:06, 88.91it/s]Loading weights:  25%|██▌       | 184/729 [00:02<00:05, 91.47it/s]Loading weights:  27%|██▋       | 196/729 [00:02<00:06, 82.96it/s]Loading weights:  29%|██▊       | 209/729 [00:02<00:05, 88.57it/s]Loading weights:  30%|███       | 220/729 [00:02<00:05, 91.72it/s]Loading weights:  32%|███▏      | 230/729 [00:02<00:05, 90.49it/s]Loading weights:  33%|███▎      | 240/729 [00:03<00:05, 88.67it/s]Loading weights:  34%|███▍      | 249/729 [00:03<00:05, 85.30it/s]Loading weights:  35%|███▌      | 258/729 [00:03<00:05, 79.91it/s]Loading weights:  37%|███▋      | 269/729 [00:03<00:05, 83.85it/s]Loading weights:  38%|███▊      | 280/729 [00:03<00:05, 80.38it/s]Loading weights:  40%|████      | 293/729 [00:03<00:05, 85.48it/s]Loading weights:  42%|████▏     | 304/729 [00:03<00:05, 83.52it/s]Loading weights:  43%|████▎     | 316/729 [00:03<00:04, 90.27it/s]Loading weights:  45%|████▍     | 326/729 [00:04<00:04, 91.93it/s]Loading weights:  46%|████▌     | 336/729 [00:04<00:04, 83.50it/s]Loading weights:  59%|█████▉    | 431/729 [00:04<00:00, 299.33it/s]Loading weights:  72%|███████▏  | 528/729 [00:04<00:00, 475.54it/s]Loading weights:  85%|████████▌ | 621/729 [00:04<00:00, 597.25it/s]Loading weights:  98%|█████████▊| 714/729 [00:04<00:00, 690.26it/s]Loading weights: 100%|██████████| 729/729 [00:04<00:00, 157.94it/s]
+  subspace: language, 8 values over 49 items, dims/block {21: 7, 22: 7, 23: 7}
+  read-back check: worst = 0.00e+00 over 12 steps
+  64/512
+  128/512
+  192/512
+  256/512
+  320/512
+  384/512
+  448/512
+  512/512
+
+      cell      n     base_q1  source_q1  source_q2    base_q2      other  ambiguous
+      self     64       92.2%       0.0%       0.0%       0.0%       7.8%       0.0%
+      flag     64       92.2%       0.0%       0.0%       0.0%       7.8%       0.0%
+  question    192       92.2%       0.0%       0.0%       0.0%       7.8%       0.0%
+      both    192       91.7%       0.0%       0.0%       0.0%       8.3%       0.0%
+
+  self must be ~100% base_q1 -- it patches a run with its own values.
+
+  CONTENT SHIFT (the confound-free number):
+    donor asked the SAME question  -> B's answer to Q1 in 0.0% of rows
+    donor asked a DIFFERENT one    -> B's answer to Q1 in 0.0% of rows
+    shift = +0.0pp
+    ~0 means the heads' content does not depend on which question produced it:
+    ENTITY data. A large drop means question-conditioned content: ATTRIBUTE data.
+
+  QUESTION-ONLY cell (entity never changes, so nothing here is entity transfer):
+    stayed at A's answer to Q1: 92.2%   moved to A's answer to Q2: 0.0%
+
+wrote /workspace/VADE-evals/results/head_cross/flags/cross_n16_sub7.jsonl
