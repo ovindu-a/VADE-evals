@@ -219,3 +219,106 @@ def test_batches_never_mix_donor_attributes():
         assert all(j["donor_attribute"] == attribute for j in chunk)
         seen += chunk
     assert len(seen) == len(jobs)
+
+
+# --- subspace patching (the DAS hypothesis, without the training) -------------
+
+def _orth(n, k, seed=0):
+    g = torch.Generator().manual_seed(seed)
+    q, _ = torch.linalg.qr(torch.randn(n, k, generator=g, dtype=torch.float64))
+    return q.float()
+
+
+def test_full_rank_subspace_equals_a_plain_head_patch(tiny):
+    """A subspace spanning everything must reproduce the unrestricted patch
+    exactly -- the algebra reduces to it, so a mismatch is a sign error."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    donor = {b: v.flip(0) + 2.0 for b, v in z.items()}
+    plain = patched_generate(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM)
+    full = {b: torch.eye(HEAD_DIM) for b in blocks}          # one head per block here
+    sub = patched_generate(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                           subspace=full)
+    assert torch.equal(plain, sub)
+
+
+def test_subspace_patch_moves_only_inside_the_subspace(tiny):
+    """In-subspace coordinates must become the donor's; the orthogonal
+    complement must stay exactly as the base produced it."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block, head = 1, 0
+    heads = [(block, head)]
+    P = _orth(HEAD_DIM, 3)
+    donor = {block: torch.full((ids.shape[0], MAX_NEW, 32), 5.0)}
+    base_seen, sub_seen = [], []
+    patched_generate(adapter, model, heads, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                     subspace={block: torch.zeros(HEAD_DIM, 0)},
+                     observers=[(block, lambda t: base_seen.append(t[:, -1].clone()))])
+    patched_generate(adapter, model, heads, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                     subspace={block: P},
+                     observers=[(block, lambda t: sub_seen.append(t[:, -1].clone()))])
+    owned = slice(head * HEAD_DIM, (head + 1) * HEAD_DIM)
+    b0, s0 = base_seen[0][:, owned].double(), sub_seen[0][:, owned].double()
+    Pd, want = P.double(), donor[block][:, 0, owned].double()
+    assert torch.allclose(s0 @ Pd, want @ Pd, atol=1e-4), "in-subspace part did not become the donor's"
+    perp = torch.eye(HEAD_DIM, dtype=torch.float64) - Pd @ Pd.T
+    assert torch.allclose(s0 @ perp, b0 @ perp, atol=1e-4), "the complement moved"
+
+
+def test_empty_subspace_is_a_no_op(tiny):
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    donor = {b: v + 50.0 for b, v in z.items()}
+    clean = plain_generate(model, ids, mask, extra, MAX_NEW, pad_id=0)
+    none = {b: torch.zeros(HEAD_DIM, 0) for b in blocks}
+    assert torch.equal(clean, patched_generate(adapter, model, HEADS, donor, ids, mask, extra,
+                                               MAX_NEW, 0, HEAD_DIM, subspace=none))
+
+
+def test_readback_under_a_subspace_checks_only_the_projection(tiny):
+    """The read-back must compare the PROJECTION, because only the in-subspace
+    component was installed. Asserted together with the fact that makes it
+    necessary: the full vector demonstrably did NOT become the donor's."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    donor = {b: v + 3.0 for b, v in z.items()}
+    sub = {b: _orth(HEAD_DIM, 2, seed=b) for b in blocks}
+    assert verify_readback(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                           subspace=sub) <= 1e-2
+
+    block, head = HEADS[0]
+    seen = []
+    patched_generate(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                     subspace=sub, observers=[(block, lambda t: seen.append(t[:, -1].clone()))])
+    owned = slice(head * HEAD_DIM, (head + 1) * HEAD_DIM)
+    full_gap = (seen[0][:, owned] - donor[block][:, 0, owned]).abs().max()
+    assert full_gap > 1e-2, ("the full vector matched the donor, so this subspace patch was really a "
+                             "full patch and the projection check proves nothing")
+
+
+def test_subspace_needs_an_attribute_whose_values_repeat(tmp_path):
+    """capital/calling_code are unique per country, so their 'value centroids'
+    are the countries -- an entity subspace wearing an attribute's name."""
+    import numpy as np
+    from methods.head_swap_vade import build_value_subspace
+    cap = tmp_path / "cap"; cap.mkdir()
+    vade = tmp_path / "VADE" / "data" / "flags"; vade.mkdir(parents=True)
+    attrs, blocks, hd, n = ["language", "capital"], [21], 8, 4
+    (cap / "meta.json").write_text(json.dumps(
+        {"attributes": attrs, "blocks": blocks, "head_dim": hd, "shape": [n * len(attrs), 1, 1, 2 * hd]}))
+    np.save(str(cap / "acts_attn_head_output.npy"),
+            np.random.default_rng(0).standard_normal((n * len(attrs), 1, 1, 2 * hd)).astype(np.float32))
+    names = [f"C{i}" for i in range(n)]
+    (cap / "index.jsonl").write_text("".join(
+        json.dumps({"row": i * len(attrs) + j, "item": c, "attribute": a}) + "\n"
+        for i, c in enumerate(names) for j, a in enumerate(attrs)))
+    (vade / "ground_truth.json").write_text(json.dumps({"countries": {
+        c: {"language": "Shared" if i < 2 else "Other", "capital": f"City{i}"} for i, c in enumerate(names)}}))
+    heads = [(21, 0)]
+    P, n_val, n_it = build_value_subspace(str(cap), heads, "language", 3, str(tmp_path / "VADE"), "flags")
+    assert n_val == 2 and P[21].shape[0] == hd and P[21].shape[1] == 1   # capped at n_values-1
+    with pytest.raises(AssertionError, match="entity subspace"):
+        build_value_subspace(str(cap), heads, "capital", 3, str(tmp_path / "VADE"), "flags")

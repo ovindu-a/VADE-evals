@@ -685,3 +685,154 @@ is about to overwrite.
 together: replaying a run's own capture into itself is bit-identical, while a
 different donor changes the answer. Neither alone is sufficient — a completely
 dead patch passes the first.
+
+## R10. On the benchmark: 10 heads ARE the entity, and that is worth 50% (PARTIAL)
+
+> **PARTIAL RUN — 20,288 of 56,208 scored rows (36.1%).** Batches run grouped by
+> donor attribute in alphabetical order, so `calling_code` is complete (3600/3600
+> queried rows), `capital` reached 1472/3600, and **`currency` and `language`
+> never started**. Consequences: those two target attributes have NO cause rows
+> and get no `final_score`; and `iso_mean` is currently an average over ONE
+> attribute rather than three. Every number below is stable in direction but not
+> final. Artifacts: `results/head_swap_vade/flags/partial_scores/`.
+
+`methods/head_swap_vade.py`, `--donor_question queried`, continuous patching.
+Percentages are `matches_source` on the cause pool and `pct_accuracy` (= stayed
+at base) on the iso pool.
+
+| arm | heads | cause cc | cause cap | iso keep | iso -> SOURCE | final cc | final cap |
+|---|---|---|---|---|---|---|---|
+| clean | — | 0.0 | 0.0 | 100.0 | 0.0 | 50.0 | 50.0 |
+| random_heads_common5 | 5 rnd | 0.0 | 0.0 | 98.6 / 100.0 | 0.0 | 50.0 | 49.3 |
+| random_heads_top8 | 8 rnd | 0.0 | 0.0 | 100.0 / 100.0 | 0.0 | 50.0 | 50.0 |
+| random_heads_common10 | 10 rnd | 0.0 | 0.0 | 99.2 / 100.0 | 0.0 | 50.0 | 49.6 |
+| heads_common5 | 5 | 69.4 | 91.8 | 5.3 / 3.2 | 69.4 / 91.8 | 36.3 | 48.5 |
+| heads_top8 | 8/attr | 87.4 | 96.7 | 1.2 / 0.1 | 87.4 / 96.7 | 43.8 | 49.0 |
+| **heads_common10** | **10** | **95.5** | **98.6** | 0.2 / 0.0 | 95.5 / 98.6 | 47.8 | 49.4 |
+| full_image | all image | 97.1 | 97.6 | 0.0 / 0.0 | 97.1 / 97.6 | 48.5 | 48.8 |
+
+### R10.1 `calling_code`'s 6.2% was the metric, exactly as suspected
+
+`head_trace` put `calling_code`'s blocks 21-23 sufficiency ceiling at **6.2%**.
+The same heads under continuous patching reach **95.5%**, against a `full_image`
+reference of 97.1%. R8's caveat is now settled empirically: that column was
+measuring **answer length**, not which attributes the window carries. The window
+carries all of them.
+
+### R10.2 Ten heads out of 784 reproduce a whole-image swap
+
+Cause rises 69.4 -> 87.4 -> 95.5 (cc) and 91.8 -> 96.7 -> 98.6 (cap) as the set
+grows 5 -> 8 -> 10, and `heads_common10` **matches `full_image`** — slightly
+exceeding it on `capital` (98.6 vs 97.6). The conduit is ~10 heads wide, and the
+10 attribute-INDEPENDENT heads beat the 8 per-attribute ones, consistent with R8's
+finding that the per-attribute rankings are near-identical.
+
+The size-matched random nulls read **0.0% cause at every size**, with base kept
+98.6-100.0%. The effect is about WHICH heads, not about perturbing the site.
+
+### R10.3 iso does not degrade — it LEAKS
+
+The `iso -> SOURCE` column is the one to read. Target `calling_code`, then ask
+for the capital, and the model returns the SOURCE country's capital **98.6%** of
+the time. The base answer is not destroyed or confused; it is replaced by the
+donor country's. R9 predicted exactly this from `item` = 0.61-0.69, and this is
+its causal confirmation.
+
+### R10.4 Why the scores sit at 50%, and why the best arm is doing nothing
+
+Under `--donor_question queried` the edit is attribute-agnostic, so ONE generation
+serves the cause row of one target file and an iso row of another — the identical
+text, scored against opposite rules. That is visible as an identity in the table:
+**`iso -> SOURCE` equals the cause rate, to the decimal, in every arm.** Hence
+
+```
+final_score = 1/2( cause_T + mean_{q != T} keep_q ),   keep_q ~= 1 - cause_q
+```
+
+and if every attribute transferred equally the result would be exactly 50%. The
+deviations below 50 are the DESTROYED fraction (rows matching neither label,
+~4-5% at k=10, ~25% for `calling_code` at k=5) plus the asymmetry between
+attributes' transfer rates. A better conduit does not score better — it converges
+on 50 from below.
+
+**The highest score in the table is `clean`.** On VADE's own metric these heads
+are the worst available intervention site: maximal `cause`, zero `iso`. That is
+the finding, not a failed run.
+
+### R10.5 A real difficulty gradient between attributes
+
+`capital` transfers more readily than `calling_code` at small k (91.8 vs 69.4 at
+k=5), and the gap closes by k=10 (98.6 vs 95.5). This is NOT the old last-token
+artefact — that is gone. The plausible cause is answer length still costing
+something: `calling_code` averages 2.68 tokens to `capital`'s 2.01, so the donor
+must stay correct for more consecutive steps.
+
+### R10.6 What the remaining 64% changes
+
+`language` and `currency` cause rows are missing. `language` had the 100%
+`head_trace` sufficiency and is the attribute where the last-token measurement was
+ALREADY accurate (78.6% single-token golds), so it is the clean control that
+continuous patching did not change something it should not have. Adding the
+missing iso rows turns `iso_mean` into an average over three attributes rather
+than one; with iso at 0.0-0.2% throughout, little movement is expected.
+
+Do not quote `overall accuracy` from the summaries — it pools cause and iso rows
+into one number, which is why `score.py` reports `final_score` separately.
+
+### R10.7 What `--donor_question target` would do, and why it is the only arm that can move
+
+R10.4's identity is the whole reason this run cannot exceed 50%, and it comes
+from ONE design choice: under `queried`, the donor is captured asking the SAME
+question the base is asked, so the edit never learns which attribute the VADE row
+is targeting. Take the pair
+
+```
+row A   target=calling_code  queried=calling_code   (cause: must flip to source)
+row B   target=capital       queried=calling_code   (iso:   must stay at base)
+```
+
+Under `queried` both rows are answered by the *same generation* — source image
+asked "what is the calling code", heads installed, base asked the same. One text,
+scored as a required flip in one file and a required non-flip in the other. It
+cannot satisfy both. That is the 50% pin, and it is arithmetic, not a property of
+the model.
+
+**`target` breaks the identity by changing what the donor was asked.** For an iso
+row it captures the source's head outputs under the TARGET attribute's question
+and freezes that one vector across all four queries:
+
+```
+row B under --donor_question target
+  donor   SOURCE image + "what is the capital"        <- the target attribute
+  base    BASE image   + "what is the calling code"   <- the queried attribute
+          with the donor's frozen head outputs installed
+```
+
+So the question becomes: **is what these heads write conditioned on the question
+that produced it?**
+
+* If they carry pure entity identity (`item` ~ 1), the installed vector says
+  "this is Argentina" no matter which question produced it. The calling code
+  leaks anyway, iso stays ~0, and the score stays at 50%.
+* If they carry a question-conditioned read (the `interaction` term), the vector
+  is "Argentina-as-read-for-capital", which is a poor answer to a calling-code
+  question. The base's calling code survives, iso rises, and the score exceeds 50.
+
+`final_score - 50%` is therefore a direct causal measurement of `interaction`,
+the same way R10 is a direct causal measurement of `item`. R9 puts `interaction`
+at 0.156-0.178 against `item` at 0.61-0.69, so the expectation is a real but
+modest rise — iso somewhere in the tens of percent, not a solved disentanglement.
+
+**A free consistency check comes with it.** On a CAUSE row the target and queried
+attributes are equal, so the donor question is the same in both modes and
+`donor_template()` resolves to the same template — the generation must be
+IDENTICAL to this run's. Cause rates that move between modes mean a bug in the
+donor-prompt plumbing, not a finding. Only the iso rows may change.
+
+**Cost:** the edit now depends on `target_attribute`, so the 4x collapse does not
+apply — 56,208 generations instead of 14,052.
+
+```bash
+python methods/head_swap_vade.py --donor_question target --arms clean heads \
+    --head_sets "common10=21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17"
+```

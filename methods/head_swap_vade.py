@@ -187,6 +187,55 @@ def heads_from_trace(path, top_k):
     return [tuple(h) for h in d["phase1_ranked"][:top_k]]
 
 
+def build_value_subspace(capture_dir, heads, attribute, dim, vade_root, entity):
+    """-> {block: [n_cols_b, dim]} orthonormal, spanning the centroids of
+    `attribute`'s VALUES in that block's selected-head columns.
+
+    BLOCK-DIAGONAL by necessity, not by preference: patch hooks fire per block in
+    forward order, so at block 21 the base's block-22 activations do not exist
+    yet and a subspace mixing the two cannot be applied during a forward pass.
+    Measured cost of the restriction: none worth worrying about -- per-block
+    7-dim subspaces decode language at 93.9-100%, and their union at 100%.
+
+    Only an attribute whose values REPEAT across items defines a value centroid
+    at all; with one item per value the centroids are the items and the subspace
+    is just an entity subspace under another name. On flags that means
+    `language` (8 classes over 49 countries) and nothing else."""
+    import numpy as np
+    meta = json.load(open(os.path.join(capture_dir, "meta.json")))
+    rows = [json.loads(l) for l in open(os.path.join(capture_dir, "index.jsonl"))]
+    attrs, blocks_cap, head_dim = meta["attributes"], meta["blocks"], meta["head_dim"]
+    acts = np.memmap(os.path.join(capture_dir, "acts_attn_head_output.npy"),
+                     dtype=np.float32, mode="r", shape=tuple(meta["shape"]))
+    gt = json.load(open(os.path.join(vade_root, "data", entity, "ground_truth.json")))
+    truth = gt["countries"] if "countries" in gt else gt["items"]
+
+    items = sorted({r["item"] for r in rows})
+    idx = {(r["item"], r["attribute"]): r["row"] for r in rows}
+    value = {c: truth[c][attribute] for c in items}
+    from collections import Counter
+    counts = Counter(value.values())
+    keep = [c for c in items if counts[value[c]] >= 2]
+    classes = sorted({value[c] for c in keep})
+    assert len(classes) >= 2, (
+        f"--subspace_attribute {attribute!r} has {len(classes)} value(s) repeated across items; "
+        f"its centroids would BE the items, making this an entity subspace, not an attribute one.")
+
+    out = {}
+    for b in sorted({blk for blk, _ in heads}):
+        hs = [h for blk, h in heads if blk == b]
+        bi = blocks_cap.index(b)
+        Z = np.array([[np.concatenate([acts[idx[(c, a)], bi, 0, h * head_dim:(h + 1) * head_dim]
+                                       for h in hs]) for a in attrs] for c in keep], dtype=np.float64)
+        Zc = Z - Z.mean((0, 1))
+        cent = np.array([Zc[[i for i, c in enumerate(keep) if value[c] == L]].mean((0, 1))
+                         for L in classes])
+        U, _, _ = np.linalg.svd((cent - cent.mean(0)).T, full_matrices=False)
+        k = min(dim, len(classes) - 1, U.shape[1])
+        out[b] = U[:, :k]
+    return out, len(classes), len(keep)
+
+
 def resolve_head_sets(specs, entity, top_k):
     """['name=21.1,23.4', 'name=path/to/trace.json#16'] -> {name: heads}.
 
@@ -403,7 +452,7 @@ def capture_donor(adapter, model, blocks, ids, mask, extra, max_new_tokens, pad_
 
 
 def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                     head_dim, extra_patches=(), stats=None, observers=()):
+                     head_dim, extra_patches=(), stats=None, observers=(), subspace=None):
     """Greedy generation with `heads` overwritten at the last column of EVERY
     forward from `donor_z`'s matching step.
 
@@ -419,8 +468,9 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
     for b in blocks:
         cols = head_columns(heads, b, head_dim).to(model.device)
         z = donor_z[b].to(model.device)                              # [B, steps, hidden]
+        P = None if subspace is None else subspace[b].to(model.device).float()
 
-        def patch(_mod, args, _b=b, _cols=cols, _z=z):
+        def patch(_mod, args, _b=b, _cols=cols, _z=z, _P=P):
             t = args[0]
             step = counters[_b]
             counters[_b] += 1
@@ -428,7 +478,16 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
             if stats is not None and step >= _z.shape[1]:
                 stats["steps_beyond_donor"] = stats.get("steps_beyond_donor", 0) + 1
             patched = t.clone()
-            patched[:, -1, _cols] = _z[:, idx, :].index_select(-1, _cols).to(t.dtype)
+            want = _z[:, idx, :].index_select(-1, _cols).to(t.dtype)
+            if _P is None:
+                patched[:, -1, _cols] = want
+            else:
+                # Replace ONLY the component inside the subspace, leaving the
+                # orthogonal complement as the base produced it. P is orthonormal,
+                # so this is base + P (P^T donor - P^T base).
+                have = t[:, -1, _cols]
+                shift = ((want.float() - have.float()) @ _P) @ _P.T
+                patched[:, -1, _cols] = (have.float() + shift).to(t.dtype)
             return (patched,) + tuple(args[1:])
         handles.append(adapter.get_attn_head_output_module(model, b)
                        .register_forward_pre_hook(patch, with_kwargs=False))
@@ -454,7 +513,7 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
 
 
 def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                    head_dim, tol=1e-3):
+                    head_dim, tol=1e-3, subspace=None):
     """Read the patched site back through a hook registered AFTER the patch and
     assert it returns what was installed, at EVERY step.
 
@@ -467,13 +526,19 @@ def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_to
     observers = [(b, (lambda t, _b=b: seen[_b].append(t[:, -1, :].detach().float().cpu())))
                  for b in seen]
     patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                     head_dim, observers=observers)
+                     head_dim, observers=observers, subspace=subspace)
     worst = 0.0
     for b, steps in seen.items():
         cols = head_columns(heads, b, head_dim)
         for t, got in enumerate(steps):
             want = donor_z[b][:, min(t, donor_z[b].shape[1] - 1), :]
-            worst = max(worst, float((got[:, cols] - want[:, cols]).abs().max()))
+            g, w = got[:, cols], want[:, cols]
+            if subspace is not None:
+                # Only the IN-SUBSPACE component was installed, so only it must
+                # read back. Checking the full vector would fail by construction.
+                P = subspace[b].cpu().to(g.dtype)
+                g, w = g @ P, w @ P
+            worst = max(worst, float((g - w).abs().max()))
     assert worst <= tol, (f"read-back mismatch {worst:.3e} > {tol}: the patch and the capture are not "
                           f"addressing the same tensor/column -- every result below would be void")
     return worst
@@ -561,6 +626,19 @@ def main():
                          "set. Every set shares ONE donor capture, so extra sets cost generations "
                          f"only. Default: {' '.join(DEFAULT_SETS)}")
     ap.add_argument("--top_k", type=int, default=8, help="Default k for a trace SPEC with no '#k'.")
+    ap.add_argument("--subspace_dim", type=int, default=0, metavar="K",
+                    help="If >0, patch only the K-dimensional value-centroid subspace of "
+                         "--subspace_attribute inside the selected heads, instead of the whole head. "
+                         "This is the DAS hypothesis without the training: does a subspace that "
+                         "carries the attribute move it WITHOUT dragging the entity along? K is "
+                         "per block (the patch is block-diagonal by necessity) and is capped at "
+                         "n_values-1. Arms are renamed sub<K>_<set>.")
+    ap.add_argument("--subspace_attribute", default="language",
+                    help="Which attribute's value centroids define the subspace. Needs values that "
+                         "REPEAT across items; on flags only `language` qualifies.")
+    ap.add_argument("--capture_dir", default=os.path.join(REPO_ROOT, "results", "attr_capture",
+                                                          "flags", "blocks15-27_n84"),
+                    help="attr_capture grid the subspace is estimated from.")
     ap.add_argument("--donor_question", choices=["queried", "target"], default="queried",
                     help="Which question the donor runs. 'queried' is the attribute-agnostic entity "
                          "edit (4x cheaper, pinned near 50%% by construction); 'target' freezes the "
@@ -581,6 +659,16 @@ def main():
 
     head_sets = resolve_head_sets(args.head_sets, args.entity, args.top_k)
     blocks = all_blocks(head_sets)
+    subspaces, sub_tag = {}, ""
+    if args.subspace_dim:
+        sub_tag = f"sub{args.subspace_dim}_"
+        for name, hs in head_sets.items():
+            assert not isinstance(hs, dict), (
+                f"--subspace_dim with the per-attribute set {name!r}: the subspace is estimated once "
+                f"from a fixed column layout, so the head set must not vary by attribute.")
+            subspaces[name], n_val, n_it = build_value_subspace(
+                args.capture_dir, hs, args.subspace_attribute, args.subspace_dim,
+                args.vade_root, args.entity)
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_swap_vade", args.entity)
 
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
@@ -590,7 +678,8 @@ def main():
 
     arm_names = []
     for arm in args.arms:
-        arm_names += ([f"{arm}_{n}" for n in head_sets] if arm in ("heads", "random_heads") else [arm])
+        arm_names += ([f"{sub_tag}{arm}_{n}" for n in head_sets]
+                      if arm in ("heads", "random_heads") else [arm])
 
     print(f"[head_swap_vade] {args.entity}/{args.split}: {len(jobs)} generations -> {n_emitted} scored "
           f"rows (full split is {n_scored}); donor_question={args.donor_question}")
@@ -602,6 +691,13 @@ def main():
                 print(f"      {a:13} " + ", ".join(f"{b}.{h}" for b, h in v))
         else:
             print(f"  {name} ({len(hs)}): " + ", ".join(f"{b}.{h}" for b, h in hs))
+    if args.subspace_dim:
+        for name, sp in subspaces.items():
+            dims = {b: int(P.shape[1]) for b, P in sp.items()}
+            print(f"  subspace [{name}]: {args.subspace_attribute} value-centroids, dims per block "
+                  f"{dims} of {{b: P.shape[0] for b, P in sp.items()}} columns"
+                  .replace("{b: P.shape[0] for b, P in sp.items()}",
+                           str({b: int(P.shape[0]) for b, P in sp.items()})))
     print(f"  blocks captured: {blocks}")
     print(f"  arms ({len(arm_names)}): {arm_names}")
     print(f"  {len(jobs)} donor passes + {len(jobs) * len(arm_names)} scored generations "
@@ -661,8 +757,9 @@ def main():
         for name, hs in head_sets.items():
             worst = verify_readback(adapter, model, heads_for(hs, first_attr), pz, probe["base_ids"],
                                     probe["base_mask"], probe["base_extra"], args.max_new_tokens,
-                                    pad_id, head_dim)
-            print(f"  read-back check [{name}]: worst |installed - read| = {worst:.2e} over "
+                                    pad_id, head_dim, subspace=subspaces.get(name))
+            scope = "in-subspace component" if args.subspace_dim else "installed"
+            print(f"  read-back check [{name}]: worst |{scope} - read| = {worst:.2e} over "
                   f"{args.max_new_tokens} steps")
 
     done = 0
@@ -694,10 +791,12 @@ def main():
                 else:
                     for name, hs in head_sets.items():
                         use = heads_for(hs, attribute) if arm == "heads" else nulls[name]
-                        emit(f"{arm}_{name}",
+                        sp = subspaces.get(name) if arm == "heads" else None
+                        emit(f"{sub_tag}{arm}_{name}",
                              patched_generate(adapter, model, use, donor_z, batch["base_ids"],
                                               batch["base_mask"], batch["base_extra"],
-                                              args.max_new_tokens, pad_id, head_dim, stats=stats))
+                                              args.max_new_tokens, pad_id, head_dim, stats=stats,
+                                              subspace=sp))
             done += len(chunk)
             print(f"  {done}/{len(jobs)} generations ({attribute})", flush=True)
     finally:
