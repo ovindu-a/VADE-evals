@@ -238,3 +238,36 @@ class TestAccumGroup(unittest.TestCase):
         got = self._sizes(3, 16)
         self.assertTrue(all(sz == 3 for _, sz in got))
         self.assertEqual([k for k, _ in got], [0, 1, 2])
+
+
+class TestProgress(unittest.TestCase):
+    def test_fmt_hms(self):
+        self.assertEqual(head_das.fmt_hms(0), "0:00:00")
+        self.assertEqual(head_das.fmt_hms(59), "0:00:59")
+        self.assertEqual(head_das.fmt_hms(60), "0:01:00")
+        self.assertEqual(head_das.fmt_hms(3599), "0:59:59")
+        self.assertEqual(head_das.fmt_hms(3600), "1:00:00")
+        self.assertEqual(head_das.fmt_hms(90061), "25:01:01")
+
+    def test_fmt_hms_clamps_negative_and_floats(self):
+        self.assertEqual(head_das.fmt_hms(-5), "0:00:00")
+        self.assertEqual(head_das.fmt_hms(61.9), "0:01:01")
+
+    def test_eta_extrapolates_linearly_from_the_mean_rate(self):
+        import time
+        t0 = time.time() - 100.0            # 100s spent on 25 of 100 units
+        elapsed, eta, rate = head_das.progress(25, 100, t0)
+        self.assertAlmostEqual(rate, 4.0, places=1)
+        self.assertEqual(elapsed, "0:01:40")
+        self.assertEqual(eta, "0:05:00")    # 75 remaining x 4s
+
+    def test_eta_is_zero_at_completion(self):
+        import time
+        _, eta, _ = head_das.progress(50, 50, time.time() - 10.0)
+        self.assertEqual(eta, "0:00:00")
+
+    def test_progress_does_not_divide_by_zero_before_the_first_unit(self):
+        import time
+        elapsed, eta, rate = head_das.progress(0, 100, time.time())
+        self.assertEqual(elapsed, "0:00:00")
+        self.assertGreaterEqual(rate, 0.0)

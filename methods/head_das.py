@@ -373,6 +373,25 @@ def weighted_ce(logits, batch, iso_weight):
 # Train
 # ---------------------------------------------------------------------------
 
+def fmt_hms(seconds):
+    """-> 'H:MM:SS'. Used for both elapsed and ETA so the two are comparable at
+    a glance; ETA is a plain linear extrapolation from the mean batch so far,
+    which is honest here because every batch does the same two forwards and one
+    backward on a fixed-size grid."""
+    seconds = max(0, int(seconds))
+    h, rem = divmod(seconds, 3600)
+    m, sec = divmod(rem, 60)
+    return f"{h}:{m:02d}:{sec:02d}"
+
+
+def progress(done, total, t0):
+    """-> (elapsed_str, eta_str, rate_per_unit). `done` counts completed units."""
+    import time
+    elapsed = time.time() - t0
+    rate = elapsed / max(done, 1)
+    return fmt_hms(elapsed), fmt_hms(rate * (total - done)), rate
+
+
 def accum_group(i, n_batches, grad_accum_steps):
     """-> (index within the accumulation group, real size of that group).
 
@@ -417,6 +436,9 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
 
     log = open(log_path, "w")
     step = 0
+    import time
+    t0 = time.time()
+    total_batches = args.epochs * len(batches)
     for epoch in range(args.epochs):
         accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
         for i, chunk in enumerate(batches):
@@ -436,15 +458,20 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
             accum += float(loss); accum_ce += float(ce); accum_l1 += l1
 
             n_cause_b = int(batch["is_cause"].sum())
+            done = epoch * len(batches) + i + 1
+            elapsed, eta, rate = progress(done, total_batches, t0)
+            losses = f"loss={float(loss):.4f} ce={float(ce):.4f}"
+            if args.method == "dbm":
+                losses += f" l1={l1:.1f} l1_term={args.l1_coef * l1:.4f}"
             if args.log_every and (i % args.log_every == 0 or i == len(batches) - 1):
                 print(f"    e{epoch} batch {i + 1}/{len(batches)} "
                       f"[{in_group + 1}/{group_size} of step {step + 1}/{n_opt_steps}] "
                       f"rows={len(chunk)} ({n_cause_b}c/{len(chunk) - n_cause_b}i) "
-                      f"ce={float(ce):.4f}" + (f" l1={l1:.1f}" if args.method == "dbm" else ""),
-                      flush=True)
+                      f"{losses} | {elapsed} eta {eta} ({rate:.2f}s/batch)", flush=True)
             log.write(json.dumps({"kind": "batch", "epoch": epoch, "batch": i,
                                   "opt_step": step + 1, "rows": len(chunk),
-                                  "n_cause": n_cause_b, "ce": float(ce), "l1": l1}) + "\n")
+                                  "n_cause": n_cause_b, "loss": float(loss), "ce": float(ce),
+                                  "l1": l1, "elapsed_s": round(time.time() - t0, 1)}) + "\n")
 
             if in_group + 1 == group_size:
                 if args.grad_clip_norm > 0:
@@ -456,15 +483,18 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                         iv.set_temperature(t)
                 step += 1
                 rec = {"kind": "opt_step", "epoch": epoch, "opt_step": step,
-                       "group_size": group_size, "loss": accum, "ce": accum_ce, "l1": accum_l1,
+                       "group_size": group_size, "loss": accum / group_size,
+                       "ce": accum_ce / group_size, "l1": accum_l1 / group_size,
+                       "elapsed_s": round(time.time() - t0, 1),
                        "temperature": None if temps is None
                        else float(temps[min(step - 1, len(temps) - 1)])}
                 log.write(json.dumps(rec) + "\n"); log.flush()
+                e_s, eta_s, _ = progress(epoch * len(batches) + i + 1, total_batches, t0)
                 print(f"  >> epoch {epoch} step {step}/{n_opt_steps} "
                       f"({group_size} batches = {group_size * args.batch_size} rows) "
-                      f"loss={accum:.4f} ce={accum_ce / group_size:.4f}"
-                      + (f" l1={accum_l1 / group_size:.1f}" if args.method == "dbm" else ""),
-                      flush=True)
+                      f"loss={accum / group_size:.4f} ce={accum_ce / group_size:.4f}"
+                      + (f" l1={accum_l1 / group_size:.1f}" if args.method == "dbm" else "")
+                      + f" | {e_s} eta {eta_s}", flush=True)
                 accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
     log.close()
     return interventions
@@ -500,6 +530,8 @@ def evaluate(adapter, model, processor, args, heads, colmap, items, entity_dir, 
         return fn
     transform = {b: transform_for(b) for b in blocks}
 
+    import time
+    t0 = time.time()
     n = 0
     with open(out_path, "w") as f:
         for chunk in chunks(rows, args.batch_size):
@@ -518,7 +550,10 @@ def evaluate(adapter, model, processor, args, heads, colmap, items, entity_dir, 
                                     "row_index": r["row_index"],
                                     "generated_text": text}) + "\n")
                 n += 1
-            print(f"    {n}/{len(rows)}", flush=True)
+            f.flush()
+            elapsed, eta, rate = progress(n, len(rows), t0)
+            print(f"    {n}/{len(rows)} | {elapsed} eta {eta} ({rate:.2f}s/row)", flush=True)
+    print(f"  eval done in {fmt_hms(time.time() - t0)}")
     return n
 
 
