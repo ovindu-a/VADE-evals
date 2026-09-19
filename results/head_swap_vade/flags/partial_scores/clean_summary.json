@@ -1,0 +1,111 @@
+{
+  "predictions_file": "results/head_swap_vade/flags/clean.jsonl",
+  "entity": "flags",
+  "attribute": "all",
+  "split": "test",
+  "n_missing_predictions": 35920,
+  "by_target_attribute": {
+    "calling_code": {
+      "overall": {
+        "n": 5072,
+        "pct_accuracy": 29.0,
+        "cause_accuracy": 0.0,
+        "iso_mean_accuracy": 100.0,
+        "final_score": 50.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": true,
+          "pct_accuracy": 0.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        },
+        {
+          "queried": "capital",
+          "n": 1472,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        }
+      ]
+    },
+    "capital": {
+      "overall": {
+        "n": 5072,
+        "pct_accuracy": 71.0,
+        "cause_accuracy": 0.0,
+        "iso_mean_accuracy": 100.0,
+        "final_score": 50.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        },
+        {
+          "queried": "capital",
+          "n": 1472,
+          "is_cause": true,
+          "pct_accuracy": 0.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        }
+      ]
+    },
+    "currency": {
+      "overall": {
+        "n": 5072,
+        "pct_accuracy": 100.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        },
+        {
+          "queried": "capital",
+          "n": 1472,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        }
+      ]
+    },
+    "language": {
+      "overall": {
+        "n": 5072,
+        "pct_accuracy": 100.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        },
+        {
+          "queried": "capital",
+          "n": 1472,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        }
+      ]
+    }
+  }
+}
