@@ -1,0 +1,191 @@
+[head_swap_vade] flags/test: 14052 generations -> 56208 scored rows (full split is 56208); donor_question=queried
+  common5 (5): 21.1, 22.19, 23.3, 23.4, 23.6
+  common10 (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  top8: per-attribute, {'capital': 8, 'currency': 8, 'language': 8, 'calling_code': 8}
+      calling_code  23.17, 23.4, 23.3, 21.1, 23.7, 21.5, 22.19, 23.6
+      capital       23.4, 23.3, 21.1, 23.6, 22.17, 23.17, 22.19, 22.13
+      currency      23.4, 23.3, 21.1, 23.6, 22.19, 22.17, 23.11, 22.15
+      language      23.4, 21.1, 23.3, 22.19, 23.6, 21.5, 22.17, 22.15
+  blocks captured: [21, 22, 23]
+  arms (8): ['clean', 'heads_common5', 'heads_common10', 'heads_top8', 'random_heads_common5', 'random_heads_common10', 'random_heads_top8', 'full_image']
+  14052 donor passes + 112416 scored generations at batch 64
+  -> /workspace/VADE-evals/results/head_swap_vade/flags
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:34,  7.70it/s]Loading weights:   0%|          | 2/729 [00:00<03:12,  3.77it/s]Loading weights:   2%|▏         | 16/729 [00:00<00:21, 33.20it/s]Loading weights:   3%|▎         | 21/729 [00:00<00:20, 34.22it/s]Loading weights:   4%|▍         | 28/729 [00:00<00:19, 35.06it/s]Loading weights:   5%|▍         | 34/729 [00:01<00:17, 39.80it/s]Loading weights:   5%|▌         | 40/729 [00:01<00:15, 43.50it/s]Loading weights:   6%|▌         | 45/729 [00:01<00:16, 41.44it/s]Loading weights:   7%|▋         | 52/729 [00:01<00:19, 34.46it/s]Loading weights:   9%|▉         | 64/729 [00:01<00:13, 50.88it/s]Loading weights:  10%|▉         | 71/729 [00:01<00:13, 49.34it/s]Loading weights:  11%|█         | 77/729 [00:02<00:14, 44.72it/s]Loading weights:  11%|█▏        | 83/729 [00:02<00:13, 46.99it/s]Loading weights:  12%|█▏        | 89/729 [00:02<00:12, 49.59it/s]Loading weights:  13%|█▎        | 95/729 [00:02<00:12, 49.55it/s]Loading weights:  14%|█▍        | 101/729 [00:02<00:12, 49.81it/s]Loading weights:  15%|█▍        | 108/729 [00:02<00:11, 54.11it/s]Loading weights:  16%|█▌        | 114/729 [00:02<00:12, 50.72it/s]Loading weights:  17%|█▋        | 125/729 [00:02<00:09, 63.42it/s]Loading weights:  19%|█▊        | 136/729 [00:02<00:08, 70.19it/s]Loading weights:  20%|█▉        | 144/729 [00:03<00:09, 63.18it/s]Loading weights:  21%|██        | 151/729 [00:03<00:09, 59.16it/s]Loading weights:  22%|██▏       | 161/729 [00:03<00:08, 63.57it/s]Loading weights:  23%|██▎       | 171/729 [00:03<00:10, 52.08it/s]Loading weights:  25%|██▌       | 185/729 [00:03<00:07, 68.80it/s]Loading weights:  26%|██▋       | 193/729 [00:03<00:07, 67.72it/s]Loading weights:  28%|██▊       | 201/729 [00:04<00:08, 61.38it/s]Loading weights:  29%|██▉       | 210/729 [00:04<00:07, 66.68it/s]Loading weights:  30%|███       | 220/729 [00:04<00:07, 70.20it/s]Loading weights:  32%|███▏      | 232/729 [00:04<00:06, 80.18it/s]Loading weights:  33%|███▎      | 244/729 [00:04<00:05, 84.87it/s]Loading weights:  35%|███▌      | 256/729 [00:04<00:05, 88.50it/s]Loading weights:  37%|███▋      | 268/729 [00:04<00:05, 87.58it/s]Loading weights:  38%|███▊      | 277/729 [00:04<00:05, 82.96it/s]Loading weights:  39%|███▉      | 286/729 [00:05<00:05, 77.35it/s]Loading weights:  40%|████      | 294/729 [00:05<00:06, 71.31it/s]Loading weights:  42%|████▏     | 305/729 [00:05<00:05, 77.83it/s]Loading weights:  43%|████▎     | 315/729 [00:05<00:05, 78.83it/s]Loading weights:  44%|████▍     | 323/729 [00:05<00:05, 75.71it/s]Loading weights:  45%|████▌     | 331/729 [00:05<00:05, 69.47it/s]Loading weights:  54%|█████▍    | 394/729 [00:05<00:01, 208.81it/s]Loading weights:  66%|██████▌   | 481/729 [00:05<00:00, 380.61it/s]Loading weights:  77%|███████▋  | 562/729 [00:05<00:00, 496.69it/s]Loading weights:  89%|████████▉ | 647/729 [00:06<00:00, 591.98it/s]Loading weights:  99%|█████████▉| 725/729 [00:06<00:00, 610.64it/s]Loading weights: 100%|██████████| 729/729 [00:06<00:00, 117.40it/s]
+  null for common5 (5): 21.6, 22.6, 22.23, 22.27, 23.14
+  null for common10 (10): 21.19, 22.1, 22.10, 22.12, 22.23, 23.1, 23.14, 23.15, 23.18, 23.20
+  null for top8 (8): 21.11, 21.14, 21.20, 22.6, 22.14, 22.20, 23.24, 23.27
+  read-back check [common5]: worst |installed - read| = 0.00e+00 over 12 steps
+  read-back check [common10]: worst |installed - read| = 0.00e+00 over 12 steps
+  read-back check [top8]: worst |installed - read| = 0.00e+00 over 12 steps
+  64/14052 generations (calling_code)
+  128/14052 generations (calling_code)
+  192/14052 generations (calling_code)
+  256/14052 generations (calling_code)
+  320/14052 generations (calling_code)
+  384/14052 generations (calling_code)
+  448/14052 generations (calling_code)
+  512/14052 generations (calling_code)
+  576/14052 generations (calling_code)
+  640/14052 generations (calling_code)
+  704/14052 generations (calling_code)
+  768/14052 generations (calling_code)
+  832/14052 generations (calling_code)
+  896/14052 generations (calling_code)
+  960/14052 generations (calling_code)
+  1024/14052 generations (calling_code)
+  1088/14052 generations (calling_code)
+  1152/14052 generations (calling_code)
+  1216/14052 generations (calling_code)
+  1280/14052 generations (calling_code)
+  1344/14052 generations (calling_code)
+  1408/14052 generations (calling_code)
+  1472/14052 generations (calling_code)
+  1536/14052 generations (calling_code)
+  1600/14052 generations (calling_code)
+  1664/14052 generations (calling_code)
+  1728/14052 generations (calling_code)
+  1792/14052 generations (calling_code)
+  1856/14052 generations (calling_code)
+  1920/14052 generations (calling_code)
+  1984/14052 generations (calling_code)
+  2048/14052 generations (calling_code)
+  2112/14052 generations (calling_code)
+  2176/14052 generations (calling_code)
+  2240/14052 generations (calling_code)
+  2304/14052 generations (calling_code)
+  2368/14052 generations (calling_code)
+  2432/14052 generations (calling_code)
+  2496/14052 generations (calling_code)
+  2560/14052 generations (calling_code)
+  2624/14052 generations (calling_code)
+  2688/14052 generations (calling_code)
+  2752/14052 generations (calling_code)
+  2816/14052 generations (calling_code)
+  2880/14052 generations (calling_code)
+  2944/14052 generations (calling_code)
+  3008/14052 generations (calling_code)
+  3072/14052 generations (calling_code)
+  3136/14052 generations (calling_code)
+  3200/14052 generations (calling_code)
+  3264/14052 generations (calling_code)
+  3328/14052 generations (calling_code)
+  3392/14052 generations (calling_code)
+  3456/14052 generations (calling_code)
+  3520/14052 generations (calling_code)
+  3584/14052 generations (calling_code)
+  3600/14052 generations (calling_code)
+  3664/14052 generations (capital)
+  3728/14052 generations (capital)
+  3792/14052 generations (capital)
+  3856/14052 generations (capital)
+  3920/14052 generations (capital)
+  3984/14052 generations (capital)
+  4048/14052 generations (capital)
+  4112/14052 generations (capital)
+  4176/14052 generations (capital)
+  4240/14052 generations (capital)
+  4304/14052 generations (capital)
+  4368/14052 generations (capital)
+  4432/14052 generations (capital)
+  4496/14052 generations (capital)
+  4560/14052 generations (capital)
+  4624/14052 generations (capital)
+  4688/14052 generations (capital)
+  4752/14052 generations (capital)
+  4816/14052 generations (capital)
+  4880/14052 generations (capital)
+  4944/14052 generations (capital)
+  5008/14052 generations (capital)
+  5072/14052 generations (capital)
+  5136/14052 generations (capital)
+  5200/14052 generations (capital)
+  5264/14052 generations (capital)
+  5328/14052 generations (capital)
+  5392/14052 generations (capital)
+  5456/14052 generations (capital)
+  5520/14052 generations (capital)
+  5584/14052 generations (capital)
+  5648/14052 generations (capital)
+  5712/14052 generations (capital)
+  5776/14052 generations (capital)
+  5840/14052 generations (capital)
+  5904/14052 generations (capital)
+  5968/14052 generations (capital)
+  6032/14052 generations (capital)
+  6096/14052 generations (capital)
+  6160/14052 generations (capital)
+  6224/14052 generations (capital)
+  6288/14052 generations (capital)
+  6352/14052 generations (capital)
+  6416/14052 generations (capital)
+  6480/14052 generations (capital)
+  6544/14052 generations (capital)
+  6608/14052 generations (capital)
+  6672/14052 generations (capital)
+  6736/14052 generations (capital)
+  6800/14052 generations (capital)
+  6864/14052 generations (capital)
+  6928/14052 generations (capital)
+  6992/14052 generations (capital)
+  7056/14052 generations (capital)
+  7120/14052 generations (capital)
+  7184/14052 generations (capital)
+  7200/14052 generations (capital)
+  7264/14052 generations (currency)
+  7328/14052 generations (currency)
+  7392/14052 generations (currency)
+  7456/14052 generations (currency)
+  7520/14052 generations (currency)
+  7584/14052 generations (currency)
+  7648/14052 generations (currency)
+  7712/14052 generations (currency)
+  7776/14052 generations (currency)
+  7840/14052 generations (currency)
+  7904/14052 generations (currency)
+  7968/14052 generations (currency)
+  8032/14052 generations (currency)
+  8096/14052 generations (currency)
+  8160/14052 generations (currency)
+  8224/14052 generations (currency)
+  8288/14052 generations (currency)
+  8352/14052 generations (currency)
+  8416/14052 generations (currency)
+  8480/14052 generations (currency)
+  8544/14052 generations (currency)
+  8608/14052 generations (currency)
+  8672/14052 generations (currency)
+  8736/14052 generations (currency)
+  8800/14052 generations (currency)
+  8864/14052 generations (currency)
+  8928/14052 generations (currency)
+  8992/14052 generations (currency)
+  9056/14052 generations (currency)
+  9120/14052 generations (currency)
+  9184/14052 generations (currency)
+  9248/14052 generations (currency)
+  9312/14052 generations (currency)
+  9376/14052 generations (currency)
+  9440/14052 generations (currency)
+  9504/14052 generations (currency)
+  9568/14052 generations (currency)
+  9632/14052 generations (currency)
+  9696/14052 generations (currency)
+  9760/14052 generations (currency)
+  9824/14052 generations (currency)
+  9888/14052 generations (currency)
+Traceback (most recent call last):
+  File "/workspace/VADE-evals/methods/head_swap_vade.py", line 717, in <module>
+    
+  File "/workspace/VADE-evals/methods/head_swap_vade.py", line 671, in main
+    args.vade_root, args.entity)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/head_swap_vade.py", line 339, in build_batch
+    keep = set(random.Random(seed).sample(pairs, min(limit_pairs, len(pairs))))
+                                     ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/PIL/Image.py", line 1069, in convert
+    self.load()
+  File "/venv/main/lib/python3.12/site-packages/PIL/ImageFile.py", line 412, in load
+    n, err_code = decoder.decode(b)
+                  ^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
