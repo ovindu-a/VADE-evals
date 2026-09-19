@@ -229,31 +229,102 @@ def load_rows(vade_root, entity, attribute, split, n_rows, seed):
     return rows
 
 
-def build_batch(rows, processor, items, entity_dir, lookup, pad_id):
+class PromptCache:
+    """Collapses build_batch's three pure-but-repeated computations.
+
+    An entity has ~59 train images backing thousands of tuple rows (each image
+    is somebody's base in some rows and somebody's source in others) and 24
+    (queried, template_id) prompts, so building every row from scratch redoes
+    the same PIL decode + vision preprocess ~200x and the same tokenization
+    ~500x per epoch. Same reasoning -- and the same three keys -- as
+    common/entities.py's BuildBatchCache, which is why VADE's own DAS trainer is
+    much faster than this script was without it.
+
+      image[item]                    -> (pixel_values, image_grid_thw)
+      ids[(queried, template_id)]    -> input_ids
+      gold[(prefill, label)]         -> gold token ids
+
+    Splitting image from ids is what keeps this at 59 + 24 entries instead of
+    their 1,416-entry cross product. It is valid because every image in a VADE
+    entity is one fixed canvas render, so the fully tokenized prompt -- image
+    placeholder tokens included -- depends only on the template, never on which
+    image fills it. That is an assumption, not a guarantee, so `verify` checks
+    it once per template against a SECOND item and fails loudly: a silent
+    mismatch here would mean patching one prompt's columns while reading
+    another's, the same class of bug that voided a whole head_trace result set
+    (see common/entities.py's BuildBatchCache docstring)."""
+
+    def __init__(self):
+        self.image, self.ids, self.gold = {}, {}, {}
+        self.builds = 0
+
+    def _build(self, processor, entity_dir, items, item, tmpl):
+        from PIL import Image
+        self.builds += 1
+        with Image.open(os.path.join(entity_dir, items[item]["image"])) as im:
+            return build_prompt(processor, im.convert("RGB"), tmpl["question"], tmpl["prefill"])
+
+    def prompt(self, processor, entity_dir, items, item, queried, template_id, tmpl):
+        """-> (input_ids[0], pixel_values, image_grid_thw).
+
+        A build happens only when this item's pixels or this template's ids are
+        missing, so the total is bounded by n_items + n_templates rather than
+        n_rows. Whenever a build lands on a template already in the cache -- the
+        normal case as new items appear -- the fresh ids are COMPARED against
+        the stored ones rather than discarded, so the fixed-canvas assumption is
+        verified continuously at zero extra cost."""
+        import torch
+        key = (queried, template_id)
+        if item not in self.image or key not in self.ids:
+            built = self._build(processor, entity_dir, items, item, tmpl)
+            ids = built["input_ids"][0]
+            if key in self.ids:
+                assert torch.equal(ids, self.ids[key]), (
+                    f"prompt ids for {key} differ between items -- the fixed-canvas assumption "
+                    f"this cache rests on does not hold for {item!r} (got {tuple(ids.shape)} vs "
+                    f"cached {tuple(self.ids[key].shape)}); rerun with --no_prompt_cache")
+            else:
+                self.ids[key] = ids
+            self.image.setdefault(item, (built["pixel_values"], built["image_grid_thw"]))
+        px, thw = self.image[item]
+        return self.ids[key], px, thw
+
+    def gold_ids(self, tokenizer, prefill, label):
+        key = (prefill, label)
+        if key not in self.gold:
+            self.gold[key] = derive_gold_token_ids(tokenizer, prefill, label)
+        return self.gold[key]
+
+
+def build_batch(rows, processor, items, entity_dir, lookup, pad_id, cache=None):
     """Base and donor prompts plus both golds, for one chunk.
 
     The donor asks the SAME question as the base (head_swap_vade's
     `donor_question=queried`): the edit must not be told which attribute the
     VADE row targets, or the intervention could satisfy iso by reading the
-    label rather than by isolating a subspace."""
+    label rather than by isolating a subspace.
+
+    Pass ONE PromptCache across every call of a run to get the reuse; a fresh
+    one per call just reproduces the uncached behavior."""
     import torch
     from PIL import Image
 
     tok = processor.tokenizer
+    cache = cache if cache is not None else PromptCache()
     base_seqs, donor_seqs = [], []
     base_px, donor_px, base_thw, donor_thw = [], [], [], []
     base_golds, source_golds = [], []
     for r in rows:
         t = lookup[r["queried"]][r["template_id"]]
-        with Image.open(os.path.join(entity_dir, items[r["base"]]["image"])) as im:
-            bp = build_prompt(processor, im.convert("RGB"), t["question"], t["prefill"])
-        with Image.open(os.path.join(entity_dir, items[r["source"]]["image"])) as im:
-            dp = build_prompt(processor, im.convert("RGB"), t["question"], t["prefill"])
-        base_seqs.append(bp["input_ids"][0]); donor_seqs.append(dp["input_ids"][0])
-        base_px.append(bp["pixel_values"]); donor_px.append(dp["pixel_values"])
-        base_thw.append(bp["image_grid_thw"]); donor_thw.append(dp["image_grid_thw"])
-        base_golds.append(derive_gold_token_ids(tok, t["prefill"], str(r["base_label"])))
-        source_golds.append(derive_gold_token_ids(tok, t["prefill"], str(r["source_label"])))
+        bi, bpx, bthw = cache.prompt(processor, entity_dir, items, r["base"],
+                                     r["queried"], r["template_id"], t)
+        di, dpx, dthw = cache.prompt(processor, entity_dir, items, r["source"],
+                                     r["queried"], r["template_id"], t)
+        base_seqs.append(bi); donor_seqs.append(di)
+        base_px.append(bpx); donor_px.append(dpx)
+        base_thw.append(bthw); donor_thw.append(dthw)
+        base_golds.append(cache.gold_ids(tok, t["prefill"], str(r["base_label"])))
+        source_golds.append(cache.gold_ids(tok, t["prefill"], str(r["source_label"])))
 
     def pack(seqs):
         n = max(len(s) for s in seqs)
@@ -318,6 +389,73 @@ def capture_donor_columns(adapter, model, blocks, batch, pad_id):
     return {b: v[0] for b, v in sinks.items()}
 
 
+def donor_key(row):
+    """What the donor's head columns are a pure function of.
+
+    The donor prompt is (source image + the QUERIED attribute's question at this
+    template), teacher-forced by the source's own gold for that attribute -- so
+    these three fields determine it completely, and nothing about the base does.
+
+    Note this is a WIDER key than common/source_cache.py's item-only one, and it
+    has to be: that cache is sound only for IMAGE positions, where causal
+    attention makes the hidden state independent of the question that follows.
+    These columns sit at the last prompt token and the answer tokens, which are
+    downstream of the question, so caching them per item alone would be wrong."""
+    return (row["source"], row["queried"], row["template_id"])
+
+
+def donor_columns(adapter, model, blocks, colmap, batch, pad_id, cache=None):
+    """-> {block: [B, K, W]}, computing only the rows not already cached.
+
+    6,000 train rows carry ~1,330 distinct donor keys, so after the first pass
+    most batches need no donor forward at all.
+
+    W is n_cols_b when `colmap` is given (the training path, which feeds
+    `intervened_logits` directly) and the full hidden size when it is None (the
+    eval path: `patched_generate` does its own column selection, so handing it
+    pre-sliced values would index the wrong columns). Slicing shrinks a cached
+    entry from ~129KB to ~15KB, so the training cache is the one worth it."""
+    import torch
+
+    def cut(t, b):
+        return t if colmap is None else t.index_select(-1, colmap[b].to(t.device))
+
+    if cache is None:
+        z = capture_donor_columns(adapter, model, blocks, batch, pad_id)
+        return {b: cut(z[b], b) for b in blocks}
+
+    keys = [donor_key(r) for r in batch["rows"]]
+    need = sorted({k for k in keys if k not in cache}, key=str)
+    if need:
+        first = {}
+        for i, k in enumerate(keys):
+            first.setdefault(k, i)
+        idx = torch.tensor([first[k] for k in need])
+        sub = {"donor_ids": batch["donor_ids"][idx], "donor_mask": batch["donor_mask"][idx],
+               "donor_extra": _slice_extra(batch["donor_extra"], batch["donor_ids"].shape[0], idx),
+               "source_gold_toks": batch["source_gold_toks"][idx],
+               "source_gold_len": batch["source_gold_len"][idx]}
+        z = capture_donor_columns(adapter, model, blocks, sub, pad_id)
+        for j, k in enumerate(need):
+            cache[k] = {b: cut(z[b][j], b).cpu() for b in blocks}
+    return {b: torch.stack([cache[k][b] for k in keys]).to(model.device) for b in blocks}
+
+
+def _slice_extra(extra, n_rows, idx):
+    """Select rows out of a batch's vision inputs.
+
+    pixel_values is NOT one row per image -- Qwen2.5-VL concatenates each
+    image's patches along dim 0, so the rows must be split by each image's own
+    patch count (the product of its grid_thw) before they can be indexed."""
+    import torch
+    thw = extra["image_grid_thw"]
+    assert thw.shape[0] == n_rows, f"expected one grid per row, got {thw.shape[0]} for {n_rows}"
+    counts = thw.prod(dim=1).tolist()
+    parts = list(torch.split(extra["pixel_values"], counts, dim=0))
+    return {"pixel_values": torch.cat([parts[i] for i in idx.tolist()]),
+            "image_grid_thw": thw.index_select(0, idx)}
+
+
 # ---------------------------------------------------------------------------
 # The intervened teacher-forced forward
 # ---------------------------------------------------------------------------
@@ -332,7 +470,7 @@ def intervened_logits(adapter, model, interventions, colmap, donor_cols, batch):
     handles = []
     for b, iv in interventions.items():
         cols = colmap[b].to(model.device)
-        z = donor_cols[b].index_select(-1, cols)             # [B, K, d_b]
+        z = donor_cols[b].to(model.device)                   # [B, K, d_b], already sliced
 
         def patch(_mod, args, _iv=iv, _cols=cols, _z=z):
             t = args[0]
@@ -434,6 +572,9 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
     print(f"  params: {n_params:,} over blocks {blocks} "
           f"(dims {[len(colmap[b]) for b in blocks]})")
 
+    prompt_cache = None if args.no_prompt_cache else PromptCache()
+    donor_cache = None if args.no_donor_cache else {}
+
     log = open(log_path, "w")
     step = 0
     import time
@@ -443,8 +584,8 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
         accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
         for i, chunk in enumerate(batches):
             in_group, group_size = accum_group(i, len(batches), args.grad_accum_steps)
-            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
-            donor_cols = capture_donor_columns(adapter, model, blocks, batch, pad_id)
+            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, prompt_cache)
+            donor_cols = donor_columns(adapter, model, blocks, colmap, batch, pad_id, donor_cache)
             logits = intervened_logits(adapter, model, interventions, colmap, donor_cols, batch)
             ce = weighted_ce(logits, batch, args.iso_weight)
             loss = ce
@@ -494,9 +635,19 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                       f"({group_size} batches = {group_size * args.batch_size} rows) "
                       f"loss={accum / group_size:.4f} ce={accum_ce / group_size:.4f}"
                       + (f" l1={accum_l1 / group_size:.1f}" if args.method == "dbm" else "")
-                      + f" | {e_s} eta {eta_s}", flush=True)
+                      + f" | {e_s} eta {eta_s}"
+                      + ("" if donor_cache is None else f" | donor cache {len(donor_cache)}"),
+                      flush=True)
                 accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
     log.close()
+    if prompt_cache is not None:
+        print(f"  prompt cache: {prompt_cache.builds} prompt builds for "
+              f"{2 * len(rows) * args.epochs} row-sides "
+              f"({len(prompt_cache.image)} images, {len(prompt_cache.ids)} templates, "
+              f"{len(prompt_cache.gold)} golds)")
+    if donor_cache is not None:
+        print(f"  donor cache: {len(donor_cache)} distinct donor states for "
+              f"{len(rows) * args.epochs} rows")
     return interventions
 
 
@@ -532,16 +683,22 @@ def evaluate(adapter, model, processor, args, heads, colmap, items, entity_dir, 
 
     import time
     t0 = time.time()
+    prompt_cache = None if args.no_prompt_cache else PromptCache()
+    # NOT shared with training: eval is a disjoint item set, and a stale entry
+    # from the train split could only ever be a bug. `generate` capture is
+    # uncached -- its step count depends on when the donor hits EOS.
+    donor_cache = None if (args.no_donor_cache or args.donor_capture == "generate") else {}
     n = 0
     with open(out_path, "w") as f:
         for chunk in chunks(rows, args.batch_size):
-            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
+            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, prompt_cache)
             if args.donor_capture == "generate":
                 dz = capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
                                    batch["donor_extra"], args.max_new_tokens, pad_id)
             else:
-                cols = capture_donor_columns(adapter, model, blocks, batch, pad_id)
-                dz = {b: v.cpu() for b, v in cols.items()}
+                # colmap=None: patched_generate selects the head columns itself.
+                dz = {b: v.cpu() for b, v in
+                      donor_columns(adapter, model, blocks, None, batch, pad_id, donor_cache).items()}
             toks = patched_generate(adapter, model, heads, dz, batch["base_ids"], batch["base_mask"],
                                     batch["base_extra"], args.max_new_tokens, pad_id, head_dim,
                                     transform=transform)
@@ -601,6 +758,12 @@ def main():
                          "metric weights cause 1/2 and the iso mean 1/2; raise this if training "
                          "lands in the cause~100/iso~0 corner (i.e. relearned the full swap).")
     ap.add_argument("--l1_coef", type=float, default=1e-3, help="dbm only.")
+    ap.add_argument("--no_prompt_cache", action="store_true",
+                    help="Rebuild every row's image preprocessing and tokenization from scratch. "
+                         "~200x slower; use only to rule the cache out as a suspect.")
+    ap.add_argument("--no_donor_cache", action="store_true",
+                    help="Re-run the donor forward every batch instead of reusing it per "
+                         "(source, queried, template_id). ~4.5x more donor compute.")
     ap.add_argument("--donor_capture", choices=["teacher_forced", "generate"], default="teacher_forced",
                     help="teacher_forced matches training exactly (1 forward); generate reproduces "
                          "head_swap_vade's R10 capture (K forwards).")

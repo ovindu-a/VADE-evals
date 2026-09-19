@@ -271,3 +271,117 @@ class TestProgress(unittest.TestCase):
         elapsed, eta, rate = head_das.progress(0, 100, time.time())
         self.assertEqual(elapsed, "0:00:00")
         self.assertGreaterEqual(rate, 0.0)
+
+
+class TestSliceExtra(unittest.TestCase):
+    """pixel_values is patches-concatenated, not one row per image. Slicing it
+    as if it were rows silently hands a batch the WRONG image's pixels."""
+
+    def _extra(self, counts):
+        thw = torch.tensor([[1, c, 1] for c in counts])          # prod == c
+        px = torch.cat([torch.full((c, 4), float(i)) for i, c in enumerate(counts)])
+        return {"pixel_values": px, "image_grid_thw": thw}
+
+    def test_selects_the_right_patches_for_uneven_images(self):
+        extra = self._extra([2, 5, 3])
+        out = head_das._slice_extra(extra, 3, torch.tensor([2, 0]))
+        self.assertEqual(out["pixel_values"].shape, (3 + 2, 4))
+        self.assertEqual(out["pixel_values"][:, 0].tolist(), [2.0] * 3 + [0.0] * 2)
+        self.assertEqual(out["image_grid_thw"].tolist(), [[1, 3, 1], [1, 2, 1]])
+
+    def test_identity_selection_round_trips(self):
+        extra = self._extra([3, 3, 3])
+        out = head_das._slice_extra(extra, 3, torch.tensor([0, 1, 2]))
+        torch.testing.assert_close(out["pixel_values"], extra["pixel_values"])
+
+    def test_row_count_mismatch_fails_loudly(self):
+        with self.assertRaises(AssertionError):
+            head_das._slice_extra(self._extra([2, 2]), 3, torch.tensor([0]))
+
+
+class TestDonorKey(unittest.TestCase):
+    def test_key_is_the_donor_prompt_and_nothing_else(self):
+        a = {"source": "FJ", "queried": "language", "template_id": "language_prefill_v1",
+             "base": "YE", "rule": "match_source", "target_attribute": "language"}
+        b = dict(a, base="AR", rule="match_base", target_attribute="capital")
+        self.assertEqual(head_das.donor_key(a), head_das.donor_key(b),
+                         "the base side must not affect the donor key")
+
+    def test_queried_and_template_do_change_the_key(self):
+        a = {"source": "FJ", "queried": "language", "template_id": "language_prefill_v1"}
+        self.assertNotEqual(head_das.donor_key(a),
+                            head_das.donor_key(dict(a, queried="capital")))
+        self.assertNotEqual(head_das.donor_key(a),
+                            head_das.donor_key(dict(a, template_id="language_prefill_v2")))
+
+
+@unittest.skipUnless(HAVE_TUPLES, "VADE flags tuples not present")
+class TestCacheSizing(unittest.TestCase):
+    def test_distinct_donor_keys_are_far_fewer_than_rows(self):
+        rows = head_das.load_rows(VADE_ROOT, "flags", "language", "train", 6000, 0)
+        keys = {head_das.donor_key(r) for r in rows}
+        self.assertLess(len(keys), len(rows) / 3, f"{len(keys)} keys for {len(rows)} rows")
+
+    def test_prompt_cache_keys_are_bounded_by_items_plus_templates(self):
+        rows = head_das.load_rows(VADE_ROOT, "flags", "language", "train", 6000, 0)
+        items = {c for r in rows for c in (r["base"], r["source"])}
+        tmpl = {(r["queried"], r["template_id"]) for r in rows}
+        self.assertLess(len(items) + len(tmpl), 2 * len(rows) / 50)
+
+
+class TestPromptCacheLogic(unittest.TestCase):
+    """Exercises PromptCache against a stub processor -- no model, no images."""
+
+    class _StubProc:
+        class _Tok:
+            def __call__(self, text, add_special_tokens=False):
+                return {"input_ids": [ord(c) for c in text]}
+        tokenizer = _Tok()
+
+    def setUp(self):
+        self.calls = []
+        self.cache = head_das.PromptCache()
+
+        def fake_build(processor, entity_dir, items, item, tmpl):
+            self.calls.append((item, tmpl["question"]))
+            self.cache.builds += 1
+            return {"input_ids": torch.tensor([[1, 2, 3]]),
+                    "pixel_values": torch.full((2, 4), float(ord(item[0]))),
+                    "image_grid_thw": torch.tensor([[1, 2, 1]])}
+        self.cache._build = fake_build
+
+    def test_repeated_rows_build_once_per_item_and_template(self):
+        tmpl = {"question": "q", "prefill": "The language is"}
+        for _ in range(50):
+            for item in ("AA", "BB", "CC"):
+                self.cache.prompt(None, None, None, item, "language", "t1", tmpl)
+        self.assertLessEqual(len(self.calls), 4, self.calls)
+        self.assertEqual(len(self.cache.image), 3)
+        self.assertEqual(len(self.cache.ids), 1)
+
+    def test_each_item_keeps_its_own_pixels(self):
+        tmpl = {"question": "q", "prefill": "p"}
+        _, pa, _ = self.cache.prompt(None, None, None, "AA", "language", "t1", tmpl)
+        _, pb, _ = self.cache.prompt(None, None, None, "BB", "language", "t1", tmpl)
+        self.assertNotEqual(pa[0, 0].item(), pb[0, 0].item())
+
+    def test_gold_ids_are_derived_once_per_prefill_label(self):
+        tok = self._StubProc.tokenizer
+        for _ in range(20):
+            self.cache.gold_ids(tok, "The language is", "Spanish")
+            self.cache.gold_ids(tok, "The language is", "French")
+        self.assertEqual(len(self.cache.gold), 2)
+
+    def test_a_template_whose_ids_differ_between_items_is_caught(self):
+        """The fixed-canvas assumption, asserted rather than trusted."""
+        tmpl = {"question": "q", "prefill": "p"}
+        seq = iter([torch.tensor([[1, 2, 3]]), torch.tensor([[9, 9, 9, 9]])])
+
+        def drifting_build(processor, entity_dir, items, item, tmpl):
+            return {"input_ids": next(seq),
+                    "pixel_values": torch.zeros(2, 4),
+                    "image_grid_thw": torch.tensor([[1, 2, 1]])}
+        self.cache._build = drifting_build
+        self.cache.prompt(None, None, None, "AA", "language", "t1", tmpl)
+        with self.assertRaises(AssertionError):
+            self.cache.prompt(None, None, None, "BB", "language", "t1", tmpl)
