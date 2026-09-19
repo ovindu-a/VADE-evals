@@ -373,6 +373,18 @@ def weighted_ce(logits, batch, iso_weight):
 # Train
 # ---------------------------------------------------------------------------
 
+def accum_group(i, n_batches, grad_accum_steps):
+    """-> (index within the accumulation group, real size of that group).
+
+    The final group of an epoch is usually SHORT (n_batches is rarely a multiple
+    of grad_accum_steps). Dividing it by grad_accum_steps anyway scales the
+    tail's gradient down by group_size/grad_accum_steps -- the same tail-flush
+    bug methods/dbm/train.py fixed in 77470b4 (see CLAUDE.md). Returning the real
+    size keeps every optimizer step a true mean over the batches it saw."""
+    start = (i // grad_accum_steps) * grad_accum_steps
+    return i - start, min(grad_accum_steps, n_batches - start)
+
+
 def chunks(seq, n):
     for i in range(0, len(seq), n):
         yield seq[i:i + n]
@@ -394,8 +406,12 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
     n_opt_steps = args.epochs * max(1, (len(batches) + args.grad_accum_steps - 1) // args.grad_accum_steps)
     temps = temperature_schedule_for(args.method, n_opt_steps, args.vade_root)
     n_cause = sum(r["rule"] == "match_source" for r in rows)
+    tail = len(batches) % args.grad_accum_steps
     print(f"  train: {len(rows)} rows ({n_cause} cause / {len(rows) - n_cause} iso), "
           f"{len(batches)} batches x {args.epochs} epochs = {n_opt_steps} opt steps")
+    print(f"  effective batch: {args.batch_size} x {args.grad_accum_steps} accum = "
+          f"{args.batch_size * args.grad_accum_steps} rows/step"
+          + (f" (final group of each epoch is {tail} batches)" if tail else ""))
     print(f"  params: {n_params:,} over blocks {blocks} "
           f"(dims {[len(colmap[b]) for b in blocks]})")
 
@@ -404,6 +420,7 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
     for epoch in range(args.epochs):
         accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
         for i, chunk in enumerate(batches):
+            in_group, group_size = accum_group(i, len(batches), args.grad_accum_steps)
             batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
             donor_cols = capture_donor_columns(adapter, model, blocks, batch, pad_id)
             logits = intervened_logits(adapter, model, interventions, colmap, donor_cols, batch)
@@ -415,9 +432,21 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                 l1_term = sum(l1_penalty(iv) for iv in interventions.values())
                 l1 = float(l1_term)
                 loss = ce + args.l1_coef * l1_term
-            (loss / args.grad_accum_steps).backward()
+            (loss / group_size).backward()
             accum += float(loss); accum_ce += float(ce); accum_l1 += l1
-            if (i + 1) % args.grad_accum_steps == 0 or i == len(batches) - 1:
+
+            n_cause_b = int(batch["is_cause"].sum())
+            if args.log_every and (i % args.log_every == 0 or i == len(batches) - 1):
+                print(f"    e{epoch} batch {i + 1}/{len(batches)} "
+                      f"[{in_group + 1}/{group_size} of step {step + 1}/{n_opt_steps}] "
+                      f"rows={len(chunk)} ({n_cause_b}c/{len(chunk) - n_cause_b}i) "
+                      f"ce={float(ce):.4f}" + (f" l1={l1:.1f}" if args.method == "dbm" else ""),
+                      flush=True)
+            log.write(json.dumps({"kind": "batch", "epoch": epoch, "batch": i,
+                                  "opt_step": step + 1, "rows": len(chunk),
+                                  "n_cause": n_cause_b, "ce": float(ce), "l1": l1}) + "\n")
+
+            if in_group + 1 == group_size:
                 if args.grad_clip_norm > 0:
                     torch.nn.utils.clip_grad_norm_(params, args.grad_clip_norm)
                 opt.step(); opt.zero_grad(set_to_none=True)
@@ -426,12 +455,16 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                     for iv in interventions.values():
                         iv.set_temperature(t)
                 step += 1
-                rec = {"epoch": epoch, "opt_step": step, "loss": accum, "ce": accum_ce,
-                       "l1": accum_l1, "temperature": None if temps is None
+                rec = {"kind": "opt_step", "epoch": epoch, "opt_step": step,
+                       "group_size": group_size, "loss": accum, "ce": accum_ce, "l1": accum_l1,
+                       "temperature": None if temps is None
                        else float(temps[min(step - 1, len(temps) - 1)])}
                 log.write(json.dumps(rec) + "\n"); log.flush()
-                print(f"    epoch {epoch} step {step}/{n_opt_steps} loss={accum:.4f} ce={accum_ce:.4f}"
-                      + (f" l1={accum_l1:.1f}" if args.method == "dbm" else ""), flush=True)
+                print(f"  >> epoch {epoch} step {step}/{n_opt_steps} "
+                      f"({group_size} batches = {group_size * args.batch_size} rows) "
+                      f"loss={accum:.4f} ce={accum_ce / group_size:.4f}"
+                      + (f" l1={accum_l1 / group_size:.1f}" if args.method == "dbm" else ""),
+                      flush=True)
                 accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
     log.close()
     return interventions
@@ -518,7 +551,15 @@ def main():
     ap.add_argument("--epochs", type=int, default=1)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--batch_size", type=int, default=4)
-    ap.add_argument("--grad_accum_steps", type=int, default=16)
+    ap.add_argument("--grad_accum_steps", type=int, default=16, metavar="G",
+                    help="Batches accumulated per optimizer step. EFFECTIVE BATCH is "
+                         "--batch_size * G: raise G to train at a large effective batch on a card "
+                         "that only fits a small --batch_size, at no extra memory. A short final "
+                         "group is divided by its own real size, not by G.")
+    ap.add_argument("--log_every", type=int, default=1, metavar="N",
+                    help="Print one line every N batches (0 = only on optimizer steps). Each line "
+                         "carries that batch's own ce and its cause/iso split; the '>>' lines are "
+                         "completed optimizer steps.")
     ap.add_argument("--grad_clip_norm", type=float, default=1.0)
     ap.add_argument("--iso_weight", type=float, default=1.0,
                     help="Multiplier on iso rows' loss. The train split is ~57%% cause but the "
@@ -553,6 +594,8 @@ def main():
     print(f"  train {args.train_split}: {len(train_rows)} rows "
           f"({n_cause} cause / {len(train_rows) - n_cause} iso), iso_weight={args.iso_weight}")
     print(f"  eval  {args.eval_split}: {len(eval_rows)} rows")
+    print(f"  effective batch: {args.batch_size} x {args.grad_accum_steps} accum = "
+          f"{args.batch_size * args.grad_accum_steps} rows/optimizer step")
     print(f"  patch columns per forward: last {MAX_ANSWER_TOKENS} (answer tokens 0..{MAX_ANSWER_TOKENS - 1})")
     print(f"  -> {out_dir}")
 

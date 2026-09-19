@@ -204,3 +204,37 @@ class TestHeadColumns(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestAccumGroup(unittest.TestCase):
+    """The tail flush. A short final group divided by grad_accum_steps rather
+    than by its own size scales that gradient down silently -- it trains, it
+    converges, and the last step of every epoch just counts for less."""
+
+    def _sizes(self, n, g):
+        return [head_das.accum_group(i, n, g) for i in range(n)]
+
+    def test_exact_multiple_has_no_short_group(self):
+        self.assertTrue(all(sz == 4 for _, sz in self._sizes(12, 4)))
+
+    def test_short_tail_reports_its_own_size(self):
+        got = self._sizes(10, 4)
+        self.assertEqual([sz for _, sz in got], [4] * 4 + [4] * 4 + [2, 2])
+        self.assertEqual([k for k, _ in got], [0, 1, 2, 3, 0, 1, 2, 3, 0, 1])
+
+    def test_every_batch_belongs_to_exactly_one_group(self):
+        for n, g in [(1, 1), (1, 16), (7, 3), (10, 4), (100, 16), (1000, 16)]:
+            flushes = [i for i in range(n) if head_das.accum_group(i, n, g)[0] + 1
+                       == head_das.accum_group(i, n, g)[1]]
+            counted = sum(head_das.accum_group(i, n, g)[1] for i in flushes)
+            self.assertEqual(counted, n, f"n={n} g={g}: groups cover {counted} of {n} batches")
+
+    def test_the_last_batch_always_flushes(self):
+        for n, g in [(1, 16), (7, 3), (10, 4), (33, 16)]:
+            k, sz = head_das.accum_group(n - 1, n, g)
+            self.assertEqual(k + 1, sz, f"n={n} g={g}: final batch does not close its group")
+
+    def test_fewer_batches_than_accum_is_one_group(self):
+        got = self._sizes(3, 16)
+        self.assertTrue(all(sz == 3 for _, sz in got))
+        self.assertEqual([k for k, _ in got], [0, 1, 2])
