@@ -1,0 +1,146 @@
+{
+  "predictions_file": "results/head_swap_vade/flags/heads_top8.jsonl",
+  "entity": "flags",
+  "attribute": "all",
+  "split": "test",
+  "n_missing_predictions": 16656,
+  "by_target_attribute": {
+    "calling_code": {
+      "overall": {
+        "n": 9888,
+        "pct_accuracy": 33.4,
+        "cause_accuracy": 87.4,
+        "iso_mean_accuracy": 2.9,
+        "final_score": 45.1
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": true,
+          "pct_accuracy": 87.4,
+          "pct_matches_source": 87.4,
+          "pct_matches_base": 1.2
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 0.3,
+          "pct_matches_source": 96.5,
+          "pct_matches_base": 0.3
+        },
+        {
+          "queried": "currency",
+          "n": 2688,
+          "is_cause": false,
+          "pct_accuracy": 5.4,
+          "pct_matches_source": 70.7,
+          "pct_matches_base": 5.4
+        }
+      ]
+    },
+    "capital": {
+      "overall": {
+        "n": 9888,
+        "pct_accuracy": 37.1,
+        "cause_accuracy": 96.5,
+        "iso_mean_accuracy": 3.3,
+        "final_score": 49.9
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 1.2,
+          "pct_matches_source": 87.4,
+          "pct_matches_base": 1.2
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": true,
+          "pct_accuracy": 96.5,
+          "pct_matches_source": 96.5,
+          "pct_matches_base": 0.3
+        },
+        {
+          "queried": "currency",
+          "n": 2688,
+          "is_cause": false,
+          "pct_accuracy": 5.4,
+          "pct_matches_source": 70.7,
+          "pct_matches_base": 5.4
+        }
+      ]
+    },
+    "currency": {
+      "overall": {
+        "n": 9888,
+        "pct_accuracy": 19.8,
+        "cause_accuracy": 70.7,
+        "iso_mean_accuracy": 0.8,
+        "final_score": 35.7
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 1.2,
+          "pct_matches_source": 87.4,
+          "pct_matches_base": 1.2
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 0.3,
+          "pct_matches_source": 96.5,
+          "pct_matches_base": 0.3
+        },
+        {
+          "queried": "currency",
+          "n": 2688,
+          "is_cause": true,
+          "pct_accuracy": 70.7,
+          "pct_matches_source": 70.7,
+          "pct_matches_base": 5.4
+        }
+      ]
+    },
+    "language": {
+      "overall": {
+        "n": 9888,
+        "pct_accuracy": 2.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 1.2,
+          "pct_matches_source": 87.4,
+          "pct_matches_base": 1.2
+        },
+        {
+          "queried": "capital",
+          "n": 3600,
+          "is_cause": false,
+          "pct_accuracy": 0.3,
+          "pct_matches_source": 96.5,
+          "pct_matches_base": 0.3
+        },
+        {
+          "queried": "currency",
+          "n": 2688,
+          "is_cause": false,
+          "pct_accuracy": 5.4,
+          "pct_matches_source": 70.7,
+          "pct_matches_base": 5.4
+        }
+      ]
+    }
+  }
+}

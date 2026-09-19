@@ -322,3 +322,55 @@ def test_subspace_needs_an_attribute_whose_values_repeat(tmp_path):
     assert n_val == 2 and P[21].shape[0] == hd and P[21].shape[1] == 1   # capped at n_values-1
     with pytest.raises(AssertionError, match="entity subspace"):
         build_value_subspace(str(cap), heads, "capital", 3, str(tmp_path / "VADE"), "flags")
+
+
+def test_transform_returning_the_donor_reproduces_a_plain_patch(tiny):
+    """head_das.py's trained module rides this path. An identity transform must
+    be indistinguishable from the unrestricted overwrite, or every trained
+    result is measured on a different generation loop than R10/R11 were."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    donor = {b: v.flip(0) + 3.0 for b, v in z.items()}
+    plain = patched_generate(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM)
+    via = patched_generate(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                           transform={b: (lambda have, want: want) for b in blocks})
+    assert torch.equal(plain, via)
+
+
+def test_transform_returning_the_base_is_a_no_op(tiny):
+    """The other end of the same check: a transform that keeps `have` must
+    leave generation exactly as the unpatched run."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    donor = {b: v.flip(0) + 3.0 for b, v in z.items()}
+    clean = plain_generate(model, ids, mask, extra, MAX_NEW, 0)
+    via = patched_generate(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                           transform={b: (lambda have, want: have) for b in blocks})
+    assert torch.equal(clean, via)
+
+
+def test_transform_sees_one_column_per_step_with_matching_shapes(tiny):
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block, head = 1, 0
+    donor = {block: torch.full((ids.shape[0], MAX_NEW, 32), 5.0)}
+    seen = []
+
+    def fn(have, want):
+        seen.append((tuple(have.shape), tuple(want.shape)))
+        return want
+    patched_generate(adapter, model, [(block, head)], donor, ids, mask, extra, MAX_NEW, 0,
+                     HEAD_DIM, transform={block: fn})
+    assert seen, "transform was never called"
+    assert all(h == w == (ids.shape[0], 1, HEAD_DIM) for h, w in seen), seen
+
+
+def test_transform_and_subspace_together_are_rejected(tiny):
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block = 1
+    donor = {block: torch.full((ids.shape[0], MAX_NEW, 32), 5.0)}
+    with pytest.raises(AssertionError):
+        patched_generate(adapter, model, [(block, 0)], donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
+                         subspace={block: torch.eye(HEAD_DIM)},
+                         transform={block: (lambda have, want: want)})

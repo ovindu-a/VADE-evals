@@ -453,13 +453,23 @@ def capture_donor(adapter, model, blocks, ids, mask, extra, max_new_tokens, pad_
 
 
 def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                     head_dim, extra_patches=(), stats=None, observers=(), subspace=None):
+                     head_dim, extra_patches=(), stats=None, observers=(), subspace=None,
+                     transform=None):
     """Greedy generation with `heads` overwritten at the last column of EVERY
     forward from `donor_z`'s matching step.
 
     If the base run outlasts the donor's recorded steps (the donor hit EOS
     earlier), the last donor step is held and the event is counted rather than
-    silently indexed out of range."""
+    silently indexed out of range.
+
+    `transform` generalizes what gets written: {block: fn(base_slice, donor_slice)
+    -> new_slice}, each [B, 1, n_cols_b]. None (the default) writes the donor's
+    values verbatim -- the R10 intervention. `subspace` is the fixed-projection
+    special case. A trained intervention (head_das.py) passes its own module
+    here rather than forking this function, so the generation path that produced
+    R10 and R11 is the one every later result is measured on. Mutually exclusive
+    with `subspace`."""
+    assert transform is None or subspace is None, "pass `transform` or `subspace`, not both"
     import torch
     blocks = sorted({b for b, _ in heads})
     counters = {b: 0 for b in blocks}
@@ -470,8 +480,9 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
         cols = head_columns(heads, b, head_dim).to(model.device)
         z = donor_z[b].to(model.device)                              # [B, steps, hidden]
         P = None if subspace is None else subspace[b].to(model.device).float()
+        fn = None if transform is None else transform[b]
 
-        def patch(_mod, args, _b=b, _cols=cols, _z=z, _P=P):
+        def patch(_mod, args, _b=b, _cols=cols, _z=z, _P=P, _fn=fn):
             t = args[0]
             step = counters[_b]
             counters[_b] += 1
@@ -480,7 +491,12 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
                 stats["steps_beyond_donor"] = stats.get("steps_beyond_donor", 0) + 1
             patched = t.clone()
             want = _z[:, idx, :].index_select(-1, _cols).to(t.dtype)
-            if _P is None:
+            if _fn is not None:
+                # Same [B, 1, n_cols] shape the training hook sees, so a module
+                # trained on teacher-forced columns is applied identically here.
+                have = t[:, -1:, :].index_select(-1, _cols)
+                patched[:, -1:, _cols] = _fn(have, want.unsqueeze(1)).to(t.dtype)
+            elif _P is None:
                 patched[:, -1, _cols] = want
             else:
                 # Replace ONLY the component inside the subspace, leaving the
