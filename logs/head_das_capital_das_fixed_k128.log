@@ -1,0 +1,9 @@
+=== 2026-09-20T17:38:12+00:00 START: python methods/head_das.py --attribute capital --method das_fixed --subspace_dim 128 --train_rows 6000 --eval_rows 2000 --batch_size 16 --grad_accum_steps 4 --out_dir results/head_das/flags/capital_das_fixed_k128 ===
+[head_das] flags/capital method=das_fixed K=128
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  train train: 6000 rows (3429 cause / 2571 iso), iso_weight=1.0
+  eval  test: 2000 rows
+  effective batch: 16 x 4 accum = 64 rows/optimizer step
+  patch columns per forward: last 3 (answer tokens 0..2)
+  -> results/head_das/flags/capital_das_fixed_k128
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.

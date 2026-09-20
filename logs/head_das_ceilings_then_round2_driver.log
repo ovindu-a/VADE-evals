@@ -1,0 +1,17 @@
+[32mActivated conda/uv virtual environment at [36m/venv/main[0m
+### CEILINGS (capital/calling_code/currency, subspace_dim=full) starting 2026-09-20T17:38:54+00:00 ###
+=== 2026-09-20T17:38:54+00:00 START: python methods/head_das.py --attribute capital --method das_fixed --subspace_dim full --eval_rows 2000 --out_dir results/head_das/flags/capital_das_fixed_kfull ===
+=== 2026-09-20T17:54:12+00:00 OK: python methods/head_das.py --attribute capital --method das_fixed --subspace_dim full --eval_rows 2000 --out_dir results/head_das/flags/capital_das_fixed_kfull ===
+=== 2026-09-20T17:54:12+00:00 START: python ../VADE/eval/score.py --entity flags --attribute capital --predictions results/head_das/flags/capital_das_fixed_kfull/predictions.jsonl ===
+=== 2026-09-20T17:54:12+00:00 OK: python ../VADE/eval/score.py --entity flags --attribute capital --predictions results/head_das/flags/capital_das_fixed_kfull/predictions.jsonl ===
+=== 2026-09-20T17:54:12+00:00 START: python methods/head_das.py --attribute calling_code --method das_fixed --subspace_dim full --eval_rows 2000 --out_dir results/head_das/flags/calling_code_das_fixed_kfull ===
+=== 2026-09-20T18:09:34+00:00 OK: python methods/head_das.py --attribute calling_code --method das_fixed --subspace_dim full --eval_rows 2000 --out_dir results/head_das/flags/calling_code_das_fixed_kfull ===
+=== 2026-09-20T18:09:34+00:00 START: python ../VADE/eval/score.py --entity flags --attribute calling_code --predictions results/head_das/flags/calling_code_das_fixed_kfull/predictions.jsonl ===
+=== 2026-09-20T18:09:34+00:00 OK: python ../VADE/eval/score.py --entity flags --attribute calling_code --predictions results/head_das/flags/calling_code_das_fixed_kfull/predictions.jsonl ===
+=== 2026-09-20T18:09:34+00:00 START: python methods/head_das.py --attribute currency --method das_fixed --subspace_dim full --eval_rows 2000 --out_dir results/head_das/flags/currency_das_fixed_kfull ===
+=== 2026-09-20T18:25:05+00:00 OK: python methods/head_das.py --attribute currency --method das_fixed --subspace_dim full --eval_rows 2000 --out_dir results/head_das/flags/currency_das_fixed_kfull ===
+=== 2026-09-20T18:25:05+00:00 START: python ../VADE/eval/score.py --entity flags --attribute currency --predictions results/head_das/flags/currency_das_fixed_kfull/predictions.jsonl ===
+=== 2026-09-20T18:25:05+00:00 OK: python ../VADE/eval/score.py --entity flags --attribute currency --predictions results/head_das/flags/currency_das_fixed_kfull/predictions.jsonl ===
+### CEILINGS done 2026-09-20T18:25:05+00:00 ###
+### ROUND 2 (batch_size=20, grad_accum_steps=3), R11 K=128 replication DEFERRED, starting 2026-09-20T18:25:05+00:00 ###
+=== 2026-09-20T18:25:05+00:00 START: python methods/head_das.py --attribute language --method das_rotated --mask_coef 3e-4 --train_rows 6000 --eval_rows 2000 --batch_size 20 --grad_accum_steps 3 --out_dir results/head_das/flags/language_das_rotated_m3e-4_b20 ===

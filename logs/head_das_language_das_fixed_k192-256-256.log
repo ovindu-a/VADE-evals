@@ -1,0 +1,625 @@
+=== 2026-09-20T16:49:04+00:00 START: python methods/head_das.py --attribute language --method das_fixed --subspace_dim 192,256,256 --train_rows 6000 --eval_rows 2000 --batch_size 16 --grad_accum_steps 4 --out_dir results/head_das/flags/language_das_fixed_k192-256-256 ===
+[head_das] flags/language method=das_fixed K=192,256,256
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  train train: 6000 rows (3443 cause / 2557 iso), iso_weight=1.0
+  eval  test: 2000 rows
+  effective batch: 16 x 4 accum = 64 rows/optimizer step
+  patch columns per forward: last 3 (answer tokens 0..2)
+  -> results/head_das/flags/language_das_fixed_k192-256-256
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<01:22,  8.77it/s]Loading weights:   0%|          | 2/729 [00:00<01:59,  6.08it/s]Loading weights:   2%|▏         | 15/729 [00:00<00:18, 38.64it/s]Loading weights:   4%|▍         | 29/729 [00:00<00:11, 62.16it/s]Loading weights:   6%|▌         | 41/729 [00:00<00:09, 72.78it/s]Loading weights:   7%|▋         | 52/729 [00:00<00:09, 70.99it/s]Loading weights:   9%|▉         | 66/729 [00:01<00:08, 82.42it/s]Loading weights:  11%|█         | 78/729 [00:01<00:07, 86.03it/s]Loading weights:  12%|█▏        | 90/729 [00:01<00:07, 89.39it/s]Loading weights:  14%|█▍        | 102/729 [00:01<00:06, 89.95it/s]Loading weights:  16%|█▌        | 114/729 [00:01<00:06, 90.62it/s]Loading weights:  17%|█▋        | 126/729 [00:01<00:06, 92.94it/s]Loading weights:  19%|█▉        | 138/729 [00:01<00:06, 93.97it/s]Loading weights:  21%|██        | 150/729 [00:01<00:06, 94.59it/s]Loading weights:  22%|██▏       | 162/729 [00:02<00:05, 94.96it/s]Loading weights:  24%|██▎       | 173/729 [00:02<00:05, 93.25it/s]Loading weights:  25%|██▌       | 184/729 [00:02<00:05, 95.99it/s]Loading weights:  27%|██▋       | 196/729 [00:02<00:06, 88.26it/s]Loading weights:  29%|██▊       | 209/729 [00:02<00:05, 93.23it/s]Loading weights:  30%|███       | 221/729 [00:02<00:05, 99.10it/s]Loading weights:  32%|███▏      | 232/729 [00:02<00:05, 87.91it/s]Loading weights:  34%|███▎      | 246/729 [00:02<00:04, 98.69it/s]Loading weights:  35%|███▌      | 257/729 [00:03<00:04, 98.75it/s]Loading weights:  37%|███▋      | 269/729 [00:03<00:04, 100.14it/s]Loading weights:  39%|███▊      | 281/729 [00:03<00:04, 101.76it/s]Loading weights:  40%|████      | 293/729 [00:03<00:04, 101.20it/s]Loading weights:  42%|████▏     | 305/729 [00:03<00:04, 98.29it/s] Loading weights:  43%|████▎     | 317/729 [00:03<00:04, 94.91it/s]Loading weights:  45%|████▍     | 328/729 [00:03<00:04, 98.06it/s]Loading weights:  48%|████▊     | 350/729 [00:03<00:02, 130.14it/s]Loading weights:  61%|██████    | 445/729 [00:03<00:00, 354.18it/s]Loading weights:  76%|███████▌  | 551/729 [00:04<00:00, 549.89it/s]Loading weights:  90%|████████▉ | 655/729 [00:04<00:00, 689.67it/s]Loading weights: 100%|██████████| 729/729 [00:04<00:00, 171.61it/s]
+  subspace per block {21: 192, 22: 256, 23: 256} of {21: 256, 22: 512, 23: 512}; effective DOF {21: 12288, 22: 65536, 23: 65536}
+  train: 6000 rows (3443 cause / 2557 iso), 375 batches x 1 epochs = 94 opt steps
+  effective batch: 16 x 4 accum = 64 rows/step (final group of each epoch is 3 batches)
+  params: 311,296 over blocks [21, 22, 23] (dims [256, 512, 512])
+/workspace/VADE-evals/methods/head_das.py:685: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  accum += float(loss); accum_ce += float(ce); accum_reg += reg
+    e0 batch 1/375 [1/4 of step 1/94] rows=16 (14c/2i) loss=1.8451 ce=1.8451 | 0:00:29 eta 3:04:49 (29.65s/batch)
+    e0 batch 2/375 [2/4 of step 1/94] rows=16 (9c/7i) loss=2.0447 ce=2.0447 | 0:00:56 eta 2:56:04 (28.32s/batch)
+    e0 batch 3/375 [3/4 of step 1/94] rows=16 (11c/5i) loss=2.3834 ce=2.3834 | 0:01:09 eta 2:23:49 (23.20s/batch)
+    e0 batch 4/375 [4/4 of step 1/94] rows=16 (6c/10i) loss=1.6695 ce=1.6695 | 0:01:25 eta 2:11:51 (21.33s/batch)
+  >> epoch 0 step 1/94 (4 batches = 64 rows) loss=1.9857 ce=1.9857 | 0:01:25 eta 2:12:00 | donor cache 59
+    e0 batch 5/375 [1/4 of step 2/94] rows=16 (10c/6i) loss=1.0141 ce=1.0141 | 0:01:33 eta 1:55:41 (18.76s/batch)
+    e0 batch 6/375 [2/4 of step 2/94] rows=16 (11c/5i) loss=1.5694 ce=1.5694 | 0:01:44 eta 1:47:07 (17.42s/batch)
+    e0 batch 7/375 [3/4 of step 2/94] rows=16 (11c/5i) loss=1.4819 ce=1.4819 | 0:01:54 eta 1:39:53 (16.29s/batch)
+    e0 batch 8/375 [4/4 of step 2/94] rows=16 (8c/8i) loss=1.6947 ce=1.6947 | 0:02:03 eta 1:34:30 (15.45s/batch)
+  >> epoch 0 step 2/94 (4 batches = 64 rows) loss=1.4400 ce=1.4400 | 0:02:03 eta 1:34:30 | donor cache 118
+    e0 batch 9/375 [1/4 of step 3/94] rows=16 (5c/11i) loss=1.2049 ce=1.2049 | 0:02:11 eta 1:29:27 (14.67s/batch)
+    e0 batch 10/375 [2/4 of step 3/94] rows=16 (11c/5i) loss=1.6708 ce=1.6708 | 0:02:20 eta 1:25:17 (14.02s/batch)
+    e0 batch 11/375 [3/4 of step 3/94] rows=16 (10c/6i) loss=1.3457 ce=1.3457 | 0:02:27 eta 1:21:10 (13.38s/batch)
+    e0 batch 12/375 [4/4 of step 3/94] rows=16 (8c/8i) loss=0.9500 ce=0.9500 | 0:02:34 eta 1:17:38 (12.83s/batch)
+  >> epoch 0 step 3/94 (4 batches = 64 rows) loss=1.2929 ce=1.2929 | 0:02:34 eta 1:17:38 | donor cache 176
+    e0 batch 13/375 [1/4 of step 4/94] rows=16 (7c/9i) loss=1.5998 ce=1.5998 | 0:02:41 eta 1:14:48 (12.40s/batch)
+    e0 batch 14/375 [2/4 of step 4/94] rows=16 (10c/6i) loss=1.0507 ce=1.0507 | 0:02:48 eta 1:12:32 (12.06s/batch)
+    e0 batch 15/375 [3/4 of step 4/94] rows=16 (9c/7i) loss=1.2789 ce=1.2789 | 0:02:55 eta 1:10:23 (11.73s/batch)
+    e0 batch 16/375 [4/4 of step 4/94] rows=16 (10c/6i) loss=0.6400 ce=0.6400 | 0:03:03 eta 1:08:35 (11.46s/batch)
+  >> epoch 0 step 4/94 (4 batches = 64 rows) loss=1.1424 ce=1.1424 | 0:03:03 eta 1:08:35 | donor cache 226
+    e0 batch 17/375 [1/4 of step 5/94] rows=16 (11c/5i) loss=1.0804 ce=1.0804 | 0:03:09 eta 1:06:33 (11.15s/batch)
+    e0 batch 18/375 [2/4 of step 5/94] rows=16 (10c/6i) loss=1.0281 ce=1.0281 | 0:03:16 eta 1:04:49 (10.90s/batch)
+    e0 batch 19/375 [3/4 of step 5/94] rows=16 (11c/5i) loss=0.8761 ce=0.8761 | 0:03:23 eta 1:03:25 (10.69s/batch)
+    e0 batch 20/375 [4/4 of step 5/94] rows=16 (7c/9i) loss=1.4299 ce=1.4299 | 0:03:30 eta 1:02:12 (10.51s/batch)
+  >> epoch 0 step 5/94 (4 batches = 64 rows) loss=1.1036 ce=1.1036 | 0:03:30 eta 1:02:12 | donor cache 273
+    e0 batch 21/375 [1/4 of step 6/94] rows=16 (9c/7i) loss=1.1538 ce=1.1538 | 0:03:37 eta 1:00:59 (10.34s/batch)
+    e0 batch 22/375 [2/4 of step 6/94] rows=16 (8c/8i) loss=1.0907 ce=1.0907 | 0:03:44 eta 0:59:55 (10.19s/batch)
+    e0 batch 23/375 [3/4 of step 6/94] rows=16 (6c/10i) loss=0.8440 ce=0.8440 | 0:03:51 eta 0:58:55 (10.04s/batch)
+    e0 batch 24/375 [4/4 of step 6/94] rows=16 (8c/8i) loss=0.9305 ce=0.9305 | 0:03:57 eta 0:57:54 (9.90s/batch)
+  >> epoch 0 step 6/94 (4 batches = 64 rows) loss=1.0048 ce=1.0048 | 0:03:57 eta 0:57:55 | donor cache 316
+    e0 batch 25/375 [1/4 of step 7/94] rows=16 (12c/4i) loss=0.9125 ce=0.9125 | 0:04:03 eta 0:56:53 (9.75s/batch)
+    e0 batch 26/375 [2/4 of step 7/94] rows=16 (9c/7i) loss=0.8262 ce=0.8262 | 0:04:10 eta 0:56:06 (9.65s/batch)
+    e0 batch 27/375 [3/4 of step 7/94] rows=16 (9c/7i) loss=1.4696 ce=1.4696 | 0:04:17 eta 0:55:21 (9.54s/batch)
+    e0 batch 28/375 [4/4 of step 7/94] rows=16 (11c/5i) loss=1.0861 ce=1.0861 | 0:04:24 eta 0:54:36 (9.44s/batch)
+  >> epoch 0 step 7/94 (4 batches = 64 rows) loss=1.0736 ce=1.0736 | 0:04:24 eta 0:54:36 | donor cache 355
+    e0 batch 29/375 [1/4 of step 8/94] rows=16 (10c/6i) loss=0.7744 ce=0.7744 | 0:04:30 eta 0:53:50 (9.34s/batch)
+    e0 batch 30/375 [2/4 of step 8/94] rows=16 (10c/6i) loss=1.0205 ce=1.0205 | 0:04:37 eta 0:53:07 (9.24s/batch)
+    e0 batch 31/375 [3/4 of step 8/94] rows=16 (10c/6i) loss=1.4359 ce=1.4359 | 0:04:43 eta 0:52:22 (9.14s/batch)
+    e0 batch 32/375 [4/4 of step 8/94] rows=16 (9c/7i) loss=1.1357 ce=1.1357 | 0:04:50 eta 0:51:51 (9.07s/batch)
+  >> epoch 0 step 8/94 (4 batches = 64 rows) loss=1.0916 ce=1.0916 | 0:04:50 eta 0:51:51 | donor cache 396
+    e0 batch 33/375 [1/4 of step 9/94] rows=16 (10c/6i) loss=1.1691 ce=1.1691 | 0:04:57 eta 0:51:21 (9.01s/batch)
+    e0 batch 34/375 [2/4 of step 9/94] rows=16 (10c/6i) loss=0.9163 ce=0.9163 | 0:05:03 eta 0:50:47 (8.94s/batch)
+    e0 batch 35/375 [3/4 of step 9/94] rows=16 (10c/6i) loss=0.8614 ce=0.8614 | 0:05:10 eta 0:50:14 (8.87s/batch)
+    e0 batch 36/375 [4/4 of step 9/94] rows=16 (7c/9i) loss=1.0646 ce=1.0646 | 0:05:16 eta 0:49:37 (8.78s/batch)
+  >> epoch 0 step 9/94 (4 batches = 64 rows) loss=1.0028 ce=1.0028 | 0:05:16 eta 0:49:37 | donor cache 432
+    e0 batch 37/375 [1/4 of step 10/94] rows=16 (8c/8i) loss=0.8212 ce=0.8212 | 0:05:22 eta 0:49:06 (8.72s/batch)
+    e0 batch 38/375 [2/4 of step 10/94] rows=16 (12c/4i) loss=1.1232 ce=1.1232 | 0:05:28 eta 0:48:29 (8.63s/batch)
+    e0 batch 39/375 [3/4 of step 10/94] rows=16 (11c/5i) loss=1.4134 ce=1.4134 | 0:05:34 eta 0:48:04 (8.58s/batch)
+    e0 batch 40/375 [4/4 of step 10/94] rows=16 (5c/11i) loss=0.8830 ce=0.8830 | 0:05:41 eta 0:47:41 (8.54s/batch)
+  >> epoch 0 step 10/94 (4 batches = 64 rows) loss=1.0602 ce=1.0602 | 0:05:41 eta 0:47:41 | donor cache 467
+    e0 batch 41/375 [1/4 of step 11/94] rows=16 (11c/5i) loss=1.2776 ce=1.2776 | 0:05:47 eta 0:47:12 (8.48s/batch)
+    e0 batch 42/375 [2/4 of step 11/94] rows=16 (8c/8i) loss=0.7027 ce=0.7027 | 0:05:53 eta 0:46:41 (8.41s/batch)
+    e0 batch 43/375 [3/4 of step 11/94] rows=16 (9c/7i) loss=0.7974 ce=0.7974 | 0:05:59 eta 0:46:15 (8.36s/batch)
+    e0 batch 44/375 [4/4 of step 11/94] rows=16 (9c/7i) loss=0.9786 ce=0.9786 | 0:06:06 eta 0:45:56 (8.33s/batch)
+  >> epoch 0 step 11/94 (4 batches = 64 rows) loss=0.9390 ce=0.9390 | 0:06:06 eta 0:45:56 | donor cache 505
+    e0 batch 45/375 [1/4 of step 12/94] rows=16 (8c/8i) loss=0.8641 ce=0.8641 | 0:06:13 eta 0:45:40 (8.30s/batch)
+    e0 batch 46/375 [2/4 of step 12/94] rows=16 (8c/8i) loss=0.8541 ce=0.8541 | 0:06:19 eta 0:45:17 (8.26s/batch)
+    e0 batch 47/375 [3/4 of step 12/94] rows=16 (7c/9i) loss=0.8123 ce=0.8123 | 0:06:27 eta 0:45:02 (8.24s/batch)
+    e0 batch 48/375 [4/4 of step 12/94] rows=16 (5c/11i) loss=0.7943 ce=0.7943 | 0:06:33 eta 0:44:41 (8.20s/batch)
+  >> epoch 0 step 12/94 (4 batches = 64 rows) loss=0.8312 ce=0.8312 | 0:06:33 eta 0:44:41 | donor cache 542
+    e0 batch 49/375 [1/4 of step 13/94] rows=16 (6c/10i) loss=1.1242 ce=1.1242 | 0:06:39 eta 0:44:17 (8.15s/batch)
+    e0 batch 50/375 [2/4 of step 13/94] rows=16 (9c/7i) loss=1.0285 ce=1.0285 | 0:06:45 eta 0:43:55 (8.11s/batch)
+    e0 batch 51/375 [3/4 of step 13/94] rows=16 (12c/4i) loss=0.5813 ce=0.5813 | 0:06:51 eta 0:43:35 (8.07s/batch)
+    e0 batch 52/375 [4/4 of step 13/94] rows=16 (9c/7i) loss=0.8677 ce=0.8677 | 0:06:57 eta 0:43:15 (8.03s/batch)
+  >> epoch 0 step 13/94 (4 batches = 64 rows) loss=0.9004 ce=0.9004 | 0:06:57 eta 0:43:15 | donor cache 572
+    e0 batch 53/375 [1/4 of step 14/94] rows=16 (12c/4i) loss=0.6783 ce=0.6783 | 0:07:03 eta 0:42:52 (7.99s/batch)
+    e0 batch 54/375 [2/4 of step 14/94] rows=16 (13c/3i) loss=0.4488 ce=0.4488 | 0:07:08 eta 0:42:28 (7.94s/batch)
+    e0 batch 55/375 [3/4 of step 14/94] rows=16 (10c/6i) loss=0.4343 ce=0.4343 | 0:07:14 eta 0:42:09 (7.90s/batch)
+    e0 batch 56/375 [4/4 of step 14/94] rows=16 (12c/4i) loss=0.7660 ce=0.7660 | 0:07:20 eta 0:41:49 (7.87s/batch)
+  >> epoch 0 step 14/94 (4 batches = 64 rows) loss=0.5819 ce=0.5819 | 0:07:20 eta 0:41:49 | donor cache 593
+    e0 batch 57/375 [1/4 of step 15/94] rows=16 (7c/9i) loss=0.5388 ce=0.5388 | 0:07:26 eta 0:41:33 (7.84s/batch)
+    e0 batch 58/375 [2/4 of step 15/94] rows=16 (11c/5i) loss=0.9676 ce=0.9676 | 0:07:32 eta 0:41:13 (7.80s/batch)
+    e0 batch 59/375 [3/4 of step 15/94] rows=16 (7c/9i) loss=1.3842 ce=1.3842 | 0:07:39 eta 0:41:02 (7.79s/batch)
+    e0 batch 60/375 [4/4 of step 15/94] rows=16 (11c/5i) loss=0.7054 ce=0.7054 | 0:07:46 eta 0:40:47 (7.77s/batch)
+  >> epoch 0 step 15/94 (4 batches = 64 rows) loss=0.8990 ce=0.8990 | 0:07:46 eta 0:40:47 | donor cache 621
+    e0 batch 61/375 [1/4 of step 16/94] rows=16 (9c/7i) loss=0.8458 ce=0.8458 | 0:07:52 eta 0:40:29 (7.74s/batch)
+    e0 batch 62/375 [2/4 of step 16/94] rows=16 (13c/3i) loss=0.6274 ce=0.6274 | 0:07:57 eta 0:40:13 (7.71s/batch)
+    e0 batch 63/375 [3/4 of step 16/94] rows=16 (10c/6i) loss=0.8128 ce=0.8128 | 0:08:02 eta 0:39:51 (7.66s/batch)
+    e0 batch 64/375 [4/4 of step 16/94] rows=16 (11c/5i) loss=0.5818 ce=0.5818 | 0:08:09 eta 0:39:36 (7.64s/batch)
+  >> epoch 0 step 16/94 (4 batches = 64 rows) loss=0.7170 ce=0.7170 | 0:08:09 eta 0:39:36 | donor cache 640
+    e0 batch 65/375 [1/4 of step 17/94] rows=16 (11c/5i) loss=0.8681 ce=0.8681 | 0:08:15 eta 0:39:23 (7.62s/batch)
+    e0 batch 66/375 [2/4 of step 17/94] rows=16 (9c/7i) loss=0.7264 ce=0.7264 | 0:08:21 eta 0:39:08 (7.60s/batch)
+    e0 batch 67/375 [3/4 of step 17/94] rows=16 (11c/5i) loss=0.6099 ce=0.6099 | 0:08:27 eta 0:38:53 (7.58s/batch)
+    e0 batch 68/375 [4/4 of step 17/94] rows=16 (9c/7i) loss=0.5944 ce=0.5944 | 0:08:33 eta 0:38:38 (7.55s/batch)
+  >> epoch 0 step 17/94 (4 batches = 64 rows) loss=0.6997 ce=0.6997 | 0:08:33 eta 0:38:38 | donor cache 662
+    e0 batch 69/375 [1/4 of step 18/94] rows=16 (7c/9i) loss=0.4775 ce=0.4775 | 0:08:39 eta 0:38:23 (7.53s/batch)
+    e0 batch 70/375 [2/4 of step 18/94] rows=16 (9c/7i) loss=0.7442 ce=0.7442 | 0:08:45 eta 0:38:07 (7.50s/batch)
+    e0 batch 71/375 [3/4 of step 18/94] rows=16 (7c/9i) loss=0.7946 ce=0.7946 | 0:08:51 eta 0:37:53 (7.48s/batch)
+    e0 batch 72/375 [4/4 of step 18/94] rows=16 (9c/7i) loss=0.9210 ce=0.9210 | 0:08:57 eta 0:37:42 (7.47s/batch)
+  >> epoch 0 step 18/94 (4 batches = 64 rows) loss=0.7343 ce=0.7343 | 0:08:57 eta 0:37:42 | donor cache 687
+    e0 batch 73/375 [1/4 of step 19/94] rows=16 (7c/9i) loss=0.9600 ce=0.9600 | 0:09:04 eta 0:37:30 (7.45s/batch)
+    e0 batch 74/375 [2/4 of step 19/94] rows=16 (10c/6i) loss=1.2218 ce=1.2218 | 0:09:09 eta 0:37:16 (7.43s/batch)
+    e0 batch 75/375 [3/4 of step 19/94] rows=16 (12c/4i) loss=0.7783 ce=0.7783 | 0:09:15 eta 0:37:01 (7.40s/batch)
+    e0 batch 76/375 [4/4 of step 19/94] rows=16 (14c/2i) loss=0.3843 ce=0.3843 | 0:09:20 eta 0:36:44 (7.37s/batch)
+  >> epoch 0 step 19/94 (4 batches = 64 rows) loss=0.8361 ce=0.8361 | 0:09:20 eta 0:36:44 | donor cache 707
+    e0 batch 77/375 [1/4 of step 20/94] rows=16 (8c/8i) loss=1.0496 ce=1.0496 | 0:09:26 eta 0:36:32 (7.36s/batch)
+    e0 batch 78/375 [2/4 of step 20/94] rows=16 (8c/8i) loss=0.5789 ce=0.5789 | 0:09:32 eta 0:36:20 (7.34s/batch)
+    e0 batch 79/375 [3/4 of step 20/94] rows=16 (9c/7i) loss=0.9310 ce=0.9310 | 0:09:38 eta 0:36:07 (7.32s/batch)
+    e0 batch 80/375 [4/4 of step 20/94] rows=16 (8c/8i) loss=0.7004 ce=0.7004 | 0:09:44 eta 0:35:54 (7.30s/batch)
+  >> epoch 0 step 20/94 (4 batches = 64 rows) loss=0.8150 ce=0.8150 | 0:09:44 eta 0:35:54 | donor cache 727
+    e0 batch 81/375 [1/4 of step 21/94] rows=16 (7c/9i) loss=1.0316 ce=1.0316 | 0:09:49 eta 0:35:40 (7.28s/batch)
+    e0 batch 82/375 [2/4 of step 21/94] rows=16 (12c/4i) loss=0.6005 ce=0.6005 | 0:09:54 eta 0:35:24 (7.25s/batch)
+    e0 batch 83/375 [3/4 of step 21/94] rows=16 (9c/7i) loss=0.9107 ce=0.9107 | 0:10:00 eta 0:35:12 (7.23s/batch)
+    e0 batch 84/375 [4/4 of step 21/94] rows=16 (11c/5i) loss=0.9807 ce=0.9807 | 0:10:05 eta 0:34:58 (7.21s/batch)
+  >> epoch 0 step 21/94 (4 batches = 64 rows) loss=0.8809 ce=0.8809 | 0:10:05 eta 0:34:58 | donor cache 746
+    e0 batch 85/375 [1/4 of step 22/94] rows=16 (12c/4i) loss=0.8664 ce=0.8664 | 0:10:11 eta 0:34:47 (7.20s/batch)
+    e0 batch 86/375 [2/4 of step 22/94] rows=16 (10c/6i) loss=0.8655 ce=0.8655 | 0:10:17 eta 0:34:36 (7.18s/batch)
+    e0 batch 87/375 [3/4 of step 22/94] rows=16 (8c/8i) loss=0.6734 ce=0.6734 | 0:10:24 eta 0:34:25 (7.17s/batch)
+    e0 batch 88/375 [4/4 of step 22/94] rows=16 (9c/7i) loss=1.1997 ce=1.1997 | 0:10:29 eta 0:34:13 (7.15s/batch)
+  >> epoch 0 step 22/94 (4 batches = 64 rows) loss=0.9012 ce=0.9012 | 0:10:29 eta 0:34:13 | donor cache 765
+    e0 batch 89/375 [1/4 of step 23/94] rows=16 (9c/7i) loss=0.8110 ce=0.8110 | 0:10:35 eta 0:34:00 (7.14s/batch)
+    e0 batch 90/375 [2/4 of step 23/94] rows=16 (10c/6i) loss=0.3974 ce=0.3974 | 0:10:40 eta 0:33:47 (7.11s/batch)
+    e0 batch 91/375 [3/4 of step 23/94] rows=16 (12c/4i) loss=0.7979 ce=0.7979 | 0:10:46 eta 0:33:36 (7.10s/batch)
+    e0 batch 92/375 [4/4 of step 23/94] rows=16 (8c/8i) loss=0.7255 ce=0.7255 | 0:10:52 eta 0:33:26 (7.09s/batch)
+  >> epoch 0 step 23/94 (4 batches = 64 rows) loss=0.6830 ce=0.6830 | 0:10:52 eta 0:33:26 | donor cache 784
+    e0 batch 93/375 [1/4 of step 24/94] rows=16 (11c/5i) loss=0.7721 ce=0.7721 | 0:10:58 eta 0:33:16 (7.08s/batch)
+    e0 batch 94/375 [2/4 of step 24/94] rows=16 (8c/8i) loss=0.7860 ce=0.7860 | 0:11:05 eta 0:33:08 (7.08s/batch)
+    e0 batch 95/375 [3/4 of step 24/94] rows=16 (11c/5i) loss=0.8071 ce=0.8071 | 0:11:10 eta 0:32:55 (7.06s/batch)
+    e0 batch 96/375 [4/4 of step 24/94] rows=16 (10c/6i) loss=0.9415 ce=0.9415 | 0:11:15 eta 0:32:44 (7.04s/batch)
+  >> epoch 0 step 24/94 (4 batches = 64 rows) loss=0.8267 ce=0.8267 | 0:11:15 eta 0:32:44 | donor cache 807
+    e0 batch 97/375 [1/4 of step 25/94] rows=16 (9c/7i) loss=0.7755 ce=0.7755 | 0:11:21 eta 0:32:33 (7.03s/batch)
+    e0 batch 98/375 [2/4 of step 25/94] rows=16 (10c/6i) loss=1.0220 ce=1.0220 | 0:11:26 eta 0:32:21 (7.01s/batch)
+    e0 batch 99/375 [3/4 of step 25/94] rows=16 (9c/7i) loss=0.8591 ce=0.8591 | 0:11:33 eta 0:32:12 (7.00s/batch)
+    e0 batch 100/375 [4/4 of step 25/94] rows=16 (8c/8i) loss=0.6085 ce=0.6085 | 0:11:39 eta 0:32:02 (6.99s/batch)
+  >> epoch 0 step 25/94 (4 batches = 64 rows) loss=0.8163 ce=0.8163 | 0:11:39 eta 0:32:02 | donor cache 826
+    e0 batch 101/375 [1/4 of step 26/94] rows=16 (9c/7i) loss=0.8185 ce=0.8185 | 0:11:45 eta 0:31:53 (6.98s/batch)
+    e0 batch 102/375 [2/4 of step 26/94] rows=16 (10c/6i) loss=0.5172 ce=0.5172 | 0:11:50 eta 0:31:41 (6.96s/batch)
+    e0 batch 103/375 [3/4 of step 26/94] rows=16 (10c/6i) loss=0.1734 ce=0.1734 | 0:11:55 eta 0:31:29 (6.95s/batch)
+    e0 batch 104/375 [4/4 of step 26/94] rows=16 (10c/6i) loss=0.5560 ce=0.5560 | 0:12:00 eta 0:31:16 (6.93s/batch)
+  >> epoch 0 step 26/94 (4 batches = 64 rows) loss=0.5163 ce=0.5163 | 0:12:00 eta 0:31:16 | donor cache 842
+    e0 batch 105/375 [1/4 of step 27/94] rows=16 (10c/6i) loss=0.3077 ce=0.3077 | 0:12:05 eta 0:31:06 (6.91s/batch)
+    e0 batch 106/375 [2/4 of step 27/94] rows=16 (9c/7i) loss=0.4685 ce=0.4685 | 0:12:11 eta 0:30:57 (6.90s/batch)
+    e0 batch 107/375 [3/4 of step 27/94] rows=16 (12c/4i) loss=0.6103 ce=0.6103 | 0:12:17 eta 0:30:47 (6.89s/batch)
+    e0 batch 108/375 [4/4 of step 27/94] rows=16 (9c/7i) loss=0.6187 ce=0.6187 | 0:12:22 eta 0:30:36 (6.88s/batch)
+  >> epoch 0 step 27/94 (4 batches = 64 rows) loss=0.5013 ce=0.5013 | 0:12:22 eta 0:30:36 | donor cache 852
+    e0 batch 109/375 [1/4 of step 28/94] rows=16 (10c/6i) loss=0.4748 ce=0.4748 | 0:12:28 eta 0:30:25 (6.86s/batch)
+    e0 batch 110/375 [2/4 of step 28/94] rows=16 (10c/6i) loss=0.3805 ce=0.3805 | 0:12:33 eta 0:30:14 (6.85s/batch)
+    e0 batch 111/375 [3/4 of step 28/94] rows=16 (5c/11i) loss=0.7123 ce=0.7123 | 0:12:39 eta 0:30:05 (6.84s/batch)
+    e0 batch 112/375 [4/4 of step 28/94] rows=16 (12c/4i) loss=0.3469 ce=0.3469 | 0:12:44 eta 0:29:54 (6.83s/batch)
+  >> epoch 0 step 28/94 (4 batches = 64 rows) loss=0.4786 ce=0.4786 | 0:12:44 eta 0:29:54 | donor cache 867
+    e0 batch 113/375 [1/4 of step 29/94] rows=16 (8c/8i) loss=0.8783 ce=0.8783 | 0:12:50 eta 0:29:45 (6.81s/batch)
+    e0 batch 114/375 [2/4 of step 29/94] rows=16 (10c/6i) loss=0.4890 ce=0.4890 | 0:12:55 eta 0:29:35 (6.80s/batch)
+    e0 batch 115/375 [3/4 of step 29/94] rows=16 (7c/9i) loss=0.6438 ce=0.6438 | 0:13:01 eta 0:29:27 (6.80s/batch)
+    e0 batch 116/375 [4/4 of step 29/94] rows=16 (11c/5i) loss=0.4218 ce=0.4218 | 0:13:07 eta 0:29:18 (6.79s/batch)
+  >> epoch 0 step 29/94 (4 batches = 64 rows) loss=0.6082 ce=0.6082 | 0:13:07 eta 0:29:18 | donor cache 883
+    e0 batch 117/375 [1/4 of step 30/94] rows=16 (4c/12i) loss=0.4983 ce=0.4983 | 0:13:13 eta 0:29:10 (6.78s/batch)
+    e0 batch 118/375 [2/4 of step 30/94] rows=16 (11c/5i) loss=0.4350 ce=0.4350 | 0:13:18 eta 0:28:59 (6.77s/batch)
+    e0 batch 119/375 [3/4 of step 30/94] rows=16 (8c/8i) loss=0.5768 ce=0.5768 | 0:13:24 eta 0:28:51 (6.76s/batch)
+    e0 batch 120/375 [4/4 of step 30/94] rows=16 (7c/9i) loss=0.8535 ce=0.8535 | 0:13:30 eta 0:28:42 (6.76s/batch)
+  >> epoch 0 step 30/94 (4 batches = 64 rows) loss=0.5909 ce=0.5909 | 0:13:30 eta 0:28:42 | donor cache 903
+    e0 batch 121/375 [1/4 of step 31/94] rows=16 (8c/8i) loss=0.7617 ce=0.7617 | 0:13:37 eta 0:28:35 (6.75s/batch)
+    e0 batch 122/375 [2/4 of step 31/94] rows=16 (9c/7i) loss=0.6901 ce=0.6901 | 0:13:42 eta 0:28:25 (6.74s/batch)
+    e0 batch 123/375 [3/4 of step 31/94] rows=16 (11c/5i) loss=0.5539 ce=0.5539 | 0:13:47 eta 0:28:15 (6.73s/batch)
+    e0 batch 124/375 [4/4 of step 31/94] rows=16 (12c/4i) loss=0.9089 ce=0.9089 | 0:13:52 eta 0:28:05 (6.72s/batch)
+  >> epoch 0 step 31/94 (4 batches = 64 rows) loss=0.7287 ce=0.7287 | 0:13:52 eta 0:28:05 | donor cache 915
+    e0 batch 125/375 [1/4 of step 32/94] rows=16 (9c/7i) loss=0.6623 ce=0.6623 | 0:13:58 eta 0:27:56 (6.71s/batch)
+    e0 batch 126/375 [2/4 of step 32/94] rows=16 (12c/4i) loss=0.7617 ce=0.7617 | 0:14:04 eta 0:27:48 (6.70s/batch)
+    e0 batch 127/375 [3/4 of step 32/94] rows=16 (9c/7i) loss=0.7317 ce=0.7317 | 0:14:10 eta 0:27:40 (6.70s/batch)
+    e0 batch 128/375 [4/4 of step 32/94] rows=16 (10c/6i) loss=0.4956 ce=0.4956 | 0:14:15 eta 0:27:31 (6.69s/batch)
+  >> epoch 0 step 32/94 (4 batches = 64 rows) loss=0.6628 ce=0.6628 | 0:14:15 eta 0:27:31 | donor cache 925
+    e0 batch 129/375 [1/4 of step 33/94] rows=16 (6c/10i) loss=0.5399 ce=0.5399 | 0:14:21 eta 0:27:23 (6.68s/batch)
+    e0 batch 130/375 [2/4 of step 33/94] rows=16 (6c/10i) loss=0.6133 ce=0.6133 | 0:14:27 eta 0:27:14 (6.67s/batch)
+    e0 batch 131/375 [3/4 of step 33/94] rows=16 (9c/7i) loss=0.8779 ce=0.8779 | 0:14:33 eta 0:27:06 (6.67s/batch)
+    e0 batch 132/375 [4/4 of step 33/94] rows=16 (8c/8i) loss=0.5488 ce=0.5488 | 0:14:38 eta 0:26:57 (6.66s/batch)
+  >> epoch 0 step 33/94 (4 batches = 64 rows) loss=0.6450 ce=0.6450 | 0:14:38 eta 0:26:57 | donor cache 938
+    e0 batch 133/375 [1/4 of step 34/94] rows=16 (11c/5i) loss=0.6201 ce=0.6201 | 0:14:44 eta 0:26:48 (6.65s/batch)
+    e0 batch 134/375 [2/4 of step 34/94] rows=16 (9c/7i) loss=0.7281 ce=0.7281 | 0:14:49 eta 0:26:40 (6.64s/batch)
+    e0 batch 135/375 [3/4 of step 34/94] rows=16 (6c/10i) loss=0.5371 ce=0.5371 | 0:14:55 eta 0:26:31 (6.63s/batch)
+    e0 batch 136/375 [4/4 of step 34/94] rows=16 (9c/7i) loss=0.3668 ce=0.3668 | 0:15:01 eta 0:26:23 (6.63s/batch)
+  >> epoch 0 step 34/94 (4 batches = 64 rows) loss=0.5630 ce=0.5630 | 0:15:01 eta 0:26:23 | donor cache 950
+    e0 batch 137/375 [1/4 of step 35/94] rows=16 (10c/6i) loss=1.0328 ce=1.0328 | 0:15:06 eta 0:26:14 (6.62s/batch)
+    e0 batch 138/375 [2/4 of step 35/94] rows=16 (11c/5i) loss=0.4106 ce=0.4106 | 0:15:11 eta 0:26:05 (6.61s/batch)
+    e0 batch 139/375 [3/4 of step 35/94] rows=16 (9c/7i) loss=0.4805 ce=0.4805 | 0:15:16 eta 0:25:56 (6.60s/batch)
+    e0 batch 140/375 [4/4 of step 35/94] rows=16 (10c/6i) loss=0.4813 ce=0.4813 | 0:15:23 eta 0:25:49 (6.59s/batch)
+  >> epoch 0 step 35/94 (4 batches = 64 rows) loss=0.6013 ce=0.6013 | 0:15:23 eta 0:25:49 | donor cache 961
+    e0 batch 141/375 [1/4 of step 36/94] rows=16 (6c/10i) loss=0.7269 ce=0.7269 | 0:15:28 eta 0:25:40 (6.58s/batch)
+    e0 batch 142/375 [2/4 of step 36/94] rows=16 (8c/8i) loss=0.7553 ce=0.7553 | 0:15:34 eta 0:25:32 (6.58s/batch)
+    e0 batch 143/375 [3/4 of step 36/94] rows=16 (5c/11i) loss=0.4760 ce=0.4760 | 0:15:40 eta 0:25:25 (6.58s/batch)
+    e0 batch 144/375 [4/4 of step 36/94] rows=16 (10c/6i) loss=0.4829 ce=0.4829 | 0:15:46 eta 0:25:17 (6.57s/batch)
+  >> epoch 0 step 36/94 (4 batches = 64 rows) loss=0.6103 ce=0.6103 | 0:15:46 eta 0:25:17 | donor cache 980
+    e0 batch 145/375 [1/4 of step 37/94] rows=16 (7c/9i) loss=0.5738 ce=0.5738 | 0:15:52 eta 0:25:10 (6.57s/batch)
+    e0 batch 146/375 [2/4 of step 37/94] rows=16 (10c/6i) loss=0.3846 ce=0.3846 | 0:15:57 eta 0:25:01 (6.56s/batch)
+    e0 batch 147/375 [3/4 of step 37/94] rows=16 (9c/7i) loss=0.3627 ce=0.3627 | 0:16:03 eta 0:24:53 (6.55s/batch)
+    e0 batch 148/375 [4/4 of step 37/94] rows=16 (7c/9i) loss=0.6619 ce=0.6619 | 0:16:08 eta 0:24:46 (6.55s/batch)
+  >> epoch 0 step 37/94 (4 batches = 64 rows) loss=0.4958 ce=0.4958 | 0:16:08 eta 0:24:46 | donor cache 994
+    e0 batch 149/375 [1/4 of step 38/94] rows=16 (9c/7i) loss=0.3353 ce=0.3353 | 0:16:14 eta 0:24:38 (6.54s/batch)
+    e0 batch 150/375 [2/4 of step 38/94] rows=16 (8c/8i) loss=0.4614 ce=0.4614 | 0:16:20 eta 0:24:30 (6.54s/batch)
+    e0 batch 151/375 [3/4 of step 38/94] rows=16 (7c/9i) loss=0.6955 ce=0.6955 | 0:16:25 eta 0:24:21 (6.53s/batch)
+    e0 batch 152/375 [4/4 of step 38/94] rows=16 (7c/9i) loss=0.3556 ce=0.3556 | 0:16:31 eta 0:24:14 (6.52s/batch)
+  >> epoch 0 step 38/94 (4 batches = 64 rows) loss=0.4620 ce=0.4620 | 0:16:31 eta 0:24:14 | donor cache 1009
+    e0 batch 153/375 [1/4 of step 39/94] rows=16 (9c/7i) loss=0.3801 ce=0.3801 | 0:16:36 eta 0:24:05 (6.51s/batch)
+    e0 batch 154/375 [2/4 of step 39/94] rows=16 (8c/8i) loss=0.4554 ce=0.4554 | 0:16:40 eta 0:23:56 (6.50s/batch)
+    e0 batch 155/375 [3/4 of step 39/94] rows=16 (10c/6i) loss=0.6465 ce=0.6465 | 0:16:46 eta 0:23:47 (6.49s/batch)
+    e0 batch 156/375 [4/4 of step 39/94] rows=16 (7c/9i) loss=0.5420 ce=0.5420 | 0:16:51 eta 0:23:40 (6.49s/batch)
+  >> epoch 0 step 39/94 (4 batches = 64 rows) loss=0.5060 ce=0.5060 | 0:16:51 eta 0:23:40 | donor cache 1019
+    e0 batch 157/375 [1/4 of step 40/94] rows=16 (5c/11i) loss=0.7542 ce=0.7542 | 0:16:57 eta 0:23:32 (6.48s/batch)
+    e0 batch 158/375 [2/4 of step 40/94] rows=16 (10c/6i) loss=0.5461 ce=0.5461 | 0:17:03 eta 0:23:25 (6.48s/batch)
+    e0 batch 159/375 [3/4 of step 40/94] rows=16 (8c/8i) loss=0.3473 ce=0.3473 | 0:17:08 eta 0:23:16 (6.47s/batch)
+    e0 batch 160/375 [4/4 of step 40/94] rows=16 (7c/9i) loss=0.3125 ce=0.3125 | 0:17:13 eta 0:23:09 (6.46s/batch)
+  >> epoch 0 step 40/94 (4 batches = 64 rows) loss=0.4901 ce=0.4901 | 0:17:13 eta 0:23:09 | donor cache 1028
+    e0 batch 161/375 [1/4 of step 41/94] rows=16 (10c/6i) loss=0.3810 ce=0.3810 | 0:17:18 eta 0:23:01 (6.45s/batch)
+    e0 batch 162/375 [2/4 of step 41/94] rows=16 (8c/8i) loss=0.5103 ce=0.5103 | 0:17:24 eta 0:22:53 (6.45s/batch)
+    e0 batch 163/375 [3/4 of step 41/94] rows=16 (6c/10i) loss=0.3504 ce=0.3504 | 0:17:30 eta 0:22:45 (6.44s/batch)
+    e0 batch 164/375 [4/4 of step 41/94] rows=16 (7c/9i) loss=0.4863 ce=0.4863 | 0:17:35 eta 0:22:37 (6.43s/batch)
+  >> epoch 0 step 41/94 (4 batches = 64 rows) loss=0.4320 ce=0.4320 | 0:17:35 eta 0:22:37 | donor cache 1036
+    e0 batch 165/375 [1/4 of step 42/94] rows=16 (10c/6i) loss=0.6331 ce=0.6331 | 0:17:40 eta 0:22:29 (6.43s/batch)
+    e0 batch 166/375 [2/4 of step 42/94] rows=16 (11c/5i) loss=0.6579 ce=0.6579 | 0:17:46 eta 0:22:22 (6.42s/batch)
+    e0 batch 167/375 [3/4 of step 42/94] rows=16 (10c/6i) loss=0.5163 ce=0.5163 | 0:17:51 eta 0:22:14 (6.41s/batch)
+    e0 batch 168/375 [4/4 of step 42/94] rows=16 (8c/8i) loss=0.7656 ce=0.7656 | 0:17:57 eta 0:22:07 (6.41s/batch)
+  >> epoch 0 step 42/94 (4 batches = 64 rows) loss=0.6432 ce=0.6432 | 0:17:57 eta 0:22:07 | donor cache 1045
+    e0 batch 169/375 [1/4 of step 43/94] rows=16 (10c/6i) loss=0.2960 ce=0.2960 | 0:18:02 eta 0:21:59 (6.41s/batch)
+    e0 batch 170/375 [2/4 of step 43/94] rows=16 (10c/6i) loss=0.5641 ce=0.5641 | 0:18:07 eta 0:21:51 (6.40s/batch)
+    e0 batch 171/375 [3/4 of step 43/94] rows=16 (11c/5i) loss=0.6792 ce=0.6792 | 0:18:13 eta 0:21:44 (6.40s/batch)
+    e0 batch 172/375 [4/4 of step 43/94] rows=16 (11c/5i) loss=0.8545 ce=0.8545 | 0:18:18 eta 0:21:36 (6.39s/batch)
+  >> epoch 0 step 43/94 (4 batches = 64 rows) loss=0.5984 ce=0.5984 | 0:18:18 eta 0:21:36 | donor cache 1052
+    e0 batch 173/375 [1/4 of step 44/94] rows=16 (8c/8i) loss=0.4596 ce=0.4596 | 0:18:24 eta 0:21:29 (6.39s/batch)
+    e0 batch 174/375 [2/4 of step 44/94] rows=16 (8c/8i) loss=0.6726 ce=0.6726 | 0:18:30 eta 0:21:22 (6.38s/batch)
+    e0 batch 175/375 [3/4 of step 44/94] rows=16 (9c/7i) loss=0.8335 ce=0.8335 | 0:18:34 eta 0:21:14 (6.37s/batch)
+    e0 batch 176/375 [4/4 of step 44/94] rows=16 (7c/9i) loss=0.6244 ce=0.6244 | 0:18:40 eta 0:21:07 (6.37s/batch)
+  >> epoch 0 step 44/94 (4 batches = 64 rows) loss=0.6475 ce=0.6475 | 0:18:40 eta 0:21:07 | donor cache 1064
+    e0 batch 177/375 [1/4 of step 45/94] rows=16 (11c/5i) loss=0.2180 ce=0.2180 | 0:18:46 eta 0:21:00 (6.37s/batch)
+    e0 batch 178/375 [2/4 of step 45/94] rows=16 (9c/7i) loss=0.2644 ce=0.2644 | 0:18:51 eta 0:20:52 (6.36s/batch)
+    e0 batch 179/375 [3/4 of step 45/94] rows=16 (13c/3i) loss=0.2688 ce=0.2688 | 0:18:57 eta 0:20:45 (6.36s/batch)
+    e0 batch 180/375 [4/4 of step 45/94] rows=16 (8c/8i) loss=0.4647 ce=0.4647 | 0:19:03 eta 0:20:38 (6.35s/batch)
+  >> epoch 0 step 45/94 (4 batches = 64 rows) loss=0.3040 ce=0.3040 | 0:19:03 eta 0:20:38 | donor cache 1071
+    e0 batch 181/375 [1/4 of step 46/94] rows=16 (9c/7i) loss=0.3167 ce=0.3167 | 0:19:08 eta 0:20:30 (6.34s/batch)
+    e0 batch 182/375 [2/4 of step 46/94] rows=16 (4c/12i) loss=0.6786 ce=0.6786 | 0:19:14 eta 0:20:24 (6.34s/batch)
+    e0 batch 183/375 [3/4 of step 46/94] rows=16 (10c/6i) loss=0.4648 ce=0.4648 | 0:19:20 eta 0:20:17 (6.34s/batch)
+    e0 batch 184/375 [4/4 of step 46/94] rows=16 (9c/7i) loss=0.2972 ce=0.2972 | 0:19:24 eta 0:20:09 (6.33s/batch)
+  >> epoch 0 step 46/94 (4 batches = 64 rows) loss=0.4393 ce=0.4393 | 0:19:25 eta 0:20:09 | donor cache 1081
+    e0 batch 185/375 [1/4 of step 47/94] rows=16 (9c/7i) loss=0.6372 ce=0.6372 | 0:19:30 eta 0:20:02 (6.33s/batch)
+    e0 batch 186/375 [2/4 of step 47/94] rows=16 (7c/9i) loss=0.4952 ce=0.4952 | 0:19:36 eta 0:19:55 (6.33s/batch)
+    e0 batch 187/375 [3/4 of step 47/94] rows=16 (5c/11i) loss=0.7837 ce=0.7837 | 0:19:41 eta 0:19:47 (6.32s/batch)
+    e0 batch 188/375 [4/4 of step 47/94] rows=16 (9c/7i) loss=0.8473 ce=0.8473 | 0:19:47 eta 0:19:40 (6.31s/batch)
+  >> epoch 0 step 47/94 (4 batches = 64 rows) loss=0.6909 ce=0.6909 | 0:19:47 eta 0:19:40 | donor cache 1094
+    e0 batch 189/375 [1/4 of step 48/94] rows=16 (12c/4i) loss=0.6991 ce=0.6991 | 0:19:52 eta 0:19:33 (6.31s/batch)
+    e0 batch 190/375 [2/4 of step 48/94] rows=16 (8c/8i) loss=0.7730 ce=0.7730 | 0:19:56 eta 0:19:25 (6.30s/batch)
+    e0 batch 191/375 [3/4 of step 48/94] rows=16 (6c/10i) loss=0.4781 ce=0.4781 | 0:20:02 eta 0:19:18 (6.29s/batch)
+    e0 batch 192/375 [4/4 of step 48/94] rows=16 (10c/6i) loss=0.4725 ce=0.4725 | 0:20:07 eta 0:19:10 (6.29s/batch)
+  >> epoch 0 step 48/94 (4 batches = 64 rows) loss=0.6057 ce=0.6057 | 0:20:07 eta 0:19:10 | donor cache 1098
+    e0 batch 193/375 [1/4 of step 49/94] rows=16 (9c/7i) loss=0.5569 ce=0.5569 | 0:20:12 eta 0:19:03 (6.28s/batch)
+    e0 batch 194/375 [2/4 of step 49/94] rows=16 (10c/6i) loss=0.2637 ce=0.2637 | 0:20:17 eta 0:18:55 (6.27s/batch)
+    e0 batch 195/375 [3/4 of step 49/94] rows=16 (8c/8i) loss=0.4788 ce=0.4788 | 0:20:23 eta 0:18:49 (6.28s/batch)
+    e0 batch 196/375 [4/4 of step 49/94] rows=16 (9c/7i) loss=0.3263 ce=0.3263 | 0:20:28 eta 0:18:42 (6.27s/batch)
+  >> epoch 0 step 49/94 (4 batches = 64 rows) loss=0.4064 ce=0.4064 | 0:20:28 eta 0:18:42 | donor cache 1111
+    e0 batch 197/375 [1/4 of step 50/94] rows=16 (9c/7i) loss=0.6081 ce=0.6081 | 0:20:33 eta 0:18:34 (6.26s/batch)
+    e0 batch 198/375 [2/4 of step 50/94] rows=16 (8c/8i) loss=0.3768 ce=0.3768 | 0:20:39 eta 0:18:27 (6.26s/batch)
+    e0 batch 199/375 [3/4 of step 50/94] rows=16 (4c/12i) loss=0.4447 ce=0.4447 | 0:20:44 eta 0:18:20 (6.25s/batch)
+    e0 batch 200/375 [4/4 of step 50/94] rows=16 (12c/4i) loss=0.4777 ce=0.4777 | 0:20:49 eta 0:18:13 (6.25s/batch)
+  >> epoch 0 step 50/94 (4 batches = 64 rows) loss=0.4768 ce=0.4768 | 0:20:49 eta 0:18:13 | donor cache 1115
+    e0 batch 201/375 [1/4 of step 51/94] rows=16 (9c/7i) loss=0.6374 ce=0.6374 | 0:20:55 eta 0:18:06 (6.24s/batch)
+    e0 batch 202/375 [2/4 of step 51/94] rows=16 (6c/10i) loss=0.7748 ce=0.7748 | 0:21:01 eta 0:18:00 (6.24s/batch)
+    e0 batch 203/375 [3/4 of step 51/94] rows=16 (9c/7i) loss=0.9596 ce=0.9596 | 0:21:05 eta 0:17:52 (6.24s/batch)
+    e0 batch 204/375 [4/4 of step 51/94] rows=16 (7c/9i) loss=0.7503 ce=0.7503 | 0:21:11 eta 0:17:46 (6.23s/batch)
+  >> epoch 0 step 51/94 (4 batches = 64 rows) loss=0.7805 ce=0.7805 | 0:21:11 eta 0:17:46 | donor cache 1126
+    e0 batch 205/375 [1/4 of step 52/94] rows=16 (12c/4i) loss=0.5424 ce=0.5424 | 0:21:17 eta 0:17:39 (6.23s/batch)
+    e0 batch 206/375 [2/4 of step 52/94] rows=16 (12c/4i) loss=0.4834 ce=0.4834 | 0:21:22 eta 0:17:31 (6.22s/batch)
+    e0 batch 207/375 [3/4 of step 52/94] rows=16 (10c/6i) loss=0.8564 ce=0.8564 | 0:21:27 eta 0:17:24 (6.22s/batch)
+    e0 batch 208/375 [4/4 of step 52/94] rows=16 (9c/7i) loss=0.2617 ce=0.2617 | 0:21:32 eta 0:17:17 (6.21s/batch)
+  >> epoch 0 step 52/94 (4 batches = 64 rows) loss=0.5360 ce=0.5360 | 0:21:32 eta 0:17:17 | donor cache 1134
+    e0 batch 209/375 [1/4 of step 53/94] rows=16 (11c/5i) loss=0.6029 ce=0.6029 | 0:21:36 eta 0:17:09 (6.20s/batch)
+    e0 batch 210/375 [2/4 of step 53/94] rows=16 (9c/7i) loss=0.7435 ce=0.7435 | 0:21:41 eta 0:17:02 (6.20s/batch)
+    e0 batch 211/375 [3/4 of step 53/94] rows=16 (11c/5i) loss=0.4070 ce=0.4070 | 0:21:46 eta 0:16:55 (6.19s/batch)
+    e0 batch 212/375 [4/4 of step 53/94] rows=16 (7c/9i) loss=0.5435 ce=0.5435 | 0:21:51 eta 0:16:48 (6.19s/batch)
+  >> epoch 0 step 53/94 (4 batches = 64 rows) loss=0.5742 ce=0.5742 | 0:21:51 eta 0:16:48 | donor cache 1144
+    e0 batch 213/375 [1/4 of step 54/94] rows=16 (12c/4i) loss=0.1982 ce=0.1982 | 0:21:56 eta 0:16:41 (6.18s/batch)
+    e0 batch 214/375 [2/4 of step 54/94] rows=16 (6c/10i) loss=0.7435 ce=0.7435 | 0:22:01 eta 0:16:34 (6.17s/batch)
+    e0 batch 215/375 [3/4 of step 54/94] rows=16 (6c/10i) loss=0.5347 ce=0.5347 | 0:22:06 eta 0:16:27 (6.17s/batch)
+    e0 batch 216/375 [4/4 of step 54/94] rows=16 (11c/5i) loss=0.2498 ce=0.2498 | 0:22:11 eta 0:16:19 (6.16s/batch)
+  >> epoch 0 step 54/94 (4 batches = 64 rows) loss=0.4316 ce=0.4316 | 0:22:11 eta 0:16:19 | donor cache 1152
+    e0 batch 217/375 [1/4 of step 55/94] rows=16 (12c/4i) loss=0.4388 ce=0.4388 | 0:22:15 eta 0:16:12 (6.15s/batch)
+    e0 batch 218/375 [2/4 of step 55/94] rows=16 (12c/4i) loss=0.3833 ce=0.3833 | 0:22:19 eta 0:16:04 (6.15s/batch)
+    e0 batch 219/375 [3/4 of step 55/94] rows=16 (13c/3i) loss=0.6660 ce=0.6660 | 0:22:24 eta 0:15:57 (6.14s/batch)
+    e0 batch 220/375 [4/4 of step 55/94] rows=16 (10c/6i) loss=0.4127 ce=0.4127 | 0:22:29 eta 0:15:50 (6.13s/batch)
+  >> epoch 0 step 55/94 (4 batches = 64 rows) loss=0.4752 ce=0.4752 | 0:22:29 eta 0:15:50 | donor cache 1156
+    e0 batch 221/375 [1/4 of step 56/94] rows=16 (10c/6i) loss=0.3809 ce=0.3809 | 0:22:33 eta 0:15:43 (6.13s/batch)
+    e0 batch 222/375 [2/4 of step 56/94] rows=16 (11c/5i) loss=0.3830 ce=0.3830 | 0:22:38 eta 0:15:36 (6.12s/batch)
+    e0 batch 223/375 [3/4 of step 56/94] rows=16 (12c/4i) loss=0.2175 ce=0.2175 | 0:22:43 eta 0:15:29 (6.11s/batch)
+    e0 batch 224/375 [4/4 of step 56/94] rows=16 (9c/7i) loss=0.3617 ce=0.3617 | 0:22:48 eta 0:15:22 (6.11s/batch)
+  >> epoch 0 step 56/94 (4 batches = 64 rows) loss=0.3358 ce=0.3358 | 0:22:48 eta 0:15:22 | donor cache 1160
+    e0 batch 225/375 [1/4 of step 57/94] rows=16 (9c/7i) loss=0.3156 ce=0.3156 | 0:22:53 eta 0:15:15 (6.10s/batch)
+    e0 batch 226/375 [2/4 of step 57/94] rows=16 (13c/3i) loss=0.4200 ce=0.4200 | 0:22:57 eta 0:15:08 (6.10s/batch)
+    e0 batch 227/375 [3/4 of step 57/94] rows=16 (12c/4i) loss=0.4106 ce=0.4106 | 0:23:02 eta 0:15:01 (6.09s/batch)
+    e0 batch 228/375 [4/4 of step 57/94] rows=16 (9c/7i) loss=0.5937 ce=0.5937 | 0:23:06 eta 0:14:54 (6.08s/batch)
+  >> epoch 0 step 57/94 (4 batches = 64 rows) loss=0.4350 ce=0.4350 | 0:23:06 eta 0:14:54 | donor cache 1165
+    e0 batch 229/375 [1/4 of step 58/94] rows=16 (6c/10i) loss=0.7588 ce=0.7588 | 0:23:11 eta 0:14:47 (6.08s/batch)
+    e0 batch 230/375 [2/4 of step 58/94] rows=16 (8c/8i) loss=0.7958 ce=0.7958 | 0:23:16 eta 0:14:40 (6.07s/batch)
+    e0 batch 231/375 [3/4 of step 58/94] rows=16 (13c/3i) loss=0.3310 ce=0.3310 | 0:23:21 eta 0:14:33 (6.07s/batch)
+    e0 batch 232/375 [4/4 of step 58/94] rows=16 (14c/2i) loss=0.1436 ce=0.1436 | 0:23:25 eta 0:14:26 (6.06s/batch)
+  >> epoch 0 step 58/94 (4 batches = 64 rows) loss=0.5073 ce=0.5073 | 0:23:25 eta 0:14:26 | donor cache 1169
+    e0 batch 233/375 [1/4 of step 59/94] rows=16 (10c/6i) loss=0.3096 ce=0.3096 | 0:23:30 eta 0:14:19 (6.05s/batch)
+    e0 batch 234/375 [2/4 of step 59/94] rows=16 (10c/6i) loss=0.5771 ce=0.5771 | 0:23:35 eta 0:14:12 (6.05s/batch)
+    e0 batch 235/375 [3/4 of step 59/94] rows=16 (10c/6i) loss=0.4399 ce=0.4399 | 0:23:40 eta 0:14:06 (6.05s/batch)
+    e0 batch 236/375 [4/4 of step 59/94] rows=16 (10c/6i) loss=0.5327 ce=0.5327 | 0:23:45 eta 0:13:59 (6.04s/batch)
+  >> epoch 0 step 59/94 (4 batches = 64 rows) loss=0.4648 ce=0.4648 | 0:23:45 eta 0:13:59 | donor cache 1176
+    e0 batch 237/375 [1/4 of step 60/94] rows=16 (8c/8i) loss=1.0082 ce=1.0082 | 0:23:50 eta 0:13:52 (6.04s/batch)
+    e0 batch 238/375 [2/4 of step 60/94] rows=16 (10c/6i) loss=0.3609 ce=0.3609 | 0:23:55 eta 0:13:46 (6.03s/batch)
+    e0 batch 239/375 [3/4 of step 60/94] rows=16 (7c/9i) loss=0.7785 ce=0.7785 | 0:24:00 eta 0:13:39 (6.03s/batch)
+    e0 batch 240/375 [4/4 of step 60/94] rows=16 (10c/6i) loss=0.2740 ce=0.2740 | 0:24:05 eta 0:13:33 (6.02s/batch)
+  >> epoch 0 step 60/94 (4 batches = 64 rows) loss=0.6054 ce=0.6054 | 0:24:05 eta 0:13:33 | donor cache 1182
+    e0 batch 241/375 [1/4 of step 61/94] rows=16 (11c/5i) loss=0.4178 ce=0.4178 | 0:24:10 eta 0:13:26 (6.02s/batch)
+    e0 batch 242/375 [2/4 of step 61/94] rows=16 (8c/8i) loss=0.5115 ce=0.5115 | 0:24:15 eta 0:13:19 (6.01s/batch)
+    e0 batch 243/375 [3/4 of step 61/94] rows=16 (8c/8i) loss=0.2887 ce=0.2887 | 0:24:20 eta 0:13:13 (6.01s/batch)
+    e0 batch 244/375 [4/4 of step 61/94] rows=16 (8c/8i) loss=0.7310 ce=0.7310 | 0:24:25 eta 0:13:06 (6.01s/batch)
+  >> epoch 0 step 61/94 (4 batches = 64 rows) loss=0.4872 ce=0.4872 | 0:24:25 eta 0:13:06 | donor cache 1187
+    e0 batch 245/375 [1/4 of step 62/94] rows=16 (8c/8i) loss=0.3768 ce=0.3768 | 0:24:30 eta 0:13:00 (6.00s/batch)
+    e0 batch 246/375 [2/4 of step 62/94] rows=16 (12c/4i) loss=0.4584 ce=0.4584 | 0:24:35 eta 0:12:53 (6.00s/batch)
+    e0 batch 247/375 [3/4 of step 62/94] rows=16 (9c/7i) loss=0.3193 ce=0.3193 | 0:24:41 eta 0:12:47 (6.00s/batch)
+    e0 batch 248/375 [4/4 of step 62/94] rows=16 (7c/9i) loss=1.0009 ce=1.0009 | 0:24:46 eta 0:12:41 (5.99s/batch)
+  >> epoch 0 step 62/94 (4 batches = 64 rows) loss=0.5388 ce=0.5388 | 0:24:46 eta 0:12:41 | donor cache 1195
+    e0 batch 249/375 [1/4 of step 63/94] rows=16 (10c/6i) loss=0.5640 ce=0.5640 | 0:24:51 eta 0:12:34 (5.99s/batch)
+    e0 batch 250/375 [2/4 of step 63/94] rows=16 (8c/8i) loss=0.6161 ce=0.6161 | 0:24:56 eta 0:12:28 (5.99s/batch)
+    e0 batch 251/375 [3/4 of step 63/94] rows=16 (9c/7i) loss=0.5239 ce=0.5239 | 0:25:01 eta 0:12:21 (5.98s/batch)
+    e0 batch 252/375 [4/4 of step 63/94] rows=16 (10c/6i) loss=0.3920 ce=0.3920 | 0:25:06 eta 0:12:15 (5.98s/batch)
+  >> epoch 0 step 63/94 (4 batches = 64 rows) loss=0.5240 ce=0.5240 | 0:25:06 eta 0:12:15 | donor cache 1202
+    e0 batch 253/375 [1/4 of step 64/94] rows=16 (7c/9i) loss=0.3964 ce=0.3964 | 0:25:11 eta 0:12:08 (5.97s/batch)
+    e0 batch 254/375 [2/4 of step 64/94] rows=16 (9c/7i) loss=0.5411 ce=0.5411 | 0:25:16 eta 0:12:02 (5.97s/batch)
+    e0 batch 255/375 [3/4 of step 64/94] rows=16 (10c/6i) loss=0.5050 ce=0.5050 | 0:25:22 eta 0:11:56 (5.97s/batch)
+    e0 batch 256/375 [4/4 of step 64/94] rows=16 (11c/5i) loss=0.3700 ce=0.3700 | 0:25:27 eta 0:11:50 (5.97s/batch)
+  >> epoch 0 step 64/94 (4 batches = 64 rows) loss=0.4531 ce=0.4531 | 0:25:27 eta 0:11:50 | donor cache 1208
+    e0 batch 257/375 [1/4 of step 65/94] rows=16 (12c/4i) loss=0.3576 ce=0.3576 | 0:25:31 eta 0:11:43 (5.96s/batch)
+    e0 batch 258/375 [2/4 of step 65/94] rows=16 (6c/10i) loss=0.5615 ce=0.5615 | 0:25:36 eta 0:11:36 (5.96s/batch)
+    e0 batch 259/375 [3/4 of step 65/94] rows=16 (12c/4i) loss=0.3326 ce=0.3326 | 0:25:42 eta 0:11:30 (5.96s/batch)
+    e0 batch 260/375 [4/4 of step 65/94] rows=16 (8c/8i) loss=0.5781 ce=0.5781 | 0:25:47 eta 0:11:24 (5.95s/batch)
+  >> epoch 0 step 65/94 (4 batches = 64 rows) loss=0.4574 ce=0.4574 | 0:25:47 eta 0:11:24 | donor cache 1212
+    e0 batch 261/375 [1/4 of step 66/94] rows=16 (9c/7i) loss=0.6159 ce=0.6159 | 0:25:52 eta 0:11:18 (5.95s/batch)
+    e0 batch 262/375 [2/4 of step 66/94] rows=16 (8c/8i) loss=0.5050 ce=0.5050 | 0:25:58 eta 0:11:12 (5.95s/batch)
+    e0 batch 263/375 [3/4 of step 66/94] rows=16 (5c/11i) loss=0.5521 ce=0.5521 | 0:26:03 eta 0:11:05 (5.95s/batch)
+    e0 batch 264/375 [4/4 of step 66/94] rows=16 (9c/7i) loss=0.9180 ce=0.9180 | 0:26:09 eta 0:10:59 (5.94s/batch)
+  >> epoch 0 step 66/94 (4 batches = 64 rows) loss=0.6477 ce=0.6477 | 0:26:09 eta 0:10:59 | donor cache 1218
+    e0 batch 265/375 [1/4 of step 67/94] rows=16 (9c/7i) loss=0.4963 ce=0.4963 | 0:26:13 eta 0:10:53 (5.94s/batch)
+    e0 batch 266/375 [2/4 of step 67/94] rows=16 (11c/5i) loss=0.4255 ce=0.4255 | 0:26:18 eta 0:10:46 (5.93s/batch)
+    e0 batch 267/375 [3/4 of step 67/94] rows=16 (10c/6i) loss=0.4898 ce=0.4898 | 0:26:23 eta 0:10:40 (5.93s/batch)
+    e0 batch 268/375 [4/4 of step 67/94] rows=16 (11c/5i) loss=0.5052 ce=0.5052 | 0:26:28 eta 0:10:34 (5.93s/batch)
+  >> epoch 0 step 67/94 (4 batches = 64 rows) loss=0.4792 ce=0.4792 | 0:26:28 eta 0:10:34 | donor cache 1222
+    e0 batch 269/375 [1/4 of step 68/94] rows=16 (9c/7i) loss=0.3991 ce=0.3991 | 0:26:33 eta 0:10:27 (5.92s/batch)
+    e0 batch 270/375 [2/4 of step 68/94] rows=16 (8c/8i) loss=0.4846 ce=0.4846 | 0:26:38 eta 0:10:21 (5.92s/batch)
+    e0 batch 271/375 [3/4 of step 68/94] rows=16 (9c/7i) loss=0.4461 ce=0.4461 | 0:26:44 eta 0:10:15 (5.92s/batch)
+    e0 batch 272/375 [4/4 of step 68/94] rows=16 (9c/7i) loss=0.2684 ce=0.2684 | 0:26:50 eta 0:10:09 (5.92s/batch)
+  >> epoch 0 step 68/94 (4 batches = 64 rows) loss=0.3995 ce=0.3995 | 0:26:50 eta 0:10:09 | donor cache 1228
+    e0 batch 273/375 [1/4 of step 69/94] rows=16 (11c/5i) loss=0.1399 ce=0.1399 | 0:26:55 eta 0:10:03 (5.92s/batch)
+    e0 batch 274/375 [2/4 of step 69/94] rows=16 (8c/8i) loss=0.3685 ce=0.3685 | 0:27:00 eta 0:09:57 (5.91s/batch)
+    e0 batch 275/375 [3/4 of step 69/94] rows=16 (9c/7i) loss=0.5284 ce=0.5284 | 0:27:05 eta 0:09:51 (5.91s/batch)
+    e0 batch 276/375 [4/4 of step 69/94] rows=16 (9c/7i) loss=0.4551 ce=0.4551 | 0:27:10 eta 0:09:44 (5.91s/batch)
+  >> epoch 0 step 69/94 (4 batches = 64 rows) loss=0.3730 ce=0.3730 | 0:27:10 eta 0:09:44 | donor cache 1230
+    e0 batch 277/375 [1/4 of step 70/94] rows=16 (8c/8i) loss=0.2750 ce=0.2750 | 0:27:15 eta 0:09:38 (5.90s/batch)
+    e0 batch 278/375 [2/4 of step 70/94] rows=16 (9c/7i) loss=0.5749 ce=0.5749 | 0:27:20 eta 0:09:32 (5.90s/batch)
+    e0 batch 279/375 [3/4 of step 70/94] rows=16 (9c/7i) loss=0.5628 ce=0.5628 | 0:27:25 eta 0:09:26 (5.90s/batch)
+    e0 batch 280/375 [4/4 of step 70/94] rows=16 (11c/5i) loss=0.4691 ce=0.4691 | 0:27:31 eta 0:09:20 (5.90s/batch)
+  >> epoch 0 step 70/94 (4 batches = 64 rows) loss=0.4705 ce=0.4705 | 0:27:31 eta 0:09:20 | donor cache 1233
+    e0 batch 281/375 [1/4 of step 71/94] rows=16 (8c/8i) loss=0.2405 ce=0.2405 | 0:27:36 eta 0:09:13 (5.89s/batch)
+    e0 batch 282/375 [2/4 of step 71/94] rows=16 (12c/4i) loss=0.3566 ce=0.3566 | 0:27:40 eta 0:09:07 (5.89s/batch)
+    e0 batch 283/375 [3/4 of step 71/94] rows=16 (8c/8i) loss=0.3507 ce=0.3507 | 0:27:46 eta 0:09:01 (5.89s/batch)
+    e0 batch 284/375 [4/4 of step 71/94] rows=16 (10c/6i) loss=0.1817 ce=0.1817 | 0:27:52 eta 0:08:55 (5.89s/batch)
+  >> epoch 0 step 71/94 (4 batches = 64 rows) loss=0.2824 ce=0.2824 | 0:27:52 eta 0:08:55 | donor cache 1239
+    e0 batch 285/375 [1/4 of step 72/94] rows=16 (9c/7i) loss=0.4409 ce=0.4409 | 0:27:57 eta 0:08:49 (5.89s/batch)
+    e0 batch 286/375 [2/4 of step 72/94] rows=16 (10c/6i) loss=0.3554 ce=0.3554 | 0:28:02 eta 0:08:43 (5.88s/batch)
+    e0 batch 287/375 [3/4 of step 72/94] rows=16 (10c/6i) loss=0.5842 ce=0.5842 | 0:28:07 eta 0:08:37 (5.88s/batch)
+    e0 batch 288/375 [4/4 of step 72/94] rows=16 (7c/9i) loss=0.5059 ce=0.5059 | 0:28:12 eta 0:08:31 (5.88s/batch)
+  >> epoch 0 step 72/94 (4 batches = 64 rows) loss=0.4716 ce=0.4716 | 0:28:12 eta 0:08:31 | donor cache 1244
+    e0 batch 289/375 [1/4 of step 73/94] rows=16 (6c/10i) loss=0.4989 ce=0.4989 | 0:28:17 eta 0:08:25 (5.87s/batch)
+    e0 batch 290/375 [2/4 of step 73/94] rows=16 (10c/6i) loss=0.3157 ce=0.3157 | 0:28:22 eta 0:08:19 (5.87s/batch)
+    e0 batch 291/375 [3/4 of step 73/94] rows=16 (10c/6i) loss=0.7417 ce=0.7417 | 0:28:27 eta 0:08:12 (5.87s/batch)
+    e0 batch 292/375 [4/4 of step 73/94] rows=16 (9c/7i) loss=0.2467 ce=0.2467 | 0:28:33 eta 0:08:06 (5.87s/batch)
+  >> epoch 0 step 73/94 (4 batches = 64 rows) loss=0.4507 ce=0.4507 | 0:28:33 eta 0:08:06 | donor cache 1247
+    e0 batch 293/375 [1/4 of step 74/94] rows=16 (12c/4i) loss=0.4313 ce=0.4313 | 0:28:37 eta 0:08:00 (5.86s/batch)
+    e0 batch 294/375 [2/4 of step 74/94] rows=16 (10c/6i) loss=0.4527 ce=0.4527 | 0:28:42 eta 0:07:54 (5.86s/batch)
+    e0 batch 295/375 [3/4 of step 74/94] rows=16 (7c/9i) loss=0.4451 ce=0.4451 | 0:28:47 eta 0:07:48 (5.86s/batch)
+    e0 batch 296/375 [4/4 of step 74/94] rows=16 (9c/7i) loss=0.2967 ce=0.2967 | 0:28:52 eta 0:07:42 (5.85s/batch)
+  >> epoch 0 step 74/94 (4 batches = 64 rows) loss=0.4065 ce=0.4065 | 0:28:52 eta 0:07:42 | donor cache 1249
+    e0 batch 297/375 [1/4 of step 75/94] rows=16 (8c/8i) loss=0.6169 ce=0.6169 | 0:28:57 eta 0:07:36 (5.85s/batch)
+    e0 batch 298/375 [2/4 of step 75/94] rows=16 (6c/10i) loss=0.3744 ce=0.3744 | 0:29:03 eta 0:07:30 (5.85s/batch)
+    e0 batch 299/375 [3/4 of step 75/94] rows=16 (14c/2i) loss=0.5466 ce=0.5466 | 0:29:07 eta 0:07:24 (5.84s/batch)
+    e0 batch 300/375 [4/4 of step 75/94] rows=16 (9c/7i) loss=0.3100 ce=0.3100 | 0:29:12 eta 0:07:18 (5.84s/batch)
+  >> epoch 0 step 75/94 (4 batches = 64 rows) loss=0.4620 ce=0.4620 | 0:29:12 eta 0:07:18 | donor cache 1252
+    e0 batch 301/375 [1/4 of step 76/94] rows=16 (6c/10i) loss=0.5359 ce=0.5359 | 0:29:18 eta 0:07:12 (5.84s/batch)
+    e0 batch 302/375 [2/4 of step 76/94] rows=16 (12c/4i) loss=0.3203 ce=0.3203 | 0:29:23 eta 0:07:06 (5.84s/batch)
+    e0 batch 303/375 [3/4 of step 76/94] rows=16 (11c/5i) loss=0.4220 ce=0.4220 | 0:29:28 eta 0:07:00 (5.84s/batch)
+    e0 batch 304/375 [4/4 of step 76/94] rows=16 (10c/6i) loss=0.5447 ce=0.5447 | 0:29:33 eta 0:06:54 (5.83s/batch)
+  >> epoch 0 step 76/94 (4 batches = 64 rows) loss=0.4557 ce=0.4557 | 0:29:33 eta 0:06:54 | donor cache 1257
+    e0 batch 305/375 [1/4 of step 77/94] rows=16 (8c/8i) loss=0.2836 ce=0.2836 | 0:29:38 eta 0:06:48 (5.83s/batch)
+    e0 batch 306/375 [2/4 of step 77/94] rows=16 (9c/7i) loss=0.4669 ce=0.4669 | 0:29:44 eta 0:06:42 (5.83s/batch)
+    e0 batch 307/375 [3/4 of step 77/94] rows=16 (7c/9i) loss=0.5131 ce=0.5131 | 0:29:49 eta 0:06:36 (5.83s/batch)
+    e0 batch 308/375 [4/4 of step 77/94] rows=16 (8c/8i) loss=0.8853 ce=0.8853 | 0:29:54 eta 0:06:30 (5.83s/batch)
+  >> epoch 0 step 77/94 (4 batches = 64 rows) loss=0.5372 ce=0.5372 | 0:29:54 eta 0:06:30 | donor cache 1264
+    e0 batch 309/375 [1/4 of step 78/94] rows=16 (13c/3i) loss=0.2766 ce=0.2766 | 0:29:59 eta 0:06:24 (5.82s/batch)
+    e0 batch 310/375 [2/4 of step 78/94] rows=16 (11c/5i) loss=0.5068 ce=0.5068 | 0:30:04 eta 0:06:18 (5.82s/batch)
+    e0 batch 311/375 [3/4 of step 78/94] rows=16 (12c/4i) loss=0.4547 ce=0.4547 | 0:30:09 eta 0:06:12 (5.82s/batch)
+    e0 batch 312/375 [4/4 of step 78/94] rows=16 (10c/6i) loss=0.4123 ce=0.4123 | 0:30:14 eta 0:06:06 (5.82s/batch)
+  >> epoch 0 step 78/94 (4 batches = 64 rows) loss=0.4126 ce=0.4126 | 0:30:14 eta 0:06:06 | donor cache 1266
+    e0 batch 313/375 [1/4 of step 79/94] rows=16 (8c/8i) loss=0.4310 ce=0.4310 | 0:30:19 eta 0:06:00 (5.81s/batch)
+    e0 batch 314/375 [2/4 of step 79/94] rows=16 (8c/8i) loss=0.4869 ce=0.4869 | 0:30:24 eta 0:05:54 (5.81s/batch)
+    e0 batch 315/375 [3/4 of step 79/94] rows=16 (10c/6i) loss=0.2413 ce=0.2413 | 0:30:30 eta 0:05:48 (5.81s/batch)
+    e0 batch 316/375 [4/4 of step 79/94] rows=16 (8c/8i) loss=0.2372 ce=0.2372 | 0:30:36 eta 0:05:42 (5.81s/batch)
+  >> epoch 0 step 79/94 (4 batches = 64 rows) loss=0.3491 ce=0.3491 | 0:30:36 eta 0:05:42 | donor cache 1270
+    e0 batch 317/375 [1/4 of step 80/94] rows=16 (7c/9i) loss=0.8051 ce=0.8051 | 0:30:41 eta 0:05:36 (5.81s/batch)
+    e0 batch 318/375 [2/4 of step 80/94] rows=16 (9c/7i) loss=0.6039 ce=0.6039 | 0:30:46 eta 0:05:30 (5.81s/batch)
+    e0 batch 319/375 [3/4 of step 80/94] rows=16 (8c/8i) loss=0.4163 ce=0.4163 | 0:30:51 eta 0:05:25 (5.80s/batch)
+    e0 batch 320/375 [4/4 of step 80/94] rows=16 (8c/8i) loss=0.3529 ce=0.3529 | 0:30:56 eta 0:05:19 (5.80s/batch)
+  >> epoch 0 step 80/94 (4 batches = 64 rows) loss=0.5445 ce=0.5445 | 0:30:56 eta 0:05:19 | donor cache 1278
+    e0 batch 321/375 [1/4 of step 81/94] rows=16 (9c/7i) loss=0.4773 ce=0.4773 | 0:31:01 eta 0:05:13 (5.80s/batch)
+    e0 batch 322/375 [2/4 of step 81/94] rows=16 (9c/7i) loss=0.4411 ce=0.4411 | 0:31:06 eta 0:05:07 (5.80s/batch)
+    e0 batch 323/375 [3/4 of step 81/94] rows=16 (9c/7i) loss=0.3534 ce=0.3534 | 0:31:11 eta 0:05:01 (5.79s/batch)
+    e0 batch 324/375 [4/4 of step 81/94] rows=16 (9c/7i) loss=0.4398 ce=0.4398 | 0:31:17 eta 0:04:55 (5.79s/batch)
+  >> epoch 0 step 81/94 (4 batches = 64 rows) loss=0.4279 ce=0.4279 | 0:31:17 eta 0:04:55 | donor cache 1281
+    e0 batch 325/375 [1/4 of step 82/94] rows=16 (10c/6i) loss=0.5394 ce=0.5394 | 0:31:22 eta 0:04:49 (5.79s/batch)
+    e0 batch 326/375 [2/4 of step 82/94] rows=16 (10c/6i) loss=0.4878 ce=0.4878 | 0:31:26 eta 0:04:43 (5.79s/batch)
+    e0 batch 327/375 [3/4 of step 82/94] rows=16 (9c/7i) loss=0.4195 ce=0.4195 | 0:31:32 eta 0:04:37 (5.79s/batch)
+    e0 batch 328/375 [4/4 of step 82/94] rows=16 (5c/11i) loss=0.4437 ce=0.4437 | 0:31:37 eta 0:04:31 (5.79s/batch)
+  >> epoch 0 step 82/94 (4 batches = 64 rows) loss=0.4726 ce=0.4726 | 0:31:37 eta 0:04:31 | donor cache 1285
+    e0 batch 329/375 [1/4 of step 83/94] rows=16 (10c/6i) loss=0.2581 ce=0.2581 | 0:31:42 eta 0:04:26 (5.78s/batch)
+    e0 batch 330/375 [2/4 of step 83/94] rows=16 (8c/8i) loss=0.4539 ce=0.4539 | 0:31:47 eta 0:04:20 (5.78s/batch)
+    e0 batch 331/375 [3/4 of step 83/94] rows=16 (10c/6i) loss=0.2810 ce=0.2810 | 0:31:52 eta 0:04:14 (5.78s/batch)
+    e0 batch 332/375 [4/4 of step 83/94] rows=16 (10c/6i) loss=0.6039 ce=0.6039 | 0:31:57 eta 0:04:08 (5.78s/batch)
+  >> epoch 0 step 83/94 (4 batches = 64 rows) loss=0.3992 ce=0.3992 | 0:31:57 eta 0:04:08 | donor cache 1287
+    e0 batch 333/375 [1/4 of step 84/94] rows=16 (9c/7i) loss=0.2942 ce=0.2942 | 0:32:02 eta 0:04:02 (5.77s/batch)
+    e0 batch 334/375 [2/4 of step 84/94] rows=16 (9c/7i) loss=0.8242 ce=0.8242 | 0:32:08 eta 0:03:56 (5.77s/batch)
+    e0 batch 335/375 [3/4 of step 84/94] rows=16 (10c/6i) loss=0.5381 ce=0.5381 | 0:32:12 eta 0:03:50 (5.77s/batch)
+    e0 batch 336/375 [4/4 of step 84/94] rows=16 (9c/7i) loss=0.2021 ce=0.2021 | 0:32:17 eta 0:03:44 (5.77s/batch)
+  >> epoch 0 step 84/94 (4 batches = 64 rows) loss=0.4647 ce=0.4647 | 0:32:17 eta 0:03:44 | donor cache 1293
+    e0 batch 337/375 [1/4 of step 85/94] rows=16 (8c/8i) loss=0.4886 ce=0.4886 | 0:32:22 eta 0:03:39 (5.77s/batch)
+    e0 batch 338/375 [2/4 of step 85/94] rows=16 (7c/9i) loss=0.4982 ce=0.4982 | 0:32:28 eta 0:03:33 (5.77s/batch)
+    e0 batch 339/375 [3/4 of step 85/94] rows=16 (12c/4i) loss=0.2066 ce=0.2066 | 0:32:33 eta 0:03:27 (5.76s/batch)
+    e0 batch 340/375 [4/4 of step 85/94] rows=16 (11c/5i) loss=0.4417 ce=0.4417 | 0:32:38 eta 0:03:21 (5.76s/batch)
+  >> epoch 0 step 85/94 (4 batches = 64 rows) loss=0.4088 ce=0.4088 | 0:32:38 eta 0:03:21 | donor cache 1296
+    e0 batch 341/375 [1/4 of step 86/94] rows=16 (11c/5i) loss=0.5889 ce=0.5889 | 0:32:43 eta 0:03:15 (5.76s/batch)
+    e0 batch 342/375 [2/4 of step 86/94] rows=16 (7c/9i) loss=0.8634 ce=0.8634 | 0:32:48 eta 0:03:09 (5.76s/batch)
+    e0 batch 343/375 [3/4 of step 86/94] rows=16 (10c/6i) loss=0.3392 ce=0.3392 | 0:32:54 eta 0:03:04 (5.76s/batch)
+    e0 batch 344/375 [4/4 of step 86/94] rows=16 (12c/4i) loss=0.5706 ce=0.5706 | 0:32:59 eta 0:02:58 (5.75s/batch)
+  >> epoch 0 step 86/94 (4 batches = 64 rows) loss=0.5905 ce=0.5905 | 0:32:59 eta 0:02:58 | donor cache 1299
+    e0 batch 345/375 [1/4 of step 87/94] rows=16 (12c/4i) loss=0.1772 ce=0.1772 | 0:33:04 eta 0:02:52 (5.75s/batch)
+    e0 batch 346/375 [2/4 of step 87/94] rows=16 (9c/7i) loss=0.4688 ce=0.4688 | 0:33:09 eta 0:02:46 (5.75s/batch)
+    e0 batch 347/375 [3/4 of step 87/94] rows=16 (9c/7i) loss=0.6897 ce=0.6897 | 0:33:14 eta 0:02:40 (5.75s/batch)
+    e0 batch 348/375 [4/4 of step 87/94] rows=16 (8c/8i) loss=0.6146 ce=0.6146 | 0:33:20 eta 0:02:35 (5.75s/batch)
+  >> epoch 0 step 87/94 (4 batches = 64 rows) loss=0.4876 ce=0.4876 | 0:33:20 eta 0:02:35 | donor cache 1304
+    e0 batch 349/375 [1/4 of step 88/94] rows=16 (10c/6i) loss=0.4160 ce=0.4160 | 0:33:26 eta 0:02:29 (5.75s/batch)
+    e0 batch 350/375 [2/4 of step 88/94] rows=16 (11c/5i) loss=0.5069 ce=0.5069 | 0:33:31 eta 0:02:23 (5.75s/batch)
+    e0 batch 351/375 [3/4 of step 88/94] rows=16 (12c/4i) loss=0.3338 ce=0.3338 | 0:33:36 eta 0:02:17 (5.74s/batch)
+    e0 batch 352/375 [4/4 of step 88/94] rows=16 (5c/11i) loss=0.5861 ce=0.5861 | 0:33:41 eta 0:02:12 (5.74s/batch)
+  >> epoch 0 step 88/94 (4 batches = 64 rows) loss=0.4607 ce=0.4607 | 0:33:41 eta 0:02:12 | donor cache 1309
+    e0 batch 353/375 [1/4 of step 89/94] rows=16 (9c/7i) loss=0.6751 ce=0.6751 | 0:33:47 eta 0:02:06 (5.74s/batch)
+    e0 batch 354/375 [2/4 of step 89/94] rows=16 (9c/7i) loss=0.5097 ce=0.5097 | 0:33:52 eta 0:02:00 (5.74s/batch)
+    e0 batch 355/375 [3/4 of step 89/94] rows=16 (9c/7i) loss=0.2574 ce=0.2574 | 0:33:56 eta 0:01:54 (5.74s/batch)
+    e0 batch 356/375 [4/4 of step 89/94] rows=16 (9c/7i) loss=0.4967 ce=0.4967 | 0:34:02 eta 0:01:48 (5.74s/batch)
+  >> epoch 0 step 89/94 (4 batches = 64 rows) loss=0.4847 ce=0.4847 | 0:34:02 eta 0:01:48 | donor cache 1312
+    e0 batch 357/375 [1/4 of step 90/94] rows=16 (9c/7i) loss=0.3308 ce=0.3308 | 0:34:07 eta 0:01:43 (5.73s/batch)
+    e0 batch 358/375 [2/4 of step 90/94] rows=16 (11c/5i) loss=0.3012 ce=0.3012 | 0:34:12 eta 0:01:37 (5.73s/batch)
+    e0 batch 359/375 [3/4 of step 90/94] rows=16 (9c/7i) loss=0.4335 ce=0.4335 | 0:34:17 eta 0:01:31 (5.73s/batch)
+    e0 batch 360/375 [4/4 of step 90/94] rows=16 (8c/8i) loss=0.9360 ce=0.9360 | 0:34:22 eta 0:01:25 (5.73s/batch)
+  >> epoch 0 step 90/94 (4 batches = 64 rows) loss=0.5004 ce=0.5004 | 0:34:22 eta 0:01:25 | donor cache 1314
+    e0 batch 361/375 [1/4 of step 91/94] rows=16 (10c/6i) loss=0.2634 ce=0.2634 | 0:34:27 eta 0:01:20 (5.73s/batch)
+    e0 batch 362/375 [2/4 of step 91/94] rows=16 (9c/7i) loss=0.3160 ce=0.3160 | 0:34:33 eta 0:01:14 (5.73s/batch)
+    e0 batch 363/375 [3/4 of step 91/94] rows=16 (7c/9i) loss=0.4820 ce=0.4820 | 0:34:38 eta 0:01:08 (5.73s/batch)
+    e0 batch 364/375 [4/4 of step 91/94] rows=16 (11c/5i) loss=0.4597 ce=0.4597 | 0:34:42 eta 0:01:02 (5.72s/batch)
+  >> epoch 0 step 91/94 (4 batches = 64 rows) loss=0.3803 ce=0.3803 | 0:34:42 eta 0:01:02 | donor cache 1316
+    e0 batch 365/375 [1/4 of step 92/94] rows=16 (9c/7i) loss=0.4817 ce=0.4817 | 0:34:47 eta 0:00:57 (5.72s/batch)
+    e0 batch 366/375 [2/4 of step 92/94] rows=16 (8c/8i) loss=0.6127 ce=0.6127 | 0:34:53 eta 0:00:51 (5.72s/batch)
+    e0 batch 367/375 [3/4 of step 92/94] rows=16 (11c/5i) loss=0.6458 ce=0.6458 | 0:34:58 eta 0:00:45 (5.72s/batch)
+    e0 batch 368/375 [4/4 of step 92/94] rows=16 (10c/6i) loss=0.4199 ce=0.4199 | 0:35:03 eta 0:00:40 (5.72s/batch)
+  >> epoch 0 step 92/94 (4 batches = 64 rows) loss=0.5400 ce=0.5400 | 0:35:03 eta 0:00:40 | donor cache 1321
+    e0 batch 369/375 [1/4 of step 93/94] rows=16 (10c/6i) loss=0.3237 ce=0.3237 | 0:35:08 eta 0:00:34 (5.71s/batch)
+    e0 batch 370/375 [2/4 of step 93/94] rows=16 (4c/12i) loss=0.9205 ce=0.9205 | 0:35:13 eta 0:00:28 (5.71s/batch)
+    e0 batch 371/375 [3/4 of step 93/94] rows=16 (8c/8i) loss=0.4883 ce=0.4883 | 0:35:18 eta 0:00:22 (5.71s/batch)
+    e0 batch 372/375 [4/4 of step 93/94] rows=16 (10c/6i) loss=0.1667 ce=0.1667 | 0:35:23 eta 0:00:17 (5.71s/batch)
+  >> epoch 0 step 93/94 (4 batches = 64 rows) loss=0.4748 ce=0.4748 | 0:35:23 eta 0:00:17 | donor cache 1325
+    e0 batch 373/375 [1/3 of step 94/94] rows=16 (4c/12i) loss=0.6599 ce=0.6599 | 0:35:29 eta 0:00:11 (5.71s/batch)
+    e0 batch 374/375 [2/3 of step 94/94] rows=16 (7c/9i) loss=0.4659 ce=0.4659 | 0:35:34 eta 0:00:05 (5.71s/batch)
+    e0 batch 375/375 [3/3 of step 94/94] rows=16 (11c/5i) loss=0.3936 ce=0.3936 | 0:35:39 eta 0:00:00 (5.71s/batch)
+  >> epoch 0 step 94/94 (3 batches = 48 rows) loss=0.5065 ce=0.5065 | 0:35:39 eta 0:00:00 | donor cache 1330
+  prompt cache: 72 prompt builds for 12000 row-sides (59 images, 24 templates, 683 golds)
+  donor cache: 1330 distinct donor states for 6000 rows
+  {"21": {"kind": "fixed_subspace", "dim": 256, "subspace_dim": 192, "dof": 12288}, "22": {"kind": "fixed_subspace", "dim": 512, "subspace_dim": 256, "dof": 65536}, "23": {"kind": "fixed_subspace", "dim": 512, "subspace_dim": 256, "dof": 65536}}
+  eval: 2000 rows from test -> results/head_das/flags/language_das_fixed_k192-256-256/predictions.jsonl
+    16/2000 | 0:00:22 eta 0:46:03 (1.39s/row)
+    32/2000 | 0:00:37 eta 0:38:41 (1.18s/row)
+    48/2000 | 0:00:45 eta 0:30:44 (0.94s/row)
+    64/2000 | 0:00:53 eta 0:27:12 (0.84s/row)
+    80/2000 | 0:01:00 eta 0:24:17 (0.76s/row)
+    96/2000 | 0:01:06 eta 0:21:58 (0.69s/row)
+    112/2000 | 0:01:12 eta 0:20:21 (0.65s/row)
+    128/2000 | 0:01:19 eta 0:19:16 (0.62s/row)
+    144/2000 | 0:01:25 eta 0:18:16 (0.59s/row)
+    160/2000 | 0:01:31 eta 0:17:31 (0.57s/row)
+    176/2000 | 0:01:36 eta 0:16:45 (0.55s/row)
+    192/2000 | 0:01:42 eta 0:16:06 (0.53s/row)
+    208/2000 | 0:01:48 eta 0:15:31 (0.52s/row)
+    224/2000 | 0:01:53 eta 0:14:58 (0.51s/row)
+    240/2000 | 0:01:58 eta 0:14:28 (0.49s/row)
+    256/2000 | 0:02:03 eta 0:14:02 (0.48s/row)
+    272/2000 | 0:02:09 eta 0:13:39 (0.47s/row)
+    288/2000 | 0:02:14 eta 0:13:18 (0.47s/row)
+    304/2000 | 0:02:19 eta 0:12:59 (0.46s/row)
+    320/2000 | 0:02:24 eta 0:12:39 (0.45s/row)
+    336/2000 | 0:02:29 eta 0:12:19 (0.44s/row)
+    352/2000 | 0:02:34 eta 0:12:02 (0.44s/row)
+    368/2000 | 0:02:39 eta 0:11:49 (0.43s/row)
+    384/2000 | 0:02:44 eta 0:11:34 (0.43s/row)
+    400/2000 | 0:02:49 eta 0:11:18 (0.42s/row)
+    416/2000 | 0:02:54 eta 0:11:02 (0.42s/row)
+    432/2000 | 0:02:58 eta 0:10:48 (0.41s/row)
+    448/2000 | 0:03:03 eta 0:10:36 (0.41s/row)
+    464/2000 | 0:03:08 eta 0:10:24 (0.41s/row)
+    480/2000 | 0:03:18 eta 0:10:28 (0.41s/row)
+    496/2000 | 0:03:27 eta 0:10:27 (0.42s/row)
+    512/2000 | 0:03:34 eta 0:10:23 (0.42s/row)
+    528/2000 | 0:03:41 eta 0:10:18 (0.42s/row)
+    544/2000 | 0:03:47 eta 0:10:09 (0.42s/row)
+    560/2000 | 0:03:54 eta 0:10:02 (0.42s/row)
+    576/2000 | 0:04:01 eta 0:09:58 (0.42s/row)
+    592/2000 | 0:04:07 eta 0:09:49 (0.42s/row)
+    608/2000 | 0:04:13 eta 0:09:40 (0.42s/row)
+    624/2000 | 0:04:19 eta 0:09:32 (0.42s/row)
+    640/2000 | 0:04:25 eta 0:09:24 (0.41s/row)
+    656/2000 | 0:04:31 eta 0:09:16 (0.41s/row)
+    672/2000 | 0:04:36 eta 0:09:06 (0.41s/row)
+    688/2000 | 0:04:41 eta 0:08:57 (0.41s/row)
+    704/2000 | 0:04:47 eta 0:08:49 (0.41s/row)
+    720/2000 | 0:04:52 eta 0:08:40 (0.41s/row)
+    736/2000 | 0:04:58 eta 0:08:32 (0.41s/row)
+    752/2000 | 0:05:04 eta 0:08:24 (0.40s/row)
+    768/2000 | 0:05:09 eta 0:08:15 (0.40s/row)
+    784/2000 | 0:05:14 eta 0:08:08 (0.40s/row)
+    800/2000 | 0:05:20 eta 0:08:00 (0.40s/row)
+    816/2000 | 0:05:25 eta 0:07:52 (0.40s/row)
+    832/2000 | 0:05:30 eta 0:07:44 (0.40s/row)
+    848/2000 | 0:05:35 eta 0:07:36 (0.40s/row)
+    864/2000 | 0:05:41 eta 0:07:28 (0.40s/row)
+    880/2000 | 0:05:47 eta 0:07:22 (0.39s/row)
+    896/2000 | 0:05:52 eta 0:07:14 (0.39s/row)
+    912/2000 | 0:05:57 eta 0:07:06 (0.39s/row)
+    928/2000 | 0:06:01 eta 0:06:58 (0.39s/row)
+    944/2000 | 0:06:07 eta 0:06:50 (0.39s/row)
+    960/2000 | 0:06:12 eta 0:06:43 (0.39s/row)
+    976/2000 | 0:06:22 eta 0:06:41 (0.39s/row)
+    992/2000 | 0:06:30 eta 0:06:37 (0.39s/row)
+    1008/2000 | 0:06:38 eta 0:06:32 (0.40s/row)
+    1024/2000 | 0:06:45 eta 0:06:26 (0.40s/row)
+    1040/2000 | 0:06:51 eta 0:06:19 (0.40s/row)
+    1056/2000 | 0:06:56 eta 0:06:12 (0.39s/row)
+    1072/2000 | 0:07:04 eta 0:06:07 (0.40s/row)
+    1088/2000 | 0:07:10 eta 0:06:00 (0.40s/row)
+    1104/2000 | 0:07:16 eta 0:05:54 (0.40s/row)
+    1120/2000 | 0:07:22 eta 0:05:47 (0.39s/row)
+    1136/2000 | 0:07:28 eta 0:05:40 (0.39s/row)
+    1152/2000 | 0:07:33 eta 0:05:34 (0.39s/row)
+    1168/2000 | 0:07:40 eta 0:05:27 (0.39s/row)
+    1184/2000 | 0:07:45 eta 0:05:20 (0.39s/row)
+    1200/2000 | 0:07:49 eta 0:05:13 (0.39s/row)
+    1216/2000 | 0:07:55 eta 0:05:06 (0.39s/row)
+    1232/2000 | 0:08:01 eta 0:04:59 (0.39s/row)
+    1248/2000 | 0:08:06 eta 0:04:53 (0.39s/row)
+    1264/2000 | 0:08:11 eta 0:04:46 (0.39s/row)
+    1280/2000 | 0:08:15 eta 0:04:38 (0.39s/row)
+    1296/2000 | 0:08:20 eta 0:04:32 (0.39s/row)
+    1312/2000 | 0:08:26 eta 0:04:25 (0.39s/row)
+    1328/2000 | 0:08:32 eta 0:04:19 (0.39s/row)
+    1344/2000 | 0:08:36 eta 0:04:12 (0.38s/row)
+    1360/2000 | 0:08:41 eta 0:04:05 (0.38s/row)
+    1376/2000 | 0:08:46 eta 0:03:58 (0.38s/row)
+    1392/2000 | 0:08:51 eta 0:03:52 (0.38s/row)
+    1408/2000 | 0:08:56 eta 0:03:45 (0.38s/row)
+    1424/2000 | 0:09:01 eta 0:03:39 (0.38s/row)
+    1440/2000 | 0:09:06 eta 0:03:32 (0.38s/row)
+    1456/2000 | 0:09:10 eta 0:03:25 (0.38s/row)
+    1472/2000 | 0:09:15 eta 0:03:19 (0.38s/row)
+    1488/2000 | 0:09:26 eta 0:03:15 (0.38s/row)
+    1504/2000 | 0:09:34 eta 0:03:09 (0.38s/row)
+    1520/2000 | 0:09:42 eta 0:03:03 (0.38s/row)
+    1536/2000 | 0:09:49 eta 0:02:58 (0.38s/row)
+    1552/2000 | 0:09:55 eta 0:02:52 (0.38s/row)
+    1568/2000 | 0:10:02 eta 0:02:45 (0.38s/row)
+    1584/2000 | 0:10:08 eta 0:02:39 (0.38s/row)
+    1600/2000 | 0:10:15 eta 0:02:33 (0.38s/row)
+    1616/2000 | 0:10:21 eta 0:02:27 (0.38s/row)
+    1632/2000 | 0:10:27 eta 0:02:21 (0.38s/row)
+    1648/2000 | 0:10:33 eta 0:02:15 (0.38s/row)
+    1664/2000 | 0:10:40 eta 0:02:09 (0.38s/row)
+    1680/2000 | 0:10:45 eta 0:02:02 (0.38s/row)
+    1696/2000 | 0:10:51 eta 0:01:56 (0.38s/row)
+    1712/2000 | 0:10:56 eta 0:01:50 (0.38s/row)
+    1728/2000 | 0:11:01 eta 0:01:44 (0.38s/row)
+    1744/2000 | 0:11:07 eta 0:01:37 (0.38s/row)
+    1760/2000 | 0:11:13 eta 0:01:31 (0.38s/row)
+    1776/2000 | 0:11:18 eta 0:01:25 (0.38s/row)
+    1792/2000 | 0:11:22 eta 0:01:19 (0.38s/row)
+    1808/2000 | 0:11:27 eta 0:01:13 (0.38s/row)
+    1824/2000 | 0:11:32 eta 0:01:06 (0.38s/row)
+    1840/2000 | 0:11:38 eta 0:01:00 (0.38s/row)
+    1856/2000 | 0:11:43 eta 0:00:54 (0.38s/row)
+    1872/2000 | 0:11:47 eta 0:00:48 (0.38s/row)
+    1888/2000 | 0:11:52 eta 0:00:42 (0.38s/row)
+    1904/2000 | 0:11:58 eta 0:00:36 (0.38s/row)
+    1920/2000 | 0:12:03 eta 0:00:30 (0.38s/row)
+    1936/2000 | 0:12:08 eta 0:00:24 (0.38s/row)
+    1952/2000 | 0:12:14 eta 0:00:18 (0.38s/row)
+    1968/2000 | 0:12:18 eta 0:00:12 (0.38s/row)
+    1984/2000 | 0:12:23 eta 0:00:05 (0.37s/row)
+    2000/2000 | 0:12:29 eta 0:00:00 (0.37s/row)
+  eval done in 0:12:29
+wrote 2000 predictions -> results/head_das/flags/language_das_fixed_k192-256-256/predictions.jsonl
+score with:
+  python /workspace/VADE/eval/score.py --entity flags --attribute language --predictions results/head_das/flags/language_das_fixed_k192-256-256/predictions.jsonl
+=== 2026-09-20T17:38:12+00:00 OK: python methods/head_das.py --attribute language --method das_fixed --subspace_dim 192,256,256 --train_rows 6000 --eval_rows 2000 --batch_size 16 --grad_accum_steps 4 --out_dir results/head_das/flags/language_das_fixed_k192-256-256 ===
+=== 2026-09-20T17:38:12+00:00 START: python ../VADE/eval/score.py --entity flags --attribute language --predictions results/head_das/flags/language_das_fixed_k192-256-256/predictions.jsonl ===
+WARNING: 12052 tuple rows had no matching prediction (of 14052 total) -- scoring on the remaining 2000.
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k192-256-256/predictions_summary.json
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k192-256-256/predictions_summary.md
+=== 2026-09-20T17:38:12+00:00 OK: python ../VADE/eval/score.py --entity flags --attribute language --predictions results/head_das/flags/language_das_fixed_k192-256-256/predictions.jsonl ===
