@@ -1,0 +1,16 @@
+=== K=16 ===
+WARNING: 10052 tuple rows had no matching prediction (of 14052 total) -- scoring on the remaining 4000.
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k16/predictions_summary.json
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k16/predictions_summary.md
+=== K=32 ===
+WARNING: 10052 tuple rows had no matching prediction (of 14052 total) -- scoring on the remaining 4000.
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k32/predictions_summary.json
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k32/predictions_summary.md
+=== K=64 ===
+WARNING: 10052 tuple rows had no matching prediction (of 14052 total) -- scoring on the remaining 4000.
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k64/predictions_summary.json
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k64/predictions_summary.md
+=== K=128 ===
+WARNING: 10052 tuple rows had no matching prediction (of 14052 total) -- scoring on the remaining 4000.
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k128/predictions_summary.json
+wrote /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k128/predictions_summary.md

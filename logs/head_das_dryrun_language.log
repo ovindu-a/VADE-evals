@@ -1,0 +1,9 @@
+[head_das] flags/language method=das_fixed K=8/block
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  train train: 32811 rows (18828 cause / 13983 iso), iso_weight=1.0
+  eval  test: 14052 rows
+  patch columns per forward: last 3 (answer tokens 0..2)
+  -> /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k8
+    items: 59 train / 25 eval, overlap 0 -- VADE splits by ITEM, so eval is on flags the rotation has never seen
+    blocks [21, 22, 23]; head columns per block {21: 256, 22: 512, 23: 512} (assuming head_dim=128)
+Grid valid.

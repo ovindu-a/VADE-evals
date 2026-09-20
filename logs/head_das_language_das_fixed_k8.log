@@ -1,0 +1,35 @@
+[head_das] flags/language method=das_fixed K=8/block
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  train train: 64 rows (37 cause / 27 iso), iso_weight=1.0
+  eval  test: 64 rows
+  patch columns per forward: last 3 (answer tokens 0..2)
+  -> /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k8
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<11:18,  1.07it/s]Loading weights:   0%|          | 2/729 [00:01<10:12,  1.19it/s]Loading weights:   1%|          | 5/729 [00:02<04:13,  2.86it/s]Loading weights:   2%|▏         | 15/729 [00:02<01:05, 10.84it/s]Loading weights:   2%|▏         | 18/729 [00:02<01:13,  9.63it/s]Loading weights:   4%|▍         | 28/729 [00:03<00:44, 15.76it/s]Loading weights:   5%|▍         | 34/729 [00:03<00:34, 20.30it/s]Loading weights:   5%|▌         | 40/729 [00:03<00:31, 21.73it/s]Loading weights:   6%|▌         | 44/729 [00:03<00:36, 18.83it/s]Loading weights:   7%|▋         | 52/729 [00:04<00:34, 19.48it/s]Loading weights:   8%|▊         | 55/729 [00:04<00:41, 16.42it/s]Loading weights:   9%|▉         | 64/729 [00:04<00:40, 16.41it/s]Loading weights:  10%|▉         | 70/729 [00:05<00:31, 20.77it/s]Loading weights:  10%|█         | 76/729 [00:05<00:29, 21.80it/s]Loading weights:  11%|█         | 79/729 [00:05<00:36, 17.98it/s]Loading weights:  12%|█▏        | 87/729 [00:05<00:27, 23.41it/s]Loading weights:  12%|█▏        | 90/729 [00:06<00:35, 18.22it/s]Loading weights:  14%|█▎        | 100/729 [00:06<00:21, 28.81it/s]Loading weights:  14%|█▍        | 105/729 [00:06<00:22, 28.27it/s]Loading weights:  15%|█▌        | 112/729 [00:06<00:19, 31.37it/s]Loading weights:  16%|█▌        | 116/729 [00:06<00:21, 28.69it/s]Loading weights:  17%|█▋        | 125/729 [00:06<00:15, 38.29it/s]Loading weights:  19%|█▊        | 136/729 [00:07<00:12, 47.41it/s]Loading weights:  19%|█▉        | 142/729 [00:07<00:14, 40.56it/s]Loading weights:  20%|██        | 147/729 [00:07<00:16, 35.33it/s]Loading weights:  21%|██        | 151/729 [00:07<00:16, 34.47it/s]Loading weights:  22%|██▏       | 160/729 [00:07<00:12, 44.75it/s]Loading weights:  23%|██▎       | 166/729 [00:08<00:17, 32.90it/s]Loading weights:  24%|██▎       | 173/729 [00:08<00:17, 31.70it/s]Loading weights:  24%|██▍       | 177/729 [00:08<00:17, 31.68it/s]Loading weights:  25%|██▌       | 184/729 [00:08<00:15, 34.57it/s]Loading weights:  26%|██▌       | 188/729 [00:08<00:15, 33.94it/s]Loading weights:  27%|██▋       | 196/729 [00:08<00:12, 42.61it/s]Loading weights:  28%|██▊       | 201/729 [00:09<00:17, 30.71it/s]Loading weights:  29%|██▊       | 208/729 [00:09<00:15, 32.75it/s]Loading weights:  29%|██▉       | 212/729 [00:09<00:19, 26.94it/s]Loading weights:  30%|███       | 220/729 [00:09<00:15, 31.98it/s]Loading weights:  31%|███       | 224/729 [00:10<00:22, 22.29it/s]Loading weights:  32%|███▏      | 232/729 [00:10<00:17, 28.01it/s]Loading weights:  32%|███▏      | 236/729 [00:10<00:25, 18.97it/s]Loading weights:  33%|███▎      | 242/729 [00:10<00:20, 24.13it/s]Loading weights:  34%|███▎      | 246/729 [00:11<00:32, 15.08it/s]Loading weights:  35%|███▌      | 256/729 [00:11<00:26, 17.79it/s]Loading weights:  36%|███▌      | 259/729 [00:12<00:26, 17.60it/s]Loading weights:  37%|███▋      | 268/729 [00:12<00:19, 23.62it/s]Loading weights:  37%|███▋      | 272/729 [00:12<00:21, 21.61it/s]Loading weights:  38%|███▊      | 279/729 [00:12<00:18, 24.63it/s]Loading weights:  40%|████      | 294/729 [00:12<00:10, 41.13it/s]Loading weights:  42%|████▏     | 305/729 [00:12<00:08, 51.30it/s]Loading weights:  43%|████▎     | 316/729 [00:13<00:06, 61.07it/s]Loading weights:  44%|████▍     | 324/729 [00:13<00:06, 62.80it/s]Loading weights:  46%|████▌     | 332/729 [00:13<00:06, 63.35it/s]Loading weights:  57%|█████▋    | 415/729 [00:13<00:01, 241.75it/s]Loading weights:  69%|██████▉   | 505/729 [00:13<00:00, 405.25it/s]Loading weights:  82%|████████▏ | 599/729 [00:13<00:00, 544.38it/s]Loading weights:  95%|█████████▌| 693/729 [00:13<00:00, 649.15it/s]Loading weights: 100%|██████████| 729/729 [00:13<00:00, 53.12it/s] 
+  train: 64 rows (37 cause / 27 iso), 16 batches x 1 epochs = 1 opt steps
+  params: 10,240 over blocks [21, 22, 23] (dims [256, 512, 512])
+/workspace/VADE-evals/methods/head_das.py:419: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  accum += float(loss); accum_ce += float(ce); accum_l1 += l1
+    epoch 0 step 1/1 loss=84.1787 ce=84.1787
+  {"21": {"kind": "fixed_subspace", "dim": 256, "subspace_dim": 8}, "22": {"kind": "fixed_subspace", "dim": 512, "subspace_dim": 8}, "23": {"kind": "fixed_subspace", "dim": 512, "subspace_dim": 8}}
+  eval: 64 rows from test -> /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k8/predictions.jsonl
+    4/64
+    8/64
+    12/64
+    16/64
+    20/64
+    24/64
+    28/64
+    32/64
+    36/64
+    40/64
+    44/64
+    48/64
+    52/64
+    56/64
+    60/64
+    64/64
+wrote 64 predictions -> /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k8/predictions.jsonl
+score with:
+  python /workspace/VADE/eval/score.py --entity flags --attribute language --predictions /workspace/VADE-evals/results/head_das/flags/language_das_fixed_k8/predictions.jsonl
