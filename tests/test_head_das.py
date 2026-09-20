@@ -385,3 +385,146 @@ class TestPromptCacheLogic(unittest.TestCase):
         self.cache.prompt(None, None, None, "AA", "language", "t1", tmpl)
         with self.assertRaises(AssertionError):
             self.cache.prompt(None, None, None, "BB", "language", "t1", tmpl)
+
+
+@unittest.skipUnless(HAVE_VADE, "sibling VADE repo not present")
+class TestSubspaceSpec(unittest.TestCase):
+    """--subspace_dim: one value, per-block values, or 'full'."""
+
+    BLOCKS = [21, 22, 23]
+    WIDTHS = {21: 256, 22: 512, 23: 512}
+
+    def test_a_single_value_applies_to_every_block(self):
+        self.assertEqual(head_das.parse_subspace_spec("128", 3), [128, 128, 128])
+
+    def test_per_block_values_keep_their_order(self):
+        self.assertEqual(head_das.parse_subspace_spec("128,64,32", 3), [128, 64, 32])
+
+    def test_full_means_each_blocks_own_width(self):
+        d = head_das.resolve_subspace_dims("full", self.BLOCKS, self.WIDTHS)
+        self.assertEqual(d, self.WIDTHS)
+
+    def test_full_is_allowed_per_block_too(self):
+        d = head_das.resolve_subspace_dims("full,64,64", self.BLOCKS, self.WIDTHS)
+        self.assertEqual(d, {21: 256, 22: 64, 23: 64})
+
+    def test_values_are_clamped_to_each_blocks_width(self):
+        # the K=256 arm: block 21 silently becomes a full swap.
+        d = head_das.resolve_subspace_dims("256", self.BLOCKS, self.WIDTHS)
+        self.assertEqual(d, {21: 256, 22: 256, 23: 256})
+
+    def test_resolution_pairs_values_with_SORTED_blocks(self):
+        d = head_das.resolve_subspace_dims("8,16,32", [23, 21, 22], self.WIDTHS)
+        self.assertEqual(d, {21: 8, 22: 16, 23: 32})
+
+    def test_wrong_number_of_values_is_rejected(self):
+        with self.assertRaises(AssertionError):
+            head_das.parse_subspace_spec("8,16", 3)
+
+    def test_non_numeric_is_rejected(self):
+        with self.assertRaises(AssertionError):
+            head_das.parse_subspace_spec("8,wide,16", 3)
+
+    def test_zero_and_negative_are_rejected(self):
+        for spec in ("0", "-4", "8,0,8"):
+            with self.assertRaises(AssertionError):
+                head_das.parse_subspace_spec(spec, 3)
+
+
+class TestSubspaceDOF(unittest.TestCase):
+    """k(dim-k), the Grassmannian dimension -- NOT the stored parameter count."""
+
+    def test_dof_is_zero_at_full_width(self):
+        self.assertEqual(head_das.subspace_dof(512, 512), 0)
+
+    def test_dof_is_zero_when_k_exceeds_the_width(self):
+        self.assertEqual(head_das.subspace_dof(999, 256), 0)
+
+    def test_dof_is_below_the_stored_parameter_count(self):
+        self.assertLess(head_das.subspace_dof(128, 512), 128 * 512)
+
+    def test_dof_peaks_at_half_width(self):
+        w = 512
+        best = max(range(1, w + 1), key=lambda k: head_das.subspace_dof(k, w))
+        self.assertEqual(best, w // 2)
+
+    def test_k_and_its_complement_have_equal_dof(self):
+        self.assertEqual(head_das.subspace_dof(8, 256), head_das.subspace_dof(248, 256))
+
+    def test_zero_dof_block_really_is_the_full_swap(self):
+        """The claim the guard rests on: at k == dim the output IS the source,
+        for ANY weights, so training it is a no-op."""
+        import torch
+        iv = head_das.make_intervention("das_fixed", 32, 32, VADE_ROOT)
+        base, src = torch.randn(4, 3, 32), torch.randn(4, 3, 32)
+        self.assertTrue(torch.allclose(iv(base, src), src, atol=1e-4))
+        iv(base, src).pow(2).sum().backward()
+        g = max(p.grad.abs().max().item() for p in iv.parameters())
+        self.assertLess(g, 1e-2)                       # gauge only
+
+    def test_a_trainable_block_is_NOT_the_full_swap(self):
+        import torch
+        iv = head_das.make_intervention("das_fixed", 32, 8, VADE_ROOT)
+        base, src = torch.randn(4, 3, 32), torch.randn(4, 3, 32)
+        self.assertFalse(torch.allclose(iv(base, src), src, atol=1e-2))
+        self.assertGreater(head_das.subspace_dof(8, 32), 0)
+
+
+class TestBuildInterventions(unittest.TestCase):
+
+    def test_each_block_gets_its_own_width(self):
+        colmap = {21: list(range(256)), 22: list(range(512))}
+        ivs = head_das.build_interventions("das_fixed", colmap, {21: 8, 22: 16}, VADE_ROOT, "cpu")
+        self.assertEqual(ivs[21].proj.weight.shape, (8, 256))
+        self.assertEqual(ivs[22].proj.weight.shape, (16, 512))
+
+    def test_stats_report_dof_per_block(self):
+        colmap = {21: list(range(256)), 22: list(range(512))}
+        ivs = head_das.build_interventions("das_fixed", colmap, {21: 256, 22: 16}, VADE_ROOT, "cpu")
+        s = head_das.intervention_stats("das_fixed", ivs)
+        self.assertEqual(s[21]["dof"], 0)              # pinned to the full swap
+        self.assertEqual(s[22]["dof"], 16 * (512 - 16))
+
+
+class TestSparsityTerm(unittest.TestCase):
+    class _Args:
+        def __init__(self, **kw):
+            self.l1_coef, self.mask_coef = 1e-3, 1e-3
+            self.__dict__.update(kw)
+
+    def test_das_fixed_has_no_term(self):
+        ivs = {21: head_das.make_intervention("das_fixed", 32, 4, VADE_ROOT)}
+        name, t, coef = head_das.sparsity_term("das_fixed", ivs, self._Args())
+        self.assertIsNone(name)
+        self.assertIsNone(t)
+
+    def test_das_rotated_counts_soft_dimensions_and_carries_gradient(self):
+        ivs = {b: head_das.make_intervention("das_rotated", 32, 0, VADE_ROOT) for b in (21, 22)}
+        for iv in ivs.values():
+            iv.set_temperature(50.0)
+        name, t, coef = head_das.sparsity_term("das_rotated", ivs, self._Args())
+        self.assertEqual(name, "maskK")
+        self.assertAlmostEqual(float(t), 2 * 32 * 0.9526, places=1)   # sigmoid(150/50)
+        self.assertTrue(t.requires_grad, "the penalty must reach the mask")
+        t.backward()
+        self.assertIsNotNone(ivs[21].masks.grad)
+
+    def test_a_closed_mask_costs_near_zero(self):
+        iv = head_das.make_intervention("das_rotated", 32, 0, VADE_ROOT)
+        with torch.no_grad():
+            iv.masks.fill_(-1e4)
+        iv.set_temperature(1.0)
+        _, t, _ = head_das.sparsity_term("das_rotated", {21: iv}, self._Args())
+        self.assertLess(float(t), 1e-3)
+
+    def test_zero_coefficient_disables_the_term(self):
+        ivs = {21: head_das.make_intervention("das_rotated", 32, 0, VADE_ROOT)}
+        name, t, _ = head_das.sparsity_term("das_rotated", ivs, self._Args(mask_coef=0.0))
+        self.assertIsNone(name, "mask_coef=0 must remove the term, not scale it to zero")
+
+    def test_dbm_uses_the_l1_of_the_raw_mask(self):
+        from methods.dbm.intervention import l1_penalty
+        ivs = {21: head_das.make_intervention("dbm", 32, 0, VADE_ROOT)}
+        name, t, coef = head_das.sparsity_term("dbm", ivs, self._Args())
+        self.assertEqual(name, "l1")
+        self.assertAlmostEqual(float(t), float(l1_penalty(ivs[21])), places=5)

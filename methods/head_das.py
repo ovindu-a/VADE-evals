@@ -172,6 +172,66 @@ def make_intervention(method, dim, subspace_dim, vade_root):
     raise ValueError(f"unknown method {method!r} (expected one of {METHODS})")
 
 
+def parse_subspace_spec(spec, n_blocks):
+    """`--subspace_dim` -> one width per block, in sorted-block order.
+
+    Three forms, because K is NOT naturally one number here: the traced heads
+    are unevenly distributed over blocks (common10 is 2/4/4 heads = 256/512/512
+    columns), so a single K gives block 21 twice the fraction of its space that
+    22 and 23 get.
+
+      "128"         every block 128 (clamped to its own width)
+      "128,64,64"   one per block, in sorted-block order
+      "full"        each block's own width -- the ceiling arm
+
+    `None` in the returned list means "this block's full width", resolved once
+    the real column counts are known."""
+    spec = str(spec).strip()
+    if spec.lower() == "full":
+        return [None] * n_blocks
+    parts = [x.strip() for x in spec.split(",")]
+    assert len(parts) in (1, n_blocks), (
+        f"--subspace_dim {spec!r} has {len(parts)} values but there are {n_blocks} blocks; "
+        f"pass one value for all blocks, {n_blocks} values, or 'full'")
+    out = []
+    for x in parts:
+        assert x.lower() == "full" or (x.lstrip("-").isdigit()), \
+            f"--subspace_dim component {x!r} is neither an integer nor 'full'"
+        if x.lower() == "full":
+            out.append(None)
+        else:
+            k = int(x)
+            assert k > 0, f"--subspace_dim component {k} must be > 0"
+            out.append(k)
+    return out * n_blocks if len(parts) == 1 else out
+
+
+def subspace_dof(k, dim):
+    """Effective degrees of freedom of a das_fixed block: dim Gr(k, dim).
+
+    `FixedSubspaceIntervention`'s output depends on R only through R^T R, so two
+    R's spanning the same subspace are the SAME function -- the class is the
+    Grassmannian, of dimension k(dim-k), not the k*dim stored parameters. It is
+    0 at k == dim: there R^T R = I identically, the intervention IS the full
+    swap whatever the weights say, and every gradient is pure gauge. A run like
+    that is a ceiling measurement, not training."""
+    k = min(k, dim)
+    return k * (dim - k)
+
+
+def resolve_subspace_dims(spec, blocks, widths):
+    """-> {block: k}, with None/oversized entries clamped to the block's width."""
+    vals = parse_subspace_spec(spec, len(blocks))
+    return {b: (widths[b] if v is None else min(v, widths[b]))
+            for b, v in zip(sorted(blocks), vals)}
+
+
+def build_interventions(method, colmap, sub_dims, vade_root, device):
+    """One intervention per block, on that block's head columns."""
+    return {b: make_intervention(method, len(colmap[b]), sub_dims[b], vade_root).to(device)
+            for b in sorted(colmap)}
+
+
 def temperature_schedule_for(method, n_steps, vade_root):
     """-> [n_steps] temperatures, or None for a method with no mask to anneal."""
     if method == "dbm":
@@ -189,8 +249,11 @@ def intervention_stats(method, interventions):
     for b, iv in sorted(interventions.items()):
         with torch.no_grad():
             if method == "das_fixed":
-                out[b] = {"kind": "fixed_subspace", "dim": int(iv.proj.weight.shape[1]),
-                          "subspace_dim": int(iv.subspace_dim)}
+                dim, k = int(iv.proj.weight.shape[1]), int(iv.subspace_dim)
+                out[b] = {"kind": "fixed_subspace", "dim": dim, "subspace_dim": k,
+                          # k(dim-k), not k*dim: see subspace_dof(). 0 means this
+                          # block was an untrainable full swap.
+                          "dof": subspace_dof(k, dim)}
             elif method == "das_rotated":
                 m = torch.sigmoid(iv.masks / iv.temperature)
                 out[b] = {"kind": "rotated_mask", "dim": int(iv.masks.shape[0]),
@@ -511,6 +574,34 @@ def weighted_ce(logits, batch, iso_weight):
 # Train
 # ---------------------------------------------------------------------------
 
+def sparsity_term(method, interventions, args):
+    """-> (name, raw, tensor_or_None): the pressure that shrinks the edit.
+
+    `das_fixed` needs none -- K is fixed by construction, so the subspace cannot
+    grow. The other two learn their own width and therefore need a cost, or the
+    cause objective (free at this site -- R10) simply keeps every dimension and
+    reproduces the full swap:
+
+      dbm          l1_coef * ||m||_1 on the raw mask, RAVEL's own formulation.
+      das_rotated  mask_coef * sum(sigmoid(m / T)), i.e. the SOFT DIMENSION
+                   COUNT of the learned rotation -- Boundless DAS's boundary
+                   penalty. VADE's own trainer never instantiates
+                   RotatedSpaceIntervention and so has no equivalent term;
+                   without one the mask starts at sigmoid(150/50) ~ 0.95 on
+                   every dimension and has no reason to ever come down.
+
+    `raw` is the interpretable number to watch (mask magnitude / effective K);
+    the loss gets coefficient * raw."""
+    if method == "dbm" and args.l1_coef:
+        from methods.dbm.intervention import l1_penalty
+        t = sum(l1_penalty(iv) for iv in interventions.values())
+        return "l1", t, args.l1_coef
+    if method == "das_rotated" and args.mask_coef:
+        t = sum(iv.mask_sum for iv in interventions.values())
+        return "maskK", t, args.mask_coef
+    return None, None, 0.0
+
+
 def fmt_hms(seconds):
     """-> 'H:MM:SS'. Used for both elapsed and ETA so the two are comparable at
     a glance; ETA is a plain linear extrapolation from the mean batch so far,
@@ -547,12 +638,11 @@ def chunks(seq, n):
         yield seq[i:i + n]
 
 
-def train(adapter, model, processor, args, heads, colmap, items, entity_dir, lookup, pad_id, log_path):
+def train(adapter, model, processor, args, heads, colmap, items, entity_dir, lookup, pad_id,
+          log_path, interventions):
     import torch
 
     blocks = sorted(colmap)
-    interventions = {b: make_intervention(args.method, len(colmap[b]), args.subspace_dim, args.vade_root)
-                     .to(model.device) for b in blocks}
     params = [p for iv in interventions.values() for p in iv.parameters() if p.requires_grad]
     n_params = sum(p.numel() for p in params)
     opt = torch.optim.Adam(params, lr=args.lr)
@@ -581,29 +671,25 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
     t0 = time.time()
     total_batches = args.epochs * len(batches)
     for epoch in range(args.epochs):
-        accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+        accum, accum_ce, accum_reg = 0.0, 0.0, 0.0
         for i, chunk in enumerate(batches):
             in_group, group_size = accum_group(i, len(batches), args.grad_accum_steps)
             batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, prompt_cache)
             donor_cols = donor_columns(adapter, model, blocks, colmap, batch, pad_id, donor_cache)
             logits = intervened_logits(adapter, model, interventions, colmap, donor_cols, batch)
             ce = weighted_ce(logits, batch, args.iso_weight)
-            loss = ce
-            l1 = 0.0
-            if args.method == "dbm" and args.l1_coef:
-                from methods.dbm.intervention import l1_penalty
-                l1_term = sum(l1_penalty(iv) for iv in interventions.values())
-                l1 = float(l1_term)
-                loss = ce + args.l1_coef * l1_term
+            reg_name, reg_t, reg_coef = sparsity_term(args.method, interventions, args)
+            reg = 0.0 if reg_t is None else float(reg_t)
+            loss = ce if reg_t is None else ce + reg_coef * reg_t
             (loss / group_size).backward()
-            accum += float(loss); accum_ce += float(ce); accum_l1 += l1
+            accum += float(loss); accum_ce += float(ce); accum_reg += reg
 
             n_cause_b = int(batch["is_cause"].sum())
             done = epoch * len(batches) + i + 1
             elapsed, eta, rate = progress(done, total_batches, t0)
             losses = f"loss={float(loss):.4f} ce={float(ce):.4f}"
-            if args.method == "dbm":
-                losses += f" l1={l1:.1f} l1_term={args.l1_coef * l1:.4f}"
+            if reg_name:
+                losses += f" {reg_name}={reg:.1f} ({reg_coef * reg:.4f})"
             if args.log_every and (i % args.log_every == 0 or i == len(batches) - 1):
                 print(f"    e{epoch} batch {i + 1}/{len(batches)} "
                       f"[{in_group + 1}/{group_size} of step {step + 1}/{n_opt_steps}] "
@@ -612,7 +698,7 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
             log.write(json.dumps({"kind": "batch", "epoch": epoch, "batch": i,
                                   "opt_step": step + 1, "rows": len(chunk),
                                   "n_cause": n_cause_b, "loss": float(loss), "ce": float(ce),
-                                  "l1": l1, "elapsed_s": round(time.time() - t0, 1)}) + "\n")
+                                  "reg": reg, "reg_name": reg_name, "elapsed_s": round(time.time() - t0, 1)}) + "\n")
 
             if in_group + 1 == group_size:
                 if args.grad_clip_norm > 0:
@@ -625,7 +711,7 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                 step += 1
                 rec = {"kind": "opt_step", "epoch": epoch, "opt_step": step,
                        "group_size": group_size, "loss": accum / group_size,
-                       "ce": accum_ce / group_size, "l1": accum_l1 / group_size,
+                       "ce": accum_ce / group_size, "reg": accum_reg / group_size,
                        "elapsed_s": round(time.time() - t0, 1),
                        "temperature": None if temps is None
                        else float(temps[min(step - 1, len(temps) - 1)])}
@@ -634,11 +720,11 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                 print(f"  >> epoch {epoch} step {step}/{n_opt_steps} "
                       f"({group_size} batches = {group_size * args.batch_size} rows) "
                       f"loss={accum / group_size:.4f} ce={accum_ce / group_size:.4f}"
-                      + (f" l1={accum_l1 / group_size:.1f}" if args.method == "dbm" else "")
+                      + (f" {reg_name}={accum_reg / group_size:.1f}" if reg_name else "")
                       + f" | {e_s} eta {eta_s}"
                       + ("" if donor_cache is None else f" | donor cache {len(donor_cache)}"),
                       flush=True)
-                accum, accum_ce, accum_l1 = 0.0, 0.0, 0.0
+                accum, accum_ce, accum_reg = 0.0, 0.0, 0.0
     log.close()
     if prompt_cache is not None:
         print(f"  prompt cache: {prompt_cache.builds} prompt builds for "
@@ -726,9 +812,14 @@ def main():
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
     ap.add_argument("--method", default="das_fixed", choices=list(METHODS))
-    ap.add_argument("--subspace_dim", type=int, default=8, metavar="K",
-                    help="das_fixed only: the FIXED subspace width, per block. das_rotated and dbm "
-                         "learn their own width via an annealed mask.")
+    ap.add_argument("--subspace_dim", default="8", metavar="K",
+                    help="das_fixed only: the FIXED subspace width. One value for every block "
+                         "(\"128\"), one PER block in sorted-block order (\"128,64,64\"), or "
+                         "\"full\" for each block's own width -- the ceiling arm, which has zero "
+                         "trainable degrees of freedom and is a measurement, not a run. Per-block "
+                         "values matter because common10's heads are spread 2/4/4 over blocks "
+                         "21/22/23, so a single K is a different FRACTION of each block's space. "
+                         "das_rotated and dbm learn their own width via an annealed mask.")
     ap.add_argument("--heads", default=COMMON10,
                     help="BLOCK.HEAD list. Default is R8/R10's common10.")
     ap.add_argument("--train_split", default="train")
@@ -757,7 +848,16 @@ def main():
                     help="Multiplier on iso rows' loss. The train split is ~57%% cause but the "
                          "metric weights cause 1/2 and the iso mean 1/2; raise this if training "
                          "lands in the cause~100/iso~0 corner (i.e. relearned the full swap).")
-    ap.add_argument("--l1_coef", type=float, default=1e-3, help="dbm only.")
+    ap.add_argument("--l1_coef", type=float, default=1e-3, metavar="C",
+                    help="dbm only: coefficient on ||m||_1 (RAVEL's reported optimum). 0 disables "
+                         "the term, which lets the mask keep every dimension.")
+    ap.add_argument("--mask_coef", type=float, default=1e-3, metavar="C",
+                    help="das_rotated only: coefficient on sum(sigmoid(m/T)), the soft dimension "
+                         "count -- Boundless DAS's boundary penalty. This is the ONLY thing pulling "
+                         "the learned K down: the mask inits near a full swap (sigmoid(150/50) ~ "
+                         "0.95 everywhere) and cause is free at this site, so at 0 the run will "
+                         "simply reproduce R10's full head swap. At 1e-3 a fully-open mask costs "
+                         "~1.28, comparable to the CE term; sweep it and read `maskK`.")
     ap.add_argument("--no_prompt_cache", action="store_true",
                     help="Rebuild every row's image preprocessing and tokenization from scratch. "
                          "~200x slower; use only to rule the cache out as a suspect.")
@@ -770,14 +870,29 @@ def main():
     ap.add_argument("--max_new_tokens", type=int, default=12)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out_dir", default=None)
+    ap.add_argument("--skip_train", action="store_true",
+                    help="Build the interventions and go straight to eval. Only meaningful where "
+                         "the untrained module is already the thing you want to measure -- "
+                         "`das_fixed --subspace_dim full`, which is the full head swap by "
+                         "construction.")
     ap.add_argument("--skip_eval", action="store_true")
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
 
     heads = parse_heads(args.heads)
     blocks = sorted({b for b, _ in heads})
-    tag = f"{args.attribute}_{args.method}" + (f"_k{args.subspace_dim}"
-                                               if args.method == "das_fixed" else "")
+    # The tag must encode every knob that changes the RESULT, or a sweep
+    # overwrites itself into one directory -- the gotcha CLAUDE.md records for
+    # select_features.py's --dictionaries_dir. das_fixed varies in K;
+    # das_rotated and dbm learn their own width, so theirs is the coefficient
+    # that decides how far it shrinks.
+    if args.method == "das_fixed":
+        suffix = f"_k{str(args.subspace_dim).replace(',', '-').strip()}"
+    elif args.method == "das_rotated":
+        suffix = f"_m{args.mask_coef:g}"
+    else:
+        suffix = f"_l1{args.l1_coef:g}"
+    tag = f"{args.attribute}_{args.method}{suffix}"
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_das", args.entity, tag)
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
 
@@ -787,7 +902,7 @@ def main():
                           args.eval_rows, args.seed + 1)
     n_cause = sum(r["rule"] == "match_source" for r in train_rows)
     print(f"[head_das] {args.entity}/{args.attribute} method={args.method}"
-          + (f" K={args.subspace_dim}/block" if args.method == "das_fixed" else ""))
+          + (f" K={args.subspace_dim}" if args.method == "das_fixed" else ""))
     print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads))
     print(f"  train {args.train_split}: {len(train_rows)} rows "
           f"({n_cause} cause / {len(train_rows) - n_cause} iso), iso_weight={args.iso_weight}")
@@ -809,8 +924,12 @@ def main():
         assert not (tr_items & ev_items), (
             "train and eval share items -- the generalization claim below does not hold; "
             "check --train_split/--eval_split")
-        print(f"    blocks {blocks}; head columns per block "
-              f"{ {b: 128 * sum(1 for x, _ in heads if x == b) for b in blocks} } (assuming head_dim=128)")
+        widths = {b: 128 * sum(1 for x, _ in heads if x == b) for b in blocks}
+        print(f"    blocks {blocks}; head columns per block {widths} (assuming head_dim=128)")
+        if args.method == "das_fixed":
+            dims = resolve_subspace_dims(args.subspace_dim, blocks, widths)
+            print(f"    subspace per block {dims}; effective DOF "
+                  f"{ {b: subspace_dof(k, widths[b]) for b, k in dims.items()} }")
         print("Grid valid.")
         return
 
@@ -828,9 +947,31 @@ def main():
     pad_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
     colmap = {b: head_columns(heads, b, head_dim) for b in blocks}
 
+    widths = {b: len(colmap[b]) for b in blocks}
+    sub_dims = (resolve_subspace_dims(args.subspace_dim, blocks, widths)
+                if args.method == "das_fixed" else {b: 0 for b in blocks})
+    skip_train = args.skip_train
+    if args.method == "das_fixed":
+        dof = {b: subspace_dof(k, widths[b]) for b, k in sub_dims.items()}
+        print(f"  subspace per block {sub_dims} of {widths}; effective DOF {dof}")
+        dead = [b for b, d in dof.items() if d == 0]
+        for b in dead:
+            print(f"  WARNING: block {b} has K == its full width ({widths[b]}), so R^T R = I and "
+                  f"this block is an UNTRAINABLE full swap whatever the optimizer does.")
+        if dead and len(dead) < len(dof):
+            print("  ^ this arm is MIXED: some blocks train, some are pinned to the full swap. "
+                  "Its point on a K curve is not comparable to the arms where every block trains.")
+        if len(dead) == len(dof) and not skip_train:
+            print("  every block has zero degrees of freedom -- this is the CEILING arm, identical "
+                  "to head_swap_vade's full head swap by construction. Skipping training: the "
+                  "gradients are pure gauge and the optimizer steps would be a no-op.")
+            skip_train = True
+
     os.makedirs(out_dir, exist_ok=True)
-    interventions = train(adapter, model, processor, args, heads, colmap, items, entity_dir,
-                          lookup, pad_id, os.path.join(out_dir, "train_log.jsonl"))
+    interventions = build_interventions(args.method, colmap, sub_dims, args.vade_root, model.device)
+    if not skip_train:
+        train(adapter, model, processor, args, heads, colmap, items, entity_dir,
+              lookup, pad_id, os.path.join(out_dir, "train_log.jsonl"), interventions)
 
     import torch
     torch.save({b: iv.state_dict() for b, iv in interventions.items()},
