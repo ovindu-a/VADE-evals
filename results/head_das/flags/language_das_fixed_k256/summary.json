@@ -5,7 +5,7 @@
     "vade_root": "/workspace/VADE",
     "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
     "method": "das_fixed",
-    "subspace_dim": 8,
+    "subspace_dim": 256,
     "heads": "21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17",
     "train_split": "train",
     "eval_split": "test",
@@ -74,17 +74,17 @@
     "21": {
       "kind": "fixed_subspace",
       "dim": 256,
-      "subspace_dim": 8
+      "subspace_dim": 256
     },
     "22": {
       "kind": "fixed_subspace",
       "dim": 512,
-      "subspace_dim": 8
+      "subspace_dim": 256
     },
     "23": {
       "kind": "fixed_subspace",
       "dim": 512,
-      "subspace_dim": 8
+      "subspace_dim": 256
     }
   }
 }
