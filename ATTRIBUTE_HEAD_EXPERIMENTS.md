@@ -910,6 +910,20 @@ anything ambiguous, so a `source_q1` of 0.0% in the `self`/`question` cells is a
 `source_q1` and `base_q1` are literally the same gold. Do not read those two
 zeros as evidence of anything.
 
+**A second, subtler unreachability — and the design's real limit.** The "4
+distinct golds" in the `both` row above is a count of distinct *strings*, not of
+*attainable outcomes*. Every VADE template ends in a prefill that fixes the
+answer's TYPE (`"The capital city is"`, `"The currency code is"`,
+`"The calling code is +"`), and that prefill belongs to the RECEIVING prompt,
+which this design never patches. Both Q2-indexed golds (`source_q2`, `base_q2`)
+are therefore Q2-typed strings that the model cannot syntactically emit under a
+Q1 prefill — measured at 767/768 = 99.9% type-correct-for-Q1 in `both`. So the
+`both` cell really discriminates on **two** outcomes, `base_q1` vs `source_q1`,
+and its power comes from `source_q1` being HIGH rather than from the Q2 golds
+being zero. See R11.2. A design that could reach the Q2 golds would have to
+patch the prefill too, which would change what is being asked and is a different
+experiment.
+
 ```bash
 # the full 2x2
 python methods/head_cross.py --n_pairs 64 --batch_size 64
@@ -962,17 +976,136 @@ The receiving run is asked Q1. The donor was asked Q2 about a different flag.
 The output is **the donor's flag answered for Q1** — a combination present in
 neither prompt, at 65.1%, with **`source_q2` at exactly 0.0%**.
 
-That last zero is only measurable in this cell, and it is the load-bearing one.
 The model did not copy the donor's answer; it *recomputed* an answer from the
-donor's entity against the receiving prompt's question. Rejecting three
-hypotheses at once:
+donor's entity against the receiving prompt's question.
 
-| observed | rejects |
-|---|---|
-| `base_q1` 5.2% | "nothing transfers" |
-| `base_q2` 0.0% | "the donor's question transfers" |
-| `source_q2` **0.0%** | "the donor's whole prompt/answer transfers" |
-| `source_q1` **65.1%** | leaves only: the donor's **entity** transfers |
+> **CORRECTION (audit, this revision).** An earlier version of this section
+> called `source_q2` = 0.0% "the load-bearing one". **It is not, and it rejects
+> nothing.** Every VADE template ends in a *prefill* that fixes the answer's
+> TYPE — `"The capital city is"`, `"The currency code is"`, `"The calling code
+> is +"` — and the prefill belongs to the RECEIVING prompt, which is never
+> patched. A `source_q2`/`base_q2` gold is by construction a Q2-typed string
+> (a city when Q1 asked for a currency code, and so on), so the model is
+> syntactically unable to emit it whatever the heads contain. Measured on the
+> 768 off-diagonal `both` rows: **767/768 = 99.9% of generations are
+> type-correct for Q1**, including every failure —
+>
+> ```
+> q1=currency     q2=capital      -> ' USD.'
+> q1=calling_code q2=capital      -> '856.'
+> q1=language     q2=currency     -> ' German.'
+> ```
+>
+> Two of the design's four golds are therefore unreachable in the cell that was
+> supposed to make all four reachable. The conclusion survives intact, but it
+> rests on ONE number, not four:
+
+| observed | rejects | still valid? |
+|---|---|---|
+| `base_q1` 5.2% | "nothing transfers" | **yes** — `base_q1` is Q1-typed and reachable |
+| `base_q2` 0.0% | "the donor's question transfers" | **no** — prefill-forced |
+| `source_q2` 0.0% | "the donor's whole prompt/answer transfers" | **no** — prefill-forced |
+| `source_q1` **65.1%** | leaves only: the donor's **entity** transfers | **yes — this is the whole result** |
+
+The surviving argument is short and still sufficient: the donor was asked **Q2
+and only Q2**, so under the ATTRIBUTE hypothesis its head outputs encode "flag
+B's answer to Q2" and contain nothing about Q1. For the receiving run to then
+emit **flag B's answer to Q1** — which it does 65.1% of the time — the payload
+must identify B well enough for the model to compute a Q1 answer it was never
+given. That is the ENTITY hypothesis, and no prefill can manufacture it.
+
+**Error bar.** The 768 rows come from only 64 flag pairs (12 off-diagonal
+question pairs each), so they are not independent. Clustering by pair:
+65.1% +/- **4.8pp** (95%), against a naive binomial +/- 3.4pp. Quote the
+clustered one. The 64 pairs cover 64 distinct countries.
+
+### R11.2b The donor's question is causally irrelevant — the ENTIRE entity crosses
+
+The single 65.1% shows the payload is entity-like. Breaking `both` out by BOTH
+questions shows something stronger: the transfer rate is set by the question the
+RECEIVING run asks, and is essentially independent of the question the donor was
+asked.
+
+```
+   donor asked |  calling_code       capital      currency      language   row mean
+  calling_code |            --         96.9%         43.8%         85.9%     75.5%
+       capital |         31.2%            --         54.7%         84.4%     56.8%
+      currency |         39.1%         96.9%            --         85.9%     74.0%
+      language |         25.0%         92.2%         45.3%            --     54.2%
+   column mean |         31.8%         95.3%         47.9%         85.4%
+                        +/-7.5        +/-4.6       +/-11.4        +/-8.6   (pair-clustered 95%)
+```
+
+Every cell is far from zero: a donor asked **only** about `calling_code` lets the
+receiving run answer `capital` at 96.9%, `language` at 85.9% and `currency` at
+43.8%. The row means vary only because each row excludes a different column —
+predicting each row mean as the average of the three columns it covers gives
+76.2 / 55.0 / 70.8 / 58.3 against the observed 75.5 / 56.8 / 74.0 / 54.2. **The
+row carries no information; the column carries all of it.**
+
+Against the `flag` cell (same question, different flag), i.e. the *upper bound*
+for a given column:
+
+| Q1 | `flag` (same-question donor) | `both` (different-question donor) | shift |
+|---|---|---|---|
+| capital | 98.4 | 95.3 | -3.1 |
+| language | 85.9 | 85.4 | -0.5 |
+| currency | 46.9 | 47.9 | +1.0 |
+| calling_code | 93.8 | 31.8 | **-62.0** |
+
+`flag` and `both` are measured on the SAME 64 pairs, so the honest test is
+paired, and all of its power sits in the pairs where the two cells DISAGREE:
+
+| Q1 | both hit | both miss | flag only | both only | McNemar exact p | MDE @ 80% |
+|---|---|---|---|---|---|---|
+| calling_code | 4 | 3 | **56** | 1 | **8.1e-16** | 12.3pp |
+| capital | 59 | 1 | 4 | 0 | 0.125 | 5.0pp |
+| currency | 25 | 27 | 5 | 7 | 0.774 | 8.3pp |
+| language | 54 | 9 | 1 | 0 | 1.000 | 1.5pp |
+
+For three of four attributes the donor's question makes **no detectable
+difference**: 4-vs-0, 5-vs-7 and 1-vs-0 discordant pairs. `currency`'s 5-vs-7 is
+as balanced as noise gets, which is why its wide +/-8.3pp MDE is not a worry —
+the *direction* is undetermined, not merely the size.
+
+**State the precision honestly.** The point estimates are +3.1 / -1.0 / +0.5pp,
+but the paired 95% CIs are [-0.4, +6.6], [-6.9, +4.8] and [-0.5, +1.5]. Only
+`language` is tight enough to call equivalent outright; `capital` and `currency`
+are bounded to roughly +/-7pp and +/-5pp. Quadrupling to 256 pairs halves every
+MDE (1.5 -> 0.8, 5.0 -> 2.5, 8.3 -> 4.2) and is the run that would let the claim
+be made without qualification.
+
+The fourth attribute, `calling_code`, is 56-vs-1 discordant at p = 8e-16 — a real
+and large effect. **It is not a failure of entity transfer.** Classifying what
+the failures actually say:
+
+| cell | exact source | source's FIRST digit, wrong after | exact base | base's first digit |
+|---|---|---|---|---|
+| `flag` (same-question donor) | 93.8% | 6.2% | 0.0% | 0.0% |
+| `both` (different-question donor) | 31.8% | **66.7%** | 1.0% | 0.5% |
+
+**98.5% of `both` rows emit the SOURCE's first digit** — higher than `language`'s
+whole transfer rate. The base country's code appears in 1.5% of rows. Matched
+examples, same pair, only the donor's question differing:
+
+```
+UY->KH (true +855)  donor asked capital  | flag: 855   both: 856
+FI->AZ (true +994)  donor asked capital  | flag: 994   both: 998
+CO->NA (true +264)  donor asked capital  | flag: 264   both: 267
+```
+
+The entity crossed intact; the *continuation* drifted. `patched_generate`
+installs the donor's head output step-for-step, so donor step 1 is whatever the
+donor's state was while emitting ITS second token — `" Penh"`, not the second
+digit of `855`. Answers that fit in one step are immune (`language` is 78.6%
+single-token golds); `calling_code` has **0/384** single-token golds and needs
+2-3 aligned steps, so it is the only attribute the misalignment can reach. See
+R11.3.
+
+This is the strongest form of the claim, and it is what licenses "the heads carry
+the whole entity" rather than the weaker "the heads carry something entity-like":
+one capture, taken while the model was answering **one** question, supplies
+enough to recompute **every** attribute the benchmark asks for.
 
 ### R11.3 The -16.1pp CONTENT SHIFT is a decode artefact, not question-conditioning
 
@@ -1009,10 +1142,13 @@ emitted. **The corrected content shift is -0.9pp.**
 ### R11.4 The `question` cell's zeros, and what they are worth
 
 `question` reads 83.2% `base_q1` / 0.0% `base_q2`: a donor captured under a
-different question, same flag, moves nothing. Note this cell **cannot** show
-`source_q1` — `donor_flag == base` there, so that gold is the same string as
-`base_q1`. The cell is a control establishing the floor (9.9% `other` excluding
-`calling_code`, against `self`'s 8.9%), not an independent result.
+different question, same flag, moves nothing. **Two** of this cell's golds are
+unreachable, for two different reasons: `source_q1` because `donor_flag == base`
+there, so that gold is literally the same string as `base_q1`; and `base_q2`
+because of the prefill blocking described in R11.2. So the cell's only real
+content is that it is INERT — 89.9% unchanged excluding `calling_code`, against
+`self`'s 91.1%, a 1.2pp gap. That inertness is the evidence that the heads carry
+no question identity; the `0.0% base_q2` next to it is not.
 
 Excluding `calling_code` throughout, the whole design reads:
 
@@ -1086,14 +1222,208 @@ Six results, in the order they constrain each other:
 4. **R10.3/R10.4** — iso does not degrade, it **leaks to the source**, and
    `final_score` is pinned at 50% by arithmetic: one generation is scored as a
    required flip in one target file and a required non-flip in another.
-5. **R11** — the payload is the **entity**, not the answer. It is portable across
-   prompts (81.2%), carries no question identity (`question` inert,
-   `source_q2` = 0.0%), and gets recomputed against whatever question the
-   receiving prompt asks. The apparent -16.1pp question-dependence is -0.9pp
-   once `calling_code`'s multi-token decode artefact is removed.
+5. **R11** — the payload is the **entity**, not the answer: a donor asked only
+   Q2 yields flag B's answer to **Q1**, 65.1% +/- 4.8pp, an answer present in
+   neither prompt. It is portable across prompts (81.2%) and carries no question
+   identity (the `question` cell is inert to within 1.2pp of `self`). The
+   apparent -16.1pp question-dependence is -0.9pp once `calling_code`'s
+   multi-token decode artefact is removed. **Do not cite `source_q2` = 0.0%** —
+   R11.2 shows it is forced by the receiving prompt's prefill.
 6. **R11.5** — a variance-derived 7-dim subspace of those heads transfers 0.0%.
 
 Taken together: these heads are a high-bandwidth entity conduit, VADE's metric
 punishes exactly that, and separating "which attribute" out of the conduit — if
 it is separable at all — requires a subspace learned against generation. That is
 the motivation for the two training experiments that follow.
+
+---
+
+## 7. `methods/head_das.py` — learning a subspace of the conduit
+
+R11 leaves one question open: the ten heads move every attribute together, but
+does the payload **decompose**? Is there a subspace of those 1,280 columns that
+carries "which language" separably from "which country"? R11.5 shows the cheap
+answer fails (a variance-derived 7-dim subspace transfers 0.0%), so the only way
+left is to learn the subspace *against the generation objective*.
+
+Three hypothesis classes, one loop, all modules imported rather than
+reimplemented:
+
+| `--method` | module | what is learned |
+|---|---|---|
+| `das_fixed` | VADE's `FixedSubspaceIntervention` | a D x K semi-orthogonal `R`, K fixed up front |
+| `das_rotated` | VADE's `RotatedSpaceIntervention` | a full D x D rotation + annealed sigmoid mask, so K is learned |
+| `dbm` | `methods/dbm/`'s `SigmoidMaskIntervention` | an axis-aligned mask over raw head dims + L1 |
+
+One intervention is trained **per (entity, attribute)** and is block-diagonal by
+necessity — blocks run sequentially, so a single joint rotation across 21/22/23
+is not expressible in one hook. Widths are `n_heads_in_block * head_dim`
+(common10: 256 / 512 / 512).
+
+The objective IS VADE's metric made differentiable: each row is supervised
+toward the SOURCE gold when `rule == match_source` and the BASE gold when
+`rule == match_base`. Trained on VADE's `train` split, evaluated on `test` —
+**split by item**, so 59 countries train and a disjoint 25 evaluate (asserted in
+`--dry_run`). The patch covers every answer token, not just the last prompt
+token, via `build_teacher_forced_extension`; a last-token patch cannot steer past
+the first answer token (see `ndm/swap_trace.py`).
+
+### `--subspace_dim`: one value, per block, or `full`
+
+```bash
+python methods/head_das.py --attribute language --subspace_dim 128          # all blocks
+python methods/head_das.py --attribute language --subspace_dim 128,256,256  # per block
+python methods/head_das.py --attribute language --subspace_dim full         # the ceiling
+```
+
+Per-block values matter because common10's heads are spread **2/4/4** over
+blocks 21/22/23, so a single K is a different *fraction* of each block's space.
+
+**The zero-DOF guard, and why it is not cosmetic.** `FixedSubspaceIntervention`'s
+output depends on `R` only through `R^T R`, so the hypothesis class is the
+Grassmannian Gr(K, D) of dimension **K(D-K)**, not the K*D stored parameters. At
+`K == D` that is **zero**: `R^T R = I` identically, the module IS the full swap
+whatever the weights say, and every gradient is pure gauge. Verified:
+
+```
+K= 128  max|out - source| = 5.250e+00   max|grad| = 1.008e+02
+K= 512  max|out - source| = 6.229e-06   max|grad| = 1.831e-04
+```
+
+So `--subspace_dim full` is a *measurement*, not a run; training is skipped
+automatically. `--dry_run` and `summary.json` report per-block DOF, which also
+surfaces **mixed** arms: `--subspace_dim 256` silently clamps block 21 (width
+256) to a full swap while 22 and 23 train, so its point on a K curve is not
+comparable to arms where every block trains.
+
+Run tags encode the knob that varies (`_k128`, `_k128-256-256`, `_kfull`,
+`_m0.001`, `_l10.001`) so a sweep cannot overwrite itself — the gotcha CLAUDE.md
+records for `select_features.py`.
+
+## R12. The conduit decomposes, but only to ~57%
+
+`methods/head_das.py`, flags, `common10`, `das_fixed`, trained on `train` and
+evaluated on the disjoint `test` items.
+
+### R12.1 The four ceilings, and the completed grid
+
+`--subspace_dim full` costs one eval pass and no training. Running it for all
+four attributes fills the target x queried grid that R10 could not complete —
+the head-swap run never asked the `language` question:
+
+```
+       target |  calling_code       capital      currency      language   final
+ calling_code |        95.1*         98.6          71.7          92.7    48.7%
+      capital |        95.6          97.9*         72.0          93.0    50.1%
+     currency |        94.5          98.4          76.1*         93.2    38.5%
+     language |        95.0          98.4          72.5          94.7*   48.2%
+  (* = the cause cell; every other entry is an iso cell. pct_matches_source.)
+```
+
+**Read the column HEIGHTS, not the row-to-row flatness.** The four runs apply a
+*byte-identical* edit — a full swap has no access to `target_attribute` — and
+VADE's four tuple files are the **same 14,052 (base, source, queried,
+template_id) rows**, differing only in the `rule` label (verified: 100% pairwise
+key overlap). So switching `--attribute` is pure relabelling plus a different
+stratified subsample, and flat columns are guaranteed by construction. They are
+worth exactly two narrower things:
+
+* a **no-leakage check** on the harness — of the 1,790 keys generated by more
+  than one of the four runs, 95.1% produced character-identical text, and every
+  disagreement is a trailing-continuation difference from batch padding, not a
+  different answer. Nothing in the donor capture or the teacher-forced extension
+  conditions on the target;
+* an **error bar** — four independent 2,000-row subsamples put sampling noise at
+  0.7-4.4pp per cell at n ~ 500, which is the yardstick for reading everything
+  below.
+
+What IS new is the `language` column: language transfers at 92.7-94.7% when it is
+not the target. That completes R10's "one edit moves all four attributes at
+72-98%", which is readable from any **single row**. The four per-attribute
+ceilings (48.7 / 50.1 / 38.5 / 48.2) are the baselines every trained arm must
+beat; `currency`'s low 38.5% is mostly the model, since clean currency accuracy
+is only 82.6%.
+
+### R12.2 The K sweep: a flat plateau at ~57%
+
+`slack` is the distance above the straight line joining clean to the measured
+ceiling — what a K-indexed dial with no selectivity at all would give. Both
+endpoints sit on that line by construction, so any bulge is real.
+
+| arm | cause | iso | final | slack | swapped dims |
+|---|---|---|---|---|---|
+| clean | 0.0% | 94.2% | 47.1% | +0.0pp | 0 |
+| K=8 | 14.0% | 85.7% | 49.9% | +5.2pp | 24 |
+| K=16 | 20.8% | 79.1% | 50.0% | +5.2pp | 48 |
+| K=32 | 33.9% | 71.5% | 52.7% | +10.4pp | 96 |
+| K=64 | 33.0% | 75.3% | 54.1% | +13.3pp | 192 |
+| **K=128** | 46.6% | 67.7% | **57.2%** | +19.0pp | 384 |
+| **128,256,256** | 62.8% | 52.1% | **57.4%** | **+19.2pp** | 640 |
+| 192,256,256 | 67.9% | 45.5% | 56.7% | +17.6pp | 704 |
+| K=256 (mixed) | 73.2% | 39.9% | 56.5% | +17.2pp | 768 |
+| `full` (ceiling) | 94.7% | 1.7% | 48.2% | -0.0pp | 1280 |
+
+Two readings, and the second is the finding:
+
+1. **The conduit does decompose, a little.** Every interior arm sits above the
+   trivial line, peaking at +19.2pp. There is a subspace of roughly half of each
+   block that carries more `language` than `capital`.
+2. **`final_score` is pinned at 56.5-57.4% across a 27-point range of `cause`
+   (46.6% -> 73.2%)**, over three different K parameterisations. On n=2000 the
+   standard error on `final_score` is ~ +/-1.3pp, so `128,256,256`'s 57.4% and
+   K=128's 57.2% are the same number. Per-block allocation bought nothing, and
+   past the peak the extra dimensions buy only full-swap behaviour: iso
+   `matches_source` climbs 6.9% -> 26.3% between K=128 and K=256 while inert
+   (base,source) pairs collapse 159/598 -> 38/598.
+
+The cap is not a training-budget artefact. K=8 has **converged** (tail slope
+-0.7% per 5 steps, CE flat at 2.6) and still reads 14.0%; a 52-step run on the
+full 32,811-row split reached CE 0.425 against 0.466 at 40 steps. Longer training
+moves along this curve, not above it.
+
+### R12.3 `das_rotated` as VADE ships it cannot sparsify — VOID
+
+Three runs at `--mask_coef` 3e-4 / 1e-3 / 3e-3 produced **byte-identical
+predictions** (md5 `43371e15...`), all equal to the full swap, with
+`mask_sum == dim` exactly on every block at final temperature 0.1.
+
+VADE never instantiates `RotatedSpaceIntervention` — its trainer only ever builds
+`FixedSubspaceIntervention` — so this path had never been exercised. Two
+compounding failures, measured:
+
+| T | mask | \|out-src\| | grad `masks` | grad `R` |
+|---|---|---|---|---|
+| 50.0 (start) | 0.95257 | 2.45e-01 | 5.64e-02 | 4.20e-05 |
+| 13.4 | 0.99999 | 7.08e-05 | 7.12e-05 | 3.43e-05 |
+| 1.0 | 1.00000 | 1.91e-06 | **0.00e+00** | 3.43e-05 |
+| 0.1 (end) | 1.00000 | 1.43e-06 | **0.00e+00** | 4.20e-05 |
+
+* `mask_init = 150` with Adam at `lr = 1e-3`: Adam's per-step move is bounded by
+  ~`lr`, so reaching the decision boundary at 0 needs **~150,000 steps**. The
+  runs did 94. Observed rate, from a killed run: `maskK` 1280 -> 1279.9656 in 22
+  steps, i.e. ~580,000 steps to reach 384.
+* The temperature anneal makes it **worse**: by T <= 1, `sigmoid'(150/T)`
+  underflows and the mask gradient is *exactly* zero.
+* And at `mask == 1`, `mixed = rotated_source`, so `output = rotated_source @ R
+  = source` — **the rotation cancels** and `R` has no useful gradient either.
+  This is the exact mirror of the `masks = 0` degeneracy VADE's own docstring
+  warns about.
+
+`dbm` does **not** have this trap: it inits at `mask = 0.5`, the maximally
+informative point, with gradients of 4e2 -> 4e7 as T falls. It is currently the
+only learned-width method usable at this site. Fixing `das_rotated` needs a
+separate parameter group giving `masks` its own learning rate (~1.0), or
+`mask_init ~ 3` with `temperature_start ~ 1`.
+
+### R12.4 Where this leaves the head site
+
+The `das_fixed` sweep is finished; no configuration left will move it. The site
+admits ~+19pp of slack over trivial and caps `final_score` near 57%, against
+endpoints at 47-48%. Two questions remain, and neither is answerable here:
+
+* does a **learned** width agree with K ~ 128-256 per block? Needs the
+  `das_rotated` fix, or a `dbm` run (trap-free today);
+* is ~57% a property of *these heads* or of the model? That is the
+  attribute-head site (blocks 17-21, `attr_head_trace.py`), where R11 predicts a
+  genuinely different answer — these heads carry "which flag", and the attribute
+  is selected downstream.

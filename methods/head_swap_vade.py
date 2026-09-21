@@ -285,10 +285,37 @@ def all_blocks(head_sets):
 # VADE assets and the job grid
 # ---------------------------------------------------------------------------
 
+def entity_items(gt):
+    """The item dict out of a VADE ground_truth.json, whatever it is called.
+
+    Each entity names its own collection -- flags `countries`, brands `brands`,
+    animals `species` -- so a hardcoded key silently restricts every script here
+    to flags. Identify it by SHAPE instead: the one top-level dict whose values
+    are dicts carrying an `image`. Fails loudly rather than guessing, because a
+    wrong pick would produce plausible-looking runs on the wrong objects."""
+    cand = [k for k, v in gt.items()
+            if isinstance(v, dict) and v and all(isinstance(x, dict) and "image" in x
+                                                 for x in v.values())]
+    assert len(cand) == 1, (
+        f"ground_truth.json must have exactly one item collection (a dict of dicts with "
+        f"'image'); found {cand or 'none'} among {list(gt)}")
+    return gt[cand[0]]
+
+
+def entity_attributes(gt):
+    """The entity's scored attributes, in the order it declares them.
+
+    NOT the keys of prompt_templates.json -- that also carries
+    `recognition_freeform`, which is not a scored attribute."""
+    attrs = gt.get("attributes")
+    assert isinstance(attrs, list) and attrs, f"ground_truth.json has no `attributes` list"
+    return tuple(attrs)
+
+
 def load_assets(vade_root, entity):
     entity_dir = os.path.join(vade_root, "data", entity)
     gt = json.load(open(os.path.join(entity_dir, "ground_truth.json")))
-    items = gt["countries"] if "countries" in gt else gt["items"]
+    items = entity_items(gt)
     templates = json.load(open(os.path.join(entity_dir, "prompt_templates.json")))
     lookup = {attr: {t["template_id"]: t for t in tl} for attr, tl in templates.items()}
     return entity_dir, items, lookup
@@ -452,15 +479,49 @@ def capture_donor(adapter, model, blocks, ids, mask, extra, max_new_tokens, pad_
     return {b: torch.stack(v, dim=1) for b, v in sinks.items()}      # [B, steps, hidden]
 
 
+ALIGN_MODES = ("matched", "hold0", "step0")
+
+
+def donor_index(align, step, n_steps):
+    """Which donor step to install at base step `step`; None = leave the base alone.
+
+    `matched` is the R10/R11 intervention -- donor step t -> base step t, holding
+    the donor's last step if the base outlasts it. The other two exist to LOCALIZE
+    a multi-token effect to step 0 versus the steps after it. A step-matched replay
+    from a donor that was asked a DIFFERENT question installs, at t>=1, that donor's
+    state while emitting ITS OWN token t, which is off-manifold for the answer the
+    base is producing -- the calling_code split in R11.2b, where `both` emits the
+    source's first digit 98.5% of the time and then drifts.
+
+      matched   idx = min(t, T-1)           step-for-step replay
+      hold0     idx = 0                     the donor's readout column, held
+      step0     idx = 0 at t=0, else None   patch once, then free-run
+
+    All three are IDENTICAL at t=0 by construction, so the FIRST generated token
+    must agree across modes for any given row -- a free self-test on the plumbing.
+    `step0` is the falsifier for the alignment story: it makes `flag` and `both`
+    differ only in the donor's prompt, with no answer token in either donor's
+    context yet, so the two cells must converge if the gap really lives in t>=1."""
+    if align == "matched":
+        return min(step, n_steps - 1)
+    if align == "hold0":
+        return 0
+    if align == "step0":
+        return 0 if step == 0 else None
+    raise ValueError(f"unknown align mode {align!r}; expected one of {ALIGN_MODES}")
+
+
 def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
                      head_dim, extra_patches=(), stats=None, observers=(), subspace=None,
-                     transform=None):
+                     transform=None, align="matched"):
     """Greedy generation with `heads` overwritten at the last column of EVERY
-    forward from `donor_z`'s matching step.
+    forward from the donor step `align` selects (see `donor_index`).
 
-    If the base run outlasts the donor's recorded steps (the donor hit EOS
-    earlier), the last donor step is held and the event is counted rather than
-    silently indexed out of range.
+    Under the default `matched`, if the base run outlasts the donor's recorded
+    steps (the donor hit EOS earlier), the last donor step is held and the event
+    is counted rather than silently indexed out of range. That counter is
+    meaningless under the other modes, which never index past step 0, so it is
+    only kept for `matched`.
 
     `transform` generalizes what gets written: {block: fn(base_slice, donor_slice)
     -> new_slice}, each [B, 1, n_cols_b]. None (the default) writes the donor's
@@ -486,8 +547,11 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
             t = args[0]
             step = counters[_b]
             counters[_b] += 1
-            idx = min(step, _z.shape[1] - 1)
-            if stats is not None and step >= _z.shape[1]:
+            idx = donor_index(align, step, _z.shape[1])
+            if idx is None:
+                return None            # a pre-hook returning None leaves the input untouched,
+                                       # which is exactly "free-run from here" for `step0`
+            if stats is not None and align == "matched" and step >= _z.shape[1]:
                 stats["steps_beyond_donor"] = stats.get("steps_beyond_donor", 0) + 1
             patched = t.clone()
             want = _z[:, idx, :].index_select(-1, _cols).to(t.dtype)
@@ -530,7 +594,7 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
 
 
 def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                    head_dim, tol=1e-3, rel_tol=0.01, subspace=None):
+                    head_dim, tol=1e-3, rel_tol=0.01, subspace=None, align="matched"):
     """Read the patched site back through a hook registered AFTER the patch and
     assert it returns what was installed, at EVERY step.
 
@@ -554,12 +618,16 @@ def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_to
     observers = [(b, (lambda t, _b=b: seen[_b].append(t[:, -1, :].detach().float().cpu())))
                  for b in seen]
     patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                     head_dim, observers=observers, subspace=subspace)
+                     head_dim, observers=observers, subspace=subspace, align=align)
     worst, worst_allowed = 0.0, tol
     for b, steps in seen.items():
         cols = head_columns(heads, b, head_dim)
         for t, got in enumerate(steps):
-            want = donor_z[b][:, min(t, donor_z[b].shape[1] - 1), :]
+            idx = donor_index(align, t, donor_z[b].shape[1])
+            if idx is None:
+                continue               # nothing was installed at this step, so there is
+                                       # nothing to read back -- `step0` past t=0
+            want = donor_z[b][:, idx, :]
             g, w = got[:, cols], want[:, cols]
             if subspace is not None:
                 # Only the IN-SUBSPACE component was installed, so only it must

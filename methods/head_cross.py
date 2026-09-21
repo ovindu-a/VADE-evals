@@ -76,9 +76,11 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from methods.head_swap_vade import (ATTRIBUTES, DEFAULT_VADE_ROOT, MODEL_ID, build_prompt,   # noqa: E402
-                                    build_value_subspace, capture_donor, decode, load_assets,
-                                    parse_heads, patched_generate, plain_generate, verify_readback)
+from methods.head_swap_vade import (DEFAULT_VADE_ROOT, MODEL_ID, build_prompt,   # noqa: E402
+                                    entity_attributes, entity_items,
+                                    ALIGN_MODES, build_value_subspace, capture_donor, decode,
+                                    load_assets, parse_heads, patched_generate, plain_generate,
+                                    verify_readback)
 
 COMMON10 = "21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17"
 CELLS = ("self", "flag", "question", "both")
@@ -148,7 +150,7 @@ def main():
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
     ap.add_argument("--heads", default=COMMON10)
-    ap.add_argument("--n_pairs", type=int, default=60, help="Distinct (base, source) flag pairs.")
+    ap.add_argument("--n_pairs", type=int, default=60, help="Distinct (base, source) item pairs.")
     ap.add_argument("--cells", nargs="+", default=list(CELLS), choices=list(CELLS),
                     help="Which of the 2x2 to generate. NOTE: dropping `flag` removes the CONTENT "
                          "SHIFT contrast (it is flag-vs-both), which is the only confound-free "
@@ -161,6 +163,16 @@ def main():
     ap.add_argument("--template_index", type=int, default=0,
                     help="Which of each attribute's templates to use, by sorted template_id. One "
                          "fixed phrasing per question keeps the cross about the ATTRIBUTE asked.")
+    ap.add_argument("--align", choices=list(ALIGN_MODES), default="matched",
+                    help="Which donor step to install at base step t (see head_swap_vade's "
+                         "`donor_index`). `matched` is the R11 intervention. `step0` patches "
+                         "only the readout column and then free-runs -- it is the FALSIFIER "
+                         "for the alignment story, because donor step 0 precedes any answer "
+                         "token, so `flag` and `both` must converge under it if the flag-vs-both "
+                         "gap really lives in the steps after 0. `hold0` holds step 0 at every "
+                         "step, asking whether that column alone can drive a multi-token answer. "
+                         "All three agree at t=0, so the FIRST generated token must be identical "
+                         "across modes for a given row -- check that before reading anything else.")
     ap.add_argument("--max_new_tokens", type=int, default=12)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
@@ -172,19 +184,37 @@ def main():
     blocks = sorted({b for b, _ in heads})
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
     gt = json.load(open(os.path.join(args.vade_root, "data", args.entity, "ground_truth.json")))
-    truth = gt["countries"] if "countries" in gt else gt["items"]
-    rows = [r for r in build_rows(items, list(ATTRIBUTES), args.n_pairs, args.seed)
+    truth = entity_items(gt)
+    # Per ENTITY, not the flags four: brands declare 3 attributes and animals 5.
+    attributes = [a for a in entity_attributes(gt) if a in lookup]
+    missing = [a for a in entity_attributes(gt) if a not in lookup]
+    assert len(attributes) >= 2, (
+        f"{args.entity} needs >=2 attributes with prompt templates to cross; got {attributes}")
+    rows = [r for r in build_rows(items, attributes, args.n_pairs, args.seed)
             if r["cell"] in args.cells]
     out_path = args.out or os.path.join(REPO_ROOT, "results", "head_cross", args.entity,
                                         f"cross_n{args.n_pairs}"
                                         + (f"_sub{args.subspace_dim}" if args.subspace_dim else "")
+                                        # the mode goes in the NAME: three arms of the same
+                                        # --n_pairs would otherwise overwrite each other
+                                        + ("" if args.align == "matched" else f"_{args.align}")
                                         + ".jsonl")
 
     from collections import Counter
-    print(f"[head_cross] {args.entity}: {args.n_pairs} flag pairs x {len(ATTRIBUTES)}x{len(ATTRIBUTES)} "
-          f"question pairs x 2 donors = {len(rows)} generations")
+    print(f"[head_cross] {args.entity}: {args.n_pairs} item pairs x "
+          f"{len(attributes)}x{len(attributes)} question pairs x 2 donors = {len(rows)} generations")
+    print(f"  attributes ({len(attributes)}): " + ", ".join(attributes)
+          + (f"   [no template, skipped: {', '.join(missing)}]" if missing else ""))
     print(f"  cells: {dict(Counter(r['cell'] for r in rows))}")
     print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads))
+    print(f"  align: {args.align}" + ("" if args.align == "matched" else
+          "   [NOT the R11 intervention -- compare against a --align matched run of the "
+          "same --n_pairs/--seed, which draws the identical rows]"))
+    if args.entity != "flags" and args.heads == COMMON10:
+        print("  WARNING: --heads is COMMON10, which head_trace localized on FLAGS. On a "
+              "different entity this arm tests whether the SAME head set carries that "
+              "entity too; a null here is ambiguous between 'the claim is wrong' and "
+              "'these are the wrong heads'. Trace this entity first for the clean test.")
     print(f"  -> {out_path}")
     if args.dry_run:
         for r in rows[:4]:
@@ -239,7 +269,8 @@ def main():
     probe = batch_of(rows[:min(4, len(rows))])
     pz = capture_donor(adapter, model, blocks, probe[3], probe[4], probe[5], args.max_new_tokens, pad_id)
     worst = verify_readback(adapter, model, heads, pz, probe[0], probe[1], probe[2],
-                            args.max_new_tokens, pad_id, head_dim, subspace=subspace)
+                            args.max_new_tokens, pad_id, head_dim, subspace=subspace,
+                            align=args.align)
     print(f"  read-back check: worst = {worst:.2e} over {args.max_new_tokens} steps")
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -250,12 +281,18 @@ def main():
             bi, bm, bx, di, dm, dx = batch_of(chunk)
             z = capture_donor(adapter, model, blocks, di, dm, dx, args.max_new_tokens, pad_id)
             toks = patched_generate(adapter, model, heads, z, bi, bm, bx, args.max_new_tokens,
-                                    pad_id, head_dim, subspace=subspace)
+                                    pad_id, head_dim, subspace=subspace, align=args.align)
             clean = plain_generate(model, bi, bm, bx, args.max_new_tokens, pad_id)
-            for r, text, ctext in zip(chunk, decode(processor, toks), decode(processor, clean)):
+            for r, text, ctext, tok0 in zip(chunk, decode(processor, toks),
+                                            decode(processor, clean), toks[:, 0].tolist()):
                 label = classify(text, r, truth, matcher)
                 tally[r["cell"]][label] += 1
-                fh.write(json.dumps({**r, "generated": text, "clean": ctext, "label": label}) + "\n")
+                # first_token is what makes the three --align modes comparable: they are
+                # identical at t=0 by construction, so this column must MATCH across modes
+                # row for row. It is also the only honest readout for a multi-token answer
+                # whose continuation the intervention cannot reach (swap_trace.py's rule).
+                fh.write(json.dumps({**r, "generated": text, "clean": ctext, "label": label,
+                                     "align": args.align, "first_token": tok0}) + "\n")
             print(f"  {min(start + args.batch_size, len(rows))}/{len(rows)}", flush=True)
 
     labels = ["base_q1", "source_q1", "source_q2", "base_q2", "other", "ambiguous"]
@@ -276,6 +313,11 @@ def main():
         print(f"    shift = {crossed - matched:+.1f}pp")
         print("    ~0 means the heads' content does not depend on which question produced it:\n"
               "    ENTITY data. A large drop means question-conditioned content: ATTRIBUTE data.")
+        if args.align == "matched":
+            print("    A drop here is NOT yet attributable to content: under `matched` the donor's\n"
+                  "    step t>=1 is its state while emitting its OWN token t, so a multi-token\n"
+                  "    answer confounds content with step alignment. Re-run --align step0 to split\n"
+                  "    them -- the shift must go to ~0 there if alignment is the whole story.")
     else:
         print("\n  CONTENT SHIFT not computed -- it needs both `flag` and `both`, and --cells "
               "excluded one. The 4-way split below is still subject to the prefill confound.")

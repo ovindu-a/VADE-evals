@@ -11,10 +11,10 @@ import pytest
 import torch
 
 from test_head_followups import tiny                                    # noqa: F401
-from methods.head_swap_vade import (all_blocks, batches_by_donor_attribute, capture_donor,
-                                    head_columns, heads_for, heads_from_trace, parse_heads,
-                                    patched_generate, plain_generate, resolve_head_sets,
-                                    verify_readback)
+from methods.head_swap_vade import (ALIGN_MODES, all_blocks, batches_by_donor_attribute,
+                                    capture_donor, donor_index, head_columns, heads_for,
+                                    heads_from_trace, parse_heads, patched_generate, plain_generate,
+                                    resolve_head_sets, verify_readback)
 
 HEADS = [(1, 0), (2, 3)]          # tiny model: 4 blocks, 4 heads, head_dim 8, hidden 32
 HEAD_DIM = 8
@@ -374,3 +374,149 @@ def test_transform_and_subspace_together_are_rejected(tiny):
         patched_generate(adapter, model, [(block, 0)], donor, ids, mask, extra, MAX_NEW, 0, HEAD_DIM,
                          subspace={block: torch.eye(HEAD_DIM)},
                          transform={block: (lambda have, want: want)})
+
+
+# --------------------------------------------------------------------------
+# --align: which donor step lands at which base step.
+#
+# These exist to separate a CONTENT effect from a STEP-ALIGNMENT one. Under
+# `matched` a donor asked a different question contributes, at t>=1, its own
+# answer's continuation, so a multi-token result cannot tell the two apart.
+# Every failure here is silent in a real run: the generation stays fluent and
+# the score just moves.
+# --------------------------------------------------------------------------
+
+def _planted(n, head, n_steps=MAX_NEW):
+    """Donor whose value at step t IS t + 1, so an observer reads the index back."""
+    z = torch.zeros(n, n_steps, 32)
+    for t in range(n_steps):
+        z[:, t, head * HEAD_DIM:(head + 1) * HEAD_DIM] = float(t + 1)
+    return z
+
+
+def _installed(tiny, align, n_steps=MAX_NEW):
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block, head = 1, 0
+    seen = []
+    patched_generate(adapter, model, [(block, head)], {block: _planted(ids.shape[0], head, n_steps)},
+                     ids, mask, extra, MAX_NEW, 0, HEAD_DIM, align=align,
+                     observers=[(block, lambda t: seen.append(float(t[0, -1, head * HEAD_DIM])))])
+    return seen
+
+
+def test_donor_index_table():
+    assert [donor_index("matched", t, 3) for t in range(5)] == [0, 1, 2, 2, 2]
+    assert [donor_index("hold0", t, 3) for t in range(5)] == [0, 0, 0, 0, 0]
+    assert [donor_index("step0", t, 3) for t in range(5)] == [0, None, None, None, None]
+    with pytest.raises(ValueError):
+        donor_index("nearest", 0, 3)
+
+
+def test_every_align_mode_agrees_at_step_zero():
+    """The self-test the CLI tells the user to check first: the modes differ only
+    in t>=1, so the first generated token must be identical across all three."""
+    assert {donor_index(a, 0, 4) for a in ALIGN_MODES} == {0}
+
+
+def test_hold0_installs_the_readout_column_at_every_step(tiny):
+    assert _installed(tiny, "hold0") == [1.0] * MAX_NEW
+    assert _installed(tiny, "matched") == [1.0, 2.0, 3.0, 4.0], "matched must be unchanged"
+
+
+def test_step0_patches_once_and_then_releases(tiny):
+    """After t=0 the hook must return None, not write step 0 again -- the
+    difference between `step0` and `hold0`, and the whole falsifier."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block, head = 1, 0
+    clean = []
+    module = adapter.get_attn_head_output_module(model, block)
+    h = module.register_forward_pre_hook(
+        lambda _m, args: clean.append(float(args[0][0, -1, head * HEAD_DIM])))
+    try:
+        plain_generate(model, ids, mask, extra, MAX_NEW, pad_id=0)
+    finally:
+        h.remove()
+    seen = _installed(tiny, "step0")
+    assert seen[0] == 1.0, "step 0 must still be patched"
+    assert seen[1:] != [1.0] * (MAX_NEW - 1), "step0 held its value -- that is hold0"
+    # Released means the model's own value flows through. It is NOT the clean run's
+    # value at t>=1 (step 0 was patched, so the base has diverged by then), but it
+    # must be whatever this forward pass computed, which the hook never touched.
+    assert all(v != 1.0 for v in seen[1:]) or seen[1:] == clean[1:]
+
+
+def test_step0_ignores_a_donor_longer_than_the_base(tiny):
+    """`step0` must never index past 0, so a donor of any length behaves alike and
+    `steps_beyond_donor` -- meaningless here -- must stay unset."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block, head = 1, 0
+    stats = {}
+    seen = []
+    patched_generate(adapter, model, [(block, head)], {block: _planted(ids.shape[0], head, 2)},
+                     ids, mask, extra, MAX_NEW, 0, HEAD_DIM, align="step0", stats=stats,
+                     observers=[(block, lambda t: seen.append(float(t[0, -1, head * HEAD_DIM])))])
+    assert seen[0] == 1.0
+    assert "steps_beyond_donor" not in stats, "that counter only means anything under `matched`"
+
+
+def test_self_replay_is_a_no_op_under_matched_and_step0_but_not_hold0(tiny):
+    """The identity test, run per mode. `matched` and `step0` only ever reinstall
+    what the base already had, so both must stay bit-identical. `hold0` overwrites
+    t>=1 with the prefill column, so it must install something DIFFERENT -- if it
+    does not, the patch is dead past step 0 and the mode comparison would read as
+    a null for the wrong reason.
+
+    The hold0 half asserts on the INSTALLED VALUES, not the generated tokens:
+    argmax is a thresholded readout that absorbs perturbations without moving
+    (CLAUDE.md's rule, and verify_sites' 0.25-logit shift with identical text),
+    and this tiny model duly generates the same string either way."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    block, head = 1, 0
+    clean = plain_generate(model, ids, mask, extra, MAX_NEW, pad_id=0)
+    z = capture_donor(adapter, model, sorted({b for b, _ in HEADS}), ids, mask, extra,
+                      MAX_NEW, pad_id=0)
+    for align in ("matched", "step0"):
+        assert torch.equal(clean, patched_generate(adapter, model, HEADS, z, ids, mask, extra,
+                                                   MAX_NEW, 0, HEAD_DIM, align=align)), align
+    own = capture_donor(adapter, model, [block], ids, mask, extra, MAX_NEW, pad_id=0)[block]
+    seen = []
+    patched_generate(adapter, model, [(block, head)], {block: own}, ids, mask, extra, MAX_NEW, 0,
+                     HEAD_DIM, align="hold0",
+                     observers=[(block, lambda t: seen.append(t[0, -1, :HEAD_DIM].clone()))])
+    assert all(torch.equal(v, seen[0]) for v in seen), "hold0 must install ONE column everywhere"
+    assert not all(torch.allclose(own[0, t, :HEAD_DIM], seen[0]) for t in range(1, MAX_NEW)), \
+        "the run's own t>=1 already equalled step 0, so this donor cannot test hold0"
+
+
+def test_readback_checks_every_mode_at_the_steps_it_installed(tiny):
+    """verify_readback is the gate head_cross opens with, and it must pass under
+    each mode rather than failing on the steps a mode deliberately leaves alone."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    donor = {b: v.flip(0) for b, v in z.items()}
+    for align in ALIGN_MODES:
+        assert verify_readback(adapter, model, HEADS, donor, ids, mask, extra, MAX_NEW, 0,
+                               HEAD_DIM, align=align) <= 1e-3, align
+
+
+def test_readback_still_catches_a_dead_patch_under_step0(tiny):
+    """The escape hatch to close: `step0` skips t>=1, so the check must not become
+    vacuous -- a wrong value at t=0 has to still fail."""
+    adapter, model, ids, mask, extra = pieces(tiny)
+    blocks = sorted({b for b, _ in HEADS})
+    z = capture_donor(adapter, model, blocks, ids, mask, extra, MAX_NEW, pad_id=0)
+    # A merely WRONG donor is self-consistent -- verify_readback installs and
+    # compares the same values, so it would pass. Kill the WRITE instead, exactly
+    # as the matched-mode dead-patch test above does.
+    import methods.head_swap_vade as mod
+    lying = {b: v + 100.0 for b, v in z.items()}
+    real = mod.head_columns
+    mod.head_columns = lambda heads, block, head_dim: (torch.empty(0, dtype=torch.long)
+                                                       if _in_patch() else real(heads, block, head_dim))
+    try:
+        with pytest.raises(AssertionError, match="read-back mismatch"):
+            mod.verify_readback(adapter, model, HEADS, lying, ids, mask, extra, MAX_NEW, 0,
+                                HEAD_DIM, align="step0")
+    finally:
+        mod.head_columns = real
