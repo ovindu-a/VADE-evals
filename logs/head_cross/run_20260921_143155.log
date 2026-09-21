@@ -1,0 +1,32 @@
++ python methods/head_cross.py --entity flags --n_pairs 64 --align step0 --cells flag self both
+[head_cross] flags: 64 item pairs x 4x4 question pairs x 2 donors = 1280 generations
+  attributes (4): capital, currency, language, calling_code
+  cells: {'flag': 256, 'self': 256, 'both': 768}
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  align: step0   [NOT the R11 intervention -- compare against a --align matched run of the same --n_pairs/--seed, which draws the identical rows]
+  -> /workspace/VADE-evals/results/head_cross/flags/cross_n64_step0.jsonl
+Traceback (most recent call last):
+  File "/workspace/VADE-evals/methods/head_cross.py", line 333, in <module>
+    main()
+  File "/workspace/VADE-evals/methods/head_cross.py", line 227, in main
+    model, processor = adapter.load()
+                       ^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/adapters/qwen2_5_vl.py", line 19, in load
+    from transformers import AutoModelForImageTextToText, AutoProcessor
+ModuleNotFoundError: No module named 'transformers'
++ python methods/head_cross.py --entity flags --n_pairs 64 --align hold0 --cells flag self both
+[head_cross] flags: 64 item pairs x 4x4 question pairs x 2 donors = 1280 generations
+  attributes (4): capital, currency, language, calling_code
+  cells: {'flag': 256, 'self': 256, 'both': 768}
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  align: hold0   [NOT the R11 intervention -- compare against a --align matched run of the same --n_pairs/--seed, which draws the identical rows]
+  -> /workspace/VADE-evals/results/head_cross/flags/cross_n64_hold0.jsonl
+Traceback (most recent call last):
+  File "/workspace/VADE-evals/methods/head_cross.py", line 333, in <module>
+    main()
+  File "/workspace/VADE-evals/methods/head_cross.py", line 227, in main
+    model, processor = adapter.load()
+                       ^^^^^^^^^^^^^^
+  File "/workspace/VADE-evals/methods/adapters/qwen2_5_vl.py", line 19, in load
+    from transformers import AutoModelForImageTextToText, AutoProcessor
+ModuleNotFoundError: No module named 'transformers'
