@@ -157,7 +157,7 @@ def load_das_module(vade_root):
     return mod
 
 
-def make_intervention(method, dim, subspace_dim, vade_root):
+def make_intervention(method, dim, subspace_dim, vade_root, mask_init=None):
     """One intervention for one block's head columns."""
     if method == "dbm":
         from methods.dbm.intervention import SigmoidMaskIntervention
@@ -168,7 +168,8 @@ def make_intervention(method, dim, subspace_dim, vade_root):
         assert k > 0, "--subspace_dim must be > 0 for das_fixed"
         return das.FixedSubspaceIntervention(dim, k)
     if method == "das_rotated":
-        return das.RotatedSpaceIntervention(dim)
+        return (das.RotatedSpaceIntervention(dim) if mask_init is None
+                else das.RotatedSpaceIntervention(dim, mask_init=float(mask_init)))
     raise ValueError(f"unknown method {method!r} (expected one of {METHODS})")
 
 
@@ -226,19 +227,55 @@ def resolve_subspace_dims(spec, blocks, widths):
             for b, v in zip(sorted(blocks), vals)}
 
 
-def build_interventions(method, colmap, sub_dims, vade_root, device):
+def mask_travel_budget(mask_init, temps, mask_lr, eps=1e-6):
+    """Can the mask actually move? -> (n_live_steps, travel, need).
+
+    `das_rotated`'s mask enters the loss only as sigmoid(m / T), so every
+    gradient reaching `masks` is scaled by sigmoid\'(m/T)/T = s(1-s)/T. Once
+    m/T is large that factor underflows to EXACTLY 0 in float32 and the mask is
+    frozen for the rest of training -- silently, with the run still producing
+    fluent text and a plausible score. That is what made the first three
+    --mask_coef arms byte-identical (R12.3).
+
+    Adam normalizes by gradient magnitude, so while the factor is non-zero the
+    mask moves ~mask_lr per step; `travel` is that budget and `need` is the
+    distance from mask_init to 0 (where sigmoid = 0.5, i.e. the mask can still
+    express "drop this dimension"). travel < need means the arm is PINNED at
+    its initialization whatever the optimizer is told."""
+    import torch
+    m = float(mask_init)
+    live = 0
+    for t in temps:
+        s = torch.sigmoid(torch.tensor(m / float(t), dtype=torch.float32))
+        if float(s * (1 - s)) / float(t) > eps:
+            live += 1
+    return live, live * float(mask_lr), abs(m)
+
+
+def build_interventions(method, colmap, sub_dims, vade_root, device, mask_init=None):
     """One intervention per block, on that block's head columns."""
-    return {b: make_intervention(method, len(colmap[b]), sub_dims[b], vade_root).to(device)
+    return {b: make_intervention(method, len(colmap[b]), sub_dims[b], vade_root, mask_init).to(device)
             for b in sorted(colmap)}
 
 
-def temperature_schedule_for(method, n_steps, vade_root):
-    """-> [n_steps] temperatures, or None for a method with no mask to anneal."""
+def temperature_schedule_for(method, n_steps, vade_root, t_start=None, t_end=None):
+    """-> [n_steps] temperatures, or None for a method with no mask to anneal.
+
+    `t_start`/`t_end` override the method's own defaults. They exist because the
+    anneal and `mask_init` are a MATCHED PAIR -- the mask enters the loss only
+    through sigmoid(m/T), so what the optimizer sees is the RATIO. VADE's
+    (mask_init 150, T 50->0.1) puts that ratio at 3.0 for one step and past 15
+    -- numerically saturated -- within a quarter of training. See
+    `mask_travel_budget`."""
     if method == "dbm":
         from methods.dbm.intervention import temperature_schedule
         return temperature_schedule(n_steps)                 # RAVEL's 1e-2 -> 1e-7
     if method == "das_rotated":
-        return load_das_module(vade_root).temperature_schedule(n_steps)   # 50 -> 0.1
+        sched = load_das_module(vade_root).temperature_schedule            # 50 -> 0.1
+        kw = {}
+        if t_start is not None: kw["temperature_start"] = float(t_start)
+        if t_end is not None: kw["temperature_end"] = float(t_end)
+        return sched(n_steps, **kw)
     return None
 
 
@@ -645,13 +682,38 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
     blocks = sorted(colmap)
     params = [p for iv in interventions.values() for p in iv.parameters() if p.requires_grad]
     n_params = sum(p.numel() for p in params)
-    opt = torch.optim.Adam(params, lr=args.lr)
+    # `masks` gets its own group: it needs a step size set by the DISTANCE it must
+    # travel (mask_init -> 0) over the few steps its gradient survives, which has
+    # nothing to do with the rotation's step size. One shared lr cannot serve both.
+    mask_ps = [p for iv in interventions.values() for n, p in iv.named_parameters()
+               if n == "masks" and p.requires_grad]
+    if mask_ps and args.mask_lr is not None:
+        ids = {id(p) for p in mask_ps}
+        opt = torch.optim.Adam([{"params": [p for p in params if id(p) not in ids], "lr": args.lr},
+                                {"params": mask_ps, "lr": args.mask_lr}])
+        print(f"  param groups: rotation lr={args.lr:g}, masks lr={args.mask_lr:g}")
+    else:
+        opt = torch.optim.Adam(params, lr=args.lr)
 
     rows = load_rows(args.vade_root, args.entity, args.attribute, args.train_split,
                      args.train_rows, args.seed)
     batches = list(chunks(rows, args.batch_size))
     n_opt_steps = args.epochs * max(1, (len(batches) + args.grad_accum_steps - 1) // args.grad_accum_steps)
-    temps = temperature_schedule_for(args.method, n_opt_steps, args.vade_root)
+    temps = temperature_schedule_for(args.method, n_opt_steps, args.vade_root,
+                                     args.temperature_start, args.temperature_end)
+    if args.method == "das_rotated":
+        mi = 150.0 if args.mask_init is None else float(args.mask_init)
+        lr_m = args.lr if args.mask_lr is None else args.mask_lr
+        live, travel, need = mask_travel_budget(mi, temps, lr_m)
+        print(f"  mask anneal T {float(temps[0]):g} -> {float(temps[-1]):g}; mask_init={mi:g}")
+        print(f"  mask gradient survives {live}/{len(temps)} steps -> travel budget "
+              f"{travel:.1f} vs {need:.1f} needed to reach sigmoid=0.5")
+        if travel < need:
+            print(f"  WARNING: the mask CANNOT reach 0.5 -- it is pinned near "
+                  f"sigmoid({mi:g}/{float(temps[0]):g})={float(torch.sigmoid(torch.tensor(mi/float(temps[0])))):.4f} "
+                  f"and this arm is an (almost) FULL SWAP whatever --mask_coef says. "
+                  f"Raise --mask_lr to >= {need / max(live, 1):.3g}, or lower --mask_init "
+                  f"and --temperature_start together (their RATIO is what the sigmoid sees).")
     n_cause = sum(r["rule"] == "match_source" for r in rows)
     tail = len(batches) % args.grad_accum_steps
     print(f"  train: {len(rows)} rows ({n_cause} cause / {len(rows) - n_cause} iso), "
@@ -833,6 +895,20 @@ def main():
                          "valid partial score, not a penalized one.")
     ap.add_argument("--epochs", type=int, default=1)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--mask_lr", type=float, default=None, metavar="LR",
+                    help="das_rotated/dbm only: separate Adam lr for the `masks` parameter. "
+                         "Default (unset) reuses --lr, which is what produced the VOID R12.3 "
+                         "runs: the mask enters the loss only as sigmoid(m/T), so its gradient "
+                         "underflows to exactly 0 once m/T saturates, and Adam moves it ~lr per "
+                         "step until then -- ~150,000 steps at 1e-3 to travel mask_init=150. The "
+                         "run prints a travel budget and warns when the mask cannot move.")
+    ap.add_argument("--mask_init", type=float, default=None, metavar="M",
+                    help="das_rotated only: initial value of every mask logit (VADE default 150). "
+                         "Only the RATIO mask_init/temperature matters to the sigmoid, so change "
+                         "this together with --temperature_start.")
+    ap.add_argument("--temperature_start", type=float, default=None)
+    ap.add_argument("--temperature_end", type=float, default=None,
+                    help="Override the method's anneal endpoints (das_rotated: 50 -> 0.1).")
     ap.add_argument("--batch_size", type=int, default=4)
     ap.add_argument("--grad_accum_steps", type=int, default=16, metavar="G",
                     help="Batches accumulated per optimizer step. EFFECTIVE BATCH is "
@@ -889,7 +965,12 @@ def main():
     if args.method == "das_fixed":
         suffix = f"_k{str(args.subspace_dim).replace(',', '-').strip()}"
     elif args.method == "das_rotated":
-        suffix = f"_m{args.mask_coef:g}"
+        # every knob that CHANGES the run goes in the tag -- R12.3's three arms
+        # overwrote each other because only --mask_coef was encoded
+        suffix = (f"_m{args.mask_coef:g}"
+                  + (f"_mlr{args.mask_lr:g}" if args.mask_lr is not None else "")
+                  + (f"_mi{args.mask_init:g}" if args.mask_init is not None else "")
+                  + (f"_T{args.temperature_start:g}" if args.temperature_start is not None else ""))
     else:
         suffix = f"_l1{args.l1_coef:g}"
     tag = f"{args.attribute}_{args.method}{suffix}"
@@ -968,7 +1049,8 @@ def main():
             skip_train = True
 
     os.makedirs(out_dir, exist_ok=True)
-    interventions = build_interventions(args.method, colmap, sub_dims, args.vade_root, model.device)
+    interventions = build_interventions(args.method, colmap, sub_dims, args.vade_root,
+                                        model.device, args.mask_init)
     if not skip_train:
         train(adapter, model, processor, args, heads, colmap, items, entity_dir,
               lookup, pad_id, os.path.join(out_dir, "train_log.jsonl"), interventions)
