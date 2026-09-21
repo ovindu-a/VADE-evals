@@ -1,5 +1,5 @@
 {
-  "predictions_file": "results/head_das/flags/language_das_rotated_m0.0003_mlr4/predictions.jsonl",
+  "predictions_file": "results/head_das/flags/language_das_rotated_m0.001_mlr4/predictions.jsonl",
   "entity": "flags",
   "attribute": "language",
   "split": "test",
@@ -8,43 +8,43 @@
     "language": {
       "overall": {
         "n": 2000,
-        "pct_accuracy": 54.1,
-        "cause_accuracy": 65.8,
-        "iso_mean_accuracy": 50.8,
-        "final_score": 58.3
+        "pct_accuracy": 60.1,
+        "cause_accuracy": 53.2,
+        "iso_mean_accuracy": 62.5,
+        "final_score": 57.9
       },
       "by_queried": [
         {
           "queried": "calling_code",
           "n": 521,
           "is_cause": false,
-          "pct_accuracy": 44.0,
-          "pct_matches_source": 16.3,
-          "pct_matches_base": 44.0
+          "pct_accuracy": 55.3,
+          "pct_matches_source": 8.4,
+          "pct_matches_base": 55.3
         },
         {
           "queried": "capital",
           "n": 499,
           "is_cause": false,
-          "pct_accuracy": 64.5,
-          "pct_matches_source": 17.0,
-          "pct_matches_base": 64.5
+          "pct_accuracy": 81.0,
+          "pct_matches_source": 7.2,
+          "pct_matches_base": 81.0
         },
         {
           "queried": "currency",
           "n": 512,
           "is_cause": false,
-          "pct_accuracy": 43.8,
-          "pct_matches_source": 15.8,
-          "pct_matches_base": 43.8
+          "pct_accuracy": 51.2,
+          "pct_matches_source": 10.9,
+          "pct_matches_base": 51.2
         },
         {
           "queried": "language",
           "n": 468,
           "is_cause": true,
-          "pct_accuracy": 65.8,
-          "pct_matches_source": 65.8,
-          "pct_matches_base": 22.6
+          "pct_accuracy": 53.2,
+          "pct_matches_source": 53.2,
+          "pct_matches_base": 34.0
         }
       ]
     }
