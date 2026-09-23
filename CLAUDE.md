@@ -486,6 +486,20 @@ patch cannot steer past the first answer token. Outputs + SUMMARY.md under
 ceiling JSONs from `logs/`. The driver imports no torch, so `--dry_run` works
 anywhere.
 
+**Scoring: `--scoring auto` = token for flags, TEXT for every other entity.** Token
+scoring (targets.py's `exact_match` over the STORED label's tokens) is correct only
+for flags, whose labels are cased as the model writes them. brands/animals/celebrities
+store labels lowercase and the model adds articles -- gold `' united states'` vs
+generated `' the United States.'` -- so brands/hq_country read matches_base=0.0%
+UNHOOKED and other=100% in every ceiling cell. Year attributes are broken either way
+under token scoring: `'1995' -> ['Ġ','1','9','9','5']`, cut to 3 tokens = the century,
+so ~half of pairs collide. `--text_match` (ceiling_sweep, head_trace,
+head_window_sweep; off by default, so flags results are unchanged) uses
+`methods/common/text_match.py`, a copy of VADE score.py's casefold/whole-word
+matcher; head_window_sweep's first_* then compares position 0 against the model's
+OWN unhooked base/source answers, plus div_* at their first differing token.
+head_decode_trace (stage 4) still scores tokens.
+
 ## The question->readout path: methods/attr_head_trace.py, attr_capture.py, attr_directions.py
 
 `methods/attribute_switch_sweep.py` holds the IMAGE fixed and swaps the QUESTION,

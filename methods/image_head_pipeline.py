@@ -188,18 +188,20 @@ def pipeline_attributes(vade_root, model_slug, entity, allow_unpruned):
     return sorted(a for a in os.listdir(root) if os.path.isfile(os.path.join(root, a, "test.jsonl")))
 
 
-def ceiling_log_candidates(model_slug, entity, attribute, spec, layers, pruned):
-    tag = "-".join(str(l) for l in layers)
+def ceiling_log_candidates(model_slug, entity, attribute, spec, layers, pruned, text=False):
+    tag = "-".join(str(l) for l in layers) + ("_text" if text else "")
     suffix = "_pruned" if pruned else ""
     pat = os.path.join(REPO_ROOT, "logs", model_slug, entity, "ndm", attribute,
                        f"L1_0.0_*_{path_safe(spec)}_mlp_hidden{suffix}", f"ceiling_sweep_layers{tag}.json")
     return sorted(glob.glob(pat), key=os.path.getmtime, reverse=True)
 
 
-def usable_ceiling(path, layers, min_rows):
+def usable_ceiling(path, layers, min_rows, text=False):
     try:
         d = load_json(path)
     except (OSError, json.JSONDecodeError):
+        return False
+    if d.get("scoring", "token") != ("text" if text else "token"):
         return False
     have = {r["layer"] for r in d["by_site_layer"].values() if r["site"] == "residual"}
     n = min((r["n_cause"] for r in d["by_site_layer"].values() if r["site"] == "residual"), default=0)
@@ -239,11 +241,19 @@ class Runner:
         print(f"    -> exit {rc} after {(time.time() - t0) / 60:.1f} min", flush=True)
         return rc
 
+    def text(self, entity):
+        """TEXT scoring for every entity but flags under --scoring auto: flags' labels are cased
+        the way the model writes them (and its earlier results are token-scored), the others'
+        are stored lowercase and read 0% unhooked under token scoring."""
+        return self.args.scoring == "text" or (self.args.scoring == "auto" and entity != "flags")
+
     def common(self, entity, attribute):
         a = self.args
         out = ["--entity", entity, "--attribute", attribute, "--model_id", a.model_id, "--vade_root", a.vade_root]
         if a.allow_unpruned:
             out.append("--allow_unpruned")
+        if self.text(entity):
+            out += ["--text_match", "--max_new_tokens", str(a.text_max_new_tokens)]
         return out
 
     # ---------------------------------------------------------- per attribute
@@ -259,18 +269,23 @@ class Runner:
         print(f"\n{'=' * 78}\n{entity}/{attribute}\n{'=' * 78}", flush=True)
         py = shlex.split(a.py)
         layers = list(range(0, a.n_layers + 1))
+        text = self.text(entity)
+        sfx = "_text" if text else ""
+        state["scoring"] = "text" if text else "token"
+        print(f"  scoring: {state['scoring']}" + (" (VADE text match; first-token metrics against the model's "
+                                                 "own unhooked base/source answers)" if text else ""))
         if not a.dry_run:
             os.makedirs(d, exist_ok=True)
 
         # ---- stage 1: ceiling -------------------------------------------------------------
         specs = {"image": a.image_positions, "last": "last_token"}
-        ceil_paths = {k: os.path.join(d, f"ceiling_{path_safe(v)}.json") for k, v in specs.items()}
+        ceil_paths = {k: os.path.join(d, f"ceiling_{path_safe(v)}{sfx}.json") for k, v in specs.items()}
         need = [k for k, p in ceil_paths.items() if a.force or not os.path.exists(p)]
         if need and not a.no_reuse and not a.force:
             for k in list(need):
                 for c in ceiling_log_candidates(self.model_slug, entity, attribute, specs[k], layers,
-                                                not a.allow_unpruned):
-                    if usable_ceiling(c, layers, a.n_rows_ceiling):
+                                                not a.allow_unpruned, text):
+                    if usable_ceiling(c, layers, a.n_rows_ceiling, text):
                         print(f"  [ceiling] reusing {rel(c)} for {specs[k]}")
                         if not a.dry_run:
                             shutil.copyfile(c, ceil_paths[k])
@@ -295,7 +310,7 @@ class Runner:
                 return self.dry_placeholders(entity, attribute)
             for k in need:
                 found = ceiling_log_candidates(self.model_slug, entity, attribute, specs[k], layers,
-                                               not a.allow_unpruned)
+                                               not a.allow_unpruned, text)
                 if not found:
                     return self.fail(entity, attribute, "ceiling", "output JSON not found")
                 shutil.copyfile(found[0], ceil_paths[k])
@@ -305,8 +320,8 @@ class Runner:
         if a.dry_run and not all(os.path.exists(p) for p in ceil_paths.values()):
             # reused from logs but not copied (dry run): read them where they are
             src = {k: next(c for c in ceiling_log_candidates(self.model_slug, entity, attribute, specs[k],
-                                                               layers, not a.allow_unpruned)
-                           if usable_ceiling(c, layers, a.n_rows_ceiling)) for k in specs}
+                                                               layers, not a.allow_unpruned, text)
+                           if usable_ceiling(c, layers, a.n_rows_ceiling, text)) for k in specs}
         else:
             src = ceil_paths
         sel = select_handoff(load_json(src["image"]), load_json(src["last"]), a.n_layers,
@@ -323,7 +338,7 @@ class Runner:
             lo, hi = a.window_range
 
         # ---- stage 2: windows ---------------------------------------------------------------
-        win_path = os.path.join(d, f"windows_patch{P}.json")
+        win_path = os.path.join(d, f"windows_patch{P}{sfx}.json")
         if a.blocks:
             blocks = sorted(a.blocks)
             state["window"] = {"blocks": blocks, "label": span_label(blocks), "override": True}
@@ -343,7 +358,16 @@ class Runner:
             wj = load_json(win_path)
             state["windows_json"] = os.path.relpath(win_path, REPO_ROOT)
             self.print_windows(wj)
-            if not a.blocks:
+            io = wj["image_patch_only"]
+            rankable = a.window_metric != "first_src" or io.get("n_first", 0) >= max(4, io.get("n", 0) // 8)
+            if not a.blocks and not rankable:
+                state["window"] = {"blocks": sel["handoff_blocks"], "label": span_label(sel["handoff_blocks"]),
+                                   "fallback": "too few rows differ at the first answer token"}
+                print(f"  !! only {io.get('n_first', 0)}/{io.get('n', 0)} rows have base/source answers that "
+                      f"differ at the FIRST token, so windows cannot be ranked by first_src; using the handoff "
+                      f"window {state['window']['label']}. Stage-3 numbers for this attribute are capped the "
+                      f"same way -- run --stages ... decode.")
+            elif not a.blocks:
                 state["window"] = select_window(wj, a.window_metric, a.window_frac)
                 w = state["window"]
                 print(f"  -> window {w['label']}: {w['metric']}={w['score']:.1%} "
@@ -363,7 +387,7 @@ class Runner:
         blocks = state["window"]["blocks"]
         n_all = 28 * len(blocks) if not os.path.exists(win_path) else load_json(win_path)["n_heads"] * len(blocks)
         ks = sorted({k for k in a.knockout_ks if k < n_all} | {n_all})
-        trace_path = os.path.join(d, f"head_trace_patch{P}_blocks{span_label(blocks)}.json")
+        trace_path = os.path.join(d, f"head_trace_patch{P}_blocks{span_label(blocks)}{sfx}.json")
         if "heads" in a.stages and (a.force or not os.path.exists(trace_path)):
             cmd = [*py, "methods/head_trace.py", *self.common(entity, attribute),
                    "--patch_layer", str(P), "--positions", a.image_positions, "--blocks", *map(str, blocks),
@@ -390,6 +414,9 @@ class Runner:
                 if a.decode_limit:
                     cmd += ["--limit", str(a.decode_limit)]
                 print(f"\n  [stage 4: decode] continuous head substitution, top-k {a.decode_head_ks}")
+                if text:
+                    print("  !! head_decode_trace scores against the stored gold TOKENS, not text: its accuracy "
+                          "columns are wrong for lowercase-label entities (read its generated text instead)")
                 rc = self.run(cmd, os.path.join(logd, "stage4_decode.log"))
                 if rc:
                     return self.fail(entity, attribute, "decode", rc)
@@ -432,13 +459,16 @@ class Runner:
     @staticmethod
     def print_windows(wj):
         io = wj["image_patch_only"]
-        print(f"  [windows] image patch only: cause={io['cause']:.1%} first_src={io['first_src']:.1%}")
-        print(f"            {'window':>8} {'heads':>5} {'suff.first':>10} {'suff.cause':>10} {'nec.first':>9} "
-              f"{'shuf.own':>8} {'shuf.donor':>10}")
+        print(f"  [windows] image patch only: cause={io['cause']:.1%} first_src={io['first_src']:.1%} "
+              f"(n_first={io.get('n_first')}/{io.get('n')})"
+              + (f" div_src={io['div_src']:.1%} (n_div={io['n_div']})" if "div_src" in io else ""))
+        print(f"            {'window':>8} {'heads':>5} {'suff.first':>10} {'suff.div':>8} {'suff.cause':>10} "
+              f"{'nec.first':>9} {'shuf.own':>8} {'shuf.donor':>10}")
         for w in wj["windows"]:
             nec = w.get("nec", {}).get("first_src", float("nan"))
             sh = w.get("shuffled", {})
             print(f"            {w['label']:>8} {w['n_heads']:>5} {w['suff']['first_src']:>10.1%} "
+                  f"{w['suff'].get('div_src', float('nan')):>8.1%} "
                   f"{w['suff']['cause']:>10.1%} {nec:>9.1%} {sh.get('first_own', float('nan')):>8.1%} "
                   f"{sh.get('first_donor', float('nan')):>10.1%}")
         if wj.get("full_reference_identity_ok") is False:
@@ -554,6 +584,12 @@ def main():
     ap.add_argument("--n_rows", type=int, default=64, help="Stage 2-3 rows (flags used 64).")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--batch_size", type=int, default=16)
+    ap.add_argument("--scoring", default="auto", choices=["auto", "token", "text"],
+                    help="auto = text for every entity except flags. token = stored-label token exact match "
+                         "(what all flags results used; reads 0%% unhooked on lowercase-label entities). "
+                         "text = VADE's text matcher, first-token metrics at the model's own divergence token.")
+    ap.add_argument("--text_max_new_tokens", type=int, default=8,
+                    help="Generation budget under text scoring (' the United States.' is 4 tokens, a year 5).")
     # selection
     ap.add_argument("--patch_frac", type=float, default=0.95)
     ap.add_argument("--read_frac", type=float, default=0.9)

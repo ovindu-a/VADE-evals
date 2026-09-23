@@ -150,6 +150,7 @@ from methods.common.sites import (  # noqa: E402
     ALL_SITES, BLOCK_SPAN_PREFIX, FULL_SWAP_EQUIVALENT, resolve_site, site_name,
 )
 from methods.common.targets import MAX_ANSWER_TOKENS, exact_match  # noqa: E402
+from methods.common.text_match import text_match_rates  # noqa: E402
 from methods.ndm.config import METHOD_NAME, ndm_logs_dir  # noqa: E402
 from methods.ndm.verify_sites import generate_unhooked, hard_mask  # noqa: E402
 
@@ -189,9 +190,25 @@ def full_swap_generation(site, adapter, model, layers, layer, batch, pad_token_i
                                   pad_token_id, max_new_tokens)
 
 
+# None = token-level scoring (the default, and what every flags result used). Set by
+# enable_text_match() to a tokenizer, which switches EVERY caller of score_generation --
+# including head_trace.py, which imports it -- to VADE's text-level matcher. Needed for
+# entities whose labels are stored lowercase (brands/animals/celebrities): see
+# methods/common/text_match.py for the measured failure.
+_TEXT_MATCH_TOKENIZER = None
+
+
+def enable_text_match(tokenizer):
+    global _TEXT_MATCH_TOKENIZER
+    _TEXT_MATCH_TOKENIZER = tokenizer
+
+
 def score_generation(gen_toks, batch):
     """-> (matches_source_rate, matches_base_rate) over this batch, using the
-    trainer's own token-level gold matching."""
+    trainer's own token-level gold matching -- or, after enable_text_match(),
+    VADE's case/diacritic-insensitive whole-word match on the decoded text."""
+    if _TEXT_MATCH_TOKENIZER is not None:
+        return text_match_rates(_TEXT_MATCH_TOKENIZER, gen_toks, batch)
     pred = gen_toks[:, :MAX_ANSWER_TOKENS]
     ms = exact_match(pred, batch["source_gold_toks"], batch["source_gold_len"])
     mb = exact_match(pred, batch["base_gold_toks"], batch["base_gold_len"])
@@ -260,6 +277,12 @@ def main():
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--max_new_tokens", type=int, default=MAX_ANSWER_TOKENS + 2)
     ap.add_argument("--allow_unpruned", action="store_true")
+    ap.add_argument("--text_match", action="store_true",
+                     help="Score by VADE's text matcher (casefold, whole word, anywhere in the answer) "
+                          "instead of token-level exact match. REQUIRED for entities whose labels are "
+                          "stored lowercase (brands/animals/celebrities): token scoring reads 0%% even "
+                          "unhooked there. Output files get a _text suffix. Raise --max_new_tokens (8) "
+                          "with it, since answers like ' the United States.' need the room.")
     ap.add_argument("--out", default=None,
                      help="JSON output path. Defaults to ceiling_sweep_layers<tag>.json under this entity/"
                           "attribute's NDM logs dir (it's a diagnostic, not a scored result).")
@@ -283,14 +306,19 @@ def main():
         d = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
                           path_safe(spec), "mlp_hidden", pruned)
         os.makedirs(d, exist_ok=True)
-        return d, (args.out or os.path.join(d, f"ceiling_sweep_layers{layers_tag}.json"))
+        suffix = "_text" if args.text_match else ""
+        return d, (args.out or os.path.join(d, f"ceiling_sweep_layers{layers_tag}{suffix}.json"))
 
     run_label = "__".join(path_safe(x) for x in specs)[:80]
     log_dir, _ = dirs_for(specs[0])
 
-    with tee_to_log(os.path.join(log_dir, f"ceiling_sweep_{run_label}_layers{layers_tag}.log")):
+    with tee_to_log(os.path.join(log_dir, f"ceiling_sweep_{run_label}_layers{layers_tag}"
+                                          f"{'_text' if args.text_match else ''}.log")):
         adapter = get_adapter(args.model_id)
         model, processor = adapter.load()
+        if args.text_match:
+            enable_text_match(processor.tokenizer)
+            print(f"[{METHOD_NAME}/ceiling_sweep] scoring: VADE text match (--text_match)")
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         layers_stack = adapter.get_decoder_layers(model)
         pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
@@ -457,6 +485,8 @@ def main():
 
             with open(out_path, "w") as f:
                 json.dump({"entity": args.entity, "attribute": args.attribute, "positions": spec,
+                           "scoring": "text" if args.text_match else "token",
+                           "max_new_tokens": args.max_new_tokens,
                            "split": args.split, "layers": args.layers, "sites": args.sites,
                            "unhooked_cause_matches_source": base_cause_ms,
                            "unhooked_cause_matches_base": base_cause_mb,

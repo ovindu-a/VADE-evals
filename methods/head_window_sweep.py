@@ -80,6 +80,7 @@ from methods.common.entities import (  # noqa: E402
 from methods.common.position_sets import build_batch_at  # noqa: E402
 from methods.common.run_logging import tee_to_log  # noqa: E402
 from methods.common.targets import MAX_ANSWER_TOKENS, exact_match  # noqa: E402
+from methods.common.text_match import contains_label, decode_answers, labels_of  # noqa: E402
 from methods.head_trace import (  # noqa: E402
     capture_head_outputs, capture_image_source, generate_with_patches, head_patches, image_patch,
     per_head_delta,
@@ -116,34 +117,97 @@ def enumerate_windows(lo, hi, max_len):
 
 # ---------------------------------------------------------------- scoring
 
-class Tally:
-    """Row-weighted accumulator for one arm."""
+def divergence_hits(pred, ref_base, ref_src):
+    """First-DIFFERING-token transfer, against the model's OWN answers.
 
-    def __init__(self):
+    ref_base / ref_src are the model's unhooked answers on the base and the source
+    image ([B, T] ids). j = the first position where they differ. A row counts for
+    the source iff the prediction reproduces the shared prefix AND the source's
+    token at j (likewise for the base). Rows whose two answers never differ are
+    excluded. This is the honest single-token readout for answers that share a
+    leading ' the', a century ('19..'), or a first digit -- where comparing the
+    first token scores nothing -- and it sidesteps stored-label casing entirely.
+    -> (valid [B] bool, hit_src [B] bool, hit_base [B] bool)"""
+    L = min(ref_base.shape[1], ref_src.shape[1])
+    diff = ref_base[:, :L] != ref_src[:, :L]
+    valid = diff.any(1)
+    j = diff.int().argmax(1)
+    B = pred.shape[0]
+    hit_src = torch.zeros(B, dtype=torch.bool)
+    hit_base = torch.zeros(B, dtype=torch.bool)
+    for i in range(B):
+        ji = int(j[i])
+        if not valid[i] or pred.shape[1] <= ji or not torch.equal(pred[i, :ji], ref_src[i, :ji]):
+            continue
+        hit_src[i] = bool(pred[i, ji] == ref_src[i, ji])
+        hit_base[i] = bool(pred[i, ji] == ref_base[i, ji])
+    return valid, hit_src, hit_base
+
+
+class Tally:
+    """Row-weighted accumulator for one arm.
+
+    Two scoring modes. TOKEN (tokenizer=None, what flags used): cause/base_kept by
+    token exact match against the stored gold labels, first_* on the gold labels'
+    first tokens. TEXT (a tokenizer): cause/base_kept by VADE's text matcher; first_*
+    at position 0 against the model's OWN unhooked base/source answers (the batch
+    carries them as `ref_base_ans` / `ref_src_ans`), over rows where those differ at
+    position 0; plus div_* via divergence_hits, at the first position they differ.
+
+    Why both. first_* (position 0) is what a last-prompt-column patch controls, so it is
+    what windows are ranked by. div_* reaches rows whose answers share a prefix
+    (' the United States' / ' the Netherlands', years), but past position 0 every
+    decode step also reads the image tokens' K/V, which a head install at the last
+    prompt column leaves clean -- so for head arms div_* can sit far below the image
+    patch's even for the right window. It is reported, not selected on."""
+
+    def __init__(self, tokenizer=None):
+        self.tok = tokenizer
         self.n = self.src = self.base = 0
         self.n_first = self.first_src = self.first_base = 0
         self.donor = self.first_donor = self.n_first_donor = 0
+        self.n_div = self.div_src = self.div_base = 0
+
+    def _full(self, pred, batch, role):
+        if self.tok is not None:
+            texts = decode_answers(self.tok, pred)
+            return sum(contains_label(t, l) for t, l in zip(texts, labels_of(batch, role)))
+        return int(exact_match(pred[:, :MAX_ANSWER_TOKENS], batch[f"{role}_gold_toks"],
+                               batch[f"{role}_gold_len"]).sum())
+
+    def _first(self, pred, batch):
+        """-> (valid, hit_src, hit_base) at position 0."""
+        if "ref_src_ans" in batch:
+            s0, b0 = batch["ref_src_ans"][:, 0], batch["ref_base_ans"][:, 0]
+        else:
+            s0, b0 = batch["source_gold_toks"][:, 0], batch["base_gold_toks"][:, 0]
+        valid = s0 != b0
+        if not pred.shape[1]:
+            z = torch.zeros_like(valid)
+            return valid, z, z
+        return valid, (pred[:, 0] == s0) & valid, (pred[:, 0] == b0) & valid
 
     def add(self, gen, batch, donor_batch=None):
-        pred = gen[:, :MAX_ANSWER_TOKENS]
-        self.n += pred.shape[0]
-        self.src += int(exact_match(pred, batch["source_gold_toks"], batch["source_gold_len"]).sum())
-        self.base += int(exact_match(pred, batch["base_gold_toks"], batch["base_gold_len"]).sum())
-        s0, b0 = batch["source_gold_toks"][:, 0], batch["base_gold_toks"][:, 0]
-        differs = s0 != b0
-        self.n_first += int(differs.sum())
-        if pred.shape[1]:
-            p0 = pred[:, 0]
-            self.first_src += int(((p0 == s0) & differs).sum())
-            self.first_base += int(((p0 == b0) & differs).sum())
+        """donor_batch: for the shuffled control, the ROLLED golds -- `source_labels`,
+        `source_gold_toks`/`source_gold_len`, and `ref_src_ans` in text mode."""
+        self.n += gen.shape[0]
+        self.src += self._full(gen, batch, "source")
+        self.base += self._full(gen, batch, "base")
+        valid, hs, hb = self._first(gen, batch)
+        self.n_first += int(valid.sum())
+        self.first_src += int(hs.sum())
+        self.first_base += int(hb.sum())
+        if "ref_src_ans" in batch:
+            dv, ds, db = divergence_hits(gen, batch["ref_base_ans"], batch["ref_src_ans"])
+            self.n_div += int(dv.sum())
+            self.div_src += int(ds.sum())
+            self.div_base += int(db.sum())
         if donor_batch is not None:
-            self.donor += int(exact_match(pred, donor_batch["source_gold_toks"],
-                                          donor_batch["source_gold_len"]).sum())
-            d0 = donor_batch["source_gold_toks"][:, 0]
-            donor_differs = d0 != b0
-            self.n_first_donor += int(donor_differs.sum())
-            if pred.shape[1]:
-                self.first_donor += int(((pred[:, 0] == d0) & donor_differs).sum())
+            merged = {**batch, **donor_batch}
+            self.donor += self._full(gen, merged, "source")
+            dv, dh, _ = self._first(gen, merged)
+            self.n_first_donor += int(dv.sum())
+            self.first_donor += int(dh.sum())
 
     def rates(self, shuffled=False):
         n, nf = max(self.n, 1), max(self.n_first, 1)
@@ -151,6 +215,9 @@ class Tally:
              "cause": self.src / n, "base_kept": self.base / n,
              "other": max(0.0, 1.0 - (self.src + self.base) / n),
              "first_src": self.first_src / nf, "first_base": self.first_base / nf}
+        if self.n_div:
+            r.update({"n_div": self.n_div, "div_src": self.div_src / self.n_div,
+                      "div_base": self.div_base / self.n_div})
         if shuffled:
             # `own` is the row's own source gold (what an artefact keeps), `donor` the gold of the
             # row whose values it actually received (what real transfer produces).
@@ -202,14 +269,14 @@ def per_block_mass(adapter, model, batches, blocks, base_z, patched_z, finals):
 
 
 def run_arm(adapter, model, batches, img_src, z_per_batch, heads, with_image_patch, patch_layer,
-            pad_token_id, max_new_tokens, shuffled=False):
+            pad_token_id, max_new_tokens, shuffled=False, tokenizer=None):
     """One generation per batch with `heads` overwritten at the last token from
     z_per_batch, optionally under the image patch. Mirrors head_trace's
     run_cause / run_cause_shuffled (1-row batches are skipped when shuffled,
     since they roll onto themselves)."""
     hidden = adapter.hidden_size(model)
     head_dim = hidden // adapter.n_attention_heads(model)
-    t = Tally()
+    t = Tally(tokenizer)
     for (b_img, b_last), z, src in zip(batches, z_per_batch, img_src):
         if shuffled and len(b_img["rows"]) < 2:
             continue
@@ -222,14 +289,20 @@ def run_arm(adapter, model, batches, img_src, z_per_batch, heads, with_image_pat
         if shuffled:
             donor = {"source_gold_toks": torch.roll(b_img["source_gold_toks"], 1, 0),
                      "source_gold_len": torch.roll(b_img["source_gold_len"], 1, 0)}
+            if tokenizer is not None:
+                labels = labels_of(b_img, "source")
+                donor["source_labels"] = labels[-1:] + labels[:-1]   # torch.roll(shifts=1): row i <- i-1
+                donor["ref_src_ans"] = torch.roll(b_img["ref_src_ans"], 1, 0)
         t.add(gen, b_img, donor)
     return t.rates(shuffled=shuffled)
 
 
 def sweep_windows(adapter, model, batches, patch_layer, windows, pad_token_id, max_new_tokens,
-                  skip_necessity=False, skip_shuffled=False, log=None):
+                  skip_necessity=False, skip_shuffled=False, log=None, tokenizer=None):
     """The whole stage on prebuilt (image batch, last_token batch) pairs.
-    Returns the report dict (minus run metadata)."""
+    Returns the report dict (minus run metadata). tokenizer switches scoring to
+    TEXT mode (see Tally); the model's own base/source answers are then generated
+    once per batch and attached to it as the first-token references."""
     log = log or (lambda msg: print(msg, flush=True))
     n_heads = adapter.n_attention_heads(model)
     n_layers = len(adapter.get_decoder_layers(model))
@@ -242,13 +315,27 @@ def sweep_windows(adapter, model, batches, patch_layer, windows, pad_token_id, m
     img_src, base_z, patched_z, finals = capture(adapter, model, batches, patch_layer, blocks)
     mass = per_block_mass(adapter, model, batches, blocks, base_z, patched_z, finals)
 
-    t = Tally()
+    t = Tally(tokenizer)
     for b_img, _ in batches:
-        t.add(generate_unhooked(model, b_img["base_input_ids"], b_img["attention_mask"], b_img["base_extra"],
-                                pad_token_id, max_new_tokens), b_img)
+        gen = generate_unhooked(model, b_img["base_input_ids"], b_img["attention_mask"], b_img["base_extra"],
+                                pad_token_id, max_new_tokens)
+        if tokenizer is not None:
+            b_img["ref_base_ans"] = gen
+            b_img["ref_src_ans"] = generate_unhooked(model, b_img["source_input_ids"], b_img["attention_mask"],
+                                                     b_img["source_extra"], pad_token_id, max_new_tokens)
+        t.add(gen, b_img)
     unhooked = t.rates()
+    if tokenizer is not None:
+        log(f"  scoring: VADE text match. first_* = position 0 vs the model's own base/source answers, "
+            f"over the {unhooked['n_first']}/{unhooked['n']} rows where those differ there; div_* = at the "
+            f"first differing token ({unhooked.get('n_div', 0)}/{unhooked['n']} rows)")
+        if unhooked["n_first"] < max(4, unhooked["n"] // 8):
+            log(f"  !! only {unhooked['n_first']} rows differ at position 0: the model's base and source "
+                f"answers share their first token almost everywhere (years, ' the ...'), so no "
+                f"last-prompt-column patch can be measured here -- windows cannot be ranked for this "
+                f"attribute; use continuous substitution (image_head_pipeline --stages ... decode)")
     image_only = run_arm(adapter, model, batches, img_src, base_z, [], True, patch_layer, pad_token_id,
-                         max_new_tokens)
+                         max_new_tokens, tokenizer=tokenizer)
     log(f"  unhooked:          cause={unhooked['cause']:6.1%} first_src={unhooked['first_src']:6.1%}")
     log(f"  image patch only:  cause={image_only['cause']:6.1%} first_src={image_only['first_src']:6.1%} "
         f"base_kept={image_only['base_kept']:6.1%}   <-- the effect every window is read against")
@@ -261,13 +348,13 @@ def sweep_windows(adapter, model, batches, patch_layer, windows, pad_token_id, m
         heads = [(b, h) for b in w for h in range(n_heads)]
         rec = {"blocks": w, "label": window_label(w), "n_heads": len(heads),
                "suff": run_arm(adapter, model, batches, img_src, patched_z, heads, False, patch_layer,
-                               pad_token_id, max_new_tokens)}
+                               pad_token_id, max_new_tokens, tokenizer=tokenizer)}
         if not skip_necessity:
             rec["nec"] = run_arm(adapter, model, batches, img_src, base_z, heads, True, patch_layer,
-                                 pad_token_id, max_new_tokens)
+                                 pad_token_id, max_new_tokens, tokenizer=tokenizer)
         if not skip_shuffled:
             rec["shuffled"] = run_arm(adapter, model, batches, img_src, patched_z, heads, False, patch_layer,
-                                      pad_token_id, max_new_tokens, shuffled=True)
+                                      pad_token_id, max_new_tokens, shuffled=True, tokenizer=tokenizer)
         rows.append(rec)
         s = rec["suff"]
         line = (f"  window {rec['label']:>7} ({len(heads):>3} heads)  suff: cause={s['cause']:6.1%} "
@@ -335,6 +422,10 @@ def main():
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--max_new_tokens", type=int, default=MAX_ANSWER_TOKENS + 2)
     ap.add_argument("--allow_unpruned", action="store_true")
+    ap.add_argument("--text_match", action="store_true",
+                    help="TEXT scoring (see Tally): VADE's matcher for cause/base_kept, first-differing-token "
+                         "against the model's own answers for first_*. Required for lowercase-label entities; "
+                         "use --max_new_tokens 8 with it.")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
@@ -345,7 +436,7 @@ def main():
     log_dir = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
                            args.positions, "attn_head_output", pruned, diagnostic=True)
     os.makedirs(log_dir, exist_ok=True)
-    tag = f"head_window_sweep_patch{args.patch_layer}"
+    tag = f"head_window_sweep_patch{args.patch_layer}" + ("_text" if args.text_match else "")
     out_path = args.out or os.path.join(log_dir, f"{tag}.json")
 
     with tee_to_log(os.path.join(log_dir, f"{tag}.log")):
@@ -378,7 +469,8 @@ def main():
         batches = build_paired_batches(args, cause_rows, entity_assets, adapter, model, processor)
 
         report = sweep_windows(adapter, model, batches, args.patch_layer, windows, pad_token_id,
-                               args.max_new_tokens, args.skip_necessity, args.skip_shuffled)
+                               args.max_new_tokens, args.skip_necessity, args.skip_shuffled,
+                               tokenizer=processor.tokenizer if args.text_match else None)
 
         io = report["image_patch_only"]
         ref = next((w for w in report["windows"] if w["blocks"] == full_ref), None)
@@ -399,6 +491,7 @@ def main():
             print(f"  block {b:>2}: delta_resid={m['delta_resid']:9.4f}  |delta_dla|={m['delta_dla']:9.4f}")
 
         report.update({"entity": args.entity, "attribute": args.attribute, "patch_layer": args.patch_layer,
+                       "scoring": "text" if args.text_match else "token", "max_new_tokens": args.max_new_tokens,
                        "positions": args.positions, "n_rows": len(cause_rows), "seed": args.seed,
                        "split": args.split, "n_layers": n_layers,
                        "n_heads": adapter.n_attention_heads(model)})

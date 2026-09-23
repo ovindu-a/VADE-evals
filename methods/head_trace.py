@@ -89,7 +89,7 @@ from methods.common.run_logging import tee_to_log  # noqa: E402
 from methods.common.sites import RESIDUAL_SITE, InterventionSite  # noqa: E402
 from methods.common.targets import MAX_ANSWER_TOKENS  # noqa: E402
 from methods.dbm.intervention import SigmoidMaskIntervention  # noqa: E402
-from methods.ndm.ceiling_sweep import score_generation  # noqa: E402
+from methods.ndm.ceiling_sweep import enable_text_match, score_generation  # noqa: E402
 from methods.ndm.config import METHOD_NAME, ndm_logs_dir  # noqa: E402
 from methods.ndm.verify_sites import HARD_TEMPERATURE, generate_unhooked  # noqa: E402
 
@@ -405,6 +405,9 @@ def main():
     ap.add_argument("--max_new_tokens", type=int, default=MAX_ANSWER_TOKENS + 2)
     ap.add_argument("--top_n", type=int, default=20, help="How many heads to print in the phase-1 table.")
     ap.add_argument("--allow_unpruned", action="store_true")
+    ap.add_argument("--text_match", action="store_true",
+                    help="Score every arm with VADE's text matcher instead of token-level exact match "
+                         "(see ndm/ceiling_sweep.py --text_match). Required for lowercase-label entities.")
     ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
@@ -428,11 +431,16 @@ def main():
     blocks_preview = args.blocks if args.blocks is not None else None
     tag = f"head_trace_patch{args.patch_layer}" + (f"_blocks{_span(blocks_preview)}"
                                                     if blocks_preview else "_blocksdefault")
+    if args.text_match:
+        tag += "_text"
     out_path = args.out or os.path.join(log_dir, f"{tag}.json")
 
     with tee_to_log(os.path.join(log_dir, f"{tag}.log")):
         adapter = get_adapter(args.model_id)
         model, processor = adapter.load()
+        if args.text_match:
+            enable_text_match(processor.tokenizer)
+            print(f"[{METHOD_NAME}/head_trace] scoring: VADE text match (--text_match)")
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         n_layers = len(adapter.get_decoder_layers(model))
         n_heads = adapter.n_attention_heads(model)
@@ -557,6 +565,7 @@ def main():
             print(f"  block {b:>2}: {by_block[b]:>10.4f}")
 
         report = {"entity": args.entity, "attribute": args.attribute, "patch_layer": args.patch_layer,
+                  "scoring": "text" if args.text_match else "token", "max_new_tokens": args.max_new_tokens,
                   "positions": args.positions, "blocks": blocks, "n_heads": n_heads, "head_dim": head_dim,
                   "n_rows": len(cause_rows), "rank_by": args.rank_by, "seed": args.seed,
                   "phase1": table, "phase1_ranked": [(r["block"], r["head"]) for r in ranked[:64]]}
@@ -752,7 +761,10 @@ def main():
                 s_own, t = score_generation(gen, b_img)
                 # Roll the gold the SAME way the values were rolled, so row i is scored against the
                 # gold of the row whose head outputs it actually received.
+                labels = [r["source_label"] for r in b_img["rows"]]
                 s_donor, _ = score_generation(gen, {**b_img,
+                    # rolled like the values (row i <- row i-1); read by the text scorer
+                    "source_labels": labels[-1:] + labels[:-1],
                     "source_gold_toks": torch.roll(b_img["source_gold_toks"], shifts=1, dims=0),
                     "source_gold_len": torch.roll(b_img["source_gold_len"], shifts=1, dims=0)})
                 k = len(b_img["rows"])
