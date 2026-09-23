@@ -466,6 +466,26 @@ ASSERTS they agree on `base_input_ids`/`attention_mask` -- a silent mismatch
 would patch one prompt's image and read another's last token with every
 downstream number still plausible.
 
+## methods/image_head_pipeline.py -- the flags head localization, for any entity
+
+One command runs the image->text localization done by hand on flags: (1)
+`ndm/ceiling_sweep.py --sites residual` at `full_image` and `last_token`, every
+layer -> patch_layer = deepest layer of the image curve's top plateau, read_end =
+first layer where the last-token curve reaches 90% of its range, handoff = blocks
+patch_layer..read_end-1; (2) `methods/head_window_sweep.py` -- every head of a
+block window installed at the last token (plus the restore-all mirror and a
+shuffled-donor control) for all windows <=3 blocks in that range+2, ONE model
+load, off ONE capture; picks the smallest window reaching 95% of the best; (3)
+`head_trace.py --blocks <window>`; (4, opt-in) `head_decode_trace.py`. On the
+existing flags logs the automatic stage-1 choice reproduces the hand-picked
+patch_layer 21 / blocks 21-23 for all four attributes. The last-token curve uses
+`1 - base_kept`, not `cause`, and stage 2 ranks windows by FIRST-token transfer
+(rows whose golds' first tokens differ) -- both because a last-prompt-column
+patch cannot steer past the first answer token. Outputs + SUMMARY.md under
+`results/image_head_pipeline/<entity>/`; resumable; reuses existing full-layer
+ceiling JSONs from `logs/`. The driver imports no torch, so `--dry_run` works
+anywhere.
+
 ## The question->readout path: methods/attr_head_trace.py, attr_capture.py, attr_directions.py
 
 `methods/attribute_switch_sweep.py` holds the IMAGE fixed and swaps the QUESTION,
@@ -530,6 +550,8 @@ python methods/mech_probe.py --entity flags --attribute language --dry_run
 python methods/mech_probe.py --entity flags --attribute language
 python methods/dla.py --entity flags --attribute language --direction base_minus_source
 python methods/head_trace.py --entity flags --attribute language --patch_layer 21 --positions flag_ring1
+python methods/image_head_pipeline.py --entity brands animals celebrities --dry_run   # image->text heads, all stages
+python methods/image_head_pipeline.py --entity brands animals celebrities
 python methods/ndm/swap_trace.py --entity flags --attribute calling_code --positions last_token \
     --site residual --layers 19 20 21 22 23 24 25 26 27 28      # what did it say INSTEAD
 
