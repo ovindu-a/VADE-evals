@@ -933,10 +933,48 @@ python methods/head_cross.py --n_pairs 64 --batch_size 64 --cells flag question 
 
 # same design, but patch only a k-dim subspace of the head columns
 python methods/head_cross.py --n_pairs 16 --batch_size 64 --subspace_dim 7
+
+# break the step correspondence -- see R11.3b. Same --n_pairs/--seed draws the
+# identical rows, so these are paired with the matched run row for row.
+python methods/head_cross.py --n_pairs 64 --align step0 --cells flag self both
+python methods/head_cross.py --n_pairs 64 --align hold0 --cells flag self both
 ```
 
 Cost is `n_pairs x 4 x 4 x 2` rows and ~3 model passes per row (donor capture,
-patched generation, clean reference). At `n_pairs=64` that is 2,048 rows.
+patched generation, clean reference). At `n_pairs=64` that is 2,048 rows;
+`--cells flag self both` drops 768 of them, and R11.4 shows the `question` cell
+carries nothing beyond its own inertness.
+
+### `--align`: which donor step lands at which base step
+
+`head_swap_vade.donor_index(align, step, n_steps)` is the whole mechanism, and
+the three modes exist to separate a CONTENT effect from a STEP-ALIGNMENT one.
+`matched` installs donor step t at base step t; a donor asked a DIFFERENT
+question therefore contributes, at t >= 1, its own answer's continuation, and a
+multi-token result cannot tell the two apart. `hold0` holds step 0 everywhere;
+`step0` patches once and lets the base free-run (the hook returns `None`, which
+leaves a pre-hook's input untouched).
+
+The mode is in the OUTPUT FILENAME (`cross_n64_step0.jsonl`) — three arms of the
+same `--n_pairs` would otherwise overwrite each other, the mistake R12.3's
+`--mask_coef` arms made. Rows carry `align` and `first_token`; `first_token` is
+what makes the modes comparable, since they are identical at t=0 by construction
+and so must agree there row for row. Check that before reading any score:
+
+```bash
+python3 -c "
+import json
+f={m:{(r['base'],r['donor_flag'],r['q1'],r['q2'],r['cell']):r['first_token']
+      for r in map(json.loads,open(p))}
+   for m,p in [('step0','results/head_cross/flags/cross_n64_step0.jsonl'),
+               ('hold0','results/head_cross/flags/cross_n64_hold0.jsonl')]}
+k=set(f['step0'])&set(f['hold0'])
+print(sum(f['step0'][x]==f['hold0'][x] for x in k), '/', len(k), 'agree at t=0')"
+```
+
+`verify_readback` takes `align` too and checks only the steps that mode actually
+installed — `step0` skips t >= 1 rather than failing on them — but it still
+catches a dead patch at t=0 (`tests/test_head_swap_vade.py`).
 
 ## R11. The heads carry the ENTITY, not the answer
 
@@ -1139,6 +1177,81 @@ step-2+ head outputs were captured while it answered a *different* question, so
 after the first token the installed sequence no longer tracks the digits being
 emitted. **The corrected content shift is -0.9pp.**
 
+### R11.3b The artefact, confirmed by a double dissociation (`--align`)
+
+R11.3 infers the artefact from *where* the shift lives (one attribute, the only
+one with 0/384 single-token golds) and from first-digit agreement. `--align`
+tests it directly by changing WHICH donor step gets installed at base step t.
+`patched_generate` patches the last column of **every** forward, so the default
+`matched` mode is a step-for-step replay (`idx = min(t, T-1)`); two alternatives
+break that correspondence (`head_swap_vade.donor_index`):
+
+| mode | donor step installed at base step t |
+|---|---|
+| `matched` | `min(t, T-1)` — the R10/R11 intervention |
+| `hold0` | `0` — the donor's readout column, held at every step |
+| `step0` | `0` at t=0, then the hook returns None and the base free-runs |
+
+All three are identical at t=0 **by construction**, which is a free self-test:
+the first generated token must agree across modes, row for row. It does —
+1200/1200 exact `first_token` agreement between `step0` and `hold0`, and
+1200/1200 on the first character against the `matched` run (which predates the
+`first_token` field). `n_pairs 64 --seed 0` draws identical rows in all three.
+
+`calling_code`, `source_q1` %:
+
+| mode | `flag` | `both` | shift |
+|---|---|---|---|
+| `matched` | 93.8 | 31.8 | **-62.0** |
+| `step0` | **1.6** | **1.6** | **+0.0** |
+| `hold0` | 95.3 | 89.1 | -6.2 |
+
+**Removing steps >=1 kills both cells identically.** `flag` falls 93.8 -> 1.6%,
+so every point of its calling_code success was carried by the steps after 0, and
+with those gone the two cells are indistinguishable. The gap was never content.
+
+**Replacing steps >=1 with a question-independent signal rescues `both` at no
+cost to `flag`.** 31.8 -> 89.1% (+57.3pp) while `flag` goes 93.8 -> 95.3%. So the
+step-0 column's content is question-independent *and* sufficient, and `matched`'s
+step >=1 was not merely useless but actively destructive. The -6.2pp residual in
+the table is a difference of cell rates; paired by base item it is **-5.3pp, 95%
+CI [-12.5, +0.8]pp over 44 items** — not significant. Do not report it as a
+remaining content effect, and do not report it as exactly zero either.
+
+The source's first digit arrives at **100.0% (`flag`) / 99.5% (`both`) in all
+three modes** — the t=0 identity, unchanged, visible at the answer level.
+
+Whole-design content shift: **-16.1pp (`matched`) -> -1.2pp (`hold0`) -> +0.4pp
+(`step0`)**. R11.3's -0.9pp correction is reproduced by an intervention that does
+not drop an attribute.
+
+**A second result, not a bug fix.** `step0` retention tracks how much token 0
+pins the rest of the answer:
+
+| attribute | `matched` | `step0` | retained |
+|---|---|---|---|
+| language | 85.9% | 82.8% | 96.4% |
+| capital | 98.4% | 85.9% | 87.3% |
+| currency | 46.9% | 35.9% | 76.7% |
+| calling_code | 93.8% | 1.6% | **1.7%** |
+
+Single-token `language` barely moves — the control, predicted in advance. `capital`
+mostly survives because `" Phnom"` leaves the base context almost no freedom;
+`"8"` is consistent with 855, 856 and 880, so calling_code collapses. And `flag`
+needs `hold0` (95.3%) where `step0` gives 1.6%: **the heads must keep asserting
+the entity at every decode step.** The answer is not written at the readout
+column and then unrolled from the KV cache.
+
+The control that licenses all of this is the `self` cell: 93.0% (`matched`) ->
+93.4% (`hold0`). Holding a step-0 column at every step is *benign on its own*, so
+`hold0`'s +57pp recovery on `both` is signal, not the intervention accidentally
+helping.
+
+**`hold0` is not a replacement headline.** It is off-manifold and exists as
+mechanism evidence. The reportable number stays `matched`, either excluding
+calling_code (R11.3) or quoted as first-token agreement, with these two modes
+cited as the proof that the exclusion is principled rather than convenient.
+
 ### R11.4 The `question` cell's zeros, and what they are worth
 
 `question` reads 83.2% `base_q1` / 0.0% `base_q2`: a donor captured under a
@@ -1300,6 +1413,78 @@ Run tags encode the knob that varies (`_k128`, `_k128-256-256`, `_kfull`,
 `_m0.001`, `_l10.001`) so a sweep cannot overwrite itself — the gotcha CLAUDE.md
 records for `select_features.py`.
 
+### `--mask_lr` / `--mask_init` / `--temperature_*`: making the mask movable
+
+`das_rotated` and `dbm` learn their width through `sigmoid(m / T)`, so **every**
+gradient reaching `masks` is scaled by `sigmoid'(m/T)/T = s(1-s)/T`. Once `m/T`
+is large that factor underflows to *exactly* 0 in float32 and the mask is frozen
+for the rest of training — silently, with the run still producing fluent text
+and a plausible score. That is R12.3.
+
+Adam normalizes by gradient magnitude, so while the factor is non-zero the mask
+moves ~`lr` per step. `mask_travel_budget(mask_init, temps, mask_lr)` turns that
+into a checkable number and every `das_rotated` run prints it:
+
+```
+  param groups: rotation lr=0.001, masks lr=4
+  mask anneal T 50 -> 0.1; mask_init=150
+  mask gradient survives 80/375 steps -> travel budget 320.0 vs 150.0 needed
+```
+
+`travel < need` prints a WARNING naming the arm as an (almost) full swap
+whatever `--mask_coef` says. Sized at three realistic step counts:
+
+| opt steps | config | live | travel | need | |
+|---|---|---|---|---|---|
+| 94 | R12.3's runs (`lr 1e-3`, `--grad_accum_steps 4`) | 20/94 | 0.02 | 150 | **PINNED** |
+| 375 | `--mask_lr 1.0` | 80/375 | 80 | 150 | **PINNED** |
+| 375 | `--mask_lr 4.0` | 80/375 | 320 | 150 | OK |
+| 375 | `--mask_init 3 --temperature_start 1 --mask_lr 0.2` | 206/375 | 41 | 3 | OK |
+
+Three things to know before tuning against it:
+
+* **`--grad_accum_steps` is the hidden variable.** R12.3 used 4, which turned 375
+  batches into 94 optimizer steps. Dropping to 1 is *free* — same batches, same
+  wall clock, 4x the steps.
+* **Only the RATIO `mask_init / T` is visible to the sigmoid**, so `--mask_init`
+  and `--temperature_start` must move together. Lowering `mask_init` alone walks
+  into the `masks = 0` degeneracy VADE's own docstring warns about, where
+  `mixed = 0.5*(rotated_source + rotated_base)` makes the rotation cancel.
+* **The guard is conservative and is a floor, not a target.** It evaluates
+  liveness at the *initial* mask value; as the mask falls so does `m/T`, so the
+  real window is longer. R14's arms were still moving at step 115 of a predicted
+  80. Do not raise `--mask_lr` to make the printed number larger.
+
+`masks` gets its own Adam parameter group because its step size is set by the
+DISTANCE it must travel, which has nothing to do with the rotation's step size.
+Every knob that changes the run is in the output tag (`_m3e-4_mlr4_mi3_T1`), so a
+sweep cannot overwrite itself — R12.3's arms did, because only `--mask_coef` was
+encoded.
+
+### `methods/head_das_table.py` — read SLACK, not `final_score`
+
+```bash
+python methods/head_das_table.py                       # flags/language, every arm
+python methods/head_das_table.py --attribute currency
+```
+
+`final_score` hides the result. Every arm at this site lies on a monotone
+cause<->iso trade-off, so arms that behave very differently (cause 46.6 / iso
+67.7 versus cause 73.2 / iso 39.9) score within noise of each other.
+
+> **slack** = the arm's `iso`, minus the `iso` a *probabilistic* full swap would
+> reach at that `cause` — i.e. the straight line from the clean run (cause 0, iso
+> 94.2) to the full-swap ceiling (cause 94.7, iso 1.7). A coin flip between "swap
+> everything" and "swap nothing" has slack 0 by construction, so slack is the
+> only column that measures whether an arm is doing something a random mixture
+> could not.
+
+The table also reports **width** — summed `subspace_dim` for `das_fixed`, summed
+`mask_sum` for the masked methods — because a rotated arm and a fixed arm are
+only comparable when they spend the same number of dimensions. It sorts by slack,
+prints an SE on `final_score` with a settable design effect for item clustering
+(default 2.0), and lists incomplete runs rather than silently omitting them.
+
 ## R12. The conduit decomposes, but only to ~57%
 
 `methods/head_das.py`, flags, `common10`, `das_fixed`, trained on `train` and
@@ -1410,20 +1595,318 @@ compounding failures, measured:
   warns about.
 
 `dbm` does **not** have this trap: it inits at `mask = 0.5`, the maximally
-informative point, with gradients of 4e2 -> 4e7 as T falls. It is currently the
-only learned-width method usable at this site. Fixing `das_rotated` needs a
-separate parameter group giving `masks` its own learning rate (~1.0), or
-`mask_init ~ 3` with `temperature_start ~ 1`.
+informative point, with gradients of 4e2 -> 4e7 as T falls.
+
+**This has since been fixed and the diagnosis confirmed exactly — see R14.** The
+checkpoints of these three void arms carry `mask_sum == dim` on every block
+(1280/1280), so they were not DAS that underperformed: they were the **full
+swap** wearing a DAS label, which is why all three scored 94.7 / 1.7 / 48.2,
+identical to `das_fixed --subspace_dim full`. They appear in R14's table at width
+1280, slack -0.0, and should be cited only as the negative control.
 
 ### R12.4 Where this leaves the head site
 
 The `das_fixed` sweep is finished; no configuration left will move it. The site
 admits ~+19pp of slack over trivial and caps `final_score` near 57%, against
-endpoints at 47-48%. Two questions remain, and neither is answerable here:
+endpoints at 47-48%. Two questions remained:
 
-* does a **learned** width agree with K ~ 128-256 per block? Needs the
-  `das_rotated` fix, or a `dbm` run (trap-free today);
-* is ~57% a property of *these heads* or of the model? That is the
-  attribute-head site (blocks 17-21, `attr_head_trace.py`), where R11 predicts a
-  genuinely different answer — these heads carry "which flag", and the attribute
-  is selected downstream.
+* does a **learned** width agree with K ~ 128-256 per block? **Answered in R14**:
+  it does not. A learned width traces the same trade-off but reaches a *better*
+  slack at every width, and the advantage grows as the width shrinks.
+* is ~57% a property of *these heads* or of the model? **R13 answers this
+  structurally** — these heads carry 77-89% entity variance and 3-15% question
+  variance, so a question-blind intervention here has no input on which to be
+  selective. The cap is the site, not the method.
+
+## R13. Why no intervention at this site can be selective — measured, and partly a theorem
+
+R12's plateau is usually read as a training result. It is not: it follows from
+what the intervention can *see*. This section measures that, off the crossed
+activation grid `attr_capture.py` already wrote (84 items x 4 attributes at
+`last_token`, blocks 15-27) with **no model and no GPU**.
+
+```bash
+python methods/attr_variance.py --site residual                                  # R13.1 top
+python methods/attr_variance.py --site attn_head_output --heads common10 \
+    --blocks 21 22 23                                                            # R13.1 bottom
+python methods/attr_variance.py --per_head --blocks 21 22 23 --site attn_head_output
+```
+
+`methods/attr_variance.py` asserts the grid is balanced before decomposing -- the
+exactness below depends on it, and a capture with a missing cell would otherwise
+produce plausible percentages. It takes any entity's capture via `--capture_dir`,
+so R13 reruns on brands/animals for the cost of an `attr_capture.py` run.
+
+### R13.1 The decomposition
+
+The grid is balanced (one row per (item, attribute) cell) and the activations are
+deterministic — one forward pass per cell, no replication — so the two-way
+decomposition `SS_total = SS_item + SS_attr + SS_interaction` is exact and the
+residual term **is** the interaction, not noise.
+
+The interaction is the quantity VADE is about. `item` alone is "which country";
+`attribute` alone is "which question"; only `item x attribute` is *this country's
+this attribute*, and only a representation carrying it can be edited for one
+attribute without moving the others.
+
+`residual` @ `last_token`, % of variance explained:
+
+| block | item (entity) | attribute (question) | **item x attribute** |
+|---|---|---|---|
+| 15 | 26.5 | 71.7 | 1.9 |
+| 17 | 13.2 | 84.9 | 2.0 |
+| 19 | 21.0 | 76.2 | 2.8 |
+| 21 | 12.8 | 84.3 | **2.9** |
+| 22 | 15.0 | 81.6 | **3.4** |
+| 23 | 32.1 | 62.6 | **5.2** |
+| 24 | 40.3 | 50.3 | **9.3** |
+| 25 | 31.9 | 51.1 | **17.1** |
+| 26 | 29.6 | 46.3 | **24.1** |
+| 27 | 28.0 | 49.4 | 22.6 |
+
+`attn_head_output`, restricted to the `common10` columns — the site R12 trained
+on:
+
+| block | item | attribute | item x attribute |
+|---|---|---|---|
+| 21 | **77.0** | 14.7 | 8.3 |
+| 22 | **82.1** | 5.3 | 12.7 |
+| 23 | **88.7** | 3.3 | 8.0 |
+
+Two readings:
+
+* **The DAS runs were three to five blocks upstream of the quantity VADE scores.**
+  The bound representation is ~3% of the variance through block 22 and does not
+  become substantial until 25-26.
+* **The `common10` heads are 77-89% "which country" and 3-15% "which question".**
+  This is R11's -1.2pp content shift measured directly in the activations rather
+  than inferred from generations, on a different quantity, off a capture the
+  head_cross runs never touched.
+
+### R13.2 The identifiability argument
+
+A DAS/DBM intervention here is one fixed trained function `f(base_head_output,
+donor_head_output)`, applied identically to every row. On a cause row it must
+transfer; on an iso row it must not. Those rows differ only in which question was
+asked — and the question is 3-15% of what `f` can see.
+
+**The information required to be selective is not in the intervention's input.**
+`cause` and `iso` are therefore yoked, which is exactly R12.2's curve: `final_score`
+pinned at 56.5-58.3% while `cause` ran 41.5 -> 73.3%, and still only 54.7% at the
+sparsest arm's `cause` of 31.4%. No K, no learning rate, no mask schedule
+addresses this, and R14 confirms it for a second hypothesis class.
+
+What DAS *does* buy is real and should be reported: at cause 46.6%, a
+probabilistic full swap predicts iso 48.7% and `fixed_k128` measures 67.7%. The
+~+19-21pp of slack is the honest ceiling for a question-blind intervention at an
+entity-coding site.
+
+### R13.3 At image positions this is not a measurement but a theorem
+
+`build_prompt` puts the image before the text question in the same user turn
+(`head_swap_vade.py`). Every image token therefore precedes every question token,
+and under causal masking **image-position activations at every layer are
+bit-identical across the four questions** — not "mostly", not "-1.2pp".
+
+So any intervention at image positions is question-blind *by architecture*, for
+every method, forever, unless the attributes are separately encoded in the visual
+representation itself. VADE's own design patches the object's image tokens; this
+is a structural cap on that design, and R11/R12/R14 are its downstream shadow at
+the heads that read those positions.
+
+This is one line to verify and has **not** been run — it is the same check
+`seq:before` uses in `methods/common/position_sets.py`: capture image-position
+activations under two different questions and assert bit-identity. Until it is
+run, treat R13.3 as an argument from the prompt layout, not a measurement.
+
+### R13.4 What this does and does not license
+
+It does **not** say the model is incapable of the task, nor that a different site
+cannot be selective — R13.1's own table shows the interaction rising to 24.1% by
+block 26.
+
+It does say that a *question-blind* intervention at an *entity-coding* site is
+structurally capped, and that the three places this project has trained one
+(image positions, `common10`, and `residual` at the image span) are all such
+sites. The natural control is the same machinery at `residual`/`last_token`/L24,
+where the interaction is 3x block 21's and the full-swap ceiling is already
+measured at 100% for language. That arm is **outside the benchmark's intended
+site** — at the last text token you have left the visual pathway, and a success
+there is a claim about factual recall, not visual attribute encoding. It is worth
+running as a **positive control** that disambiguates "our trainer is broken" from
+"the site cannot support selectivity", and it should be labelled as one.
+
+## R14. `das_rotated`, fixed: a canonical ~50-dim ENTITY subspace
+
+R12.3's three arms were void. With `--mask_lr 4.0 --grad_accum_steps 1` the mask
+moves and the hypothesis class is tested for the first time. Five arms,
+flags/language, `common10`, 6000 train / 2000 eval rows, 375 optimizer steps.
+
+```bash
+for C in 1e-4 3e-4 1e-3 3e-3 1e-2; do
+  python methods/head_das.py --attribute language --method das_rotated --mask_coef $C \
+    --train_rows 6000 --eval_rows 2000 --batch_size 16 --grad_accum_steps 1 --mask_lr 4.0
+done
+python methods/head_das_table.py                                      # R14.1
+python methods/das_subspace_geometry.py --checkpoints <dir of *.pt>   # R14.3, R14.4
+```
+
+R14.3 and R14.4 are read off the **checkpoints**, not the predictions: two arms
+that found completely different geometry can score identically on a trade-off
+curve, so `final_score` and even `slack` cannot see any of what follows.
+
+### R14.1 The sweep, and the retraction it completes
+
+| `--mask_coef` | width | cause | iso | final | slack | slack/dim |
+|---|---|---|---|---|---|---|
+| 1e-4 | 922 | 73.3% | 43.1% | 58.2% | +20.5 | 0.022 |
+| **3e-4** | 773 | 65.8% | 50.8% | **58.3%** | **+20.9** | 0.027 |
+| 1e-3 | 436 | 53.2% | 62.5% | 57.9% | +20.3 | 0.047 |
+| 3e-3 | 178 | 41.5% | 72.1% | 56.8% | +18.4 | 0.103 |
+| 1e-2 | 52 | 31.4% | 77.9% | 54.7% | +14.4 | **0.277** |
+| *(void, R12.3)* | *1280* | *94.7%* | *1.7%* | *48.2%* | *-0.0* | *0.000* |
+
+The void arms land at width 1280 — `mask_sum == dim` on every block. They were
+the full swap, confirming R12.3's diagnosis from the checkpoints rather than from
+the gradient table.
+
+Width falls monotonically with `--mask_coef`; slack peaks at 773 and falls. So on
+the score axis **there is no compact subspace that wins**, and `final_score`'s
++0.9pp over `das_fixed`'s best is inside the error bar (SE 1.8pp at design effect
+2.0). The plateau is intact across two hypothesis classes.
+
+### R14.2 Annealed sparsification beats fixed-K, and the gap grows as K shrinks
+
+At matched width — the only comparison that separates "the method helps" from
+"this arm sits further along the same curve":
+
+| width | `das_fixed` | `das_rotated` | gap |
+|---|---|---|---|
+| ~50 | +5.2 (K=16) | **+14.4** | **+9.2** (2.8x) |
+| ~185 | +13.3 (K=64) | +18.4 | +5.1 |
+| ~410 | +19.0 (K=128) | +20.3 | +1.3 |
+| ~770 | +17.2 (K=256) | +20.9 | +3.7 |
+
+Both classes learn an arbitrarily-oriented subspace (`FixedSubspaceIntervention`
+is Grassmannian — see §7 — and `das_rotated`'s masks are **perfectly binary**:
+zero dimensions anywhere in 0.01-0.99 at final temperature, on every arm). So the
+difference is not soft-versus-hard transfer and not axis alignment. It is
+optimization: sparsifying down from a working full swap finds a much better small
+subspace than optimizing a hard K directly. The rotated arm also *allocates*
+across blocks (13/14/25 of 256/512/512 at the tightest budget) where a single K
+cannot.
+
+### R14.3 The subspaces are nested, far beyond chance
+
+Fraction of the sparse arm's span captured by the denser arm's, against the
+random-subspace expectation (`observed / chance`):
+
+| sparse | dims | vs 178 | vs 436 | vs 773 | vs 922 |
+|---|---|---|---|---|---|
+| 1e-2 | 52 | **0.910** / 0.147 | 0.920 / 0.347 | 0.936 / 0.595 | 0.941 / 0.699 |
+| 3e-3 | 178 | — | 0.619 / 0.348 | 0.786 / 0.600 | 0.851 / 0.706 |
+| 1e-3 | 436 | — | — | 0.705 / 0.603 | 0.805 / 0.716 |
+| 3e-4 | 773 | — | — | — | 0.787 / 0.726 |
+
+The 52-dim subspace sits **91% inside** the 178-dim one where chance is 15% — a
+factor of 6.2. The nesting is strongest at the sparse end and **dissolves at the
+dense end** (0.787 against 0.726 chance). The dense arms are a canonical core plus
+several hundred dimensions of essentially arbitrary padding, which is why slack
+per dimension falls 10x from 52 to 773 dims.
+
+**Two controls rule out a shared-initialization artefact.** The five rotations are
+*mutually random*: mean |cos| between same-index rotated axes is 0.033-0.054,
+matching sqrt(2/pi*D) = 0.050 (D=256) and 0.035 (D=512) to two digits. And the
+mask index Jaccard is at chance in all ten pairs (e.g. 0.044 vs 0.039). Five
+independent trainings, from mutually random bases, keeping different coordinates,
+converge on the same **span**.
+
+### R14.4 But the core is entity structure, not attribute structure
+
+Fraction of the sparse core's span captured by three reference subspaces built
+from the R13 grid at the same columns:
+
+| block | dims | top-k PCA | **item means** | **attribute means** | chance |
+|---|---|---|---|---|---|
+| 21 | 13 | 0.321 | **0.342** | 0.010 | 0.051 |
+| 22 | 14 | 0.434 | **0.433** | 0.030 | 0.027 |
+| 23 | 25 | 0.338 | **0.354** | 0.011 | 0.049 |
+
+The core aligns with the **entity** directions at 7-16x chance and with the
+**attribute** directions at roughly chance. The attribute-mean subspace has rank
+3 (four attributes), so a 13-dim core could capture at most 3/13 = 0.23 of its
+own span from it; the observed 0.010 is **4% of that maximum**. Item and PCA
+overlaps are near-identical, consistent with R13.1's finding that these columns
+are 77-89% item variance — the top principal directions here *are* the entity
+directions.
+
+So DAS, given a free rotation and a free width, found a compact canonical
+**entity code**. It did not find an attribute subspace, because R13 says there
+isn't one here to find.
+
+### R14.5 What is established, and the one control still missing
+
+Established:
+
+* a **canonical ~50-dimensional entity subspace** at the `common10` heads,
+  recovered by five independent runs from mutually random bases, carrying 69% of
+  the best arm's slack (+14.4 of +20.9) in 52 of the site's 1,280 columns (4.1%);
+* **annealed sparsification > fixed-K optimization** at this site, by 2.8x in
+  slack at ~50 dims;
+* the plateau survives a second hypothesis class, and the thing DAS converges on
+  is entity-aligned — which is R13's prediction, tested against geometry the
+  score table cannot see.
+
+Missing: **all five arms share the row-sampling seed**, so they saw the same data
+in the same order. Mutually random rotations rule out shared *initialization*, not
+shared *data order*.
+
+```bash
+python methods/head_das.py --attribute language --method das_rotated --mask_coef 1e-2 \
+  --train_rows 6000 --eval_rows 2000 --batch_size 16 --grad_accum_steps 1 \
+  --mask_lr 4.0 --seed 1
+```
+
+If that arm's 52-dim span still lands ~0.9 inside the seed-0 178-dim arm, the
+canonical core is a property of the model and R14.3-R14.5 stand. If it drops
+toward 0.15, the nesting was data order and R14.3 onward collapse to a statement
+about one training run. **Do not cite the canonical core before this runs.**
+
+## R15. The account, after R11-R14
+
+Four independent lines now say the same thing, and they were measured on
+different quantities with different tooling:
+
+1. **R1** — one shared router in blocks 19-21 carries *which attribute was asked*;
+   the per-attribute top-8 lists are nearly identical. No per-attribute heads.
+2. **R8/R9** — one shared circuit in blocks 21-23 reads the entity out of the
+   image; again no per-attribute heads.
+3. **R11/R11.3b** — what those heads transfer is question-independent: content
+   shift -1.2pp (`hold0`) / +0.4pp (`step0`), and the -16.1pp headline was a
+   decode artefact, proved by a double dissociation rather than inferred.
+4. **R13/R14** — the same columns are 77-89% entity variance and 3-15% question
+   variance, and the best subspace DAS can find in them is entity-aligned at
+   7-16x chance and attribute-aligned at chance.
+
+**The model does not disentangle visual attributes: it stores an entity identity
+at blocks 21-23 and computes attributes on demand at 25-27.** For this checkpoint
+VADE's premise does not hold, and R13.3 argues the benchmark's chosen patch site
+cannot test it either way, because image-position activations are question-blind
+under causal masking.
+
+That is a finding, not a failed experiment — and it predicts R12/R14's plateau
+quantitatively rather than after the fact. The positive results that come with it
+are the ~+19-21pp slack ceiling for question-blind interventions at this site,
+the canonical ~50-dim entity subspace (pending R14.5) — 4.1% of the site's
+columns carrying 69% of the best arm's slack — and the sparsification result in
+R14.2.
+
+**What would move it, in order of cost:**
+
+| | experiment | cost | what it settles |
+|---|---|---|---|
+| 1 | R14.5's `--seed 1` rerun | 1 run | whether the canonical core is real |
+| 2 | R13.3's bit-identity check | no GPU | turns the image-side cap from argument into measurement |
+| 3 | `residual`/`last_token`/L24, labelled a positive control | 1 run | disambiguates "trainer broken" from "site cannot support it" |
+| 4 | the oracle arm — give `head_das` the `target_attribute` | 1 run | upper bound at `common10` under a question-blind input |
+
