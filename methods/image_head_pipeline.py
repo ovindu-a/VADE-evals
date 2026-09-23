@@ -123,6 +123,36 @@ def select_handoff(image_json, last_json, n_layers, patch_frac=0.95, read_frac=0
             "warnings": warnings}
 
 
+def scoring_check(image_json, last_json, min_source_match=0.85):
+    """Is the scorer able to recognise the model's CORRECT answers at all?
+
+    The full-image residual swap at layer 0 replaces every image embedding with
+    the source's, so it IS the model answering about the source image -- and
+    VADE's pruning keeps a cause row only if the model answers the source
+    correctly (models/prune_tuples.py checks the SOURCE item on match_source
+    rows, never the base). So that cell must be near 100% whenever labels and
+    matching agree with how the model writes answers; a low value is a scoring
+    failure (brands/hq_country under token scoring: 0%), not a finding.
+
+    The unhooked base match is reported but not gated on: it is legitimately
+    below 100% (TOGG -> ' Sweden'; ~44% of brands/founded_year bases wrong),
+    and it only compresses the last-token curve, whose floor select_handoff
+    already subtracts."""
+    img = residual_curve(image_json, "cause")
+    source_read = img.get(0, float("nan"))
+    clean_base = last_json.get("unhooked_cause_matches_base", float("nan"))
+    warnings = []
+    if not source_read >= min_source_match:
+        warnings.append(f"the model's own reading of the source image scores {source_read:.1%} < "
+                        f"{min_source_match:.0%} -- labels/matching disagree with its answers")
+    if clean_base < 0.7:
+        warnings.append(f"only {clean_base:.1%} of unhooked answers match base_label (the model is wrong about "
+                        f"many BASE items, which pruning allows): base_kept and the last-token curve are capped "
+                        f"there, so read them relative to that floor")
+    return {"ok": bool(source_read >= min_source_match), "source_read": source_read,
+            "clean_base": clean_base, "min_source_match": min_source_match, "warnings": warnings}
+
+
 WINDOW_METRICS = {
     "first_src": lambda w: w["suff"]["first_src"],
     "cause": lambda w: w["suff"]["cause"],
@@ -328,6 +358,23 @@ class Runner:
                              a.patch_frac, a.read_frac, a.margin, patch_layer=a.patch_layer)
         state["handoff"] = sel
         self.print_handoff(sel)
+        chk = scoring_check(load_json(src["image"]), load_json(src["last"]), a.min_source_match)
+        state["scoring_check"] = chk
+        print(f"  [scoring check] image swap @ layer 0 (= the model reading the SOURCE image, which pruning "
+              f"guarantees it answers correctly): {chk['source_read']:.1%} match source_label; unhooked "
+              f"base match {chk['clean_base']:.1%} (NOT guaranteed: pruning never checks the base on cause rows)")
+        for w in chk["warnings"]:
+            print(f"  !! {w}")
+        if not chk["ok"] and not a.skip_scoring_check:
+            print(f"  !! stopping {entity}/{attribute} before stages 2-3: the scorer does not recognise the "
+                  f"model's own correct answers, so every number would be capped by scoring. Read them with:\n"
+                  f"     python methods/ndm/swap_trace.py --entity {entity} --attribute {attribute} "
+                  f"--positions {a.image_positions} --site residual --layers 0 --n_rows 32 --seed {a.seed}"
+                  + (" --text_match" if text else "")
+                  + "\n     then fix labels/matching, or pass --skip_scoring_check to proceed anyway.")
+            state["skipped"] = "scoring check failed"
+            self.failures.append((entity, attribute, "scoring_check", f"source_read={chk['source_read']:.1%}"))
+            return self.save_state(state_path, state)
         if sel["warnings"] and not a.patch_layer and any("little image effect" in w for w in sel["warnings"]):
             print("  !! skipping stages 2-3: nothing to trace (override with --patch_layer to force)")
             state["skipped"] = "no image effect"
@@ -591,6 +638,11 @@ def main():
     ap.add_argument("--text_max_new_tokens", type=int, default=8,
                     help="Generation budget under text scoring (' the United States.' is 4 tokens, a year 5).")
     # selection
+    ap.add_argument("--min_source_match", type=float, default=0.85,
+                    help="Scoring guard: the layer-0 full-image swap (the model reading the source image, which "
+                         "pruning guarantees is correct) must score at least this, or the attribute stops "
+                         "after stage 1.")
+    ap.add_argument("--skip_scoring_check", action="store_true")
     ap.add_argument("--patch_frac", type=float, default=0.95)
     ap.add_argument("--read_frac", type=float, default=0.9)
     ap.add_argument("--margin", type=int, default=2, help="Blocks past the handoff to include in stage 2.")

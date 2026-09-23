@@ -498,7 +498,12 @@ head_window_sweep; off by default, so flags results are unchanged) uses
 `methods/common/text_match.py`, a copy of VADE score.py's casefold/whole-word
 matcher; head_window_sweep's first_* then compares position 0 against the model's
 OWN unhooked base/source answers, plus div_* at their first differing token.
-head_decode_trace (stage 4) still scores tokens.
+head_decode_trace (stage 4) still scores tokens. **Pruning checks only the SOURCE on cause rows**
+(VADE/models/prune_tuples.py), so the unhooked base match on cause rows is NOT
+guaranteed (TOGG -> ' Sweden'; 56% on brands/founded_year). The pipeline's
+scoring guard therefore gates on the layer-0 full-image swap (= the model
+reading the source image, pruned to be correct): below `--min_source_match`
+(0.85) the attribute stops after stage 1 and prints the swap_trace command.
 
 ## The question->readout path: methods/attr_head_trace.py, attr_capture.py, attr_directions.py
 
