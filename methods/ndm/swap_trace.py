@@ -60,9 +60,12 @@ import os
 import random
 import sys
 
+
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, REPO_ROOT)
 DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join(REPO_ROOT, "..", "VADE"))
+
+import torch  # noqa: E402
 
 from methods.adapters.registry import get_adapter  # noqa: E402
 from methods.common.entities import (  # noqa: E402
@@ -71,6 +74,7 @@ from methods.common.entities import (  # noqa: E402
 from methods.common.position_sets import build_batch_at, path_safe  # noqa: E402
 from methods.common.sites import resolve_site, site_name  # noqa: E402
 from methods.common.targets import MAX_ANSWER_TOKENS, exact_match  # noqa: E402
+from methods.common.text_match import contains_label, decode_answers  # noqa: E402
 from methods.ndm.ceiling_sweep import full_swap_generation  # noqa: E402
 from methods.ndm.config import METHOD_NAME  # noqa: E402
 from methods.ndm.verify_sites import generate_unhooked  # noqa: E402
@@ -79,10 +83,17 @@ HIT, BASE, OTHER = "HIT", "base", "other"
 DEFAULT_OUT_DIR = os.path.join(REPO_ROOT, "logs", "adhoc_probes")
 
 
-def classify_batch(gen_toks, batch):
+def classify_batch(gen_toks, batch, tokenizer=None):
     """-> [HIT|base|other] per row. HIT takes precedence over base, which can
     only collide if base_label == source_label -- pruned tuples exclude that,
-    and the collision count is reported rather than silently resolved."""
+    and the collision count is reported rather than silently resolved.
+    tokenizer: score by VADE's text matcher instead (see --text_match)."""
+    if tokenizer is not None:
+        texts = decode_answers(tokenizer, gen_toks)
+        ms = torch.tensor([contains_label(t, r["source_label"]) for t, r in zip(texts, batch["rows"])])
+        mb = torch.tensor([contains_label(t, r["base_label"]) for t, r in zip(texts, batch["rows"])])
+        both = int((ms & mb).sum())
+        return [HIT if ms[i] else (BASE if mb[i] else OTHER) for i in range(len(ms))], both
     pred = gen_toks[:, :MAX_ANSWER_TOKENS]
     ms = exact_match(pred, batch["source_gold_toks"], batch["source_gold_len"])
     mb = exact_match(pred, batch["base_gold_toks"], batch["base_gold_len"])
@@ -120,6 +131,10 @@ def main():
                     help="Skip the _TOKENS log. Keep it for numeric attributes -- Qwen splits digits "
                          "one per token, so a half-right answer is invisible in decoded text.")
     ap.add_argument("--allow_unpruned", action="store_true")
+    ap.add_argument("--text_match", action="store_true",
+                    help="Classify with VADE's text matcher (casefold, whole word) instead of token exact "
+                         "match -- required for lowercase-label entities. Also tags the UNHOOKED answer, so "
+                         "rows whose clean answer does not match the base label are visible.")
     ap.add_argument("--out_dir", default=DEFAULT_OUT_DIR)
     args = ap.parse_args()
 
@@ -132,7 +147,7 @@ def main():
     assert not bad, f"site {args.site!r} needs --layer >= {site.min_layer()}; got {bad}"
     layers_tag = f"{min(args.layers)}-{max(args.layers)}"
     stem = (f"{args.entity}_{args.attribute}_{path_safe(args.positions)}_{path_safe(args.site)}"
-            f"_n{args.n_rows}_layers{layers_tag}")
+            f"_n{args.n_rows}_layers{layers_tag}" + ("_text" if args.text_match else ""))
     os.makedirs(args.out_dir, exist_ok=True)
     main_path = os.path.join(args.out_dir, stem + ".log")
     tok_path = os.path.join(args.out_dir, stem + "_TOKENS.log")
@@ -142,6 +157,7 @@ def main():
     entity_assets = load_entity_assets(args.vade_root, args.entity)
     layers_stack = adapter.get_decoder_layers(model)
     tokenizer = processor.tokenizer
+    scorer = tokenizer if args.text_match else None
     pad_token_id = tokenizer.pad_token_id or tokenizer.eos_token_id
     cache = BuildBatchCache()
 
@@ -159,6 +175,7 @@ def main():
     # in row order at the end rather than interleaving generation with I/O.
     recs = [{"row": r, "per_layer": {}, "tokens": {}} for r in cause_rows]
     per_layer_counts = {l: {HIT: 0, BASE: 0, OTHER: 0} for l in args.layers}
+    unhooked_counts = {HIT: 0, BASE: 0, OTHER: 0}
     collisions = 0
 
     for lo in range(0, n_rows, args.batch_size):
@@ -170,6 +187,10 @@ def main():
         for k, i in enumerate(idx):
             recs[i]["unhooked"] = tokenizer.decode(gen[k].tolist(), skip_special_tokens=True)
             recs[i]["unhooked_toks"] = token_view(tokenizer, gen[k].tolist())
+        unhooked_labels, _ = classify_batch(gen, batch, scorer)
+        for k, i in enumerate(idx):
+            recs[i]["unhooked_label"] = unhooked_labels[k]
+            unhooked_counts[unhooked_labels[k]] += 1
             gl = int(batch["base_gold_len"][k].item())
             sl = int(batch["source_gold_len"][k].item())
             recs[i]["gold_base_toks"] = token_view(tokenizer, batch["base_gold_toks"][k][:gl].tolist())
@@ -178,7 +199,7 @@ def main():
         for layer in args.layers:
             g = full_swap_generation(site, adapter, model, layers_stack, layer, batch, pad_token_id,
                                      args.max_new_tokens)
-            labels, both = classify_batch(g, batch)
+            labels, both = classify_batch(g, batch, scorer)
             collisions += both
             for k, i in enumerate(idx):
                 recs[i]["per_layer"][layer] = (tokenizer.decode(g[k].tolist(), skip_special_tokens=True),
@@ -203,6 +224,11 @@ def main():
         out = ["", "=" * 100,
                f"SUMMARY: per-layer cause_hit / base_kept / other, over {n_rows} rows", "=" * 100,
                f"{'layer':>6} {'cause_hit':>16} {'base_kept':>16} {'other':>12}"]
+        c = unhooked_counts
+        out.append(f"{'clean':>6} {c[HIT]:>5}/{n_rows} ({c[HIT] / n_rows:6.1%}) "
+                   f"{c[BASE]:>5}/{n_rows} ({c[BASE] / n_rows:6.1%}) "
+                   f"{c[OTHER]:>5} ({c[OTHER] / n_rows:6.1%})   <-- unhooked; base_kept here is the "
+                   f"ceiling for every row below")
         for l in args.layers:
             c = per_layer_counts[l]
             out.append(f"{l:>6} {c[HIT]:>5}/{n_rows} ({c[HIT] / n_rows:6.1%}) "
@@ -223,7 +249,8 @@ def main():
             q, prefill = template_of(r)
             f.write(f"row {i}: base={r['base']} (gold={r['base_label']!r}) -> source={r['source']} "
                     f"(gold={r['source_label']!r})  template={r['template_id']}\n")
-            f.write(f"  question: {q!r}\n  prefill : {prefill!r}\n  unhooked: {rec['unhooked']!r}\n")
+            f.write(f"  question: {q!r}\n  prefill : {prefill!r}\n  unhooked: {rec['unhooked']!r}"
+                    f"  [{rec['unhooked_label']}]\n")
             for l in args.layers:
                 text, label = rec["per_layer"][l]
                 f.write(f"  L{l}: {text!r}".ljust(48) + f" [{label}]\n")
@@ -257,6 +284,7 @@ def main():
         json.dump({"entity": args.entity, "attribute": args.attribute, "positions": args.positions,
                    "site": args.site, "layers": args.layers, "n_rows": n_rows, "seed": args.seed,
                    "split": args.split, "gold_collisions": collisions,
+                   "scoring": "text" if args.text_match else "token", "unhooked": unhooked_counts,
                    "per_layer": {str(l): per_layer_counts[l] for l in args.layers}}, f, indent=2)
     print(f"\nwrote {main_path}" + ("" if args.no_tokens_log else f"\n      {tok_path}")
           + f"\n      {json_path}")
