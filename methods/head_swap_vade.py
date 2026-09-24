@@ -452,9 +452,37 @@ def head_columns(heads, block, head_dim):
     return torch.tensor(sorted(cols), dtype=torch.long)
 
 
-def capture_donor(adapter, model, blocks, ids, mask, extra, max_new_tokens, pad_id):
-    """-> {block: [B, n_steps, hidden]} of attn_head_output at the LAST column of
-    every forward of the donor's own generation.
+# Where the continuous capture/patch lives. Both are the INPUT of a bias-free
+# linear map, read and written by a forward pre-hook, so everything below is the
+# same code for either:
+#   attn_head_output  o_proj's input, 28 heads x 128 (the default; R10/R11)
+#   mlp_hidden        down_proj's input, the 18944 post-SwiGLU neurons
+# For mlp_hidden a "head" is a whole block: pass units = [(block, 0), ...] and
+# unit_dim = intermediate_size (see `site_units`), and head_columns then selects
+# every neuron of that block.
+UNIT_SITES = ("attn_head_output", "mlp_hidden")
+
+
+def site_module(adapter, model, block, site="attn_head_output"):
+    if site == "attn_head_output":
+        return adapter.get_attn_head_output_module(model, block)
+    if site == "mlp_hidden":
+        return adapter.get_mlp_hidden_module(model, block)
+    raise ValueError(f"unknown site {site!r}; expected one of {UNIT_SITES}")
+
+
+def site_units(adapter, model, site, heads=None, blocks=None):
+    """-> (units, unit_dim): what to pass as `heads` / `head_dim` for `site`."""
+    if site == "attn_head_output":
+        assert heads, "attn_head_output needs a head list"
+        return heads, adapter.hidden_size(model) // adapter.n_attention_heads(model)
+    assert blocks, "mlp_hidden needs a block list"
+    return [(b, 0) for b in sorted(blocks)], adapter.intermediate_size(model)
+
+
+def capture_donor(adapter, model, blocks, ids, mask, extra, max_new_tokens, pad_id, site="attn_head_output"):
+    """-> {block: [B, n_steps, width]} of `site` (default attn_head_output) at
+    the LAST column of every forward of the donor's own generation.
 
     Step 0 is the prefill (the readout column); step t>0 is generated token t.
     One pre-hook per block on o_proj, each appending its own column -- a block's
@@ -463,7 +491,7 @@ def capture_donor(adapter, model, blocks, ids, mask, extra, max_new_tokens, pad_
     sinks = {b: [] for b in blocks}
     handles = []
     for b in blocks:
-        module = adapter.get_attn_head_output_module(model, b)
+        module = site_module(adapter, model, b, site)
 
         def grab(_mod, args, _sink=sinks[b]):
             _sink.append(args[0][:, -1, :].detach().float().cpu())
@@ -513,7 +541,7 @@ def donor_index(align, step, n_steps):
 
 def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
                      head_dim, extra_patches=(), stats=None, observers=(), subspace=None,
-                     transform=None, align="matched"):
+                     transform=None, align="matched", site="attn_head_output"):
     """Greedy generation with `heads` overwritten at the last column of EVERY
     forward from the donor step `align` selects (see `donor_index`).
 
@@ -529,14 +557,17 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
     special case. A trained intervention (head_das.py) passes its own module
     here rather than forking this function, so the generation path that produced
     R10 and R11 is the one every later result is measured on. Mutually exclusive
-    with `subspace`."""
+    with `subspace`.
+
+    `site` (see UNIT_SITES) moves the whole patch from o_proj's input to
+    down_proj's; `heads`/`head_dim` then come from `site_units`."""
     assert transform is None or subspace is None, "pass `transform` or `subspace`, not both"
     import torch
     blocks = sorted({b for b, _ in heads})
     counters = {b: 0 for b in blocks}
     handles = []
-    for site, layer_idx, fn in extra_patches:
-        handles.extend(site.register(adapter, model, adapter.get_decoder_layers(model), layer_idx, fn))
+    for extra_site, layer_idx, fn in extra_patches:     # NOT `site`: that names this call's unit site
+        handles.extend(extra_site.register(adapter, model, adapter.get_decoder_layers(model), layer_idx, fn))
     for b in blocks:
         cols = head_columns(heads, b, head_dim).to(model.device)
         z = donor_z[b].to(model.device)                              # [B, steps, hidden]
@@ -570,7 +601,7 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
                 shift = ((want.float() - have.float()) @ _P) @ _P.T
                 patched[:, -1, _cols] = (have.float() + shift).to(t.dtype)
             return (patched,) + tuple(args[1:])
-        handles.append(adapter.get_attn_head_output_module(model, b)
+        handles.append(site_module(adapter, model, b, site)
                        .register_forward_pre_hook(patch, with_kwargs=False))
     # Registered LAST on purpose. PyTorch runs a module's forward pre-hooks in
     # registration order, so an observer added before the patch reads the very
@@ -581,7 +612,7 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
             _f(args[0])
             return None            # a pre-hook's return REPLACES the input; an observer
                                    # that happens to return something must not corrupt it
-        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(watch))
+        handles.append(site_module(adapter, model, b, site).register_forward_pre_hook(watch))
     try:
         with torch.no_grad():
             out = model.generate(input_ids=ids.to(model.device), attention_mask=mask.to(model.device),
@@ -594,7 +625,8 @@ def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_t
 
 
 def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                    head_dim, tol=1e-3, rel_tol=0.01, subspace=None, align="matched"):
+                    head_dim, tol=1e-3, rel_tol=0.01, subspace=None, align="matched",
+                    site="attn_head_output"):
     """Read the patched site back through a hook registered AFTER the patch and
     assert it returns what was installed, at EVERY step.
 
@@ -618,7 +650,7 @@ def verify_readback(adapter, model, heads, donor_z, ids, mask, extra, max_new_to
     observers = [(b, (lambda t, _b=b: seen[_b].append(t[:, -1, :].detach().float().cpu())))
                  for b in seen]
     patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
-                     head_dim, observers=observers, subspace=subspace, align=align)
+                     head_dim, observers=observers, subspace=subspace, align=align, site=site)
     worst, worst_allowed = 0.0, tol
     for b, steps in seen.items():
         cols = head_columns(heads, b, head_dim)

@@ -45,6 +45,32 @@ step 0 only and lets later steps compute freely. The FIRST-TOKEN columns are
 exact under both and are the primary readout; full-answer text matching (VADE's
 own matcher) is reported next to them.
 
+WHICH VALUE A COMPONENT IS FROZEN TO (--freeze_values, any subset)
+
+A component frozen at the BASE value does two things at once: it stops reacting
+to the new entity, and it keeps writing the base country's own lookup. The
+flags run (2026-09-24) cannot tell those apart -- under heads+mlp[25],
+calling_code goes back to the base answer on 100% of pairs. Two more values
+separate them:
+
+  base    the clean base run's value (ROME's severed test; the default)
+  mean    leave-one-out mean of that component over the attribute's OTHER base
+          items asking the same template -- "stop reacting" with no single
+          country's answer in it (mean ablation)
+  other   a THIRD country's clean value (same template, base and label both
+          different from this pair's), with that country's gold scored too
+
+  * mean ~ base (both collapse)  -> the block is NEEDED: without its reaction
+    to the new entity there is no transfer, whoever's answer it writes.
+  * mean recovers, base does not -> the collapse was the base's answer being
+    re-written, not a missing lookup.
+  * other lands on the THIRD country's value -> the block WRITES the answer
+    itself (a value writer, ROME's "MLP recall"), rather than enabling a
+    lookup done elsewhere.
+
+Arms frozen to mean/other are named `<arm>@mean` / `<arm>@other`; base keeps
+the plain name so earlier summaries stay comparable.
+
 SELF-CHECKS (run on the first batch, before any scored generation)
 
   1. read-back   the head install reads back what was installed (verify_readback).
@@ -62,6 +88,7 @@ Usage
     python methods/head_severed.py --n_pairs 16 --attributes language    # smoke
     python methods/head_severed.py --n_pairs 64                          # all attributes
     python methods/head_severed.py --freeze_attn_singles 24 25 26 27     # + attention singles
+    python methods/head_severed.py --freeze_values base mean other       # what the frozen block writes
 """
 import argparse
 import json
@@ -79,6 +106,7 @@ from methods.head_swap_vade import (COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, build
                                     parse_heads, patched_generate, to_device, verify_readback)
 
 KINDS = {"mlp": "mlp_output", "attn": "attn_output"}
+FREEZE_VALUES = ("base", "mean", "other")
 
 
 def parse_span(s):
@@ -93,7 +121,8 @@ def parse_span(s):
 
 
 def build_arms(args, head_blocks):
-    """-> ordered list of (arm name, uses_heads, uses_full_image, [(kind, block), ...])."""
+    """-> ordered list of (arm name, uses_heads, uses_full_image, [(kind, block), ...],
+    freeze value mode). Every freezing arm is repeated once per --freeze_values."""
     arms = [("clean", False, False, []), ("heads", True, False, [])]
     mlp_span = parse_span(args.freeze_mlp_span) if args.freeze_mlp_span else []
     attn_span = parse_span(args.freeze_attn_span) if args.freeze_attn_span else []
@@ -114,7 +143,95 @@ def build_arms(args, head_blocks):
         assert not bad, (
             f"arm {name!r} freezes attention in block(s) {bad}, which hold installed heads -- the "
             f"attn_output freeze would overwrite the install itself. Freeze attention downstream only.")
-    return arms
+    modes = list(getattr(args, "freeze_values", None) or ["base"])
+    assert modes and all(m in FREEZE_VALUES for m in modes), f"--freeze_values must be from {FREEZE_VALUES}"
+    out = []
+    for name, uses_heads, uses_img, freezes in arms:
+        if not freezes:
+            out.append((name, uses_heads, uses_img, freezes, None))
+            continue
+        for m in modes:
+            out.append((name if m == "base" else f"{name}@{m}", uses_heads, uses_img, freezes, m))
+    return out
+
+
+def pad_steps(t, n_steps):
+    """[T, H] -> [n_steps, H], holding the last step (freeze_patches' own rule)."""
+    import torch
+    if t.shape[0] >= n_steps:
+        return t[:n_steps]
+    return torch.cat([t, t[-1:].expand(n_steps - t.shape[0], -1)])
+
+
+def choose_thirds(rows, seed):
+    """-> {row_index: (third row or None, same_template)} for the `other` freeze.
+
+    The third must be a different country from both the base and the source,
+    with a gold label different from both, so a first token matching it is
+    unambiguous. Same template first (its last column is the same prompt text
+    over a different image); any template of the attribute as a fallback."""
+    out = {}
+    for r in rows:
+        rng = random.Random(seed * 1_000_003 + int(r["row_index"]))
+        ok = [c for c in rows
+              if c["base"] not in (r["base"], r["source"])
+              and str(c["base_label"]) not in (str(r["base_label"]), str(r["source_label"]))]
+        same = [c for c in ok if c["template_id"] == r["template_id"]]
+        pool = same or ok
+        out[r["row_index"]] = (rng.choice(pool) if pool else None, bool(same))
+    return out
+
+
+def mean_groups(rows, min_size=4):
+    """-> {row_index: [row_index, ...]} for the `mean` freeze: every OTHER base
+    item asking the same template (leave-one-out, so a row's own base never
+    enters its mean). Below `min_size` such items the "mean" would be one or two
+    specific countries -- an `other` freeze in disguise -- so it falls back to
+    every other base item of the attribute, across templates."""
+    out = {}
+    for r in rows:
+        others = [c for c in rows if c["base"] != r["base"]]
+        same = [c["row_index"] for c in others if c["template_id"] == r["template_id"]]
+        out[r["row_index"]] = same if len(same) >= min_size else [c["row_index"] for c in others]
+        assert out[r["row_index"]], f"row {r['row_index']}: no other base item to average over"
+    return out
+
+
+def freeze_values_for(mode, chunk, store, thirds, means):
+    """-> {(kind, block): [B, T, H]} frozen values for one batch.
+
+    store[row_index][(kind, block)] = that row's clean [T, H]; means is the
+    same shape, precomputed per row."""
+    import torch
+    keys = list(store[chunk[0]["row_index"]])
+    src = []
+    for r in chunk:
+        ri = r["row_index"]
+        if mode == "base":
+            src.append(store[ri])
+        elif mode == "mean":
+            src.append(means[ri])
+        elif mode == "other":
+            third = thirds[ri][0]
+            src.append(store[third["row_index"]] if third is not None else store[ri])
+        else:
+            raise ValueError(mode)
+    n = max(v.shape[0] for d in src for v in d.values())
+    return {k: torch.stack([pad_steps(d[k], n) for d in src]) for k in keys}
+
+
+def row_means(rows, store, groups):
+    """-> {row_index: {(kind, block): [T_all, H]}}: the leave-one-out mean, over
+    each row's group, of the members' clean values padded to a common length."""
+    import torch
+    n = max(v.shape[0] for d in store.values() for v in d.values())
+    out = {}
+    for r in rows:
+        members = groups[r["row_index"]]
+        out[r["row_index"]] = {
+            k: torch.stack([pad_steps(store[m][k], n).float() for m in members]).mean(0).to(v.dtype)
+            for k, v in store[r["row_index"]].items()}
+    return out
 
 
 def capture_components(adapter, model, need, ids, mask, extra, max_new_tokens, pad_id):
@@ -188,11 +305,11 @@ def last_logits(adapter, model, ids, mask, extra, extra_patches=()):
 def self_checks(adapter, model, batch, heads, head_dim, arms, max_new_tokens, pad_id, freeze_steps):
     """The three gates in the module docstring. Returns a dict of what was measured."""
     import torch
-    need = sorted({f for _, _, _, fr in arms for f in fr})
+    need = sorted({f for a in arms for f in a[3]})
     clean, base_vals = capture_components(adapter, model, need, batch["base_ids"], batch["base_mask"],
                                           batch["base_extra"], max_new_tokens, pad_id)
     report = {}
-    if any(uses for _, uses, _, _ in arms):
+    if any(a[1] for a in arms):
         blocks = sorted({b for b, _ in heads})
         z = capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
                           batch["donor_extra"], max_new_tokens, pad_id)
@@ -252,18 +369,29 @@ def as_job(r):
             "rows": [(r["target_attribute"], r["row_index"])]}
 
 
-def score(texts, toks, rows, lookup, tokenizer, matcher):
-    """Per row: first-token vs source/base gold (exact) and VADE text match."""
+def score(texts, toks, rows, lookup, tokenizer, matcher, thirds=None):
+    """Per row: first-token vs source/base gold (exact) and VADE text match.
+    `thirds` (one label or None per row) adds the same two checks against a
+    third country's gold, for the `other` freeze."""
     from methods.common.targets import derive_gold_token_ids
     out = []
-    for r, text, t in zip(rows, texts, toks.tolist()):
+    thirds = thirds or [None] * len(rows)
+    for r, text, t, third in zip(rows, texts, toks.tolist(), thirds):
         prefill = lookup[r["queried"]][r["template_id"]]["prefill"]
         sg = derive_gold_token_ids(tokenizer, prefill, str(r["source_label"]))
         bg = derive_gold_token_ids(tokenizer, prefill, str(r["base_label"]))
         s_txt, b_txt = matcher(text, str(r["source_label"])), matcher(text, str(r["base_label"]))
-        out.append({"distinct_first": bool(sg and bg and sg[0] != bg[0]),
-                    "src_first": bool(sg) and t[0] == sg[0], "base_first": bool(bg) and t[0] == bg[0],
-                    "src_text": s_txt, "base_text": b_txt, "other_text": not (s_txt or b_txt)})
+        rec = {"distinct_first": bool(sg and bg and sg[0] != bg[0]),
+               "src_first": bool(sg) and t[0] == sg[0], "base_first": bool(bg) and t[0] == bg[0],
+               "src_text": s_txt, "base_text": b_txt, "other_text": not (s_txt or b_txt)}
+        if third is not None:
+            tg = derive_gold_token_ids(tokenizer, prefill, str(third))
+            t_txt = matcher(text, str(third))
+            rec.update({"third_label": str(third),
+                        "distinct3_first": bool(rec["distinct_first"] and tg and tg[0] not in (sg[0], bg[0])),
+                        "third_first": bool(tg) and t[0] == tg[0], "third_text": t_txt,
+                        "other_text": not (s_txt or b_txt or t_txt)})
+        out.append(rec)
     return out
 
 
@@ -272,25 +400,37 @@ def aggregate(scored):
     golds differ in their first token (otherwise a hit is uninformative)."""
     d = [s for s in scored if s["distinct_first"]]
     n = len(scored)
-    return {"n": n, "n_distinct_first": len(d),
-            "src_first": sum(s["src_first"] for s in d) / max(len(d), 1),
-            "base_first": sum(s["base_first"] for s in d) / max(len(d), 1),
-            "src_text": sum(s["src_text"] for s in scored) / max(n, 1),
-            "base_text": sum(s["base_text"] for s in scored) / max(n, 1),
-            "other_text": sum(s["other_text"] for s in scored) / max(n, 1)}
+    out = {"n": n, "n_distinct_first": len(d),
+           "src_first": sum(s["src_first"] for s in d) / max(len(d), 1),
+           "base_first": sum(s["base_first"] for s in d) / max(len(d), 1),
+           "src_text": sum(s["src_text"] for s in scored) / max(n, 1),
+           "base_text": sum(s["base_text"] for s in scored) / max(n, 1),
+           "other_text": sum(s["other_text"] for s in scored) / max(n, 1)}
+    t3 = [s for s in scored if "third_first" in s]
+    if t3:
+        # Third-country first-token rate over rows whose three golds all differ at token 0.
+        d3 = [s for s in t3 if s["distinct3_first"]]
+        out.update({"n_distinct3_first": len(d3),
+                    "third_first": sum(s["third_first"] for s in d3) / max(len(d3), 1),
+                    "third_text": sum(s["third_text"] for s in t3) / max(len(t3), 1)})
+    return out
 
 
 def print_table(summary):
     for attr, arms in summary.items():
         ref = arms.get("heads", {}).get("src_first") or 0.0
         print(f"\n=== {attr} ===")
-        print(f"{'arm':>28} {'n':>4} {'src 1st':>8} {'base 1st':>9} {'kept':>6} "
-              f"{'src txt':>8} {'base txt':>9} {'other':>6}")
+        print(f"{'arm':>34} {'n':>4} {'src 1st':>8} {'base 1st':>9} {'kept':>6} "
+              f"{'src txt':>8} {'base txt':>9} {'other':>6} {'3rd 1st':>8} {'3rd txt':>8}")
         for arm, s in arms.items():
             kept = s["src_first"] / ref if ref else float("nan")
-            print(f"{arm:>28} {s['n']:>4} {s['src_first']:8.1%} {s['base_first']:9.1%} {kept:6.2f} "
-                  f"{s['src_text']:8.1%} {s['base_text']:9.1%} {s['other_text']:6.1%}")
+            third = (f"{s['third_first']:8.1%} {s['third_text']:8.1%}" if "third_first" in s
+                     else f"{'-':>8} {'-':>8}")
+            print(f"{arm:>34} {s['n']:>4} {s['src_first']:8.1%} {s['base_first']:9.1%} {kept:6.2f} "
+                  f"{s['src_text']:8.1%} {s['base_text']:9.1%} {s['other_text']:6.1%} {third}")
     print("\n  kept = src 1st / src 1st of `heads`. <<1 under heads+mlp[span] = the lookup is downstream.")
+    print("  @mean ~ base -> the block is needed; @mean recovers -> base's answer was being re-written;")
+    print("  @other lands on the 3rd country -> the block writes the answer itself. 'other' excludes 3rd.")
 
 
 def main():
@@ -310,6 +450,10 @@ def main():
     ap.add_argument("--full_image", action="store_true", help="Add full_image and full_image+mlp[span].")
     ap.add_argument("--patch_layer", type=int, default=21, help="full_image arms only.")
     ap.add_argument("--freeze_steps", choices=["all", "first"], default="all")
+    ap.add_argument("--freeze_values", nargs="+", choices=list(FREEZE_VALUES), default=["base"],
+                    help="What a frozen component is held at: the clean base value (ROME), the "
+                         "leave-one-out mean over other base items (mean ablation), or a third "
+                         "country's value. Any subset; each freezing arm runs once per value.")
     ap.add_argument("--max_new_tokens", type=int, default=12)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
@@ -329,7 +473,9 @@ def main():
         rows[a], path = load_cause_rows(args.vade_root, model_slug, args.entity, a, args.split, args.n_pairs,
                                         args.seed, args.allow_unpruned)
         print(f"  {a}: {len(rows[a])} cause rows from {path}")
-    out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_severed", args.entity)
+    default_dir = args.entity if args.freeze_values == ["base"] else \
+        f"{args.entity}__freeze-{'-'.join(args.freeze_values)}"
+    out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_severed", default_dir)
     n_gen = sum(len(v) for v in rows.values()) * len(arms)
     print(f"[head_severed] {args.entity}: heads {', '.join(f'{b}.{h}' for b, h in heads)}")
     print(f"  arms ({len(arms)}): {[a[0] for a in arms]}")
@@ -339,9 +485,18 @@ def main():
             for r in rows[a][:2]:
                 print(f"    {a}: {r['base']}->{r['source']} {r['template_id']} "
                       f"{r['base_label']!r}->{r['source_label']!r}")
+            if "mean" in args.freeze_values:
+                sizes = [len(g) for g in mean_groups(rows[a]).values()]
+                print(f"    {a}: mean freeze averages {min(sizes)}-{max(sizes)} other base items per row")
+            if "other" in args.freeze_values:
+                th = choose_thirds(rows[a], args.seed)
+                found = [t for t in th.values() if t[0] is not None]
+                print(f"    {a}: third country found for {len(found)}/{len(th)} rows "
+                      f"({sum(t[1] for t in found)} from the same template)")
         print("Grid valid.")
         return
 
+    import torch
     from methods.adapters.registry import get_adapter
     from methods.head_cross import vade_matcher
 
@@ -349,8 +504,8 @@ def main():
     model, processor = adapter.load()
     head_dim = adapter.hidden_size(model) // adapter.n_attention_heads(model)
     n_layers = len(adapter.get_decoder_layers(model))
-    for _, _, _, fr in arms:
-        assert all(0 <= b < n_layers for _, b in fr), f"freeze blocks must be in 0..{n_layers - 1}"
+    for a in arms:
+        assert all(0 <= b < n_layers for _, b in a[3]), f"freeze blocks must be in 0..{n_layers - 1}"
     pad_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
     image_token_id = adapter.image_token_id(model, processor)
     matcher = vade_matcher(args.vade_root)
@@ -362,22 +517,42 @@ def main():
 
     os.makedirs(out_dir, exist_ok=True)
     scored = defaultdict(lambda: defaultdict(list))
-    need = sorted({f for _, _, _, fr in arms for f in fr})
+    need = sorted({f for a in arms for f in a[3]})
+    modes = sorted({a[4] for a in arms if a[4]})
     with open(os.path.join(out_dir, "rows.jsonl"), "w") as fh:
         for attr in attributes:
-            for start in range(0, len(rows[attr]), args.batch_size):
-                chunk = rows[attr][start:start + args.batch_size]
+            batches = [rows[attr][i:i + args.batch_size] for i in range(0, len(rows[attr]), args.batch_size)]
+            # PASS 1: every row's clean generation and clean component values. The mean
+            # and third-country freezes need OTHER rows' values, so these come first.
+            clean_toks, store = {}, {}
+            for chunk in batches:
                 batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id)
                 clean, base_vals = capture_components(adapter, model, need, batch["base_ids"], batch["base_mask"],
                                                       batch["base_extra"], args.max_new_tokens, pad_id)
+                for i, r in enumerate(chunk):
+                    clean_toks[r["row_index"]] = clean[i]
+                    store[r["row_index"]] = {k: v[i].cpu() for k, v in base_vals.items()}
+            thirds = choose_thirds(rows[attr], args.seed) if "other" in modes else {}
+            means = row_means(rows[attr], store, mean_groups(rows[attr])) if ("mean" in modes and need) else {}
+            if thirds:
+                n_same = sum(t[1] for t in thirds.values() if t[0] is not None)
+                print(f"  {attr}: third country from the same template for {n_same}/{len(thirds)} rows", flush=True)
+
+            # PASS 2: the arms.
+            for start, chunk in zip(range(0, len(rows[attr]), args.batch_size), batches):
+                batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id)
                 donor_z = capture_donor(adapter, model, head_blocks, batch["donor_ids"], batch["donor_mask"],
                                         batch["donor_extra"], args.max_new_tokens, pad_id)
+                vals = {m: freeze_values_for(m, chunk, store, thirds, means) for m in modes} if need else {}
                 img_patches = None
-                for name, uses_heads, uses_img, freezes in arms:
+                for name, uses_heads, uses_img, freezes, mode in arms:
                     if name == "clean":
-                        toks = clean
+                        n = max(clean_toks[r["row_index"]].shape[0] for r in chunk)
+                        toks = torch.stack([torch.nn.functional.pad(clean_toks[r["row_index"]],
+                                                                    (0, n - clean_toks[r["row_index"]].shape[0]),
+                                                                    value=pad_id) for r in chunk])
                     else:
-                        extra = freeze_patches(freezes, base_vals, args.freeze_steps)
+                        extra = freeze_patches(freezes, vals[mode], args.freeze_steps) if freezes else []
                         if uses_img:
                             img_patches = img_patches or full_image_patch(adapter, model, batch, args.patch_layer,
                                                                           image_token_id)
@@ -386,19 +561,23 @@ def main():
                                                 batch["base_ids"], batch["base_mask"], batch["base_extra"],
                                                 args.max_new_tokens, pad_id, head_dim, extra_patches=extra)
                     texts = decode(processor, toks)
-                    sc = score(texts, toks, chunk, lookup, processor.tokenizer, matcher)
-                    for r, text, s in zip(chunk, texts, sc):
-                        scored[attr][name].append(s)
+                    third_rows = [thirds[r["row_index"]][0] if mode == "other" else None for r in chunk]
+                    sc = score(texts, toks, chunk, lookup, processor.tokenizer, matcher,
+                               thirds=[t["base_label"] if t is not None else None for t in third_rows])
+                    for r, text, s_, t in zip(chunk, texts, sc, third_rows):
+                        scored[attr][name].append(s_)
                         fh.write(json.dumps({"attribute": attr, "row_index": r["row_index"], "arm": name,
-                                             "base": r["base"], "source": r["source"],
+                                             "freeze_value": mode, "base": r["base"], "source": r["source"],
+                                             "third": None if t is None else t["base"],
                                              "template_id": r["template_id"], "generated_text": text,
-                                             **s}, ensure_ascii=False) + "\n")
+                                             **s_}, ensure_ascii=False) + "\n")
                 fh.flush()
                 print(f"  {attr}: {min(start + args.batch_size, len(rows[attr]))}/{len(rows[attr])}", flush=True)
 
     summary = {a: {arm: aggregate(v) for arm, v in arms_.items()} for a, arms_ in scored.items()}
     with open(os.path.join(out_dir, "summary.json"), "w") as f:
-        json.dump({"heads": args.heads, "freeze_steps": args.freeze_steps, "self_checks": checks,
+        json.dump({"heads": args.heads, "freeze_steps": args.freeze_steps,
+                   "freeze_values": args.freeze_values, "self_checks": checks,
                    "arms": [a[0] for a in arms], "by_attribute": summary}, f, indent=2)
     print_table(summary)
     print(f"\nwrote {out_dir}/rows.jsonl and summary.json")

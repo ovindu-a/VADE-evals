@@ -68,6 +68,20 @@ readout energy its learned core captures (against chance k_v/d) and how much of
 the core lies inside the union of readout subspaces. A core that carries
 entity-transfer but little readout energy is the dormant-pathway signature.
 
+SITE mlp_hidden (--site mlp_hidden --blocks 23-26)
+
+head_severed.py puts the attribute lookup in the last-token MLPs of blocks
+23-26 -- freezing any one of them costs 30-100% of the head install's transfer,
+with attribute-specific profiles (block 25 is ~all of calling_code and
+currency, far less of language) -- while the heads' own readouts overlap
+50-66% (flags run, 2026-09-24). The same geometry, run on each of those blocks'
+18944 post-SwiGLU neurons, asks whether the attributes separate THERE. Two
+things change: d is 18944, so the edit operators are applied factored (EditOp)
+and never materialized, and chance for every cross/reach number is k/18944
+instead of k/256-512. The eval phase's `full` arm is then the continuous
+full-swap CEILING for head_das.py --site mlp_hidden: a mask there selects a
+subset of what `full` swaps.
+
 PHASE eval -- VADE-scored
 
 For each target attribute, every row of its test tuple file (cause AND iso),
@@ -96,6 +110,9 @@ Usage
     python methods/readout_jacobian.py --phase geometry --das_checkpoint path/to/arm.pt
     python methods/readout_jacobian.py --phase eval --limit_pairs 20
     python methods/readout_jacobian.py --phase all
+    python methods/readout_jacobian.py --phase eval --max_rank 128 \
+        --fit_path results/readout_jacobian/flags/readout_fit.pt --out_dir results/readout_jacobian/flags_rank128
+    python methods/readout_jacobian.py --phase all --site mlp_hidden --blocks 23-26 --max_rank 128
 """
 import argparse
 import json
@@ -108,8 +125,8 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from methods.head_swap_vade import (COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, entity_attributes,  # noqa: E402
-                                    load_assets, parse_heads)
+from methods.head_swap_vade import (COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, UNIT_SITES,  # noqa: E402
+                                    entity_attributes, load_assets, parse_heads)
 
 EDIT_ARMS = ("readout", "isolated", "random")
 
@@ -160,9 +177,11 @@ def energy_in(G, U):
 
 
 def reach(G, M):
-    """||G M^T||^2 / ||G||^2 for a row-convention edit operator M."""
+    """||G M^T||^2 / ||G||^2 for a row-convention edit operator M (a dense
+    array or an EditOp)."""
     tot = float((G ** 2).sum())
-    return float(((G @ M.T) ** 2).sum()) / tot if tot > 0 else float("nan")
+    GM = M.apply_T(G) if isinstance(M, EditOp) else G @ M.T
+    return float((GM ** 2).sum()) / tot if tot > 0 else float("nan")
 
 
 def principal_cosines(U, V):
@@ -176,15 +195,52 @@ def random_basis(d, k, seed):
     return Q
 
 
-def edit_operators(U, target, seed=0):
-    """-> {arm: M [d, d]} for one block. U = {attr: basis}."""
+class EditOp:
+    """A row-convention edit operator M = U U^T (I - Q Q^T), kept FACTORED.
+
+    delta = x M: project onto span(U), then (if Q is given) remove span(Q). At
+    mlp_hidden d = 18944, so the dense d x d form is 2.9 GB per operator and
+    every product with it is O(d^2); factored, both are O(d k)."""
+
+    def __init__(self, U, Q=None):
+        self.U, self.Q = U, Q
+
+    def apply(self, X):
+        """X [n, d] -> X M."""
+        Y = (X @ self.U) @ self.U.T
+        if self.Q is not None:
+            Y = Y - (Y @ self.Q) @ self.Q.T
+        return Y
+
+    def apply_T(self, X):
+        """X [n, d] -> X M^T (M^T = (I - Q Q^T) U U^T)."""
+        Y = X if self.Q is None else X - (X @ self.Q) @ self.Q.T
+        return (Y @ self.U) @ self.U.T
+
+    def dense(self):
+        import numpy as np
+        return self.apply(np.eye(self.U.shape[0]))
+
+
+def edit_ops(U, target, seed=0):
+    """-> {arm: EditOp} for one block. U = {attr: basis}.
+
+        readout   P_r                     EditOp(U_r)
+        isolated  P_r P_perp(others)      EditOp(U_r, orth(others))
+        random    Q Q^T, Q random rank-k_r"""
+    import numpy as np
     d = next(iter(U.values())).shape[0]
-    P = U[target] @ U[target].T
-    Pperp = complement_projector([U[a] for a in U if a != target], d)
+    others = [U[a] for a in U if a != target]
+    Qo = orth(np.concatenate(others, axis=1)) if others else None
     # Seeded per TARGET as well as per block, so the four targets' nulls are four
     # different random subspaces rather than one reused draw.
-    Q = random_basis(d, U[target].shape[1], seed + zlib.crc32(target.encode()))
-    return {"readout": P, "isolated": P @ Pperp, "random": Q @ Q.T}
+    R = random_basis(d, U[target].shape[1], seed + zlib.crc32(target.encode()))
+    return {"readout": EditOp(U[target]), "isolated": EditOp(U[target], Qo), "random": EditOp(R)}
+
+
+def edit_operators(U, target, seed=0):
+    """-> {arm: M [d, d]} for one block, dense. Small d only (tests, heads)."""
+    return {arm: op.dense() for arm, op in edit_ops(U, target, seed).items()}
 
 
 def block_geometry(G, energy, max_rank, seed=0, G_eval=None):
@@ -224,7 +280,7 @@ def block_geometry(G, energy, max_rank, seed=0, G_eval=None):
     rep["self_energy"] = {a: energy_in(E[a], U[a]) for a in attrs}
     rep["reach"] = {}
     for t in attrs:
-        ops = edit_operators(U, t, seed)
+        ops = edit_ops(U, t, seed)
         rep["reach"][t] = {arm: {s_: reach(E[s_], M) for s_ in attrs} for arm, M in ops.items()}
     rep["measured_on"] = "in-sample" if G_eval is None else "held-out items"
     return U, rep
@@ -290,13 +346,17 @@ def probe_weights(n, seed):
     return w / max(np.linalg.norm(w), 1e-12)
 
 
-def jacobian_rows(adapter, model, ids, mask, extra, heads, head_dim, cand_lists, weights):
+def jacobian_rows(adapter, model, ids, mask, extra, heads, head_dim, cand_lists, weights,
+                  site="attn_head_output"):
     """One forward + one backward for a LEFT-padded batch. Row i gets its own
     zero leaf on each block's selected-head columns at the last column, and its
     own probe weights over its own candidates, so the backward yields one sketch
-    row per batch row. -> ({block: [B, d_b] float32 CPU}, clean logits [B, V])."""
+    row per batch row. -> ({block: [B, d_b] float32 CPU}, clean logits [B, V]).
+
+    `site` = mlp_hidden puts the leaf on down_proj's input instead (heads /
+    head_dim from head_swap_vade.site_units, i.e. every neuron of each block)."""
     import torch
-    from methods.head_swap_vade import head_columns, to_device
+    from methods.head_swap_vade import head_columns, site_module, to_device
     blocks = sorted({b for b, _ in heads})
     B = ids.shape[0]
     leaves, handles = {}, []
@@ -310,7 +370,7 @@ def jacobian_rows(adapter, model, ids, mask, extra, heads, head_dim, cand_lists,
             add = add.index_copy(1, _cols, _eps)
             last = t[:, -1, :] + add.to(t.dtype)
             return (torch.cat([t[:, :-1, :], last.unsqueeze(1)], dim=1),) + tuple(args[1:])
-        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(pre))
+        handles.append(site_module(adapter, model, b, site).register_forward_pre_hook(pre))
     try:
         with torch.enable_grad():
             out = model(input_ids=ids.to(model.device), attention_mask=mask.to(model.device),
@@ -365,12 +425,12 @@ def run_fit(args, heads, items, entity_dir, lookup, attributes, fit_items):
     import torch
     from PIL import Image
     from methods.adapters.registry import get_adapter
-    from methods.head_swap_vade import build_prompt
+    from methods.head_swap_vade import build_prompt, site_units
 
     adapter = get_adapter(args.model_id)
     model, processor = adapter.load(device=args.device)
     tok = processor.tokenizer
-    head_dim = adapter.hidden_size(model) // adapter.n_attention_heads(model)
+    heads, head_dim = site_units(adapter, model, args.site, heads=heads, blocks=sorted({b for b, _ in heads}))
     pad_id = tok.pad_token_id or tok.eos_token_id
     cands = candidates(tok, items, attributes, lookup)
     units = fit_units(fit_items, attributes, lookup, args.fit_templates, args.probes, args.seed)
@@ -402,7 +462,7 @@ def run_fit(args, heads, items, entity_dir, lookup, attributes, fit_items):
                  "image_grid_thw": torch.cat([p["image_grid_thw"] for p in ps])}
         cl = [cands[(a, t)][0] for a, _, t, _ in chunk]
         ws = [probe_weights(len(c), s) for c, (_, _, _, s) in zip(cl, chunk)]
-        rows, logits = jacobian_rows(adapter, model, ids, mask, extra, heads, head_dim, cl, ws)
+        rows, logits = jacobian_rows(adapter, model, ids, mask, extra, heads, head_dim, cl, ws, args.site)
         for i, (a, k, t, _) in enumerate(chunk):
             row_items[a].append(k)
             for b in blocks:
@@ -425,14 +485,32 @@ def run_fit(args, heads, items, entity_dir, lookup, attributes, fit_items):
 # ---------------------------------------------------------------------------
 
 def transform_for(M_by_block, device):
-    """-> head_swap_vade `transform`: have + (want - have) @ M, per block."""
+    """-> head_swap_vade `transform`: have + (want - have) @ M, per block.
+
+    M may be a dense [d, d] array, an EditOp (applied factored, never
+    materialized), or a scalar s meaning s * I -- 0 and 1 are the gate's
+    clean and full-swap operators at any width."""
     import torch
+
+    def as_t(x):
+        return None if x is None else torch.as_tensor(x, dtype=torch.float32, device=device)
+
     out = {}
     for b, M in M_by_block.items():
-        Mt = torch.as_tensor(M, dtype=torch.float32, device=device)
+        if isinstance(M, EditOp):
+            U, Q = as_t(M.U), as_t(M.Q)
 
-        def fn(have, want, _M=Mt):
-            return (have.float() + (want.float() - have.float()) @ _M).to(have.dtype)
+            def apply(d, _U=U, _Q=Q):
+                y = (d @ _U) @ _U.T
+                return y if _Q is None else y - (y @ _Q) @ _Q.T
+        elif isinstance(M, (int, float)):
+            apply = (lambda d, _s=float(M): d * _s)
+        else:
+            Mt = as_t(M)
+            apply = (lambda d, _M=Mt: d @ _M)
+
+        def fn(have, want, _apply=apply):
+            return (have.float() + _apply(want.float() - have.float())).to(have.dtype)
         out[b] = fn
     return out
 
@@ -460,12 +538,14 @@ def run_eval(args, heads, items, entity_dir, lookup, attributes, fit):
     from methods.head_swap_vade import (batches_by_donor_attribute, build_batch, capture_donor, decode,
                                         load_jobs, patched_generate, plain_generate)
 
+    from methods.head_swap_vade import site_units
+
     adapter = get_adapter(args.model_id)
     model, processor = adapter.load(device=args.device)
-    head_dim = adapter.hidden_size(model) // adapter.n_attention_heads(model)
+    blocks = sorted({b for b, _ in heads})
+    heads, head_dim = site_units(adapter, model, args.site, heads=heads, blocks=blocks)
     pad_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
     matcher = vade_matcher(args.vade_root)
-    blocks = sorted({b for b, _ in heads})
     U = {a: {b: fit["U"][a][b].numpy() for b in blocks} for a in attributes}
     arms = ["clean", "full"] + list(EDIT_ARMS)
     os.makedirs(args.out_dir, exist_ok=True)
@@ -473,7 +553,7 @@ def run_eval(args, heads, items, entity_dir, lookup, attributes, fit):
     summary = {}
     try:
         for target in args.eval_attributes or attributes:
-            ops = {b: edit_operators({a: U[a][b] for a in attributes}, target, args.seed + b) for b in blocks}
+            ops = {b: edit_ops({a: U[a][b] for a in attributes}, target, args.seed + b) for b in blocks}
             trans = {arm: transform_for({b: ops[b][arm] for b in blocks}, model.device) for arm in EDIT_ARMS}
             jobs, _ = load_jobs(args.vade_root, args.entity, args.split, [target], "queried",
                                 args.limit_pairs, args.seed)
@@ -484,22 +564,21 @@ def run_eval(args, heads, items, entity_dir, lookup, attributes, fit):
             for _, chunk in batches_by_donor_attribute(jobs, args.batch_size):
                 batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
                 z = capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
-                                  batch["donor_extra"], args.max_new_tokens, pad_id)
+                                  batch["donor_extra"], args.max_new_tokens, pad_id, site=args.site)
                 gen = lambda tr=None: patched_generate(adapter, model, heads, z, batch["base_ids"],
                                                        batch["base_mask"], batch["base_extra"],
-                                                       args.max_new_tokens, pad_id, head_dim, transform=tr)
+                                                       args.max_new_tokens, pad_id, head_dim, transform=tr,
+                                                       site=args.site)
                 outs = {"clean": plain_generate(model, batch["base_ids"], batch["base_mask"], batch["base_extra"],
                                                 args.max_new_tokens, pad_id),
                         "full": gen()}
                 if not checked:
                     # Gate: M = 0 must be the clean run exactly; M = I must reproduce the plain
                     # head patch (up to bf16 rounding of have + (want - have)).
-                    zero = gen(transform_for({b: 0 * ops[b]["readout"] for b in blocks}, model.device))
+                    zero = gen(transform_for({b: 0.0 for b in blocks}, model.device))
                     assert torch.equal(zero, outs["clean"]), (
                         "M=0 transform changed the clean generation -- the transform path is not a no-op")
-                    import numpy as np
-                    ident = gen(transform_for({b: np.eye(ops[b]["readout"].shape[0]) for b in blocks},
-                                              model.device))
+                    ident = gen(transform_for({b: 1.0 for b in blocks}, model.device))
                     agree = float((ident == outs["full"]).all(1).float().mean())
                     print(f"  [{target}] transform gate: M=0 == clean (exact); M=I == full on {agree:.0%} of rows")
                     assert agree >= 0.75, "M=I transform disagrees with the plain head patch on most rows"
@@ -571,7 +650,15 @@ def main():
     ap.add_argument("--entity", default="flags")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
-    ap.add_argument("--heads", default=COMMON10)
+    ap.add_argument("--heads", default=COMMON10, help="attn_head_output only.")
+    ap.add_argument("--site", default="attn_head_output", choices=list(UNIT_SITES),
+                    help="attn_head_output (default): the heads' o_proj input. mlp_hidden: every neuron of "
+                         "each --blocks block (down_proj's input) -- where head_severed.py puts the lookup.")
+    ap.add_argument("--blocks", default="23-26", help="mlp_hidden only: '23-26' or '23,25'.")
+    ap.add_argument("--fit_path", default=None,
+                    help="readout_fit.pt to read (geometry/eval) or write (fit). Default <out_dir>/readout_fit.pt. "
+                         "Pass an existing one with a new --out_dir to redo geometry/eval (e.g. --max_rank 128) "
+                         "without refitting.")
     ap.add_argument("--attributes", nargs="+", default=None)
     ap.add_argument("--fit_split", default="train", help="Items are taken from this split's tuples.")
     ap.add_argument("--fit_templates", nargs="+", default=["v1", "v2", "v3", "v4"],
@@ -596,19 +683,36 @@ def main():
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
 
-    heads = parse_heads(args.heads)
+    if args.site == "mlp_hidden":
+        spec = str(args.blocks)
+        blocks = (list(range(int(spec.split("-")[0]), int(spec.split("-")[1]) + 1)) if "-" in spec
+                  else sorted(int(x) for x in spec.split(",") if x.strip()))
+        heads = [(b, 0) for b in blocks]             # one unit per block; site_units widens it
+    else:
+        heads = parse_heads(args.heads)
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
     gt = json.load(open(os.path.join(entity_dir, "ground_truth.json")))
     attributes = args.attributes or [a for a in entity_attributes(gt) if a in lookup]
-    args.out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "readout_jacobian", args.entity)
+    bl = [b for b, _ in heads]
+    default_dir = args.entity if args.site == "attn_head_output" else (
+        f"{args.entity}__mlp_hidden_b{bl[0]}-{bl[-1]}" if bl == list(range(bl[0], bl[-1] + 1))
+        else f"{args.entity}__mlp_hidden_b{'-'.join(map(str, bl))}")
+    args.out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "readout_jacobian", default_dir)
     fit_items = sorted({json.loads(l)["base"] for a in attributes
                         for l in open(os.path.join(entity_dir, "tuples", a, f"{args.fit_split}.jsonl"))})
     if args.items_limit:
         fit_items = fit_items[:args.items_limit]
     units = fit_units(fit_items, attributes, lookup, args.fit_templates, args.probes, args.seed)
-    fit_path = os.path.join(args.out_dir, "readout_fit.pt")
-    print(f"[readout_jacobian] {args.entity} phase={args.phase}: heads "
-          + ", ".join(f"{b}.{h}" for b, h in heads))
+    fit_path = args.fit_path or os.path.join(args.out_dir, "readout_fit.pt")
+    print(f"[readout_jacobian] {args.entity} phase={args.phase} site={args.site}: "
+          + (", ".join(f"{b}.{h}" for b, h in heads) if args.site == "attn_head_output"
+             else f"every neuron of blocks {[b for b, _ in heads]}"))
+    if args.site == "mlp_hidden":
+        n_rows = len(units) // max(len(attributes), 1)
+        print(f"  mlp_hidden: d = 18944 per block; the sketch is ~{n_rows} rows per attribute, so a rank "
+              f"cap of {args.max_rank} is {args.max_rank / 18944:.2%} of the space (chance for every "
+              f"cross/reach number below). readout_fit.pt ~ "
+              f"{len(units) * len(heads) * 18944 * 4 / 1e9:.1f} GB.")
     print(f"  attributes: {attributes}; fit on {len(fit_items)} {args.fit_split} items x templates "
           f"{args.fit_templates} x {args.probes} probes = {len(units)} sketch rows")
     print(f"  -> {args.out_dir}")
@@ -623,7 +727,7 @@ def main():
     if args.phase in ("fit", "all"):
         G, row_items, clean_acc = run_fit(args, heads, items, entity_dir, lookup, attributes, fit_items)
         torch.save({"G": {a: {b: torch.from_numpy(m) for b, m in bb.items()} for a, bb in G.items()},
-                    "row_items": row_items,
+                    "row_items": row_items, "site": args.site,
                     "heads": heads, "attributes": attributes, "fit_items": fit_items,
                     "fit_templates": args.fit_templates, "probes": args.probes, "clean_acc": clean_acc},
                    fit_path)
@@ -631,6 +735,8 @@ def main():
 
     if args.phase in ("geometry", "eval", "all"):
         fit = torch.load(fit_path, weights_only=False)
+        assert fit.get("site", "attn_head_output") == args.site, (
+            f"{fit_path} was fitted at site {fit.get('site', 'attn_head_output')}, not {args.site}")
         assert [tuple(h) for h in fit["heads"]] == heads, "readout_fit.pt was fitted on a different head set"
         G = {a: {b: m.numpy() for b, m in bb.items()} for a, bb in fit["G"].items()}
         blocks = sorted({b for b, _ in heads})

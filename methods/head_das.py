@@ -110,6 +110,11 @@ Usage
     python methods/head_das.py --attribute language --method das_rotated --train_rows 4000
     python methods/head_das.py --attribute language --method dbm --l1_coef 1e-3 --train_rows 4000
 
+    # the same mask on every post-SwiGLU neuron of blocks 23-26 (where head_severed
+    # puts the attribute lookup); flat temperature, L1 scaled for a 4 x 18944 mask
+    python methods/head_das.py --attribute calling_code --method dbm --site mlp_hidden \
+        --blocks 23-26 --l1_coef 1e-4 --temperature_start 1e-2 --temperature_end 1e-2 --train_rows 4000
+
     # score (sibling VADE repo)
     python ../VADE/eval/score.py --entity flags --attribute language \
         --predictions results/head_das/flags/language_das_fixed_k8/predictions.jsonl
@@ -125,8 +130,9 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 from methods.head_swap_vade import (  # noqa: E402
-    ATTRIBUTES, COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, build_prompt, capture_donor, decode,
-    head_columns, load_assets, parse_heads, patched_generate, to_device,
+    ATTRIBUTES, COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, UNIT_SITES, build_prompt, capture_donor, decode,
+    head_columns, load_assets, parse_heads, patched_generate, site_module, site_units, to_device,
+    verify_readback,
 )
 from methods.common.targets import (  # noqa: E402
     MAX_ANSWER_TOKENS, build_teacher_forced_extension, derive_gold_token_ids,
@@ -268,8 +274,14 @@ def temperature_schedule_for(method, n_steps, vade_root, t_start=None, t_end=Non
     -- numerically saturated -- within a quarter of training. See
     `mask_travel_budget`."""
     if method == "dbm":
+        # Default RAVEL's 1e-2 -> 1e-7. dbm/train.py records that annealing to that
+        # floor saturates sigmoid(m/T) early and freezes the mask; a FLAT 1e-2
+        # (--temperature_start 1e-2 --temperature_end 1e-2) scored best there.
         from methods.dbm.intervention import temperature_schedule
-        return temperature_schedule(n_steps)                 # RAVEL's 1e-2 -> 1e-7
+        kw = {}
+        if t_start is not None: kw["temperature_start"] = float(t_start)
+        if t_end is not None: kw["temperature_end"] = float(t_end)
+        return temperature_schedule(n_steps, **kw)
     if method == "das_rotated":
         sched = load_das_module(vade_root).temperature_schedule            # 50 -> 0.1
         kw = {}
@@ -459,9 +471,9 @@ def build_batch(rows, processor, items, entity_dir, lookup, pad_id, cache=None):
 # The donor's answer-token trajectory
 # ---------------------------------------------------------------------------
 
-def capture_donor_columns(adapter, model, blocks, batch, pad_id):
-    """-> {block: [B, K, hidden]} of attn_head_output at the LAST K columns of
-    ONE teacher-forced donor forward.
+def capture_donor_columns(adapter, model, blocks, batch, pad_id, site="attn_head_output"):
+    """-> {block: [B, K, width]} of `site` (o_proj's or down_proj's input) at the
+    LAST K columns of ONE teacher-forced donor forward.
 
     The donor is extended by its OWN gold (the SOURCE's label), so column j is
     the source's state while emitting its answer token j -- the same alignment
@@ -475,7 +487,7 @@ def capture_donor_columns(adapter, model, blocks, batch, pad_id):
 
         def grab(_mod, args, _sink=sinks[b]):
             _sink.append(args[0][:, -MAX_ANSWER_TOKENS:, :].detach().float())
-        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(grab))
+        handles.append(site_module(adapter, model, b, site).register_forward_pre_hook(grab))
     try:
         with torch.no_grad():
             model(input_ids=ext_ids.to(model.device), attention_mask=ext_mask.to(model.device),
@@ -485,7 +497,7 @@ def capture_donor_columns(adapter, model, blocks, batch, pad_id):
         for h in handles:
             h.remove()
     for b, v in sinks.items():
-        assert len(v) == 1, f"block {b} o_proj fired {len(v)} times in one forward, expected 1"
+        assert len(v) == 1, f"block {b} {site} hook fired {len(v)} times in one forward, expected 1"
     return {b: v[0] for b, v in sinks.items()}
 
 
@@ -504,7 +516,7 @@ def donor_key(row):
     return (row["source"], row["queried"], row["template_id"])
 
 
-def donor_columns(adapter, model, blocks, colmap, batch, pad_id, cache=None):
+def donor_columns(adapter, model, blocks, colmap, batch, pad_id, cache=None, site="attn_head_output"):
     """-> {block: [B, K, W]}, computing only the rows not already cached.
 
     6,000 train rows carry ~1,330 distinct donor keys, so after the first pass
@@ -521,7 +533,7 @@ def donor_columns(adapter, model, blocks, colmap, batch, pad_id, cache=None):
         return t if colmap is None else t.index_select(-1, colmap[b].to(t.device))
 
     if cache is None:
-        z = capture_donor_columns(adapter, model, blocks, batch, pad_id)
+        z = capture_donor_columns(adapter, model, blocks, batch, pad_id, site)
         return {b: cut(z[b], b) for b in blocks}
 
     keys = [donor_key(r) for r in batch["rows"]]
@@ -535,9 +547,12 @@ def donor_columns(adapter, model, blocks, colmap, batch, pad_id, cache=None):
                "donor_extra": _slice_extra(batch["donor_extra"], batch["donor_ids"].shape[0], idx),
                "source_gold_toks": batch["source_gold_toks"][idx],
                "source_gold_len": batch["source_gold_len"][idx]}
-        z = capture_donor_columns(adapter, model, blocks, sub, pad_id)
+        z = capture_donor_columns(adapter, model, blocks, sub, pad_id, site)
         for j, k in enumerate(need):
-            cache[k] = {b: cut(z[b][j], b).cpu() for b in blocks}
+            # Stored back in the MODEL dtype: the captured activations were model-dtype
+            # before capture's .float(), so this is lossless, and it halves the cache --
+            # which matters for mlp_hidden (4 blocks x 18944 x K per donor key).
+            cache[k] = {b: cut(z[b][j], b).to(model.dtype).cpu() for b in blocks}
     return {b: torch.stack([cache[k][b] for k in keys]).to(model.device) for b in blocks}
 
 
@@ -560,7 +575,7 @@ def _slice_extra(extra, n_rows, idx):
 # The intervened teacher-forced forward
 # ---------------------------------------------------------------------------
 
-def intervened_logits(adapter, model, interventions, colmap, donor_cols, batch):
+def intervened_logits(adapter, model, interventions, colmap, donor_cols, batch, site="attn_head_output"):
     """Teacher-forced forward with every block's intervention live at the last
     MAX_ANSWER_TOKENS columns. Returns [B, K, vocab] aligned 1:1 with
     target_toks. Differentiable through the interventions."""
@@ -579,7 +594,7 @@ def intervened_logits(adapter, model, interventions, colmap, donor_cols, batch):
             patched = t.clone()
             patched[:, -MAX_ANSWER_TOKENS:, _cols] = new.to(t.dtype)
             return (patched,) + tuple(args[1:])
-        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(patch))
+        handles.append(site_module(adapter, model, b, site).register_forward_pre_hook(patch))
     try:
         out = model(input_ids=ext_ids.to(model.device), attention_mask=ext_mask.to(model.device),
                     **to_device(batch["base_extra"], model.device, model.dtype),
@@ -737,8 +752,8 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
         for i, chunk in enumerate(batches):
             in_group, group_size = accum_group(i, len(batches), args.grad_accum_steps)
             batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, prompt_cache)
-            donor_cols = donor_columns(adapter, model, blocks, colmap, batch, pad_id, donor_cache)
-            logits = intervened_logits(adapter, model, interventions, colmap, donor_cols, batch)
+            donor_cols = donor_columns(adapter, model, blocks, colmap, batch, pad_id, donor_cache, args.site)
+            logits = intervened_logits(adapter, model, interventions, colmap, donor_cols, batch, args.site)
             ce = weighted_ce(logits, batch, args.iso_weight)
             reg_name, reg_t, reg_coef = sparsity_term(args.method, interventions, args)
             reg = 0.0 if reg_t is None else float(reg_t)
@@ -769,7 +784,12 @@ def train(adapter, model, processor, args, heads, colmap, items, entity_dir, loo
                 if temps is not None:
                     t = float(temps[min(step, len(temps) - 1)])
                     for iv in interventions.values():
-                        iv.set_temperature(t)
+                        # pyvene's SigmoidMaskIntervention (dbm) assigns `.data = temp`, so it needs
+                        # a TENSOR on the parameter's own device; a float raised TypeError at the
+                        # first optimizer step, which is why no dbm run existed. VADE's rotated
+                        # class fill_()s, which takes either.
+                        iv.set_temperature(torch.tensor(t, dtype=iv.temperature.dtype, device=iv.temperature.device)
+                                           if args.method == "dbm" else t)
                 step += 1
                 rec = {"kind": "opt_step", "epoch": epoch, "opt_step": step,
                        "group_size": group_size, "loss": accum / group_size,
@@ -837,19 +857,28 @@ def evaluate(adapter, model, processor, args, heads, colmap, items, entity_dir, 
     # uncached -- its step count depends on when the donor hits EOS.
     donor_cache = None if (args.no_donor_cache or args.donor_capture == "generate") else {}
     n = 0
+    checked = False
     with open(out_path, "w") as f:
         for chunk in chunks(rows, args.batch_size):
             batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, prompt_cache)
             if args.donor_capture == "generate":
                 dz = capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
-                                   batch["donor_extra"], args.max_new_tokens, pad_id)
+                                   batch["donor_extra"], args.max_new_tokens, pad_id, site=args.site)
             else:
                 # colmap=None: patched_generate selects the head columns itself.
-                dz = {b: v.cpu() for b, v in
-                      donor_columns(adapter, model, blocks, None, batch, pad_id, donor_cache).items()}
+                dz = {b: v.float().cpu() for b, v in
+                      donor_columns(adapter, model, blocks, None, batch, pad_id, donor_cache, args.site).items()}
+            if not checked:
+                # The site's patch must read back what it installed before any score
+                # means anything -- the one exact check, and new sites have had no other.
+                worst = verify_readback(adapter, model, heads, dz, batch["base_ids"], batch["base_mask"],
+                                        batch["base_extra"], args.max_new_tokens, pad_id, head_dim,
+                                        site=args.site)
+                print(f"  read-back ({args.site}): worst {worst:.2e}")
+                checked = True
             toks = patched_generate(adapter, model, heads, dz, batch["base_ids"], batch["base_mask"],
                                     batch["base_extra"], args.max_new_tokens, pad_id, head_dim,
-                                    transform=transform)
+                                    transform=transform, site=args.site)
             for r, text in zip(chunk, decode(processor, toks)):
                 f.write(json.dumps({"attribute": r["target_attribute"],
                                     "row_index": r["row_index"],
@@ -883,7 +912,14 @@ def main():
                          "21/22/23, so a single K is a different FRACTION of each block's space. "
                          "das_rotated and dbm learn their own width via an annealed mask.")
     ap.add_argument("--heads", default=COMMON10,
-                    help="BLOCK.HEAD list. Default is R8/R10's common10.")
+                    help="BLOCK.HEAD list. Default is R8/R10's common10. attn_head_output only.")
+    ap.add_argument("--site", default="attn_head_output", choices=list(UNIT_SITES),
+                    help="attn_head_output (default): the heads' o_proj input columns. mlp_hidden: every "
+                         "post-SwiGLU neuron (down_proj's input, 18944 wide) of each --blocks block -- "
+                         "the site head_severed.py localizes the attribute lookup to. Same continuous "
+                         "every-answer-token patch, same cause+iso objective, same eval path.")
+    ap.add_argument("--blocks", default="23-26",
+                    help="mlp_hidden only: blocks as '23-26' or '23,25'. Ignored for attn_head_output.")
     ap.add_argument("--train_split", default="train")
     ap.add_argument("--eval_split", default="test")
     ap.add_argument("--train_rows", type=int, default=0, metavar="N",
@@ -955,8 +991,18 @@ def main():
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
 
-    heads = parse_heads(args.heads)
-    blocks = sorted({b for b, _ in heads})
+    if args.site == "mlp_hidden":
+        spec = str(args.blocks)
+        blocks = (list(range(int(spec.split("-")[0]), int(spec.split("-")[1]) + 1)) if "-" in spec
+                  else sorted(int(x) for x in spec.split(",") if x.strip()))
+        heads = [(b, 0) for b in blocks]            # one "unit" per block = all of its neurons
+        assert args.method != "das_fixed" or str(args.subspace_dim).lower() != "full", (
+            "das_fixed --subspace_dim full at mlp_hidden would allocate an 18944 x 18944 matrix per "
+            "block; the full-swap ceiling for this site is readout_jacobian.py --site mlp_hidden's "
+            "`full` arm.")
+    else:
+        heads = parse_heads(args.heads)
+        blocks = sorted({b for b, _ in heads})
     # The tag must encode every knob that changes the RESULT, or a sweep
     # overwrites itself into one directory -- the gotcha CLAUDE.md records for
     # select_features.py's --dictionaries_dir. das_fixed varies in K;
@@ -972,7 +1018,12 @@ def main():
                   + (f"_mi{args.mask_init:g}" if args.mask_init is not None else "")
                   + (f"_T{args.temperature_start:g}" if args.temperature_start is not None else ""))
     else:
-        suffix = f"_l1{args.l1_coef:g}"
+        suffix = (f"_l1{args.l1_coef:g}"
+                  + (f"_T{args.temperature_start:g}" if args.temperature_start is not None else "")
+                  + (f"-{args.temperature_end:g}" if args.temperature_end is not None else ""))
+    if args.site == "mlp_hidden":
+        suffix += f"_mlp{blocks[0]}-{blocks[-1]}" if blocks == list(range(blocks[0], blocks[-1] + 1)) \
+            else "_mlp" + "-".join(map(str, blocks))
     tag = f"{args.attribute}_{args.method}{suffix}"
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_das", args.entity, tag)
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
@@ -984,7 +1035,14 @@ def main():
     n_cause = sum(r["rule"] == "match_source" for r in train_rows)
     print(f"[head_das] {args.entity}/{args.attribute} method={args.method}"
           + (f" K={args.subspace_dim}" if args.method == "das_fixed" else ""))
-    print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads))
+    if args.site == "mlp_hidden":
+        print(f"  site mlp_hidden: every neuron of blocks {blocks}")
+        if args.method == "dbm":
+            print(f"  NOTE this mask is {len(blocks)} x 18944 wide, ~{len(blocks) * 18944 / 4096:.0f}x the "
+                  f"~4096-wide mask RAVEL's 1e-3 was tuned for, so ||m||_1 at --l1_coef {args.l1_coef:g} weighs "
+                  f"that much more at equal per-dim magnitude. Sweep it (CLAUDE.md's NDM gotcha 1).")
+    else:
+        print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads))
     print(f"  train {args.train_split}: {len(train_rows)} rows "
           f"({n_cause} cause / {len(train_rows) - n_cause} iso), iso_weight={args.iso_weight}")
     print(f"  eval  {args.eval_split}: {len(eval_rows)} rows")
@@ -1005,8 +1063,10 @@ def main():
         assert not (tr_items & ev_items), (
             "train and eval share items -- the generalization claim below does not hold; "
             "check --train_split/--eval_split")
-        widths = {b: 128 * sum(1 for x, _ in heads if x == b) for b in blocks}
-        print(f"    blocks {blocks}; head columns per block {widths} (assuming head_dim=128)")
+        widths = ({b: 18944 for b in blocks} if args.site == "mlp_hidden"
+                  else {b: 128 * sum(1 for x, _ in heads if x == b) for b in blocks})
+        print(f"    blocks {blocks}; columns per block {widths} "
+              f"(assuming {'intermediate_size=18944' if args.site == 'mlp_hidden' else 'head_dim=128'})")
         if args.method == "das_fixed":
             dims = resolve_subspace_dims(args.subspace_dim, blocks, widths)
             print(f"    subspace per block {dims}; effective DOF "
@@ -1019,12 +1079,13 @@ def main():
     adapter = get_adapter(args.model_id)
     model, processor = adapter.load()
     model.requires_grad_(False)                # only the intervention trains
-    hidden = adapter.hidden_size(model)
     n_heads = adapter.n_attention_heads(model)
-    head_dim = hidden // n_heads
     n_layers = len(adapter.get_decoder_layers(model))
     assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
     assert all(0 <= h < n_heads for _, h in heads), f"head index out of 0..{n_heads - 1}"
+    # For mlp_hidden, head_dim is the block's whole neuron width and head_columns
+    # selects all of it; the rest of the script is site-agnostic.
+    heads, head_dim = site_units(adapter, model, args.site, heads=heads, blocks=blocks)
     pad_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
     colmap = {b: head_columns(heads, b, head_dim) for b in blocks}
 
@@ -1061,6 +1122,15 @@ def main():
     stats = intervention_stats(args.method, interventions)
     json.dump({"args": vars(args), "heads": [[b, h] for b, h in heads], "stats": stats},
               open(os.path.join(out_dir, "summary.json"), "w"), indent=2)
+    if args.method == "dbm":
+        # The selected units themselves (summary.json drops them for size) -- what
+        # mask_overlap.py compares ACROSS attributes: attribute-specific neurons
+        # are the claim an isolating mask makes.
+        from methods.dbm.intervention import mask_stats
+        json.dump({"site": args.site, "attribute": args.attribute,
+                   "selected": {int(b): mask_stats(iv)["selected_indices"] for b, iv in interventions.items()},
+                   "width": {int(b): len(colmap[b]) for b in blocks}},
+                  open(os.path.join(out_dir, "mask_selected.json"), "w"))
     print("  " + json.dumps(stats))
 
     if not args.skip_eval:

@@ -543,6 +543,40 @@ than a fork of it. Offline tests: `tests/test_head_localization.py`.
   `geometry.json["in_sample"]` for comparison only. `--das_checkpoint` adds the
   Makelov dormant-subspace control for a head_das.py das_rotated core.
 
+**Flags results (2026-09-24) and the follow-ups they motivated.** The heads are
+question-blind entity movers (name-token rank ~1-10/78, queried-value z ==
+other-value z); freezing last-token MLPs 22-27 at base drops the install's
+transfer to 0.0% on all four attributes while freezing attention 24-27 barely
+matters; single MLPs 23-26 each cost 30-100%, attribute-specifically (block 25
+is ~all of calling_code/currency, much less of language); and the attributes'
+readouts of the heads overlap 50-66% (isolated edit = clean exactly). So the
+follow-ups move to the MLPs:
+
+- **`site="mlp_hidden"`** in head_swap_vade's `capture_donor` /
+  `patched_generate` / `verify_readback` (default `attn_head_output`, so every
+  earlier caller is unchanged): the same continuous patch on down_proj's input.
+  A "head" there is a whole block -- `site_units()` returns `[(b, 0), ...]` and
+  `unit_dim = intermediate_size`. Beware the name: `patched_generate`'s
+  extra_patches loop variable is `extra_site`, NOT `site`, since a shadowed
+  `site` silently patched the wrong module.
+- **`readout_jacobian.py --site mlp_hidden --blocks 23-26`**: the geometry on
+  18944-wide neurons. Edit operators are factored (`EditOp`, never d x d);
+  `--fit_path` reuses a fit (e.g. `--max_rank 128` without refitting). Its eval
+  `full` arm is the continuous full-swap CEILING for head_das at that site.
+- **`head_das.py --site mlp_hidden --blocks 23-26 --method dbm`**: the trained
+  mask on those neurons (NDM's hypothesis, with head_das's every-answer-token
+  patch and cause+iso objective instead of dbm/train.py's prompt-only one).
+  `--method dbm` had NEVER run before this: head_das passed a float to pyvene's
+  `set_temperature`, which needs a tensor (fixed). dbm now honours
+  `--temperature_start/_end` (a flat 1e-2 is what dbm/train.py found works).
+  Writes `mask_selected.json`; `methods/mask_overlap.py` compares the selected
+  neurons across attributes against chance.
+- **`head_severed.py --freeze_values base mean other`**: freezing at BASE both
+  stops a block reacting AND re-writes the base's answer; `@mean` (leave-one-out
+  mean over >=4 same-template base items) and `@other` (a third country, whose
+  gold is scored too) separate "needed" from "writes the answer".
+  Offline tests: `tests/test_mlp_site_followups.py`.
+
 ## The question->readout path: methods/attr_head_trace.py, attr_capture.py, attr_directions.py
 
 `methods/attribute_switch_sweep.py` holds the IMAGE fixed and swaps the QUESTION,
@@ -617,6 +651,14 @@ python methods/head_vocab_projection.py --dry_run
 python methods/head_vocab_projection.py                          # 84 items x 4 questions, read-only
 python methods/head_severed.py --n_pairs 64                      # ROME-style severed test
 python methods/readout_jacobian.py --phase all                   # readout geometry + VADE-scored edits
+python methods/readout_jacobian.py --phase eval --max_rank 128 \
+    --fit_path results/readout_jacobian/flags/readout_fit.pt --out_dir results/readout_jacobian/flags_rank128
+python methods/readout_jacobian.py --phase all --site mlp_hidden --blocks 23-26 --max_rank 128
+python methods/head_severed.py --freeze_values base mean other --freeze_mlp_span 23-26 \
+    --freeze_mlp_singles 23 24 25 26 --freeze_attn_span ''
+python methods/head_das.py --attribute calling_code --method dbm --site mlp_hidden --blocks 23-26 \
+    --l1_coef 1e-4 --temperature_start 1e-2 --temperature_end 1e-2 --train_rows 4000 --eval_rows 4000
+python methods/mask_overlap.py results/head_das/flags/*_dbm_*_mlp23-26/mask_selected.json
 
 # NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
 python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # 1. is the hook right
