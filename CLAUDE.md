@@ -505,6 +505,44 @@ scoring guard therefore gates on the layer-0 full-image swap (= the model
 reading the source image, pruned to be correct): below `--min_source_match`
 (0.85) the attribute stops after stage 1 and prints the swap_trace command.
 
+## Past the entity heads: head_vocab_projection.py, head_severed.py, readout_jacobian.py
+
+Three follow-ups to R8-R15 (ATTRIBUTE_HEAD_EXPERIMENTS.md), all defaulting to
+`common10`, all built on head_swap_vade's patch/capture/read-back path rather
+than a fork of it. Offline tests: `tests/test_head_localization.py`.
+
+- **`head_vocab_projection.py`** (read-only, eager attention, one forward per
+  item x question). Each head's exact write `z_h W_O_h^T` through the final norm
+  (dla.py's frozen scale, asserted against the model's own logit) and the
+  unembedding: rank of the item's NAME token among all names vs rank of each
+  attribute's VALUE token, plus a split of the write by source key group
+  (system / object / image_background / question / assistant_prefix; A@V is
+  asserted to reconstruct o_proj's input). Entity mover vs attribute extractor
+  vs question reader. Direct paths only, like dla.py.
+- **`head_severed.py`** (ROME's severed tracing). R10's continuous `common10`
+  install, with late components frozen at the last column to their CLEAN BASE
+  values: `heads+mlp[22-27]`, per-block MLP singles, `heads+attn[24-27]` as the
+  mirror, optional `full_image(+mlp)`. Step 0 is exact; later steps replay the
+  clean base trajectory step-matched (`--freeze_steps first` freezes step 0
+  only), so FIRST-TOKEN columns are the primary readout. Gates: read-back,
+  freeze-at-own-values is BIT-EXACT to clean, and freezing to another row's
+  values moves the logits. Freezing attention inside the head blocks is refused
+  (it would overwrite the install).
+- **`readout_jacobian.py`** (`--phase fit|geometry|eval|all`). Tests R13.2:
+  sketches each attribute's readout Jacobian (first-answer-token candidate
+  logits w.r.t. each block's selected-head columns; one zero leaf per batch row
+  so one backward yields a batch of rows, checked against finite differences in
+  the tests), then principal angles / cross-energy / shared-subspace energy /
+  `reach` of three question-blind edits (`readout` = P_r, `isolated` =
+  P_perp(others) P_r, `random`), then VADE-scored generations of those edits via
+  `patched_generate(transform=...)`. **The reported geometry is two-fold
+  ITEM-HELD-OUT** (fit subspaces on half the items, measure on the other half):
+  in-sample numbers are inflated by the subspace fitting its own sketch noise,
+  which on a random smoke model read as 30-45x "selectivity" that the held-out
+  measurement correctly puts at ~1-4x. In-sample values are kept in
+  `geometry.json["in_sample"]` for comparison only. `--das_checkpoint` adds the
+  Makelov dormant-subspace control for a head_das.py das_rotated core.
+
 ## The question->readout path: methods/attr_head_trace.py, attr_capture.py, attr_directions.py
 
 `methods/attribute_switch_sweep.py` holds the IMAGE fixed and swaps the QUESTION,
@@ -573,6 +611,12 @@ python methods/image_head_pipeline.py --entity brands animals celebrities --dry_
 python methods/image_head_pipeline.py --entity brands animals celebrities
 python methods/ndm/swap_trace.py --entity flags --attribute calling_code --positions last_token \
     --site residual --layers 19 20 21 22 23 24 25 26 27 28      # what did it say INSTEAD
+
+# Past the entity heads (common10 by default)
+python methods/head_vocab_projection.py --dry_run
+python methods/head_vocab_projection.py                          # 84 items x 4 questions, read-only
+python methods/head_severed.py --n_pairs 64                      # ROME-style severed test
+python methods/readout_jacobian.py --phase all                   # readout geometry + VADE-scored edits
 
 # NDM (Native Dictionary Masking) -- MLP-hidden site, shares dbm/'s engine
 python methods/ndm/verify_sites.py --entity flags --attribute language --layer 16   # 1. is the hook right
