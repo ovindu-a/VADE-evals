@@ -1,0 +1,108 @@
+{
+  "entity": "brands",
+  "attribute": "founded_year",
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "image_positions": "full_image",
+  "scoring": "text",
+  "handoff": {
+    "patch_layer": 9,
+    "image_end": 22,
+    "read_end": 10,
+    "handoff_blocks": [
+      9
+    ],
+    "window_range": [
+      9,
+      11
+    ],
+    "image_curve": {
+      "0": 0.9375,
+      "1": 0.9375,
+      "2": 0.9375,
+      "3": 0.9375,
+      "4": 0.9375,
+      "5": 0.9375,
+      "6": 0.90625,
+      "7": 0.90625,
+      "8": 0.9375,
+      "9": 0.90625,
+      "10": 0.875,
+      "11": 0.84375,
+      "12": 0.78125,
+      "13": 0.78125,
+      "14": 0.59375,
+      "15": 0.28125,
+      "16": 0.28125,
+      "17": 0.3125,
+      "18": 0.28125,
+      "19": 0.28125,
+      "20": 0.125,
+      "21": 0.1875,
+      "22": 0.03125,
+      "23": 0.0,
+      "24": 0.0,
+      "25": 0.0,
+      "26": 0.0,
+      "27": 0.0,
+      "28": 0.0
+    },
+    "last_token_curve": {
+      "0": 0.4375,
+      "1": 0.4375,
+      "2": 0.4375,
+      "3": 0.4375,
+      "4": 0.4375,
+      "5": 0.4375,
+      "6": 0.4375,
+      "7": 0.4375,
+      "8": 0.4375,
+      "9": 0.4375,
+      "10": 0.4375,
+      "11": 0.4375,
+      "12": 0.4375,
+      "13": 0.4375,
+      "14": 0.4375,
+      "15": 0.4375,
+      "16": 0.4375,
+      "17": 0.4375,
+      "18": 0.4375,
+      "19": 0.4375,
+      "20": 0.4375,
+      "21": 0.4375,
+      "22": 0.4375,
+      "23": 0.4375,
+      "24": 0.4375,
+      "25": 0.4375,
+      "26": 0.4375,
+      "27": 0.4375,
+      "28": 0.4375
+    },
+    "last_token_floor": 0.4375,
+    "thresholds": {
+      "patch_frac": 0.95,
+      "read_frac": 0.9,
+      "margin": 2
+    },
+    "warnings": [
+      "last-token residual swap moves the answer off base at most 44% (floor 44%) -- no clear destination for the read"
+    ]
+  },
+  "scoring_check": {
+    "ok": true,
+    "source_read": 0.9375,
+    "clean_base": 0.5625,
+    "min_source_match": 0.85,
+    "warnings": [
+      "only 56.2% of unhooked answers match base_label (the model is wrong about many BASE items, which pruning allows): base_kept and the last-token curve are capped there, so read them relative to that floor"
+    ]
+  },
+  "windows_json": "results/image_head_pipeline/brands/founded_year/windows_patch9_text.json",
+  "window": {
+    "blocks": [
+      9
+    ],
+    "label": "9",
+    "fallback": "too few rows differ at the first answer token"
+  },
+  "head_trace_json": "results/image_head_pipeline/brands/founded_year/head_trace_patch9_blocks9_text.json"
+}

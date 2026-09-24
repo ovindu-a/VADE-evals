@@ -1,0 +1,113 @@
+
+===== 2026-09-24 20:01:22 $ /home/ahl4090/DAS-Explorations/VADE-evals/.venv/bin/python methods/head_window_sweep.py --entity animals --attribute native_continent --model_id Qwen/Qwen2.5-VL-7B-Instruct --vade_root /home/ahl4090/DAS-Explorations/VADE --text_match --max_new_tokens 8 --patch_layer 12 --positions full_image --range 12 25 --max_len 3 --extra_windows 12-23 --n_rows 64 --seed 0 --batch_size 16 --out /home/ahl4090/DAS-Explorations/VADE-evals/results/image_head_pipeline/animals/native_continent/windows_patch12_text.json
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+
+=== logging to /home/ahl4090/DAS-Explorations/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/animals/ndm/native_continent/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_window_sweep_patch12_text.log ===
+
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]
+Loading weights:   0%|          | 1/729 [00:00<07:13,  1.68it/s]
+Loading weights:   0%|          | 2/729 [00:01<06:03,  2.00it/s]
+Loading weights:   1%|          | 5/729 [00:01<02:03,  5.86it/s]
+Loading weights:   2%|2         | 16/729 [00:01<00:31, 22.79it/s]
+Loading weights:   3%|2         | 21/729 [00:01<00:26, 27.09it/s]
+Loading weights:   4%|3         | 29/729 [00:01<00:19, 36.29it/s]
+Loading weights:   5%|5         | 39/729 [00:01<00:17, 40.40it/s]
+Loading weights:   6%|6         | 45/729 [00:01<00:15, 44.33it/s]
+Loading weights:   7%|7         | 53/729 [00:01<00:13, 49.87it/s]
+Loading weights:   9%|8         | 64/729 [00:02<00:11, 60.38it/s]
+Loading weights:  10%|9         | 71/729 [00:02<00:11, 55.56it/s]
+Loading weights:  11%|#         | 78/729 [00:02<00:11, 54.70it/s]
+Loading weights:  12%|#2        | 90/729 [00:02<00:09, 63.90it/s]
+Loading weights:  13%|#3        | 97/729 [00:02<00:10, 61.77it/s]
+Loading weights:  16%|#5        | 115/729 [00:02<00:06, 90.05it/s]
+Loading weights:  19%|#8        | 137/729 [00:02<00:04, 120.02it/s]
+Loading weights:  22%|##1       | 160/729 [00:02<00:04, 134.99it/s]
+Loading weights:  24%|##3       | 174/729 [00:03<00:04, 133.28it/s]
+Loading weights:  27%|##6       | 196/729 [00:03<00:03, 152.44it/s]
+Loading weights:  29%|##9       | 212/729 [00:03<00:03, 137.21it/s]
+Loading weights:  31%|###1      | 227/729 [00:03<00:04, 119.73it/s]
+Loading weights:  33%|###2      | 240/729 [00:03<00:05, 88.21it/s] 
+Loading weights:  34%|###4      | 251/729 [00:03<00:05, 89.37it/s]
+Loading weights:  36%|###5      | 262/729 [00:04<00:06, 77.47it/s]
+Loading weights:  37%|###7      | 271/729 [00:04<00:06, 74.05it/s]
+Loading weights:  39%|###8      | 282/729 [00:04<00:05, 76.76it/s]
+Loading weights:  40%|####      | 293/729 [00:04<00:05, 75.27it/s]
+Loading weights:  42%|####1     | 304/729 [00:04<00:06, 69.27it/s]
+Loading weights:  44%|####3     | 318/729 [00:04<00:04, 82.33it/s]
+Loading weights:  49%|####8     | 355/729 [00:04<00:02, 146.78it/s]
+Loading weights:  65%|######5   | 477/729 [00:05<00:00, 400.70it/s]
+Loading weights:  77%|#######7  | 563/729 [00:05<00:00, 513.63it/s]
+Loading weights:  89%|########8 | 647/729 [00:05<00:00, 597.61it/s]
+Loading weights:  99%|#########9| 723/729 [00:05<00:00, 641.73it/s]
+Loading weights: 100%|##########| 729/729 [00:05<00:00, 137.08it/s]
+[head_window_sweep] entity=animals attribute=native_continent patch_layer=12 positions=full_image rows=64 (20 distinct bases) windows=42
+capturing per-head outputs at blocks 12-27 (clean + image-patched) ...
+/home/ahl4090/DAS-Explorations/VADE-evals/.venv/lib/python3.14/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  scoring: VADE text match. first_* = position 0 vs the model's own base/source answers, over the 63/64 rows where those differ there; div_* = at the first differing token (63/64 rows)
+  unhooked:          cause=  1.6% first_src=  0.0%
+  image patch only:  cause= 92.2% first_src= 92.1% base_kept=  3.1%   <-- the effect every window is read against
+  window      12 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      13 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      14 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      15 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      16 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      17 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      18 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 95.3% first_src= 95.2% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      19 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 89.1% first_src= 88.9% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      20 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      21 ( 28 heads)  suff: cause=  3.1% first_src=  1.6% base_kept= 92.2% | nec: cause= 87.5% first_src= 87.3% | shuffled: own=  0.0% donor=  1.9% (first tok)
+  window      22 ( 28 heads)  suff: cause= 17.2% first_src= 15.9% base_kept= 76.6% | nec: cause= 62.5% first_src= 61.9% | shuffled: own=  6.3% donor= 13.0% (first tok)
+  window      23 ( 28 heads)  suff: cause=  7.8% first_src=  6.3% base_kept= 85.9% | nec: cause= 81.2% first_src= 81.0% | shuffled: own=  4.8% donor=  7.4% (first tok)
+  window      24 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      25 ( 28 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 95.3% first_src= 95.2% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   12-13 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   13-14 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   14-15 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   15-16 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   16-17 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   17-18 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 95.3% first_src= 95.2% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   18-19 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 93.8% | nec: cause= 85.9% first_src= 85.7% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   19-20 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 92.2% | nec: cause= 84.4% first_src= 84.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   20-21 ( 56 heads)  suff: cause=  3.1% first_src=  1.6% base_kept= 92.2% | nec: cause= 90.6% first_src= 90.5% | shuffled: own=  0.0% donor=  1.9% (first tok)
+  window   21-22 ( 56 heads)  suff: cause= 54.7% first_src= 54.0% base_kept= 35.9% | nec: cause= 29.7% first_src= 28.6% | shuffled: own= 19.0% donor= 50.0% (first tok)
+  window   22-23 ( 56 heads)  suff: cause= 59.4% first_src= 58.7% base_kept= 32.8% | nec: cause= 25.0% first_src= 23.8% | shuffled: own= 20.6% donor= 55.6% (first tok)
+  window   23-24 ( 56 heads)  suff: cause= 14.1% first_src= 12.7% base_kept= 76.6% | nec: cause= 78.1% first_src= 77.8% | shuffled: own=  6.3% donor=  9.3% (first tok)
+  window   24-25 ( 56 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   12-14 ( 84 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 93.8% first_src= 93.7% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   13-15 ( 84 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   14-16 ( 84 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   15-17 ( 84 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 92.2% first_src= 92.1% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   16-18 ( 84 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 95.3% | nec: cause= 95.3% first_src= 95.2% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   17-19 ( 84 heads)  suff: cause=  1.6% first_src=  0.0% base_kept= 93.8% | nec: cause= 82.8% first_src= 82.5% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window   18-20 ( 84 heads)  suff: cause=  3.1% first_src=  1.6% base_kept= 90.6% | nec: cause= 81.2% first_src= 81.0% | shuffled: own=  0.0% donor=  1.9% (first tok)
+  window   19-21 ( 84 heads)  suff: cause= 17.2% first_src= 15.9% base_kept= 73.4% | nec: cause= 67.2% first_src= 66.7% | shuffled: own=  7.9% donor= 16.7% (first tok)
+  window   20-22 ( 84 heads)  suff: cause= 54.7% first_src= 54.0% base_kept= 37.5% | nec: cause= 31.2% first_src= 30.2% | shuffled: own= 20.6% donor= 55.6% (first tok)
+  window   21-23 ( 84 heads)  suff: cause= 78.1% first_src= 77.8% base_kept= 18.8% | nec: cause= 14.1% first_src= 12.7% | shuffled: own= 23.8% donor= 77.8% (first tok)
+  window   22-24 ( 84 heads)  suff: cause= 65.6% first_src= 65.1% base_kept= 28.1% | nec: cause= 25.0% first_src= 23.8% | shuffled: own= 22.2% donor= 61.1% (first tok)
+  window   23-25 ( 84 heads)  suff: cause= 15.6% first_src= 14.3% base_kept= 78.1% | nec: cause= 79.7% first_src= 79.4% | shuffled: own=  4.8% donor=  7.4% (first tok)
+  window   12-25 (392 heads)  suff: cause= 92.2% first_src= 92.1% base_kept=  4.7% | nec: cause=  1.6% first_src=  0.0% | shuffled: own= 22.2% donor= 92.6% (first tok)
+  window   12-23 (336 heads)  suff: cause= 87.5% first_src= 87.3% base_kept=  9.4% | nec: cause=  3.1% first_src=  1.6% | shuffled: own= 23.8% donor= 90.7% (first tok)
+  window   12-27 (448 heads)  suff: cause= 92.2% first_src= 92.1% base_kept=  3.1% | nec: cause=  1.6% first_src=  0.0% | shuffled: own= 20.6% donor= 90.7% (first tok)
+
+full-coverage identity (window 12-27 suff vs image patch only): cause 92.2% vs 92.2%, first_src 92.1% vs 92.1% -> OK
+
+per-block |delta_resid| mass at the last token (where the image-patched writes changed):
+  block 12: delta_resid=   0.7990  |delta_dla|=   0.0040
+  block 13: delta_resid=   2.7394  |delta_dla|=   0.0048
+  block 14: delta_resid=   6.2068  |delta_dla|=   0.0081
+  block 15: delta_resid=   7.2170  |delta_dla|=   0.0075
+  block 16: delta_resid=  14.6156  |delta_dla|=   0.0148
+  block 17: delta_resid=  20.6383  |delta_dla|=   0.0199
+  block 18: delta_resid=  36.9805  |delta_dla|=   0.0390
+  block 19: delta_resid=  61.1653  |delta_dla|=   0.1278
+  block 20: delta_resid=  52.6575  |delta_dla|=   0.0672
+  block 21: delta_resid= 106.2402  |delta_dla|=   0.3556
+  block 22: delta_resid= 112.5930  |delta_dla|=   0.9130
+  block 23: delta_resid= 110.6531  |delta_dla|=   1.0418
+  block 24: delta_resid=  61.4827  |delta_dla|=   0.3761
+  block 25: delta_resid=  90.0263  |delta_dla|=   0.3322
+  block 26: delta_resid= 144.6174  |delta_dla|=   1.5818
+  block 27: delta_resid= 158.0232  |delta_dla|=   1.2985
+
+wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/image_head_pipeline/animals/native_continent/windows_patch12_text.json

@@ -1,0 +1,206 @@
+
+===== 2026-09-24 21:01:37 $ /home/ahl4090/DAS-Explorations/VADE-evals/.venv/bin/python methods/head_trace.py --entity animals --attribute taxonomic_class --model_id Qwen/Qwen2.5-VL-7B-Instruct --vade_root /home/ahl4090/DAS-Explorations/VADE --text_match --max_new_tokens 8 --patch_layer 12 --positions full_image --blocks 12 13 14 15 16 17 18 19 20 21 22 23 24 25 --n_rows 64 --seed 0 --batch_size 16 --knockout_ks 1 2 4 8 16 32 64 392 --control_k 1 2 4 8 16 32 --n_random 8 --out /home/ahl4090/DAS-Explorations/VADE-evals/results/image_head_pipeline/animals/taxonomic_class/head_trace_patch12_blocks12-25_text.json
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+
+=== logging to /home/ahl4090/DAS-Explorations/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/animals/ndm/taxonomic_class/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch12_blocks12-25_text.log ===
+
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]
+Loading weights:   0%|          | 1/729 [00:00<07:08,  1.70it/s]
+Loading weights:   0%|          | 2/729 [00:00<05:36,  2.16it/s]
+Loading weights:   1%|          | 6/729 [00:01<01:35,  7.57it/s]
+Loading weights:   2%|2         | 18/729 [00:01<00:26, 26.50it/s]
+Loading weights:   5%|5         | 40/729 [00:01<00:11, 61.39it/s]
+Loading weights:   7%|7         | 52/729 [00:01<00:09, 72.73it/s]
+Loading weights:   9%|8         | 64/729 [00:01<00:08, 75.99it/s]
+Loading weights:  11%|#         | 78/729 [00:01<00:07, 86.37it/s]
+Loading weights:  13%|#2        | 94/729 [00:01<00:06, 103.43it/s]
+Loading weights:  15%|#5        | 110/729 [00:01<00:05, 108.80it/s]
+Loading weights:  17%|#7        | 125/729 [00:02<00:05, 116.75it/s]
+Loading weights:  19%|#9        | 142/729 [00:02<00:04, 130.08it/s]
+Loading weights:  22%|##1       | 160/729 [00:02<00:04, 133.48it/s]
+Loading weights:  24%|##3       | 174/729 [00:02<00:04, 113.97it/s]
+Loading weights:  26%|##5       | 187/729 [00:02<00:04, 109.92it/s]
+Loading weights:  27%|##7       | 199/729 [00:02<00:05, 93.22it/s] 
+Loading weights:  29%|##8       | 210/729 [00:02<00:06, 86.19it/s]
+Loading weights:  31%|###       | 225/729 [00:03<00:05, 99.55it/s]
+Loading weights:  32%|###2      | 236/729 [00:03<00:06, 81.20it/s]
+Loading weights:  34%|###3      | 246/729 [00:03<00:06, 76.29it/s]
+Loading weights:  35%|###5      | 257/729 [00:03<00:06, 74.59it/s]
+Loading weights:  37%|###6      | 269/729 [00:03<00:06, 76.18it/s]
+Loading weights:  38%|###8      | 280/729 [00:03<00:05, 76.12it/s]
+Loading weights:  40%|###9      | 288/729 [00:03<00:06, 70.37it/s]
+Loading weights:  41%|####      | 296/729 [00:04<00:10, 43.19it/s]
+Loading weights:  42%|####1     | 305/729 [00:04<00:09, 46.34it/s]
+Loading weights:  43%|####2     | 311/729 [00:04<00:09, 45.86it/s]
+Loading weights:  43%|####3     | 317/729 [00:04<00:09, 43.61it/s]
+Loading weights:  45%|####4     | 325/729 [00:04<00:08, 50.18it/s]
+Loading weights:  45%|####5     | 331/729 [00:05<00:09, 40.40it/s]
+Loading weights:  56%|#####5    | 407/729 [00:05<00:01, 178.31it/s]
+Loading weights:  66%|######6   | 482/729 [00:05<00:00, 300.77it/s]
+Loading weights:  72%|#######2  | 527/729 [00:05<00:00, 327.96it/s]
+Loading weights:  84%|########3 | 611/729 [00:05<00:00, 449.66it/s]
+Loading weights:  97%|#########7| 709/729 [00:05<00:00, 584.83it/s]
+Loading weights: 100%|##########| 729/729 [00:05<00:00, 127.04it/s]
+[ndm/head_trace] scoring: VADE text match (--text_match)
+[ndm/head_trace] entity=animals attribute=taxonomic_class patch_layer=12 positions=full_image blocks=12-25 heads=28x128 rows=64 (20 distinct bases)
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/home/ahl4090/DAS-Explorations/VADE-evals/.venv/lib/python3.14/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/4 traced
+  batch 2/4 traced
+  batch 3/4 traced
+  batch 4/4 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+23.11              19.1568    17.9234     -0.4601
+23.6               18.7360    13.9385     -0.2730
+21.4               16.7154    14.5968     -0.0671
+23.0               15.2953    11.2660     -0.3418
+21.5               14.9639    13.3482     -0.1371
+25.25              14.1303    14.0841      0.0564
+22.15              13.8288    10.9098     -0.0943
+24.26              12.8170     7.9176     -0.0495
+24.21               9.8958     8.0736     -0.2277
+22.25               9.5842     6.3050      0.0173
+22.1                8.5935     7.0295     -0.1600
+22.13               7.8439     6.0510     -0.0161
+22.24               7.6386     6.2078     -0.0417
+22.17               7.4219     6.2750     -0.0400
+19.17               7.2101     6.5548     -0.0053
+21.2                6.9114     5.8749     -0.0278
+23.3                6.9048     5.3527     -0.0026
+24.27               6.6656     5.2787     -0.1883
+25.8                6.4955     4.9466     -0.1283
+21.24               6.1840     5.0133      0.0023
+  top-1   heads sit in blocks: 23x1
+  top-2   heads sit in blocks: 23x2
+  top-4   heads sit in blocks: 21x1, 23x3
+  top-8   heads sit in blocks: 21x2, 22x1, 23x3, 24x1, 25x1
+  top-16  heads sit in blocks: 19x1, 21x3, 22x6, 23x3, 24x2, 25x1
+  top-32  heads sit in blocks: 19x2, 20x1, 21x6, 22x10, 23x4, 24x5, 25x4
+  top-64  heads sit in blocks: 16x1, 18x1, 19x8, 20x7, 21x7, 22x10, 23x8, 24x9, 25x13
+  top-392 heads sit in blocks: 12x28, 13x28, 14x28, 15x28, 16x28, 17x28, 18x28, 19x28, 20x28, 21x28, 22x28, 23x28, 24x28, 25x28
+  (a top-k drawn only from the LAST block(s) localizes the final WRITE, not the image->text read -- installing it is close to writing the answer into the residual one block before the unembedding. Re-run with --blocks restricted to the early window to test the read itself.)
+
+per-block total |delta_resid| (where the read happens):
+  block 12:     0.6010
+  block 13:     2.6414
+  block 14:     5.1346
+  block 15:     5.3540
+  block 16:    11.6915
+  block 17:    15.8866
+  block 18:    27.3009
+  block 19:    49.5791
+  block 20:    54.2772
+  block 21:    85.6870
+  block 22:   106.8895
+  block 23:   102.5455
+  block 24:    77.6844
+  block 25:    83.9268
+
+==============================================================================
+=== phase 1c: read-back identity (batch 1, 3 forwards, no generation)
+==============================================================================
+  residual entering block 12 at the read column, image-patched vs clean: 0.000%
+    -> as required
+
+  o_proj INPUT reads back what was installed: worst 0.00e+00 (block 25)
+    block    clean run   installed run   (o_proj OUTPUT vs W_O @ its captured INPUT)
+       12       0.15%          0.17%
+       13       0.18%          0.18%
+       14       0.17%          0.16%
+       15       0.17%          0.17%
+       16       0.18%          0.17%
+       17       0.16%          0.17%
+       18       0.16%          0.16%
+       19       0.16%          0.16%
+       20       0.17%          0.17%
+       21       0.17%          0.17%
+       22       0.16%          0.17%
+       23       0.16%          0.16%
+       24       0.16%          0.15%
+       25       0.16%          0.15%
+
+  final pre-norm residual at the read column, installed-heads run vs:
+    the image-patched run: 8.698%   <-- the identity; must be ~0
+    the CLEAN run:         40.723%   <-- ~0 means the patch changed NOTHING
+  -> diverges, and --blocks is missing downstream block(s) [26, 27], which explains it: their attention at the read column still sees the CLEAN image. Re-run with --blocks 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27.
+
+==============================================================================
+=== phase 1b: connectivity + block-everything
+==============================================================================
+  patch telemetry (did the hook fire, and did it write anything?):
+    block 12: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=2.4844
+    block 13: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=2.2969
+    block 14: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=3.3438
+    block 15: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=2.9219
+    block 16: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=2.5312
+    block 17: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=2.5156
+    block 18: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=2.6719
+    block 19: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=3.8281
+    block 20: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=4.4375
+    block 21: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=4.5312
+    block 22: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=3.2344
+    block 23: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=7.4375
+    block 24: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=5.1875
+    block 25: prefill_calls=4 decode_skips=28 seq_len=206 max|delta|=7.2500
+  -> connected: reached on 56 prefill call(s), changed the tensor at all 14 blocks
+
+  image patch + ALL 392 heads ZEROED: cause= 70.3% base_kept= 10.9%
+  (compare against the image-patch-only row in phase 2. Zeroing every traced head at the last token severs every path by which the patched image can reach that position after block 12, so cause here SHOULD fall to the unhooked floor. If it does not, either --blocks is too narrow or the read does not go through the last token's attention -- and that would be the finding.)
+
+==============================================================================
+=== phase 2: cumulative knockout under the image patch (path patching)
+==============================================================================
+  unhooked:                       cause=  0.0% base_kept=100.0%
+  image patch only (k=0):         cause= 90.6% base_kept=  9.4%   <-- the effect being traced
+  restore top-1   heads:            cause= 85.9% base_kept= 14.1%  (recovered  5.2% of the effect)
+  restore top-2   heads:            cause= 76.6% base_kept= 23.4%  (recovered 15.5% of the effect)
+  restore top-4   heads:            cause= 51.6% base_kept= 45.3%  (recovered 43.1% of the effect)
+  restore top-8   heads:            cause= 48.4% base_kept= 46.9%  (recovered 46.6% of the effect)
+  restore top-16  heads:            cause= 28.1% base_kept= 68.8%  (recovered 69.0% of the effect)
+  restore top-32  heads:            cause=  7.8% base_kept= 89.1%  (recovered 91.4% of the effect)
+  restore top-64  heads:            cause=  0.0% base_kept=100.0%  (recovered 100.0% of the effect)
+  restore top-392 heads:            cause=  0.0% base_kept=100.0%  (recovered 100.0% of the effect)
+  restore 8 RANDOM heads (null):   cause= 93.8% base_kept=  6.2%
+
+  top-8 vs random-8 gap: +45.3% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+
+==============================================================================
+=== phase 3: sufficiency -- patch ONLY these heads, no image patch
+==============================================================================
+  The mirror of phase 2. Instead of removing a head's contribution from a fully patched run, this INSTALLS it into an otherwise clean one: the image is NOT swapped, and the selected heads are forced to the values they took when it was. Necessity (phase 2) is the question redundancy breaks; sufficiency is not, so a small set reproducing the effect here is localization even if the knockout curve is flat.
+
+  nothing patched (k=0):          cause=  0.0% base_kept=100.0%   <-- must match the unhooked row above
+  ALL 392 traced heads:           cause= 78.1% base_kept= 21.9%   <-- a PARTIAL ceiling: downstream block(s) [26, 27] are not traced, so their attention still reads the clean image
+  patch top-1   heads:              cause=  0.0% base_kept=100.0%  ( 0.0% of this arm's ceiling)
+  patch top-2   heads:              cause=  0.0% base_kept=100.0%  ( 0.0% of this arm's ceiling)
+  patch top-4   heads:              cause=  4.7% base_kept= 95.3%  ( 6.0% of this arm's ceiling)
+  patch top-8   heads:              cause=  7.8% base_kept= 92.2%  (10.0% of this arm's ceiling)
+  patch top-16  heads:              cause= 25.0% base_kept= 75.0%  (32.0% of this arm's ceiling)
+  patch top-32  heads:              cause= 51.6% base_kept= 48.4%  (66.0% of this arm's ceiling)
+  patch top-64  heads:              cause= 67.2% base_kept= 32.8%  (86.0% of this arm's ceiling)
+  patch top-392 heads:              cause= 78.1% base_kept= 21.9%  (100.0% of this arm's ceiling)
+  patch 8 RANDOM heads (null):     cause=  0.0% base_kept=100.0%   <-- same heads as phase 2's null
+
+  top-8 vs random-8: 7.8% vs 0.0% of cause.
+
+==============================================================================
+=== phase 4: shuffled-donor control (is the content row-specific?)
+==============================================================================
+  Each row is given the head outputs ANOTHER row's source flag produced, and scored against its own source gold (`own`), the donor's source gold (`donor`), and its base gold (`kept`). If these heads carry the source's identity, `own` must collapse and `donor` must rise. `own` staying high would mean the effect never depended on which image was patched in.
+       top-1 shuffled:  own=  0.0% donor= 25.0% kept=100.0%   (unshuffled cause was 0.0%)
+       top-2 shuffled:  own=  0.0% donor= 25.0% kept=100.0%   (unshuffled cause was 0.0%)
+       top-4 shuffled:  own=  1.6% donor= 28.1% kept= 96.9%   (unshuffled cause was 4.7%)
+       top-8 shuffled:  own=  4.7% donor= 31.2% kept= 93.8%   (unshuffled cause was 7.8%)
+      top-16 shuffled:  own= 15.6% donor= 45.3% kept= 79.7%   (unshuffled cause was 25.0%)
+      top-32 shuffled:  own= 26.6% donor= 67.2% kept= 56.2%   (unshuffled cause was 51.6%)
+     ALL 392 shuffled:  own= 34.4% donor= 87.5% kept= 29.7%   (unshuffled cause was 78.1%)
+
+  -> partial: no arm reached the confirmation bar. Best donor rate was 87.5% at ALL 392 (own=34.4%). These heads carry source-specific content -- the answer stopped being the row's own -- but do not reconstruct the donor's answer, so report it as 'carries identity', not 'sufficient'.
+
+wrote /home/ahl4090/DAS-Explorations/VADE-evals/results/image_head_pipeline/animals/taxonomic_class/head_trace_patch12_blocks12-25_text.json
