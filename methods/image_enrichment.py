@@ -64,8 +64,10 @@ PHASES = ("capture", "probe")
 def region_index(vade_root, n_image_tokens):
     """-> {region: [image-relative token indices]} from object_location.json."""
     loc = json.load(open(os.path.join(vade_root, "data", "flags", "object_location.json")))
-    obj = sorted(loc["object_token_indices"]["flag_only"]["flat"])
-    ring1 = sorted(loc["object_token_indices"]["flag_ring1"]["flat"])
+    from methods.common.entities import canonical_position_name
+    sets = loc["object_token_indices"]
+    obj = sorted(sets[canonical_position_name("flag_only", sets)]["flat"])
+    ring1 = sorted(sets[canonical_position_name("flag_ring1", sets)]["flat"])
     assert loc["vlm_token_grid"]["n_tokens"] == n_image_tokens, "geometry does not match the model's image grid"
     ring = sorted(set(ring1) - set(obj))
     bg = sorted(set(range(n_image_tokens)) - set(ring1))

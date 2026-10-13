@@ -7,6 +7,8 @@
 #   bash scripts/run_tier2.sh all                      # everything above, in that order
 #
 # Run inside tmux. PY overrides the interpreter (default: python). Logs: logs/tier2/<step>_<stamp>.log
+# GPU=a100 (any 80GB card) raises every batch size that only changes how many rows share a
+# forward pass; unset = each script's own default (sized for 24GB).
 # e8_* write pruned tuples into the sibling VADE repo (VADE/models/<model slug>/), VADE's own convention.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -14,6 +16,15 @@ PY=${PY:-python}
 VADE=${VADE_ROOT:-../VADE}
 STAMP=$(date +%Y%m%d_%H%M%S)
 mkdir -p logs/tier2
+
+BS_SEV= BS_VRH= BS_CEIL= BS_PIPE= BS_ACC=
+if [ "${GPU:-}" = a100 ]; then
+  # PIPE stays at 32, not 64: head_trace/head_window_sweep build their shuffled-donor control by
+  # rolling rows WITHIN a batch, and a single 64-row batch would leave no batch boundary at all.
+  BS_SEV=48 BS_VRH=64 BS_CEIL=64 BS_PIPE=32 BS_ACC=64
+  echo "GPU=a100 batch profile: severed=$BS_SEV vrh=$BS_VRH ceiling=$BS_CEIL pipeline=$BS_PIPE accuracy=$BS_ACC"
+fi
+bs() { [ -n "$1" ] && echo "--batch_size $1"; return 0; }   # bs <value> -> flag or nothing
 
 run() {  # run <step> <command...>
   local step=$1; shift
@@ -52,7 +63,7 @@ e7() {  # do brands/celebrities use the same movers AND the same downstream MLP 
   # --gold own: brands/celebrities store lowercase labels, so first-token columns must use the
   # model's own answers (read at their divergence point). Text columns use VADE's matcher either way.
   local SEV=(--n_pairs 64 --gold own --freeze_values base mean other --freeze_mlp_span 22-27
-             --freeze_mlp_singles 23 24 25 26 --freeze_attn_span 24-27)
+             --freeze_mlp_singles 23 24 25 26 --freeze_attn_span 24-27 $(bs "$BS_SEV"))
   run e7_severed_brands_hq $PY methods/head_severed.py --entity brands --attributes hq_country --heads "$BH" \
       "${SEV[@]}" --out_dir results/head_severed/brands_hq_country__gold-own
   run e7_severed_celeb_nat $PY methods/head_severed.py --entity celebrities --attributes nationality --heads "$CN" \
@@ -62,16 +73,16 @@ e7() {  # do brands/celebrities use the same movers AND the same downstream MLP 
 }
 
 e9() {  # zero Park et al.'s Visual Retrieval Heads on flags: index check, recall, entity at the movers
-  run e9_vrh $PY methods/vrh_ablation.py
+  run e9_vrh $PY methods/vrh_ablation.py $(bs "$BS_VRH")
 }
 
 e11() {  # object vs background tokens: does identity leave the object before the movers read it?
   # seq:before MUST read 0% (bit-identical tokens under causal attention); if not, discard the run.
-  local L=(--layers 10 14 18 19 20 21 22 23 --sites residual --n_rows 48)
+  local L=(--layers 10 14 18 19 20 21 22 23 --sites residual --n_rows 48 $(bs "$BS_CEIL"))
   run e11_flags $PY methods/ndm/ceiling_sweep.py --entity flags --attribute capital "${L[@]}" \
-      --positions_list flag_only "~flag_ring1" "~flag_only" full_image seq:before seq:after
+      --positions_list entity_only "~entity_ring1" "~entity_only" full_image seq:before seq:after
   run e11_brands $PY methods/ndm/ceiling_sweep.py --entity brands --attribute hq_country "${L[@]}" --text_match \
-      --positions_list logo_only "~logo_ring1" "~logo_only" full_image seq:before seq:after
+      --positions_list entity_only "~entity_ring1" "~entity_only" full_image seq:before seq:after
   run e11_celebrities $PY methods/ndm/ceiling_sweep.py --entity celebrities --attribute nationality "${L[@]}" \
       --text_match --positions_list entity_only "~entity_ring1" "~entity_only" full_image seq:before seq:after
 }
@@ -79,13 +90,14 @@ e11() {  # object vs background tokens: does identity leave the object before th
 # ---------------------------------------------------------------- second models (E8)
 
 prep_model() {  # prep_model <step> <model_id>: VADE baseline accuracy -> pruned tuples for that model
-  run "$1_accuracy" $PY "$VADE/models/run_accuracy_sweep.py" --model_id "$2" --entities flags brands celebrities
+  run "$1_accuracy" $PY "$VADE/models/run_accuracy_sweep.py" --model_id "$2" --entities flags brands celebrities \
+      $(bs "$BS_ACC")
   run "$1_prune" $PY "$VADE/models/prune_tuples.py" --model_id "$2" --entities flags brands celebrities
 }
 
 pipeline() {  # pipeline <step> <model_id> <n_layers> <n_heads>: image->text heads on the key attributes
   local step=$1 model=$2 nl=$3 nh=$4
-  local C=(--model_id "$model" --n_layers "$nl" --n_heads "$nh")
+  local C=(--model_id "$model" --n_layers "$nl" --n_heads "$nh" $(bs "$BS_PIPE"))
   run "${step}_flags" $PY methods/image_head_pipeline.py --entity flags "${C[@]}"
   run "${step}_brands" $PY methods/image_head_pipeline.py --entity brands --attributes hq_country "${C[@]}"
   run "${step}_celebrities" $PY methods/image_head_pipeline.py --entity celebrities \
@@ -122,7 +134,7 @@ smoke() {
       --model_id OpenGVLab/InternVL3-8B-hf --allow_unpruned --dry_run
 }
 
-[ $# -eq 0 ] && { sed -n 2,10p "$0"; exit 1; }
+[ $# -eq 0 ] && { sed -n 2,12p "$0"; exit 1; }
 for step in "$@"; do
   case $step in
     all) e10; e7; e9; e11; e8_3b; e8_internvl ;;

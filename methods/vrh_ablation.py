@@ -14,7 +14,7 @@ THREE MEASUREMENTS, ONE MODEL LOAD
      score in THIS code: a grounding prompt on our flags ("locate the flag ...
      bbox"), greedy box generation, then one eager forward over prompt + box with
      attention captured, and per head the attention mass from the generated
-     positions onto the flag's own image tokens (flag_only), averaged. If the
+     positions onto the flag's own image tokens (entity_only), averaged. If the
      indices line up, their heads sit in the top percentiles of all 784; under
      the wrong convention (off by one layer and/or head) they look like random
      heads. Every list variant in published_heads.json is scored, so a 0- vs

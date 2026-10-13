@@ -7,11 +7,22 @@
 #
 # Run inside tmux: the full set is several hours. Each step loads the model once.
 # PY overrides the interpreter (default: python). Logs: logs/tier1/<step>_<stamp>.log
+# GPU=a100 (any 80GB card) raises every batch size that only changes how many rows share a
+# forward pass, never what is computed; unset = each script's own default (sized for 24GB).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=${PY:-python}
 STAMP=$(date +%Y%m%d_%H%M%S)
 mkdir -p logs/tier1
+
+# Batch-size profile. Empty = the script's own default. head_das keeps its EFFECTIVE batch
+# (batch_size x grad_accum_steps = 64 rows per optimizer step), so training is unchanged.
+BS_E1= BS_E4= BS_E5= BS_E6= BS_SEV= BS_JAC= DAS_BS= DAS_ACC=
+if [ "${GPU:-}" = a100 ]; then
+  BS_E1=64 BS_E4=32 BS_E5=32 BS_E6=48 BS_SEV=48 BS_JAC=32 DAS_BS=16 DAS_ACC=4
+  echo "GPU=a100 batch profile: e1=$BS_E1 e4=$BS_E4 e5=$BS_E5 e6=$BS_E6 severed=$BS_SEV jacobian=$BS_JAC das=${DAS_BS}x${DAS_ACC}"
+fi
+bs() { [ -n "$1" ] && echo "--batch_size $1"; return 0; }   # bs <value> -> flag or nothing
 
 run() {  # run <step> <command...>
   local step=$1; shift
@@ -23,29 +34,31 @@ run() {  # run <step> <command...>
 }
 
 e1() {  # attributes at the image tokens? (+ E0b identity check)
-  run e1 $PY methods/image_enrichment.py
+  run e1 $PY methods/image_enrichment.py $(bs "$BS_E1")
 }
 
 e2() {  # do the late MLPs WRITE the answer? + their direct logit share
   run e2_severed $PY methods/head_severed.py --n_pairs 64 --freeze_values base mean other \
-      --freeze_mlp_span 23-26 --freeze_mlp_singles 23 24 25 26 --freeze_attn_span ''
+      --freeze_mlp_span 23-26 --freeze_mlp_singles 23 24 25 26 --freeze_attn_span '' $(bs "$BS_SEV")
   for a in capital currency language calling_code; do
     run "e2_dla_$a" $PY methods/dla.py --entity flags --attribute "$a" --direction gold_minus_mean --limit 24
   done
 }
 
 e3() {  # attribute-specific lookup at the neuron level (ceiling first, then masks)
-  run e3_jacobian $PY methods/readout_jacobian.py --phase all --site mlp_hidden --blocks 23-26 --max_rank 128
+  run e3_jacobian $PY methods/readout_jacobian.py --phase all --site mlp_hidden --blocks 23-26 --max_rank 128 \
+      $(bs "$BS_JAC")
   for a in calling_code currency language capital; do
     run "e3_das_$a" $PY methods/head_das.py --attribute "$a" --method dbm --site mlp_hidden --blocks 23-26 \
-        --l1_coef 1e-4 --temperature_start 1e-2 --temperature_end 1e-2 --train_rows 4000 --eval_rows 4000
+        --l1_coef 1e-4 --temperature_start 1e-2 --temperature_end 1e-2 --train_rows 4000 --eval_rows 4000 \
+        $(bs "$DAS_BS") ${DAS_ACC:+--grad_accum_steps $DAS_ACC}
   done
   run e3_overlap $PY methods/mask_overlap.py results/head_das/flags/*_dbm_l10.0001_T0.01-0.01_mlp23-26/mask_selected.json
 }
 
-e4() { run e4 $PY methods/circuit_compose.py; }
-e5() { run e5 $PY methods/route_knockout.py; }
-e6() { run e6 $PY methods/text_entity_contrast.py; }
+e4() { run e4 $PY methods/circuit_compose.py $(bs "$BS_E4"); }
+e5() { run e5 $PY methods/route_knockout.py $(bs "$BS_E5"); }
+e6() { run e6 $PY methods/text_entity_contrast.py $(bs "$BS_E6"); }
 
 smoke() {
   run smoke_e1 $PY methods/image_enrichment.py --identity_items 2 --probe_layers 0 16 22 --n_perm 5 \
@@ -56,7 +69,7 @@ smoke() {
       --out_dir results/text_entity_contrast/smoke
 }
 
-[ $# -eq 0 ] && { sed -n 2,9p "$0"; exit 1; }
+[ $# -eq 0 ] && { sed -n 2,11p "$0"; exit 1; }
 for step in "$@"; do
   case $step in
     all) e1; e5; e2; e6; e4; e3 ;;

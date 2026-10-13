@@ -393,7 +393,12 @@ def main():
         assert dict_method == dict_method_expected, (
             f"{winners_path} says dict_method={dict_method!r}, expected {dict_method_expected!r}")
         attributes = args.attributes.split(",") if args.attributes else list(winners.keys())
-        flat_indices = loc["object_token_indices"][token_set]["flat"]
+        import sys
+        _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if _root not in sys.path:
+            sys.path.insert(0, _root)
+        from methods.common.entities import canonical_position_name
+        flat_indices = loc["object_token_indices"][canonical_position_name(token_set, loc["object_token_indices"])]["flat"]
         n_image_tokens = loc["vlm_token_grid"]["n_tokens"]
 
         print(f"job: entity={entity} token_set={token_set} dict_method={dict_method} attributes={attributes}")

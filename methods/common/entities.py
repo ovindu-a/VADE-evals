@@ -91,24 +91,62 @@ def require_pruned_tuples(vade_root, model_slug, entity, attribute):
     return d
 
 
+# VADE renamed every entity's object sets to entity_only / entity_ring1 (VADE a3609de). The
+# Qwen token indices are unchanged (verified per entity), so the old names are aliases: every
+# earlier command, default argument and logs/ path that says flag_ring1 keeps meaning the same
+# 24 tokens. Resolved only when the stored file does not define the old name itself.
+POSITION_ALIASES = {"flag_only": "entity_only", "flag_ring1": "entity_ring1",
+                    "logo_only": "entity_only", "logo_ring1": "entity_ring1"}
+
+
+def canonical_position_name(name, available):
+    """`name` if object_location.json defines it, else its POSITION_ALIASES target."""
+    if name in available or name not in POSITION_ALIASES:
+        return name
+    return POSITION_ALIASES[name]
+
+
+def _model_location_override(entity_assets, model):
+    """Some models (e.g. InternVL3-8B-hf, whose fixed-resize image pipeline produces a
+    different token grid than Qwen2.5-VL's native-resolution one for the same entity) need
+    their own vlm_token_grid/object_token_indices instead of object_location.json's top-level
+    ones (which describe Qwen2.5-VL, the original/default model). Looked up by model_id's own
+    slug (last path component) under an optional top-level "models" key -- absent entirely for
+    every entity that's only ever been run against the default model, so this is a pure
+    additive lookup that changes nothing for existing Qwen2.5-VL runs. (Synced from VADE.)"""
+    model_id = getattr(model.config, "name_or_path", None) or ""
+    model_slug = model_id.split("/")[-1]
+    return entity_assets.object_location.get("models", {}).get(model_slug)
+
+
+def object_token_indices_for_model(entity_assets, model_slug):
+    """object_token_indices that apply to model_slug: its per-model override (see
+    _model_location_override) if object_location.json defines one, else the top-level
+    set (Qwen2.5-VL's). For callers that have a model_slug but no loaded model. (Synced from VADE.)"""
+    override = entity_assets.object_location.get("models", {}).get(model_slug)
+    return override["object_token_indices"] if override else entity_assets.object_location["object_token_indices"]
+
+
 def _validated_n_image_tokens(entity_assets, adapter, model):
     """The number of merged image tokens a VADE entity's (fixed-canvas)
     images expand to -- computed FROM the model's own vision config and
-    cross-checked against the entity's stored object_location.json, so a
-    stale file or a wrong adapter formula fails loudly instead of silently
-    mis-indexing positions. Every image in an entity shares this exact
-    count (see each entity's object_location.json note field: one fixed
-    canvas size per entity, only the object's pixel content varies) --
-    that's what makes it safe for BuildBatchCache to tokenize a template
-    once and reuse it for every row regardless of which image."""
+    cross-checked against the entity's stored object_location.json (its
+    per-model override when it has one), so a stale file or a wrong adapter
+    formula fails loudly instead of silently mis-indexing positions. Every
+    image in an entity shares this exact count (see each entity's
+    object_location.json note field: one fixed canvas size per entity, only
+    the object's pixel content varies) -- that's what makes it safe for
+    BuildBatchCache to tokenize a template once and reuse it for every row
+    regardless of which image."""
+    override = _model_location_override(entity_assets, model)
     loc = entity_assets.object_location
-    grid = loc["vlm_token_grid"]
+    grid = override["vlm_token_grid"] if override else loc["vlm_token_grid"]
     canvas = loc["canvas_px"]
     computed = adapter.vision_patch_grid(model, canvas["width"], canvas["height"])
-    if not getattr(adapter, "shares_object_grid", True):
+    if override is None and not getattr(adapter, "shares_object_grid", True):
         # A model whose image tokens are NOT the 28px merged grid object_location.json was built on
-        # (e.g. InternVL's 448px tile, 16x16 tokens of 21 canvas px). Its token COUNT comes from its
-        # own config; resolve_position_set refuses every object-relative set for it.
+        # and that has no per-model override: its token COUNT comes from its own config, and
+        # resolve_position_set refuses every object-relative set for it.
         return computed["n_tokens"]
     mismatches = {k: (computed[k], grid[k]) for k in ("grid_rows", "grid_cols", "n_tokens", "patch_size_px", "merge_size")
                   if computed[k] != grid[k]}
@@ -131,15 +169,17 @@ def resolve_position_set(positions_name, entity_assets, adapter, model):
     if positions_name == "full_image":
         return list(range(n_image_tokens)), n_image_tokens, False
 
-    assert getattr(adapter, "shares_object_grid", True), (
+    override = _model_location_override(entity_assets, model)
+    assert override is not None or getattr(adapter, "shares_object_grid", True), (
         f"{positions_name!r} is defined on object_location.json's {entity_assets.object_location['vlm_token_grid']['grid_rows']}"
         f"x{entity_assets.object_location['vlm_token_grid']['grid_cols']} Qwen token grid, which {adapter.model_id} "
-        f"does not use -- only 'full_image' and 'last_token' are valid for it")
-    available = entity_assets.object_location["object_token_indices"]
-    assert positions_name in available, (
+        f"does not use and has no per-model override for -- only 'full_image' and 'last_token' are valid for it")
+    available = override["object_token_indices"] if override else entity_assets.object_location["object_token_indices"]
+    name = canonical_position_name(positions_name, available)
+    assert name in available, (
         f"Unknown position set {positions_name!r} for entity {entity_assets.entity!r}; "
         f"available: {list(available)} (plus 'last_token', 'full_image')")
-    return available[positions_name]["flat"], n_image_tokens, False
+    return available[name]["flat"], n_image_tokens, False
 
 
 def object_token_positions(input_ids_1d, image_token_id, flat_indices, n_image_tokens):

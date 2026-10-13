@@ -244,3 +244,53 @@ def test_object_sets_refused_for_a_model_off_the_qwen_grid(tiny_internvl):
     assert resolve_position_set("last_token", assets, adapter, model)[2]
     with pytest.raises(AssertionError, match="only 'full_image' and 'last_token'"):
         resolve_position_set("flag_only", assets, adapter, model)
+
+
+# ---------------------------------------------------------------------------
+# VADE's entity_only/entity_ring1 rename + per-model object_location overrides
+# ---------------------------------------------------------------------------
+
+def _vade_or_skip():
+    from methods.head_swap_vade import DEFAULT_VADE_ROOT
+    if not os.path.isdir(os.path.join(DEFAULT_VADE_ROOT, "data", "flags")):
+        pytest.skip("VADE checkout not present")
+    return DEFAULT_VADE_ROOT
+
+
+def _config_only(name_or_path, vision, downsample_ratio=None):
+    from types import SimpleNamespace
+    cfg = SimpleNamespace(name_or_path=name_or_path, vision_config=SimpleNamespace(**vision))
+    if downsample_ratio is not None:
+        cfg.downsample_ratio = downsample_ratio
+    return SimpleNamespace(config=cfg)
+
+
+def test_old_position_names_alias_the_renamed_sets():
+    from methods.common.entities import POSITION_ALIASES, load_entity_assets, resolve_position_set
+    from methods.adapters.qwen2_5_vl import Qwen25VLAdapter
+    root = _vade_or_skip()
+    model = _config_only("Qwen/Qwen2.5-VL-7B-Instruct", dict(patch_size=14, spatial_merge_size=2))
+    adapter = Qwen25VLAdapter()
+    for entity in ("flags", "brands"):
+        assets = load_entity_assets(root, entity)
+        for old, new in POSITION_ALIASES.items():
+            if not old.startswith({"flags": "flag", "brands": "logo"}[entity]):
+                continue
+            a = resolve_position_set(old, assets, adapter, model)
+            b = resolve_position_set(new, assets, adapter, model)
+            assert a == b and len(a[0]) in (8, 24) and a[1] == 144
+
+
+def test_internvl_uses_vades_per_model_positions_when_present():
+    from methods.adapters.registry import get_adapter
+    from methods.common.entities import load_entity_assets, resolve_position_set
+    root = _vade_or_skip()
+    assets = load_entity_assets(root, "flags")
+    if "InternVL3-8B-hf" not in assets.object_location.get("models", {}):
+        pytest.skip("this VADE has no InternVL3 override")
+    adapter = get_adapter("OpenGVLab/InternVL3-8B-hf")
+    model = _config_only("OpenGVLab/InternVL3-8B-hf", dict(image_size=[448, 448], patch_size=[14, 14]), 0.5)
+    flat, n, _ = resolve_position_set("entity_ring1", assets, adapter, model)
+    want = assets.object_location["models"]["InternVL3-8B-hf"]["object_token_indices"]["entity_ring1"]["flat"]
+    assert n == 256 and flat == want
+    assert resolve_position_set("flag_ring1", assets, adapter, model)[0] == want     # alias works there too

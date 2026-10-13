@@ -124,11 +124,13 @@ def _grid(entity_assets):
 
 def _object_bbox(entity_assets, base_name=None):
     """-> (r0, r1, c0, c1) of a named object set's token bbox. Defaults to the
-    entity's SMALLEST object set (flag_only for flags, logo_only for brands),
+    entity's SMALLEST object set (entity_only; flag_only/logo_only before VADE's rename),
     i.e. the object itself rather than one of its dilations."""
     available = entity_assets.object_location["object_token_indices"]
     if base_name is None:
         base_name = min(available, key=lambda k: len(available[k]["flat"]))
+    from .entities import canonical_position_name
+    base_name = canonical_position_name(base_name, available)
     assert base_name in available, f"unknown object set {base_name!r}; available: {list(available)}"
     entry = available[base_name]
     rows, cols = entry.get("rows"), entry.get("cols")
@@ -149,8 +151,10 @@ def grid_indices(part, entity_assets):
     available = entity_assets.object_location["object_token_indices"]
 
     if part.startswith("~"):
-        excluded = set(available[part[1:]]["flat"])
-        assert part[1:] in available, f"unknown object set {part[1:]!r}"
+        from .entities import canonical_position_name
+        name = canonical_position_name(part[1:], available)
+        assert name in available, f"unknown object set {part[1:]!r}"
+        excluded = set(available[name]["flat"])
         return [j for j in range(n_tokens) if j not in excluded]
 
     head = _head(part)

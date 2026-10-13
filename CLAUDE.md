@@ -667,13 +667,24 @@ offline tests `tests/test_tier2.py`.
   (attention mass from generated box tokens onto flag_only) in this code first -- a list
   whose heads are not near the top percentile here is mis-indexed, not a null result.
 - **`adapters/internvl.py` (E8)**: `OpenGVLab/InternVL3-8B-hf`, one 448px tile
-  (crop_to_patches=False), 256 tokens of 21 canvas px. `shares_object_grid = False` --
-  `entities.resolve_position_set` and `position_sets.build_batch_at` REFUSE every object-
-  relative set for it (object_location.json's grid is Qwen's 28px one); only `full_image`
-  and `last_token` work, which is all image_head_pipeline needs. Non-default models get
+  (crop_to_patches=False), 256 tokens of 21 canvas px. VADE has its own thinner
+  `adapters/internvl3.py` (no MLP/head sites, no unembed/DLA, no attn_implementation);
+  this one is a superset, registered for any `*internvl*-hf` id. Object sets come from
+  VADE's per-model override (`object_location.json` -> `models.InternVL3-8B-hf`, the
+  smallest whole-cell 16x16 box CONTAINING the object after the 336->448 resize -- a
+  cover, not pixel-exact), synced into `common/entities.py`'s `_model_location_override`.
+  Without an override, `shares_object_grid = False` makes entities.py refuse object sets;
+  `position_sets` grid specs (`ring:`/`side:`/`seq:`/`~set`) are ALWAYS refused for it,
+  since they read the top-level Qwen grid. Non-default models get
   `results/image_head_pipeline_<slug>/` and `logs/image_head_pipeline_<slug>/`
   automatically, and need `--n_layers/--n_heads` (3B: 36/16). E8 also needs VADE's
   `run_accuracy_sweep.py` + `prune_tuples.py` for that model first (the launcher does it).
+- **VADE renamed every object set to `entity_only` / `entity_ring1`** (VADE a3609de;
+  flags was `flag_only`/`flag_ring1`, brands `logo_only`/`logo_ring1`). The Qwen token
+  indices are IDENTICAL (checked per entity) and images are unchanged, so earlier results
+  stand. `common/entities.py`'s `POSITION_ALIASES` / `canonical_position_name` keep the old
+  names resolving everywhere (defaults, `~flag_ring1`, `sae.py --token_sets`, logs paths),
+  so nothing that says `flag_ring1` needs editing. New commands should use the new names.
 
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 

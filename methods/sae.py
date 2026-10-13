@@ -174,13 +174,20 @@ def load_entity_metadata(vade_root, entity, token_set_names=None):
     codes = sorted(items)
     image_paths = [os.path.join(entity_dir, items[c]["image"]) for c in codes]
 
+    import sys
+    _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if _root not in sys.path:
+        sys.path.insert(0, _root)
+    from methods.common.entities import canonical_position_name
     available = loc["object_token_indices"]
     names = token_set_names or list(available)
-    unknown = [n for n in names if n not in available]
+    # Old names (flag_only, logo_ring1, ...) resolve to VADE's renamed sets but stay the KEY, so
+    # activations extracted under either VADE keep the token_set names downstream scripts ask for.
+    unknown = [n for n in names if canonical_position_name(n, available) not in available]
     if unknown:
         raise ValueError(f"Unknown token set(s) {unknown} for entity {entity!r}; "
                           f"available: {list(available)}")
-    token_sets = {name: available[name]["flat"] for name in names}
+    token_sets = {name: available[canonical_position_name(name, available)]["flat"] for name in names}
 
     grid = loc["vlm_token_grid"]
     return codes, image_paths, token_sets, grid
