@@ -1910,3 +1910,239 @@ R14.2.
 | 3 | `residual`/`last_token`/L24, labelled a positive control | 1 run | disambiguates "trainer broken" from "site cannot support it" |
 | 4 | the oracle arm — give `head_das` the `target_attribute` | 1 run | upper bound at `common10` under a question-blind input |
 
+
+## R16. Past the entity heads: what they write, where the lookup happens, and why no edit there isolates
+
+R15 left one gap in the account: it says the `common10` heads carry the entity
+and the attributes are "computed on demand at 25-27", but nothing had shown
+*what* the heads write, *which* downstream component turns it into an answer, or
+whether the four attributes read *different* directions of the heads' output — the
+one loophole in R13.2 (a question-blind edit can still be selective if the
+downstream readouts are disjoint). Three experiments close it, all on flags, all
+defaulting to `common10`, all built on head_swap_vade's patch / capture /
+read-back path:
+
+```bash
+python methods/head_vocab_projection.py          # R16.1  read-only, 84 items x 4 questions
+python methods/head_severed.py --n_pairs 64      # R16.2  ROME-style severed test
+python methods/readout_jacobian.py --phase all   # R16.3  readout geometry + VADE-scored edits
+```
+
+Run 2026-09-24 in one session; full log `logs/head_experiments/run_20260924_162815.log`,
+outputs under `results/{head_vocab_projection,head_severed,readout_jacobian}/flags/`.
+Every self-check passed: vocab projection's A@V reconstruction and frozen-scale
+logit (asserted per row); severed read-back 0.0, freeze-at-own-values
+**bit-exact** to clean, liveness 14.6 logits; readout-Jacobian transform gate
+M=0 == clean exactly and M=I == full patch on 100% of rows, for all four targets.
+
+### R16.1 The heads write the COUNTRY, question-blind, and read it mostly off the background
+
+`head_vocab_projection.py` sends each head's exact write `z_h W_O_h^T` through
+the final norm (dla.py's frozen scale) and the unembedding, and ranks the
+item's own NAME token among all names, and each attribute's own VALUE token among
+that attribute's values. It also splits the write by which prompt tokens the head
+attended to.
+
+| head | name rank (/78, chance 39) | name z | queried-value z | other-value z | name DLA | img attn | q attn |
+|---|---|---|---|---|---|---|---|
+| 23.4 | **1.4** | 4.82 | 1.55 | 1.54 | 0.335 | 0.84 | 0.05 |
+| 23.6 | 2.9 | 4.22 | 1.47 | 1.40 | 0.163 | 0.31 | 0.15 |
+| 21.1 | 4.0 | 3.55 | 0.99 | 0.98 | 0.140 | 0.79 | 0.08 |
+| 22.17 | 4.0 | 3.17 | 0.85 | 0.87 | 0.066 | 0.59 | 0.04 |
+| 23.3 | 4.1 | 3.84 | 1.02 | 0.98 | 0.153 | 0.72 | 0.01 |
+| 22.19 | 6.1 | 3.02 | 0.98 | 0.99 | 0.111 | 0.55 | 0.18 |
+| 22.15 | 8.1 | 2.70 | 0.69 | 0.73 | 0.061 | 0.56 | 0.14 |
+| 21.5 | 9.6 | 2.51 | 0.85 | 0.82 | 0.054 | 0.42 | 0.16 |
+| 22.13 | 21.4 | 1.54 | 0.31 | 0.40 | 0.018 | 0.56 | 0.03 |
+| 23.17 | 25.9 | 1.39 | 0.38 | 0.42 | 0.025 | 0.35 | 0.09 |
+
+* **Entity movers, not attribute extractors.** Eight of ten heads put the
+  country's own name in the top ~10 of 78 in DIRECT projection.
+* **Question-blind, measured directly.** Over all 336 rows the name z is 2.95 /
+  3.04 / 3.09 / 3.23 under the capital / currency / language / calling_code
+  question, and a head promotes an attribute's value exactly as much when a
+  DIFFERENT attribute is asked (capital 1.42 queried vs 1.49 not; language 1.62
+  vs 1.48). That is R13.2's premise read off the unembedding rather than the
+  variance decomposition.
+* **Small direct effect.** 0.02-0.34 logits per head: the country has to be
+  turned into an answer downstream — R16.2.
+* **Read mostly off the image BACKGROUND, not the flag.** For every head the
+  name-token DLA from background image tokens exceeds that from the flag's 8
+  `flag_only` tokens by 2-3x (23.4: 0.222 vs 0.092; 21.1: 0.108 vs 0.032), and
+  21.1 puts 60% of its attention on background vs 19% on the flag. By block 21 the
+  identity has spread through the image (`seq:after` leakage, CLAUDE.md), so a
+  `flag_only` patch at or above block 21 misses most of what these heads read.
+* **`router8` is the other circuit.** Excluding 21.5 (in both sets), its heads carry no
+  country (rank 42-59/78) and put 24-59% of their attention on the question —
+  R1's router, independently.
+
+Value ranks are unreliable for calling_code (all 84 codes share first tokens
+with another code), language (49) and currency (41); the name result is not
+affected (21 collisions of 84).
+
+### R16.2 The lookup is in the last-token MLPs 23-26 — serial, and attribute-specific
+
+`head_severed.py` repeats R10's continuous `common10` install and FREEZES chosen
+components at the last column to their clean-BASE values (step 0 exact; later
+steps replay the clean base step-matched). First-token transfer = source's first
+gold token, over rows whose base/source golds differ at token 0; 64 pairs per
+attribute (51 usable on calling_code), so one pair is ~1.6-2pp.
+
+| arm | capital | currency | language | calling_code |
+|---|---|---|---|---|
+| heads (R10) | 96.9 | 78.1 | 100 | 98.0 |
+| + mlp[22-27] frozen | **0.0** | **0.0** | **0.0** | **0.0** |
+| + attn[24-27] frozen | 96.9 | 79.7 | 100 | 86.3 |
+| + mlp[22] | 92.2 | 68.8 | 98.4 | 94.1 |
+| + mlp[23] | 42.2 | 23.4 | 64.1 | 31.4 |
+| + mlp[24] | 46.9 | 39.1 | 65.6 | 47.1 |
+| + mlp[25] | 37.5 | **4.7** | 71.9 | **0.0** |
+| + mlp[26] | 43.8 | 23.4 | 92.2 | 21.6 |
+| + mlp[27] | 78.1 | 53.1 | 85.9 | 88.2 |
+
+* **Entity in, lookup downstream.** With MLPs 22-27 held at base the install
+  transfers nothing on any attribute — base first-token returns to the clean
+  run's rate exactly. With late ATTENTION held instead, transfer is untouched
+  (except calling_code, -12pp). The path is heads -> last-token MLPs, which is
+  ROME's picture (entity moved by attention, attribute recalled by mid-late MLPs)
+  on a VLM.
+* **Serial, not redundant.** Every single block 23-26 costs 30-100% alone; none
+  is backed up by the others.
+* **The first attribute-specific structure found anywhere in this circuit.**
+  mlp[25] is ~all of calling_code (0.0%) and currency (4.7%) but under a third of
+  language (71.9%); language barely needs mlp[26] (92.2%); capital leans on 23-26
+  about equally. This matches R13.1, where item x attribute becomes substantial
+  exactly at blocks 24-26 (9.3 / 17.1 / 24.1%).
+* **mlp[27] damages rather than blocks.** First-token transfer stays high but the
+  text-level `other` rate is 30-72% on capital, currency and calling_code (6% on
+  language) — frozen at base it corrupts the later tokens.
+
+**Caveat — freezing at BASE is two interventions.** A frozen block stops
+reacting to the new entity AND keeps writing the base country's own lookup
+(under mlp[25], calling_code reverts to the base answer on 100% of pairs). The
+two are separated by R16.5's `--freeze_values mean other`, not yet run.
+
+### R16.3 The attributes read the SAME directions of the heads — the isolating edit is empty
+
+`readout_jacobian.py` sketches, per attribute and per block, the Jacobian of the
+first-answer-token candidate logits with respect to the `common10` columns at the
+last column (3,776 sketch rows over 59 train items x v1-v4 templates x 4 probes;
+checked against finite differences offline), takes each attribute's readout
+subspace U_r (90% energy, rank cap 64), and measures overlap. **Every number
+below is two-fold ITEM-HELD-OUT** (subspaces fitted on half the items, measured
+on the other half). The in-sample versions inflate own-subspace energy by
+0.05-0.16 and are in `geometry.json["in_sample"]` for comparison only.
+
+Held-out cross-energy — share of the row attribute's readout inside the column
+attribute's subspace (chance = k/d in brackets), block 22 (d = 512):
+
+| | capital | currency | language | calling_code |
+|---|---|---|---|---|
+| capital | — | 0.557 [0.125] | 0.582 [0.113] | 0.366 [0.062] |
+| currency | 0.513 [0.125] | — | 0.494 [0.113] | 0.312 [0.062] |
+| language | 0.665 [0.125] | 0.605 [0.125] | — | 0.408 [0.062] |
+| calling_code | 0.549 [0.125] | 0.521 [0.125] | 0.522 [0.113] | — |
+
+Blocks 21 and 23 read the same (cross 0.35-0.66). One shared subspace of 31-39
+dims holds 53-76% of every attribute's readout. Ranks hit the 64 cap for capital
+and currency (and 56-60 for language), so 90% of their readout needs more than 64
+dims per block.
+
+The edits, scored as `reach` = the fraction of each attribute's readout the edit
+can touch (block 22; blocks 21/23 agree):
+
+| edit (target) | own reach | reach on each other attribute | selectivity |
+|---|---|---|---|
+| readout `P_r` | 0.76-0.84 | 0.31-0.67 | 1.4-2.2x |
+| isolated `P_perp(others) P_r` | **0.046-0.092** | 0.003-0.014 | 4.7-14.6x |
+| random, same rank | ~k/d | ~k/d | ~1.0x |
+
+The isolated edit is selective only as a ratio of two tiny numbers: removing the
+other attributes' directions leaves the target 1.5-9% of its own readout.
+
+**VADE-scored** (continuous patch through `patched_generate(transform=...)`, donor
+asks the same question, 60 pairs per target = 1,434 rows; in-script VADE matcher —
+`score.py` is the number of record and has not been run on these files):
+
+| target | clean c / iso / final | full | readout | isolated | random |
+|---|---|---|---|---|---|
+| capital | 0.0 / 93.8 / 46.9 | 97.8 / 2.6 / 50.2 | 93.9 / 4.1 / 49.0 | 0.0 / 93.9 / 46.9 | 0.0 / 92.7 / 46.3 |
+| currency | 0.0 / 98.9 / 49.4 | 69.7 / 0.8 / 35.2 | 56.7 / 3.5 / 30.1 | 0.0 / 98.9 / 49.4 | 0.6 / 98.2 / 49.4 |
+| language | 1.7 / 94.9 / 48.3 | 90.4 / 2.0 / 46.2 | 89.8 / 4.4 / 47.1 | 1.7 / 94.9 / 48.3 | 1.7 / 94.0 / 47.8 |
+| calling_code | 0.0 / 93.8 / 46.9 | 96.7 / 2.4 / 49.5 | 55.8 / **21.8** / 38.8 | 0.0 / 94.1 / 47.0 | 0.0 / 94.4 / 47.2 |
+
+* **The readout subspace is where the causal effect is — for every attribute at
+  once.** `P_r` (<=64 dims per block) reproduces 96-99% of the full swap's cause
+  for capital and language, and collapses iso just as completely.
+* **The isolated edit IS the clean run.** Identical cause and iso to `clean` on
+  all four targets: the 2-9% of readout it keeps moves nothing.
+* **No question-blind linear edit at these heads beats the ~47-49% clean
+  baseline.** R13.2's loophole is closed by measurement: the readouts are not
+  disjoint, so the selectivity DAS never found (R12/R14's ~57% plateau) is not
+  there to find.
+* **calling_code is the partial exception** — the least-shared readout (only
+  31-41% of the others' readout lies in its subspace) and the only non-trivial iso
+  (21.8%). Its readout edit lands on a NEIGHBOUR: of 360 cause rows, 55.8% emit the
+  source's code, 5.6% the base's, and **35.8% a wrong code sharing the source's
+  first digit** (e.g. 374 Armenia for the source's 375 Belarus; 359 Bulgaria for
+  351 Portugal). A rank-~36 edit fitted on the first answer token moves the country
+  only part of the way — consistent with the heads carrying identity and every
+  attribute being read from it.
+
+Not run: the Makelov control (`--das_checkpoint`), and the capital/currency
+geometry is rank-capped (R16.5).
+
+### R16.4 The account, after R16
+
+R16 turns R15's "stored at 21-23, computed at 25-27" from an inference into a
+traced path:
+
+1. **What crosses** (R16.1): the country, in direct projection, independent of
+   the question, read mostly from background image tokens.
+2. **Where it becomes an answer** (R16.2): the last-token MLPs 23-26, each
+   necessary, with attribute-specific dependence (mlp[25] for calling_code and
+   currency). Late attention is not on the path.
+3. **Why editing the heads cannot isolate** (R16.3): the four attributes read
+   largely the same directions of the heads' output; projecting out the overlap
+   leaves an edit that does nothing.
+
+So the attributes separate AFTER the question meets the country, in the MLPs —
+the first place in this circuit where any per-attribute structure has appeared.
+That makes the last-token MLP neurons of blocks 23-26 the candidate site for an
+isolating intervention, with two costs: a last-column patch only steers the
+first answer token (so it must be held for every generated step, as R10 and
+head_das do), and it is downstream of the question, so it is not a VADE image-site
+intervention (R13.3).
+
+### R16.5 Follow-ups, implemented and not yet run
+
+All three reuse existing machinery via a `site="mlp_hidden"` option in
+head_swap_vade's capture / patch / read-back (default `attn_head_output`, so
+every earlier caller is unchanged). Offline tests: `tests/test_mlp_site_followups.py`.
+
+| | experiment | what it settles |
+|---|---|---|
+| 1 | `head_severed.py --freeze_values base mean other` | whether each MLP is NEEDED (`@mean` collapses like base) or was only re-writing the base answer (`@mean` recovers); whether it WRITES the answer (`@other` lands on a third country's value) |
+| 2 | `readout_jacobian.py --site mlp_hidden --blocks 23-26` | whether the attributes' readouts separate on the 18,944 MLP neurons where they did not on the heads; its `full` arm is the continuous full-swap ceiling for 3 |
+| 3 | `head_das.py --site mlp_hidden --blocks 23-26 --method dbm` | whether a sparse mask on those neurons isolates an attribute (VADE-scored); `mask_overlap.py` compares the selected neurons across attributes against chance |
+| 4 | `readout_jacobian.py --max_rank 128 --fit_path ...` | R16.3 without the rank cap, from the existing fit |
+
+`head_das.py --method dbm` had never run before this: it passed a float to
+pyvene's `set_temperature`, which needs a tensor, and would have raised at the
+first optimizer step (fixed; it now also honours `--temperature_start/_end`).
+The mask at this site is 4 x 18,944 wide, ~18x the width RAVEL's `--l1_coef 1e-3`
+was tuned for — sweep it and read `n_selected` next to the score.
+
+```bash
+python methods/head_severed.py --n_pairs 64 --freeze_values base mean other \
+    --freeze_mlp_span 23-26 --freeze_mlp_singles 23 24 25 26 --freeze_attn_span ''
+python methods/readout_jacobian.py --phase eval --max_rank 128 \
+    --fit_path results/readout_jacobian/flags/readout_fit.pt --out_dir results/readout_jacobian/flags_rank128
+python methods/readout_jacobian.py --phase all --site mlp_hidden --blocks 23-26 --max_rank 128
+python methods/head_das.py --attribute calling_code --method dbm --site mlp_hidden --blocks 23-26 \
+    --l1_coef 1e-4 --temperature_start 1e-2 --temperature_end 1e-2 --train_rows 4000 --eval_rows 4000
+python methods/mask_overlap.py results/head_das/flags/*_dbm_*_mlp23-26/mask_selected.json
+```
+
+Run 2 before 3: a mask selects a subset of what `full` swaps, so if `full` does
+not transfer at this site no mask can (CLAUDE.md's ceiling rule).

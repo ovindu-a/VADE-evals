@@ -315,6 +315,10 @@ def build_batch_at(spec, rows, entity_assets, adapter, model, processor, batch_c
     from .entities import build_batch
 
     parts = split_union(spec)
+    # Grid-geometry specs (ring:, side:, seq:, ~set) read object_location.json's Qwen grid directly.
+    assert getattr(adapter, "shares_object_grid", True) or not any(
+        _is_extended_part(p) and _head(p) not in _TEXT_HEADS for p in parts), (
+        f"{spec!r} uses object_location.json's token grid, which {adapter.model_id} does not share")
     needed = {underlying_positions_name(p) for p in parts}
     builds = {name: build_batch(rows, entity_assets, adapter, model, processor, name, batch_cache=batch_cache)
               for name in needed}

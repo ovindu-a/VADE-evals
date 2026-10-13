@@ -71,6 +71,21 @@ separate them:
 Arms frozen to mean/other are named `<arm>@mean` / `<arm>@other`; base keeps
 the plain name so earlier summaries stay comparable.
 
+WHICH GOLD THE TOKEN COLUMNS COMPARE AGAINST (--gold)
+
+  label  (default) the STORED label's tokens under the prefill. Correct for
+         flags only: brands/celebrities/animals store lowercase labels and the
+         model writes articles (' the United States'), so `src 1st` there reads
+         ~0 on every arm, clean included.
+  own    the model's OWN unhooked answers: the clean base run, a clean run on
+         the source image (one extra generation per batch), and the third
+         row's clean base run. Scored at the DIVERGENCE point -- the first
+         token where the target answer stops being a prefix of the others --
+         so ' the United States' vs ' the United Kingdom' is read at 'States'
+         rather than counted as a hit on ' the'. Columns `src div` / `base div`
+         / `3rd div`, over rows whose own answers diverge at all. Text columns
+         are unchanged (VADE's matcher on the stored labels either way).
+
 SELF-CHECKS (run on the first batch, before any scored generation)
 
   1. read-back   the head install reads back what was installed (verify_readback).
@@ -103,7 +118,8 @@ if REPO_ROOT not in sys.path:
 
 from methods.head_swap_vade import (COMMON10, DEFAULT_VADE_ROOT, MODEL_ID, build_batch,  # noqa: E402
                                     capture_donor, decode, entity_attributes, full_image_patch, load_assets,
-                                    parse_heads, patched_generate, to_device, verify_readback)
+                                    parse_heads, patched_generate, plain_generate, to_device,
+                                    verify_readback)
 
 KINDS = {"mlp": "mlp_output", "attn": "attn_output"}
 FREEZE_VALUES = ("base", "mean", "other")
@@ -369,14 +385,37 @@ def as_job(r):
             "rows": [(r["target_attribute"], r["row_index"])]}
 
 
-def score(texts, toks, rows, lookup, tokenizer, matcher, thirds=None):
+def own_hit(generated, target, others):
+    """Divergence-point match of `generated` against `target`, an answer the
+    model itself produced. The readout index is the first i at which
+    target[:i+1] is a prefix of NONE of `others`; the row is a hit iff the
+    generation agrees with target through that index. None when no such index
+    exists (target is a prefix of, or equal to, another answer -- nothing
+    separates them), so callers drop the row rather than score it."""
+    target = list(target)
+    for i in range(len(target)):
+        if all(list(o[:i + 1]) != target[:i + 1] for o in others):
+            return list(generated[:i + 1]) == target[:i + 1]
+    return None
+
+
+def strip_pad(ids, pad_id):
+    """Generated ids up to the first pad (a finished row's tail in a batch)."""
+    ids = list(ids)
+    return ids[:ids.index(pad_id)] if pad_id in ids else ids
+
+
+def score(texts, toks, rows, lookup, tokenizer, matcher, thirds=None, own=None):
     """Per row: first-token vs source/base gold (exact) and VADE text match.
     `thirds` (one label or None per row) adds the same two checks against a
-    third country's gold, for the `other` freeze."""
+    third country's gold, for the `other` freeze. `own` (one dict per row with
+    the model's own 'src'/'base'/'third' answer ids, see --gold own) adds the
+    divergence-point columns."""
     from methods.common.targets import derive_gold_token_ids
     out = []
     thirds = thirds or [None] * len(rows)
-    for r, text, t, third in zip(rows, texts, toks.tolist(), thirds):
+    own = own or [None] * len(rows)
+    for r, text, t, third, o in zip(rows, texts, toks.tolist(), thirds, own):
         prefill = lookup[r["queried"]][r["template_id"]]["prefill"]
         sg = derive_gold_token_ids(tokenizer, prefill, str(r["source_label"]))
         bg = derive_gold_token_ids(tokenizer, prefill, str(r["base_label"]))
@@ -391,6 +430,11 @@ def score(texts, toks, rows, lookup, tokenizer, matcher, thirds=None):
                         "distinct3_first": bool(rec["distinct_first"] and tg and tg[0] not in (sg[0], bg[0])),
                         "third_first": bool(tg) and t[0] == tg[0], "third_text": t_txt,
                         "other_text": not (s_txt or b_txt or t_txt)})
+        if o is not None:
+            rec["own_src_div"] = own_hit(t, o["src"], [o["base"]])
+            rec["own_base_div"] = own_hit(t, o["base"], [o["src"]])
+            if o.get("third") is not None:
+                rec["own_third_div"] = own_hit(t, o["third"], [o["base"], o["src"]])
         out.append(rec)
     return out
 
@@ -413,22 +457,35 @@ def aggregate(scored):
         out.update({"n_distinct3_first": len(d3),
                     "third_first": sum(s["third_first"] for s in d3) / max(len(d3), 1),
                     "third_text": sum(s["third_text"] for s in t3) / max(len(t3), 1)})
+    for key in ("own_src_div", "own_base_div", "own_third_div"):
+        # None = the model's own answers never diverge for that row; excluded, not scored as a miss.
+        vals = [s[key] for s in scored if s.get(key) is not None]
+        if any(key in s for s in scored):
+            out[f"n_{key}"] = len(vals)
+            out[key] = sum(vals) / len(vals) if vals else None
     return out
 
 
 def print_table(summary):
+    def pct(v):
+        return f"{v:8.1%}" if v is not None else f"{'-':>8}"
     for attr, arms in summary.items():
-        ref = arms.get("heads", {}).get("src_first") or 0.0
+        own = any("own_src_div" in s for s in arms.values())
+        key = "own_src_div" if own else "src_first"
+        ref = arms.get("heads", {}).get(key) or 0.0
         print(f"\n=== {attr} ===")
-        print(f"{'arm':>34} {'n':>4} {'src 1st':>8} {'base 1st':>9} {'kept':>6} "
-              f"{'src txt':>8} {'base txt':>9} {'other':>6} {'3rd 1st':>8} {'3rd txt':>8}")
+        cols = (f"{'src div':>8} {'base div':>9} {'3rd div':>8}" if own else
+                f"{'src 1st':>8} {'base 1st':>9} {'3rd 1st':>8}")
+        print(f"{'arm':>34} {'n':>4} {cols} {'kept':>6} {'src txt':>8} {'base txt':>9} {'other':>6} {'3rd txt':>8}")
         for arm, s in arms.items():
-            kept = s["src_first"] / ref if ref else float("nan")
-            third = (f"{s['third_first']:8.1%} {s['third_text']:8.1%}" if "third_first" in s
-                     else f"{'-':>8} {'-':>8}")
-            print(f"{arm:>34} {s['n']:>4} {s['src_first']:8.1%} {s['base_first']:9.1%} {kept:6.2f} "
-                  f"{s['src_text']:8.1%} {s['base_text']:9.1%} {s['other_text']:6.1%} {third}")
-    print("\n  kept = src 1st / src 1st of `heads`. <<1 under heads+mlp[span] = the lookup is downstream.")
+            kept = (s.get(key) or 0.0) / ref if ref else float("nan")
+            tok = (f"{pct(s.get('own_src_div'))} {pct(s.get('own_base_div')):>9} {pct(s.get('own_third_div'))}"
+                   if own else
+                   f"{pct(s['src_first'])} {pct(s['base_first']):>9} {pct(s.get('third_first'))}")
+            print(f"{arm:>34} {s['n']:>4} {tok} {kept:6.2f} "
+                  f"{s['src_text']:8.1%} {s['base_text']:9.1%} {s['other_text']:6.1%} {pct(s.get('third_text'))}")
+    print(f"\n  kept = {'src div' if any('own_src_div' in s for a in summary.values() for s in a.values()) else 'src 1st'}"
+          " / the same column of `heads`. <<1 under heads+mlp[span] = the lookup is downstream.")
     print("  @mean ~ base -> the block is needed; @mean recovers -> base's answer was being re-written;")
     print("  @other lands on the 3rd country -> the block writes the answer itself. 'other' excludes 3rd.")
 
@@ -454,6 +511,9 @@ def main():
                     help="What a frozen component is held at: the clean base value (ROME), the "
                          "leave-one-out mean over other base items (mean ablation), or a third "
                          "country's value. Any subset; each freezing arm runs once per value.")
+    ap.add_argument("--gold", choices=["label", "own"], default="label",
+                    help="Token columns against the stored label (flags) or the model's own unhooked "
+                         "answers at their divergence point (any entity with lowercase labels).")
     ap.add_argument("--max_new_tokens", type=int, default=12)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
@@ -475,6 +535,10 @@ def main():
         print(f"  {a}: {len(rows[a])} cause rows from {path}")
     default_dir = args.entity if args.freeze_values == ["base"] else \
         f"{args.entity}__freeze-{'-'.join(args.freeze_values)}"
+    if args.gold == "own":
+        default_dir += "__gold-own"
+    if model_slug != MODEL_ID.split("/")[-1]:
+        default_dir += f"__{model_slug}"
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_severed", default_dir)
     n_gen = sum(len(v) for v in rows.values()) * len(arms)
     print(f"[head_severed] {args.entity}: heads {', '.join(f'{b}.{h}' for b, h in heads)}")
@@ -524,14 +588,18 @@ def main():
             batches = [rows[attr][i:i + args.batch_size] for i in range(0, len(rows[attr]), args.batch_size)]
             # PASS 1: every row's clean generation and clean component values. The mean
             # and third-country freezes need OTHER rows' values, so these come first.
-            clean_toks, store = {}, {}
+            clean_toks, store, src_toks = {}, {}, {}
             for chunk in batches:
                 batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id)
                 clean, base_vals = capture_components(adapter, model, need, batch["base_ids"], batch["base_mask"],
                                                       batch["base_extra"], args.max_new_tokens, pad_id)
+                src_clean = (plain_generate(model, batch["donor_ids"], batch["donor_mask"], batch["donor_extra"],
+                                            args.max_new_tokens, pad_id) if args.gold == "own" else None)
                 for i, r in enumerate(chunk):
                     clean_toks[r["row_index"]] = clean[i]
                     store[r["row_index"]] = {k: v[i].cpu() for k, v in base_vals.items()}
+                    if src_clean is not None:
+                        src_toks[r["row_index"]] = strip_pad(src_clean[i].tolist(), pad_id)
             thirds = choose_thirds(rows[attr], args.seed) if "other" in modes else {}
             means = row_means(rows[attr], store, mean_groups(rows[attr])) if ("mean" in modes and need) else {}
             if thirds:
@@ -562,8 +630,15 @@ def main():
                                                 args.max_new_tokens, pad_id, head_dim, extra_patches=extra)
                     texts = decode(processor, toks)
                     third_rows = [thirds[r["row_index"]][0] if mode == "other" else None for r in chunk]
+                    own = None
+                    if args.gold == "own":
+                        own = [{"src": src_toks[r["row_index"]],
+                                "base": strip_pad(clean_toks[r["row_index"]].tolist(), pad_id),
+                                "third": (strip_pad(clean_toks[t["row_index"]].tolist(), pad_id)
+                                          if t is not None else None)}
+                               for r, t in zip(chunk, third_rows)]
                     sc = score(texts, toks, chunk, lookup, processor.tokenizer, matcher,
-                               thirds=[t["base_label"] if t is not None else None for t in third_rows])
+                               thirds=[t["base_label"] if t is not None else None for t in third_rows], own=own)
                     for r, text, s_, t in zip(chunk, texts, sc, third_rows):
                         scored[attr][name].append(s_)
                         fh.write(json.dumps({"attribute": attr, "row_index": r["row_index"], "arm": name,
@@ -576,7 +651,8 @@ def main():
 
     summary = {a: {arm: aggregate(v) for arm, v in arms_.items()} for a, arms_ in scored.items()}
     with open(os.path.join(out_dir, "summary.json"), "w") as f:
-        json.dump({"heads": args.heads, "freeze_steps": args.freeze_steps,
+        json.dump({"heads": args.heads, "freeze_steps": args.freeze_steps, "gold": args.gold,
+                   "model_id": args.model_id,
                    "freeze_values": args.freeze_values, "self_checks": checks,
                    "arms": [a[0] for a in arms], "by_attribute": summary}, f, indent=2)
     print_table(summary)

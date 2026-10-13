@@ -1,0 +1,5544 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "k": 8,
+  "n_perm": 20000,
+  "skipped_inert": [
+    "celebrities/occupation"
+  ],
+  "sets": {
+    "animals/body_covering": {
+      "heads": [
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ],
+        [
+          24,
+          26
+        ],
+        [
+          24,
+          27
+        ],
+        [
+          25,
+          7
+        ],
+        [
+          25,
+          23
+        ],
+        [
+          25,
+          25
+        ]
+      ],
+      "pool_blocks": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/animals/body_covering/head_trace_patch9_blocks9-25_text.json",
+      "n_heads": 28
+    },
+    "animals/native_continent": {
+      "heads": [
+        [
+          21,
+          4
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ],
+        [
+          25,
+          25
+        ]
+      ],
+      "pool_blocks": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/animals/native_continent/head_trace_patch12_blocks12-25_text.json",
+      "n_heads": 28
+    },
+    "animals/primary_habitat": {
+      "heads": [
+        [
+          21,
+          4
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          24
+        ],
+        [
+          22,
+          25
+        ],
+        [
+          22,
+          27
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ]
+      ],
+      "pool_blocks": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/animals/primary_habitat/head_trace_patch9_blocks9-23_text.json",
+      "n_heads": 28
+    },
+    "animals/reproduction": {
+      "heads": [
+        [
+          21,
+          4
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          22,
+          25
+        ],
+        [
+          22,
+          27
+        ],
+        [
+          23,
+          0
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ]
+      ],
+      "pool_blocks": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/animals/reproduction/head_trace_patch8_blocks8-23_text.json",
+      "n_heads": 28
+    },
+    "animals/taxonomic_class": {
+      "heads": [
+        [
+          21,
+          4
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          23,
+          0
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ],
+        [
+          24,
+          26
+        ],
+        [
+          25,
+          25
+        ]
+      ],
+      "pool_blocks": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/animals/taxonomic_class/head_trace_patch12_blocks12-25_text.json",
+      "n_heads": 28
+    },
+    "brands/founded_year": {
+      "heads": [
+        [
+          9,
+          2
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          9,
+          9
+        ],
+        [
+          9,
+          15
+        ],
+        [
+          9,
+          17
+        ],
+        [
+          9,
+          22
+        ],
+        [
+          9,
+          23
+        ],
+        [
+          9,
+          25
+        ]
+      ],
+      "pool_blocks": [
+        9
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/brands/founded_year/head_trace_patch9_blocks9_text.json",
+      "n_heads": 28
+    },
+    "brands/hq_country": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          21,
+          4
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          17
+        ]
+      ],
+      "pool_blocks": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/brands/hq_country/head_trace_patch19_blocks19-23_text.json",
+      "n_heads": 28
+    },
+    "celebrities/nationality": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          21,
+          4
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ]
+      ],
+      "pool_blocks": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/celebrities/nationality/head_trace_patch19_blocks19-24_text.json",
+      "n_heads": 28
+    },
+    "celebrities/native_language": {
+      "heads": [
+        [
+          19,
+          6
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          22,
+          19
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ]
+      ],
+      "pool_blocks": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/results/image_head_pipeline/celebrities/native_language/head_trace_patch19_blocks19-23_text.json",
+      "n_heads": 28
+    },
+    "flags/calling_code": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          19
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          7
+        ],
+        [
+          23,
+          17
+        ]
+      ],
+      "pool_blocks": [
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/calling_code/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21_blocks21-23.json",
+      "n_heads": 28
+    },
+    "flags/capital": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          13
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          22,
+          19
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          17
+        ]
+      ],
+      "pool_blocks": [
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/capital/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21_blocks21-23.json",
+      "n_heads": 28
+    },
+    "flags/currency": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          22,
+          19
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ]
+      ],
+      "pool_blocks": [
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/currency/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21_blocks21-23.json",
+      "n_heads": 28
+    },
+    "flags/language": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          22,
+          19
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ]
+      ],
+      "pool_blocks": [
+        21,
+        22,
+        23
+      ],
+      "source": "/Users/ovindu/Desktop/Repos/fyp/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch21_blocks21-23.json",
+      "n_heads": 28
+    },
+    "flags/common10": {
+      "heads": [
+        [
+          21,
+          1
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          22,
+          13
+        ],
+        [
+          22,
+          15
+        ],
+        [
+          22,
+          17
+        ],
+        [
+          22,
+          19
+        ],
+        [
+          23,
+          3
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          17
+        ]
+      ],
+      "pool_blocks": [
+        21,
+        22,
+        23
+      ],
+      "source": "R8/R10"
+    },
+    "flags/router8": {
+      "heads": [
+        [
+          19,
+          21
+        ],
+        [
+          19,
+          27
+        ],
+        [
+          20,
+          17
+        ],
+        [
+          20,
+          18
+        ],
+        [
+          21,
+          0
+        ],
+        [
+          21,
+          4
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          21,
+          25
+        ]
+      ],
+      "pool_blocks": [
+        19,
+        20,
+        21
+      ],
+      "source": "R1"
+    },
+    "park_vrh": {
+      "heads": [
+        [
+          14,
+          11
+        ],
+        [
+          14,
+          16
+        ],
+        [
+          14,
+          23
+        ],
+        [
+          16,
+          0
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          16,
+          6
+        ],
+        [
+          16,
+          7
+        ],
+        [
+          16,
+          17
+        ],
+        [
+          16,
+          20
+        ],
+        [
+          17,
+          14
+        ],
+        [
+          17,
+          18
+        ],
+        [
+          18,
+          15
+        ],
+        [
+          18,
+          16
+        ],
+        [
+          19,
+          15
+        ],
+        [
+          19,
+          17
+        ],
+        [
+          19,
+          19
+        ],
+        [
+          19,
+          20
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          19,
+          23
+        ],
+        [
+          19,
+          26
+        ]
+      ],
+      "pool_blocks": null,
+      "source": "https://arxiv.org/abs/2608.27417",
+      "verbatim": true,
+      "index_note": "index base unconfirmed"
+    },
+    "park_vrh@1based": {
+      "heads": [
+        [
+          13,
+          11
+        ],
+        [
+          13,
+          16
+        ],
+        [
+          13,
+          23
+        ],
+        [
+          15,
+          0
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          15,
+          6
+        ],
+        [
+          15,
+          7
+        ],
+        [
+          15,
+          17
+        ],
+        [
+          15,
+          20
+        ],
+        [
+          16,
+          14
+        ],
+        [
+          16,
+          18
+        ],
+        [
+          17,
+          15
+        ],
+        [
+          17,
+          16
+        ],
+        [
+          18,
+          15
+        ],
+        [
+          18,
+          17
+        ],
+        [
+          18,
+          19
+        ],
+        [
+          18,
+          20
+        ],
+        [
+          18,
+          22
+        ],
+        [
+          18,
+          23
+        ],
+        [
+          18,
+          26
+        ]
+      ],
+      "pool_blocks": null,
+      "source": "https://arxiv.org/abs/2608.27417",
+      "verbatim": true,
+      "index_note": "index base unconfirmed"
+    },
+    "lietzow_promoting": {
+      "heads": [
+        [
+          17,
+          21
+        ],
+        [
+          18,
+          8
+        ],
+        [
+          18,
+          9
+        ],
+        [
+          18,
+          24
+        ],
+        [
+          19,
+          22
+        ],
+        [
+          19,
+          23
+        ],
+        [
+          19,
+          24
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          20,
+          3
+        ],
+        [
+          20,
+          5
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          21,
+          19
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          22,
+          13
+        ],
+        [
+          23,
+          6
+        ],
+        [
+          23,
+          11
+        ],
+        [
+          24,
+          21
+        ],
+        [
+          24,
+          27
+        ],
+        [
+          26,
+          24
+        ],
+        [
+          26,
+          25
+        ],
+        [
+          26,
+          26
+        ]
+      ],
+      "pool_blocks": null,
+      "source": "https://arxiv.org/abs/2606.28273",
+      "verbatim": true,
+      "index_note": ""
+    },
+    "lietzow_suppressing": {
+      "heads": [
+        [
+          18,
+          7
+        ],
+        [
+          20,
+          2
+        ],
+        [
+          20,
+          21
+        ],
+        [
+          21,
+          14
+        ],
+        [
+          22,
+          25
+        ],
+        [
+          25,
+          25
+        ],
+        [
+          26,
+          22
+        ],
+        [
+          27,
+          3
+        ]
+      ],
+      "pool_blocks": null,
+      "source": "https://arxiv.org/abs/2606.28273",
+      "verbatim": true,
+      "index_note": ""
+    },
+    "lietzow_writing": {
+      "heads": [
+        [
+          23,
+          6
+        ]
+      ],
+      "pool_blocks": null,
+      "source": "https://arxiv.org/abs/2606.28273",
+      "verbatim": false,
+      "index_note": ""
+    }
+  },
+  "pairs": [
+    {
+      "a": "flags/common10",
+      "b": "animals/body_covering",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.17045,
+        "p": 0.15884205789710515,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.42265,
+        "p": 0.3688815559222039,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "animals/native_continent",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.20315,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.86085,
+        "p": 0.00024998750062496874,
+        "shared": [
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "animals/primary_habitat",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.1924,
+        "p": 0.0005499725013749313,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.9888,
+        "p": 0.05624718764061797,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "animals/reproduction",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.1776,
+        "p": 0.01159942002899855,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 1.0658,
+        "p": 0.2872356382180891,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "animals/taxonomic_class",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.20315,
+        "p": 0.00044997750112494374,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.7119,
+        "p": 0.0215989200539973,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "brands/founded_year",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "brands/hq_country",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.576,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 1.00905,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "celebrities/nationality",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.4797,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.93185,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "celebrities/native_language",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.576,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.92215,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "flags/calling_code",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.9616,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 1.006,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "derived": true
+    },
+    {
+      "a": "flags/common10",
+      "b": "flags/capital",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 8,
+        "null_mean": 0.9616,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.13",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "block": {
+        "observed": 8,
+        "null_mean": 1.0658,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.13",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "derived": true
+    },
+    {
+      "a": "flags/common10",
+      "b": "flags/currency",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.9616,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 1.0658,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": true
+    },
+    {
+      "a": "flags/common10",
+      "b": "flags/language",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 8,
+        "null_mean": 0.9616,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 8,
+        "null_mean": 0.9964,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": true
+    },
+    {
+      "a": "flags/common10",
+      "b": "park_vrh",
+      "n_a": 10,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.25975,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "park_vrh@1based",
+      "n_a": 10,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.25975,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "lietzow_promoting",
+      "n_a": 10,
+      "n_b": 21,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.2726,
+        "p": 0.0018499075046247689,
+        "shared": [
+          "21.5",
+          "22.13",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.71885,
+        "p": 0.021798910054497276,
+        "shared": [
+          "21.5",
+          "22.13",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "lietzow_suppressing",
+      "n_a": 10,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.1025,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.21885,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/common10",
+      "b": "lietzow_writing",
+      "n_a": 10,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01335,
+        "p": 0.013399330033498325,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1431,
+        "p": 0.1431428428578571,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "animals/body_covering",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.13625,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "animals/native_continent",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.1643,
+        "p": 0.008649567521623918,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.2867,
+        "p": 0.016199190040497975,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "animals/primary_habitat",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.1549,
+        "p": 0.009649517524123795,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.28125,
+        "p": 0.016999150042497874,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "animals/reproduction",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.13555,
+        "p": 0.12814359282035898,
+        "shared": [
+          "21.4"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.14775,
+        "p": 0.14779261036948152,
+        "shared": [
+          "21.4"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "animals/taxonomic_class",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.1643,
+        "p": 0.008649567521623918,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.28215,
+        "p": 0.015349232538373081,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "brands/founded_year",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.4577,
+        "p": 0.38283085845707715,
+        "shared": [
+          "21.4"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.28995,
+        "p": 0.2725863706814659,
+        "shared": [
+          "21.4"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.38335,
+        "p": 0.04769761511924404,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.4242,
+        "p": 0.04519774011299435,
+        "shared": [
+          "21.4",
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.4577,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.2143,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.3798,
+        "p": 0.33573321333933304,
+        "shared": [
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.2821,
+        "p": 0.2663366831658417,
+        "shared": [
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.3798,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.14775,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.3798,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.14775,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.3798,
+        "p": 0.33573321333933304,
+        "shared": [
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.28735,
+        "p": 0.27163641817909107,
+        "shared": [
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2066,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.49825,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2066,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.216,
+        "p": 0.19704014799260036,
+        "shared": [
+          "21.5"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.7002,
+        "p": 0.5300734963251837,
+        "shared": [
+          "21.5"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08265,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.28915,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/router8",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.01025,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "animals/native_continent",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.1634,
+        "p": 0.00034998250087495624,
+        "shared": [
+          "23.6",
+          "23.11",
+          "25.25"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.40255,
+        "p": 0.0034998250087495625,
+        "shared": [
+          "23.6",
+          "23.11",
+          "25.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "animals/primary_habitat",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.05965,
+        "p": 0.001399930003499825,
+        "shared": [
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.28585,
+        "p": 0.022348882555872206,
+        "shared": [
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "animals/reproduction",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.0526,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "22.1",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.3952,
+        "p": 0.0018499075046247689,
+        "shared": [
+          "22.1",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "animals/taxonomic_class",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.1634,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "23.6",
+          "23.11",
+          "24.26",
+          "25.25"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.44035,
+        "p": 0.000199990000499975,
+        "shared": [
+          "23.6",
+          "23.11",
+          "24.26",
+          "25.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "brands/founded_year",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.17255,
+        "p": 0.16374181290935452,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.362,
+        "p": 0.32823358832058397,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.23655,
+        "p": 0.21683915804209788,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.29145,
+        "p": 0.2664866756662167,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.17255,
+        "p": 0.16374181290935452,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.32395,
+        "p": 0.2941352932353382,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.2802,
+        "p": 0.2584870756462177,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.40055,
+        "p": 0.3606319684015799,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.2802,
+        "p": 0.2584870756462177,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.3952,
+        "p": 0.35078246087695614,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2802,
+        "p": 0.021148942552872356,
+        "shared": [
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.3952,
+        "p": 0.04269786510674466,
+        "shared": [
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.2802,
+        "p": 0.2584870756462177,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.3234,
+        "p": 0.29393530323483824,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2074,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2074,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.21775,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "22.1",
+          "23.6",
+          "23.11",
+          "24.27"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.36105,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "22.1",
+          "23.6",
+          "23.11",
+          "24.27"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0853,
+        "p": 0.08279586020698965,
+        "shared": [
+          "25.25"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.14065,
+        "p": 0.1368931553422329,
+        "shared": [
+          "25.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/body_covering",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01025,
+        "p": 0.010299485025748713,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.07155,
+        "p": 0.07159642017899105,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "animals/primary_habitat",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.1352,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.6383,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "animals/reproduction",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.12255,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "23.3",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.7139,
+        "p": 0.001799910004499775,
+        "shared": [
+          "21.4",
+          "23.3",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "animals/taxonomic_class",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.1631,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6",
+          "23.11",
+          "25.25"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.57905,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6",
+          "23.11",
+          "25.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "brands/founded_year",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.4012,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.7172,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.33525,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.68615,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.4012,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.605,
+        "p": 0.0007999600019999,
+        "shared": [
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.6621,
+        "p": 0.016699165041747913,
+        "shared": [
+          "21.5",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.759,
+        "p": 0.021748912554372283,
+        "shared": [
+          "21.5",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.6621,
+        "p": 0.016699165041747913,
+        "shared": [
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.7139,
+        "p": 0.020598970051497426,
+        "shared": [
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.6621,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.7139,
+        "p": 0.00014999250037498125,
+        "shared": [
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.6621,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.67665,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.207,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.207,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.21775,
+        "p": 0.0008499575021248938,
+        "shared": [
+          "21.5",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.5031,
+        "p": 0.008049597520123995,
+        "shared": [
+          "21.5",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0822,
+        "p": 0.08029598520073997,
+        "shared": [
+          "25.25"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.18095,
+        "p": 0.17009149542522875,
+        "shared": [
+          "25.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/native_continent",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0108,
+        "p": 0.010849457527123643,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1077,
+        "p": 0.10774461276936154,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "animals/reproduction",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.1377,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "22.25",
+          "22.27",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.78745,
+        "p": 0.00024998750062496874,
+        "shared": [
+          "21.4",
+          "22.25",
+          "22.27",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "animals/taxonomic_class",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.16495,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.5066,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "brands/founded_year",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.454,
+        "p": 0.006149692515374231,
+        "shared": [
+          "21.4",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.71545,
+        "p": 0.02129893505324734,
+        "shared": [
+          "21.4",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.37855,
+        "p": 0.00014999250037498125,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.72235,
+        "p": 0.00199990000499975,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.454,
+        "p": 0.06784660766961652,
+        "shared": [
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.7137,
+        "p": 0.14689265536723164,
+        "shared": [
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.75065,
+        "p": 0.16119194040297985,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.64755,
+        "p": 0.12269386530673466,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.75065,
+        "p": 0.55977201139943,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.78745,
+        "p": 0.5800209989500525,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.75065,
+        "p": 0.026748662566871657,
+        "shared": [
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.78745,
+        "p": 0.0279986000699965,
+        "shared": [
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.75065,
+        "p": 0.026748662566871657,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.78545,
+        "p": 0.029648517574121295,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.21015,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.21015,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.22105,
+        "p": 0.0010499475026248687,
+        "shared": [
+          "21.5",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.57605,
+        "p": 0.01159942002899855,
+        "shared": [
+          "21.5",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0838,
+        "p": 0.08144592770361482,
+        "shared": [
+          "22.25"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.2178,
+        "p": 0.2072896355182241,
+        "shared": [
+          "22.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/primary_habitat",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01105,
+        "p": 0.011099445027748612,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.07155,
+        "p": 0.07159642017899105,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "animals/taxonomic_class",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.16565,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.4",
+          "23.0",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.6125,
+        "p": 0.00039998000099995,
+        "shared": [
+          "21.4",
+          "23.0",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "brands/founded_year",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.4583,
+        "p": 0.006849657517124144,
+        "shared": [
+          "21.4",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.8655,
+        "p": 0.03374831258437078,
+        "shared": [
+          "21.4",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.38255,
+        "p": 0.0039998000099995,
+        "shared": [
+          "21.4",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.7547,
+        "p": 0.025298735063246838,
+        "shared": [
+          "21.4",
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.4583,
+        "p": 0.06814659267036648,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.7847,
+        "p": 0.17314134293285335,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.7516,
+        "p": 0.16374181290935452,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.90465,
+        "p": 0.21403929803509825,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.7516,
+        "p": 0.16374181290935452,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.9398,
+        "p": 0.23578821058947053,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.7516,
+        "p": 0.026598670066496674,
+        "shared": [
+          "23.3",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.9398,
+        "p": 0.044747762611869406,
+        "shared": [
+          "23.3",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.7516,
+        "p": 0.16374181290935452,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.8282,
+        "p": 0.19099045047747612,
+        "shared": [
+          "23.3",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20455,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20455,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.2136,
+        "p": 0.000599970001499925,
+        "shared": [
+          "22.1",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.5759,
+        "p": 0.010449477526123694,
+        "shared": [
+          "22.1",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.08185,
+        "p": 0.08009599520024,
+        "shared": [
+          "22.25"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1437,
+        "p": 0.13939303034848258,
+        "shared": [
+          "22.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/reproduction",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0111,
+        "p": 0.011149442527873607,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1443,
+        "p": 0.14434278286085694,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "brands/founded_year",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.3468,
+        "p": 0.002449877506124694,
+        "shared": [
+          "21.4",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.6468,
+        "p": 0.013899305034748262,
+        "shared": [
+          "21.4",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 4,
+        "null_mean": 0.33695,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 4,
+        "null_mean": 0.6177,
+        "p": 0.0008499575021248938,
+        "shared": [
+          "21.4",
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.3468,
+        "p": 0.04009799510024499,
+        "shared": [
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.49735,
+        "p": 0.07309634518274086,
+        "shared": [
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.5688,
+        "p": 0.09714514274286286,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.72005,
+        "p": 0.14204289785510724,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.5688,
+        "p": 0.4606769661516924,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.6079,
+        "p": 0.48937553122343885,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.5688,
+        "p": 0.01064946752662367,
+        "shared": [
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.6079,
+        "p": 0.012199390030498474,
+        "shared": [
+          "22.15",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.5688,
+        "p": 0.01064946752662367,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.56755,
+        "p": 0.010699465026748662,
+        "shared": [
+          "21.5",
+          "22.15",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2058,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2058,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 3,
+        "null_mean": 0.2165,
+        "p": 0.00119994000299985,
+        "shared": [
+          "21.5",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 3,
+        "null_mean": 0.50505,
+        "p": 0.008049597520123995,
+        "shared": [
+          "21.5",
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.08205,
+        "p": 0.08024598770061497,
+        "shared": [
+          "25.25"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.14655,
+        "p": 0.1392930353482326,
+        "shared": [
+          "25.25"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "animals/taxonomic_class",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.00975,
+        "p": 0.009799510024498775,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.10815,
+        "p": 0.10819459027048647,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "brands/hq_country",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20305,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20305,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.21285,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.07805,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/founded_year",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0094,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "celebrities/nationality",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.38295,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.4",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.78745,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.4",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.45935,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.70665,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.76605,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.1",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.93525,
+        "p": 0.000199990000499975,
+        "shared": [
+          "21.1",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.76605,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.8528,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.76605,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.8528,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.76605,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.7814,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20725,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20725,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.2172,
+        "p": 0.19794010299485026,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.57235,
+        "p": 0.46017699115044247,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.0818,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.14605,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01095,
+        "p": 0.010999450027498626,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1431,
+        "p": 0.1431428428578571,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "celebrities/native_language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.46135,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.6412,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.7622,
+        "p": 0.000199990000499975,
+        "shared": [
+          "21.1",
+          "21.5",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.83015,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.7622,
+        "p": 0.000199990000499975,
+        "shared": [
+          "21.1",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.74945,
+        "p": 0.00014999250037498125,
+        "shared": [
+          "21.1",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.7622,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.74945,
+        "p": 9.99950002499875e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.7622,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.74885,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.15",
+          "22.17",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2072,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2072,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2167,
+        "p": 0.01799910004499775,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.57625,
+        "p": 0.1031948402579871,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08275,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.18335,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/nationality",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0107,
+        "p": 0.010749462526873657,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1084,
+        "p": 0.10844457777111144,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.6686,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.7269,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.6686,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.78305,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.6686,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.78305,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.6686,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.71395,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20305,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.24825,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.20305,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.21275,
+        "p": 0.19394030298485077,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.60995,
+        "p": 0.48217589120543974,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08055,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.14535,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "celebrities/native_language",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0111,
+        "p": 0.011149442527873607,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1084,
+        "p": 0.10844457777111144,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.7655,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.8962,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6",
+          "23.17"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 5,
+        "null_mean": 0.7655,
+        "p": 0.00014999250037498125,
+        "shared": [
+          "21.1",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 5,
+        "null_mean": 0.8962,
+        "p": 0.00014999250037498125,
+        "shared": [
+          "21.1",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.7655,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.79165,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "21.5",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.207,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.207,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.21715,
+        "p": 0.016599170041497927,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.5757,
+        "p": 0.09704514774261287,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08095,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.11165,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01035,
+        "p": 0.0103994800259987,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.17945,
+        "p": 0.17949102544872755,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.76865,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.92555,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.76865,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.8208,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2075,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2075,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2172,
+        "p": 0.018349082545872707,
+        "shared": [
+          "22.13",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.57345,
+        "p": 0.09809509524523774,
+        "shared": [
+          "22.13",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08165,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.14495,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01085,
+        "p": 0.010899455027248638,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1431,
+        "p": 0.1431428428578571,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.76145,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.8203,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "21.1",
+          "22.15",
+          "22.17",
+          "22.19",
+          "23.3",
+          "23.4",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2041,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2041,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2144,
+        "p": 0.01784910754462277,
+        "shared": [
+          "23.6",
+          "23.11"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.57485,
+        "p": 0.10149492525373731,
+        "shared": [
+          "23.6",
+          "23.11"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08075,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.14535,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.01065,
+        "p": 0.010699465026748662,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.14355,
+        "p": 0.14359282035898205,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/language",
+      "b": "park_vrh",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2064,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/language",
+      "b": "park_vrh@1based",
+      "n_a": 8,
+      "n_b": 20,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.2064,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.0,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/language",
+      "b": "lietzow_promoting",
+      "n_a": 8,
+      "n_b": 21,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.21655,
+        "p": 0.017899105044747763,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.578,
+        "p": 0.1031948402579871,
+        "shared": [
+          "21.5",
+          "23.6"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/language",
+      "b": "lietzow_suppressing",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 0,
+        "null_mean": 0.08195,
+        "p": 1.0,
+        "shared": []
+      },
+      "block": {
+        "observed": 0,
+        "null_mean": 0.18265,
+        "p": 1.0,
+        "shared": []
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/language",
+      "b": "lietzow_writing",
+      "n_a": 8,
+      "n_b": 1,
+      "pool": {
+        "observed": 1,
+        "null_mean": 0.0107,
+        "p": 0.010749462526873657,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "block": {
+        "observed": 1,
+        "null_mean": 0.1084,
+        "p": 0.10844457777111144,
+        "shared": [
+          "23.6"
+        ]
+      },
+      "derived": false
+    }
+  ],
+  "consensus": [
+    {
+      "m": 3,
+      "observed": 12,
+      "null_mean": 1.9015,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "21.1",
+        "21.4",
+        "21.5",
+        "22.15",
+        "22.17",
+        "22.19",
+        "23.11",
+        "23.17",
+        "23.3",
+        "23.4",
+        "23.6",
+        "25.25"
+      ],
+      "null": "pool",
+      "n_sets": 13
+    },
+    {
+      "m": 3,
+      "observed": 12,
+      "null_mean": 7.283,
+      "p": 0.00849575212393803,
+      "heads": [
+        "21.1",
+        "21.4",
+        "21.5",
+        "22.15",
+        "22.17",
+        "22.19",
+        "23.11",
+        "23.17",
+        "23.3",
+        "23.4",
+        "23.6",
+        "25.25"
+      ],
+      "null": "block",
+      "n_sets": 13
+    },
+    {
+      "m": 4,
+      "observed": 10,
+      "null_mean": 0.2005,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "21.1",
+        "21.4",
+        "21.5",
+        "22.15",
+        "22.17",
+        "22.19",
+        "23.11",
+        "23.3",
+        "23.4",
+        "23.6"
+      ],
+      "null": "pool",
+      "n_sets": 13
+    },
+    {
+      "m": 4,
+      "observed": 10,
+      "null_mean": 1.6635,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "21.1",
+        "21.4",
+        "21.5",
+        "22.15",
+        "22.17",
+        "22.19",
+        "23.11",
+        "23.3",
+        "23.4",
+        "23.6"
+      ],
+      "null": "block",
+      "n_sets": 13
+    }
+  ]
+}

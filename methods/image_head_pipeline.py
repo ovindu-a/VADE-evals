@@ -244,6 +244,9 @@ class Runner:
     def __init__(self, args):
         self.args = args
         self.model_slug = args.model_id.split("/")[-1]
+        # Every non-default model gets its own log tree, so a second model's run can never be
+        # mistaken for (or resumed into) the 7B's.
+        self.log_suffix = "" if args.model_id == DEFAULT_MODEL else f"_{self.model_slug}"
         self.failures = []
 
     def run(self, cmd, log_path):
@@ -291,7 +294,7 @@ class Runner:
     def attribute(self, entity, attribute):
         a = self.args
         d = os.path.join(a.out_root, entity, attribute)
-        logd = os.path.join(REPO_ROOT, "logs", "image_head_pipeline", entity, attribute)
+        logd = os.path.join(REPO_ROOT, "logs", "image_head_pipeline" + self.log_suffix, entity, attribute)
         state_path = os.path.join(d, "pipeline.json")
         state = load_json(state_path) if os.path.exists(state_path) and not a.force else {}
         state.update({"entity": entity, "attribute": attribute, "model_id": a.model_id,
@@ -432,7 +435,7 @@ class Runner:
 
         # ---- stage 3: heads -----------------------------------------------------------------
         blocks = state["window"]["blocks"]
-        n_all = 28 * len(blocks) if not os.path.exists(win_path) else load_json(win_path)["n_heads"] * len(blocks)
+        n_all = a.n_heads * len(blocks) if not os.path.exists(win_path) else load_json(win_path)["n_heads"] * len(blocks)
         ks = sorted({k for k in a.knockout_ks if k < n_all} | {n_all})
         trace_path = os.path.join(d, f"head_trace_patch{P}_blocks{span_label(blocks)}{sfx}.json")
         if "heads" in a.stages and (a.force or not os.path.exists(trace_path)):
@@ -627,6 +630,7 @@ def main():
     ap.add_argument("--image_positions", default="full_image",
                     help="Image position set for the image swap (flags used full_image).")
     ap.add_argument("--n_layers", type=int, default=28, help="Decoder blocks in the model (Qwen2.5-VL-7B: 28).")
+    ap.add_argument("--n_heads", type=int, default=28, help="Query heads per block (Qwen2.5-VL-7B: 28).")
     ap.add_argument("--n_rows_ceiling", type=int, default=32, help="Stage 1 rows (flags used 32).")
     ap.add_argument("--n_rows", type=int, default=64, help="Stage 2-3 rows (flags used 64).")
     ap.add_argument("--seed", type=int, default=0)
@@ -664,13 +668,18 @@ def main():
     ap.add_argument("--allow_unpruned", action="store_true")
     ap.add_argument("--py", default=sys.executable,
                     help="Interpreter for the stage scripts (shell-split, so 'uv run python' works).")
-    ap.add_argument("--out_root", default=os.path.join(REPO_ROOT, "results", "image_head_pipeline"))
+    ap.add_argument("--out_root", default=None,
+                    help="Default results/image_head_pipeline, suffixed _<model slug> for any non-default model.")
     ap.add_argument("--no_reuse", action="store_true", help="Never reuse existing ceiling_sweep logs.")
     ap.add_argument("--force", action="store_true", help="Re-run stages whose outputs exist.")
     ap.add_argument("--dry_run", action="store_true", help="Print commands and selections; run nothing.")
     ap.add_argument("--summary_only", action="store_true")
     ap.add_argument("--quiet", action="store_true", help="Do not echo stage output (logs still written).")
     args = ap.parse_args()
+    if args.out_root is None:
+        slug = args.model_id.split("/")[-1]
+        args.out_root = os.path.join(REPO_ROOT, "results", "image_head_pipeline"
+                                     + ("" if args.model_id == DEFAULT_MODEL else f"_{slug}"))
     if args.blocks:
         assert args.patch_layer is None or min(args.blocks) >= args.patch_layer, "--blocks must be >= --patch_layer"
 

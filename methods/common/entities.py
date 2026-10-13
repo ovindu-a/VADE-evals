@@ -105,6 +105,11 @@ def _validated_n_image_tokens(entity_assets, adapter, model):
     grid = loc["vlm_token_grid"]
     canvas = loc["canvas_px"]
     computed = adapter.vision_patch_grid(model, canvas["width"], canvas["height"])
+    if not getattr(adapter, "shares_object_grid", True):
+        # A model whose image tokens are NOT the 28px merged grid object_location.json was built on
+        # (e.g. InternVL's 448px tile, 16x16 tokens of 21 canvas px). Its token COUNT comes from its
+        # own config; resolve_position_set refuses every object-relative set for it.
+        return computed["n_tokens"]
     mismatches = {k: (computed[k], grid[k]) for k in ("grid_rows", "grid_cols", "n_tokens", "patch_size_px", "merge_size")
                   if computed[k] != grid[k]}
     assert not mismatches, (
@@ -126,6 +131,10 @@ def resolve_position_set(positions_name, entity_assets, adapter, model):
     if positions_name == "full_image":
         return list(range(n_image_tokens)), n_image_tokens, False
 
+    assert getattr(adapter, "shares_object_grid", True), (
+        f"{positions_name!r} is defined on object_location.json's {entity_assets.object_location['vlm_token_grid']['grid_rows']}"
+        f"x{entity_assets.object_location['vlm_token_grid']['grid_cols']} Qwen token grid, which {adapter.model_id} "
+        f"does not use -- only 'full_image' and 'last_token' are valid for it")
     available = entity_assets.object_location["object_token_indices"]
     assert positions_name in available, (
         f"Unknown position set {positions_name!r} for entity {entity_assets.entity!r}; "

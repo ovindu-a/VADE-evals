@@ -600,6 +600,81 @@ row (the prompt variants agree on 205 of 219 tokens, image included) and default
 to `--attn_impl sdpa`; both change run identity, so earlier partial runs need a
 new `--out_dir`.
 
+## Tier-1 circuit experiments: image_enrichment, circuit_compose, route_knockout, text_entity_contrast
+
+Four scripts testing the "see -> move -> recall" account (movers 21-23 carry the
+entity, routers 19-21 carry the asked attribute, last-token MLPs 23-26 look it up),
+all on `methods/circuit_common.py` and the CONTROLLED prompts of
+attribute_switch_sweep.py (prefill `Answer:` does not fix the answer type; every
+flag/attribute tokenizes to one length, so image batches are unpadded). Launcher:
+`scripts/run_tier1.sh` (`smoke`, `e1`..`e6`, `all`). Offline tests:
+`tests/test_tier1_circuit.py`.
+
+- **Readout = divergence point** (E5/E6): the shared gold prefix is appended and
+  the base vs source token where the golds first differ is compared. Required, not
+  optional: every calling code tokenizes as `['Ġ', digit, ...]`, so first-token
+  scoring counts 'Ġ' as a transfer on 100% of rows.
+- **`image_enrichment.py` (E1)**: logit lens at image tokens (name rank vs value
+  rank) and leave-one-COUNTRY-out probes for repeated values (language, EUR, calling
+  zone), read against LAYER 0 (visual similarity alone predicts some of it) and a
+  permutation null (LOO accuracy is biased BELOW chance on small balanced data).
+  Probes standardize per feature and take max-over-C, with the null taking the same
+  max; standardize-then-PCA was tried and discards low-variance attribute
+  directions. Folds in E0b: image-token activations identical across questions
+  (batched and batch-1). Vocab ranks EXCLUDE rows whose first token also stands for
+  a different name/value (ties would score rank 1) -- which drops calling_code
+  entirely, so its only test here is the probe.
+- **`circuit_compose.py` (E4)**: movers from (image B, asked X) + routers from
+  (image C, asked A) into (C, X) -> B.A? Continuous, full-prefix recompute with
+  donors re-run on the RECIPIENT's generated prefix. Router 21.5 overlaps the movers;
+  `router_heads` gives it to the movers and takes the next-ranked router.
+- **`route_knockout.py` (E5)**: Salazar et al.'s direct vs text-mediated routes.
+  `EdgeKnockout` is an exact batched correction `out += W_O((A' - A)V)`, needs eager
+  + output_attentions, asserts A@V == o_proj input, and matches head_token_ablation's
+  `AttentionEdges` to 1e-5 (tested). `qpatch@L+ko:readout_all` cuts readout->image
+  in EVERY block, not just >= L, so no direct read of the base image survives.
+- **`text_entity_contrast.py` (E6)**: same pairs with the country NAMED (no image);
+  entity site = name's last token (`--text_entity_site all`: every name token, pairs
+  restricted to equal-length names). Phases accuracy/curves/heads/freeze. L_e = the
+  deepest entity-plateau layer that still PRECEDES the readout curve's onset -- the
+  deepest plateau layer alone lands inside the handoff on flags (plateau to ~L22,
+  movers from block 21); a warning fires if L_e still excludes a mover block. Freeze
+  spans are clipped to blocks >= L_e (earlier ones never see the patch; freezing them
+  at `mean` is pure damage).
+
+## Tier-2 generality experiments: head_overlap, vrh_ablation, InternVL adapter
+
+Launcher `scripts/run_tier2.sh` (`smoke`, `e7`..`e11`, `e8_3b`, `e8_internvl`, `all`);
+offline tests `tests/test_tier2.py`.
+
+- **`head_overlap.py` (E7 stats, E10; CPU only)**: top-k of every head_trace JSON
+  (image_head_pipeline outputs + flags' blocks 21-23 traces) against each other, against
+  common10/router8, and against `methods/published_heads.json` (Park et al.'s Visual
+  Retrieval Heads, Lietzow et al.'s promoting/suppressing heads -- copied verbatim from the
+  arXiv TeX, provenance per list). Two nulls: `pool` (redraw within the trace's own block
+  window) and `block` (keep per-block counts -- the one that rules out "both lists just live
+  in block 23"). flags/common10 vs flags/* rows are marked `(derived)`: common10 was BUILT
+  from those traces. A list whose index base the paper does not state is emitted twice
+  (`@1based`). `--compare_pipeline_root` compares the same entity/attribute across two
+  same-shape models (InternVL3-8B vs Qwen2.5-VL-7B are both a 28x28 Qwen2.5-7B stack).
+- **`head_severed.py --gold own`**: brands/celebrities/animals store lowercase labels, so
+  `src 1st` against the stored label reads ~0 on every arm. `own` scores against the
+  model's own unhooked base/source/third answers at their DIVERGENCE point (`own_hit`),
+  costing one extra source generation per batch. Default `label` is unchanged for flags.
+- **`vrh_ablation.py` (E9)**: zeroes Park's VRHs (o_proj input, every position/step) on
+  flags; reports VADE-matched recall and the movers' direct-write name rank, against
+  block-matched random sets and zero:common10. Its INDEX CHECK re-measures Park's own score
+  (attention mass from generated box tokens onto flag_only) in this code first -- a list
+  whose heads are not near the top percentile here is mis-indexed, not a null result.
+- **`adapters/internvl.py` (E8)**: `OpenGVLab/InternVL3-8B-hf`, one 448px tile
+  (crop_to_patches=False), 256 tokens of 21 canvas px. `shares_object_grid = False` --
+  `entities.resolve_position_set` and `position_sets.build_batch_at` REFUSE every object-
+  relative set for it (object_location.json's grid is Qwen's 28px one); only `full_image`
+  and `last_token` work, which is all image_head_pipeline needs. Non-default models get
+  `results/image_head_pipeline_<slug>/` and `logs/image_head_pipeline_<slug>/`
+  automatically, and need `--n_layers/--n_heads` (3B: 36/16). E8 also needs VADE's
+  `run_accuracy_sweep.py` + `prune_tuples.py` for that model first (the launcher does it).
+
 ## A key finding worth knowing before trusting proxy scores (see RESULTS.md)
 
 The Phase B feature-selection proxy (a classifier reading the target attribute off

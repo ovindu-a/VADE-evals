@@ -1,0 +1,94 @@
+{
+  "_schema": "See methods/head_overlap.py load_published. heads are [layer, head] exactly as printed in the source; layer_base/head_base give the source's index convention (null = not stated, which makes head_overlap.py and vrh_ablation.py emit both readings). Checked against the arXiv e-print TeX on 2026-10-13.",
+  "lists": [
+    {
+      "name": "park_vrh",
+      "paper": "Park et al., Retrieval Heads Meet Vision (arXiv 2608.27417v1)",
+      "url": "https://arxiv.org/abs/2608.27417",
+      "where": "sections/100_appendix.tex, RefCOCO head-list table (the main detection set); ordered by descending head score",
+      "model": "Qwen2.5-VL-7B (no HF id or Instruct suffix given; no code release)",
+      "applies_to": ["Qwen/Qwen2.5-VL-7B-Instruct"],
+      "layer_base": null,
+      "head_base": 0,
+      "verbatim": true,
+      "note": "Heads 0-based: (16,0) appears. Layers 0-based only per a figure axis (crossmodel_three_pairs.pdf), so left null: vrh_ablation.py's index check decides. Score: mean over 200 RefCOCO val samples of the attention mass from output tokens onto visual tokens overlapping the GT box. Masking = zeroing the head output.",
+      "heads": [[19,17],[16,0],[18,16],[16,20],[19,22],[19,20],[16,1],[19,23],[19,15],[17,18],[16,7],[14,11],[14,16],[16,6],[16,17],[19,26],[19,19],[14,23],[17,14],[18,15]]
+    },
+    {
+      "name": "park_vrh_internvl3",
+      "paper": "Park et al., Retrieval Heads Meet Vision (arXiv 2608.27417v1)",
+      "url": "https://arxiv.org/abs/2608.27417",
+      "where": "sections/100_appendix.tex, RefCOCO head-list table, InternVL3-8B row",
+      "model": "InternVL3-8B",
+      "applies_to": ["OpenGVLab/InternVL3-8B-hf"],
+      "layer_base": null,
+      "head_base": 0,
+      "verbatim": true,
+      "note": "Same convention caveat as park_vrh.",
+      "heads": [[16,20],[16,0],[19,22],[16,1],[19,23],[19,17],[19,20],[16,6],[14,11],[19,15],[16,4],[17,24],[18,16],[16,16],[16,17],[20,21],[16,7],[19,19],[14,16],[14,8]]
+    },
+    {
+      "name": "lietzow_promoting",
+      "paper": "Lietzow et al., Vision-Default, Prior-Override (arXiv 2606.28273v1)",
+      "url": "https://arxiv.org/abs/2606.28273",
+      "where": "acl_latex.tex, table 'All promoting attention heads (PCA > +2 sigma)', Qwen-VL 7B row; ordered by layer then head, not by score",
+      "model": "Qwen/Qwen2.5-VL-7B-Instruct (from the code's MODEL_PATH_TEMPLATE; the paper cites the Qwen2-VL report)",
+      "applies_to": ["Qwen/Qwen2.5-VL-7B-Instruct"],
+      "layer_base": 0,
+      "head_base": 0,
+      "verbatim": true,
+      "note": "0-based per their code (layer = i // n_heads over model.language_model.layers). Last-token patching between a 'what colour here' and a 'usually' prompt on 212 Visual-CounterFact items. Their promoting MLPs: 25 and 27.",
+      "heads": [[17,21],[18,8],[18,9],[18,24],[19,22],[19,23],[19,24],[20,1],[20,3],[20,5],[21,5],[21,19],[22,1],[22,13],[23,6],[23,11],[24,21],[24,27],[26,24],[26,25],[26,26]]
+    },
+    {
+      "name": "lietzow_suppressing",
+      "paper": "Lietzow et al., Vision-Default, Prior-Override (arXiv 2606.28273v1)",
+      "url": "https://arxiv.org/abs/2606.28273",
+      "where": "acl_latex.tex, suppressing-heads table, Qwen-VL 7B row",
+      "model": "Qwen/Qwen2.5-VL-7B-Instruct",
+      "applies_to": ["Qwen/Qwen2.5-VL-7B-Instruct"],
+      "layer_base": 0,
+      "head_base": 0,
+      "verbatim": true,
+      "heads": [[18,7],[20,2],[20,21],[21,14],[22,25],[25,25],[26,22],[27,3]]
+    },
+    {
+      "name": "lietzow_writing",
+      "paper": "Lietzow et al., Vision-Default, Prior-Override (arXiv 2606.28273v1)",
+      "url": "https://arxiv.org/abs/2606.28273",
+      "where": "NOT a printed list: read off logit_lens_all.pdf bar widths (top-20 hit rate, n=212); only L23H6 (87.7%) clears the paper's stated >80% writing criterion",
+      "model": "Qwen/Qwen2.5-VL-7B-Instruct",
+      "applies_to": ["Qwen/Qwen2.5-VL-7B-Instruct"],
+      "layer_base": 0,
+      "head_base": 0,
+      "verbatim": false,
+      "note": "Derived, not quotable as theirs. Next by hit rate: L22H1 59.9%, L23H11 46.2%, L24H21 45.3%, L22H13 25.0%.",
+      "heads": [[23,6]]
+    },
+    {
+      "name": "lietzow_promoting_3b",
+      "paper": "Lietzow et al., Vision-Default, Prior-Override (arXiv 2606.28273v1)",
+      "url": "https://arxiv.org/abs/2606.28273",
+      "where": "acl_latex.tex, promoting-heads table, Qwen-VL 3B row",
+      "model": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "applies_to": ["Qwen/Qwen2.5-VL-3B-Instruct"],
+      "layer_base": 0,
+      "head_base": 0,
+      "verbatim": true,
+      "note": "Promoting MLPs for 3B: 30-32.",
+      "heads": [[26,0],[26,5],[26,6],[27,1],[27,4],[28,3],[31,3],[31,7],[34,14]]
+    },
+    {
+      "name": "lietzow_suppressing_3b",
+      "paper": "Lietzow et al., Vision-Default, Prior-Override (arXiv 2606.28273v1)",
+      "url": "https://arxiv.org/abs/2606.28273",
+      "where": "acl_latex.tex, suppressing-heads table, Qwen-VL 3B row",
+      "model": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "applies_to": ["Qwen/Qwen2.5-VL-3B-Instruct"],
+      "layer_base": 0,
+      "head_base": 0,
+      "verbatim": true,
+      "heads": [[26,3],[27,2],[28,4],[30,3],[31,8],[34,10]]
+    }
+  ]
+}
