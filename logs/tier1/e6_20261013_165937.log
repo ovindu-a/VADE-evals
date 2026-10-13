@@ -1,0 +1,135 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[text_entity_contrast] phases=['accuracy', 'curves', 'heads', 'freeze']; 64 pairs x 4 attributes
+  example text prompt: 'For the country named, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. The country is France. Report the capital of this country.'
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:12,  1.68it/s]Loading weights:   0%|          | 2/729 [00:01<07:39,  1.58it/s]Loading weights:   1%|          | 5/729 [00:01<02:39,  4.55it/s]Loading weights:   2%|▏         | 12/729 [00:01<00:55, 12.94it/s]Loading weights:   2%|▏         | 17/729 [00:01<00:42, 16.82it/s]Loading weights:   3%|▎         | 22/729 [00:01<00:32, 21.83it/s]Loading weights:   4%|▍         | 28/729 [00:02<00:27, 25.68it/s]Loading weights:   5%|▍         | 34/729 [00:02<00:21, 32.25it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:18, 37.82it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:19, 35.31it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:16, 41.04it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:17, 37.63it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:17, 37.11it/s]Loading weights:  10%|▉         | 70/729 [00:02<00:15, 41.38it/s]Loading weights:  10%|█         | 76/729 [00:03<00:16, 38.49it/s]Loading weights:  11%|█         | 82/729 [00:03<00:15, 41.26it/s]Loading weights:  12%|█▏        | 87/729 [00:03<00:17, 37.59it/s]Loading weights:  13%|█▎        | 94/729 [00:03<00:14, 44.31it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:15, 39.80it/s]Loading weights:  15%|█▍        | 108/729 [00:03<00:13, 47.20it/s]Loading weights:  16%|█▌        | 114/729 [00:04<00:16, 37.01it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:12, 47.81it/s]Loading weights:  18%|█▊        | 130/729 [00:04<00:14, 42.33it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:15, 39.00it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:14, 41.10it/s]Loading weights:  20%|██        | 148/729 [00:04<00:12, 47.35it/s]Loading weights:  21%|██        | 154/729 [00:04<00:13, 41.69it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:12, 45.60it/s]Loading weights:  23%|██▎       | 166/729 [00:05<00:13, 40.71it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 44.78it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:14, 39.32it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:14, 37.59it/s]Loading weights:  26%|██▌       | 190/729 [00:05<00:12, 42.13it/s]Loading weights:  27%|██▋       | 196/729 [00:05<00:11, 45.66it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 40.11it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 45.19it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:12, 39.86it/s]Loading weights:  30%|███       | 220/729 [00:06<00:13, 37.80it/s]Loading weights:  31%|███       | 226/729 [00:06<00:11, 42.36it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:12, 39.03it/s]Loading weights:  33%|███▎      | 238/729 [00:06<00:11, 43.37it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:10, 47.04it/s]Loading weights:  34%|███▍      | 250/729 [00:07<00:11, 41.22it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 45.44it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:11, 39.84it/s]Loading weights:  37%|███▋      | 268/729 [00:07<00:12, 38.21it/s]Loading weights:  38%|███▊      | 274/729 [00:07<00:10, 42.56it/s]Loading weights:  38%|███▊      | 280/729 [00:07<00:09, 46.52it/s]Loading weights:  39%|███▉      | 286/729 [00:08<00:10, 41.39it/s]Loading weights:  40%|████      | 292/729 [00:08<00:11, 38.34it/s]Loading weights:  41%|████      | 298/729 [00:08<00:10, 42.68it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:09, 46.60it/s]Loading weights:  43%|████▎     | 310/729 [00:08<00:10, 41.20it/s]Loading weights:  43%|████▎     | 315/729 [00:08<00:09, 43.17it/s]Loading weights:  44%|████▍     | 320/729 [00:08<00:10, 38.52it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:10, 39.07it/s]Loading weights:  46%|████▌     | 336/729 [00:09<00:08, 46.24it/s]Loading weights:  53%|█████▎    | 385/729 [00:09<00:02, 145.99it/s]Loading weights:  60%|█████▉    | 437/729 [00:09<00:01, 236.61it/s]Loading weights:  67%|██████▋   | 487/729 [00:09<00:00, 301.30it/s]Loading weights:  73%|███████▎  | 535/729 [00:09<00:00, 348.83it/s]Loading weights:  80%|████████  | 585/729 [00:09<00:00, 384.99it/s]Loading weights:  87%|████████▋ | 633/729 [00:09<00:00, 402.15it/s]Loading weights:  94%|█████████▎| 683/729 [00:09<00:00, 426.56it/s]Loading weights: 100%|█████████▉| 728/729 [00:10<00:00, 388.92it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 71.90it/s] 
+  accuracy[image] done
+  accuracy[text] done
+
+clean accuracy (VADE matcher)
+  attribute        image    text     gap
+  capital         97.6%  100.0%   +2.4%
+  currency        89.3%   92.9%   +3.6%
+  language        90.5%   90.5%   +0.0%
+  calling_code    91.7%  100.0%   +8.3%
+  252 pair rows (4 dropped: golds never diverge)
+  curves 1/10
+  curves 2/10
+  curves 3/10
+  curves 4/10
+  curves 5/10
+  curves 6/10
+  curves 7/10
+  curves 8/10
+  curves 9/10
+  curves 10/10
+
+   L     image:entity   image:readout     text:entity    text:readout
+   0          100.0%            0.0%           87.9%            0.0% 
+   1          100.0%            0.0%           94.0%            0.0% 
+   2          100.0%            0.0%           99.1%            0.0% 
+   3          100.0%            0.0%           99.1%            0.0% 
+   4          100.0%            0.0%           99.6%            0.0% 
+   5          100.0%            0.0%           99.6%            0.0% 
+   6          100.0%            0.0%           99.6%            0.0% 
+   7          100.0%            0.0%           99.6%            0.0% 
+   8          100.0%            0.0%           99.6%            0.0% 
+   9           99.6%            0.0%           99.6%            0.0% 
+  10           99.1%            0.0%           99.6%            0.0% 
+  11           99.1%            0.0%           99.6%            0.0% 
+  12           99.1%            0.0%           99.1%            0.0% 
+  13           99.1%            0.0%           99.1%            0.0% 
+  14           99.6%            0.0%           98.7%            0.0% 
+  15           99.6%            0.0%           98.3%            0.0% 
+  16           99.1%            0.0%           98.3%            0.0% 
+  17           98.7%            0.0%           98.3%            0.0% 
+  18           98.7%            0.0%           98.3%            0.0% 
+  19           98.3%            0.0%           97.8%            0.0% 
+  20           97.8%            0.0%           97.0%            0.0% 
+  21           97.0%            0.0%           96.1%            0.0% 
+  22           67.0%            1.7%           87.1%            0.9% 
+  23           19.1%           48.3%           20.3%           48.3% 
+  24            0.4%           95.7%            0.0%           94.4% 
+  25            0.0%           99.6%            0.0%          100.0% 
+  26            0.0%           99.6%            0.0%          100.0% 
+  27            0.0%           99.6%            0.0%          100.0% 
+
+  entity patch layer L_e: {'image': 21, 'text': 21}
+  heads/rank 1/10
+  heads/rank 2/10
+  heads/rank 3/10
+  heads/rank 4/10
+  heads/rank 5/10
+  heads/rank 6/10
+  heads/rank 7/10
+  heads/rank 8/10
+  heads/rank 9/10
+  heads/rank 10/10
+
+HEADS [image] L_e=21, n=230 eligible
+  arm                                              n  transfer        95% CI    base   other   meanLD  normLD
+  clean                                          230     0.0%         0%-2% 100.0%   0.0%   -10.60    0.00
+  source_clean                                   230   100.0%      98%-100%   0.0%   0.0%    10.98    1.00
+  entity_patch                                   230    97.0%       94%-99%   0.0%   3.0%    10.03    0.96
+  install:top5                                   230    33.9%       28%-40%  55.2%  10.9%    -1.28    0.43
+  install:top10                                  230    80.9%       75%-85%  11.3%   7.8%     4.39    0.69
+  install:top20                                  230    92.6%       88%-95%   3.0%   4.3%     7.96    0.86
+  install:image_movers                           230    90.9%       86%-94%   3.5%   5.7%     6.96    0.81
+  install:text_top10                             230    88.3%       83%-92%   6.1%   5.7%     6.19    0.78
+  install:random10                               230     0.0%         0%-2% 100.0%   0.0%   -10.59    0.00
+  top-20: 24.25, 23.4, 26.24, 21.1, 23.3, 26.22, 26.26, 22.19, 23.17, 26.25, 27.10, 27.13, 23.6, 21.5, 27.12, 25.4, 27.3, 27.11, 27.7, 27.16
+  image movers in this top-10: [(21, 1), (22, 19), (23, 3), (23, 4), (23, 17)]
+
+HEADS [text] L_e=21, n=232 eligible
+  arm                                              n  transfer        95% CI    base   other   meanLD  normLD
+  clean                                          232     0.0%         0%-2% 100.0%   0.0%   -11.09    0.00
+  source_clean                                   232   100.0%      98%-100%   0.0%   0.0%    11.24    1.00
+  entity_patch                                   232    96.1%       93%-98%   2.6%   1.3%    10.28    0.96
+  install:top5                                   232    26.3%       21%-32%  61.2%  12.5%    -2.23    0.40
+  install:top10                                  232    89.7%       85%-93%   3.4%   6.9%     7.55    0.83
+  install:top20                                  232    93.1%       89%-96%   2.6%   4.3%     8.77    0.89
+  install:image_movers                           232    87.1%       82%-91%   4.7%   8.2%     7.25    0.82
+  install:image_top10                            232    86.2%       81%-90%   6.0%   7.8%     5.90    0.76
+  install:random10                               232     0.0%         0%-2% 100.0%   0.0%   -11.10   -0.00
+  top-20: 23.4, 26.24, 24.25, 21.1, 23.3, 22.19, 26.26, 26.25, 23.6, 26.22, 27.3, 27.13, 27.10, 23.17, 25.4, 27.12, 27.11, 27.16, 24.23, 27.7
+  image movers in this top-10: [(21, 1), (22, 19), (23, 3), (23, 4), (23, 6)]
+
+  image top-10 ∩ text top-10: [(21, 1), (22, 19), (23, 3), (23, 4), (24, 25), (26, 22), (26, 24), (26, 25), (26, 26)] (9/10)
+  freeze 1/10
+  freeze 2/10
+  freeze 3/10
+  freeze 4/10
+  freeze 5/10
+  freeze 6/10
+  freeze 7/10
+  freeze 8/10
+  freeze 10/10
+
+FREEZE [image] entity patch at L_e=21
+  arm                                              n  transfer        95% CI    base   other   meanLD  normLD
+  clean                                          229     0.0%         0%-2% 100.0%   0.0%   -10.58    0.00
+  source_clean                                   229   100.0%      98%-100%   0.0%   0.0%    10.96    1.00
+  entity_patch                                   229    96.9%       94%-99%   0.0%   3.1%    10.03    0.96
+  freeze:readout:21-22@base                      229    92.6%       88%-95%   2.6%   4.8%     8.79    0.90
+  freeze:readout:21-22@mean                      229    93.0%       89%-96%   0.4%   6.6%     9.62    0.94
+  freeze:readout:23-26@base                      229     1.7%         1%-4%  91.7%   6.6%    -6.78    0.18
+  freeze:readout:23-26@mean                      229    36.7%       31%-43%   7.9%  55.5%     3.03    0.63
+  freeze:readout:22-27@base                      229     0.4%         0%-2%  94.8%   4.8%    -7.82    0.13
+  freeze:readout:22-27@mean                      229    10.0%        7%-15%   8.3%  81.7%     1.82    0.58
+  freeze:entity:21-26@base                       229    96.1%       93%-98%   0.4%   3.5%     9.18    0.92
+  freeze:entity:21-26@mean                       229    96.9%       94%-99%   0.0%   3.1%     9.75    0.94
+
+FREEZE [text] entity patch at L_e=21
+  arm                                              n  transfer        95% CI    base   other   meanLD  normLD
+  clean                                          231     0.0%         0%-2% 100.0%   0.0%   -11.08    0.00
+  source_clean                                   231   100.0%      98%-100%   0.0%   0.0%    11.22    1.00
+  entity_patch                                   231    96.5%       93%-98%   2.2%   1.3%    10.35    0.96
+  freeze:readout:21-22@base                      231    92.2%       88%-95%   2.6%   5.2%     9.09    0.90
+  freeze:readout:21-22@mean                      231    93.9%       90%-96%   1.7%   4.3%     9.83    0.94
+  freeze:readout:23-26@base                      231     1.3%         0%-4%  93.1%   5.6%    -7.30    0.17
+  freeze:readout:23-26@mean                      231    20.8%       16%-26%   8.2%  71.0%     2.83    0.62
+  freeze:readout:22-27@base                      231     0.0%         0%-2%  97.0%   3.0%    -8.36    0.12
+  freeze:readout:22-27@mean                      231     4.3%         2%-8%   2.6%  93.1%     1.66    0.57
+  freeze:entity:21-26@base                       231    96.1%       93%-98%   1.7%   2.2%     9.32    0.92
+  freeze:entity:21-26@mean                       231    95.2%       92%-97%   2.2%   2.6%    10.06    0.95
+
+wrote /workspace/VADE-evals/results/text_entity_contrast/flags/summary.json

@@ -1,0 +1,78 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[image_enrichment] 84 flags x 4 questions; phases=['capture', 'probe']
+  probe target language      49 countries in 8 classes with >=2 members
+  probe target currency_eur  84 countries in 2 classes with >=2 members
+  probe target calling_zone  84 countries in 7 classes with >=2 members
+Fetching 5 files:   0%|          | 0/5 [00:00<?, ?it/s]Fetching 5 files:  20%|██        | 1/5 [00:03<00:14,  3.61s/it]Fetching 5 files:  40%|████      | 2/5 [00:05<00:07,  2.66s/it]Fetching 5 files:  60%|██████    | 3/5 [00:06<00:03,  1.98s/it]Fetching 5 files:  80%|████████  | 4/5 [00:08<00:01,  1.72s/it]Fetching 5 files: 100%|██████████| 5/5 [00:08<00:00,  1.31s/it]Fetching 5 files: 100%|██████████| 5/5 [00:08<00:00,  1.74s/it]
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<15:09,  1.25s/it]Loading weights:   1%|          | 4/729 [00:01<03:24,  3.55it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:09, 10.31it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:40, 17.40it/s]Loading weights:   3%|▎         | 21/729 [00:01<00:34, 20.51it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:25, 27.20it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:24, 27.90it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:19, 34.52it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:20, 32.77it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 38.99it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 35.80it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:16, 41.47it/s]Loading weights:   9%|▉         | 69/729 [00:02<00:17, 37.16it/s]Loading weights:  10%|█         | 76/729 [00:03<00:15, 42.33it/s]Loading weights:  11%|█         | 81/729 [00:03<00:16, 38.22it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:14, 42.98it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:16, 38.23it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:14, 43.70it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:16, 38.73it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:16, 37.28it/s]Loading weights:  16%|█▌        | 118/729 [00:04<00:15, 40.46it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:15, 38.53it/s]Loading weights:  18%|█▊        | 130/729 [00:04<00:13, 42.85it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:14, 39.58it/s]Loading weights:  19%|█▉        | 142/729 [00:04<00:13, 43.29it/s]Loading weights:  20%|██        | 148/729 [00:04<00:14, 39.55it/s]Loading weights:  21%|██▏       | 156/729 [00:05<00:12, 46.88it/s]Loading weights:  22%|██▏       | 162/729 [00:05<00:15, 37.23it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:11, 47.95it/s]Loading weights:  24%|██▍       | 178/729 [00:05<00:12, 43.30it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:11, 46.69it/s]Loading weights:  26%|██▌       | 190/729 [00:05<00:12, 41.95it/s]Loading weights:  27%|██▋       | 196/729 [00:05<00:11, 45.75it/s]Loading weights:  28%|██▊       | 202/729 [00:06<00:12, 41.26it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:12, 40.98it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 37.76it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 43.26it/s]Loading weights:  31%|███       | 225/729 [00:06<00:13, 37.58it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:11, 42.87it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:12, 38.98it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:13, 37.15it/s]Loading weights:  34%|███▍      | 250/729 [00:07<00:11, 41.76it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 45.63it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:11, 40.62it/s]Loading weights:  37%|███▋      | 268/729 [00:07<00:10, 46.04it/s]Loading weights:  37%|███▋      | 273/729 [00:07<00:11, 40.42it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:11, 38.81it/s]Loading weights:  39%|███▉      | 286/729 [00:08<00:10, 43.14it/s]Loading weights:  40%|████      | 292/729 [00:08<00:10, 40.40it/s]Loading weights:  41%|████      | 298/729 [00:08<00:09, 44.68it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:08, 48.29it/s]Loading weights:  43%|████▎     | 310/729 [00:08<00:09, 42.87it/s]Loading weights:  43%|████▎     | 315/729 [00:08<00:11, 37.42it/s]Loading weights:  44%|████▍     | 324/729 [00:09<00:08, 47.98it/s]Loading weights:  45%|████▌     | 330/729 [00:09<00:10, 38.11it/s]Loading weights:  51%|█████     | 370/729 [00:09<00:03, 109.71it/s]Loading weights:  58%|█████▊    | 420/729 [00:09<00:01, 196.04it/s]Loading weights:  64%|██████▍   | 466/729 [00:09<00:01, 258.85it/s]Loading weights:  71%|███████   | 517/729 [00:09<00:00, 318.81it/s]Loading weights:  78%|███████▊  | 565/729 [00:09<00:00, 360.03it/s]Loading weights:  85%|████████▍ | 617/729 [00:09<00:00, 402.25it/s]Loading weights:  91%|█████████▏| 667/729 [00:09<00:00, 417.12it/s]Loading weights:  98%|█████████▊| 717/729 [00:10<00:00, 436.54it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 71.73it/s] 
+  excluded from ranks (shared first token): names 21, values capital 8, currency 31, language 0, calling_code 84
+  capture 4/84
+  capture 8/84
+  capture 12/84
+  capture 16/84
+  capture 20/84
+  capture 24/84
+  capture 28/84
+  capture 32/84
+  capture 36/84
+  capture 40/84
+  capture 44/84
+  capture 48/84
+  capture 52/84
+  capture 56/84
+  capture 60/84
+  capture 64/84
+  capture 68/84
+  capture 72/84
+  capture 76/84
+  capture 80/84
+  capture 84/84
+  identity (batch 1, 2 flags x 4 questions): max |dh| = 0.000e+00
+  identity (batched capture): max |dh| at image tokens across questions = 0.000e+00
+
+VOCAB (logit lens, top-1 rate): NAME vs attribute VALUE at the image tokens; last token for reference
+  candidates (chance top-1 ~ 1/n): name=84, capital=80, currency=55, language=43, calling_code=7
+  rows whose first token is shared with a different name/value are excluded (counts in summary.json rank_exclusions); that removes calling_code entirely -- every code starts with a digit another code shares -- so the probe is its only test here
+  [object/max_token]  L:      4      8     12     16     18     20     22     24     27
+    name_rank           4.8%   4.8%   6.3%   3.2%   1.6%   1.6%   0.0%  49.2%  50.8%
+    capital_rank        0.0%   1.3%   2.6%   0.0%   0.0%   0.0%   3.9%  25.0%   9.2%
+    currency_rank       1.9%   3.8%   5.7%   3.8%   3.8%   5.7%   3.8%  11.3%   7.5%
+    language_rank       3.6%   3.6%   3.6%   2.4%   2.4%   1.2%   1.2%  26.2%  20.2%
+    calling_code_rank   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%
+  [all/max_token]  L:      4      8     12     16     18     20     22     24     27
+    name_rank           0.0%   4.8%   9.5%   7.9%  12.7%   7.9%   7.9%  92.1%  85.7%
+    capital_rank        1.3%   1.3%   5.3%   3.9%   3.9%   3.9%   2.6%  40.8%  27.6%
+    currency_rank       0.0%   0.0%   3.8%   1.9%   1.9%   0.0%   3.8%  20.8%   7.5%
+    language_rank       2.4%   1.2%   6.0%   9.5%   7.1%   3.6%   6.0%  39.3%  44.0%
+    calling_code_rank   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%
+  [background/pooled]  L:      4      8     12     16     18     20     22     24     27
+    name_rank           1.6%   1.6%   1.6%   6.3%   3.2%   4.8%   6.3%  39.7%  36.5%
+    capital_rank        1.3%   0.0%   0.0%   1.3%   0.0%   1.3%   1.3%  23.7%   2.6%
+    currency_rank       1.9%   1.9%   1.9%   1.9%   1.9%   1.9%   1.9%   9.4%   3.8%
+    language_rank       1.2%   1.2%   3.6%   2.4%   2.4%   2.4%   1.2%   8.3%   2.4%
+    calling_code_rank   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%
+  [last token, queried value]
+    capital_rank        1.3%   1.3%   1.3%   1.3%   1.3%   1.3%  14.5%  51.3% 100.0%
+    currency_rank       1.9%   1.9%   1.9%   1.9%   1.9%   1.9%   0.0%  37.7%  62.3%
+    language_rank       1.2%   1.2%   1.2%   1.2%   1.2%  10.7%  10.7%  21.4%  86.9%
+    calling_code_rank   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%   nan%
+  language      image:object           L0=0.71 best=L0:0.71 (base 0.31, p@best=0.167)
+  language      image:ring             L0=0.63 best=L0:0.63 (base 0.31, p@best=0.167)
+  language      image:background       L0=0.65 best=L0:0.65 (base 0.31, p@best=0.167)
+  language      image:all              L0=0.69 best=L0:0.69 (base 0.31, p@best=0.167)
+  language      last_token:asked       L0=0.31 best=L22:0.84 (base 0.31, p@best=0.167)
+  language      last_token:capital_q   L0=0.31 best=L22:0.80 (base 0.31, p@best=0.167)
+  currency_eur  image:object           L0=0.67 best=L0:0.67 (base 0.50, p@best=0.167)
+  currency_eur  image:ring             L0=0.60 best=L22:0.73 (base 0.50, p@best=0.167)
+  currency_eur  image:background       L0=0.67 best=L16:0.74 (base 0.50, p@best=0.167)
+  currency_eur  image:all              L0=0.66 best=L16:0.77 (base 0.50, p@best=0.167)
+  currency_eur  last_token:asked       L0=0.50 best=L22:0.94 (base 0.50, p@best=0.167)
+  currency_eur  last_token:capital_q   L0=0.50 best=L22:0.89 (base 0.50, p@best=0.167)
+  calling_zone  image:object           L0=0.70 best=L0:0.70 (base 0.24, p@best=0.167)
+  calling_zone  image:ring             L0=0.58 best=L22:0.63 (base 0.24, p@best=0.167)
+  calling_zone  image:background       L0=0.68 best=L16:0.75 (base 0.24, p@best=0.167)
+  calling_zone  image:all              L0=0.67 best=L16:0.74 (base 0.24, p@best=0.167)
+  calling_zone  last_token:asked       L0=0.24 best=L22:0.83 (base 0.24, p@best=0.167)
+  calling_zone  last_token:capital_q   L0=0.24 best=L22:0.85 (base 0.24, p@best=0.167)
+
+wrote results/image_enrichment/smoke/summary.json

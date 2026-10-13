@@ -1,0 +1,37 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[vrh_ablation] flags: 6 items x 4 attributes x 1 templates = 24 generations per arm, 6 arms -> results/vrh_ablation/smoke
+  clean                        ( 0) 
+  zero:park_vrh                (20) 14.11 14.16 14.23 16.0 16.1 16.6 16.7 16.17 16.20 17.14 17.18 18.15 18.16 19.15 19.17 19.19 19.20 19.22 19.23 19.26
+  zero:park_vrh:random0        (20) 14.13 14.14 14.27 16.3 16.12 16.13 16.16 16.21 16.22 17.11 17.16 18.6 18.20 19.3 19.4 19.8 19.9 19.14 19.18 19.25
+  zero:park_vrh@1based         (20) 13.11 13.16 13.23 15.0 15.1 15.6 15.7 15.17 15.20 16.14 16.18 17.15 17.16 18.15 18.17 18.19 18.20 18.22 18.23 18.26
+  zero:park_vrh@1based:random0 (20) 13.19 13.21 13.25 15.4 15.5 15.8 15.13 15.14 15.21 16.3 16.19 17.11 17.13 18.6 18.10 18.13 18.14 18.16 18.21 18.25
+  zero:common10                (10) 21.1 21.5 22.13 22.15 22.17 22.19 23.3 23.4 23.6 23.17
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:06,  1.71it/s]Loading weights:   0%|          | 2/729 [00:01<07:35,  1.60it/s]Loading weights:   1%|          | 5/729 [00:01<02:36,  4.63it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:06, 10.80it/s]Loading weights:   2%|▏         | 17/729 [00:01<00:39, 18.07it/s]Loading weights:   3%|▎         | 24/729 [00:01<00:26, 26.38it/s]Loading weights:   4%|▍         | 29/729 [00:01<00:25, 27.61it/s]Loading weights:   5%|▍         | 36/729 [00:02<00:19, 35.09it/s]Loading weights:   6%|▌         | 41/729 [00:02<00:20, 33.57it/s]Loading weights:   7%|▋         | 48/729 [00:02<00:16, 40.06it/s]Loading weights:   7%|▋         | 53/729 [00:02<00:18, 37.03it/s]Loading weights:   8%|▊         | 58/729 [00:02<00:16, 39.70it/s]Loading weights:   9%|▉         | 65/729 [00:02<00:16, 39.59it/s]Loading weights:  10%|▉         | 72/729 [00:02<00:14, 44.95it/s]Loading weights:  11%|█         | 77/729 [00:03<00:16, 40.14it/s]Loading weights:  12%|█▏        | 84/729 [00:03<00:14, 45.53it/s]Loading weights:  12%|█▏        | 89/729 [00:03<00:15, 40.46it/s]Loading weights:  13%|█▎        | 94/729 [00:03<00:14, 42.63it/s]Loading weights:  14%|█▍        | 101/729 [00:03<00:15, 41.39it/s]Loading weights:  15%|█▍        | 108/729 [00:03<00:13, 46.44it/s]Loading weights:  16%|█▌        | 113/729 [00:03<00:15, 40.98it/s]Loading weights:  16%|█▋        | 120/729 [00:04<00:13, 46.26it/s]Loading weights:  17%|█▋        | 125/729 [00:04<00:14, 40.72it/s]Loading weights:  18%|█▊        | 131/729 [00:04<00:13, 45.13it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:12, 45.74it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:14, 39.98it/s]Loading weights:  20%|██        | 148/729 [00:04<00:12, 45.49it/s]Loading weights:  21%|██        | 153/729 [00:04<00:14, 39.88it/s]Loading weights:  22%|██▏       | 160/729 [00:04<00:12, 45.31it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:14, 39.88it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 45.24it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:13, 39.90it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:12, 45.17it/s]Loading weights:  26%|██▌       | 189/729 [00:05<00:13, 39.87it/s]Loading weights:  27%|██▋       | 196/729 [00:05<00:11, 45.06it/s]Loading weights:  28%|██▊       | 201/729 [00:05<00:13, 39.92it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 45.17it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:12, 39.72it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 44.90it/s]Loading weights:  31%|███       | 225/729 [00:06<00:12, 39.79it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:11, 44.81it/s]Loading weights:  33%|███▎      | 237/729 [00:06<00:12, 39.86it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:12, 38.36it/s]Loading weights:  35%|███▍      | 252/729 [00:07<00:10, 45.63it/s]Loading weights:  35%|███▌      | 257/729 [00:07<00:11, 40.59it/s]Loading weights:  36%|███▌      | 264/729 [00:07<00:10, 45.65it/s]Loading weights:  37%|███▋      | 269/729 [00:07<00:11, 40.29it/s]Loading weights:  38%|███▊      | 274/729 [00:07<00:10, 42.34it/s]Loading weights:  39%|███▊      | 281/729 [00:07<00:10, 41.09it/s]Loading weights:  40%|███▉      | 288/729 [00:07<00:09, 45.99it/s]Loading weights:  40%|████      | 293/729 [00:08<00:10, 40.76it/s]Loading weights:  41%|████      | 298/729 [00:08<00:10, 42.60it/s]Loading weights:  42%|████▏     | 305/729 [00:08<00:10, 41.14it/s]Loading weights:  43%|████▎     | 311/729 [00:08<00:09, 43.91it/s]Loading weights:  43%|████▎     | 316/729 [00:08<00:10, 39.15it/s]Loading weights:  44%|████▍     | 324/729 [00:08<00:08, 46.83it/s]Loading weights:  45%|████▌     | 329/729 [00:08<00:09, 40.95it/s]Loading weights:  46%|████▌     | 334/729 [00:09<00:09, 41.64it/s]Loading weights:  53%|█████▎    | 390/729 [00:09<00:02, 165.34it/s]Loading weights:  60%|██████    | 438/729 [00:09<00:01, 244.47it/s]Loading weights:  67%|██████▋   | 489/729 [00:09<00:00, 311.67it/s]Loading weights:  74%|███████▎  | 537/729 [00:09<00:00, 357.41it/s]Loading weights:  80%|████████  | 586/729 [00:09<00:00, 389.87it/s]Loading weights:  87%|████████▋ | 637/729 [00:09<00:00, 419.79it/s]Loading weights:  95%|█████████▍| 689/729 [00:09<00:00, 448.08it/s]Loading weights: 100%|██████████| 729/729 [00:09<00:00, 73.32it/s] 
+
+  INDEX CHECK: percentile of each list's heads by box-attention mass (100 = top of all 784); a correctly indexed VRH list should sit near the top
+    park_vrh                 mean percentile  98.3
+    park_vrh@1based          mean percentile  74.9
+    lietzow_promoting        mean percentile  73.5
+    lietzow_suppressing      mean percentile  64.9
+    lietzow_writing          mean percentile  86.2
+    our top-20 by box mass: 19.17 19.23 19.20 16.7 19.15 20.21 17.18 16.17 14.11 13.16 14.23 14.19 14.16 16.6 19.26 16.20 16.18 17.14 20.23 18.10
+    e.g. AF: '```json\n[\n\t{"bbox_2d": [140, 135, 268, 259], "flag": "{"bbox_2d": [140, 1'
+    e.g. AL: '```json\n[\n\t{"bbox_2d": [145, 168, 307, 229], "label": "flag"}\n]\n```'
+    e.g. AM: '```json\n[\n\t{"bbox_2d": [0, 0, 392, 168], "label": "flag"}\n]\n```'
+  clean: done
+  zero:park_vrh: done
+  zero:park_vrh:random0: done
+  zero:park_vrh@1based: done
+  zero:park_vrh@1based:random0: done
+  zero:common10: done
+
+arm                             acc    capital   currency   language calling_co  mover rank  rank=1
+clean                         83.3%     100.0%      66.7%      83.3%      83.3%        1.00  100.0%
+zero:park_vrh                 70.8%     100.0%      33.3%      66.7%      83.3%        1.00  100.0%
+zero:park_vrh:random0         83.3%     100.0%      83.3%      66.7%      83.3%        1.00  100.0%
+zero:park_vrh@1based          83.3%     100.0%      66.7%      83.3%      83.3%        1.00  100.0%
+zero:park_vrh@1based:random0  87.5%     100.0%      83.3%      83.3%      83.3%        1.00  100.0%
+zero:common10                 33.3%      50.0%      16.7%      50.0%      16.7%           -       -
+
+  mover rank: this flag's name among 12 name tokens in the movers' summed direct write (1 = best, chance 6.5).
+wrote results/vrh_ablation/smoke/rows.jsonl and summary.json

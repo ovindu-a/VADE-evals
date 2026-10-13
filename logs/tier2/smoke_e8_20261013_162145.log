@@ -1,0 +1,12 @@
+
+##### flags: attributes ['language'] stages ['ceiling', 'windows', 'heads']
+
+==============================================================================
+flags/language
+==============================================================================
+  scoring: token
+  [stage 1: ceiling] full residual swap at full_image and last_token, layers 0..28
+  $ /opt/conda/bin/python methods/ndm/ceiling_sweep.py --entity flags --attribute language --model_id OpenGVLab/InternVL3-8B-hf --vade_root /workspace/VADE --allow_unpruned --sites residual --positions_list full_image last_token --layers 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 --n_rows 32 --seed 0 --batch_size 16
+  (dry run: stages 2-3 need stage 1's output to pick layers; showing them with placeholders)
+  $ /opt/conda/bin/python methods/head_window_sweep.py --entity flags --attribute language --patch_layer <P> --positions full_image --range <P> <read_end-1+2> --max_len 3 --n_rows 64 --out ...
+  $ /opt/conda/bin/python methods/head_trace.py --entity flags --attribute language --patch_layer <P> --positions full_image --blocks <stage-2 window> --n_rows 64 ...
