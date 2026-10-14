@@ -294,3 +294,37 @@ def test_internvl_uses_vades_per_model_positions_when_present():
     want = assets.object_location["models"]["InternVL3-8B-hf"]["object_token_indices"]["entity_ring1"]["flat"]
     assert n == 256 and flat == want
     assert resolve_position_set("flag_ring1", assets, adapter, model)[0] == want     # alias works there too
+
+
+# ---------------------------------------------------------------------------
+# route_knockout (E5): an empty knockout must be an exact no-op in bf16
+# ---------------------------------------------------------------------------
+
+def test_empty_edge_knockout_is_exact_in_bf16(tiny):
+    """bf16 attention rows sum to 1 only within ~1e-3. Renormalizing to 1 made an empty
+    knockout move the real 7B's logits by 1.31 (pod run, 2026-10-13); renormalizing to the
+    row's own mass must leave them bit-identical."""
+    import types
+    from methods.route_knockout import EdgeKnockout
+    runner, batch = tiny
+    model = runner.model.to(torch.bfloat16)
+    try:
+        m = types.SimpleNamespace(adapter=runner.adapter, model=model, n_heads=runner.n_heads,
+                                  head_dim=runner.head_dim)
+        ids = batch["base_input_ids"]
+        extra = {k: (v.to(torch.bfloat16) if v.is_floating_point() else v) for k, v in batch["base_extra"].items()}
+
+        def logits(ko=None):
+            with torch.no_grad():
+                if ko is None:
+                    return model(input_ids=ids, **extra, output_attentions=True, use_cache=False).logits
+                with ko:
+                    return model(input_ids=ids, **extra, output_attentions=True, use_cache=False).logits
+        clean = logits()
+        everyone = list(range(ids.shape[1]))
+        same = logits(EdgeKnockout(m, list(range(runner.n_layers)), everyone, [], renormalize=True))
+        assert torch.equal(same, clean)
+        moved = logits(EdgeKnockout(m, list(range(runner.n_layers)), [ids.shape[1] - 1], [1, 2], renormalize=True))
+        assert (moved.float() - clean.float()).abs().max() > 0          # a real knockout still bites
+    finally:
+        runner.model.to(torch.float32)

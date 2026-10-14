@@ -25,6 +25,34 @@ what to run, in what order, what must hold, and what to report back.
 - Do not `git commit` or `git push` unless the user tells you to.
 - If something is ambiguous, stop and ask the user. Do not guess.
 
+## 0. Continuing on an existing pod (second session, 2026-10-14)
+
+If the pod was already set up and E1, E2 and E6 have finished (commit `607b957`), do NOT
+redo sections 1-2 or rerun those three. Instead:
+
+```bash
+cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home
+git pull                                  # brings the E5 fix and the larger A100 profile
+python -m pytest -q tests/                # expect 0 failures
+tmux new -s runs2
+GPU=a100 bash scripts/run_tier1.sh e5 e4 e3 && GPU=a100 bash scripts/run_tier2.sh all
+```
+
+What changed since the first session:
+
+- **E5 was failing its own no-op check** (`an empty knockout changed the logits`, max
+  |dlogit| 1.31). The cause was a bf16 renormalization in `EdgeKnockout`, now fixed and
+  covered by a test. The check must now print `max |dlogit| = 0.00e+00`. Anything else:
+  stop E5 and report it.
+- **The `GPU=a100` profile is larger.** Batch sizes go up to 64-128, and sample sizes
+  double for E5 (128 pairs), E4 (64 base countries), E7 (128 pairs) and E11 (96 rows).
+  E2 and E6 keep their finished 64-pair results. If a step runs out of memory, rerun it
+  without `GPU=a100`.
+- Expected time for this command: about 5.5-7.5 h (Tier 1 remainder ~2-2.5 h, Tier 2
+  ~3.5-5 h).
+
+Then do sections 4 and 5 as written, for the steps run in this session.
+
 ## 1. Setup
 
 Work in the pod's large data volume (usually `/workspace`), not the root disk. The three

@@ -142,7 +142,11 @@ class EdgeKnockout:
         An = Aq.clone()
         An[..., self.keys] = 0
         if self.renormalize:
-            An = An / An.sum(-1, keepdim=True).clamp_min(1e-30)
+            # Back to each row's OWN original mass, not to 1. Identical in exact arithmetic, but
+            # bf16 attention rows sum to 1 only within ~1e-3: dividing by the sum anyway rescaled
+            # every queried row, so an EMPTY knockout moved the 7B's logits by 1.31 and failed
+            # the no-op check. S/S is exactly 1 in IEEE arithmetic, so no keys -> no change.
+            An = An * (Aq.sum(-1, keepdim=True) / An.sum(-1, keepdim=True).clamp_min(1e-30))
         dz = ((An - Aq) @ Vh).permute(0, 2, 1, 3).reshape(Bsz, len(self.queries), H * d)
         W = self.m.adapter.get_attn_head_output_module(self.m.model, block).weight.float()      # [hidden, H*d]
         patched = out.clone()
