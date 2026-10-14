@@ -1,0 +1,717 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[readout_jacobian] flags phase=all site=mlp_hidden: every neuron of blocks [23, 24, 25, 26]
+  mlp_hidden: d = 18944 per block; the sketch is ~944 rows per attribute, so a rank cap of 128 is 0.68% of the space (chance for every cross/reach number below). readout_fit.pt ~ 1.1 GB.
+  attributes: ['capital', 'currency', 'language', 'calling_code']; fit on 59 train items x templates ['v1', 'v2', 'v3', 'v4'] x 4 probes = 3776 sketch rows
+  -> /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:54<11:07:09, 54.99s/it]Loading weights:   0%|          | 3/729 [00:56<3:01:15, 14.98s/it] Loading weights:   1%|          | 5/729 [00:59<1:37:13,  8.06s/it]Loading weights:   1%|          | 6/729 [01:01<1:17:22,  6.42s/it]Loading weights:   1%|          | 7/729 [01:03<59:38,  4.96s/it]  Loading weights:   2%|▏         | 11/729 [01:06<28:49,  2.41s/it]Loading weights:   2%|▏         | 13/729 [01:08<23:42,  1.99s/it]Loading weights:   2%|▏         | 16/729 [01:14<24:01,  2.02s/it]Loading weights:   2%|▏         | 18/729 [01:18<23:51,  2.01s/it]Loading weights:   3%|▎         | 21/729 [01:18<15:09,  1.28s/it]Loading weights:   3%|▎         | 22/729 [01:18<13:11,  1.12s/it]Loading weights:   3%|▎         | 24/729 [01:19<10:42,  1.10it/s]Loading weights:   4%|▍         | 28/729 [01:27<15:40,  1.34s/it]Loading weights:   4%|▍         | 29/729 [01:33<23:24,  2.01s/it]Loading weights:   5%|▍         | 35/729 [01:33<10:42,  1.08it/s]Loading weights:   5%|▌         | 40/729 [01:42<15:09,  1.32s/it]Loading weights:   6%|▋         | 47/729 [01:43<08:33,  1.33it/s]Loading weights:   7%|▋         | 52/729 [01:46<08:09,  1.38it/s]Loading weights:   7%|▋         | 54/729 [01:52<11:54,  1.06s/it]Loading weights:   8%|▊         | 58/729 [01:53<09:24,  1.19it/s]Loading weights:   8%|▊         | 61/729 [01:53<07:13,  1.54it/s]Loading weights:   9%|▉         | 64/729 [01:54<06:20,  1.75it/s]Loading weights:   9%|▉         | 65/729 [01:56<07:24,  1.49it/s]Loading weights:   9%|▉         | 66/729 [01:57<08:40,  1.27it/s]Loading weights:  10%|▉         | 70/729 [01:58<05:15,  2.09it/s]Loading weights:  10%|▉         | 72/729 [02:00<07:25,  1.47it/s]Loading weights:  10%|█         | 73/729 [02:00<06:30,  1.68it/s]Loading weights:  10%|█         | 76/729 [02:04<08:26,  1.29it/s]Loading weights:  11%|█         | 77/729 [02:06<11:14,  1.03s/it]Loading weights:  11%|█         | 78/729 [02:07<11:24,  1.05s/it]Loading weights:  11%|█         | 81/729 [02:08<06:57,  1.55it/s]Loading weights:  11%|█▏        | 83/729 [02:08<05:28,  1.96it/s]Loading weights:  12%|█▏        | 88/729 [02:11<05:34,  1.92it/s]Loading weights:  12%|█▏        | 89/729 [02:15<11:21,  1.07s/it]Loading weights:  13%|█▎        | 94/729 [02:16<06:48,  1.55it/s]Loading weights:  14%|█▎        | 99/729 [02:20<07:03,  1.49it/s]Loading weights:  14%|█▍        | 101/729 [02:22<08:00,  1.31it/s]Loading weights:  15%|█▍        | 108/729 [02:24<05:22,  1.92it/s]Loading weights:  15%|█▌        | 112/729 [02:28<06:57,  1.48it/s]Loading weights:  16%|█▌        | 113/729 [02:38<15:02,  1.46s/it]Loading weights:  16%|█▌        | 114/729 [02:41<17:25,  1.70s/it]Loading weights:  16%|█▋        | 120/729 [02:42<09:48,  1.03it/s]Loading weights:  17%|█▋        | 122/729 [02:43<08:10,  1.24it/s]Loading weights:  17%|█▋        | 124/729 [02:49<12:39,  1.25s/it]Loading weights:  17%|█▋        | 125/729 [02:55<20:06,  2.00s/it]Loading weights:  17%|█▋        | 126/729 [02:58<20:25,  2.03s/it]Loading weights:  18%|█▊        | 128/729 [03:02<21:31,  2.15s/it]Loading weights:  18%|█▊        | 131/729 [03:11<24:51,  2.49s/it]Loading weights:  19%|█▊        | 136/729 [03:13<14:33,  1.47s/it]Loading weights:  19%|█▉        | 137/729 [03:18<18:35,  1.88s/it]Loading weights:  19%|█▉        | 142/729 [03:18<09:56,  1.02s/it]Loading weights:  20%|█▉        | 144/729 [03:18<07:57,  1.23it/s]Loading weights:  20%|██        | 146/729 [03:19<07:12,  1.35it/s]Loading weights:  20%|██        | 148/729 [03:20<05:48,  1.66it/s]Loading weights:  20%|██        | 149/729 [03:22<08:20,  1.16it/s]Loading weights:  21%|██        | 150/729 [03:25<12:12,  1.27s/it]Loading weights:  21%|██        | 154/729 [03:27<07:28,  1.28it/s]Loading weights:  22%|██▏       | 158/729 [03:27<04:32,  2.09it/s]Loading weights:  22%|██▏       | 160/729 [03:29<05:29,  1.73it/s]Loading weights:  22%|██▏       | 161/729 [03:31<08:33,  1.11it/s]Loading weights:  22%|██▏       | 162/729 [03:40<20:39,  2.19s/it]Loading weights:  23%|██▎       | 166/729 [03:41<11:21,  1.21s/it]Loading weights:  23%|██▎       | 170/729 [03:41<06:53,  1.35it/s]Loading weights:  24%|██▎       | 172/729 [03:48<12:28,  1.34s/it]Loading weights:  24%|██▎       | 173/729 [03:57<22:14,  2.40s/it]Loading weights:  24%|██▍       | 174/729 [04:01<24:57,  2.70s/it]Loading weights:  24%|██▍       | 178/729 [04:06<18:41,  2.04s/it]Loading weights:  25%|██▍       | 182/729 [04:06<11:02,  1.21s/it]Loading weights:  25%|██▌       | 184/729 [04:08<10:20,  1.14s/it]Loading weights:  25%|██▌       | 185/729 [04:11<12:19,  1.36s/it]Loading weights:  26%|██▌       | 186/729 [04:13<14:06,  1.56s/it]Loading weights:  26%|██▌       | 190/729 [04:14<07:41,  1.17it/s]Loading weights:  26%|██▌       | 191/729 [04:14<06:52,  1.31it/s]Loading weights:  27%|██▋       | 196/729 [04:15<04:23,  2.03it/s]Loading weights:  27%|██▋       | 197/729 [04:18<07:05,  1.25it/s]Loading weights:  28%|██▊       | 203/729 [04:20<04:34,  1.92it/s]Loading weights:  28%|██▊       | 207/729 [04:22<04:33,  1.91it/s]Loading weights:  29%|██▊       | 209/729 [04:24<05:37,  1.54it/s]Loading weights:  29%|██▉       | 210/729 [04:27<07:49,  1.11it/s]Loading weights:  30%|██▉       | 216/729 [04:27<03:53,  2.20it/s]Loading weights:  30%|███       | 220/729 [04:37<09:11,  1.08s/it]Loading weights:  30%|███       | 222/729 [04:46<14:56,  1.77s/it]Loading weights:  31%|███       | 226/729 [04:47<09:57,  1.19s/it]Loading weights:  32%|███▏      | 232/729 [04:47<05:44,  1.44it/s]Loading weights:  32%|███▏      | 234/729 [04:51<07:38,  1.08it/s]Loading weights:  33%|███▎      | 239/729 [04:51<04:47,  1.70it/s]Loading weights:  33%|███▎      | 242/729 [04:52<04:29,  1.81it/s]Loading weights:  33%|███▎      | 244/729 [04:54<04:53,  1.65it/s]Loading weights:  34%|███▎      | 246/729 [05:01<09:56,  1.24s/it]Loading weights:  34%|███▍      | 250/729 [05:01<06:13,  1.28it/s]Loading weights:  35%|███▍      | 255/729 [05:02<04:01,  1.96it/s]Loading weights:  35%|███▌      | 257/729 [05:04<04:38,  1.70it/s]Loading weights:  36%|███▌      | 259/729 [05:06<05:43,  1.37it/s]Loading weights:  36%|███▌      | 263/729 [05:07<03:50,  2.02it/s]Loading weights:  36%|███▋      | 266/729 [05:07<03:17,  2.35it/s]Loading weights:  37%|███▋      | 268/729 [05:12<06:35,  1.17it/s]Loading weights:  38%|███▊      | 276/729 [05:13<03:02,  2.48it/s]Loading weights:  38%|███▊      | 280/729 [05:14<02:42,  2.77it/s]Loading weights:  39%|███▊      | 282/729 [05:18<05:14,  1.42it/s]Loading weights:  39%|███▉      | 286/729 [05:20<04:23,  1.68it/s]Loading weights:  40%|███▉      | 288/729 [05:20<03:41,  1.99it/s]Loading weights:  40%|████      | 292/729 [05:21<03:08,  2.31it/s]Loading weights:  40%|████      | 293/729 [05:27<07:15,  1.00it/s]Loading weights:  40%|████      | 294/729 [05:29<07:58,  1.10s/it]Loading weights:  41%|████      | 298/729 [05:29<05:06,  1.40it/s]Loading weights:  41%|████      | 299/729 [05:30<05:22,  1.33it/s]Loading weights:  42%|████▏     | 304/729 [05:32<03:55,  1.80it/s]Loading weights:  42%|████▏     | 305/729 [05:37<07:16,  1.03s/it]Loading weights:  42%|████▏     | 306/729 [05:43<12:34,  1.78s/it]Loading weights:  42%|████▏     | 309/729 [05:43<07:43,  1.10s/it]Loading weights:  43%|████▎     | 310/729 [05:44<07:55,  1.13s/it]Loading weights:  43%|████▎     | 312/729 [05:45<06:35,  1.06it/s]Loading weights:  43%|████▎     | 313/729 [05:46<05:54,  1.17it/s]Loading weights:  43%|████▎     | 314/729 [05:46<04:53,  1.41it/s]Loading weights:  43%|████▎     | 316/729 [05:57<17:38,  2.56s/it]Loading weights:  44%|████▎     | 318/729 [06:00<14:15,  2.08s/it]Loading weights:  45%|████▍     | 327/729 [06:08<08:31,  1.27s/it]Loading weights:  45%|████▌     | 329/729 [06:10<08:16,  1.24s/it]Loading weights:  46%|████▌     | 335/729 [06:10<04:50,  1.35it/s]Loading weights:  47%|████▋     | 344/729 [06:11<02:29,  2.58it/s]Loading weights:  48%|████▊     | 349/729 [06:11<02:06,  2.99it/s]Loading weights:  49%|████▊     | 355/729 [06:12<01:27,  4.30it/s]Loading weights:  50%|████▉     | 364/729 [06:12<00:52,  6.97it/s]Loading weights:  51%|█████▏    | 375/729 [06:12<00:31, 11.22it/s]Loading weights:  52%|█████▏    | 382/729 [06:12<00:24, 14.40it/s]Loading weights:  53%|█████▎    | 390/729 [06:13<00:25, 13.52it/s]Loading weights:  55%|█████▍    | 399/729 [06:13<00:20, 15.91it/s]Loading weights:  55%|█████▌    | 403/729 [06:13<00:22, 14.63it/s]Loading weights:  57%|█████▋    | 413/729 [06:14<00:17, 18.51it/s]Loading weights:  57%|█████▋    | 417/729 [06:16<00:44,  7.05it/s]Loading weights:  59%|█████▉    | 431/729 [06:25<01:54,  2.61it/s]Loading weights:  61%|██████    | 442/729 [06:26<01:23,  3.43it/s]Loading weights:  62%|██████▏   | 453/729 [06:27<00:56,  4.92it/s]Loading weights:  63%|██████▎   | 456/729 [06:27<00:50,  5.43it/s]Loading weights:  64%|██████▍   | 467/729 [06:28<00:37,  6.98it/s]Loading weights:  65%|██████▍   | 472/729 [06:28<00:34,  7.47it/s]Loading weights:  65%|██████▌   | 475/729 [06:29<00:37,  6.83it/s]Loading weights:  66%|██████▌   | 479/729 [06:29<00:39,  6.36it/s]Loading weights:  67%|██████▋   | 485/729 [06:30<00:32,  7.62it/s]Loading weights:  68%|██████▊   | 493/729 [06:30<00:21, 10.82it/s]Loading weights:  68%|██████▊   | 498/729 [06:30<00:17, 12.87it/s]Loading weights:  69%|██████▉   | 506/729 [06:34<00:45,  4.96it/s]Loading weights:  71%|███████▏  | 521/729 [06:34<00:21,  9.46it/s]Loading weights:  73%|███████▎  | 535/729 [06:34<00:13, 14.27it/s]Loading weights:  74%|███████▍  | 541/729 [06:34<00:11, 16.40it/s]Loading weights:  77%|███████▋  | 561/729 [06:34<00:06, 27.04it/s]Loading weights:  78%|███████▊  | 568/729 [06:36<00:10, 15.82it/s]Loading weights:  80%|████████  | 584/729 [06:37<00:11, 12.81it/s]Loading weights:  83%|████████▎ | 605/729 [06:37<00:05, 21.10it/s]Loading weights:  85%|████████▍ | 619/729 [06:37<00:03, 27.58it/s]Loading weights:  86%|████████▋ | 629/729 [06:39<00:05, 17.13it/s]Loading weights:  87%|████████▋ | 637/729 [06:40<00:06, 13.48it/s]Loading weights:  88%|████████▊ | 642/729 [06:40<00:06, 12.95it/s]Loading weights:  90%|████████▉ | 655/729 [06:41<00:05, 14.19it/s]Loading weights:  90%|█████████ | 659/729 [06:42<00:06, 10.82it/s]Loading weights:  91%|█████████▏| 667/729 [06:42<00:05, 11.90it/s]Loading weights:  92%|█████████▏| 670/729 [06:43<00:04, 11.90it/s]Loading weights:  93%|█████████▎| 678/729 [06:45<00:06,  7.55it/s]Loading weights:  94%|█████████▍| 685/729 [06:47<00:08,  5.16it/s]Loading weights:  97%|█████████▋| 704/729 [06:47<00:02, 10.66it/s]Loading weights:  98%|█████████▊| 713/729 [06:48<00:01, 11.24it/s]Loading weights:  99%|█████████▉| 725/729 [06:49<00:00,  9.41it/s]Loading weights: 100%|██████████| 729/729 [06:50<00:00, 10.09it/s]Loading weights: 100%|██████████| 729/729 [06:50<00:00,  1.78it/s]
+  3776 probe rows over 59 items; batch 8
+    8/3776
+    16/3776
+    24/3776
+    32/3776
+    40/3776
+    48/3776
+    56/3776
+    64/3776
+    72/3776
+    80/3776
+    88/3776
+    96/3776
+    104/3776
+    112/3776
+    120/3776
+    128/3776
+    136/3776
+    144/3776
+    152/3776
+    160/3776
+    168/3776
+    176/3776
+    184/3776
+    192/3776
+    200/3776
+    208/3776
+    216/3776
+    224/3776
+    232/3776
+    240/3776
+    248/3776
+    256/3776
+    264/3776
+    272/3776
+    280/3776
+    288/3776
+    296/3776
+    304/3776
+    312/3776
+    320/3776
+    328/3776
+    336/3776
+    344/3776
+    352/3776
+    360/3776
+    368/3776
+    376/3776
+    384/3776
+    392/3776
+    400/3776
+    408/3776
+    416/3776
+    424/3776
+    432/3776
+    440/3776
+    448/3776
+    456/3776
+    464/3776
+    472/3776
+    480/3776
+    488/3776
+    496/3776
+    504/3776
+    512/3776
+    520/3776
+    528/3776
+    536/3776
+    544/3776
+    552/3776
+    560/3776
+    568/3776
+    576/3776
+    584/3776
+    592/3776
+    600/3776
+    608/3776
+    616/3776
+    624/3776
+    632/3776
+    640/3776
+    648/3776
+    656/3776
+    664/3776
+    672/3776
+    680/3776
+    688/3776
+    696/3776
+    704/3776
+    712/3776
+    720/3776
+    728/3776
+    736/3776
+    744/3776
+    752/3776
+    760/3776
+    768/3776
+    776/3776
+    784/3776
+    792/3776
+    800/3776
+    808/3776
+    816/3776
+    824/3776
+    832/3776
+    840/3776
+    848/3776
+    856/3776
+    864/3776
+    872/3776
+    880/3776
+    888/3776
+    896/3776
+    904/3776
+    912/3776
+    920/3776
+    928/3776
+    936/3776
+    944/3776
+    952/3776
+    960/3776
+    968/3776
+    976/3776
+    984/3776
+    992/3776
+    1000/3776
+    1008/3776
+    1016/3776
+    1024/3776
+    1032/3776
+    1040/3776
+    1048/3776
+    1056/3776
+    1064/3776
+    1072/3776
+    1080/3776
+    1088/3776
+    1096/3776
+    1104/3776
+    1112/3776
+    1120/3776
+    1128/3776
+    1136/3776
+    1144/3776
+    1152/3776
+    1160/3776
+    1168/3776
+    1176/3776
+    1184/3776
+    1192/3776
+    1200/3776
+    1208/3776
+    1216/3776
+    1224/3776
+    1232/3776
+    1240/3776
+    1248/3776
+    1256/3776
+    1264/3776
+    1272/3776
+    1280/3776
+    1288/3776
+    1296/3776
+    1304/3776
+    1312/3776
+    1320/3776
+    1328/3776
+    1336/3776
+    1344/3776
+    1352/3776
+    1360/3776
+    1368/3776
+    1376/3776
+    1384/3776
+    1392/3776
+    1400/3776
+    1408/3776
+    1416/3776
+    1424/3776
+    1432/3776
+    1440/3776
+    1448/3776
+    1456/3776
+    1464/3776
+    1472/3776
+    1480/3776
+    1488/3776
+    1496/3776
+    1504/3776
+    1512/3776
+    1520/3776
+    1528/3776
+    1536/3776
+    1544/3776
+    1552/3776
+    1560/3776
+    1568/3776
+    1576/3776
+    1584/3776
+    1592/3776
+    1600/3776
+    1608/3776
+    1616/3776
+    1624/3776
+    1632/3776
+    1640/3776
+    1648/3776
+    1656/3776
+    1664/3776
+    1672/3776
+    1680/3776
+    1688/3776
+    1696/3776
+    1704/3776
+    1712/3776
+    1720/3776
+    1728/3776
+    1736/3776
+    1744/3776
+    1752/3776
+    1760/3776
+    1768/3776
+    1776/3776
+    1784/3776
+    1792/3776
+    1800/3776
+    1808/3776
+    1816/3776
+    1824/3776
+    1832/3776
+    1840/3776
+    1848/3776
+    1856/3776
+    1864/3776
+    1872/3776
+    1880/3776
+    1888/3776
+    1896/3776
+    1904/3776
+    1912/3776
+    1920/3776
+    1928/3776
+    1936/3776
+    1944/3776
+    1952/3776
+    1960/3776
+    1968/3776
+    1976/3776
+    1984/3776
+    1992/3776
+    2000/3776
+    2008/3776
+    2016/3776
+    2024/3776
+    2032/3776
+    2040/3776
+    2048/3776
+    2056/3776
+    2064/3776
+    2072/3776
+    2080/3776
+    2088/3776
+    2096/3776
+    2104/3776
+    2112/3776
+    2120/3776
+    2128/3776
+    2136/3776
+    2144/3776
+    2152/3776
+    2160/3776
+    2168/3776
+    2176/3776
+    2184/3776
+    2192/3776
+    2200/3776
+    2208/3776
+    2216/3776
+    2224/3776
+    2232/3776
+    2240/3776
+    2248/3776
+    2256/3776
+    2264/3776
+    2272/3776
+    2280/3776
+    2288/3776
+    2296/3776
+    2304/3776
+    2312/3776
+    2320/3776
+    2328/3776
+    2336/3776
+    2344/3776
+    2352/3776
+    2360/3776
+    2368/3776
+    2376/3776
+    2384/3776
+    2392/3776
+    2400/3776
+    2408/3776
+    2416/3776
+    2424/3776
+    2432/3776
+    2440/3776
+    2448/3776
+    2456/3776
+    2464/3776
+    2472/3776
+    2480/3776
+    2488/3776
+    2496/3776
+    2504/3776
+    2512/3776
+    2520/3776
+    2528/3776
+    2536/3776
+    2544/3776
+    2552/3776
+    2560/3776
+    2568/3776
+    2576/3776
+    2584/3776
+    2592/3776
+    2600/3776
+    2608/3776
+    2616/3776
+    2624/3776
+    2632/3776
+    2640/3776
+    2648/3776
+    2656/3776
+    2664/3776
+    2672/3776
+    2680/3776
+    2688/3776
+    2696/3776
+    2704/3776
+    2712/3776
+    2720/3776
+    2728/3776
+    2736/3776
+    2744/3776
+    2752/3776
+    2760/3776
+    2768/3776
+    2776/3776
+    2784/3776
+    2792/3776
+    2800/3776
+    2808/3776
+    2816/3776
+    2824/3776
+    2832/3776
+    2840/3776
+    2848/3776
+    2856/3776
+    2864/3776
+    2872/3776
+    2880/3776
+    2888/3776
+    2896/3776
+    2904/3776
+    2912/3776
+    2920/3776
+    2928/3776
+    2936/3776
+    2944/3776
+    2952/3776
+    2960/3776
+    2968/3776
+    2976/3776
+    2984/3776
+    2992/3776
+    3000/3776
+    3008/3776
+    3016/3776
+    3024/3776
+    3032/3776
+    3040/3776
+    3048/3776
+    3056/3776
+    3064/3776
+    3072/3776
+    3080/3776
+    3088/3776
+    3096/3776
+    3104/3776
+    3112/3776
+    3120/3776
+    3128/3776
+    3136/3776
+    3144/3776
+    3152/3776
+    3160/3776
+    3168/3776
+    3176/3776
+    3184/3776
+    3192/3776
+    3200/3776
+    3208/3776
+    3216/3776
+    3224/3776
+    3232/3776
+    3240/3776
+    3248/3776
+    3256/3776
+    3264/3776
+    3272/3776
+    3280/3776
+    3288/3776
+    3296/3776
+    3304/3776
+    3312/3776
+    3320/3776
+    3328/3776
+    3336/3776
+    3344/3776
+    3352/3776
+    3360/3776
+    3368/3776
+    3376/3776
+    3384/3776
+    3392/3776
+    3400/3776
+    3408/3776
+    3416/3776
+    3424/3776
+    3432/3776
+    3440/3776
+    3448/3776
+    3456/3776
+    3464/3776
+    3472/3776
+    3480/3776
+    3488/3776
+    3496/3776
+    3504/3776
+    3512/3776
+    3520/3776
+    3528/3776
+    3536/3776
+    3544/3776
+    3552/3776
+    3560/3776
+    3568/3776
+    3576/3776
+    3584/3776
+    3592/3776
+    3600/3776
+    3608/3776
+    3616/3776
+    3624/3776
+    3632/3776
+    3640/3776
+    3648/3776
+    3656/3776
+    3664/3776
+    3672/3776
+    3680/3776
+    3688/3776
+    3696/3776
+    3704/3776
+    3712/3776
+    3720/3776
+    3728/3776
+    3736/3776
+    3744/3776
+    3752/3776
+    3760/3776
+    3768/3776
+    3776/3776
+  clean first-token accuracy among candidates: capital 99.6%, currency 91.5%, language 96.2%, calling_code 100.0%
+  wrote /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26/readout_fit.pt
+
+=== block 23 (d=18944) ranks per fold: [{'calling_code': 55, 'capital': 128, 'currency': 128, 'language': 128}, {'calling_code': 54, 'capital': 128, 'currency': 128, 'language': 128}]  [held-out items (2-fold mean)]
+  own-subspace energy held-out vs in-sample (a large gap = the subspace is fitting noise): capital 0.610/0.764, currency 0.661/0.799, language 0.701/0.827, calling_code 0.683/0.901
+  cross-energy r->s = share of r's readout inside s's subspace (chance in brackets):
+          capital            -- 0.086[0.007] 0.106[0.007] 0.026[0.003]
+         currency  0.092[0.007]           -- 0.091[0.007] 0.026[0.003]
+         language  0.132[0.007] 0.099[0.007]           -- 0.026[0.003]
+     calling_code  0.068[0.007] 0.066[0.007] 0.062[0.007]           --
+  shared subspace (k=55) energy: calling_code 0.609, capital 0.204, currency 0.324, language 0.438
+  reach[readout] (row = edited target, col = readout touched) / selectivity:
+          capital    0.610   0.092   0.132   0.068   sel   6.29
+         currency    0.086   0.661   0.099   0.066   sel   7.87
+         language    0.106   0.091   0.701   0.062   sel   8.12
+     calling_code    0.026   0.026   0.026   0.683   sel  26.23
+  reach[isolated] (row = edited target, col = readout touched) / selectivity:
+          capital    0.396   0.016   0.015   0.013   sel  27.25
+         currency    0.019   0.441   0.014   0.013   sel  28.44
+         language    0.020   0.016   0.415   0.013   sel  25.18
+     calling_code    0.007   0.006   0.005   0.466   sel  75.34
+  reach[random] (row = edited target, col = readout touched) / selectivity:
+          capital    0.007   0.007   0.007   0.007   sel   1.00
+         currency    0.007   0.007   0.007   0.006   sel   1.03
+         language    0.007   0.007   0.007   0.007   sel   1.00
+     calling_code    0.003   0.003   0.003   0.003   sel   0.93
+
+=== block 24 (d=18944) ranks per fold: [{'calling_code': 50, 'capital': 128, 'currency': 128, 'language': 128}, {'calling_code': 50, 'capital': 128, 'currency': 128, 'language': 128}]  [held-out items (2-fold mean)]
+  own-subspace energy held-out vs in-sample (a large gap = the subspace is fitting noise): capital 0.667/0.798, currency 0.712/0.829, language 0.754/0.858, calling_code 0.713/0.901
+  cross-energy r->s = share of r's readout inside s's subspace (chance in brackets):
+          capital            -- 0.080[0.007] 0.100[0.007] 0.021[0.003]
+         currency  0.091[0.007]           -- 0.086[0.007] 0.020[0.003]
+         language  0.135[0.007] 0.096[0.007]           -- 0.020[0.003]
+     calling_code  0.055[0.007] 0.056[0.007] 0.053[0.007]           --
+  shared subspace (k=50) energy: calling_code 0.634, capital 0.193, currency 0.333, language 0.464
+  reach[readout] (row = edited target, col = readout touched) / selectivity:
+          capital    0.667   0.091   0.135   0.055   sel   7.12
+         currency    0.080   0.712   0.096   0.056   sel   9.21
+         language    0.100   0.086   0.754   0.053   sel   9.48
+     calling_code    0.021   0.020   0.020   0.713   sel  34.90
+  reach[isolated] (row = edited target, col = readout touched) / selectivity:
+          capital    0.446   0.013   0.012   0.012   sel  36.31
+         currency    0.016   0.478   0.012   0.012   sel  36.17
+         language    0.017   0.014   0.452   0.012   sel  31.92
+     calling_code    0.006   0.005   0.004   0.511   sel 105.96
+  reach[random] (row = edited target, col = readout touched) / selectivity:
+          capital    0.007   0.007   0.007   0.007   sel   1.01
+         currency    0.007   0.007   0.007   0.007   sel   1.00
+         language    0.007   0.007   0.007   0.007   sel   1.01
+     calling_code    0.003   0.003   0.003   0.002   sel   0.88
+
+=== block 25 (d=18944) ranks per fold: [{'calling_code': 6, 'capital': 126, 'currency': 88, 'language': 74}, {'calling_code': 6, 'capital': 128, 'currency': 99, 'language': 80}]  [held-out items (2-fold mean)]
+  own-subspace energy held-out vs in-sample (a large gap = the subspace is fitting noise): capital 0.781/0.868, currency 0.821/0.900, language 0.832/0.900, calling_code 0.953/0.956
+  cross-energy r->s = share of r's readout inside s's subspace (chance in brackets):
+          capital            -- 0.110[0.005] 0.103[0.004] 0.005[0.000]
+         currency  0.163[0.007]           -- 0.100[0.004] 0.006[0.000]
+         language  0.196[0.007] 0.128[0.005]           -- 0.004[0.000]
+     calling_code  0.116[0.007] 0.113[0.005] 0.062[0.004]           --
+  shared subspace (k=6) energy: calling_code 0.949, capital 0.006, currency 0.007, language 0.007
+  reach[readout] (row = edited target, col = readout touched) / selectivity:
+          capital    0.781   0.163   0.196   0.116   sel   4.93
+         currency    0.110   0.821   0.128   0.113   sel   7.02
+         language    0.103   0.100   0.832   0.062   sel   9.42
+     calling_code    0.005   0.006   0.004   0.953   sel 198.07
+  reach[isolated] (row = edited target, col = readout touched) / selectivity:
+          capital    0.533   0.009   0.009   0.002   sel  77.61
+         currency    0.009   0.510   0.007   0.002   sel  86.15
+         language    0.007   0.005   0.470   0.001   sel 102.70
+     calling_code    0.001   0.001   0.001   0.516   sel 648.13
+  reach[random] (row = edited target, col = readout touched) / selectivity:
+          capital    0.007   0.007   0.007   0.006   sel   1.04
+         currency    0.005   0.005   0.005   0.005   sel   1.00
+         language    0.004   0.004   0.004   0.004   sel   0.96
+     calling_code    0.000   0.000   0.000   0.000   sel   1.03
+
+=== block 26 (d=18944) ranks per fold: [{'calling_code': 8, 'capital': 65, 'currency': 46, 'language': 35}, {'calling_code': 8, 'capital': 65, 'currency': 46, 'language': 35}]  [held-out items (2-fold mean)]
+  own-subspace energy held-out vs in-sample (a large gap = the subspace is fitting noise): capital 0.838/0.905, currency 0.861/0.903, language 0.870/0.906, calling_code 0.896/0.903
+  cross-energy r->s = share of r's readout inside s's subspace (chance in brackets):
+          capital            -- 0.191[0.002] 0.123[0.002] 0.003[0.000]
+         currency  0.268[0.003]           -- 0.108[0.002] 0.002[0.000]
+         language  0.291[0.003] 0.203[0.002]           -- 0.003[0.000]
+     calling_code  0.016[0.003] 0.009[0.002] 0.009[0.002]           --
+  shared subspace (k=8) energy: calling_code 0.739, capital 0.051, currency 0.069, language 0.171
+  reach[readout] (row = edited target, col = readout touched) / selectivity:
+          capital    0.838   0.268   0.291   0.016   sel   4.37
+         currency    0.191   0.861   0.203   0.009   sel   6.40
+         language    0.123   0.108   0.870   0.009   sel  10.90
+     calling_code    0.003   0.002   0.003   0.896   sel 386.12
+  reach[isolated] (row = edited target, col = readout touched) / selectivity:
+          capital    0.545   0.008   0.006   0.002   sel 100.13
+         currency    0.005   0.518   0.004   0.001   sel 147.34
+         language    0.005   0.002   0.465   0.001   sel 167.16
+     calling_code    0.001   0.000   0.000   0.835   sel 1863.32
+  reach[random] (row = edited target, col = readout touched) / selectivity:
+          capital    0.003   0.004   0.003   0.004   sel   0.95
+         currency    0.002   0.003   0.002   0.002   sel   1.11
+         language    0.002   0.002   0.002   0.002   sel   0.99
+     calling_code    0.000   0.000   0.000   0.000   sel   0.99
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:02<33:19,  2.75s/it]Loading weights:   1%|          | 4/729 [00:02<06:38,  1.82it/s]Loading weights:   1%|          | 6/729 [00:03<04:53,  2.46it/s]Loading weights:   2%|▏         | 13/729 [00:03<01:38,  7.25it/s]Loading weights:   2%|▏         | 17/729 [00:03<01:22,  8.59it/s]Loading weights:   3%|▎         | 20/729 [00:03<01:14,  9.56it/s]Loading weights:   4%|▎         | 26/729 [00:04<00:46, 15.21it/s]Loading weights:   4%|▍         | 30/729 [00:04<00:57, 12.12it/s]Loading weights:   5%|▍         | 35/729 [00:04<00:43, 15.87it/s]Loading weights:   5%|▌         | 40/729 [00:04<00:37, 18.55it/s]Loading weights:   6%|▌         | 43/729 [00:05<00:47, 14.30it/s]Loading weights:   7%|▋         | 50/729 [00:05<00:31, 21.34it/s]Loading weights:   7%|▋         | 54/729 [00:05<00:39, 17.12it/s]Loading weights:   8%|▊         | 61/729 [00:05<00:28, 23.52it/s]Loading weights:   9%|▉         | 65/729 [00:06<00:35, 18.60it/s]Loading weights:  10%|█         | 74/729 [00:06<00:23, 28.02it/s]Loading weights:  11%|█         | 79/729 [00:06<00:30, 21.20it/s]Loading weights:  12%|█▏        | 86/729 [00:06<00:24, 26.25it/s]Loading weights:  12%|█▏        | 90/729 [00:07<00:34, 18.51it/s]Loading weights:  13%|█▎        | 98/729 [00:07<00:24, 26.20it/s]Loading weights:  14%|█▍        | 103/729 [00:07<00:35, 17.67it/s]Loading weights:  15%|█▍        | 109/729 [00:08<00:28, 22.08it/s]Loading weights:  16%|█▌        | 113/729 [00:08<00:39, 15.73it/s]Loading weights:  16%|█▋        | 120/729 [00:08<00:29, 20.87it/s]Loading weights:  17%|█▋        | 125/729 [00:09<00:37, 15.93it/s]Loading weights:  19%|█▊        | 135/729 [00:09<00:28, 20.59it/s]Loading weights:  19%|█▉        | 138/729 [00:09<00:33, 17.90it/s]Loading weights:  20%|█▉        | 143/729 [00:09<00:28, 20.41it/s]Loading weights:  20%|██        | 148/729 [00:10<00:24, 23.99it/s]Loading weights:  21%|██        | 152/729 [00:10<00:30, 19.05it/s]Loading weights:  22%|██▏       | 159/729 [00:10<00:22, 25.64it/s]Loading weights:  22%|██▏       | 163/729 [00:10<00:30, 18.43it/s]Loading weights:  24%|██▎       | 172/729 [00:11<00:24, 22.60it/s]Loading weights:  24%|██▍       | 175/729 [00:11<00:28, 19.14it/s]Loading weights:  25%|██▍       | 182/729 [00:11<00:22, 24.69it/s]Loading weights:  26%|██▌       | 186/729 [00:12<00:31, 17.00it/s]Loading weights:  27%|██▋       | 194/729 [00:12<00:22, 23.50it/s]Loading weights:  27%|██▋       | 198/729 [00:12<00:30, 17.31it/s]Loading weights:  28%|██▊       | 206/729 [00:12<00:21, 24.33it/s]Loading weights:  29%|██▉       | 210/729 [00:13<00:32, 15.73it/s]Loading weights:  30%|███       | 219/729 [00:13<00:25, 20.21it/s]Loading weights:  31%|███       | 223/729 [00:13<00:27, 18.28it/s]Loading weights:  32%|███▏      | 232/729 [00:14<00:19, 25.25it/s]Loading weights:  32%|███▏      | 236/729 [00:14<00:23, 20.55it/s]Loading weights:  33%|███▎      | 244/729 [00:14<00:20, 23.10it/s]Loading weights:  34%|███▍      | 247/729 [00:15<00:25, 19.01it/s]Loading weights:  35%|███▍      | 255/729 [00:15<00:17, 26.46it/s]Loading weights:  36%|███▌      | 259/729 [00:15<00:28, 16.57it/s]Loading weights:  36%|███▋      | 266/729 [00:15<00:20, 22.36it/s]Loading weights:  37%|███▋      | 270/729 [00:16<00:29, 15.72it/s]Loading weights:  38%|███▊      | 279/729 [00:16<00:19, 23.53it/s]Loading weights:  39%|███▉      | 284/729 [00:16<00:23, 19.20it/s]Loading weights:  40%|████      | 292/729 [00:17<00:19, 21.93it/s]Loading weights:  41%|████      | 296/729 [00:17<00:25, 16.79it/s]Loading weights:  42%|████▏     | 304/729 [00:17<00:21, 19.84it/s]Loading weights:  42%|████▏     | 307/729 [00:18<00:26, 16.21it/s]Loading weights:  43%|████▎     | 315/729 [00:18<00:17, 23.42it/s]Loading weights:  44%|████▍     | 319/729 [00:18<00:24, 16.84it/s]Loading weights:  45%|████▍     | 328/729 [00:18<00:17, 23.31it/s]Loading weights:  46%|████▌     | 332/729 [00:19<00:20, 19.22it/s]Loading weights:  48%|████▊     | 349/729 [00:19<00:10, 37.70it/s]Loading weights:  50%|████▉     | 363/729 [00:19<00:07, 51.65it/s]Loading weights:  53%|█████▎    | 383/729 [00:19<00:04, 73.19it/s]Loading weights:  54%|█████▍    | 397/729 [00:19<00:04, 78.28it/s]Loading weights:  60%|█████▉    | 437/729 [00:19<00:02, 139.16it/s]Loading weights:  63%|██████▎   | 462/729 [00:20<00:01, 161.97it/s]Loading weights:  67%|██████▋   | 488/729 [00:20<00:01, 170.18it/s]Loading weights:  70%|███████   | 511/729 [00:20<00:01, 183.37it/s]Loading weights:  73%|███████▎  | 532/729 [00:20<00:01, 177.59it/s]Loading weights:  76%|███████▌  | 555/729 [00:20<00:01, 165.59it/s]Loading weights:  81%|████████▏ | 594/729 [00:20<00:00, 181.53it/s]Loading weights:  86%|████████▌ | 626/729 [00:20<00:00, 211.01it/s]Loading weights:  90%|█████████ | 658/729 [00:20<00:00, 236.55it/s]Loading weights:  95%|█████████▍| 690/729 [00:21<00:00, 255.76it/s]Loading weights:  99%|█████████▉| 723/729 [00:21<00:00, 266.02it/s]Loading weights: 100%|██████████| 729/729 [00:21<00:00, 34.34it/s] 
+  [capital] transform gate: M=0 == clean (exact); M=I == full on 100% of rows
+  [capital] 64 rows
+  [capital] 128 rows
+  [capital] 192 rows
+  [capital] 256 rows
+  [capital] 320 rows
+  [capital] 360 rows
+  [capital] 424 rows
+  [capital] 488 rows
+  [capital] 552 rows
+  [capital] 616 rows
+  [capital] 680 rows
+  [capital] 720 rows
+  [capital] 784 rows
+  [capital] 848 rows
+  [capital] 912 rows
+  [capital] 976 rows
+  [capital] 1040 rows
+  [capital] 1080 rows
+  [capital] 1144 rows
+  [capital] 1208 rows
+  [capital] 1272 rows
+  [capital] 1336 rows
+  [capital] 1400 rows
+  [capital] 1434 rows
+  [currency] transform gate: M=0 == clean (exact); M=I == full on 100% of rows
+  [currency] 64 rows
+  [currency] 128 rows
+  [currency] 192 rows
+  [currency] 256 rows
+  [currency] 320 rows
+  [currency] 360 rows
+  [currency] 424 rows
+  [currency] 488 rows
+  [currency] 552 rows
+  [currency] 616 rows
+  [currency] 680 rows
+  [currency] 720 rows
+  [currency] 784 rows
+  [currency] 848 rows
+  [currency] 912 rows
+  [currency] 976 rows
+  [currency] 1040 rows
+  [currency] 1080 rows
+  [currency] 1144 rows
+  [currency] 1208 rows
+  [currency] 1272 rows
+  [currency] 1336 rows
+  [currency] 1400 rows
+  [currency] 1434 rows
+  [language] transform gate: M=0 == clean (exact); M=I == full on 100% of rows
+  [language] 64 rows
+  [language] 128 rows
+  [language] 192 rows
+  [language] 256 rows
+  [language] 320 rows
+  [language] 360 rows
+  [language] 424 rows
+  [language] 488 rows
+  [language] 552 rows
+  [language] 616 rows
+  [language] 680 rows
+  [language] 720 rows
+  [language] 784 rows
+  [language] 848 rows
+  [language] 912 rows
+  [language] 976 rows
+  [language] 1040 rows
+  [language] 1080 rows
+  [language] 1144 rows
+  [language] 1208 rows
+  [language] 1272 rows
+  [language] 1336 rows
+  [language] 1400 rows
+  [language] 1434 rows
+  [calling_code] transform gate: M=0 == clean (exact); M=I == full on 100% of rows
+  [calling_code] 64 rows
+  [calling_code] 128 rows
+  [calling_code] 192 rows
+  [calling_code] 256 rows
+  [calling_code] 320 rows
+  [calling_code] 360 rows
+  [calling_code] 424 rows
+  [calling_code] 488 rows
+  [calling_code] 552 rows
+  [calling_code] 616 rows
+  [calling_code] 680 rows
+  [calling_code] 720 rows
+  [calling_code] 784 rows
+  [calling_code] 848 rows
+  [calling_code] 912 rows
+  [calling_code] 976 rows
+  [calling_code] 1040 rows
+  [calling_code] 1080 rows
+  [calling_code] 1144 rows
+  [calling_code] 1208 rows
+  [calling_code] 1272 rows
+  [calling_code] 1336 rows
+  [calling_code] 1400 rows
+  [calling_code] 1434 rows
+
+=== target capital ===
+      arm   cause     iso   final   iso by queried
+    clean    0.0%   93.8%   46.9%   calling_code 100%, currency 85%, language 97%
+     full   96.9%    0.8%   48.8%   calling_code 0%, currency 0%, language 2%
+  readout   91.9%   76.0%   84.0%   calling_code 68%, currency 63%, language 97%
+ isolated   62.5%   91.3%   76.9%   calling_code 91%, currency 87%, language 96%
+   random    0.0%   94.0%   47.0%   calling_code 100%, currency 85%, language 97%
+
+=== target currency ===
+      arm   cause     iso   final   iso by queried
+    clean    0.0%   98.9%   49.4%   calling_code 100%, capital 100%, language 97%
+     full   70.6%    0.7%   35.6%   calling_code 0%, capital 0%, language 2%
+  readout   59.4%   78.5%   69.0%   calling_code 70%, capital 68%, language 97%
+ isolated   43.9%   94.9%   69.4%   calling_code 88%, capital 100%, language 97%
+   random    0.0%   98.9%   49.4%   calling_code 100%, capital 100%, language 97%
+
+=== target language ===
+      arm   cause     iso   final   iso by queried
+    clean    1.7%   94.9%   48.3%   calling_code 100%, capital 100%, currency 85%
+     full   87.3%    0.1%   43.7%   calling_code 0%, capital 0%, currency 0%
+  readout   74.0%   82.6%   78.3%   calling_code 81%, capital 92%, currency 75%
+ isolated   48.0%   94.1%   71.0%   calling_code 96%, capital 100%, currency 86%
+   random    1.7%   95.3%   48.5%   calling_code 99%, capital 100%, currency 87%
+
+=== target calling_code ===
+      arm   cause     iso   final   iso by queried
+    clean    0.0%   93.8%   46.9%   capital 100%, currency 85%, language 97%
+     full  100.0%    0.8%   50.4%   capital 0%, currency 0%, language 2%
+  readout   60.6%   92.3%   76.4%   capital 100%, currency 80%, language 97%
+ isolated   53.9%   94.0%   73.9%   capital 100%, currency 85%, language 97%
+   random    0.0%   93.8%   46.9%   capital 100%, currency 85%, language 97%
+
+Score each arm with VADE's own scorer (the number of record):
+  python /workspace/VADE/eval/score.py --entity flags --attribute all --predictions /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26/clean.jsonl
+  python /workspace/VADE/eval/score.py --entity flags --attribute all --predictions /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26/full.jsonl
+  python /workspace/VADE/eval/score.py --entity flags --attribute all --predictions /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26/readout.jsonl
+  python /workspace/VADE/eval/score.py --entity flags --attribute all --predictions /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26/isolated.jsonl
+  python /workspace/VADE/eval/score.py --entity flags --attribute all --predictions /workspace/VADE-evals/results/readout_jacobian/flags__mlp_hidden_b23-26/random.jsonl

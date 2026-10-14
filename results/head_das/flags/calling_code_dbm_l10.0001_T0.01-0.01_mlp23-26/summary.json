@@ -1,0 +1,103 @@
+{
+  "args": {
+    "entity": "flags",
+    "attribute": "calling_code",
+    "vade_root": "/workspace/VADE",
+    "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "method": "dbm",
+    "subspace_dim": "8",
+    "heads": "21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17",
+    "site": "mlp_hidden",
+    "blocks": "23-26",
+    "train_split": "train",
+    "eval_split": "test",
+    "train_rows": 4000,
+    "eval_rows": 4000,
+    "epochs": 1,
+    "lr": 0.001,
+    "mask_lr": null,
+    "mask_init": null,
+    "temperature_start": 0.01,
+    "temperature_end": 0.01,
+    "batch_size": 32,
+    "grad_accum_steps": 2,
+    "log_every": 1,
+    "grad_clip_norm": 1.0,
+    "iso_weight": 1.0,
+    "l1_coef": 0.0001,
+    "mask_coef": 0.001,
+    "no_prompt_cache": false,
+    "no_donor_cache": false,
+    "donor_capture": "teacher_forced",
+    "max_new_tokens": 12,
+    "seed": 0,
+    "out_dir": null,
+    "skip_train": false,
+    "skip_eval": false,
+    "dry_run": false
+  },
+  "heads": [
+    [
+      23,
+      0
+    ],
+    [
+      24,
+      0
+    ],
+    [
+      25,
+      0
+    ],
+    [
+      26,
+      0
+    ]
+  ],
+  "stats": {
+    "23": {
+      "kind": "sigmoid_mask",
+      "embed_dim": 18944,
+      "epsilon": 0.01,
+      "n_selected": 0,
+      "temperature": 0.009999999776482582,
+      "mask_min": -0.040166910737752914,
+      "mask_max": 0.03070537932217121,
+      "mask_mean": -0.00039393093902617693,
+      "sigmoid_mean": 0.49222618341445923
+    },
+    "24": {
+      "kind": "sigmoid_mask",
+      "embed_dim": 18944,
+      "epsilon": 0.01,
+      "n_selected": 0,
+      "temperature": 0.009999999776482582,
+      "mask_min": -0.03519950807094574,
+      "mask_max": 0.036818522959947586,
+      "mask_mean": -0.0006271498859860003,
+      "sigmoid_mean": 0.48693379759788513
+    },
+    "25": {
+      "kind": "sigmoid_mask",
+      "embed_dim": 18944,
+      "epsilon": 0.01,
+      "n_selected": 0,
+      "temperature": 0.009999999776482582,
+      "mask_min": -0.03424316644668579,
+      "mask_max": 0.03899236395955086,
+      "mask_mean": -0.00017197660054080188,
+      "sigmoid_mean": 0.49527251720428467
+    },
+    "26": {
+      "kind": "sigmoid_mask",
+      "embed_dim": 18944,
+      "epsilon": 0.01,
+      "n_selected": 0,
+      "temperature": 0.009999999776482582,
+      "mask_min": -0.04383709654211998,
+      "mask_max": 0.04316588491201401,
+      "mask_mean": -0.0016421464970335364,
+      "sigmoid_mean": 0.465700626373291
+    }
+  }
+}

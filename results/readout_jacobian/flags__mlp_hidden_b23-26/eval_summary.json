@@ -1,0 +1,250 @@
+{
+  "capital": {
+    "clean": {
+      "cause": 0.0,
+      "iso_by_queried": {
+        "calling_code": 1.0,
+        "currency": 0.8472222222222222,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9377746390458256,
+      "final": 0.4688873195229128,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "full": {
+      "cause": 0.9694444444444444,
+      "iso_by_queried": {
+        "calling_code": 0.0,
+        "currency": 0.002777777777777778,
+        "language": 0.01977401129943503
+      },
+      "iso_mean": 0.007517263025737603,
+      "final": 0.48848085373509104,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "readout": {
+      "cause": 0.9194444444444444,
+      "iso_by_queried": {
+        "calling_code": 0.675,
+        "currency": 0.6333333333333333,
+        "language": 0.9717514124293786
+      },
+      "iso_mean": 0.7600282485875707,
+      "final": 0.8397363465160075,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "isolated": {
+      "cause": 0.625,
+      "iso_by_queried": {
+        "calling_code": 0.9083333333333333,
+        "currency": 0.8694444444444445,
+        "language": 0.96045197740113
+      },
+      "iso_mean": 0.9127432517263027,
+      "final": 0.7688716258631514,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "random": {
+      "cause": 0.0,
+      "iso_by_queried": {
+        "calling_code": 1.0,
+        "currency": 0.8472222222222222,
+        "language": 0.9717514124293786
+      },
+      "iso_mean": 0.9396578782172003,
+      "final": 0.46982893910860013,
+      "n_cause": 360,
+      "n_iso": 1074
+    }
+  },
+  "currency": {
+    "clean": {
+      "cause": 0.0,
+      "iso_by_queried": {
+        "calling_code": 1.0,
+        "capital": 1.0,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9887005649717514,
+      "final": 0.4943502824858757,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "full": {
+      "cause": 0.7055555555555556,
+      "iso_by_queried": {
+        "calling_code": 0.0,
+        "capital": 0.0,
+        "language": 0.01977401129943503
+      },
+      "iso_mean": 0.006591337099811676,
+      "final": 0.3560734463276836,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "readout": {
+      "cause": 0.5944444444444444,
+      "iso_by_queried": {
+        "calling_code": 0.7027777777777777,
+        "capital": 0.6777777777777778,
+        "language": 0.9745762711864406
+      },
+      "iso_mean": 0.7850439422473321,
+      "final": 0.6897441933458883,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "isolated": {
+      "cause": 0.4388888888888889,
+      "iso_by_queried": {
+        "calling_code": 0.8805555555555555,
+        "capital": 1.0,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9488857501569367,
+      "final": 0.6938873195229127,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "random": {
+      "cause": 0.0,
+      "iso_by_queried": {
+        "calling_code": 1.0,
+        "capital": 1.0,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9887005649717514,
+      "final": 0.4943502824858757,
+      "n_cause": 360,
+      "n_iso": 1074
+    }
+  },
+  "language": {
+    "clean": {
+      "cause": 0.01694915254237288,
+      "iso_by_queried": {
+        "calling_code": 1.0,
+        "capital": 1.0,
+        "currency": 0.8472222222222222
+      },
+      "iso_mean": 0.9490740740740741,
+      "final": 0.48301161330822345,
+      "n_cause": 354,
+      "n_iso": 1080
+    },
+    "full": {
+      "cause": 0.8728813559322034,
+      "iso_by_queried": {
+        "calling_code": 0.0,
+        "capital": 0.0,
+        "currency": 0.002777777777777778
+      },
+      "iso_mean": 0.000925925925925926,
+      "final": 0.43690364092906464,
+      "n_cause": 354,
+      "n_iso": 1080
+    },
+    "readout": {
+      "cause": 0.7401129943502824,
+      "iso_by_queried": {
+        "calling_code": 0.8083333333333333,
+        "capital": 0.9166666666666666,
+        "currency": 0.7527777777777778
+      },
+      "iso_mean": 0.825925925925926,
+      "final": 0.7830194601381042,
+      "n_cause": 354,
+      "n_iso": 1080
+    },
+    "isolated": {
+      "cause": 0.480225988700565,
+      "iso_by_queried": {
+        "calling_code": 0.9583333333333334,
+        "capital": 1.0,
+        "currency": 0.8638888888888889
+      },
+      "iso_mean": 0.9407407407407408,
+      "final": 0.7104833647206529,
+      "n_cause": 354,
+      "n_iso": 1080
+    },
+    "random": {
+      "cause": 0.01694915254237288,
+      "iso_by_queried": {
+        "calling_code": 0.9916666666666667,
+        "capital": 1.0,
+        "currency": 0.8666666666666667
+      },
+      "iso_mean": 0.9527777777777778,
+      "final": 0.48486346516007534,
+      "n_cause": 354,
+      "n_iso": 1080
+    }
+  },
+  "calling_code": {
+    "clean": {
+      "cause": 0.0,
+      "iso_by_queried": {
+        "capital": 1.0,
+        "currency": 0.8472222222222222,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9377746390458256,
+      "final": 0.4688873195229128,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "full": {
+      "cause": 1.0,
+      "iso_by_queried": {
+        "capital": 0.0,
+        "currency": 0.002777777777777778,
+        "language": 0.01977401129943503
+      },
+      "iso_mean": 0.007517263025737603,
+      "final": 0.5037586315128688,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "readout": {
+      "cause": 0.6055555555555555,
+      "iso_by_queried": {
+        "capital": 1.0,
+        "currency": 0.8027777777777778,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9229598242310106,
+      "final": 0.7642576898932831,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "isolated": {
+      "cause": 0.5388888888888889,
+      "iso_by_queried": {
+        "capital": 1.0,
+        "currency": 0.8527777777777777,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9396264908976774,
+      "final": 0.7392576898932831,
+      "n_cause": 360,
+      "n_iso": 1074
+    },
+    "random": {
+      "cause": 0.0,
+      "iso_by_queried": {
+        "capital": 1.0,
+        "currency": 0.8472222222222222,
+        "language": 0.9661016949152542
+      },
+      "iso_mean": 0.9377746390458256,
+      "final": 0.4688873195229128,
+      "n_cause": 360,
+      "n_iso": 1074
+    }
+  }
+}
