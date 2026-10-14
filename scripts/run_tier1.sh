@@ -18,9 +18,14 @@ mkdir -p logs/tier1
 # Batch-size profile. Empty = the script's own default. head_das keeps its EFFECTIVE batch
 # (batch_size x grad_accum_steps = 64 rows per optimizer step), so training is unchanged.
 BS_E1= BS_E4= BS_E5= BS_E6= BS_SEV= BS_JAC= DAS_BS= DAS_ACC=
+# Sample-size profile. Empty = the script's own default (64 pairs; 32 base countries for E4).
+# Raised steps write to an _n<N> directory so a finished default-size run is never overwritten.
+N_SEV= N_E4= N_E5= N_E6=
 if [ "${GPU:-}" = a100 ]; then
-  BS_E1=64 BS_E4=32 BS_E5=32 BS_E6=48 BS_SEV=48 BS_JAC=32 DAS_BS=16 DAS_ACC=4
+  BS_E1=128 BS_E4=64 BS_E5=64 BS_E6=64 BS_SEV=64 BS_JAC=64 DAS_BS=32 DAS_ACC=2
+  N_SEV=128 N_E4=64 N_E5=128 N_E6=128
   echo "GPU=a100 batch profile: e1=$BS_E1 e4=$BS_E4 e5=$BS_E5 e6=$BS_E6 severed=$BS_SEV jacobian=$BS_JAC das=${DAS_BS}x${DAS_ACC}"
+  echo "GPU=a100 sample sizes: severed n_pairs=$N_SEV e4 n_items=$N_E4 e5 n_pairs=$N_E5 e6 n_pairs=$N_E6"
 fi
 bs() { [ -n "$1" ] && echo "--batch_size $1"; return 0; }   # bs <value> -> flag or nothing
 
@@ -38,8 +43,9 @@ e1() {  # attributes at the image tokens? (+ E0b identity check)
 }
 
 e2() {  # do the late MLPs WRITE the answer? + their direct logit share
-  run e2_severed $PY methods/head_severed.py --n_pairs 64 --freeze_values base mean other \
-      --freeze_mlp_span 23-26 --freeze_mlp_singles 23 24 25 26 --freeze_attn_span '' $(bs "$BS_SEV")
+  run e2_severed $PY methods/head_severed.py --n_pairs "${N_SEV:-64}" --freeze_values base mean other \
+      --freeze_mlp_span 23-26 --freeze_mlp_singles 23 24 25 26 --freeze_attn_span '' $(bs "$BS_SEV") \
+      ${N_SEV:+--out_dir results/head_severed/flags__freeze-base-mean-other_n$N_SEV}
   for a in capital currency language calling_code; do
     run "e2_dla_$a" $PY methods/dla.py --entity flags --attribute "$a" --direction gold_minus_mean --limit 24
   done
@@ -56,9 +62,10 @@ e3() {  # attribute-specific lookup at the neuron level (ceiling first, then mas
   run e3_overlap $PY methods/mask_overlap.py results/head_das/flags/*_dbm_l10.0001_T0.01-0.01_mlp23-26/mask_selected.json
 }
 
-e4() { run e4 $PY methods/circuit_compose.py $(bs "$BS_E4"); }
-e5() { run e5 $PY methods/route_knockout.py $(bs "$BS_E5"); }
-e6() { run e6 $PY methods/text_entity_contrast.py $(bs "$BS_E6"); }
+e4() { run e4 $PY methods/circuit_compose.py $(bs "$BS_E4") ${N_E4:+--n_items $N_E4}; }
+e5() { run e5 $PY methods/route_knockout.py $(bs "$BS_E5") ${N_E5:+--n_pairs $N_E5}; }
+e6() { run e6 $PY methods/text_entity_contrast.py $(bs "$BS_E6") \
+       ${N_E6:+--n_pairs $N_E6 --out_dir results/text_entity_contrast/flags_n$N_E6}; }
 
 smoke() {
   run smoke_e1 $PY methods/image_enrichment.py --identity_items 2 --probe_layers 0 16 22 --n_perm 5 \

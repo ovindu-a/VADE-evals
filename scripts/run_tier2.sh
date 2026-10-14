@@ -18,11 +18,14 @@ STAMP=$(date +%Y%m%d_%H%M%S)
 mkdir -p logs/tier2
 
 BS_SEV= BS_VRH= BS_CEIL= BS_PIPE= BS_ACC=
+N_SEV=64 N_CEIL=48       # pairs per severed run (E7), rows per ceiling sweep (E11)
 if [ "${GPU:-}" = a100 ]; then
+  N_SEV=128 N_CEIL=96
   # PIPE stays at 32, not 64: head_trace/head_window_sweep build their shuffled-donor control by
   # rolling rows WITHIN a batch, and a single 64-row batch would leave no batch boundary at all.
-  BS_SEV=48 BS_VRH=64 BS_CEIL=64 BS_PIPE=32 BS_ACC=64
+  BS_SEV=64 BS_VRH=128 BS_CEIL=64 BS_PIPE=32 BS_ACC=128
   echo "GPU=a100 batch profile: severed=$BS_SEV vrh=$BS_VRH ceiling=$BS_CEIL pipeline=$BS_PIPE accuracy=$BS_ACC"
+  echo "GPU=a100 sample sizes: e7 n_pairs=$N_SEV e11 n_rows=$N_CEIL"
 fi
 bs() { [ -n "$1" ] && echo "--batch_size $1"; return 0; }   # bs <value> -> flag or nothing
 
@@ -62,7 +65,7 @@ e7() {  # do brands/celebrities use the same movers AND the same downstream MLP 
                   "common10=21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17"
   # --gold own: brands/celebrities store lowercase labels, so first-token columns must use the
   # model's own answers (read at their divergence point). Text columns use VADE's matcher either way.
-  local SEV=(--n_pairs 64 --gold own --freeze_values base mean other --freeze_mlp_span 22-27
+  local SEV=(--n_pairs "$N_SEV" --gold own --freeze_values base mean other --freeze_mlp_span 22-27
              --freeze_mlp_singles 23 24 25 26 --freeze_attn_span 24-27 $(bs "$BS_SEV"))
   run e7_severed_brands_hq $PY methods/head_severed.py --entity brands --attributes hq_country --heads "$BH" \
       "${SEV[@]}" --out_dir results/head_severed/brands_hq_country__gold-own
@@ -78,7 +81,7 @@ e9() {  # zero Park et al.'s Visual Retrieval Heads on flags: index check, recal
 
 e11() {  # object vs background tokens: does identity leave the object before the movers read it?
   # seq:before MUST read 0% (bit-identical tokens under causal attention); if not, discard the run.
-  local L=(--layers 10 14 18 19 20 21 22 23 --sites residual --n_rows 48 $(bs "$BS_CEIL"))
+  local L=(--layers 10 14 18 19 20 21 22 23 --sites residual --n_rows "$N_CEIL" $(bs "$BS_CEIL"))
   run e11_flags $PY methods/ndm/ceiling_sweep.py --entity flags --attribute capital "${L[@]}" \
       --positions_list entity_only "~entity_ring1" "~entity_only" full_image seq:before seq:after
   run e11_brands $PY methods/ndm/ceiling_sweep.py --entity brands --attribute hq_country "${L[@]}" --text_match \
