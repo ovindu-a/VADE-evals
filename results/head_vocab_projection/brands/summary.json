@@ -1,0 +1,1344 @@
+{
+  "entity": "brands",
+  "attributes": [
+    "hq_country",
+    "founded_year",
+    "industry"
+  ],
+  "template_index": 0,
+  "n_items": 128,
+  "collisions": {
+    "entity": [
+      "ALFA_ROMEO",
+      "ALIBABA_GROUP",
+      "ALPHABET_INC",
+      "BASKIN_ROBBINS",
+      "BURGER_KING",
+      "DEUTSCHE_BANK",
+      "DEUTSCHE_WELLE",
+      "FERRARI",
+      "FIAT",
+      "GAZPROM",
+      "GUCCI",
+      "HBO",
+      "HEWLETT_PACKARD",
+      "H_M",
+      "KFC",
+      "KIA",
+      "KOREAN_BROADCASTING_SYSTEM",
+      "MAZDA",
+      "MERCEDES_BENZ",
+      "MERCEDES_BENZ_GROUP",
+      "MUNHWA_BROADCASTING_CORPORAT",
+      "NASDAQ",
+      "NESTL",
+      "NISSAN",
+      "NOKIA",
+      "NVIDIA",
+      "PFIZER",
+      "PORSCHE",
+      "Q483551",
+      "TATA_MOTORS_LTD",
+      "THE_COCA_COLA_COMPANY",
+      "THE_ECONOMIST",
+      "THE_GUARDIAN",
+      "THE_NEW_YORK_TIMES",
+      "THE_TIMES",
+      "THE_WALT_DISNEY_COMPANY",
+      "TOGG",
+      "TOSHIBA",
+      "WWE",
+      "X",
+      "XIAOMI",
+      "YAMAHA_MOTOR_COMPANY",
+      "YANDEX"
+    ],
+    "hq_country": [
+      "20TH_CENTURY_STUDIOS",
+      "AB_VOLVO",
+      "ADOBE",
+      "AIRBUS",
+      "ALEXA_INTERNET",
+      "ALFA_ROMEO",
+      "ALIBABA_GROUP",
+      "ALPHABET_INC",
+      "AMAZON",
+      "AMD",
+      "APPLE_INC",
+      "ASSOCIATED_PRESS",
+      "AT_T",
+      "AUDI_AG",
+      "BASKIN_ROBBINS",
+      "BMW",
+      "BRITISH_BROADCASTING_CORPORA",
+      "BURGER_KING",
+      "CANON_INC",
+      "CARTOON_NETWORK",
+      "CBS",
+      "CHEVROLET",
+      "CITRO_N",
+      "CNN",
+      "DC_COMICS",
+      "DEEPSEEK",
+      "DELL",
+      "DEUTSCHE_BANK",
+      "DEUTSCHE_WELLE",
+      "DONKERVOORT",
+      "ELECTRONIC_ARTS",
+      "EXXONMOBIL",
+      "FERRARI",
+      "FIAT",
+      "FORD_MOTOR_COMPANY",
+      "FOX_NEWS",
+      "GAZPROM",
+      "GENERAL_MOTORS",
+      "GOOGLE",
+      "GRUPO_TELEVISA",
+      "GUCCI",
+      "HBO",
+      "HEWLETT_PACKARD",
+      "HONDA",
+      "HUAWEI",
+      "HYUNDAI_MOTOR_COMPANY",
+      "H_M",
+      "IBM",
+      "INTEL",
+      "KFC",
+      "KIA",
+      "KONINKLIJKE_PHILIPS_NV",
+      "KOREAN_BROADCASTING_SYSTEM",
+      "LAMBORGHINI",
+      "LENOVO",
+      "LE_MONDE",
+      "LG_GROUP",
+      "LONDON_STOCK_EXCHANGE",
+      "MARVEL_COMICS",
+      "MAZDA",
+      "MERCEDES_BENZ",
+      "MERCEDES_BENZ_GROUP",
+      "META",
+      "METRO_GOLDWYN_MAYER",
+      "MICROSOFT",
+      "MUNHWA_BROADCASTING_CORPORAT",
+      "NASDAQ",
+      "NBC",
+      "NESTL",
+      "NIKE",
+      "NINTENDO",
+      "NISSAN",
+      "NVIDIA",
+      "OCLC_INC",
+      "OPEL",
+      "OPENAI",
+      "ORACLE_CORPORATION",
+      "PANASONIC_HOLDINGS_CORPORATI",
+      "PARAMOUNT_PICTURES",
+      "PEUGEOT",
+      "PFIZER",
+      "PIXAR",
+      "PORSCHE",
+      "Q122741",
+      "Q193559",
+      "Q2308012",
+      "Q384060",
+      "Q483551",
+      "Q58024",
+      "Q866",
+      "REDDIT",
+      "RENAULT",
+      "REUTERS",
+      "SAMSUNG_GROUP",
+      "SHELL",
+      "SIEMENS",
+      "SONY_GROUP",
+      "SPACEX",
+      "STARBUCKS",
+      "STUDIO_GHIBLI",
+      "SUN_MICROSYSTEMS",
+      "SUZUKI_MOTOR_CORPORATION",
+      "TESLA",
+      "THE_COCA_COLA_COMPANY",
+      "THE_ECONOMIST",
+      "THE_GUARDIAN",
+      "THE_NEW_YORK_TIMES",
+      "THE_TIMES",
+      "THE_WALT_DISNEY_COMPANY",
+      "TOGG",
+      "TOSHIBA",
+      "TOYOTA",
+      "TURKISH_AIRLINES",
+      "TV_AZTECA",
+      "UBER",
+      "UNIVERSAL_PICTURES",
+      "VOLKSWAGEN",
+      "WARNER_BROS_ENTERTAINMENT",
+      "WWE",
+      "X",
+      "XIAOMI",
+      "YAHOO",
+      "YAMAHA_MOTOR_COMPANY",
+      "YANDEX"
+    ],
+    "founded_year": [
+      "20TH_CENTURY_STUDIOS",
+      "ABS_CBN_CORPORATION",
+      "AB_VOLVO",
+      "ADOBE",
+      "AIRBUS",
+      "ALEXA_INTERNET",
+      "ALFA_ROMEO",
+      "ALIBABA_GROUP",
+      "ALPHABET_INC",
+      "AMAZON",
+      "AMD",
+      "APPLE_INC",
+      "ASSOCIATED_PRESS",
+      "AT_T",
+      "AUDI_AG",
+      "BASKIN_ROBBINS",
+      "BMW",
+      "BRITISH_BROADCASTING_CORPORA",
+      "BURGER_KING",
+      "CANON_INC",
+      "CARTOON_NETWORK",
+      "CBS",
+      "CHEVROLET",
+      "CITRO_N",
+      "CNN",
+      "DC_COMICS",
+      "DEEPSEEK",
+      "DELL",
+      "DEUTSCHE_BANK",
+      "DEUTSCHE_WELLE",
+      "DONKERVOORT",
+      "ELECTRONIC_ARTS",
+      "EXXONMOBIL",
+      "FERRARI",
+      "FIAT",
+      "FORD_MOTOR_COMPANY",
+      "FOX_NEWS",
+      "GAZPROM",
+      "GENERAL_MOTORS",
+      "GOOGLE",
+      "GRUPO_TELEVISA",
+      "GUCCI",
+      "HBO",
+      "HEWLETT_PACKARD",
+      "HONDA",
+      "HUAWEI",
+      "HYUNDAI_MOTOR_COMPANY",
+      "H_M",
+      "IBM",
+      "INTEL",
+      "KFC",
+      "KIA",
+      "KODA_AUTO",
+      "KONINKLIJKE_PHILIPS_NV",
+      "KOREAN_BROADCASTING_SYSTEM",
+      "LAMBORGHINI",
+      "LENOVO",
+      "LE_MONDE",
+      "LG_GROUP",
+      "LONDON_STOCK_EXCHANGE",
+      "MARVEL_COMICS",
+      "MAZDA",
+      "MERCEDES_BENZ",
+      "MERCEDES_BENZ_GROUP",
+      "META",
+      "METRO_GOLDWYN_MAYER",
+      "MICROSOFT",
+      "MUNHWA_BROADCASTING_CORPORAT",
+      "NASDAQ",
+      "NBC",
+      "NESTL",
+      "NIKE",
+      "NINTENDO",
+      "NISSAN",
+      "NOKIA",
+      "NVIDIA",
+      "OCLC_INC",
+      "OPEL",
+      "OPENAI",
+      "ORACLE_CORPORATION",
+      "PANASONIC_HOLDINGS_CORPORATI",
+      "PARAMOUNT_PICTURES",
+      "PEUGEOT",
+      "PFIZER",
+      "PIXAR",
+      "PORSCHE",
+      "Q122741",
+      "Q193559",
+      "Q2308012",
+      "Q384060",
+      "Q483551",
+      "Q58024",
+      "Q866",
+      "REDDIT",
+      "RENAULT",
+      "REUTERS",
+      "SAMSUNG_GROUP",
+      "SHELL",
+      "SIEMENS",
+      "SONY_GROUP",
+      "SPACEX",
+      "STARBUCKS",
+      "STUDIO_GHIBLI",
+      "SUN_MICROSYSTEMS",
+      "SUZUKI_MOTOR_CORPORATION",
+      "TATA_MOTORS_LTD",
+      "TESLA",
+      "THE_COCA_COLA_COMPANY",
+      "THE_ECONOMIST",
+      "THE_GUARDIAN",
+      "THE_NEW_YORK_TIMES",
+      "THE_TIMES",
+      "THE_WALT_DISNEY_COMPANY",
+      "TOGG",
+      "TOSHIBA",
+      "TOYOTA",
+      "TURKISH_AIRLINES",
+      "TV_AZTECA",
+      "UBER",
+      "UNIVERSAL_PICTURES",
+      "VOLKSWAGEN",
+      "WARNER_BROS_ENTERTAINMENT",
+      "WWE",
+      "X",
+      "XIAOMI",
+      "YAHOO",
+      "YAMAHA_MOTOR_COMPANY",
+      "YANDEX"
+    ],
+    "industry": [
+      "20TH_CENTURY_STUDIOS",
+      "ABS_CBN_CORPORATION",
+      "AB_VOLVO",
+      "ADOBE",
+      "ALEXA_INTERNET",
+      "ALFA_ROMEO",
+      "ALIBABA_GROUP",
+      "ALPHABET_INC",
+      "AMAZON",
+      "AMD",
+      "APPLE_INC",
+      "ASSOCIATED_PRESS",
+      "AT_T",
+      "AUDI_AG",
+      "BASKIN_ROBBINS",
+      "BMW",
+      "BRITISH_BROADCASTING_CORPORA",
+      "BURGER_KING",
+      "CANON_INC",
+      "CARTOON_NETWORK",
+      "CBS",
+      "CHEVROLET",
+      "CITRO_N",
+      "CNN",
+      "DC_COMICS",
+      "DEEPSEEK",
+      "DELL",
+      "DEUTSCHE_BANK",
+      "DEUTSCHE_WELLE",
+      "DONKERVOORT",
+      "ELECTRONIC_ARTS",
+      "EXXONMOBIL",
+      "FERRARI",
+      "FIAT",
+      "FORD_MOTOR_COMPANY",
+      "FOX_NEWS",
+      "GAZPROM",
+      "GENERAL_MOTORS",
+      "GOOGLE",
+      "GRUPO_TELEVISA",
+      "GUCCI",
+      "HBO",
+      "HEWLETT_PACKARD",
+      "HONDA",
+      "HUAWEI",
+      "HYUNDAI_MOTOR_COMPANY",
+      "H_M",
+      "IBM",
+      "INTEL",
+      "KFC",
+      "KIA",
+      "KODA_AUTO",
+      "KONINKLIJKE_PHILIPS_NV",
+      "KOREAN_BROADCASTING_SYSTEM",
+      "LAMBORGHINI",
+      "LENOVO",
+      "LE_MONDE",
+      "LG_GROUP",
+      "LONDON_STOCK_EXCHANGE",
+      "MARVEL_COMICS",
+      "MAZDA",
+      "MERCEDES_BENZ",
+      "MERCEDES_BENZ_GROUP",
+      "META",
+      "METRO_GOLDWYN_MAYER",
+      "MICROSOFT",
+      "MUNHWA_BROADCASTING_CORPORAT",
+      "NASDAQ",
+      "NBC",
+      "NESTL",
+      "NIKE",
+      "NINTENDO",
+      "NISSAN",
+      "NOKIA",
+      "NVIDIA",
+      "OCLC_INC",
+      "OPEL",
+      "OPENAI",
+      "ORACLE_CORPORATION",
+      "PANASONIC_HOLDINGS_CORPORATI",
+      "PARAMOUNT_PICTURES",
+      "PEUGEOT",
+      "PIXAR",
+      "PORSCHE",
+      "Q122741",
+      "Q193559",
+      "Q2308012",
+      "Q384060",
+      "Q483551",
+      "Q58024",
+      "Q866",
+      "REDDIT",
+      "RENAULT",
+      "REUTERS",
+      "SAMSUNG_GROUP",
+      "SHELL",
+      "SIEMENS",
+      "SONY_GROUP",
+      "SPACEX",
+      "STARBUCKS",
+      "STUDIO_GHIBLI",
+      "SUN_MICROSYSTEMS",
+      "SUZUKI_MOTOR_CORPORATION",
+      "TATA_MOTORS_LTD",
+      "TESLA",
+      "THE_COCA_COLA_COMPANY",
+      "THE_ECONOMIST",
+      "THE_GUARDIAN",
+      "THE_NEW_YORK_TIMES",
+      "THE_TIMES",
+      "THE_WALT_DISNEY_COMPANY",
+      "TOGG",
+      "TOSHIBA",
+      "TOYOTA",
+      "TV_AZTECA",
+      "UBER",
+      "UNIVERSAL_PICTURES",
+      "VOLKSWAGEN",
+      "WARNER_BROS_ENTERTAINMENT",
+      "WWE",
+      "X",
+      "XIAOMI",
+      "YAHOO",
+      "YAMAHA_MOTOR_COMPANY",
+      "YANDEX"
+    ]
+  },
+  "by_head": {
+    "common10": {
+      "21.1": {
+        "n": 383,
+        "entity_rank_mean": 28.879895561357703,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.34203655352480417,
+        "entity_z_mean": 2.1578220965963237,
+        "queried_value_rank_mean": 5.652741514360313,
+        "queried_value_z_mean": 0.5272918109011207,
+        "other_value_rank_mean": 6.268324607329843,
+        "other_value_z_mean": 0.4229995229917503,
+        "dla_entity_mean": 0.03825671613938363,
+        "dla_value_queried_mean": 0.01040878784306306,
+        "top1_class": {
+          "other": 0.97911227154047,
+          "own_entity": 0.020887728459530026
+        },
+        "top1_question_invariant_rate": 0.046875,
+        "groups": {
+          "system": {
+            "attention": 0.4074587976418961,
+            "write_norm": 0.7481779235928239,
+            "dla_entity": -0.00034618649341640724,
+            "dla_value_queried": -0.0014207254517950598
+          },
+          "object": {
+            "attention": 0.10253950229824056,
+            "write_norm": 1.8332466851900435,
+            "dla_entity": 0.011738220139500715,
+            "dla_value_queried": 0.0019650857084444365
+          },
+          "image_background": {
+            "attention": 0.24132317911065124,
+            "write_norm": 3.6915860403299954,
+            "dla_entity": 0.025388234118114795,
+            "dla_value_queried": 0.0055962721507824735
+          },
+          "question": {
+            "attention": 0.16540492888219052,
+            "write_norm": 1.1478614304846946,
+            "dla_entity": 0.001272672763560314,
+            "dla_value_queried": 0.003550643884243284
+          },
+          "assistant_prefix": {
+            "attention": 0.08328356879809506,
+            "write_norm": 0.5009949161007261,
+            "dla_entity": 0.00020514045793577337,
+            "dla_value_queried": 0.0007180809836662307
+          }
+        }
+      },
+      "21.5": {
+        "n": 383,
+        "entity_rank_mean": 30.464751958224543,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.22193211488250653,
+        "entity_z_mean": 1.6948688419988043,
+        "queried_value_rank_mean": 3.553524804177546,
+        "queried_value_z_mean": 0.9636240052472673,
+        "other_value_rank_mean": 5.023560209424084,
+        "other_value_z_mean": 0.6423739459550286,
+        "dla_entity_mean": 0.03798242288419895,
+        "dla_value_queried_mean": 0.01859791702064848,
+        "top1_class": {
+          "other": 0.9921671018276762,
+          "own_entity": 0.007832898172323759
+        },
+        "top1_question_invariant_rate": 0.0234375,
+        "groups": {
+          "system": {
+            "attention": 0.24222156503748432,
+            "write_norm": 0.5117159284038503,
+            "dla_entity": 3.389699472333986e-05,
+            "dla_value_queried": -0.0013602037201345546
+          },
+          "object": {
+            "attention": 0.0956776383145671,
+            "write_norm": 1.4838008938099478,
+            "dla_entity": 0.010238934737453248,
+            "dla_value_queried": 0.004084606993046691
+          },
+          "image_background": {
+            "attention": 0.3444922577696743,
+            "write_norm": 4.110052801999348,
+            "dla_entity": 0.022635616128428356,
+            "dla_value_queried": 0.012395952086838314
+          },
+          "question": {
+            "attention": 0.20246126499165618,
+            "write_norm": 1.707432940947597,
+            "dla_entity": 0.004058544852390857,
+            "dla_value_queried": 0.0026995066651400402
+          },
+          "assistant_prefix": {
+            "attention": 0.11510696982011666,
+            "write_norm": 0.797208719393822,
+            "dla_entity": 0.001015200617194785,
+            "dla_value_queried": 0.0007777253033834655
+          }
+        }
+      },
+      "22.13": {
+        "n": 383,
+        "entity_rank_mean": 41.133159268929504,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.06527415143603134,
+        "entity_z_mean": 1.2899126056566157,
+        "queried_value_rank_mean": 8.112271540469974,
+        "queried_value_z_mean": 0.18417755244469985,
+        "other_value_rank_mean": 8.12434554973822,
+        "other_value_z_mean": 0.21665715853042453,
+        "dla_entity_mean": 0.007912445574702383,
+        "dla_value_queried_mean": 0.0016320330738029568,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.0859375,
+        "groups": {
+          "system": {
+            "attention": 0.6584861970679255,
+            "write_norm": 0.510451195387087,
+            "dla_entity": -9.39523907433199e-05,
+            "dla_value_queried": -0.0007206083798904747
+          },
+          "object": {
+            "attention": 0.06511308863642322,
+            "write_norm": 0.8065250313235325,
+            "dla_entity": 0.0028729224947589356,
+            "dla_value_queried": 0.00023313553107632775
+          },
+          "image_background": {
+            "attention": 0.15402431629461968,
+            "write_norm": 1.4632034852672806,
+            "dla_entity": 0.0049918064956661415,
+            "dla_value_queried": 0.0006661058649734934
+          },
+          "question": {
+            "attention": 0.07831775675243248,
+            "write_norm": 0.5041549454392092,
+            "dla_entity": 7.763997636396034e-05,
+            "dla_value_queried": 0.00044276773017588855
+          },
+          "assistant_prefix": {
+            "attention": 0.0441375220724559,
+            "write_norm": 0.3765579865608296,
+            "dla_entity": 6.344679496286382e-05,
+            "dla_value_queried": 0.0010103283007243437
+          }
+        }
+      },
+      "22.15": {
+        "n": 383,
+        "entity_rank_mean": 25.373368146214098,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.31070496083550914,
+        "entity_z_mean": 2.0797989137918145,
+        "queried_value_rank_mean": 1.6919060052219321,
+        "queried_value_z_mean": 1.5144554697482921,
+        "other_value_rank_mean": 1.8599476439790577,
+        "other_value_z_mean": 1.4528093731301441,
+        "dla_entity_mean": 0.0744371261162253,
+        "dla_value_queried_mean": 0.07303800683217208,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.484375,
+        "groups": {
+          "system": {
+            "attention": 0.11640034664626532,
+            "write_norm": 0.18772117255192358,
+            "dla_entity": 1.4694313778471768e-05,
+            "dla_value_queried": -0.00045678786908558215
+          },
+          "object": {
+            "attention": 0.16048915995474583,
+            "write_norm": 2.598695385588367,
+            "dla_entity": 0.01648808054154485,
+            "dla_value_queried": 0.015402520340060621
+          },
+          "image_background": {
+            "attention": 0.38718388154227334,
+            "write_norm": 6.174118755536042,
+            "dla_entity": 0.0390767394319601,
+            "dla_value_queried": 0.03837925261564183
+          },
+          "question": {
+            "attention": 0.21895546538089025,
+            "write_norm": 2.9139125325738915,
+            "dla_entity": 0.012529375927046175,
+            "dla_value_queried": 0.014351347566712403
+          },
+          "assistant_prefix": {
+            "attention": 0.11694348091867511,
+            "write_norm": 1.5472040646381229,
+            "dla_entity": 0.006326062298064408,
+            "dla_value_queried": 0.005360007089516437
+          }
+        }
+      },
+      "22.17": {
+        "n": 383,
+        "entity_rank_mean": 18.177545691906005,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.47780678851174935,
+        "entity_z_mean": 2.7538761336054876,
+        "queried_value_rank_mean": 5.903394255874674,
+        "queried_value_z_mean": 0.5949555905845852,
+        "other_value_rank_mean": 6.048429319371728,
+        "other_value_z_mean": 0.5774966961940682,
+        "dla_entity_mean": 0.10042887405789026,
+        "dla_value_queried_mean": 0.007960287886626081,
+        "top1_class": {
+          "other": 0.9242819843342036,
+          "own_entity": 0.07571801566579635
+        },
+        "top1_question_invariant_rate": 0.4375,
+        "groups": {
+          "system": {
+            "attention": 0.20326604674674822,
+            "write_norm": 0.38113788683356487,
+            "dla_entity": -5.999942114739157e-05,
+            "dla_value_queried": -0.0004670401779744454
+          },
+          "object": {
+            "attention": 0.22930437727167463,
+            "write_norm": 3.5847400905024602,
+            "dla_entity": 0.030089525135116254,
+            "dla_value_queried": 0.0014738156733465812
+          },
+          "image_background": {
+            "attention": 0.41296103197410117,
+            "write_norm": 6.78719477553903,
+            "dla_entity": 0.059408811751498376,
+            "dla_value_queried": 0.004308817635414415
+          },
+          "question": {
+            "attention": 0.13268746121229685,
+            "write_norm": 1.83122551867218,
+            "dla_entity": 0.00954291482957832,
+            "dla_value_queried": 0.002830391579215327
+          },
+          "assistant_prefix": {
+            "attention": 0.021738614906452344,
+            "write_norm": 0.29197528676796153,
+            "dla_entity": 0.0014440896642896608,
+            "dla_value_queried": -0.0001879000000133523
+          }
+        }
+      },
+      "22.19": {
+        "n": 383,
+        "entity_rank_mean": 31.973890339425587,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.16449086161879894,
+        "entity_z_mean": 1.6451601622748984,
+        "queried_value_rank_mean": 4.441253263707572,
+        "queried_value_z_mean": 0.847458913390994,
+        "other_value_rank_mean": 4.810209424083769,
+        "other_value_z_mean": 0.7326682175540716,
+        "dla_entity_mean": 0.032870795225516974,
+        "dla_value_queried_mean": 0.01870311395431274,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.125,
+        "groups": {
+          "system": {
+            "attention": 0.2531451897272553,
+            "write_norm": 0.38706665038187105,
+            "dla_entity": -3.9426886937797e-05,
+            "dla_value_queried": 0.00036093868976501485
+          },
+          "object": {
+            "attention": 0.09574252055768244,
+            "write_norm": 1.3771792931273075,
+            "dla_entity": 0.007207167159443233,
+            "dla_value_queried": 0.004270690052898467
+          },
+          "image_background": {
+            "attention": 0.1764769113425642,
+            "write_norm": 2.080032581332147,
+            "dla_entity": 0.011167616865372843,
+            "dla_value_queried": 0.005734894213097082
+          },
+          "question": {
+            "attention": 0.352597666082432,
+            "write_norm": 3.016769271528752,
+            "dla_entity": 0.009609441576215457,
+            "dla_value_queried": 0.006119682813110491
+          },
+          "assistant_prefix": {
+            "attention": 0.1220660471106945,
+            "write_norm": 1.3564538991871453,
+            "dla_entity": 0.004927557156734395,
+            "dla_value_queried": 0.002218122346450362
+          }
+        }
+      },
+      "23.17": {
+        "n": 383,
+        "entity_rank_mean": 48.12532637075718,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.04177545691906005,
+        "entity_z_mean": 1.0886751734147058,
+        "queried_value_rank_mean": 6.7702349869451695,
+        "queried_value_z_mean": 0.3913361906528706,
+        "other_value_rank_mean": 9.424083769633508,
+        "other_value_z_mean": 0.09958147166506509,
+        "dla_entity_mean": 0.008144199731784587,
+        "dla_value_queried_mean": 0.00044328811189464314,
+        "top1_class": {
+          "other": 0.9973890339425587,
+          "own_value_other_attr": 0.0026109660574412533
+        },
+        "top1_question_invariant_rate": 0.0703125,
+        "groups": {
+          "system": {
+            "attention": 0.8438192029379056,
+            "write_norm": 0.701102269069333,
+            "dla_entity": -2.625232346746651e-06,
+            "dla_value_queried": -0.0017776696370273154
+          },
+          "object": {
+            "attention": 0.038503943337005984,
+            "write_norm": 1.1779280185611924,
+            "dla_entity": 0.0028170605497758617,
+            "dla_value_queried": 5.8999344446419855e-05
+          },
+          "image_background": {
+            "attention": 0.06611065543317492,
+            "write_norm": 1.8958105281403888,
+            "dla_entity": 0.0051774692817474115,
+            "dla_value_queried": 0.0005567104106647072
+          },
+          "question": {
+            "attention": 0.0322418104049898,
+            "write_norm": 0.3563971704859335,
+            "dla_entity": 9.234362751015707e-05,
+            "dla_value_queried": 0.00036630406499522976
+          },
+          "assistant_prefix": {
+            "attention": 0.019368031940012003,
+            "write_norm": 0.2773335935261013,
+            "dla_entity": 5.84668412892048e-05,
+            "dla_value_queried": 0.0012403416223140313
+          }
+        }
+      },
+      "23.3": {
+        "n": 383,
+        "entity_rank_mean": 21.97650130548303,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.5143603133159269,
+        "entity_z_mean": 3.302123132037782,
+        "queried_value_rank_mean": 6.4281984334203655,
+        "queried_value_z_mean": 0.46300028091267376,
+        "other_value_rank_mean": 6.791884816753926,
+        "other_value_z_mean": 0.4044026047049556,
+        "dla_entity_mean": 0.10768388630192541,
+        "dla_value_queried_mean": 0.003060398931578124,
+        "top1_class": {
+          "other": 0.7911227154046997,
+          "own_entity": 0.19843342036553524,
+          "other_entity": 0.010443864229765013
+        },
+        "top1_question_invariant_rate": 0.5078125,
+        "groups": {
+          "system": {
+            "attention": 0.5057265176571536,
+            "write_norm": 0.6308581910811014,
+            "dla_entity": -0.00016368558623426307,
+            "dla_value_queried": -0.0011409042081684
+          },
+          "object": {
+            "attention": 0.12830749453670362,
+            "write_norm": 2.6610625394444924,
+            "dla_entity": 0.03208709485123622,
+            "dla_value_queried": 0.0007923081201827915
+          },
+          "image_background": {
+            "attention": 0.2510338796682014,
+            "write_norm": 5.032401173995618,
+            "dla_entity": 0.06411003140475109,
+            "dla_value_queried": 0.0029643428665645944
+          },
+          "question": {
+            "attention": 0.08611594218342485,
+            "write_norm": 1.0948972865627888,
+            "dla_entity": 0.008328157126598847,
+            "dla_value_queried": 0.0006047509274678932
+          },
+          "assistant_prefix": {
+            "attention": 0.0287803441830777,
+            "write_norm": 0.39576592355694223,
+            "dla_entity": 0.0033230499531863435,
+            "dla_value_queried": -0.00015931793465620518
+          }
+        }
+      },
+      "23.4": {
+        "n": 383,
+        "entity_rank_mean": 32.806788511749346,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.2689295039164491,
+        "entity_z_mean": 2.0013258801651608,
+        "queried_value_rank_mean": 5.093994778067885,
+        "queried_value_z_mean": 0.7772944296363531,
+        "other_value_rank_mean": 5.442408376963351,
+        "other_value_z_mean": 0.7213783644631789,
+        "dla_entity_mean": 0.03137693259304322,
+        "dla_value_queried_mean": 0.017416344484412045,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.265625,
+        "groups": {
+          "system": {
+            "attention": 0.5466231503001081,
+            "write_norm": 0.5930850400854456,
+            "dla_entity": -0.00015895658073647275,
+            "dla_value_queried": 0.0001398178516747161
+          },
+          "object": {
+            "attention": 0.036716837756938785,
+            "write_norm": 0.6166438454514073,
+            "dla_entity": 0.004016441518949105,
+            "dla_value_queried": 0.001632203108837893
+          },
+          "image_background": {
+            "attention": 0.12338664118254036,
+            "write_norm": 1.873372712262539,
+            "dla_entity": 0.013356046077260592,
+            "dla_value_queried": 0.006487593832156677
+          },
+          "question": {
+            "attention": 0.17515593790509992,
+            "write_norm": 1.8816180317310067,
+            "dla_entity": 0.00715956414315608,
+            "dla_value_queried": 0.005837282549090353
+          },
+          "assistant_prefix": {
+            "attention": 0.11808060790477783,
+            "write_norm": 1.6788620869227862,
+            "dla_entity": 0.007003196571739372,
+            "dla_value_queried": 0.003319352526353976
+          }
+        }
+      },
+      "23.6": {
+        "n": 383,
+        "entity_rank_mean": 20.425587467362924,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.3838120104438642,
+        "entity_z_mean": 2.7194115973512982,
+        "queried_value_rank_mean": 3.537859007832898,
+        "queried_value_z_mean": 1.2468487164394702,
+        "other_value_rank_mean": 4.980366492146596,
+        "other_value_z_mean": 0.8808392708123349,
+        "dla_entity_mean": 0.048195385969608005,
+        "dla_value_queried_mean": 0.03855430923163552,
+        "top1_class": {
+          "other": 0.97911227154047,
+          "own_entity": 0.015665796344647518,
+          "other_entity": 0.005221932114882507
+        },
+        "top1_question_invariant_rate": 0.375,
+        "groups": {
+          "system": {
+            "attention": 0.555351110753985,
+            "write_norm": 0.726470758963386,
+            "dla_entity": -1.7263957991004366e-05,
+            "dla_value_queried": 0.0008375031711711547
+          },
+          "object": {
+            "attention": 0.024716404804050456,
+            "write_norm": 0.35416924396126137,
+            "dla_entity": 0.003151393265802808,
+            "dla_value_queried": 0.0006728699169053891
+          },
+          "image_background": {
+            "attention": 0.06998594895165715,
+            "write_norm": 0.7878872468659056,
+            "dla_entity": 0.006994243352756871,
+            "dla_value_queried": 0.0026056083329327124
+          },
+          "question": {
+            "attention": 0.2180492472166181,
+            "write_norm": 2.62760545626555,
+            "dla_entity": 0.019690677295488908,
+            "dla_value_queried": 0.01947228502368838
+          },
+          "assistant_prefix": {
+            "attention": 0.13193520553429505,
+            "write_norm": 2.1314493127886993,
+            "dla_entity": 0.018377184214656467,
+            "dla_value_queried": 0.01496550347775457
+          }
+        }
+      }
+    },
+    "hq_country_top8": {
+      "21.1": {
+        "n": 383,
+        "entity_rank_mean": 28.879895561357703,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.34203655352480417,
+        "entity_z_mean": 2.1578220965963237,
+        "queried_value_rank_mean": 5.652741514360313,
+        "queried_value_z_mean": 0.5272918109011207,
+        "other_value_rank_mean": 6.268324607329843,
+        "other_value_z_mean": 0.4229995229917503,
+        "dla_entity_mean": 0.03825671613938363,
+        "dla_value_queried_mean": 0.01040878784306306,
+        "top1_class": {
+          "other": 0.97911227154047,
+          "own_entity": 0.020887728459530026
+        },
+        "top1_question_invariant_rate": 0.046875,
+        "groups": {
+          "system": {
+            "attention": 0.4074587976418961,
+            "write_norm": 0.7481779235928239,
+            "dla_entity": -0.00034618649341640724,
+            "dla_value_queried": -0.0014207254517950598
+          },
+          "object": {
+            "attention": 0.10253950229824056,
+            "write_norm": 1.8332466851900435,
+            "dla_entity": 0.011738220139500715,
+            "dla_value_queried": 0.0019650857084444365
+          },
+          "image_background": {
+            "attention": 0.24132317911065124,
+            "write_norm": 3.6915860403299954,
+            "dla_entity": 0.025388234118114795,
+            "dla_value_queried": 0.0055962721507824735
+          },
+          "question": {
+            "attention": 0.16540492888219052,
+            "write_norm": 1.1478614304846946,
+            "dla_entity": 0.001272672763560314,
+            "dla_value_queried": 0.003550643884243284
+          },
+          "assistant_prefix": {
+            "attention": 0.08328356879809506,
+            "write_norm": 0.5009949161007261,
+            "dla_entity": 0.00020514045793577337,
+            "dla_value_queried": 0.0007180809836662307
+          }
+        }
+      },
+      "21.4": {
+        "n": 383,
+        "entity_rank_mean": 21.992167101827675,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.3733681462140992,
+        "entity_z_mean": 2.5090212122938116,
+        "queried_value_rank_mean": 4.584856396866841,
+        "queried_value_z_mean": 0.6931640899242583,
+        "other_value_rank_mean": 4.763089005235602,
+        "other_value_z_mean": 0.6628254504681745,
+        "dla_entity_mean": 0.09498418984155343,
+        "dla_value_queried_mean": 0.017241424098841884,
+        "top1_class": {
+          "other": 0.9634464751958225,
+          "own_entity": 0.03655352480417755
+        },
+        "top1_question_invariant_rate": 0.5546875,
+        "groups": {
+          "system": {
+            "attention": 0.14475997986075015,
+            "write_norm": 0.2569542883460072,
+            "dla_entity": -3.580090915204125e-05,
+            "dla_value_queried": -0.00024488976660215045
+          },
+          "object": {
+            "attention": 0.24490173965420176,
+            "write_norm": 4.485759720002002,
+            "dla_entity": 0.03250830652700108,
+            "dla_value_queried": 0.006800598294338113
+          },
+          "image_background": {
+            "attention": 0.4784471950403782,
+            "write_norm": 8.300323476212455,
+            "dla_entity": 0.060205135152025656,
+            "dla_value_queried": 0.010263436041850938
+          },
+          "question": {
+            "attention": 0.10989248261886694,
+            "write_norm": 1.0860642382957761,
+            "dla_entity": 0.002228865126588242,
+            "dla_value_queried": 0.0004609499387285127
+          },
+          "assistant_prefix": {
+            "attention": 0.021980461591548303,
+            "write_norm": 0.1658058884722611,
+            "dla_entity": 7.75464127249098e-05,
+            "dla_value_queried": -3.881916019502702e-05
+          }
+        }
+      },
+      "22.15": {
+        "n": 383,
+        "entity_rank_mean": 25.373368146214098,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.31070496083550914,
+        "entity_z_mean": 2.0797989137918145,
+        "queried_value_rank_mean": 1.6919060052219321,
+        "queried_value_z_mean": 1.5144554697482921,
+        "other_value_rank_mean": 1.8599476439790577,
+        "other_value_z_mean": 1.4528093731301441,
+        "dla_entity_mean": 0.0744371261162253,
+        "dla_value_queried_mean": 0.07303800683217208,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.484375,
+        "groups": {
+          "system": {
+            "attention": 0.11640034664626532,
+            "write_norm": 0.18772117255192358,
+            "dla_entity": 1.4694313778471768e-05,
+            "dla_value_queried": -0.00045678786908558215
+          },
+          "object": {
+            "attention": 0.16048915995474583,
+            "write_norm": 2.598695385588367,
+            "dla_entity": 0.01648808054154485,
+            "dla_value_queried": 0.015402520340060621
+          },
+          "image_background": {
+            "attention": 0.38718388154227334,
+            "write_norm": 6.174118755536042,
+            "dla_entity": 0.0390767394319601,
+            "dla_value_queried": 0.03837925261564183
+          },
+          "question": {
+            "attention": 0.21895546538089025,
+            "write_norm": 2.9139125325738915,
+            "dla_entity": 0.012529375927046175,
+            "dla_value_queried": 0.014351347566712403
+          },
+          "assistant_prefix": {
+            "attention": 0.11694348091867511,
+            "write_norm": 1.5472040646381229,
+            "dla_entity": 0.006326062298064408,
+            "dla_value_queried": 0.005360007089516437
+          }
+        }
+      },
+      "22.17": {
+        "n": 383,
+        "entity_rank_mean": 18.177545691906005,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.47780678851174935,
+        "entity_z_mean": 2.7538761336054876,
+        "queried_value_rank_mean": 5.903394255874674,
+        "queried_value_z_mean": 0.5949555905845852,
+        "other_value_rank_mean": 6.048429319371728,
+        "other_value_z_mean": 0.5774966961940682,
+        "dla_entity_mean": 0.10042887405789026,
+        "dla_value_queried_mean": 0.007960287886626081,
+        "top1_class": {
+          "other": 0.9242819843342036,
+          "own_entity": 0.07571801566579635
+        },
+        "top1_question_invariant_rate": 0.4375,
+        "groups": {
+          "system": {
+            "attention": 0.20326604674674822,
+            "write_norm": 0.38113788683356487,
+            "dla_entity": -5.999942114739157e-05,
+            "dla_value_queried": -0.0004670401779744454
+          },
+          "object": {
+            "attention": 0.22930437727167463,
+            "write_norm": 3.5847400905024602,
+            "dla_entity": 0.030089525135116254,
+            "dla_value_queried": 0.0014738156733465812
+          },
+          "image_background": {
+            "attention": 0.41296103197410117,
+            "write_norm": 6.78719477553903,
+            "dla_entity": 0.059408811751498376,
+            "dla_value_queried": 0.004308817635414415
+          },
+          "question": {
+            "attention": 0.13268746121229685,
+            "write_norm": 1.83122551867218,
+            "dla_entity": 0.00954291482957832,
+            "dla_value_queried": 0.002830391579215327
+          },
+          "assistant_prefix": {
+            "attention": 0.021738614906452344,
+            "write_norm": 0.29197528676796153,
+            "dla_entity": 0.0014440896642896608,
+            "dla_value_queried": -0.0001879000000133523
+          }
+        }
+      },
+      "23.17": {
+        "n": 383,
+        "entity_rank_mean": 48.12532637075718,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.04177545691906005,
+        "entity_z_mean": 1.0886751734147058,
+        "queried_value_rank_mean": 6.7702349869451695,
+        "queried_value_z_mean": 0.3913361906528706,
+        "other_value_rank_mean": 9.424083769633508,
+        "other_value_z_mean": 0.09958147166506509,
+        "dla_entity_mean": 0.008144199731784587,
+        "dla_value_queried_mean": 0.00044328811189464314,
+        "top1_class": {
+          "other": 0.9973890339425587,
+          "own_value_other_attr": 0.0026109660574412533
+        },
+        "top1_question_invariant_rate": 0.0703125,
+        "groups": {
+          "system": {
+            "attention": 0.8438192029379056,
+            "write_norm": 0.701102269069333,
+            "dla_entity": -2.625232346746651e-06,
+            "dla_value_queried": -0.0017776696370273154
+          },
+          "object": {
+            "attention": 0.038503943337005984,
+            "write_norm": 1.1779280185611924,
+            "dla_entity": 0.0028170605497758617,
+            "dla_value_queried": 5.8999344446419855e-05
+          },
+          "image_background": {
+            "attention": 0.06611065543317492,
+            "write_norm": 1.8958105281403888,
+            "dla_entity": 0.0051774692817474115,
+            "dla_value_queried": 0.0005567104106647072
+          },
+          "question": {
+            "attention": 0.0322418104049898,
+            "write_norm": 0.3563971704859335,
+            "dla_entity": 9.234362751015707e-05,
+            "dla_value_queried": 0.00036630406499522976
+          },
+          "assistant_prefix": {
+            "attention": 0.019368031940012003,
+            "write_norm": 0.2773335935261013,
+            "dla_entity": 5.84668412892048e-05,
+            "dla_value_queried": 0.0012403416223140313
+          }
+        }
+      },
+      "23.3": {
+        "n": 383,
+        "entity_rank_mean": 21.97650130548303,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.5143603133159269,
+        "entity_z_mean": 3.302123132037782,
+        "queried_value_rank_mean": 6.4281984334203655,
+        "queried_value_z_mean": 0.46300028091267376,
+        "other_value_rank_mean": 6.791884816753926,
+        "other_value_z_mean": 0.4044026047049556,
+        "dla_entity_mean": 0.10768388630192541,
+        "dla_value_queried_mean": 0.003060398931578124,
+        "top1_class": {
+          "other": 0.7911227154046997,
+          "own_entity": 0.19843342036553524,
+          "other_entity": 0.010443864229765013
+        },
+        "top1_question_invariant_rate": 0.5078125,
+        "groups": {
+          "system": {
+            "attention": 0.5057265176571536,
+            "write_norm": 0.6308581910811014,
+            "dla_entity": -0.00016368558623426307,
+            "dla_value_queried": -0.0011409042081684
+          },
+          "object": {
+            "attention": 0.12830749453670362,
+            "write_norm": 2.6610625394444924,
+            "dla_entity": 0.03208709485123622,
+            "dla_value_queried": 0.0007923081201827915
+          },
+          "image_background": {
+            "attention": 0.2510338796682014,
+            "write_norm": 5.032401173995618,
+            "dla_entity": 0.06411003140475109,
+            "dla_value_queried": 0.0029643428665645944
+          },
+          "question": {
+            "attention": 0.08611594218342485,
+            "write_norm": 1.0948972865627888,
+            "dla_entity": 0.008328157126598847,
+            "dla_value_queried": 0.0006047509274678932
+          },
+          "assistant_prefix": {
+            "attention": 0.0287803441830777,
+            "write_norm": 0.39576592355694223,
+            "dla_entity": 0.0033230499531863435,
+            "dla_value_queried": -0.00015931793465620518
+          }
+        }
+      },
+      "23.4": {
+        "n": 383,
+        "entity_rank_mean": 32.806788511749346,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.2689295039164491,
+        "entity_z_mean": 2.0013258801651608,
+        "queried_value_rank_mean": 5.093994778067885,
+        "queried_value_z_mean": 0.7772944296363531,
+        "other_value_rank_mean": 5.442408376963351,
+        "other_value_z_mean": 0.7213783644631789,
+        "dla_entity_mean": 0.03137693259304322,
+        "dla_value_queried_mean": 0.017416344484412045,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.265625,
+        "groups": {
+          "system": {
+            "attention": 0.5466231503001081,
+            "write_norm": 0.5930850400854456,
+            "dla_entity": -0.00015895658073647275,
+            "dla_value_queried": 0.0001398178516747161
+          },
+          "object": {
+            "attention": 0.036716837756938785,
+            "write_norm": 0.6166438454514073,
+            "dla_entity": 0.004016441518949105,
+            "dla_value_queried": 0.001632203108837893
+          },
+          "image_background": {
+            "attention": 0.12338664118254036,
+            "write_norm": 1.873372712262539,
+            "dla_entity": 0.013356046077260592,
+            "dla_value_queried": 0.006487593832156677
+          },
+          "question": {
+            "attention": 0.17515593790509992,
+            "write_norm": 1.8816180317310067,
+            "dla_entity": 0.00715956414315608,
+            "dla_value_queried": 0.005837282549090353
+          },
+          "assistant_prefix": {
+            "attention": 0.11808060790477783,
+            "write_norm": 1.6788620869227862,
+            "dla_entity": 0.007003196571739372,
+            "dla_value_queried": 0.003319352526353976
+          }
+        }
+      },
+      "23.6": {
+        "n": 383,
+        "entity_rank_mean": 20.425587467362924,
+        "entity_rank_chance": 111.5,
+        "entity_top1_rate": 0.3838120104438642,
+        "entity_z_mean": 2.7194115973512982,
+        "queried_value_rank_mean": 3.537859007832898,
+        "queried_value_z_mean": 1.2468487164394702,
+        "other_value_rank_mean": 4.980366492146596,
+        "other_value_z_mean": 0.8808392708123349,
+        "dla_entity_mean": 0.048195385969608005,
+        "dla_value_queried_mean": 0.03855430923163552,
+        "top1_class": {
+          "other": 0.97911227154047,
+          "own_entity": 0.015665796344647518,
+          "other_entity": 0.005221932114882507
+        },
+        "top1_question_invariant_rate": 0.375,
+        "groups": {
+          "system": {
+            "attention": 0.555351110753985,
+            "write_norm": 0.726470758963386,
+            "dla_entity": -1.7263957991004366e-05,
+            "dla_value_queried": 0.0008375031711711547
+          },
+          "object": {
+            "attention": 0.024716404804050456,
+            "write_norm": 0.35416924396126137,
+            "dla_entity": 0.003151393265802808,
+            "dla_value_queried": 0.0006728699169053891
+          },
+          "image_background": {
+            "attention": 0.06998594895165715,
+            "write_norm": 0.7878872468659056,
+            "dla_entity": 0.006994243352756871,
+            "dla_value_queried": 0.0026056083329327124
+          },
+          "question": {
+            "attention": 0.2180492472166181,
+            "write_norm": 2.62760545626555,
+            "dla_entity": 0.019690677295488908,
+            "dla_value_queried": 0.01947228502368838
+          },
+          "assistant_prefix": {
+            "attention": 0.13193520553429505,
+            "write_norm": 2.1314493127886993,
+            "dla_entity": 0.018377184214656467,
+            "dla_value_queried": 0.01496550347775457
+          }
+        }
+      }
+    }
+  }
+}

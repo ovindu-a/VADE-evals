@@ -1,0 +1,31 @@
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-3B-Instruct/flags/ndm/calling_code/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_window_sweep_patch27.log ===
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   0%|          | 1/824 [00:00<04:09,  3.30it/s]Loading weights:   1%|1         | 12/824 [00:00<00:21, 37.20it/s]Loading weights:   3%|3         | 27/824 [00:00<00:11, 67.97it/s]Loading weights:   5%|4         | 39/824 [00:00<00:10, 77.06it/s]Loading weights:   6%|6         | 53/824 [00:00<00:08, 88.12it/s]Loading weights:   8%|8         | 69/824 [00:00<00:07, 106.51it/s]Loading weights:  10%|9         | 81/824 [00:00<00:06, 109.52it/s]Loading weights:  11%|#1        | 94/824 [00:01<00:06, 112.73it/s]Loading weights:  13%|#3        | 108/824 [00:01<00:05, 120.20it/s]Loading weights:  15%|#4        | 122/824 [00:01<00:06, 116.87it/s]Loading weights:  16%|#6        | 135/824 [00:01<00:05, 120.17it/s]Loading weights:  18%|#7        | 148/824 [00:01<00:11, 60.58it/s] Loading weights:  19%|#9        | 158/824 [00:02<00:13, 50.58it/s]Loading weights:  20%|##        | 166/824 [00:02<00:13, 47.38it/s]Loading weights:  21%|##        | 173/824 [00:02<00:18, 34.65it/s]Loading weights:  22%|##2       | 183/824 [00:02<00:15, 42.48it/s]Loading weights:  23%|##3       | 190/824 [00:03<00:17, 36.42it/s]Loading weights:  24%|##3       | 196/824 [00:03<00:18, 34.23it/s]Loading weights:  24%|##4       | 201/824 [00:03<00:17, 36.28it/s]Loading weights:  25%|##5       | 208/824 [00:03<00:14, 41.56it/s]Loading weights:  27%|##6       | 221/824 [00:03<00:10, 56.83it/s]Loading weights:  28%|##8       | 233/824 [00:03<00:08, 70.06it/s]Loading weights:  30%|###       | 249/824 [00:03<00:06, 91.05it/s]Loading weights:  32%|###1      | 262/824 [00:04<00:05, 98.87it/s]Loading weights:  34%|###3      | 278/824 [00:04<00:05, 107.22it/s]Loading weights:  35%|###5      | 292/824 [00:04<00:04, 109.61it/s]Loading weights:  37%|###7      | 305/824 [00:04<00:04, 107.76it/s]Loading weights:  38%|###8      | 317/824 [00:04<00:04, 110.53it/s]Loading weights:  40%|###9      | 329/824 [00:04<00:04, 112.60it/s]Loading weights:  41%|####1     | 341/824 [00:04<00:04, 114.25it/s]Loading weights:  43%|####2     | 353/824 [00:04<00:04, 114.79it/s]Loading weights:  44%|####4     | 365/824 [00:04<00:03, 115.84it/s]Loading weights:  46%|####5     | 377/824 [00:05<00:03, 116.84it/s]Loading weights:  47%|####7     | 389/824 [00:05<00:03, 116.83it/s]Loading weights:  49%|####8     | 402/824 [00:05<00:03, 119.77it/s]Loading weights:  50%|#####     | 415/824 [00:05<00:03, 122.73it/s]Loading weights:  52%|#####2    | 429/824 [00:05<00:03, 126.64it/s]Loading weights:  57%|#####7    | 473/824 [00:05<00:01, 218.07it/s]Loading weights:  62%|######1   | 509/824 [00:05<00:01, 257.40it/s]Loading weights:  67%|######6   | 548/824 [00:05<00:00, 294.02it/s]Loading weights:  71%|#######1  | 586/824 [00:05<00:00, 318.81it/s]Loading weights:  76%|#######5  | 623/824 [00:05<00:00, 330.17it/s]Loading weights:  81%|########  | 665/824 [00:06<00:00, 353.54it/s]Loading weights:  86%|########5 | 706/824 [00:06<00:00, 366.34it/s]Loading weights:  90%|######### | 744/824 [00:06<00:00, 367.51it/s]Loading weights:  95%|#########5| 784/824 [00:06<00:00, 376.54it/s]Loading weights: 100%|#########9| 822/824 [00:06<00:00, 349.91it/s]Loading weights: 100%|##########| 824/824 [00:06<00:00, 126.97it/s]
+[head_window_sweep] entity=flags attribute=calling_code patch_layer=27 positions=full_image rows=64 (25 distinct bases) windows=7
+capturing per-head outputs at blocks 27-35 (clean + image-patched) ...
+/root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  unhooked:          cause=  0.0% first_src=  2.0%
+  image patch only:  cause= 98.4% first_src=100.0% base_kept=  0.0%   <-- the effect every window is read against
+  window      27 ( 16 heads)  suff: cause=  0.0% first_src= 72.5% base_kept= 28.1% | nec: cause= 43.8% first_src= 29.4% | shuffled: own= 15.7% donor= 79.2% (first tok)
+  window      28 ( 16 heads)  suff: cause=  0.0% first_src=  2.0% base_kept= 85.9% | nec: cause= 98.4% first_src=100.0% | shuffled: own=  2.0% donor=  0.0% (first tok)
+  window      29 ( 16 heads)  suff: cause=  0.0% first_src=  2.0% base_kept= 85.9% | nec: cause= 98.4% first_src=100.0% | shuffled: own=  2.0% donor=  0.0% (first tok)
+  window   27-28 ( 32 heads)  suff: cause=  0.0% first_src= 72.5% base_kept= 28.1% | nec: cause= 43.8% first_src= 29.4% | shuffled: own= 15.7% donor= 79.2% (first tok)
+  window   28-29 ( 32 heads)  suff: cause=  0.0% first_src=  2.0% base_kept= 85.9% | nec: cause= 98.4% first_src=100.0% | shuffled: own=  2.0% donor=  0.0% (first tok)
+  window   27-29 ( 48 heads)  suff: cause=  0.0% first_src= 74.5% base_kept= 26.6% | nec: cause= 43.8% first_src= 29.4% | shuffled: own= 15.7% donor= 79.2% (first tok)
+  window   27-35 (144 heads)  suff: cause=  0.0% first_src=100.0% base_kept= 15.6% | nec: cause= 20.3% first_src=  2.0% | shuffled: own= 19.6% donor=100.0% (first tok)
+
+full-coverage identity (window 27-35 suff vs image patch only): cause 0.0% vs 98.4%, first_src 100.0% vs 100.0% -> OK
+
+per-block |delta_resid| mass at the last token (where the image-patched writes changed):
+  block 27: delta_resid=  47.8027  |delta_dla|=   0.0304
+  block 28: delta_resid=  13.1961  |delta_dla|=   0.0080
+  block 29: delta_resid=   7.1534  |delta_dla|=   0.0059
+  block 30: delta_resid=  10.9848  |delta_dla|=   0.0068
+  block 31: delta_resid=  83.1223  |delta_dla|=   0.1095
+  block 32: delta_resid=  54.4906  |delta_dla|=   0.0256
+  block 33: delta_resid=  31.9257  |delta_dla|=   0.0151
+  block 34: delta_resid=  79.7903  |delta_dla|=   0.1427
+  block 35: delta_resid= 130.8671  |delta_dla|=   2.9554
+
+wrote /workspace/VADE-evals/results/image_head_pipeline_Qwen2.5-VL-3B-Instruct/flags/calling_code/windows_patch27.json

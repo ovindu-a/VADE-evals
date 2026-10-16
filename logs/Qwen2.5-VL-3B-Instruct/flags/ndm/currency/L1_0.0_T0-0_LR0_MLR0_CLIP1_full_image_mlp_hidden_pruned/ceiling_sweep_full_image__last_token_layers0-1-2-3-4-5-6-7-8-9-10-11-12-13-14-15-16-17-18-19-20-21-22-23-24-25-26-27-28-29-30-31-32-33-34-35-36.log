@@ -1,0 +1,182 @@
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-3B-Instruct/flags/ndm/currency/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/ceiling_sweep_full_image__last_token_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-36.log ===
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   0%|          | 1/824 [00:00<04:49,  2.85it/s]Loading weights:   2%|1         | 13/824 [00:00<00:22, 36.66it/s]Loading weights:   3%|3         | 27/824 [00:00<00:12, 65.78it/s]Loading weights:   5%|4         | 38/824 [00:00<00:10, 77.65it/s]Loading weights:   6%|6         | 51/824 [00:00<00:08, 91.73it/s]Loading weights:   8%|7         | 63/824 [00:00<00:08, 91.28it/s]Loading weights:   9%|9         | 77/824 [00:01<00:07, 97.23it/s]Loading weights:  11%|#         | 89/824 [00:01<00:07, 102.47it/s]Loading weights:  12%|#2        | 101/824 [00:01<00:06, 105.04it/s]Loading weights:  14%|#3        | 113/824 [00:01<00:06, 106.87it/s]Loading weights:  15%|#5        | 125/824 [00:01<00:06, 109.38it/s]Loading weights:  17%|#6        | 137/824 [00:01<00:06, 111.73it/s]Loading weights:  18%|#8        | 149/824 [00:01<00:06, 111.26it/s]Loading weights:  20%|#9        | 161/824 [00:01<00:05, 112.41it/s]Loading weights:  21%|##        | 173/824 [00:01<00:05, 112.50it/s]Loading weights:  22%|##2       | 185/824 [00:01<00:05, 112.80it/s]Loading weights:  24%|##3       | 197/824 [00:02<00:05, 113.81it/s]Loading weights:  25%|##5       | 209/824 [00:02<00:05, 113.34it/s]Loading weights:  27%|##6       | 221/824 [00:02<00:05, 113.33it/s]Loading weights:  28%|##8       | 233/824 [00:02<00:05, 113.29it/s]Loading weights:  30%|##9       | 245/824 [00:02<00:05, 112.77it/s]Loading weights:  31%|###1      | 257/824 [00:02<00:05, 112.75it/s]Loading weights:  33%|###2      | 269/824 [00:02<00:04, 113.73it/s]Loading weights:  34%|###4      | 281/824 [00:02<00:04, 115.33it/s]Loading weights:  36%|###5      | 293/824 [00:02<00:04, 114.48it/s]Loading weights:  37%|###7      | 305/824 [00:03<00:04, 115.30it/s]Loading weights:  38%|###8      | 317/824 [00:03<00:04, 116.03it/s]Loading weights:  40%|###9      | 329/824 [00:03<00:04, 117.18it/s]Loading weights:  41%|####1     | 341/824 [00:03<00:04, 116.56it/s]Loading weights:  43%|####2     | 353/824 [00:03<00:04, 116.10it/s]Loading weights:  44%|####4     | 365/824 [00:03<00:03, 115.77it/s]Loading weights:  46%|####5     | 377/824 [00:03<00:03, 115.93it/s]Loading weights:  47%|####7     | 389/824 [00:03<00:03, 115.92it/s]Loading weights:  49%|####8     | 401/824 [00:03<00:03, 115.54it/s]Loading weights:  50%|#####     | 413/824 [00:03<00:03, 115.47it/s]Loading weights:  52%|#####1    | 425/824 [00:04<00:03, 114.36it/s]Loading weights:  56%|#####6    | 464/824 [00:04<00:01, 193.36it/s]Loading weights:  61%|######    | 501/824 [00:04<00:01, 242.48it/s]Loading weights:  65%|######5   | 538/824 [00:04<00:01, 276.31it/s]Loading weights:  70%|######9   | 575/824 [00:04<00:00, 302.92it/s]Loading weights:  74%|#######4  | 612/824 [00:04<00:00, 320.22it/s]Loading weights:  79%|#######9  | 654/824 [00:04<00:00, 347.70it/s]Loading weights:  84%|########4 | 694/824 [00:04<00:00, 362.22it/s]Loading weights:  89%|########9 | 737/824 [00:04<00:00, 382.18it/s]Loading weights:  94%|#########4| 776/824 [00:04<00:00, 372.56it/s]Loading weights:  99%|#########8| 814/824 [00:05<00:00, 371.86it/s]Loading weights: 100%|##########| 824/824 [00:05<00:00, 159.88it/s]
+[ndm/ceiling_sweep] sampled 32 cause rows (seed=0) spanning 19 distinct base entities of 25 available
+[ndm/ceiling_sweep] entity=flags attribute=currency layers=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36] sites=['residual'] positions=['full_image', 'last_token'] cause_rows=32 iso_rows=32
+
+==============================================================================
+=== positions='full_image'
+==============================================================================
+  unhooked baseline on cause rows: matches_source=0.0% matches_base=50.0%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+/root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+                residual layer  0: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer  1: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer  2: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer  3: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer  4: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer  5: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer  6: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer  7: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer  8: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer  9: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 10: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 11: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 12: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 13: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer 14: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 15: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 16: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 17: cause_ceiling= 90.6% base_kept=  3.1% other=  6.2% iso_floor=  3.1%
+                residual layer 18: cause_ceiling= 87.5% base_kept=  3.1% other=  9.4% iso_floor=  3.1%
+                residual layer 19: cause_ceiling= 84.4% base_kept=  3.1% other= 12.5% iso_floor=  3.1%
+                residual layer 20: cause_ceiling= 84.4% base_kept=  3.1% other= 12.5% iso_floor=  3.1%
+                residual layer 21: cause_ceiling= 84.4% base_kept=  3.1% other= 12.5% iso_floor=  3.1%
+                residual layer 22: cause_ceiling= 81.2% base_kept=  3.1% other= 15.6% iso_floor=  3.1%
+                residual layer 23: cause_ceiling= 78.1% base_kept=  3.1% other= 18.8% iso_floor=  3.1%
+                residual layer 24: cause_ceiling= 81.2% base_kept=  3.1% other= 15.6% iso_floor=  3.1%
+                residual layer 25: cause_ceiling= 78.1% base_kept=  3.1% other= 18.8% iso_floor=  3.1%
+                residual layer 26: cause_ceiling= 78.1% base_kept=  3.1% other= 18.8% iso_floor=  3.1%
+                residual layer 27: cause_ceiling= 81.2% base_kept=  3.1% other= 15.6% iso_floor=  3.1%
+                residual layer 28: cause_ceiling= 46.9% base_kept=  3.1% other= 50.0% iso_floor= 43.8%
+                residual layer 29: cause_ceiling= 46.9% base_kept=  3.1% other= 50.0% iso_floor= 46.9%
+                residual layer 30: cause_ceiling= 46.9% base_kept=  3.1% other= 50.0% iso_floor= 46.9%
+                residual layer 31: cause_ceiling= 46.9% base_kept=  3.1% other= 50.0% iso_floor= 43.8%
+                residual layer 32: cause_ceiling=  6.2% base_kept= 43.8% other= 50.0% iso_floor= 87.5%
+                residual layer 33: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 34: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 35: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 36: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+
+=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+                  site  layer   width  cause_ceiling  base_kept    other  iso_floor
+              residual      0    2048         90.6%      3.1%    6.2%      3.1%
+              residual      1    2048         90.6%      3.1%    6.2%      3.1%
+              residual      2    2048         87.5%      3.1%    9.4%      3.1%
+              residual      3    2048         90.6%      3.1%    6.2%      3.1%
+              residual      4    2048         87.5%      3.1%    9.4%      3.1%
+              residual      5    2048         87.5%      3.1%    9.4%      3.1%
+              residual      6    2048         87.5%      3.1%    9.4%      3.1%
+              residual      7    2048         90.6%      3.1%    6.2%      3.1%
+              residual      8    2048         87.5%      3.1%    9.4%      3.1%
+              residual      9    2048         90.6%      3.1%    6.2%      3.1%
+              residual     10    2048         90.6%      3.1%    6.2%      3.1%
+              residual     11    2048         90.6%      3.1%    6.2%      3.1%
+              residual     12    2048         90.6%      3.1%    6.2%      3.1%
+              residual     13    2048         87.5%      3.1%    9.4%      3.1%
+              residual     14    2048         90.6%      3.1%    6.2%      3.1%
+              residual     15    2048         90.6%      3.1%    6.2%      3.1%
+              residual     16    2048         90.6%      3.1%    6.2%      3.1%
+              residual     17    2048         90.6%      3.1%    6.2%      3.1%
+              residual     18    2048         87.5%      3.1%    9.4%      3.1%
+              residual     19    2048         84.4%      3.1%   12.5%      3.1%
+              residual     20    2048         84.4%      3.1%   12.5%      3.1%
+              residual     21    2048         84.4%      3.1%   12.5%      3.1%
+              residual     22    2048         81.2%      3.1%   15.6%      3.1%
+              residual     23    2048         78.1%      3.1%   18.8%      3.1%
+              residual     24    2048         81.2%      3.1%   15.6%      3.1%
+              residual     25    2048         78.1%      3.1%   18.8%      3.1%
+              residual     26    2048         78.1%      3.1%   18.8%      3.1%
+              residual     27    2048         81.2%      3.1%   15.6%      3.1%
+              residual     28    2048         46.9%      3.1%   50.0%     43.8%
+              residual     29    2048         46.9%      3.1%   50.0%     46.9%
+              residual     30    2048         46.9%      3.1%   50.0%     46.9%
+              residual     31    2048         46.9%      3.1%   50.0%     43.8%
+              residual     32    2048          6.2%     43.8%   50.0%     87.5%
+              residual     33    2048          0.0%     50.0%   50.0%    100.0%
+              residual     34    2048          0.0%     50.0%   50.0%    100.0%
+              residual     35    2048          0.0%     50.0%   50.0%    100.0%
+              residual     36    2048          0.0%     50.0%   50.0%    100.0%
+
+Most headroom: residual layer 0 (cause_ceiling=90.6%) -- train there.
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-3B-Instruct/flags/ndm/currency/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-36.json
+
+==============================================================================
+=== positions='last_token'
+==============================================================================
+  unhooked baseline on cause rows: matches_source=0.0% matches_base=50.0%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+                residual layer  0: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  1: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  2: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  3: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  4: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  5: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  6: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  7: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  8: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer  9: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 10: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 11: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 12: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 13: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 14: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 15: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 16: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 17: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 18: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 19: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 20: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 21: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 22: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 23: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 24: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 25: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 26: cause_ceiling=  0.0% base_kept= 50.0% other= 50.0% iso_floor=100.0%
+                residual layer 27: cause_ceiling=  0.0% base_kept= 56.2% other= 43.8% iso_floor=100.0%
+                residual layer 28: cause_ceiling=  9.4% base_kept= 37.5% other= 53.1% iso_floor= 53.1%
+                residual layer 29: cause_ceiling=  9.4% base_kept= 37.5% other= 53.1% iso_floor= 53.1%
+                residual layer 30: cause_ceiling=  6.2% base_kept= 37.5% other= 56.2% iso_floor= 50.0%
+                residual layer 31: cause_ceiling=  6.2% base_kept= 37.5% other= 56.2% iso_floor= 50.0%
+                residual layer 32: cause_ceiling= 59.4% base_kept=  3.1% other= 37.5% iso_floor= 15.6%
+                residual layer 33: cause_ceiling= 71.9% base_kept=  3.1% other= 25.0% iso_floor= 12.5%
+                residual layer 34: cause_ceiling= 68.8% base_kept=  3.1% other= 28.1% iso_floor=  6.2%
+                residual layer 35: cause_ceiling= 62.5% base_kept=  3.1% other= 34.4% iso_floor=  6.2%
+                residual layer 36: cause_ceiling= 65.6% base_kept=  3.1% other= 31.2% iso_floor=  6.2%
+
+=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+                  site  layer   width  cause_ceiling  base_kept    other  iso_floor
+              residual      0    2048          0.0%     50.0%   50.0%    100.0%
+              residual      1    2048          0.0%     50.0%   50.0%    100.0%
+              residual      2    2048          0.0%     50.0%   50.0%    100.0%
+              residual      3    2048          0.0%     50.0%   50.0%    100.0%
+              residual      4    2048          0.0%     50.0%   50.0%    100.0%
+              residual      5    2048          0.0%     50.0%   50.0%    100.0%
+              residual      6    2048          0.0%     50.0%   50.0%    100.0%
+              residual      7    2048          0.0%     50.0%   50.0%    100.0%
+              residual      8    2048          0.0%     50.0%   50.0%    100.0%
+              residual      9    2048          0.0%     50.0%   50.0%    100.0%
+              residual     10    2048          0.0%     50.0%   50.0%    100.0%
+              residual     11    2048          0.0%     50.0%   50.0%    100.0%
+              residual     12    2048          0.0%     50.0%   50.0%    100.0%
+              residual     13    2048          0.0%     50.0%   50.0%    100.0%
+              residual     14    2048          0.0%     50.0%   50.0%    100.0%
+              residual     15    2048          0.0%     50.0%   50.0%    100.0%
+              residual     16    2048          0.0%     50.0%   50.0%    100.0%
+              residual     17    2048          0.0%     50.0%   50.0%    100.0%
+              residual     18    2048          0.0%     50.0%   50.0%    100.0%
+              residual     19    2048          0.0%     50.0%   50.0%    100.0%
+              residual     20    2048          0.0%     50.0%   50.0%    100.0%
+              residual     21    2048          0.0%     50.0%   50.0%    100.0%
+              residual     22    2048          0.0%     50.0%   50.0%    100.0%
+              residual     23    2048          0.0%     50.0%   50.0%    100.0%
+              residual     24    2048          0.0%     50.0%   50.0%    100.0%
+              residual     25    2048          0.0%     50.0%   50.0%    100.0%
+              residual     26    2048          0.0%     50.0%   50.0%    100.0%
+              residual     27    2048          0.0%     56.2%   43.8%    100.0%
+              residual     28    2048          9.4%     37.5%   53.1%     53.1%
+              residual     29    2048          9.4%     37.5%   53.1%     53.1%
+              residual     30    2048          6.2%     37.5%   56.2%     50.0%
+              residual     31    2048          6.2%     37.5%   56.2%     50.0%
+              residual     32    2048         59.4%      3.1%   37.5%     15.6%
+              residual     33    2048         71.9%      3.1%   25.0%     12.5%
+              residual     34    2048         68.8%      3.1%   28.1%      6.2%
+              residual     35    2048         62.5%      3.1%   34.4%      6.2%
+              residual     36    2048         65.6%      3.1%   31.2%      6.2%
+
+Most headroom: residual layer 33 (cause_ceiling=71.9%) -- train there.
+wrote /workspace/VADE-evals/logs/Qwen2.5-VL-3B-Instruct/flags/ndm/currency/L1_0.0_T0-0_LR0_MLR0_CLIP1_last_token_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-36.json
+
+=== cross-position summary (best cause_ceiling per spec) ===
+positions                    best site/layer              cause_ceiling  iso_floor
+full_image                   residual/0                          90.6%      3.1%
+last_token                   residual/33                         71.9%     12.5%

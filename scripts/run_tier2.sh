@@ -95,7 +95,13 @@ e11() {  # object vs background tokens: does identity leave the object before th
 prep_model() {  # prep_model <step> <model_id>: VADE baseline accuracy -> pruned tuples for that model
   run "$1_accuracy" $PY "$VADE/models/run_accuracy_sweep.py" --model_id "$2" --entities flags brands celebrities \
       $(bs "$BS_ACC")
-  run "$1_prune" $PY "$VADE/models/prune_tuples.py" --model_id "$2" --entities flags brands celebrities
+  # identity/ holds only test.jsonl and no `rule` field, which prune_tuples.py (VADE b8dfaf9) cannot
+  # read; nothing in E8 uses it, so prune every OTHER tuple dir.
+  local attrs
+  attrs=$(find "$VADE"/data/{flags,brands,celebrities}/tuples -mindepth 1 -maxdepth 1 -type d \
+          ! -name identity -printf '%f\n' | sort -u)
+  run "$1_prune" $PY "$VADE/models/prune_tuples.py" --model_id "$2" --entities flags brands celebrities \
+      --attributes $attrs
 }
 
 pipeline() {  # pipeline <step> <model_id> <n_layers> <n_heads>: image->text heads on the key attributes

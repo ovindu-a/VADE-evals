@@ -1,0 +1,49 @@
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-3B-Instruct/celebrities/ndm/native_language/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_window_sweep_patch27_text.log ===
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   0%|          | 1/824 [00:00<04:18,  3.18it/s]Loading weights:   1%|1         | 11/824 [00:00<00:24, 33.28it/s]Loading weights:   3%|3         | 25/824 [00:00<00:12, 65.99it/s]Loading weights:   4%|4         | 35/824 [00:00<00:10, 75.81it/s]Loading weights:   5%|5         | 45/824 [00:00<00:09, 80.32it/s]Loading weights:   7%|7         | 59/824 [00:00<00:07, 97.84it/s]Loading weights:   8%|8         | 70/824 [00:01<00:11, 66.37it/s]Loading weights:  10%|9         | 79/824 [00:01<00:10, 71.36it/s]Loading weights:  11%|#         | 89/824 [00:01<00:09, 77.51it/s]Loading weights:  13%|#2        | 105/824 [00:01<00:07, 97.48it/s]Loading weights:  14%|#4        | 118/824 [00:01<00:06, 105.77it/s]Loading weights:  16%|#6        | 135/824 [00:01<00:05, 114.93it/s]Loading weights:  18%|#7        | 148/824 [00:01<00:06, 100.57it/s]Loading weights:  20%|##        | 167/824 [00:01<00:05, 121.71it/s]Loading weights:  22%|##1       | 181/824 [00:02<00:05, 121.74it/s]Loading weights:  24%|##3       | 194/824 [00:02<00:05, 123.03it/s]Loading weights:  25%|##5       | 207/824 [00:02<00:05, 116.22it/s]Loading weights:  27%|##6       | 220/824 [00:02<00:05, 110.49it/s]Loading weights:  28%|##8       | 232/824 [00:02<00:05, 112.67it/s]Loading weights:  30%|##9       | 244/824 [00:02<00:05, 112.63it/s]Loading weights:  31%|###1      | 256/824 [00:02<00:05, 104.59it/s]Loading weights:  33%|###2      | 268/824 [00:02<00:05, 108.54it/s]Loading weights:  35%|###4      | 285/824 [00:02<00:04, 124.07it/s]Loading weights:  36%|###6      | 299/824 [00:03<00:04, 127.39it/s]Loading weights:  38%|###7      | 313/824 [00:03<00:05, 93.67it/s] Loading weights:  39%|###9      | 324/824 [00:03<00:05, 96.77it/s]Loading weights:  41%|####      | 335/824 [00:03<00:04, 98.08it/s]Loading weights:  43%|####2     | 351/824 [00:03<00:04, 106.04it/s]Loading weights:  44%|####4     | 364/824 [00:03<00:04, 105.50it/s]Loading weights:  46%|####5     | 376/824 [00:03<00:04, 108.97it/s]Loading weights:  47%|####7     | 389/824 [00:03<00:04, 106.79it/s]Loading weights:  49%|####8     | 402/824 [00:04<00:03, 112.53it/s]Loading weights:  50%|#####     | 414/824 [00:04<00:03, 114.41it/s]Loading weights:  52%|#####1    | 426/824 [00:04<00:03, 115.81it/s]Loading weights:  57%|#####7    | 473/824 [00:04<00:01, 211.64it/s]Loading weights:  63%|######3   | 522/824 [00:04<00:01, 285.76it/s]Loading weights:  68%|######8   | 564/824 [00:04<00:00, 320.89it/s]Loading weights:  74%|#######4  | 610/824 [00:04<00:00, 359.09it/s]Loading weights:  80%|#######9  | 658/824 [00:04<00:00, 388.47it/s]Loading weights:  85%|########5 | 704/824 [00:04<00:00, 407.69it/s]Loading weights:  91%|#########1| 752/824 [00:05<00:00, 423.45it/s]Loading weights:  97%|#########6| 797/824 [00:05<00:00, 430.81it/s]Loading weights: 100%|##########| 824/824 [00:05<00:00, 158.46it/s]
+[head_window_sweep] entity=celebrities attribute=native_language patch_layer=27 positions=full_image rows=64 (22 distinct bases) windows=24
+capturing per-head outputs at blocks 27-35 (clean + image-patched) ...
+/root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  scoring: VADE text match. first_* = position 0 vs the model's own base/source answers, over the 62/64 rows where those differ there; div_* = at the first differing token (62/64 rows)
+  unhooked:          cause=  3.1% first_src=  0.0%
+  image patch only:  cause=100.0% first_src=100.0% base_kept=  0.0%   <-- the effect every window is read against
+  window      27 ( 16 heads)  suff: cause= 70.3% first_src= 69.4% base_kept= 23.4% | nec: cause= 31.2% first_src= 29.0% | shuffled: own=  9.7% donor= 64.0% (first tok)
+  window      28 ( 16 heads)  suff: cause=  3.1% first_src=  0.0% base_kept= 73.4% | nec: cause=100.0% first_src=100.0% | shuffled: own=  0.0% donor=  0.0% (first tok)
+  window      29 ( 16 heads)  suff: cause=  3.1% first_src=  0.0% base_kept= 73.4% | nec: cause= 98.4% first_src= 98.4% | shuffled: own=  1.6% donor=  2.0% (first tok)
+  window      30 ( 16 heads)  suff: cause=  4.7% first_src=  1.6% base_kept= 73.4% | nec: cause=100.0% first_src=100.0% | shuffled: own=  1.6% donor=  2.0% (first tok)
+  window      31 ( 16 heads)  suff: cause=  6.2% first_src=  4.8% base_kept= 73.4% | nec: cause= 92.2% first_src= 91.9% | shuffled: own=  0.0% donor=  4.0% (first tok)
+  window      32 ( 16 heads)  suff: cause=  7.8% first_src=  4.8% base_kept= 73.4% | nec: cause= 96.9% first_src= 96.8% | shuffled: own=  3.2% donor=  8.0% (first tok)
+  window      33 ( 16 heads)  suff: cause=  4.7% first_src=  1.6% base_kept= 73.4% | nec: cause=100.0% first_src=100.0% | shuffled: own=  1.6% donor=  4.0% (first tok)
+  window      34 ( 16 heads)  suff: cause=  6.2% first_src=  3.2% base_kept= 75.0% | nec: cause= 96.9% first_src= 96.8% | shuffled: own=  1.6% donor=  6.0% (first tok)
+  window   27-28 ( 32 heads)  suff: cause= 70.3% first_src= 69.4% base_kept= 23.4% | nec: cause= 31.2% first_src= 29.0% | shuffled: own=  9.7% donor= 68.0% (first tok)
+  window   28-29 ( 32 heads)  suff: cause=  6.2% first_src=  3.2% base_kept= 73.4% | nec: cause= 98.4% first_src= 98.4% | shuffled: own=  1.6% donor=  2.0% (first tok)
+  window   29-30 ( 32 heads)  suff: cause=  4.7% first_src=  1.6% base_kept= 73.4% | nec: cause= 98.4% first_src= 98.4% | shuffled: own=  1.6% donor=  4.0% (first tok)
+  window   30-31 ( 32 heads)  suff: cause=  7.8% first_src=  4.8% base_kept= 73.4% | nec: cause= 92.2% first_src= 91.9% | shuffled: own=  0.0% donor=  4.0% (first tok)
+  window   31-32 ( 32 heads)  suff: cause= 14.1% first_src= 11.3% base_kept= 67.2% | nec: cause= 84.4% first_src= 83.9% | shuffled: own=  0.0% donor= 10.0% (first tok)
+  window   32-33 ( 32 heads)  suff: cause=  7.8% first_src=  4.8% base_kept= 75.0% | nec: cause= 95.3% first_src= 96.8% | shuffled: own=  3.2% donor=  8.0% (first tok)
+  window   33-34 ( 32 heads)  suff: cause=  6.2% first_src=  3.2% base_kept= 75.0% | nec: cause= 96.9% first_src= 96.8% | shuffled: own=  1.6% donor=  8.0% (first tok)
+  window   27-29 ( 48 heads)  suff: cause= 71.9% first_src= 71.0% base_kept= 21.9% | nec: cause= 29.7% first_src= 27.4% | shuffled: own=  9.7% donor= 68.0% (first tok)
+  window   28-30 ( 48 heads)  suff: cause=  6.2% first_src=  3.2% base_kept= 73.4% | nec: cause=100.0% first_src=100.0% | shuffled: own=  1.6% donor=  4.0% (first tok)
+  window   29-31 ( 48 heads)  suff: cause=  7.8% first_src=  4.8% base_kept= 73.4% | nec: cause= 93.8% first_src= 93.5% | shuffled: own=  0.0% donor=  4.0% (first tok)
+  window   30-32 ( 48 heads)  suff: cause= 15.6% first_src= 12.9% base_kept= 65.6% | nec: cause= 79.7% first_src= 79.0% | shuffled: own=  0.0% donor= 16.0% (first tok)
+  window   31-33 ( 48 heads)  suff: cause= 18.8% first_src= 16.1% base_kept= 64.1% | nec: cause= 81.2% first_src= 80.6% | shuffled: own=  1.6% donor= 12.0% (first tok)
+  window   32-34 ( 48 heads)  suff: cause=  9.4% first_src=  6.5% base_kept= 76.6% | nec: cause= 92.2% first_src= 91.9% | shuffled: own=  1.6% donor= 10.0% (first tok)
+  window   27-34 (128 heads)  suff: cause=100.0% first_src=100.0% base_kept=  0.0% | nec: cause=  3.1% first_src=  0.0% | shuffled: own= 14.5% donor= 98.0% (first tok)
+  window   27-32 ( 96 heads)  suff: cause= 95.3% first_src= 95.2% base_kept=  3.1% | nec: cause=  7.8% first_src=  4.8% | shuffled: own= 11.3% donor= 92.0% (first tok)
+  window   27-35 (144 heads)  suff: cause=100.0% first_src=100.0% base_kept=  0.0% | nec: cause=  3.1% first_src=  0.0% | shuffled: own= 14.5% donor= 98.0% (first tok)
+
+full-coverage identity (window 27-35 suff vs image patch only): cause 100.0% vs 100.0%, first_src 100.0% vs 100.0% -> OK
+
+per-block |delta_resid| mass at the last token (where the image-patched writes changed):
+  block 27: delta_resid=  53.9390  |delta_dla|=   0.7307
+  block 28: delta_resid=  20.5104  |delta_dla|=   0.1489
+  block 29: delta_resid=  15.4079  |delta_dla|=   0.0365
+  block 30: delta_resid=  21.2279  |delta_dla|=   0.1506
+  block 31: delta_resid=  59.1709  |delta_dla|=   0.7826
+  block 32: delta_resid=  49.3884  |delta_dla|=   0.6375
+  block 33: delta_resid=  71.5062  |delta_dla|=   0.4962
+  block 34: delta_resid=  91.0169  |delta_dla|=   1.9969
+  block 35: delta_resid=  48.9537  |delta_dla|=   0.3315
+
+wrote /workspace/VADE-evals/results/image_head_pipeline_Qwen2.5-VL-3B-Instruct/celebrities/native_language/windows_patch27_text.json

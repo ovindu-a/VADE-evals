@@ -1,0 +1,597 @@
+
+##### brands: attributes ['hq_country'] stages ['ceiling', 'windows', 'heads']
+
+==============================================================================
+brands/hq_country
+==============================================================================
+  scoring: text (VADE text match; first-token metrics against the model's own unhooked base/source answers)
+  [stage 1: ceiling] full residual swap at full_image and last_token, layers 0..28
+  $ /opt/conda/bin/python methods/ndm/ceiling_sweep.py --entity brands --attribute hq_country --model_id OpenGVLab/InternVL3-8B-hf --vade_root /workspace/VADE --text_match --max_new_tokens 8 --sites residual --positions_list full_image last_token --layers 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 --n_rows 32 --seed 0 --batch_size 32
+    (log: logs/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/stage1_ceiling.log)
+    | nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+    | 
+    | === logging to /workspace/VADE-evals/logs/InternVL3-8B-hf/brands/ndm/hq_country/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/ceiling_sweep_full_image__last_token_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28_text.log ===
+    | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+    | 
+    | Loading weights:   0%|          | 0/781 [00:00<?, ?it/s]
+    | Loading weights:   0%|          | 1/781 [00:00<07:48,  1.66it/s]
+    | Loading weights:   0%|          | 2/781 [00:01<08:32,  1.52it/s]
+    | Loading weights:   1%|          | 5/781 [00:01<02:58,  4.36it/s]
+    | Loading weights:   1%|1         | 10/781 [00:01<01:15, 10.22it/s]
+    | Loading weights:   2%|2         | 16/781 [00:01<00:43, 17.74it/s]
+    | Loading weights:   3%|2         | 20/781 [00:01<00:39, 19.23it/s]
+    | Loading weights:   4%|3         | 28/781 [00:01<00:25, 29.10it/s]
+    | Loading weights:   4%|4         | 33/781 [00:02<00:25, 28.93it/s]
+    | Loading weights:   5%|5         | 40/781 [00:02<00:21, 35.26it/s]
+    | Loading weights:   6%|5         | 45/781 [00:02<00:22, 32.28it/s]
+    | Loading weights:   7%|6         | 52/781 [00:02<00:19, 38.03it/s]
+    | Loading weights:   7%|7         | 57/781 [00:02<00:20, 35.14it/s]
+    | Loading weights:   8%|8         | 64/781 [00:02<00:17, 40.30it/s]
+    | Loading weights:   9%|8         | 69/781 [00:03<00:19, 36.44it/s]
+    | Loading weights:  10%|9         | 76/781 [00:03<00:16, 41.65it/s]
+    | Loading weights:  10%|#         | 81/781 [00:03<00:18, 37.28it/s]
+    | Loading weights:  11%|#1        | 88/781 [00:03<00:16, 42.31it/s]
+    | Loading weights:  12%|#1        | 93/781 [00:03<00:18, 37.31it/s]
+    | Loading weights:  13%|#2        | 100/781 [00:03<00:16, 42.13it/s]
+    | Loading weights:  13%|#3        | 105/781 [00:03<00:18, 37.29it/s]
+    | Loading weights:  14%|#4        | 112/781 [00:04<00:15, 42.38it/s]
+    | Loading weights:  15%|#4        | 117/781 [00:04<00:17, 37.54it/s]
+    | Loading weights:  16%|#5        | 124/781 [00:04<00:15, 42.32it/s]
+    | Loading weights:  17%|#6        | 129/781 [00:04<00:17, 37.15it/s]
+    | Loading weights:  17%|#7        | 136/781 [00:04<00:15, 41.97it/s]
+    | Loading weights:  18%|#8        | 141/781 [00:04<00:17, 37.10it/s]
+    | Loading weights:  19%|#8        | 148/781 [00:05<00:15, 41.75it/s]
+    | Loading weights:  20%|#9        | 153/781 [00:05<00:17, 36.85it/s]
+    | Loading weights:  20%|##        | 160/781 [00:05<00:14, 41.85it/s]
+    | Loading weights:  21%|##1       | 165/781 [00:05<00:16, 37.15it/s]
+    | Loading weights:  22%|##2       | 172/781 [00:05<00:14, 41.75it/s]
+    | Loading weights:  23%|##2       | 177/781 [00:05<00:16, 36.97it/s]
+    | Loading weights:  24%|##3       | 184/781 [00:05<00:14, 42.00it/s]
+    | Loading weights:  24%|##4       | 189/781 [00:06<00:15, 37.12it/s]
+    | Loading weights:  25%|##4       | 195/781 [00:06<00:20, 29.01it/s]
+    | Loading weights:  27%|##6       | 208/781 [00:06<00:12, 44.80it/s]
+    | Loading weights:  27%|##7       | 214/781 [00:06<00:13, 40.75it/s]
+    | Loading weights:  28%|##8       | 220/781 [00:06<00:12, 43.49it/s]
+    | Loading weights:  29%|##8       | 225/781 [00:07<00:14, 39.00it/s]
+    | Loading weights:  29%|##9       | 230/781 [00:07<00:13, 39.39it/s]
+    | Loading weights:  30%|###       | 235/781 [00:07<00:15, 36.16it/s]
+    | Loading weights:  31%|###1      | 243/781 [00:07<00:16, 32.44it/s]
+    | Loading weights:  33%|###2      | 256/781 [00:07<00:11, 47.34it/s]
+    | Loading weights:  34%|###3      | 262/781 [00:07<00:12, 42.92it/s]
+    | Loading weights:  34%|###4      | 268/781 [00:08<00:11, 45.80it/s]
+    | Loading weights:  35%|###5      | 274/781 [00:08<00:12, 40.86it/s]
+    | Loading weights:  36%|###5      | 279/781 [00:08<00:16, 31.29it/s]
+    | Loading weights:  37%|###7      | 292/781 [00:08<00:10, 46.82it/s]
+    | Loading weights:  38%|###8      | 298/781 [00:08<00:11, 42.39it/s]
+    | Loading weights:  39%|###9      | 305/781 [00:08<00:11, 41.13it/s]
+    | Loading weights:  40%|###9      | 310/781 [00:09<00:11, 42.52it/s]
+    | Loading weights:  40%|####      | 316/781 [00:09<00:10, 46.17it/s]
+    | Loading weights:  41%|####1     | 322/781 [00:09<00:11, 41.65it/s]
+    | Loading weights:  42%|####2     | 329/781 [00:09<00:11, 40.70it/s]
+    | Loading weights:  43%|####2     | 335/781 [00:09<00:09, 44.72it/s]
+    | Loading weights:  48%|####7     | 372/781 [00:09<00:03, 119.19it/s]
+    | Loading weights:  55%|#####5    | 430/781 [00:09<00:01, 226.27it/s]
+    | Loading weights:  63%|######2   | 492/781 [00:09<00:00, 326.71it/s]
+    | Loading weights:  72%|#######2  | 566/781 [00:10<00:00, 437.04it/s]
+    | Loading weights:  83%|########2 | 647/781 [00:10<00:00, 528.58it/s]
+    | Loading weights:  91%|######### | 709/781 [00:10<00:00, 547.79it/s]
+    | Loading weights:  98%|#########8| 766/781 [00:10<00:00, 548.15it/s]
+    | Loading weights: 100%|##########| 781/781 [00:10<00:00, 75.16it/s] 
+    | [transformers] The tied weights mapping and config for this model specifies to tie model.language_model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints with different values, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning.
+    | [ndm/ceiling_sweep] scoring: VADE text match (--text_match)
+    | [ndm/ceiling_sweep] sampled 32 cause rows (seed=0) spanning 20 distinct base entities of 38 available
+    | [ndm/ceiling_sweep] entity=brands attribute=hq_country layers=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28] sites=['residual'] positions=['full_image', 'last_token'] cause_rows=32 iso_rows=32
+    | 
+    | ==============================================================================
+    | === positions='full_image'
+    | ==============================================================================
+    |   unhooked baseline on cause rows: matches_source=0.0% matches_base=84.4%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+    | /root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    |   mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+    |                 residual layer  0: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  1: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  2: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  3: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  4: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  5: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  6: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  7: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  8: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer  9: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+    |                 residual layer 10: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  6.2%
+    |                 residual layer 11: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  9.4%
+    |                 residual layer 12: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  9.4%
+    |                 residual layer 13: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor= 18.8%
+    |                 residual layer 14: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor= 25.0%
+    |                 residual layer 15: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor= 34.4%
+    |                 residual layer 16: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor= 43.8%
+    |                 residual layer 17: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor= 43.8%
+    |                 residual layer 18: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor= 43.8%
+    |                 residual layer 19: cause_ceiling= 96.9% base_kept=  0.0% other=  3.1% iso_floor= 43.8%
+    |                 residual layer 20: cause_ceiling= 78.1% base_kept=  9.4% other= 12.5% iso_floor= 46.9%
+    |                 residual layer 21: cause_ceiling= 78.1% base_kept=  9.4% other= 12.5% iso_floor= 46.9%
+    |                 residual layer 22: cause_ceiling= 56.2% base_kept= 40.6% other=  3.1% iso_floor= 68.8%
+    |                 residual layer 23: cause_ceiling=  3.1% base_kept= 84.4% other= 12.5% iso_floor= 75.0%
+    |                 residual layer 24: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor= 93.8%
+    |                 residual layer 25: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 26: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 27: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 28: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    | 
+    | === ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+    |                   site  layer   width  cause_ceiling  base_kept    other  iso_floor
+    |               residual      0    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      1    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      2    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      3    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      4    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      5    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      6    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      7    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      8    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual      9    3584        100.0%      0.0%    0.0%      3.1%
+    |               residual     10    3584        100.0%      0.0%    0.0%      6.2%
+    |               residual     11    3584        100.0%      0.0%    0.0%      9.4%
+    |               residual     12    3584        100.0%      0.0%    0.0%      9.4%
+    |               residual     13    3584        100.0%      0.0%    0.0%     18.8%
+    |               residual     14    3584        100.0%      0.0%    0.0%     25.0%
+    |               residual     15    3584        100.0%      0.0%    0.0%     34.4%
+    |               residual     16    3584        100.0%      0.0%    0.0%     43.8%
+    |               residual     17    3584        100.0%      0.0%    0.0%     43.8%
+    |               residual     18    3584        100.0%      0.0%    0.0%     43.8%
+    |               residual     19    3584         96.9%      0.0%    3.1%     43.8%
+    |               residual     20    3584         78.1%      9.4%   12.5%     46.9%
+    |               residual     21    3584         78.1%      9.4%   12.5%     46.9%
+    |               residual     22    3584         56.2%     40.6%    3.1%     68.8%
+    |               residual     23    3584          3.1%     84.4%   12.5%     75.0%
+    |               residual     24    3584          0.0%     84.4%   15.6%     93.8%
+    |               residual     25    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     26    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     27    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     28    3584          0.0%     84.4%   15.6%    100.0%
+    | 
+    | Most headroom: residual layer 0 (cause_ceiling=100.0%) -- train there.
+    | wrote /workspace/VADE-evals/logs/InternVL3-8B-hf/brands/ndm/hq_country/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28_text.json
+    | 
+    | ==============================================================================
+    | === positions='last_token'
+    | ==============================================================================
+    |   unhooked baseline on cause rows: matches_source=0.0% matches_base=84.4%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+    |                 residual layer  0: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  1: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  2: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  3: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  4: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  5: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  6: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  7: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  8: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer  9: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor= 96.9%
+    |                 residual layer 10: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 11: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 12: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 13: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 14: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 15: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 16: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 17: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 18: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 19: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor=100.0%
+    |                 residual layer 20: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor= 96.9%
+    |                 residual layer 21: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor= 90.6%
+    |                 residual layer 22: cause_ceiling= 15.6% base_kept= 75.0% other=  9.4% iso_floor= 75.0%
+    |                 residual layer 23: cause_ceiling= 84.4% base_kept= 15.6% other=  0.0% iso_floor= 65.6%
+    |                 residual layer 24: cause_ceiling= 90.6% base_kept=  9.4% other=  0.0% iso_floor= 62.5%
+    |                 residual layer 25: cause_ceiling= 90.6% base_kept=  9.4% other=  0.0% iso_floor= 53.1%
+    |                 residual layer 26: cause_ceiling= 90.6% base_kept=  9.4% other=  0.0% iso_floor= 53.1%
+    |                 residual layer 27: cause_ceiling= 90.6% base_kept=  9.4% other=  0.0% iso_floor= 46.9%
+    |                 residual layer 28: cause_ceiling= 90.6% base_kept=  9.4% other=  0.0% iso_floor= 50.0%
+    | 
+    | === ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+    |                   site  layer   width  cause_ceiling  base_kept    other  iso_floor
+    |               residual      0    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      1    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      2    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      3    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      4    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      5    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      6    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      7    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      8    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual      9    3584          0.0%     84.4%   15.6%     96.9%
+    |               residual     10    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     11    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     12    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     13    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     14    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     15    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     16    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     17    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     18    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     19    3584          0.0%     84.4%   15.6%    100.0%
+    |               residual     20    3584          0.0%     84.4%   15.6%     96.9%
+    |               residual     21    3584          0.0%     84.4%   15.6%     90.6%
+    |               residual     22    3584         15.6%     75.0%    9.4%     75.0%
+    |               residual     23    3584         84.4%     15.6%    0.0%     65.6%
+    |               residual     24    3584         90.6%      9.4%    0.0%     62.5%
+    |               residual     25    3584         90.6%      9.4%    0.0%     53.1%
+    |               residual     26    3584         90.6%      9.4%    0.0%     53.1%
+    |               residual     27    3584         90.6%      9.4%    0.0%     46.9%
+    |               residual     28    3584         90.6%      9.4%    0.0%     50.0%
+    | 
+    | Most headroom: residual layer 24 (cause_ceiling=90.6%) -- train there.
+    | wrote /workspace/VADE-evals/logs/InternVL3-8B-hf/brands/ndm/hq_country/L1_0.0_T0-0_LR0_MLR0_CLIP1_last_token_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28_text.json
+    | 
+    | === cross-position summary (best cause_ceiling per spec) ===
+    | positions                    best site/layer              cause_ceiling  iso_floor
+    | full_image                   residual/0                         100.0%      3.1%
+    | last_token                   residual/24                         90.6%     62.5%
+    -> exit 0 after 11.3 min
+  [handoff] layer        15    16    17    18    19    20    21    22    23    24    25
+            image      100%  100%  100%  100%   97%   78%   78%   56%    3%    0%    0%   (cause)
+            last_tok    16%   16%   16%   16%   16%   16%   16%   25%   84%   91%   91%   (1 - base_kept)
+  -> patch_layer=19  image_end=23  read_end=23  handoff blocks 19-22  window range 19-24
+  [scoring check] image swap @ layer 0 (= the model reading the SOURCE image, which pruning guarantees it answers correctly): 100.0% match source_label; unhooked base match 84.4% (NOT guaranteed: pruning never checks the base on cause rows)
+
+  [stage 2: windows] full attention-block patches, blocks 19..24, <= 3 blocks per window, patch_layer=19
+  $ /opt/conda/bin/python methods/head_window_sweep.py --entity brands --attribute hq_country --model_id OpenGVLab/InternVL3-8B-hf --vade_root /workspace/VADE --text_match --max_new_tokens 8 --patch_layer 19 --positions full_image --range 19 24 --max_len 3 --extra_windows 19-22 --n_rows 64 --seed 0 --batch_size 32 --out /workspace/VADE-evals/results/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/windows_patch19_text.json
+    (log: logs/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/stage2_windows.log)
+    | nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+    | 
+    | === logging to /workspace/VADE-evals/logs/InternVL3-8B-hf/brands/ndm/hq_country/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_window_sweep_patch19_text.log ===
+    | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+    | 
+    | Loading weights:   0%|          | 0/781 [00:00<?, ?it/s]
+    | Loading weights:   0%|          | 1/781 [00:00<07:45,  1.68it/s]
+    | Loading weights:   0%|          | 2/781 [00:01<08:28,  1.53it/s]
+    | Loading weights:   1%|          | 5/781 [00:01<02:56,  4.39it/s]
+    | Loading weights:   1%|1         | 10/781 [00:01<01:16, 10.13it/s]
+    | Loading weights:   2%|2         | 16/781 [00:01<00:43, 17.52it/s]
+    | Loading weights:   3%|2         | 20/781 [00:01<00:40, 18.97it/s]
+    | Loading weights:   4%|3         | 28/781 [00:02<00:26, 28.29it/s]
+    | Loading weights:   4%|4         | 32/781 [00:02<00:28, 26.63it/s]
+    | Loading weights:   5%|5         | 40/781 [00:02<00:21, 35.16it/s]
+    | Loading weights:   6%|5         | 45/781 [00:02<00:22, 32.80it/s]
+    | Loading weights:   7%|6         | 52/781 [00:02<00:19, 38.01it/s]
+    | Loading weights:   7%|7         | 57/781 [00:02<00:20, 34.84it/s]
+    | Loading weights:   8%|8         | 64/781 [00:02<00:18, 39.34it/s]
+    | Loading weights:   9%|8         | 69/781 [00:03<00:20, 35.12it/s]
+    | Loading weights:  10%|9         | 76/781 [00:03<00:17, 39.61it/s]
+    | Loading weights:  10%|#         | 81/781 [00:03<00:19, 35.46it/s]
+    | Loading weights:  11%|#1        | 88/781 [00:03<00:16, 41.24it/s]
+    | Loading weights:  12%|#1        | 93/781 [00:03<00:18, 36.90it/s]
+    | Loading weights:  13%|#2        | 100/781 [00:03<00:16, 42.10it/s]
+    | Loading weights:  13%|#3        | 105/781 [00:04<00:19, 35.15it/s]
+    | Loading weights:  14%|#4        | 113/781 [00:04<00:17, 37.85it/s]
+    | Loading weights:  15%|#5        | 118/781 [00:04<00:16, 39.85it/s]
+    | Loading weights:  16%|#5        | 124/781 [00:04<00:15, 42.34it/s]
+    | Loading weights:  17%|#6        | 129/781 [00:04<00:17, 37.17it/s]
+    | Loading weights:  17%|#7        | 136/781 [00:04<00:15, 41.21it/s]
+    | Loading weights:  18%|#8        | 141/781 [00:04<00:17, 36.64it/s]
+    | Loading weights:  19%|#8        | 148/781 [00:05<00:15, 41.43it/s]
+    | Loading weights:  20%|#9        | 153/781 [00:05<00:17, 36.82it/s]
+    | Loading weights:  20%|##        | 160/781 [00:05<00:14, 41.45it/s]
+    | Loading weights:  21%|##1       | 165/781 [00:05<00:16, 36.77it/s]
+    | Loading weights:  22%|##1       | 169/781 [00:05<00:17, 35.52it/s]
+    | Loading weights:  22%|##2       | 174/781 [00:05<00:18, 33.04it/s]
+    | Loading weights:  24%|##3       | 184/781 [00:06<00:13, 44.91it/s]
+    | Loading weights:  24%|##4       | 189/781 [00:06<00:15, 39.29it/s]
+    | Loading weights:  25%|##5       | 196/781 [00:06<00:13, 43.69it/s]
+    | Loading weights:  26%|##5       | 201/781 [00:06<00:15, 38.39it/s]
+    | Loading weights:  26%|##6       | 206/781 [00:06<00:15, 38.16it/s]
+    | Loading weights:  27%|##6       | 210/781 [00:06<00:17, 33.42it/s]
+    | Loading weights:  28%|##8       | 220/781 [00:06<00:12, 44.96it/s]
+    | Loading weights:  29%|##8       | 225/781 [00:07<00:14, 39.22it/s]
+    | Loading weights:  30%|##9       | 232/781 [00:07<00:15, 36.49it/s]
+    | Loading weights:  30%|###       | 237/781 [00:07<00:14, 37.38it/s]
+    | Loading weights:  31%|###1      | 245/781 [00:07<00:13, 40.51it/s]
+    | Loading weights:  32%|###2      | 250/781 [00:07<00:12, 42.25it/s]
+    | Loading weights:  33%|###2      | 256/781 [00:07<00:11, 45.18it/s]
+    | Loading weights:  33%|###3      | 261/781 [00:07<00:13, 39.72it/s]
+    | Loading weights:  34%|###4      | 268/781 [00:08<00:11, 44.62it/s]
+    | Loading weights:  35%|###4      | 273/781 [00:08<00:13, 38.91it/s]
+    | Loading weights:  36%|###5      | 280/781 [00:08<00:11, 42.40it/s]
+    | Loading weights:  36%|###6      | 285/781 [00:08<00:13, 38.12it/s]
+    | Loading weights:  37%|###7      | 292/781 [00:08<00:11, 42.80it/s]
+    | Loading weights:  38%|###8      | 297/781 [00:08<00:12, 38.35it/s]
+    | Loading weights:  39%|###8      | 304/781 [00:09<00:14, 32.18it/s]
+    | Loading weights:  40%|####      | 316/781 [00:09<00:09, 46.76it/s]
+    | Loading weights:  41%|####1     | 322/781 [00:09<00:10, 42.05it/s]
+    | Loading weights:  42%|####1     | 328/781 [00:09<00:10, 45.19it/s]
+    | Loading weights:  43%|####2     | 334/781 [00:09<00:10, 40.66it/s]
+    | Loading weights:  46%|####6     | 362/781 [00:09<00:04, 89.59it/s]
+    | Loading weights:  54%|#####3    | 420/781 [00:09<00:01, 200.80it/s]
+    | Loading weights:  61%|######    | 473/781 [00:10<00:01, 281.29it/s]
+    | Loading weights:  68%|######7   | 529/781 [00:10<00:00, 352.39it/s]
+    | Loading weights:  77%|#######6  | 600/781 [00:10<00:00, 442.69it/s]
+    | Loading weights:  86%|########5 | 668/781 [00:10<00:00, 505.44it/s]
+    | Loading weights:  95%|#########4| 740/781 [00:10<00:00, 563.67it/s]
+    | Loading weights: 100%|##########| 781/781 [00:10<00:00, 73.98it/s] 
+    | [transformers] The tied weights mapping and config for this model specifies to tie model.language_model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints with different values, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning.
+    | [head_window_sweep] entity=brands attribute=hq_country patch_layer=19 positions=full_image rows=64 (29 distinct bases) windows=18
+    | capturing per-head outputs at blocks 19-27 (clean + image-patched) ...
+    | /root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    |   mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+    |   scoring: VADE text match. first_* = position 0 vs the model's own base/source answers, over the 60/64 rows where those differ there; div_* = at the first differing token (64/64 rows)
+    |   unhooked:          cause=  0.0% first_src=  0.0%
+    |   image patch only:  cause= 93.8% first_src= 93.3% base_kept=  4.7%   <-- the effect every window is read against
+    |   window      19 ( 28 heads)  suff: cause=  0.0% first_src=  0.0% base_kept= 92.2% | nec: cause= 90.6% first_src= 90.0% | shuffled: own=  0.0% donor=  0.0% (first tok)
+    |   window      20 ( 28 heads)  suff: cause=  0.0% first_src=  0.0% base_kept= 92.2% | nec: cause= 93.8% first_src= 93.3% | shuffled: own=  0.0% donor=  0.0% (first tok)
+    |   window      21 ( 28 heads)  suff: cause=  0.0% first_src=  0.0% base_kept= 92.2% | nec: cause= 90.6% first_src= 90.0% | shuffled: own=  1.7% donor=  2.1% (first tok)
+    |   window      22 ( 28 heads)  suff: cause= 12.5% first_src= 13.3% base_kept= 81.2% | nec: cause= 65.6% first_src= 63.3% | shuffled: own=  1.7% donor= 12.8% (first tok)
+    |   window      23 ( 28 heads)  suff: cause=  6.2% first_src=  6.7% base_kept= 89.1% | nec: cause= 89.1% first_src= 86.7% | shuffled: own=  0.0% donor=  4.3% (first tok)
+    |   window      24 ( 28 heads)  suff: cause=  0.0% first_src=  0.0% base_kept= 92.2% | nec: cause= 93.8% first_src= 93.3% | shuffled: own=  0.0% donor=  0.0% (first tok)
+    |   window   19-20 ( 56 heads)  suff: cause=  0.0% first_src=  0.0% base_kept= 92.2% | nec: cause= 89.1% first_src= 88.3% | shuffled: own=  0.0% donor=  0.0% (first tok)
+    |   window   20-21 ( 56 heads)  suff: cause=  1.6% first_src=  1.7% base_kept= 92.2% | nec: cause= 90.6% first_src= 90.0% | shuffled: own=  0.0% donor=  0.0% (first tok)
+    |   window   21-22 ( 56 heads)  suff: cause= 37.5% first_src= 40.0% base_kept= 57.8% | nec: cause= 35.9% first_src= 30.0% | shuffled: own=  6.7% donor= 36.2% (first tok)
+    |   window   22-23 ( 56 heads)  suff: cause= 48.4% first_src= 51.7% base_kept= 50.0% | nec: cause= 20.3% first_src= 13.3% | shuffled: own= 16.7% donor= 66.0% (first tok)
+    |   window   23-24 ( 56 heads)  suff: cause=  4.7% first_src=  5.0% base_kept= 90.6% | nec: cause= 89.1% first_src= 86.7% | shuffled: own=  0.0% donor=  4.3% (first tok)
+    |   window   19-21 ( 84 heads)  suff: cause=  1.6% first_src=  1.7% base_kept= 92.2% | nec: cause= 84.4% first_src= 81.7% | shuffled: own=  1.7% donor=  2.1% (first tok)
+    |   window   20-22 ( 84 heads)  suff: cause= 34.4% first_src= 36.7% base_kept= 59.4% | nec: cause= 34.4% first_src= 28.3% | shuffled: own=  6.7% donor= 40.4% (first tok)
+    |   window   21-23 ( 84 heads)  suff: cause= 76.6% first_src= 81.7% base_kept= 20.3% | nec: cause=  7.8% first_src=  0.0% | shuffled: own= 21.7% donor= 85.1% (first tok)
+    |   window   22-24 ( 84 heads)  suff: cause= 50.0% first_src= 53.3% base_kept= 48.4% | nec: cause= 18.8% first_src= 11.7% | shuffled: own= 18.3% donor= 74.5% (first tok)
+    |   window   19-24 (168 heads)  suff: cause= 82.8% first_src= 88.3% base_kept= 17.2% | nec: cause=  7.8% first_src=  0.0% | shuffled: own= 20.0% donor= 89.4% (first tok)
+    |   window   19-22 (112 heads)  suff: cause= 53.1% first_src= 56.7% base_kept= 45.3% | nec: cause= 20.3% first_src= 11.7% | shuffled: own= 16.7% donor= 68.1% (first tok)
+    |   window   19-27 (252 heads)  suff: cause= 87.5% first_src= 93.3% base_kept= 10.9% | nec: cause=  7.8% first_src=  0.0% | shuffled: own= 20.0% donor= 91.5% (first tok)
+    | 
+    | full-coverage identity (window 19-27 suff vs image patch only): cause 87.5% vs 93.8%, first_src 93.3% vs 93.3% -> OK
+    | 
+    | per-block |delta_resid| mass at the last token (where the image-patched writes changed):
+    |   block 19: delta_resid=  26.6159  |delta_dla|=   0.1489
+    |   block 20: delta_resid=  23.1013  |delta_dla|=   0.0515
+    |   block 21: delta_resid=  71.2117  |delta_dla|=   0.3192
+    |   block 22: delta_resid=  71.1879  |delta_dla|=   0.8384
+    |   block 23: delta_resid= 121.7264  |delta_dla|=   0.6589
+    |   block 24: delta_resid=  87.1109  |delta_dla|=   0.2536
+    |   block 25: delta_resid=  91.4528  |delta_dla|=   0.2228
+    |   block 26: delta_resid= 186.4829  |delta_dla|=   3.2106
+    |   block 27: delta_resid= 165.7429  |delta_dla|=   0.5413
+    | 
+    | wrote /workspace/VADE-evals/results/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/windows_patch19_text.json
+    -> exit 0 after 7.9 min
+  [windows] image patch only: cause=93.8% first_src=93.3% (n_first=60/64) div_src=93.8% (n_div=64)
+              window heads suff.first suff.div suff.cause nec.first shuf.own shuf.donor
+                  19    28       0.0%     0.0%       0.0%     90.0%     0.0%       0.0%
+                  20    28       0.0%     0.0%       0.0%     93.3%     0.0%       0.0%
+                  21    28       0.0%     0.0%       0.0%     90.0%     1.7%       2.1%
+                  22    28      13.3%    12.5%      12.5%     63.3%     1.7%      12.8%
+                  23    28       6.7%     6.2%       6.2%     86.7%     0.0%       4.3%
+                  24    28       0.0%     0.0%       0.0%     93.3%     0.0%       0.0%
+               19-20    56       0.0%     0.0%       0.0%     88.3%     0.0%       0.0%
+               20-21    56       1.7%     1.6%       1.6%     90.0%     0.0%       0.0%
+               21-22    56      40.0%    37.5%      37.5%     30.0%     6.7%      36.2%
+               22-23    56      51.7%    48.4%      48.4%     13.3%    16.7%      66.0%
+               23-24    56       5.0%     4.7%       4.7%     86.7%     0.0%       4.3%
+               19-21    84       1.7%     1.6%       1.6%     81.7%     1.7%       2.1%
+               20-22    84      36.7%    34.4%      34.4%     28.3%     6.7%      40.4%
+               21-23    84      81.7%    76.6%      76.6%      0.0%    21.7%      85.1%
+               22-24    84      53.3%    50.0%      50.0%     11.7%    18.3%      74.5%
+               19-24   168      88.3%    82.8%      82.8%      0.0%    20.0%      89.4%
+               19-22   112      56.7%    53.1%      53.1%     11.7%    16.7%      68.1%
+               19-27   252      93.3%    87.5%      87.5%      0.0%    20.0%      91.5%
+  -> window 19-24: first_src=88.3% (best 88.3%; 95% of the image patch's own effect)
+
+  [stage 3: heads] head_trace in blocks 19-24
+  $ /opt/conda/bin/python methods/head_trace.py --entity brands --attribute hq_country --model_id OpenGVLab/InternVL3-8B-hf --vade_root /workspace/VADE --text_match --max_new_tokens 8 --patch_layer 19 --positions full_image --blocks 19 20 21 22 23 24 --n_rows 64 --seed 0 --batch_size 32 --knockout_ks 1 2 4 8 16 32 64 168 --control_k 1 2 4 8 16 32 --n_random 8 --out /workspace/VADE-evals/results/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/head_trace_patch19_blocks19-24_text.json
+    (log: logs/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/stage3_heads_blocks19-24.log)
+    | nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+    | 
+    | === logging to /workspace/VADE-evals/logs/InternVL3-8B-hf/brands/ndm/hq_country/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/head_trace_patch19_blocks19-24_text.log ===
+    | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+    | 
+    | Loading weights:   0%|          | 0/781 [00:00<?, ?it/s]
+    | Loading weights:   0%|          | 1/781 [00:00<08:58,  1.45it/s]
+    | Loading weights:   0%|          | 2/781 [00:01<08:52,  1.46it/s]
+    | Loading weights:   1%|          | 5/781 [00:01<03:02,  4.26it/s]
+    | Loading weights:   2%|2         | 16/781 [00:01<00:44, 17.12it/s]
+    | Loading weights:   3%|2         | 21/781 [00:01<00:38, 19.60it/s]
+    | Loading weights:   4%|3         | 28/781 [00:01<00:28, 26.45it/s]
+    | Loading weights:   4%|4         | 33/781 [00:02<00:27, 26.90it/s]
+    | Loading weights:   5%|5         | 40/781 [00:02<00:22, 33.38it/s]
+    | Loading weights:   6%|5         | 45/781 [00:02<00:23, 31.70it/s]
+    | Loading weights:   7%|6         | 52/781 [00:02<00:19, 37.36it/s]
+    | Loading weights:   7%|7         | 57/781 [00:02<00:20, 34.55it/s]
+    | Loading weights:   8%|8         | 64/781 [00:03<00:24, 29.62it/s]
+    | Loading weights:  10%|9         | 76/781 [00:03<00:22, 31.59it/s]
+    | Loading weights:  11%|#1        | 89/781 [00:03<00:16, 41.62it/s]
+    | Loading weights:  12%|#2        | 94/781 [00:03<00:16, 41.67it/s]
+    | Loading weights:  13%|#2        | 100/781 [00:03<00:15, 43.61it/s]
+    | Loading weights:  13%|#3        | 105/781 [00:03<00:17, 39.41it/s]
+    | Loading weights:  14%|#4        | 112/781 [00:04<00:15, 42.84it/s]
+    | Loading weights:  15%|#4        | 117/781 [00:04<00:17, 37.62it/s]
+    | Loading weights:  16%|#5        | 124/781 [00:04<00:15, 41.62it/s]
+    | Loading weights:  17%|#6        | 129/781 [00:04<00:18, 35.97it/s]
+    | Loading weights:  17%|#7        | 136/781 [00:04<00:16, 40.08it/s]
+    | Loading weights:  18%|#8        | 141/781 [00:04<00:17, 36.11it/s]
+    | Loading weights:  19%|#8        | 148/781 [00:05<00:15, 40.84it/s]
+    | Loading weights:  20%|#9        | 153/781 [00:05<00:17, 35.75it/s]
+    | Loading weights:  20%|##        | 160/781 [00:05<00:20, 29.62it/s]
+    | Loading weights:  22%|##2       | 172/781 [00:05<00:14, 40.79it/s]
+    | Loading weights:  23%|##2       | 177/781 [00:05<00:16, 37.09it/s]
+    | Loading weights:  24%|##3       | 184/781 [00:06<00:14, 41.04it/s]
+    | Loading weights:  24%|##4       | 189/781 [00:06<00:16, 36.41it/s]
+    | Loading weights:  25%|##5       | 196/781 [00:06<00:14, 40.80it/s]
+    | Loading weights:  26%|##5       | 201/781 [00:06<00:15, 36.52it/s]
+    | Loading weights:  27%|##6       | 208/781 [00:06<00:13, 41.48it/s]
+    | Loading weights:  27%|##7       | 213/781 [00:06<00:15, 36.91it/s]
+    | Loading weights:  28%|##8       | 220/781 [00:06<00:13, 41.76it/s]
+    | Loading weights:  29%|##8       | 225/781 [00:07<00:15, 36.72it/s]
+    | Loading weights:  30%|##9       | 232/781 [00:07<00:13, 41.98it/s]
+    | Loading weights:  30%|###       | 237/781 [00:07<00:14, 36.74it/s]
+    | Loading weights:  31%|###1      | 244/781 [00:07<00:12, 42.10it/s]
+    | Loading weights:  32%|###1      | 249/781 [00:07<00:14, 37.37it/s]
+    | Loading weights:  33%|###2      | 256/781 [00:07<00:12, 42.33it/s]
+    | Loading weights:  33%|###3      | 261/781 [00:08<00:13, 37.61it/s]
+    | Loading weights:  34%|###4      | 268/781 [00:08<00:12, 42.68it/s]
+    | Loading weights:  35%|###4      | 273/781 [00:08<00:13, 37.44it/s]
+    | Loading weights:  36%|###5      | 280/781 [00:08<00:11, 42.44it/s]
+    | Loading weights:  36%|###6      | 285/781 [00:08<00:13, 37.84it/s]
+    | Loading weights:  37%|###7      | 292/781 [00:08<00:11, 42.99it/s]
+    | Loading weights:  38%|###8      | 297/781 [00:08<00:12, 37.41it/s]
+    | Loading weights:  39%|###8      | 304/781 [00:09<00:11, 42.41it/s]
+    | Loading weights:  40%|###9      | 309/781 [00:09<00:12, 37.76it/s]
+    | Loading weights:  40%|####      | 316/781 [00:09<00:10, 42.61it/s]
+    | Loading weights:  41%|####1     | 321/781 [00:09<00:12, 37.75it/s]
+    | Loading weights:  42%|####1     | 328/781 [00:09<00:10, 42.43it/s]
+    | Loading weights:  43%|####2     | 333/781 [00:09<00:11, 37.45it/s]
+    | Loading weights:  46%|####5     | 356/781 [00:09<00:05, 78.80it/s]
+    | Loading weights:  52%|#####2    | 408/781 [00:10<00:02, 181.02it/s]
+    | Loading weights:  59%|#####9    | 462/781 [00:10<00:01, 267.78it/s]
+    | Loading weights:  66%|######5   | 515/781 [00:10<00:00, 336.04it/s]
+    | Loading weights:  73%|#######2  | 570/781 [00:10<00:00, 390.58it/s]
+    | Loading weights:  82%|########2 | 644/781 [00:10<00:00, 483.82it/s]
+    | Loading weights:  90%|######### | 704/781 [00:10<00:00, 513.14it/s]
+    | Loading weights:  98%|#########7| 763/781 [00:10<00:00, 530.20it/s]
+    | Loading weights: 100%|##########| 781/781 [00:10<00:00, 72.88it/s] 
+    | [transformers] The tied weights mapping and config for this model specifies to tie model.language_model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints with different values, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning.
+    | [ndm/head_trace] scoring: VADE text match (--text_match)
+    | [ndm/head_trace] entity=brands attribute=hq_country patch_layer=19 positions=full_image blocks=19-24 heads=28x128 rows=64 (29 distinct bases)
+    | 
+    | ==============================================================================
+    | === phase 1: differential head trace (2 forwards per batch, no generation)
+    | ==============================================================================
+    | /root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+    |   mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+    |   batch 1/2 traced
+    |   batch 2/2 traced
+    | 
+    | top 20 heads by |delta_resid| (how much this head's write to the last token changed when the image was swapped):
+    |   block.head  delta_resid    delta_z   delta_dla
+    | 23.17              21.3062    19.6287     -0.0113
+    | 23.3               17.5770    15.6537     -0.0090
+    | 21.4               17.1293    18.7883     -0.0772
+    | 23.7               16.6782    16.4856      0.0666
+    | 24.25              16.3833    14.4150      0.0208
+    | 23.4               14.5540    13.2181     -0.2413
+    | 22.17              13.7576    13.7910     -0.1942
+    | 21.1               12.3637    12.2368     -0.0334
+    | 22.15              11.9655    11.0086     -0.3012
+    | 22.19              11.6663    10.8241     -0.2153
+    | 21.5                9.6031    10.0482     -0.0955
+    | 23.6                7.4282     6.3248     -0.2154
+    | 21.24               7.2786     6.7681      0.0058
+    | 19.6                7.0752     7.0098     -0.0669
+    | 23.1                6.2795     5.7149     -0.0236
+    | 24.18               6.0294     5.4353      0.0318
+    | 24.14               5.5969     5.1448     -0.0360
+    | 21.6                5.2990     3.8691      0.0449
+    | 22.13               5.2706     5.2018      0.0277
+    | 24.22               5.1697     4.7747      0.0101
+    |   top-1   heads sit in blocks: 23x1
+    |   top-2   heads sit in blocks: 23x2
+    |   top-4   heads sit in blocks: 21x1, 23x3
+    |   top-8   heads sit in blocks: 21x2, 22x1, 23x4, 24x1
+    |   top-16  heads sit in blocks: 19x1, 21x4, 22x3, 23x6, 24x2
+    |   top-32  heads sit in blocks: 19x2, 21x6, 22x5, 23x9, 24x10
+    |   top-64  heads sit in blocks: 19x6, 20x5, 21x9, 22x10, 23x16, 24x18
+    |   top-168 heads sit in blocks: 19x28, 20x28, 21x28, 22x28, 23x28, 24x28
+    |   (a top-k drawn only from the LAST block(s) localizes the final WRITE, not the image->text read -- installing it is close to writing the answer into the residual one block before the unembedding. Re-run with --blocks restricted to the early window to test the read itself.)
+    | 
+    | per-block total |delta_resid| (where the read happens):
+    |   block 19:    26.6159
+    |   block 20:    23.1013
+    |   block 21:    71.2117
+    |   block 22:    71.1879
+    |   block 23:   121.7264
+    |   block 24:    87.1109
+    | 
+    | ==============================================================================
+    | === phase 1c: read-back identity (batch 1, 3 forwards, no generation)
+    | ==============================================================================
+    |   residual entering block 19 at the read column, image-patched vs clean: 0.000%
+    |     -> as required
+    | 
+    |   o_proj INPUT reads back what was installed: worst 0.00e+00 (block 24)
+    |     block    clean run   installed run   (o_proj OUTPUT vs W_O @ its captured INPUT)
+    |        19       0.17%          0.17%
+    |        20       0.16%          0.17%
+    |        21       0.17%          0.17%
+    |        22       0.17%          0.17%
+    |        23       0.17%          0.17%
+    |        24       0.17%          0.17%
+    | 
+    |   final pre-norm residual at the read column, installed-heads run vs:
+    |     the image-patched run: 16.907%   <-- the identity; must be ~0
+    |     the CLEAN run:         68.419%   <-- ~0 means the patch changed NOTHING
+    |   -> diverges, and --blocks is missing downstream block(s) [25, 26, 27], which explains it: their attention at the read column still sees the CLEAN image. Re-run with --blocks 19 20 21 22 23 24 25 26 27.
+    | 
+    | ==============================================================================
+    | === phase 1b: connectivity + block-everything
+    | ==============================================================================
+    |   patch telemetry (did the hook fire, and did it write anything?):
+    |     block 19: prefill_calls=2 decode_skips=9 seq_len=300 max|delta|=4.3125
+    |     block 20: prefill_calls=2 decode_skips=9 seq_len=300 max|delta|=5.0938
+    |     block 21: prefill_calls=2 decode_skips=9 seq_len=300 max|delta|=6.6562
+    |     block 22: prefill_calls=2 decode_skips=9 seq_len=300 max|delta|=5.1562
+    |     block 23: prefill_calls=2 decode_skips=9 seq_len=300 max|delta|=7.5938
+    |     block 24: prefill_calls=2 decode_skips=9 seq_len=300 max|delta|=8.1875
+    |   -> connected: reached on 12 prefill call(s), changed the tensor at all 6 blocks
+    | 
+    |   image patch + ALL 168 heads ZEROED: cause= 26.6% base_kept= 28.1%
+    |   (compare against the image-patch-only row in phase 2. Zeroing every traced head at the last token severs every path by which the patched image can reach that position after block 19, so cause here SHOULD fall to the unhooked floor. If it does not, either --blocks is too narrow or the read does not go through the last token's attention -- and that would be the finding.)
+    | 
+    | ==============================================================================
+    | === phase 2: cumulative knockout under the image patch (path patching)
+    | ==============================================================================
+    |   unhooked:                       cause=  0.0% base_kept= 92.2%
+    |   image patch only (k=0):         cause= 93.8% base_kept=  4.7%   <-- the effect being traced
+    |   restore top-1   heads:            cause= 95.3% base_kept=  4.7%  (recovered  0.0% of the effect)
+    |   restore top-2   heads:            cause= 96.9% base_kept=  3.1%  (recovered  0.0% of the effect)
+    |   restore top-4   heads:            cause= 95.3% base_kept=  4.7%  (recovered  0.0% of the effect)
+    |   restore top-8   heads:            cause= 70.3% base_kept= 28.1%  (recovered 25.0% of the effect)
+    |   restore top-16  heads:            cause=  7.8% base_kept= 81.2%  (recovered 91.7% of the effect)
+    |   restore top-32  heads:            cause=  7.8% base_kept= 82.8%  (recovered 91.7% of the effect)
+    |   restore top-64  heads:            cause=  7.8% base_kept= 82.8%  (recovered 91.7% of the effect)
+    |   restore top-168 heads:            cause=  7.8% base_kept= 82.8%  (recovered 91.7% of the effect)
+    |   restore 8 RANDOM heads (null):   cause= 95.3% base_kept=  3.1%
+    | 
+    |   top-8 vs random-8 gap: +25.0% of cause. A gap near zero means the phase-1 ranking is NOT carrying information and the curve above says nothing about which heads matter.
+    | 
+    | ==============================================================================
+    | === phase 3: sufficiency -- patch ONLY these heads, no image patch
+    | ==============================================================================
+    |   The mirror of phase 2. Instead of removing a head's contribution from a fully patched run, this INSTALLS it into an otherwise clean one: the image is NOT swapped, and the selected heads are forced to the values they took when it was. Necessity (phase 2) is the question redundancy breaks; sufficiency is not, so a small set reproducing the effect here is localization even if the knockout curve is flat.
+    | 
+    |   nothing patched (k=0):          cause=  0.0% base_kept= 92.2%   <-- must match the unhooked row above
+    |   ALL 168 traced heads:           cause= 82.8% base_kept= 17.2%   <-- a PARTIAL ceiling: downstream block(s) [25, 26, 27] are not traced, so their attention still reads the clean image
+    |   patch top-1   heads:              cause=  0.0% base_kept= 92.2%  ( 0.0% of this arm's ceiling)
+    |   patch top-2   heads:              cause=  0.0% base_kept= 92.2%  ( 0.0% of this arm's ceiling)
+    |   patch top-4   heads:              cause=  1.6% base_kept= 90.6%  ( 1.9% of this arm's ceiling)
+    |   patch top-8   heads:              cause=  7.8% base_kept= 85.9%  ( 9.4% of this arm's ceiling)
+    |   patch top-16  heads:              cause= 82.8% base_kept= 15.6%  (100.0% of this arm's ceiling)
+    |   patch top-32  heads:              cause= 84.4% base_kept= 15.6%  (101.9% of this arm's ceiling)
+    |   patch top-64  heads:              cause= 82.8% base_kept= 17.2%  (100.0% of this arm's ceiling)
+    |   patch top-168 heads:              cause= 82.8% base_kept= 17.2%  (100.0% of this arm's ceiling)
+    |   patch 8 RANDOM heads (null):     cause=  0.0% base_kept= 92.2%   <-- same heads as phase 2's null
+    | 
+    |   top-8 vs random-8: 7.8% vs 0.0% of cause.
+    | 
+    | ==============================================================================
+    | === phase 4: shuffled-donor control (is the content row-specific?)
+    | ==============================================================================
+    |   Each row is given the head outputs ANOTHER row's source flag produced, and scored against its own source gold (`own`), the donor's source gold (`donor`), and its base gold (`kept`). If these heads carry the source's identity, `own` must collapse and `donor` must rise. `own` staying high would mean the effect never depended on which image was patched in.
+    |        top-1 shuffled:  own=  0.0% donor= 26.6% kept= 92.2%   (unshuffled cause was 0.0%)
+    |        top-2 shuffled:  own=  0.0% donor= 26.6% kept= 92.2%   (unshuffled cause was 0.0%)
+    |        top-4 shuffled:  own=  0.0% donor= 26.6% kept= 90.6%   (unshuffled cause was 1.6%)
+    |        top-8 shuffled:  own=  1.6% donor= 29.7% kept= 90.6%   (unshuffled cause was 7.8%)
+    |       top-16 shuffled:  own= 20.3% donor= 90.6% kept= 29.7%   (unshuffled cause was 82.8%)
+    |       top-32 shuffled:  own= 20.3% donor= 90.6% kept= 29.7%   (unshuffled cause was 84.4%)
+    |      ALL 168 shuffled:  own= 20.3% donor= 92.2% kept= 28.1%   (unshuffled cause was 82.8%)
+    | 
+    |   -> partial: no arm reached the confirmation bar. Best donor rate was 92.2% at ALL 168 (own=20.3%). These heads carry source-specific content -- the answer stopped being the row's own -- but do not reconstruct the donor's answer, so report it as 'carries identity', not 'sufficient'.
+    | 
+    | wrote /workspace/VADE-evals/results/image_head_pipeline_InternVL3-8B-hf/brands/hq_country/head_trace_patch19_blocks19-24_text.json
+    -> exit 0 after 4.7 min
+  [heads] image patch only cause=93.8%  all traced heads (suff ceiling)=82.8%
+          suff    top-1    cause=  0.0%
+          suff    top-2    cause=  0.0%
+          suff    top-4    cause=  1.6%
+          suff    top-8    cause=  7.8%
+          suff    top-16   cause= 82.8%
+          suff    top-32   cause= 84.4%
+          suff    top-64   cause= 82.8%
+          suff    top-168  cause= 82.8%
+          suff random-8    cause=  0.0%
+  top-8 heads: 23.17 23.3 21.4 23.7 24.25 23.4 22.17 21.1
+
+wrote results/image_head_pipeline_InternVL3-8B-hf/brands/SUMMARY.md

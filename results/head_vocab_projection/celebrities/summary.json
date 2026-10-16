@@ -1,0 +1,1656 @@
+{
+  "entity": "celebrities",
+  "attributes": [
+    "nationality",
+    "occupation",
+    "birth_year",
+    "native_language"
+  ],
+  "template_index": 0,
+  "n_items": 84,
+  "collisions": {
+    "entity": [
+      "BEYONC",
+      "BOB_DYLAN",
+      "BOB_MARLEY",
+      "BORIS_JOHNSON",
+      "CHARLES_DARWIN",
+      "CHARLES_DE_GAULLE",
+      "CHARLES_DICKENS",
+      "CRISTIANO_RONALDO",
+      "C_LINE_DION",
+      "ELON_MUSK",
+      "ELVIS_PRESLEY",
+      "FIDEL_CASTRO",
+      "FYODOR_DOSTOEVSKY",
+      "JOHN_F_KENNEDY",
+      "JOHN_LENNON",
+      "MAHATHIR_MOHAMAD",
+      "MAHATMA_GANDHI",
+      "MAO_ZEDONG",
+      "MIGUEL_DE_CERVANTES",
+      "MIKHAIL_GORBACHEV",
+      "NARENDRA_MODI",
+      "NELSON_MANDELA",
+      "NEYMAR",
+      "NIKOLA_TESLA",
+      "RABINDRANATH_TAGORE",
+      "RAFAEL_NADAL",
+      "RIHANNA",
+      "SHAKIRA",
+      "SHINZO_ABE"
+    ],
+    "nationality": [
+      "ABRAHAM_LINCOLN",
+      "ALAN_TURING",
+      "ALBERT_EINSTEIN",
+      "ALFRED_HITCHCOCK",
+      "ANGELA_MERKEL",
+      "AUDREY_HEPBURN",
+      "BARACK_OBAMA",
+      "BEYONC",
+      "BILL_GATES",
+      "BOB_DYLAN",
+      "BORIS_JOHNSON",
+      "BRAD_PITT",
+      "BRIGITTE_BARDOT",
+      "BRUCE_LEE",
+      "CHARLES_DARWIN",
+      "CHARLES_DE_GAULLE",
+      "CHARLES_DICKENS",
+      "CHARLIE_CHAPLIN",
+      "CHE_GUEVARA",
+      "C_LINE_DION",
+      "DIEGO_MARADONA",
+      "DONALD_TRUMP",
+      "ELON_MUSK",
+      "ELVIS_PRESLEY",
+      "EMINEM",
+      "EMMANUEL_MACRON",
+      "ERNEST_HEMINGWAY",
+      "FRANKLIN_D_ROOSEVELT",
+      "FYODOR_DOSTOEVSKY",
+      "GABRIEL_GARC_A_M_RQUEZ",
+      "GEORGE_ORWELL",
+      "HENRY_FORD",
+      "HILLARY_CLINTON",
+      "INDIRA_GANDHI",
+      "ISAAC_NEWTON",
+      "JAWAHARLAL_NEHRU",
+      "JOE_BIDEN",
+      "JOHNNY_DEPP",
+      "JOHN_F_KENNEDY",
+      "JOHN_LENNON",
+      "JUSTIN_BIEBER",
+      "LIONEL_MESSI",
+      "LOUIS_PASTEUR",
+      "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "MAHATMA_GANDHI",
+      "MAO_ZEDONG",
+      "MARGARET_THATCHER",
+      "MICHAEL_SCHUMACHER",
+      "MIKHAIL_GORBACHEV",
+      "NARENDRA_MODI",
+      "NELSON_MANDELA",
+      "NEYMAR",
+      "PAUL_MCCARTNEY",
+      "PEL",
+      "RABINDRANATH_TAGORE",
+      "SHAKIRA",
+      "STEPHEN_HAWKING",
+      "TIM_BERNERS_LEE",
+      "TONY_BLAIR",
+      "VIRGINIA_WOOLF",
+      "VLADIMIR_PUTIN",
+      "WINSTON_CHURCHILL",
+      "XI_JINPING"
+    ],
+    "occupation": [
+      "ABRAHAM_LINCOLN",
+      "ALAN_TURING",
+      "ALBERT_EINSTEIN",
+      "ANGELA_MERKEL",
+      "AUDREY_HEPBURN",
+      "AUNG_SAN_SUU_KYI",
+      "BARACK_OBAMA",
+      "BENJAMIN_NETANYAHU",
+      "BEYONC",
+      "BILL_GATES",
+      "BOB_DYLAN",
+      "BOB_MARLEY",
+      "BORIS_JOHNSON",
+      "BRAD_PITT",
+      "BRIGITTE_BARDOT",
+      "BRUCE_LEE",
+      "CHARLES_DARWIN",
+      "CHARLES_DE_GAULLE",
+      "CHARLES_DICKENS",
+      "CHARLIE_CHAPLIN",
+      "CHE_GUEVARA",
+      "CRISTIANO_RONALDO",
+      "C_LINE_DION",
+      "DIEGO_MARADONA",
+      "DONALD_TRUMP",
+      "ELON_MUSK",
+      "ELVIS_PRESLEY",
+      "EMINEM",
+      "EMMANUEL_MACRON",
+      "ERNEST_HEMINGWAY",
+      "FIDEL_CASTRO",
+      "FRANKLIN_D_ROOSEVELT",
+      "FRANZ_KAFKA",
+      "FYODOR_DOSTOEVSKY",
+      "GABRIEL_GARC_A_M_RQUEZ",
+      "GALILEO_GALILEI",
+      "GEORGE_ORWELL",
+      "HENRY_FORD",
+      "HILLARY_CLINTON",
+      "INDIRA_GANDHI",
+      "ISAAC_NEWTON",
+      "JAWAHARLAL_NEHRU",
+      "JOE_BIDEN",
+      "JOHNNY_DEPP",
+      "JOHN_F_KENNEDY",
+      "JOHN_LENNON",
+      "JUSTIN_BIEBER",
+      "KOFI_ANNAN",
+      "LIONEL_MESSI",
+      "LOUIS_PASTEUR",
+      "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "MAHATHIR_MOHAMAD",
+      "MAHATMA_GANDHI",
+      "MAO_ZEDONG",
+      "MARGARET_THATCHER",
+      "MARIE_CURIE",
+      "MICHAEL_SCHUMACHER",
+      "MIGUEL_DE_CERVANTES",
+      "MIKHAIL_GORBACHEV",
+      "NARENDRA_MODI",
+      "NELSON_MANDELA",
+      "NEYMAR",
+      "NIKOLA_TESLA",
+      "NOVAK_DJOKOVIC",
+      "PAUL_MCCARTNEY",
+      "PEL",
+      "RABINDRANATH_TAGORE",
+      "RAFAEL_NADAL",
+      "RECEP_TAYYIP_ERDO_AN",
+      "RIHANNA",
+      "ROGER_FEDERER",
+      "SHAKIRA",
+      "SHINZO_ABE",
+      "SIM_N_BOL_VAR",
+      "STEPHEN_HAWKING",
+      "TIM_BERNERS_LEE",
+      "TONY_BLAIR",
+      "VIRGINIA_WOOLF",
+      "VLADIMIR_PUTIN",
+      "WILLIAM_SHAKESPEARE",
+      "WINSTON_CHURCHILL",
+      "XI_JINPING",
+      "YASSER_ARAFAT"
+    ],
+    "birth_year": [
+      "ABRAHAM_LINCOLN",
+      "ALAN_TURING",
+      "ALBERT_EINSTEIN",
+      "ALFRED_HITCHCOCK",
+      "ANGELA_MERKEL",
+      "AUDREY_HEPBURN",
+      "AUNG_SAN_SUU_KYI",
+      "BARACK_OBAMA",
+      "BENJAMIN_NETANYAHU",
+      "BEYONC",
+      "BILL_GATES",
+      "BOB_DYLAN",
+      "BOB_MARLEY",
+      "BORIS_JOHNSON",
+      "BRAD_PITT",
+      "BRIGITTE_BARDOT",
+      "BRUCE_LEE",
+      "CHARLES_DARWIN",
+      "CHARLES_DE_GAULLE",
+      "CHARLES_DICKENS",
+      "CHARLIE_CHAPLIN",
+      "CHE_GUEVARA",
+      "CRISTIANO_RONALDO",
+      "C_LINE_DION",
+      "DIEGO_MARADONA",
+      "DONALD_TRUMP",
+      "ELON_MUSK",
+      "ELVIS_PRESLEY",
+      "EMINEM",
+      "EMMANUEL_MACRON",
+      "ERNEST_HEMINGWAY",
+      "FIDEL_CASTRO",
+      "FRANKLIN_D_ROOSEVELT",
+      "FRANZ_KAFKA",
+      "FYODOR_DOSTOEVSKY",
+      "GABRIEL_GARC_A_M_RQUEZ",
+      "GALILEO_GALILEI",
+      "GEORGE_ORWELL",
+      "HENRY_FORD",
+      "HILLARY_CLINTON",
+      "INDIRA_GANDHI",
+      "ISAAC_NEWTON",
+      "JAWAHARLAL_NEHRU",
+      "JOE_BIDEN",
+      "JOHNNY_DEPP",
+      "JOHN_F_KENNEDY",
+      "JOHN_LENNON",
+      "JUSTIN_BIEBER",
+      "KOFI_ANNAN",
+      "LIONEL_MESSI",
+      "LOUIS_PASTEUR",
+      "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "MAHATHIR_MOHAMAD",
+      "MAHATMA_GANDHI",
+      "MAO_ZEDONG",
+      "MARGARET_THATCHER",
+      "MARIE_CURIE",
+      "MICHAEL_SCHUMACHER",
+      "MIGUEL_DE_CERVANTES",
+      "MIKHAIL_GORBACHEV",
+      "NARENDRA_MODI",
+      "NELSON_MANDELA",
+      "NEYMAR",
+      "NIKOLA_TESLA",
+      "NOVAK_DJOKOVIC",
+      "PAUL_MCCARTNEY",
+      "PEL",
+      "RABINDRANATH_TAGORE",
+      "RAFAEL_NADAL",
+      "RECEP_TAYYIP_ERDO_AN",
+      "RIHANNA",
+      "ROGER_FEDERER",
+      "SHAKIRA",
+      "SHINZO_ABE",
+      "SIM_N_BOL_VAR",
+      "STEPHEN_HAWKING",
+      "TIM_BERNERS_LEE",
+      "TONY_BLAIR",
+      "VIRGINIA_WOOLF",
+      "VLADIMIR_PUTIN",
+      "WILLIAM_SHAKESPEARE",
+      "WINSTON_CHURCHILL",
+      "XI_JINPING",
+      "YASSER_ARAFAT"
+    ],
+    "native_language": [
+      "ABRAHAM_LINCOLN",
+      "ALAN_TURING",
+      "ALBERT_EINSTEIN",
+      "ALFRED_HITCHCOCK",
+      "ANGELA_MERKEL",
+      "BARACK_OBAMA",
+      "BEYONC",
+      "BILL_GATES",
+      "BOB_DYLAN",
+      "BOB_MARLEY",
+      "BORIS_JOHNSON",
+      "BRAD_PITT",
+      "BRIGITTE_BARDOT",
+      "CHARLES_DARWIN",
+      "CHARLES_DE_GAULLE",
+      "CHARLES_DICKENS",
+      "CHARLIE_CHAPLIN",
+      "CHE_GUEVARA",
+      "CRISTIANO_RONALDO",
+      "C_LINE_DION",
+      "DIEGO_MARADONA",
+      "DONALD_TRUMP",
+      "ELON_MUSK",
+      "ELVIS_PRESLEY",
+      "EMINEM",
+      "EMMANUEL_MACRON",
+      "ERNEST_HEMINGWAY",
+      "FIDEL_CASTRO",
+      "FRANKLIN_D_ROOSEVELT",
+      "FRANZ_KAFKA",
+      "FYODOR_DOSTOEVSKY",
+      "GABRIEL_GARC_A_M_RQUEZ",
+      "GALILEO_GALILEI",
+      "GEORGE_ORWELL",
+      "HENRY_FORD",
+      "HILLARY_CLINTON",
+      "ISAAC_NEWTON",
+      "JAWAHARLAL_NEHRU",
+      "JOE_BIDEN",
+      "JOHNNY_DEPP",
+      "JOHN_F_KENNEDY",
+      "JOHN_LENNON",
+      "JUSTIN_BIEBER",
+      "KOFI_ANNAN",
+      "LIONEL_MESSI",
+      "LOUIS_PASTEUR",
+      "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "MAHATMA_GANDHI",
+      "MAO_ZEDONG",
+      "MARGARET_THATCHER",
+      "MICHAEL_SCHUMACHER",
+      "MIGUEL_DE_CERVANTES",
+      "MIKHAIL_GORBACHEV",
+      "NARENDRA_MODI",
+      "NEYMAR",
+      "NIKOLA_TESLA",
+      "NOVAK_DJOKOVIC",
+      "PAUL_MCCARTNEY",
+      "PEL",
+      "RIHANNA",
+      "ROGER_FEDERER",
+      "SHAKIRA",
+      "SIM_N_BOL_VAR",
+      "STEPHEN_HAWKING",
+      "TIM_BERNERS_LEE",
+      "TONY_BLAIR",
+      "VIRGINIA_WOOLF",
+      "VLADIMIR_PUTIN",
+      "WILLIAM_SHAKESPEARE",
+      "WINSTON_CHURCHILL",
+      "XI_JINPING"
+    ]
+  },
+  "by_head": {
+    "common10": {
+      "21.1": {
+        "n": 336,
+        "entity_rank_mean": 39.354166666666664,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.05952380952380952,
+        "entity_z_mean": 0.9003418032918402,
+        "queried_value_rank_mean": 7.815476190476191,
+        "queried_value_z_mean": 0.7290768215898424,
+        "other_value_rank_mean": 11.768849206349206,
+        "other_value_z_mean": 0.35529855861658155,
+        "dla_entity_mean": 0.015750534712543368,
+        "dla_value_queried_mean": 0.015350263357482791,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.0,
+        "groups": {
+          "system": {
+            "attention": 0.3545183621879135,
+            "write_norm": 0.6930000779462889,
+            "dla_entity": -0.00033915494292576415,
+            "dla_value_queried": -0.0009726412700577688
+          },
+          "object": {
+            "attention": 0.12364279789783593,
+            "write_norm": 2.401523072158896,
+            "dla_entity": 0.005828777509459353,
+            "dla_value_queried": 0.006166672149664096
+          },
+          "image_background": {
+            "attention": 0.27051465431716115,
+            "write_norm": 3.8264930497943643,
+            "dla_entity": 0.01000545373273606,
+            "dla_value_queried": 0.0073386270051157354
+          },
+          "question": {
+            "attention": 0.1608307236539466,
+            "write_norm": 1.009054689801165,
+            "dla_entity": 0.0001997986946351137,
+            "dla_value_queried": 0.0017338046573102805
+          },
+          "assistant_prefix": {
+            "attention": 0.09053103927345503,
+            "write_norm": 0.5038244674603144,
+            "dla_entity": 5.611699282867665e-05,
+            "dla_value_queried": 0.0010840830887505469
+          }
+        }
+      },
+      "21.5": {
+        "n": 336,
+        "entity_rank_mean": 26.467261904761905,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.12797619047619047,
+        "entity_z_mean": 1.3667600175956198,
+        "queried_value_rank_mean": 4.026785714285714,
+        "queried_value_z_mean": 1.341913646281076,
+        "other_value_rank_mean": 5.399801587301587,
+        "other_value_z_mean": 1.0414832916816636,
+        "dla_entity_mean": 0.029344649235662518,
+        "dla_value_queried_mean": 0.04157241794326269,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.011904761904761904,
+        "groups": {
+          "system": {
+            "attention": 0.24774558411999828,
+            "write_norm": 0.5218789012980691,
+            "dla_entity": 1.2132524878844769e-05,
+            "dla_value_queried": -0.001334198221106438
+          },
+          "object": {
+            "attention": 0.22535866733995222,
+            "write_norm": 3.6786403390357183,
+            "dla_entity": 0.01224126328123107,
+            "dla_value_queried": 0.013701546551081785
+          },
+          "image_background": {
+            "attention": 0.36660837539516034,
+            "write_norm": 4.519931558164812,
+            "dla_entity": 0.015922363719840047,
+            "dla_value_queried": 0.021221471782523406
+          },
+          "question": {
+            "attention": 0.11142579106880086,
+            "write_norm": 0.9710476758856592,
+            "dla_entity": 0.00094340791299276,
+            "dla_value_queried": 0.006497210802803822
+          },
+          "assistant_prefix": {
+            "attention": 0.04890161850267932,
+            "write_norm": 0.31931112927988925,
+            "dla_entity": 0.0002229890520302731,
+            "dla_value_queried": 0.0014836295759800965
+          }
+        }
+      },
+      "22.13": {
+        "n": 336,
+        "entity_rank_mean": 31.3125,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.10416666666666667,
+        "entity_z_mean": 1.1571323427044609,
+        "queried_value_rank_mean": 8.586309523809524,
+        "queried_value_z_mean": 0.5487836578610031,
+        "other_value_rank_mean": 9.10218253968254,
+        "other_value_z_mean": 0.4928404217928238,
+        "dla_entity_mean": 0.009850132822163817,
+        "dla_value_queried_mean": 0.0037662872475071447,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.2261904761904762,
+        "groups": {
+          "system": {
+            "attention": 0.5451445159103189,
+            "write_norm": 0.4194756181289752,
+            "dla_entity": -8.47705428691556e-05,
+            "dla_value_queried": -0.000602770569874979
+          },
+          "object": {
+            "attention": 0.1357528829636673,
+            "write_norm": 1.6855335879982227,
+            "dla_entity": 0.005243563850965096,
+            "dla_value_queried": 0.0011235669981080794
+          },
+          "image_background": {
+            "attention": 0.20082107982376501,
+            "write_norm": 1.9443219412295591,
+            "dla_entity": 0.004725712894545116,
+            "dla_value_queried": 0.002386340724932606
+          },
+          "question": {
+            "attention": 0.07152156179238643,
+            "write_norm": 0.4377603333532101,
+            "dla_entity": -7.493160069282383e-05,
+            "dla_value_queried": 0.00038187617738504373
+          },
+          "assistant_prefix": {
+            "attention": 0.046662932350522,
+            "write_norm": 0.3271297788070071,
+            "dla_entity": 3.9070913865928214e-05,
+            "dla_value_queried": 0.00047818323817205323
+          }
+        }
+      },
+      "22.15": {
+        "n": 336,
+        "entity_rank_mean": 26.077380952380953,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.11011904761904762,
+        "entity_z_mean": 1.3142416356976832,
+        "queried_value_rank_mean": 3.1845238095238093,
+        "queried_value_z_mean": 1.6865934020274185,
+        "other_value_rank_mean": 3.3214285714285716,
+        "other_value_z_mean": 1.593361307469581,
+        "dla_entity_mean": 0.03390574938696643,
+        "dla_value_queried_mean": 0.0658493873373421,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.4166666666666667,
+        "groups": {
+          "system": {
+            "attention": 0.23074096942409164,
+            "write_norm": 0.37425780267221853,
+            "dla_entity": -7.421569276492132e-05,
+            "dla_value_queried": -0.0007409720739650945
+          },
+          "object": {
+            "attention": 0.24330661453617117,
+            "write_norm": 3.7273161015251564,
+            "dla_entity": 0.011306681075179117,
+            "dla_value_queried": 0.022308957030309967
+          },
+          "image_background": {
+            "attention": 0.3447438302627277,
+            "write_norm": 5.2614763503273325,
+            "dla_entity": 0.018279988703511663,
+            "dla_value_queried": 0.03477341781156914
+          },
+          "question": {
+            "attention": 0.1265573171854374,
+            "write_norm": 1.380144548646751,
+            "dla_entity": 0.0029719691070392664,
+            "dla_value_queried": 0.007164736737173544
+          },
+          "assistant_prefix": {
+            "attention": 0.05465028896218255,
+            "write_norm": 0.5945285590188134,
+            "dla_entity": 0.0014159737202838923,
+            "dla_value_queried": 0.002347520397820734
+          }
+        }
+      },
+      "22.17": {
+        "n": 336,
+        "entity_rank_mean": 19.764880952380953,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.3005952380952381,
+        "entity_z_mean": 1.8710993710084862,
+        "queried_value_rank_mean": 9.321428571428571,
+        "queried_value_z_mean": 0.6634631887898736,
+        "other_value_rank_mean": 10,
+        "other_value_z_mean": 0.5842895676554661,
+        "dla_entity_mean": 0.06598995272564762,
+        "dla_value_queried_mean": 0.01755573432401867,
+        "top1_class": {
+          "other": 0.9880952380952381,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.44047619047619047,
+        "groups": {
+          "system": {
+            "attention": 0.22261481466037886,
+            "write_norm": 0.414535696496993,
+            "dla_entity": -0.0001444799997640377,
+            "dla_value_queried": -0.00013250845649127014
+          },
+          "object": {
+            "attention": 0.34268500896481174,
+            "write_norm": 6.841477324842431,
+            "dla_entity": 0.03133169897046173,
+            "dla_value_queried": 0.008383684248442538
+          },
+          "image_background": {
+            "attention": 0.33595598217410344,
+            "write_norm": 6.261623713941801,
+            "dla_entity": 0.0321867810347439,
+            "dla_value_queried": 0.007204079916369838
+          },
+          "question": {
+            "attention": 0.08697482136665799,
+            "write_norm": 0.8823270809371024,
+            "dla_entity": 0.0021796832291009934,
+            "dla_value_queried": 0.0018805097482998332
+          },
+          "assistant_prefix": {
+            "attention": 0.011766431215662686,
+            "write_norm": 0.14470018732355952,
+            "dla_entity": 0.0004382416299513298,
+            "dla_value_queried": 0.00022204901552686217
+          }
+        }
+      },
+      "22.19": {
+        "n": 336,
+        "entity_rank_mean": 27.553571428571427,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.06845238095238096,
+        "entity_z_mean": 1.2413052411367451,
+        "queried_value_rank_mean": 7.011904761904762,
+        "queried_value_z_mean": 0.776643234314785,
+        "other_value_rank_mean": 7.781746031746032,
+        "other_value_z_mean": 0.6890164952834196,
+        "dla_entity_mean": 0.025371594323338457,
+        "dla_value_queried_mean": 0.022080964083616414,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.09523809523809523,
+        "groups": {
+          "system": {
+            "attention": 0.23128056193568877,
+            "write_norm": 0.37401247910678476,
+            "dla_entity": -8.246913943464409e-05,
+            "dla_value_queried": 0.00011594861945308734
+          },
+          "object": {
+            "attention": 0.19149145563798292,
+            "write_norm": 2.993897628804137,
+            "dla_entity": 0.008799116671482244,
+            "dla_value_queried": 0.007929508613404409
+          },
+          "image_background": {
+            "attention": 0.22891070618338527,
+            "write_norm": 3.2704300976668796,
+            "dla_entity": 0.010608570260081879,
+            "dla_value_queried": 0.009210579987828689
+          },
+          "question": {
+            "attention": 0.2542199178465775,
+            "write_norm": 1.989314751522172,
+            "dla_entity": 0.003995505772370019,
+            "dla_value_queried": 0.002856892767585437
+          },
+          "assistant_prefix": {
+            "attention": 0.09415856926214128,
+            "write_norm": 0.9149858695233152,
+            "dla_entity": 0.002047361821859167,
+            "dla_value_queried": 0.0019704556205700405
+          }
+        }
+      },
+      "23.17": {
+        "n": 336,
+        "entity_rank_mean": 42.979166666666664,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.041666666666666664,
+        "entity_z_mean": 0.7402711008159842,
+        "queried_value_rank_mean": 10.80952380952381,
+        "queried_value_z_mean": 0.5252453285419116,
+        "other_value_rank_mean": 11.214285714285714,
+        "other_value_z_mean": 0.3981024703920527,
+        "dla_entity_mean": 0.004464699344886131,
+        "dla_value_queried_mean": -0.001621106406817251,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.0,
+        "groups": {
+          "system": {
+            "attention": 0.8307286587854227,
+            "write_norm": 0.6877965318659941,
+            "dla_entity": 6.7135868250932705e-06,
+            "dla_value_queried": -0.0015033818770115474
+          },
+          "object": {
+            "attention": 0.039977804297536966,
+            "write_norm": 1.0762127447773568,
+            "dla_entity": 0.0030868927443079776,
+            "dla_value_queried": 0.00023113345072968086
+          },
+          "image_background": {
+            "attention": 0.03591990672534199,
+            "write_norm": 0.7267205205335769,
+            "dla_entity": 0.0015931842667662348,
+            "dla_value_queried": 0.00013139262272854864
+          },
+          "question": {
+            "attention": 0.049338930242118384,
+            "write_norm": 0.62676605183099,
+            "dla_entity": -6.952182103857143e-05,
+            "dla_value_queried": -0.0006383027450318597
+          },
+          "assistant_prefix": {
+            "attention": 0.044074924219222295,
+            "write_norm": 0.5009004662611655,
+            "dla_entity": -0.00015319753809300046,
+            "dla_value_queried": 0.0001586786781026766
+          }
+        }
+      },
+      "23.3": {
+        "n": 336,
+        "entity_rank_mean": 32.74702380952381,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.15773809523809523,
+        "entity_z_mean": 1.3154398082524061,
+        "queried_value_rank_mean": 10.946428571428571,
+        "queried_value_z_mean": 0.6067475508482728,
+        "other_value_rank_mean": 11.83234126984127,
+        "other_value_z_mean": 0.4575222873730953,
+        "dla_entity_mean": 0.02443352434772264,
+        "dla_value_queried_mean": 0.0045757846921246495,
+        "top1_class": {
+          "other": 0.9880952380952381,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.15476190476190477,
+        "groups": {
+          "system": {
+            "attention": 0.6123588894482791,
+            "write_norm": 0.760304103125929,
+            "dla_entity": -0.0001434292731449291,
+            "dla_value_queried": -0.0009464592590660121
+          },
+          "object": {
+            "attention": 0.17894758607283057,
+            "write_norm": 3.601008420050632,
+            "dla_entity": 0.012909535310823474,
+            "dla_value_queried": 0.0033079272955674134
+          },
+          "image_background": {
+            "attention": 0.16400753338876667,
+            "write_norm": 2.98696375451982,
+            "dla_entity": 0.010883783405103844,
+            "dla_value_queried": 0.0018922820559650756
+          },
+          "question": {
+            "attention": 0.031837093455362175,
+            "write_norm": 0.2921497713098125,
+            "dla_entity": 0.0004043542195810395,
+            "dla_value_queried": 0.00016949885462768153
+          },
+          "assistant_prefix": {
+            "attention": 0.012751329080423429,
+            "write_norm": 0.17349317405439382,
+            "dla_entity": 0.0003754818363034421,
+            "dla_value_queried": 0.00015283634844265315
+          }
+        }
+      },
+      "23.4": {
+        "n": 336,
+        "entity_rank_mean": 36.098214285714285,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.05654761904761905,
+        "entity_z_mean": 1.0118149505883811,
+        "queried_value_rank_mean": 6.622023809523809,
+        "queried_value_z_mean": 1.0737790528607245,
+        "other_value_rank_mean": 7.954365079365079,
+        "other_value_z_mean": 0.9436711112202685,
+        "dla_entity_mean": 0.015257435219387801,
+        "dla_value_queried_mean": 0.0364986836669386,
+        "top1_class": {
+          "other": 0.9732142857142857,
+          "own_value_queried": 0.005952380952380952,
+          "own_value_other_attr": 0.017857142857142856,
+          "other_value": 0.002976190476190476
+        },
+        "top1_question_invariant_rate": 0.2261904761904762,
+        "groups": {
+          "system": {
+            "attention": 0.4824537033924744,
+            "write_norm": 0.48748986074462575,
+            "dla_entity": -3.9097525052537006e-05,
+            "dla_value_queried": 0.00013244419540385586
+          },
+          "object": {
+            "attention": 0.12305512275391568,
+            "write_norm": 1.94690657122105,
+            "dla_entity": 0.0042155474843030205,
+            "dla_value_queried": 0.010049752399436465
+          },
+          "image_background": {
+            "attention": 0.18390803353118135,
+            "write_norm": 2.815368791277121,
+            "dla_entity": 0.006469201797943113,
+            "dla_value_queried": 0.015803118878092652
+          },
+          "question": {
+            "attention": 0.12299262820964768,
+            "write_norm": 1.3896391012351073,
+            "dla_entity": 0.002237244887808066,
+            "dla_value_queried": 0.004955326402032715
+          },
+          "assistant_prefix": {
+            "attention": 0.08757400654611133,
+            "write_norm": 1.3181084196382602,
+            "dla_entity": 0.0023745178397735094,
+            "dla_value_queried": 0.005555872486002586
+          }
+        }
+      },
+      "23.6": {
+        "n": 336,
+        "entity_rank_mean": 19.476190476190474,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.31845238095238093,
+        "entity_z_mean": 2.1123975501596717,
+        "queried_value_rank_mean": 2.8779761904761907,
+        "queried_value_z_mean": 1.9017820110727501,
+        "other_value_rank_mean": 3.636904761904762,
+        "other_value_z_mean": 1.5823605290103684,
+        "dla_entity_mean": 0.05198852105900187,
+        "dla_value_queried_mean": 0.09245314197552477,
+        "top1_class": {
+          "other": 0.9821428571428571,
+          "own_value_queried": 0.005952380952380952,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.39285714285714285,
+        "groups": {
+          "system": {
+            "attention": 0.3279127128466609,
+            "write_norm": 0.43328833294522373,
+            "dla_entity": -1.9372378723318884e-05,
+            "dla_value_queried": 0.00011519971869935897
+          },
+          "object": {
+            "attention": 0.12648148458572991,
+            "write_norm": 2.055991150083996,
+            "dla_entity": 0.010140591136698856,
+            "dla_value_queried": 0.015502388623988714
+          },
+          "image_background": {
+            "attention": 0.15210784832015634,
+            "write_norm": 2.351784340372043,
+            "dla_entity": 0.014562727332694132,
+            "dla_value_queried": 0.018187100621958052
+          },
+          "question": {
+            "attention": 0.22622277064337618,
+            "write_norm": 2.8942212724082528,
+            "dla_entity": 0.012726557701842552,
+            "dla_value_queried": 0.029298281172768406
+          },
+          "assistant_prefix": {
+            "attention": 0.16720346467835562,
+            "write_norm": 2.797186517189922,
+            "dla_entity": 0.014577313541936053,
+            "dla_value_queried": 0.029354688759061293
+          }
+        }
+      }
+    },
+    "nationality_top8": {
+      "21.1": {
+        "n": 336,
+        "entity_rank_mean": 39.354166666666664,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.05952380952380952,
+        "entity_z_mean": 0.9003418032918402,
+        "queried_value_rank_mean": 7.815476190476191,
+        "queried_value_z_mean": 0.7290768215898424,
+        "other_value_rank_mean": 11.768849206349206,
+        "other_value_z_mean": 0.35529855861658155,
+        "dla_entity_mean": 0.015750534712543368,
+        "dla_value_queried_mean": 0.015350263357482791,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.0,
+        "groups": {
+          "system": {
+            "attention": 0.3545183621879135,
+            "write_norm": 0.6930000779462889,
+            "dla_entity": -0.00033915494292576415,
+            "dla_value_queried": -0.0009726412700577688
+          },
+          "object": {
+            "attention": 0.12364279789783593,
+            "write_norm": 2.401523072158896,
+            "dla_entity": 0.005828777509459353,
+            "dla_value_queried": 0.006166672149664096
+          },
+          "image_background": {
+            "attention": 0.27051465431716115,
+            "write_norm": 3.8264930497943643,
+            "dla_entity": 0.01000545373273606,
+            "dla_value_queried": 0.0073386270051157354
+          },
+          "question": {
+            "attention": 0.1608307236539466,
+            "write_norm": 1.009054689801165,
+            "dla_entity": 0.0001997986946351137,
+            "dla_value_queried": 0.0017338046573102805
+          },
+          "assistant_prefix": {
+            "attention": 0.09053103927345503,
+            "write_norm": 0.5038244674603144,
+            "dla_entity": 5.611699282867665e-05,
+            "dla_value_queried": 0.0010840830887505469
+          }
+        }
+      },
+      "21.4": {
+        "n": 336,
+        "entity_rank_mean": 32.145833333333336,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.1636904761904762,
+        "entity_z_mean": 1.2358563418993505,
+        "queried_value_rank_mean": 7.6875,
+        "queried_value_z_mean": 0.7565290765626178,
+        "other_value_rank_mean": 8.340277777777779,
+        "other_value_z_mean": 0.7146413664932403,
+        "dla_entity_mean": 0.022151692512752993,
+        "dla_value_queried_mean": 0.0132135527821252,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.07142857142857142,
+        "groups": {
+          "system": {
+            "attention": 0.36603487411048263,
+            "write_norm": 0.6503160526654461,
+            "dla_entity": -0.00015461257992079762,
+            "dla_value_queried": 5.092243959785898e-05
+          },
+          "object": {
+            "attention": 0.15373050585566533,
+            "write_norm": 2.721860560921154,
+            "dla_entity": 0.009486638983630547,
+            "dla_value_queried": 0.005677475202967723
+          },
+          "image_background": {
+            "attention": 0.3132861580123149,
+            "write_norm": 4.085332526248836,
+            "dla_entity": 0.012003937006733438,
+            "dla_value_queried": 0.006555808866063931
+          },
+          "question": {
+            "attention": 0.1272782165476764,
+            "write_norm": 1.039401617361277,
+            "dla_entity": 0.0007007409114001868,
+            "dla_value_queried": 0.0009012176715073462
+          },
+          "assistant_prefix": {
+            "attention": 0.03963485318014309,
+            "write_norm": 0.2681161907939462,
+            "dla_entity": 0.00010886246138412725,
+            "dla_value_queried": 2.8224099578112926e-05
+          }
+        }
+      },
+      "21.5": {
+        "n": 336,
+        "entity_rank_mean": 26.467261904761905,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.12797619047619047,
+        "entity_z_mean": 1.3667600175956198,
+        "queried_value_rank_mean": 4.026785714285714,
+        "queried_value_z_mean": 1.341913646281076,
+        "other_value_rank_mean": 5.399801587301587,
+        "other_value_z_mean": 1.0414832916816636,
+        "dla_entity_mean": 0.029344649235662518,
+        "dla_value_queried_mean": 0.04157241794326269,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.011904761904761904,
+        "groups": {
+          "system": {
+            "attention": 0.24774558411999828,
+            "write_norm": 0.5218789012980691,
+            "dla_entity": 1.2132524878844769e-05,
+            "dla_value_queried": -0.001334198221106438
+          },
+          "object": {
+            "attention": 0.22535866733995222,
+            "write_norm": 3.6786403390357183,
+            "dla_entity": 0.01224126328123107,
+            "dla_value_queried": 0.013701546551081785
+          },
+          "image_background": {
+            "attention": 0.36660837539516034,
+            "write_norm": 4.519931558164812,
+            "dla_entity": 0.015922363719840047,
+            "dla_value_queried": 0.021221471782523406
+          },
+          "question": {
+            "attention": 0.11142579106880086,
+            "write_norm": 0.9710476758856592,
+            "dla_entity": 0.00094340791299276,
+            "dla_value_queried": 0.006497210802803822
+          },
+          "assistant_prefix": {
+            "attention": 0.04890161850267932,
+            "write_norm": 0.31931112927988925,
+            "dla_entity": 0.0002229890520302731,
+            "dla_value_queried": 0.0014836295759800965
+          }
+        }
+      },
+      "22.15": {
+        "n": 336,
+        "entity_rank_mean": 26.077380952380953,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.11011904761904762,
+        "entity_z_mean": 1.3142416356976832,
+        "queried_value_rank_mean": 3.1845238095238093,
+        "queried_value_z_mean": 1.6865934020274185,
+        "other_value_rank_mean": 3.3214285714285716,
+        "other_value_z_mean": 1.593361307469581,
+        "dla_entity_mean": 0.03390574938696643,
+        "dla_value_queried_mean": 0.0658493873373421,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.4166666666666667,
+        "groups": {
+          "system": {
+            "attention": 0.23074096942409164,
+            "write_norm": 0.37425780267221853,
+            "dla_entity": -7.421569276492132e-05,
+            "dla_value_queried": -0.0007409720739650945
+          },
+          "object": {
+            "attention": 0.24330661453617117,
+            "write_norm": 3.7273161015251564,
+            "dla_entity": 0.011306681075179117,
+            "dla_value_queried": 0.022308957030309967
+          },
+          "image_background": {
+            "attention": 0.3447438302627277,
+            "write_norm": 5.2614763503273325,
+            "dla_entity": 0.018279988703511663,
+            "dla_value_queried": 0.03477341781156914
+          },
+          "question": {
+            "attention": 0.1265573171854374,
+            "write_norm": 1.380144548646751,
+            "dla_entity": 0.0029719691070392664,
+            "dla_value_queried": 0.007164736737173544
+          },
+          "assistant_prefix": {
+            "attention": 0.05465028896218255,
+            "write_norm": 0.5945285590188134,
+            "dla_entity": 0.0014159737202838923,
+            "dla_value_queried": 0.002347520397820734
+          }
+        }
+      },
+      "22.17": {
+        "n": 336,
+        "entity_rank_mean": 19.764880952380953,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.3005952380952381,
+        "entity_z_mean": 1.8710993710084862,
+        "queried_value_rank_mean": 9.321428571428571,
+        "queried_value_z_mean": 0.6634631887898736,
+        "other_value_rank_mean": 10,
+        "other_value_z_mean": 0.5842895676554661,
+        "dla_entity_mean": 0.06598995272564762,
+        "dla_value_queried_mean": 0.01755573432401867,
+        "top1_class": {
+          "other": 0.9880952380952381,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.44047619047619047,
+        "groups": {
+          "system": {
+            "attention": 0.22261481466037886,
+            "write_norm": 0.414535696496993,
+            "dla_entity": -0.0001444799997640377,
+            "dla_value_queried": -0.00013250845649127014
+          },
+          "object": {
+            "attention": 0.34268500896481174,
+            "write_norm": 6.841477324842431,
+            "dla_entity": 0.03133169897046173,
+            "dla_value_queried": 0.008383684248442538
+          },
+          "image_background": {
+            "attention": 0.33595598217410344,
+            "write_norm": 6.261623713941801,
+            "dla_entity": 0.0321867810347439,
+            "dla_value_queried": 0.007204079916369838
+          },
+          "question": {
+            "attention": 0.08697482136665799,
+            "write_norm": 0.8823270809371024,
+            "dla_entity": 0.0021796832291009934,
+            "dla_value_queried": 0.0018805097482998332
+          },
+          "assistant_prefix": {
+            "attention": 0.011766431215662686,
+            "write_norm": 0.14470018732355952,
+            "dla_entity": 0.0004382416299513298,
+            "dla_value_queried": 0.00022204901552686217
+          }
+        }
+      },
+      "23.3": {
+        "n": 336,
+        "entity_rank_mean": 32.74702380952381,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.15773809523809523,
+        "entity_z_mean": 1.3154398082524061,
+        "queried_value_rank_mean": 10.946428571428571,
+        "queried_value_z_mean": 0.6067475508482728,
+        "other_value_rank_mean": 11.83234126984127,
+        "other_value_z_mean": 0.4575222873730953,
+        "dla_entity_mean": 0.02443352434772264,
+        "dla_value_queried_mean": 0.0045757846921246495,
+        "top1_class": {
+          "other": 0.9880952380952381,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.15476190476190477,
+        "groups": {
+          "system": {
+            "attention": 0.6123588894482791,
+            "write_norm": 0.760304103125929,
+            "dla_entity": -0.0001434292731449291,
+            "dla_value_queried": -0.0009464592590660121
+          },
+          "object": {
+            "attention": 0.17894758607283057,
+            "write_norm": 3.601008420050632,
+            "dla_entity": 0.012909535310823474,
+            "dla_value_queried": 0.0033079272955674134
+          },
+          "image_background": {
+            "attention": 0.16400753338876667,
+            "write_norm": 2.98696375451982,
+            "dla_entity": 0.010883783405103844,
+            "dla_value_queried": 0.0018922820559650756
+          },
+          "question": {
+            "attention": 0.031837093455362175,
+            "write_norm": 0.2921497713098125,
+            "dla_entity": 0.0004043542195810395,
+            "dla_value_queried": 0.00016949885462768153
+          },
+          "assistant_prefix": {
+            "attention": 0.012751329080423429,
+            "write_norm": 0.17349317405439382,
+            "dla_entity": 0.0003754818363034421,
+            "dla_value_queried": 0.00015283634844265315
+          }
+        }
+      },
+      "23.4": {
+        "n": 336,
+        "entity_rank_mean": 36.098214285714285,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.05654761904761905,
+        "entity_z_mean": 1.0118149505883811,
+        "queried_value_rank_mean": 6.622023809523809,
+        "queried_value_z_mean": 1.0737790528607245,
+        "other_value_rank_mean": 7.954365079365079,
+        "other_value_z_mean": 0.9436711112202685,
+        "dla_entity_mean": 0.015257435219387801,
+        "dla_value_queried_mean": 0.0364986836669386,
+        "top1_class": {
+          "other": 0.9732142857142857,
+          "own_value_queried": 0.005952380952380952,
+          "own_value_other_attr": 0.017857142857142856,
+          "other_value": 0.002976190476190476
+        },
+        "top1_question_invariant_rate": 0.2261904761904762,
+        "groups": {
+          "system": {
+            "attention": 0.4824537033924744,
+            "write_norm": 0.48748986074462575,
+            "dla_entity": -3.9097525052537006e-05,
+            "dla_value_queried": 0.00013244419540385586
+          },
+          "object": {
+            "attention": 0.12305512275391568,
+            "write_norm": 1.94690657122105,
+            "dla_entity": 0.0042155474843030205,
+            "dla_value_queried": 0.010049752399436465
+          },
+          "image_background": {
+            "attention": 0.18390803353118135,
+            "write_norm": 2.815368791277121,
+            "dla_entity": 0.006469201797943113,
+            "dla_value_queried": 0.015803118878092652
+          },
+          "question": {
+            "attention": 0.12299262820964768,
+            "write_norm": 1.3896391012351073,
+            "dla_entity": 0.002237244887808066,
+            "dla_value_queried": 0.004955326402032715
+          },
+          "assistant_prefix": {
+            "attention": 0.08757400654611133,
+            "write_norm": 1.3181084196382602,
+            "dla_entity": 0.0023745178397735094,
+            "dla_value_queried": 0.005555872486002586
+          }
+        }
+      },
+      "23.6": {
+        "n": 336,
+        "entity_rank_mean": 19.476190476190474,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.31845238095238093,
+        "entity_z_mean": 2.1123975501596717,
+        "queried_value_rank_mean": 2.8779761904761907,
+        "queried_value_z_mean": 1.9017820110727501,
+        "other_value_rank_mean": 3.636904761904762,
+        "other_value_z_mean": 1.5823605290103684,
+        "dla_entity_mean": 0.05198852105900187,
+        "dla_value_queried_mean": 0.09245314197552477,
+        "top1_class": {
+          "other": 0.9821428571428571,
+          "own_value_queried": 0.005952380952380952,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.39285714285714285,
+        "groups": {
+          "system": {
+            "attention": 0.3279127128466609,
+            "write_norm": 0.43328833294522373,
+            "dla_entity": -1.9372378723318884e-05,
+            "dla_value_queried": 0.00011519971869935897
+          },
+          "object": {
+            "attention": 0.12648148458572991,
+            "write_norm": 2.055991150083996,
+            "dla_entity": 0.010140591136698856,
+            "dla_value_queried": 0.015502388623988714
+          },
+          "image_background": {
+            "attention": 0.15210784832015634,
+            "write_norm": 2.351784340372043,
+            "dla_entity": 0.014562727332694132,
+            "dla_value_queried": 0.018187100621958052
+          },
+          "question": {
+            "attention": 0.22622277064337618,
+            "write_norm": 2.8942212724082528,
+            "dla_entity": 0.012726557701842552,
+            "dla_value_queried": 0.029298281172768406
+          },
+          "assistant_prefix": {
+            "attention": 0.16720346467835562,
+            "write_norm": 2.797186517189922,
+            "dla_entity": 0.014577313541936053,
+            "dla_value_queried": 0.029354688759061293
+          }
+        }
+      }
+    },
+    "native_language_top8": {
+      "19.6": {
+        "n": 336,
+        "entity_rank_mean": 35.226190476190474,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.026785714285714284,
+        "entity_z_mean": 0.8986829703221918,
+        "queried_value_rank_mean": 9.81547619047619,
+        "queried_value_z_mean": 0.5042462468624026,
+        "other_value_rank_mean": 10.16170634920635,
+        "other_value_z_mean": 0.5044551439765662,
+        "dla_entity_mean": 0.015403793613846315,
+        "dla_value_queried_mean": 0.0034872290719705,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.16666666666666666,
+        "groups": {
+          "system": {
+            "attention": 0.008665241725837058,
+            "write_norm": 0.035778960915000164,
+            "dla_entity": 1.942837049631475e-05,
+            "dla_value_queried": 8.258523948618892e-05
+          },
+          "object": {
+            "attention": 0.3195839474931182,
+            "write_norm": 3.8614803033304357,
+            "dla_entity": 0.007043276961759321,
+            "dla_value_queried": 0.0028861523241408534
+          },
+          "image_background": {
+            "attention": 0.43096417419257615,
+            "write_norm": 4.652608689630315,
+            "dla_entity": 0.0072625433638330876,
+            "dla_value_queried": -0.00024534299325837524
+          },
+          "question": {
+            "attention": 0.21656817836282288,
+            "write_norm": 1.375860806806789,
+            "dla_entity": 0.0010238548695730525,
+            "dla_value_queried": 0.0007096611649885853
+          },
+          "assistant_prefix": {
+            "attention": 0.02424144404046404,
+            "write_norm": 0.1747807333905214,
+            "dla_entity": 5.458533286452548e-05,
+            "dla_value_queried": 5.3024847350088966e-05
+          }
+        }
+      },
+      "21.1": {
+        "n": 336,
+        "entity_rank_mean": 39.354166666666664,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.05952380952380952,
+        "entity_z_mean": 0.9003418032918402,
+        "queried_value_rank_mean": 7.815476190476191,
+        "queried_value_z_mean": 0.7290768215898424,
+        "other_value_rank_mean": 11.768849206349206,
+        "other_value_z_mean": 0.35529855861658155,
+        "dla_entity_mean": 0.015750534712543368,
+        "dla_value_queried_mean": 0.015350263357482791,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.0,
+        "groups": {
+          "system": {
+            "attention": 0.3545183621879135,
+            "write_norm": 0.6930000779462889,
+            "dla_entity": -0.00033915494292576415,
+            "dla_value_queried": -0.0009726412700577688
+          },
+          "object": {
+            "attention": 0.12364279789783593,
+            "write_norm": 2.401523072158896,
+            "dla_entity": 0.005828777509459353,
+            "dla_value_queried": 0.006166672149664096
+          },
+          "image_background": {
+            "attention": 0.27051465431716115,
+            "write_norm": 3.8264930497943643,
+            "dla_entity": 0.01000545373273606,
+            "dla_value_queried": 0.0073386270051157354
+          },
+          "question": {
+            "attention": 0.1608307236539466,
+            "write_norm": 1.009054689801165,
+            "dla_entity": 0.0001997986946351137,
+            "dla_value_queried": 0.0017338046573102805
+          },
+          "assistant_prefix": {
+            "attention": 0.09053103927345503,
+            "write_norm": 0.5038244674603144,
+            "dla_entity": 5.611699282867665e-05,
+            "dla_value_queried": 0.0010840830887505469
+          }
+        }
+      },
+      "22.15": {
+        "n": 336,
+        "entity_rank_mean": 26.077380952380953,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.11011904761904762,
+        "entity_z_mean": 1.3142416356976832,
+        "queried_value_rank_mean": 3.1845238095238093,
+        "queried_value_z_mean": 1.6865934020274185,
+        "other_value_rank_mean": 3.3214285714285716,
+        "other_value_z_mean": 1.593361307469581,
+        "dla_entity_mean": 0.03390574938696643,
+        "dla_value_queried_mean": 0.0658493873373421,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.4166666666666667,
+        "groups": {
+          "system": {
+            "attention": 0.23074096942409164,
+            "write_norm": 0.37425780267221853,
+            "dla_entity": -7.421569276492132e-05,
+            "dla_value_queried": -0.0007409720739650945
+          },
+          "object": {
+            "attention": 0.24330661453617117,
+            "write_norm": 3.7273161015251564,
+            "dla_entity": 0.011306681075179117,
+            "dla_value_queried": 0.022308957030309967
+          },
+          "image_background": {
+            "attention": 0.3447438302627277,
+            "write_norm": 5.2614763503273325,
+            "dla_entity": 0.018279988703511663,
+            "dla_value_queried": 0.03477341781156914
+          },
+          "question": {
+            "attention": 0.1265573171854374,
+            "write_norm": 1.380144548646751,
+            "dla_entity": 0.0029719691070392664,
+            "dla_value_queried": 0.007164736737173544
+          },
+          "assistant_prefix": {
+            "attention": 0.05465028896218255,
+            "write_norm": 0.5945285590188134,
+            "dla_entity": 0.0014159737202838923,
+            "dla_value_queried": 0.002347520397820734
+          }
+        }
+      },
+      "22.17": {
+        "n": 336,
+        "entity_rank_mean": 19.764880952380953,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.3005952380952381,
+        "entity_z_mean": 1.8710993710084862,
+        "queried_value_rank_mean": 9.321428571428571,
+        "queried_value_z_mean": 0.6634631887898736,
+        "other_value_rank_mean": 10,
+        "other_value_z_mean": 0.5842895676554661,
+        "dla_entity_mean": 0.06598995272564762,
+        "dla_value_queried_mean": 0.01755573432401867,
+        "top1_class": {
+          "other": 0.9880952380952381,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.44047619047619047,
+        "groups": {
+          "system": {
+            "attention": 0.22261481466037886,
+            "write_norm": 0.414535696496993,
+            "dla_entity": -0.0001444799997640377,
+            "dla_value_queried": -0.00013250845649127014
+          },
+          "object": {
+            "attention": 0.34268500896481174,
+            "write_norm": 6.841477324842431,
+            "dla_entity": 0.03133169897046173,
+            "dla_value_queried": 0.008383684248442538
+          },
+          "image_background": {
+            "attention": 0.33595598217410344,
+            "write_norm": 6.261623713941801,
+            "dla_entity": 0.0321867810347439,
+            "dla_value_queried": 0.007204079916369838
+          },
+          "question": {
+            "attention": 0.08697482136665799,
+            "write_norm": 0.8823270809371024,
+            "dla_entity": 0.0021796832291009934,
+            "dla_value_queried": 0.0018805097482998332
+          },
+          "assistant_prefix": {
+            "attention": 0.011766431215662686,
+            "write_norm": 0.14470018732355952,
+            "dla_entity": 0.0004382416299513298,
+            "dla_value_queried": 0.00022204901552686217
+          }
+        }
+      },
+      "22.19": {
+        "n": 336,
+        "entity_rank_mean": 27.553571428571427,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.06845238095238096,
+        "entity_z_mean": 1.2413052411367451,
+        "queried_value_rank_mean": 7.011904761904762,
+        "queried_value_z_mean": 0.776643234314785,
+        "other_value_rank_mean": 7.781746031746032,
+        "other_value_z_mean": 0.6890164952834196,
+        "dla_entity_mean": 0.025371594323338457,
+        "dla_value_queried_mean": 0.022080964083616414,
+        "top1_class": {
+          "other": 1.0
+        },
+        "top1_question_invariant_rate": 0.09523809523809523,
+        "groups": {
+          "system": {
+            "attention": 0.23128056193568877,
+            "write_norm": 0.37401247910678476,
+            "dla_entity": -8.246913943464409e-05,
+            "dla_value_queried": 0.00011594861945308734
+          },
+          "object": {
+            "attention": 0.19149145563798292,
+            "write_norm": 2.993897628804137,
+            "dla_entity": 0.008799116671482244,
+            "dla_value_queried": 0.007929508613404409
+          },
+          "image_background": {
+            "attention": 0.22891070618338527,
+            "write_norm": 3.2704300976668796,
+            "dla_entity": 0.010608570260081879,
+            "dla_value_queried": 0.009210579987828689
+          },
+          "question": {
+            "attention": 0.2542199178465775,
+            "write_norm": 1.989314751522172,
+            "dla_entity": 0.003995505772370019,
+            "dla_value_queried": 0.002856892767585437
+          },
+          "assistant_prefix": {
+            "attention": 0.09415856926214128,
+            "write_norm": 0.9149858695233152,
+            "dla_entity": 0.002047361821859167,
+            "dla_value_queried": 0.0019704556205700405
+          }
+        }
+      },
+      "23.3": {
+        "n": 336,
+        "entity_rank_mean": 32.74702380952381,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.15773809523809523,
+        "entity_z_mean": 1.3154398082524061,
+        "queried_value_rank_mean": 10.946428571428571,
+        "queried_value_z_mean": 0.6067475508482728,
+        "other_value_rank_mean": 11.83234126984127,
+        "other_value_z_mean": 0.4575222873730953,
+        "dla_entity_mean": 0.02443352434772264,
+        "dla_value_queried_mean": 0.0045757846921246495,
+        "top1_class": {
+          "other": 0.9880952380952381,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.15476190476190477,
+        "groups": {
+          "system": {
+            "attention": 0.6123588894482791,
+            "write_norm": 0.760304103125929,
+            "dla_entity": -0.0001434292731449291,
+            "dla_value_queried": -0.0009464592590660121
+          },
+          "object": {
+            "attention": 0.17894758607283057,
+            "write_norm": 3.601008420050632,
+            "dla_entity": 0.012909535310823474,
+            "dla_value_queried": 0.0033079272955674134
+          },
+          "image_background": {
+            "attention": 0.16400753338876667,
+            "write_norm": 2.98696375451982,
+            "dla_entity": 0.010883783405103844,
+            "dla_value_queried": 0.0018922820559650756
+          },
+          "question": {
+            "attention": 0.031837093455362175,
+            "write_norm": 0.2921497713098125,
+            "dla_entity": 0.0004043542195810395,
+            "dla_value_queried": 0.00016949885462768153
+          },
+          "assistant_prefix": {
+            "attention": 0.012751329080423429,
+            "write_norm": 0.17349317405439382,
+            "dla_entity": 0.0003754818363034421,
+            "dla_value_queried": 0.00015283634844265315
+          }
+        }
+      },
+      "23.4": {
+        "n": 336,
+        "entity_rank_mean": 36.098214285714285,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.05654761904761905,
+        "entity_z_mean": 1.0118149505883811,
+        "queried_value_rank_mean": 6.622023809523809,
+        "queried_value_z_mean": 1.0737790528607245,
+        "other_value_rank_mean": 7.954365079365079,
+        "other_value_z_mean": 0.9436711112202685,
+        "dla_entity_mean": 0.015257435219387801,
+        "dla_value_queried_mean": 0.0364986836669386,
+        "top1_class": {
+          "other": 0.9732142857142857,
+          "own_value_queried": 0.005952380952380952,
+          "own_value_other_attr": 0.017857142857142856,
+          "other_value": 0.002976190476190476
+        },
+        "top1_question_invariant_rate": 0.2261904761904762,
+        "groups": {
+          "system": {
+            "attention": 0.4824537033924744,
+            "write_norm": 0.48748986074462575,
+            "dla_entity": -3.9097525052537006e-05,
+            "dla_value_queried": 0.00013244419540385586
+          },
+          "object": {
+            "attention": 0.12305512275391568,
+            "write_norm": 1.94690657122105,
+            "dla_entity": 0.0042155474843030205,
+            "dla_value_queried": 0.010049752399436465
+          },
+          "image_background": {
+            "attention": 0.18390803353118135,
+            "write_norm": 2.815368791277121,
+            "dla_entity": 0.006469201797943113,
+            "dla_value_queried": 0.015803118878092652
+          },
+          "question": {
+            "attention": 0.12299262820964768,
+            "write_norm": 1.3896391012351073,
+            "dla_entity": 0.002237244887808066,
+            "dla_value_queried": 0.004955326402032715
+          },
+          "assistant_prefix": {
+            "attention": 0.08757400654611133,
+            "write_norm": 1.3181084196382602,
+            "dla_entity": 0.0023745178397735094,
+            "dla_value_queried": 0.005555872486002586
+          }
+        }
+      },
+      "23.6": {
+        "n": 336,
+        "entity_rank_mean": 19.476190476190474,
+        "entity_rank_chance": 73.0,
+        "entity_top1_rate": 0.31845238095238093,
+        "entity_z_mean": 2.1123975501596717,
+        "queried_value_rank_mean": 2.8779761904761907,
+        "queried_value_z_mean": 1.9017820110727501,
+        "other_value_rank_mean": 3.636904761904762,
+        "other_value_z_mean": 1.5823605290103684,
+        "dla_entity_mean": 0.05198852105900187,
+        "dla_value_queried_mean": 0.09245314197552477,
+        "top1_class": {
+          "other": 0.9821428571428571,
+          "own_value_queried": 0.005952380952380952,
+          "own_entity": 0.011904761904761904
+        },
+        "top1_question_invariant_rate": 0.39285714285714285,
+        "groups": {
+          "system": {
+            "attention": 0.3279127128466609,
+            "write_norm": 0.43328833294522373,
+            "dla_entity": -1.9372378723318884e-05,
+            "dla_value_queried": 0.00011519971869935897
+          },
+          "object": {
+            "attention": 0.12648148458572991,
+            "write_norm": 2.055991150083996,
+            "dla_entity": 0.010140591136698856,
+            "dla_value_queried": 0.015502388623988714
+          },
+          "image_background": {
+            "attention": 0.15210784832015634,
+            "write_norm": 2.351784340372043,
+            "dla_entity": 0.014562727332694132,
+            "dla_value_queried": 0.018187100621958052
+          },
+          "question": {
+            "attention": 0.22622277064337618,
+            "write_norm": 2.8942212724082528,
+            "dla_entity": 0.012726557701842552,
+            "dla_value_queried": 0.029298281172768406
+          },
+          "assistant_prefix": {
+            "attention": 0.16720346467835562,
+            "write_norm": 2.797186517189922,
+            "dla_entity": 0.014577313541936053,
+            "dla_value_queried": 0.029354688759061293
+          }
+        }
+      }
+    }
+  }
+}

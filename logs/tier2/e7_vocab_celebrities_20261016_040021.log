@@ -1,0 +1,158 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[head_vocab_projection] celebrities: 84 items x 4 attributes = 336 forwards; object footprint 16 image tokens
+  nationality_top8 (8): 21.1, 21.4, 21.5, 22.15, 22.17, 23.3, 23.4, 23.6
+  native_language_top8 (8): 19.6, 21.1, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6
+  common10 (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  -> /workspace/VADE-evals/results/head_vocab_projection/celebrities
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:20,  1.65it/s]Loading weights:   0%|          | 2/729 [00:01<07:50,  1.55it/s]Loading weights:   1%|          | 5/729 [00:01<02:43,  4.44it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:09, 10.40it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:39, 18.14it/s]Loading weights:   3%|▎         | 20/729 [00:01<00:35, 19.78it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:23, 30.04it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:23, 29.97it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:18, 36.88it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:19, 34.52it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:16, 40.62it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 37.06it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:18, 36.35it/s]Loading weights:  10%|▉         | 71/729 [00:03<00:15, 41.90it/s]Loading weights:  11%|█         | 77/729 [00:03<00:16, 39.88it/s]Loading weights:  11%|█         | 82/729 [00:03<00:15, 40.63it/s]Loading weights:  12%|█▏        | 89/729 [00:03<00:18, 35.10it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:13, 47.96it/s]Loading weights:  15%|█▍        | 106/729 [00:03<00:14, 42.37it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:13, 45.75it/s]Loading weights:  16%|█▌        | 118/729 [00:04<00:14, 41.32it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:15, 38.27it/s]Loading weights:  18%|█▊        | 130/729 [00:04<00:14, 42.63it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:15, 39.34it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:14, 41.54it/s]Loading weights:  20%|██        | 148/729 [00:04<00:12, 47.95it/s]Loading weights:  21%|██        | 154/729 [00:04<00:13, 42.33it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:14, 38.86it/s]Loading weights:  23%|██▎       | 166/729 [00:05<00:13, 43.27it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:11, 46.73it/s]Loading weights:  24%|██▍       | 178/729 [00:05<00:13, 41.28it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:14, 38.20it/s]Loading weights:  26%|██▌       | 190/729 [00:05<00:12, 42.76it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:13, 39.11it/s]Loading weights:  28%|██▊       | 202/729 [00:06<00:12, 42.02it/s]Loading weights:  29%|██▊       | 209/729 [00:06<00:12, 41.77it/s]Loading weights:  29%|██▉       | 214/729 [00:06<00:11, 43.44it/s]Loading weights:  30%|███       | 220/729 [00:06<00:10, 47.20it/s]Loading weights:  31%|███       | 225/729 [00:06<00:12, 40.67it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:10, 45.66it/s]Loading weights:  33%|███▎      | 237/729 [00:06<00:12, 40.00it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:10, 45.07it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:12, 39.66it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 44.81it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:11, 39.84it/s]Loading weights:  37%|███▋      | 268/729 [00:07<00:12, 38.11it/s]Loading weights:  38%|███▊      | 274/729 [00:07<00:10, 42.59it/s]Loading weights:  39%|███▊      | 281/729 [00:08<00:10, 41.09it/s]Loading weights:  39%|███▉      | 286/729 [00:08<00:10, 42.93it/s]Loading weights:  40%|████      | 293/729 [00:08<00:10, 41.38it/s]Loading weights:  41%|████      | 298/729 [00:08<00:10, 42.86it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:09, 46.81it/s]Loading weights:  42%|████▏     | 309/729 [00:08<00:10, 40.82it/s]Loading weights:  43%|████▎     | 316/729 [00:08<00:08, 46.00it/s]Loading weights:  44%|████▍     | 321/729 [00:08<00:10, 40.44it/s]Loading weights:  45%|████▍     | 327/729 [00:09<00:09, 43.33it/s]Loading weights:  46%|████▌     | 332/729 [00:09<00:10, 38.84it/s]Loading weights:  51%|█████     | 371/729 [00:09<00:03, 118.75it/s]Loading weights:  57%|█████▋    | 419/729 [00:09<00:01, 205.36it/s]Loading weights:  64%|██████▍   | 465/729 [00:09<00:00, 269.23it/s]Loading weights:  70%|███████   | 513/729 [00:09<00:00, 319.44it/s]Loading weights:  78%|███████▊  | 565/729 [00:09<00:00, 369.33it/s]Loading weights:  84%|████████▍ | 613/729 [00:09<00:00, 398.49it/s]Loading weights:  91%|█████████ | 665/729 [00:09<00:00, 430.91it/s]Loading weights:  98%|█████████▊| 715/729 [00:10<00:00, 444.37it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 71.82it/s] 
+  first-token collisions (rank measures a name FAMILY for these): entity: 29; nationality: 63; occupation: 83; birth_year: 84; native_language: 71
+  1/84 items
+  2/84 items
+  3/84 items
+  4/84 items
+  5/84 items
+  6/84 items
+  7/84 items
+  8/84 items
+  9/84 items
+  10/84 items
+  11/84 items
+  12/84 items
+  13/84 items
+  14/84 items
+  15/84 items
+  16/84 items
+  17/84 items
+  18/84 items
+  19/84 items
+  20/84 items
+  21/84 items
+  22/84 items
+  23/84 items
+  24/84 items
+  25/84 items
+  26/84 items
+  27/84 items
+  28/84 items
+  29/84 items
+  30/84 items
+  31/84 items
+  32/84 items
+  33/84 items
+  34/84 items
+  35/84 items
+  36/84 items
+  37/84 items
+  38/84 items
+  39/84 items
+  40/84 items
+  41/84 items
+  42/84 items
+  43/84 items
+  44/84 items
+  45/84 items
+  46/84 items
+  47/84 items
+  48/84 items
+  49/84 items
+  50/84 items
+  51/84 items
+  52/84 items
+  53/84 items
+  54/84 items
+  55/84 items
+  56/84 items
+  57/84 items
+  58/84 items
+  59/84 items
+  60/84 items
+  61/84 items
+  62/84 items
+  63/84 items
+  64/84 items
+  65/84 items
+  66/84 items
+  67/84 items
+  68/84 items
+  69/84 items
+  70/84 items
+  71/84 items
+  72/84 items
+  73/84 items
+  74/84 items
+  75/84 items
+  76/84 items
+  77/84 items
+  78/84 items
+  79/84 items
+  80/84 items
+  81/84 items
+  82/84 items
+  83/84 items
+  84/84 items
+
+=== head set: common10 ===
+  head  ent rank  ent z  q-val z oth-val z  dla ent  dla qval  img attn  q attn top1 inv  top-1 class / verdict
+  21.1   39.4/73   0.90     0.73      0.36    0.016     0.015      0.39    0.16     0.00  other 100% | unclear
+  21.5   26.5/73   1.37     1.34      1.04    0.029     0.042      0.59    0.11     0.01  other 100% | entity-mover-like
+ 22.13   31.3/73   1.16     0.55      0.49    0.010     0.004      0.34    0.07     0.23  other 100% | entity-mover-like
+ 22.15   26.1/73   1.31     1.69      1.59    0.034     0.066      0.59    0.13     0.42  other 100% | unclear
+ 22.17   19.8/73   1.87     0.66      0.58    0.066     0.018      0.68    0.09     0.44  other 99% | entity-mover-like
+ 22.19   27.6/73   1.24     0.78      0.69    0.025     0.022      0.42    0.25     0.10  other 100% | entity-mover-like
+ 23.17   43.0/73   0.74     0.53      0.40    0.004    -0.002      0.08    0.05     0.00  other 100% | unclear
+  23.3   32.7/73   1.32     0.61      0.46    0.024     0.005      0.34    0.03     0.15  other 99% | entity-mover-like
+  23.4   36.1/73   1.01     1.07      0.94    0.015     0.036      0.31    0.12     0.23  other 97% | unclear
+  23.6   19.5/73   2.11     1.90      1.58    0.052     0.092      0.28    0.23     0.39  other 98% | entity-mover-like
+  dla_entity by source group (mean over rows): 
+      21.1 system=-0.000  object=+0.006  image_background=+0.010  question=+0.000  assistant_prefix=+0.000
+      21.5 system=+0.000  object=+0.012  image_background=+0.016  question=+0.001  assistant_prefix=+0.000
+     22.13 system=-0.000  object=+0.005  image_background=+0.005  question=-0.000  assistant_prefix=+0.000
+     22.15 system=-0.000  object=+0.011  image_background=+0.018  question=+0.003  assistant_prefix=+0.001
+     22.17 system=-0.000  object=+0.031  image_background=+0.032  question=+0.002  assistant_prefix=+0.000
+     22.19 system=-0.000  object=+0.009  image_background=+0.011  question=+0.004  assistant_prefix=+0.002
+     23.17 system=+0.000  object=+0.003  image_background=+0.002  question=-0.000  assistant_prefix=-0.000
+      23.3 system=-0.000  object=+0.013  image_background=+0.011  question=+0.000  assistant_prefix=+0.000
+      23.4 system=-0.000  object=+0.004  image_background=+0.006  question=+0.002  assistant_prefix=+0.002
+      23.6 system=-0.000  object=+0.010  image_background=+0.015  question=+0.013  assistant_prefix=+0.015
+
+=== head set: nationality_top8 ===
+  head  ent rank  ent z  q-val z oth-val z  dla ent  dla qval  img attn  q attn top1 inv  top-1 class / verdict
+  21.1   39.4/73   0.90     0.73      0.36    0.016     0.015      0.39    0.16     0.00  other 100% | unclear
+  21.4   32.1/73   1.24     0.76      0.71    0.022     0.013      0.47    0.13     0.07  other 100% | entity-mover-like
+  21.5   26.5/73   1.37     1.34      1.04    0.029     0.042      0.59    0.11     0.01  other 100% | entity-mover-like
+ 22.15   26.1/73   1.31     1.69      1.59    0.034     0.066      0.59    0.13     0.42  other 100% | unclear
+ 22.17   19.8/73   1.87     0.66      0.58    0.066     0.018      0.68    0.09     0.44  other 99% | entity-mover-like
+  23.3   32.7/73   1.32     0.61      0.46    0.024     0.005      0.34    0.03     0.15  other 99% | entity-mover-like
+  23.4   36.1/73   1.01     1.07      0.94    0.015     0.036      0.31    0.12     0.23  other 97% | unclear
+  23.6   19.5/73   2.11     1.90      1.58    0.052     0.092      0.28    0.23     0.39  other 98% | entity-mover-like
+  dla_entity by source group (mean over rows): 
+      21.1 system=-0.000  object=+0.006  image_background=+0.010  question=+0.000  assistant_prefix=+0.000
+      21.4 system=-0.000  object=+0.009  image_background=+0.012  question=+0.001  assistant_prefix=+0.000
+      21.5 system=+0.000  object=+0.012  image_background=+0.016  question=+0.001  assistant_prefix=+0.000
+     22.15 system=-0.000  object=+0.011  image_background=+0.018  question=+0.003  assistant_prefix=+0.001
+     22.17 system=-0.000  object=+0.031  image_background=+0.032  question=+0.002  assistant_prefix=+0.000
+      23.3 system=-0.000  object=+0.013  image_background=+0.011  question=+0.000  assistant_prefix=+0.000
+      23.4 system=-0.000  object=+0.004  image_background=+0.006  question=+0.002  assistant_prefix=+0.002
+      23.6 system=-0.000  object=+0.010  image_background=+0.015  question=+0.013  assistant_prefix=+0.015
+
+=== head set: native_language_top8 ===
+  head  ent rank  ent z  q-val z oth-val z  dla ent  dla qval  img attn  q attn top1 inv  top-1 class / verdict
+  19.6   35.2/73   0.90     0.50      0.50    0.015     0.003      0.75    0.22     0.17  other 100% | unclear
+  21.1   39.4/73   0.90     0.73      0.36    0.016     0.015      0.39    0.16     0.00  other 100% | unclear
+ 22.15   26.1/73   1.31     1.69      1.59    0.034     0.066      0.59    0.13     0.42  other 100% | unclear
+ 22.17   19.8/73   1.87     0.66      0.58    0.066     0.018      0.68    0.09     0.44  other 99% | entity-mover-like
+ 22.19   27.6/73   1.24     0.78      0.69    0.025     0.022      0.42    0.25     0.10  other 100% | entity-mover-like
+  23.3   32.7/73   1.32     0.61      0.46    0.024     0.005      0.34    0.03     0.15  other 99% | entity-mover-like
+  23.4   36.1/73   1.01     1.07      0.94    0.015     0.036      0.31    0.12     0.23  other 97% | unclear
+  23.6   19.5/73   2.11     1.90      1.58    0.052     0.092      0.28    0.23     0.39  other 98% | entity-mover-like
+  dla_entity by source group (mean over rows): 
+      19.6 system=+0.000  object=+0.007  image_background=+0.007  question=+0.001  assistant_prefix=+0.000
+      21.1 system=-0.000  object=+0.006  image_background=+0.010  question=+0.000  assistant_prefix=+0.000
+     22.15 system=-0.000  object=+0.011  image_background=+0.018  question=+0.003  assistant_prefix=+0.001
+     22.17 system=-0.000  object=+0.031  image_background=+0.032  question=+0.002  assistant_prefix=+0.000
+     22.19 system=-0.000  object=+0.009  image_background=+0.011  question=+0.004  assistant_prefix=+0.002
+      23.3 system=-0.000  object=+0.013  image_background=+0.011  question=+0.000  assistant_prefix=+0.000
+      23.4 system=-0.000  object=+0.004  image_background=+0.006  question=+0.002  assistant_prefix=+0.002
+      23.6 system=-0.000  object=+0.010  image_background=+0.015  question=+0.013  assistant_prefix=+0.015
+
+wrote /workspace/VADE-evals/results/head_vocab_projection/celebrities/rows.jsonl and summary.json

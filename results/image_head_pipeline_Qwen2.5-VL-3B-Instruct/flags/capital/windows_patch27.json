@@ -1,0 +1,831 @@
+{
+  "blocks_captured": [
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "per_block_mass": {
+    "27": {
+      "delta_resid": 34.87108299648389,
+      "delta_dla": 0.4588387947223964
+    },
+    "28": {
+      "delta_resid": 14.93347056210041,
+      "delta_dla": 0.02835640643752413
+    },
+    "29": {
+      "delta_resid": 9.555886281654239,
+      "delta_dla": 0.020506030708929757
+    },
+    "30": {
+      "delta_resid": 15.343174330890179,
+      "delta_dla": 0.033191718903253786
+    },
+    "31": {
+      "delta_resid": 90.23392203450203,
+      "delta_dla": 2.784414611538523
+    },
+    "32": {
+      "delta_resid": 57.05146297812462,
+      "delta_dla": 1.9842674603569321
+    },
+    "33": {
+      "delta_resid": 43.182808578014374,
+      "delta_dla": 0.47567702291416936
+    },
+    "34": {
+      "delta_resid": 81.42294374108315,
+      "delta_dla": 2.0261040322948247
+    },
+    "35": {
+      "delta_resid": 50.446711391210556,
+      "delta_dla": 0.28295230033108965
+    }
+  },
+  "unhooked": {
+    "n": 64,
+    "n_first": 64,
+    "cause": 0.0,
+    "base_kept": 0.84375,
+    "other": 0.15625,
+    "first_src": 0.0,
+    "first_base": 0.84375
+  },
+  "image_patch_only": {
+    "n": 64,
+    "n_first": 64,
+    "cause": 0.953125,
+    "base_kept": 0.0,
+    "other": 0.046875,
+    "first_src": 0.953125,
+    "first_base": 0.0
+  },
+  "windows": [
+    {
+      "blocks": [
+        27
+      ],
+      "label": "27",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.734375,
+        "other": 0.234375,
+        "first_src": 0.03125,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.734375,
+        "base_kept": 0.046875,
+        "other": 0.21875,
+        "first_src": 0.734375,
+        "first_base": 0.0625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.078125,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        28
+      ],
+      "label": "28",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.859375,
+        "other": 0.140625,
+        "first_src": 0.0,
+        "first_base": 0.859375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.953125,
+        "base_kept": 0.0,
+        "other": 0.046875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.859375,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        29
+      ],
+      "label": "29",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.84375,
+        "other": 0.15625,
+        "first_src": 0.0,
+        "first_base": 0.84375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.953125,
+        "base_kept": 0.0,
+        "other": 0.046875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.84375,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        30
+      ],
+      "label": "30",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.84375,
+        "other": 0.15625,
+        "first_src": 0.0,
+        "first_base": 0.84375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.953125,
+        "base_kept": 0.0,
+        "other": 0.046875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.84375,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        31
+      ],
+      "label": "31",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.203125,
+        "base_kept": 0.484375,
+        "other": 0.3125,
+        "first_src": 0.234375,
+        "first_base": 0.484375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.578125,
+        "base_kept": 0.234375,
+        "other": 0.1875,
+        "first_src": 0.578125,
+        "first_base": 0.234375
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.296875,
+        "base_kept": 0.484375,
+        "first_own": 0.0,
+        "first_donor": 0.23728813559322035
+      }
+    },
+    {
+      "blocks": [
+        32
+      ],
+      "label": "32",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.8125,
+        "other": 0.171875,
+        "first_src": 0.015625,
+        "first_base": 0.8125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.09375,
+        "base_kept": 0.828125,
+        "first_own": 0.0,
+        "first_donor": 0.01694915254237288
+      }
+    },
+    {
+      "blocks": [
+        33
+      ],
+      "label": "33",
+      "n_heads": 16,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.84375,
+        "other": 0.15625,
+        "first_src": 0.0,
+        "first_base": 0.84375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.96875,
+        "base_kept": 0.0,
+        "other": 0.03125,
+        "first_src": 0.96875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.84375,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        27,
+        28
+      ],
+      "label": "27-28",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.046875,
+        "base_kept": 0.734375,
+        "other": 0.21875,
+        "first_src": 0.046875,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.734375,
+        "base_kept": 0.046875,
+        "other": 0.21875,
+        "first_src": 0.734375,
+        "first_base": 0.0625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.078125,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        28,
+        29
+      ],
+      "label": "28-29",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.859375,
+        "other": 0.140625,
+        "first_src": 0.0,
+        "first_base": 0.859375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.953125,
+        "base_kept": 0.0,
+        "other": 0.046875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.84375,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        29,
+        30
+      ],
+      "label": "29-30",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.84375,
+        "other": 0.15625,
+        "first_src": 0.0,
+        "first_base": 0.84375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.953125,
+        "base_kept": 0.0,
+        "other": 0.046875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.828125,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        30,
+        31
+      ],
+      "label": "30-31",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.203125,
+        "base_kept": 0.484375,
+        "other": 0.3125,
+        "first_src": 0.234375,
+        "first_base": 0.484375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.578125,
+        "base_kept": 0.25,
+        "other": 0.171875,
+        "first_src": 0.578125,
+        "first_base": 0.25
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.3125,
+        "base_kept": 0.484375,
+        "first_own": 0.0,
+        "first_donor": 0.2542372881355932
+      }
+    },
+    {
+      "blocks": [
+        31,
+        32
+      ],
+      "label": "31-32",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.515625,
+        "base_kept": 0.125,
+        "other": 0.359375,
+        "first_src": 0.59375,
+        "first_base": 0.125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.171875,
+        "base_kept": 0.609375,
+        "other": 0.21875,
+        "first_src": 0.171875,
+        "first_base": 0.65625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.609375,
+        "base_kept": 0.203125,
+        "first_own": 0.0,
+        "first_donor": 0.6101694915254238
+      }
+    },
+    {
+      "blocks": [
+        32,
+        33
+      ],
+      "label": "32-33",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.8125,
+        "other": 0.15625,
+        "first_src": 0.03125,
+        "first_base": 0.8125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.09375,
+        "base_kept": 0.8125,
+        "first_own": 0.0,
+        "first_donor": 0.01694915254237288
+      }
+    },
+    {
+      "blocks": [
+        27,
+        28,
+        29
+      ],
+      "label": "27-29",
+      "n_heads": 48,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.046875,
+        "base_kept": 0.734375,
+        "other": 0.21875,
+        "first_src": 0.046875,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.71875,
+        "base_kept": 0.046875,
+        "other": 0.234375,
+        "first_src": 0.71875,
+        "first_base": 0.0625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.078125,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        28,
+        29,
+        30
+      ],
+      "label": "28-30",
+      "n_heads": 48,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.84375,
+        "other": 0.15625,
+        "first_src": 0.0,
+        "first_base": 0.84375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.953125,
+        "base_kept": 0.0,
+        "other": 0.046875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.078125,
+        "base_kept": 0.84375,
+        "first_own": 0.0,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        29,
+        30,
+        31
+      ],
+      "label": "29-31",
+      "n_heads": 48,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.203125,
+        "base_kept": 0.484375,
+        "other": 0.3125,
+        "first_src": 0.234375,
+        "first_base": 0.484375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.578125,
+        "base_kept": 0.265625,
+        "other": 0.15625,
+        "first_src": 0.578125,
+        "first_base": 0.265625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.28125,
+        "base_kept": 0.484375,
+        "first_own": 0.0,
+        "first_donor": 0.22033898305084745
+      }
+    },
+    {
+      "blocks": [
+        30,
+        31,
+        32
+      ],
+      "label": "30-32",
+      "n_heads": 48,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.515625,
+        "base_kept": 0.140625,
+        "other": 0.34375,
+        "first_src": 0.59375,
+        "first_base": 0.140625
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.125,
+        "base_kept": 0.609375,
+        "other": 0.265625,
+        "first_src": 0.125,
+        "first_base": 0.671875
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.625,
+        "base_kept": 0.203125,
+        "first_own": 0.0,
+        "first_donor": 0.6440677966101694
+      }
+    },
+    {
+      "blocks": [
+        31,
+        32,
+        33
+      ],
+      "label": "31-33",
+      "n_heads": 48,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.5625,
+        "base_kept": 0.078125,
+        "other": 0.359375,
+        "first_src": 0.65625,
+        "first_base": 0.078125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.09375,
+        "base_kept": 0.625,
+        "other": 0.28125,
+        "first_src": 0.09375,
+        "first_base": 0.6875
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.609375,
+        "base_kept": 0.15625,
+        "first_own": 0.0,
+        "first_donor": 0.6949152542372882
+      }
+    },
+    {
+      "blocks": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "label": "27-33",
+      "n_heads": 112,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.8125,
+        "base_kept": 0.0,
+        "other": 0.1875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.765625,
+        "other": 0.234375,
+        "first_src": 0.0,
+        "first_base": 0.859375
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.796875,
+        "base_kept": 0.078125,
+        "first_own": 0.0,
+        "first_donor": 0.9661016949152542
+      }
+    },
+    {
+      "blocks": [
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "label": "27-31",
+      "n_heads": 80,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.75,
+        "base_kept": 0.0625,
+        "other": 0.1875,
+        "first_src": 0.859375,
+        "first_base": 0.0625
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0625,
+        "base_kept": 0.75,
+        "other": 0.1875,
+        "first_src": 0.0625,
+        "first_base": 0.796875
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.765625,
+        "base_kept": 0.109375,
+        "first_own": 0.0,
+        "first_donor": 0.8983050847457628
+      }
+    },
+    {
+      "blocks": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "label": "27-35",
+      "n_heads": 144,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.8125,
+        "base_kept": 0.0,
+        "other": 0.1875,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.0,
+        "base_kept": 0.75,
+        "other": 0.25,
+        "first_src": 0.0,
+        "first_base": 0.84375
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.0,
+        "donor": 0.796875,
+        "base_kept": 0.078125,
+        "first_own": 0.0,
+        "first_donor": 0.9661016949152542
+      }
+    }
+  ],
+  "full_reference_identity_ok": true,
+  "entity": "flags",
+  "attribute": "capital",
+  "patch_layer": 27,
+  "scoring": "token",
+  "max_new_tokens": 5,
+  "positions": "full_image",
+  "n_rows": 64,
+  "seed": 0,
+  "split": "test",
+  "n_layers": 36,
+  "n_heads": 16
+}

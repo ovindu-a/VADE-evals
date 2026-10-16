@@ -1,0 +1,182 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[head_vocab_projection] brands: 128 items x 3 attributes = 384 forwards; object footprint 8 image tokens
+  hq_country_top8 (8): 21.1, 21.4, 22.15, 22.17, 23.3, 23.4, 23.6, 23.17
+  common10 (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  -> /workspace/VADE-evals/results/head_vocab_projection/brands
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<10:27,  1.16it/s]Loading weights:   0%|          | 2/729 [00:01<08:54,  1.36it/s]Loading weights:   1%|          | 5/729 [00:01<03:00,  4.02it/s]Loading weights:   2%|▏         | 11/729 [00:01<01:06, 10.75it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:43, 16.42it/s]Loading weights:   3%|▎         | 20/729 [00:02<00:49, 14.27it/s]Loading weights:   4%|▍         | 28/729 [00:02<00:30, 23.19it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:27, 24.93it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:21, 32.13it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:21, 31.28it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 37.72it/s]Loading weights:   8%|▊         | 57/729 [00:03<00:19, 34.20it/s]Loading weights:   9%|▉         | 64/729 [00:03<00:16, 41.30it/s]Loading weights:   9%|▉         | 69/729 [00:03<00:17, 37.71it/s]Loading weights:  10%|█         | 76/729 [00:03<00:15, 43.42it/s]Loading weights:  11%|█         | 81/729 [00:03<00:16, 38.70it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:14, 44.04it/s]Loading weights:  13%|█▎        | 93/729 [00:04<00:30, 20.54it/s]Loading weights:  13%|█▎        | 97/729 [00:04<00:27, 22.80it/s]Loading weights:  14%|█▍        | 101/729 [00:05<00:40, 15.69it/s]Loading weights:  14%|█▍        | 104/729 [00:05<00:38, 16.29it/s]Loading weights:  15%|█▌        | 112/729 [00:05<00:25, 24.30it/s]Loading weights:  16%|█▌        | 116/729 [00:05<00:25, 24.11it/s]Loading weights:  17%|█▋        | 124/729 [00:05<00:18, 32.20it/s]Loading weights:  18%|█▊        | 129/729 [00:05<00:19, 31.45it/s]Loading weights:  19%|█▊        | 136/729 [00:05<00:15, 37.42it/s]Loading weights:  19%|█▉        | 141/729 [00:06<00:16, 35.09it/s]Loading weights:  20%|██        | 148/729 [00:06<00:14, 40.53it/s]Loading weights:  21%|██        | 153/729 [00:06<00:15, 37.27it/s]Loading weights:  22%|██▏       | 160/729 [00:06<00:13, 42.46it/s]Loading weights:  23%|██▎       | 165/729 [00:06<00:14, 38.15it/s]Loading weights:  24%|██▎       | 172/729 [00:06<00:13, 42.84it/s]Loading weights:  24%|██▍       | 177/729 [00:06<00:14, 38.60it/s]Loading weights:  25%|██▌       | 184/729 [00:07<00:12, 43.67it/s]Loading weights:  26%|██▌       | 189/729 [00:07<00:13, 39.05it/s]Loading weights:  27%|██▋       | 196/729 [00:07<00:12, 44.05it/s]Loading weights:  28%|██▊       | 201/729 [00:07<00:13, 39.34it/s]Loading weights:  29%|██▊       | 208/729 [00:07<00:11, 43.96it/s]Loading weights:  29%|██▉       | 213/729 [00:07<00:13, 39.23it/s]Loading weights:  30%|███       | 220/729 [00:07<00:11, 44.11it/s]Loading weights:  31%|███       | 225/729 [00:08<00:12, 39.08it/s]Loading weights:  32%|███▏      | 232/729 [00:08<00:11, 43.57it/s]Loading weights:  33%|███▎      | 237/729 [00:08<00:12, 38.58it/s]Loading weights:  33%|███▎      | 244/729 [00:08<00:11, 43.80it/s]Loading weights:  34%|███▍      | 249/729 [00:08<00:12, 38.87it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:10, 44.02it/s]Loading weights:  36%|███▌      | 261/729 [00:08<00:11, 39.38it/s]Loading weights:  37%|███▋      | 268/729 [00:09<00:10, 44.33it/s]Loading weights:  37%|███▋      | 273/729 [00:09<00:11, 39.73it/s]Loading weights:  38%|███▊      | 280/729 [00:09<00:09, 44.99it/s]Loading weights:  39%|███▉      | 285/729 [00:09<00:11, 39.94it/s]Loading weights:  40%|████      | 292/729 [00:09<00:17, 24.66it/s]Loading weights:  41%|████      | 296/729 [00:10<00:23, 18.72it/s]Loading weights:  41%|████      | 299/729 [00:10<00:21, 20.02it/s]Loading weights:  42%|████▏     | 304/729 [00:10<00:23, 18.34it/s]Loading weights:  42%|████▏     | 307/729 [00:11<00:24, 17.52it/s]Loading weights:  43%|████▎     | 316/729 [00:11<00:15, 27.35it/s]Loading weights:  44%|████▍     | 320/729 [00:11<00:15, 26.69it/s]Loading weights:  45%|████▍     | 328/729 [00:11<00:11, 34.94it/s]Loading weights:  46%|████▌     | 333/729 [00:11<00:11, 33.47it/s]Loading weights:  50%|████▉     | 361/729 [00:11<00:04, 82.40it/s]Loading weights:  55%|█████▌    | 402/729 [00:11<00:02, 152.88it/s]Loading weights:  61%|██████    | 446/729 [00:11<00:01, 219.32it/s]Loading weights:  66%|██████▌   | 482/729 [00:12<00:00, 254.55it/s]Loading weights:  72%|███████▏  | 522/729 [00:12<00:00, 288.32it/s]Loading weights:  78%|███████▊  | 571/729 [00:12<00:00, 340.99it/s]Loading weights:  85%|████████▍ | 619/729 [00:12<00:00, 376.68it/s]Loading weights:  91%|█████████▏| 667/729 [00:12<00:00, 404.54it/s]Loading weights:  98%|█████████▊| 715/729 [00:12<00:00, 420.29it/s]Loading weights: 100%|██████████| 729/729 [00:12<00:00, 57.88it/s] 
+  first-token collisions (rank measures a name FAMILY for these): entity: 43; hq_country: 124; founded_year: 128; industry: 125
+  1/128 items
+  2/128 items
+  3/128 items
+  4/128 items
+  skip AIRBUS/industry: no ground-truth value
+  5/128 items
+  6/128 items
+  7/128 items
+  8/128 items
+  9/128 items
+  10/128 items
+  11/128 items
+  12/128 items
+  13/128 items
+  14/128 items
+  15/128 items
+  16/128 items
+  17/128 items
+  18/128 items
+  19/128 items
+  20/128 items
+  21/128 items
+  22/128 items
+  23/128 items
+  24/128 items
+  25/128 items
+  26/128 items
+  27/128 items
+  28/128 items
+  29/128 items
+  30/128 items
+  31/128 items
+  32/128 items
+  33/128 items
+  34/128 items
+  35/128 items
+  36/128 items
+  37/128 items
+  38/128 items
+  39/128 items
+  40/128 items
+  41/128 items
+  42/128 items
+  43/128 items
+  44/128 items
+  45/128 items
+  46/128 items
+  47/128 items
+  48/128 items
+  49/128 items
+  50/128 items
+  51/128 items
+  52/128 items
+  53/128 items
+  54/128 items
+  55/128 items
+  56/128 items
+  57/128 items
+  58/128 items
+  59/128 items
+  60/128 items
+  61/128 items
+  62/128 items
+  63/128 items
+  64/128 items
+  65/128 items
+  66/128 items
+  67/128 items
+  68/128 items
+  69/128 items
+  70/128 items
+  71/128 items
+  72/128 items
+  73/128 items
+  74/128 items
+  75/128 items
+  76/128 items
+  77/128 items
+  78/128 items
+  79/128 items
+  80/128 items
+  81/128 items
+  82/128 items
+  83/128 items
+  84/128 items
+  85/128 items
+  86/128 items
+  87/128 items
+  88/128 items
+  89/128 items
+  90/128 items
+  91/128 items
+  92/128 items
+  93/128 items
+  94/128 items
+  95/128 items
+  96/128 items
+  97/128 items
+  98/128 items
+  99/128 items
+  100/128 items
+  101/128 items
+  102/128 items
+  103/128 items
+  104/128 items
+  105/128 items
+  106/128 items
+  107/128 items
+  108/128 items
+  109/128 items
+  110/128 items
+  111/128 items
+  112/128 items
+  113/128 items
+  114/128 items
+  115/128 items
+  116/128 items
+  117/128 items
+  118/128 items
+  119/128 items
+  120/128 items
+  121/128 items
+  122/128 items
+  123/128 items
+  124/128 items
+  125/128 items
+  126/128 items
+  127/128 items
+  128/128 items
+
+=== head set: common10 ===
+  head  ent rank  ent z  q-val z oth-val z  dla ent  dla qval  img attn  q attn top1 inv  top-1 class / verdict
+  21.1   28.9/112  2.16     0.53      0.42    0.038     0.010      0.34    0.17     0.05  other 98% | entity-mover-like
+  21.5   30.5/112  1.69     0.96      0.64    0.038     0.019      0.44    0.20     0.02  other 99% | entity-mover-like
+ 22.13   41.1/112  1.29     0.18      0.22    0.008     0.002      0.22    0.08     0.09  other 100% | entity-mover-like
+ 22.15   25.4/112  2.08     1.51      1.45    0.074     0.073      0.55    0.22     0.48  other 100% | entity-mover-like
+ 22.17   18.2/112  2.75     0.59      0.58    0.100     0.008      0.64    0.13     0.44  other 92% | entity-mover-like
+ 22.19   32.0/112  1.65     0.85      0.73    0.033     0.019      0.27    0.35     0.12  other 100% | entity-mover-like (reads text)
+ 23.17   48.1/112  1.09     0.39      0.10    0.008     0.000      0.10    0.03     0.07  other 100% | entity-mover-like
+  23.3   22.0/112  3.30     0.46      0.40    0.108     0.003      0.38    0.09     0.51  other 79% | entity-mover-like
+  23.4   32.8/112  2.00     0.78      0.72    0.031     0.017      0.16    0.18     0.27  other 100% | entity-mover-like (reads text)
+  23.6   20.4/112  2.72     1.25      0.88    0.048     0.039      0.09    0.22     0.38  other 98% | entity-mover-like (reads text)
+  dla_entity by source group (mean over rows): 
+      21.1 system=-0.000  object=+0.012  image_background=+0.025  question=+0.001  assistant_prefix=+0.000
+      21.5 system=+0.000  object=+0.010  image_background=+0.023  question=+0.004  assistant_prefix=+0.001
+     22.13 system=-0.000  object=+0.003  image_background=+0.005  question=+0.000  assistant_prefix=+0.000
+     22.15 system=+0.000  object=+0.016  image_background=+0.039  question=+0.013  assistant_prefix=+0.006
+     22.17 system=-0.000  object=+0.030  image_background=+0.059  question=+0.010  assistant_prefix=+0.001
+     22.19 system=-0.000  object=+0.007  image_background=+0.011  question=+0.010  assistant_prefix=+0.005
+     23.17 system=-0.000  object=+0.003  image_background=+0.005  question=+0.000  assistant_prefix=+0.000
+      23.3 system=-0.000  object=+0.032  image_background=+0.064  question=+0.008  assistant_prefix=+0.003
+      23.4 system=-0.000  object=+0.004  image_background=+0.013  question=+0.007  assistant_prefix=+0.007
+      23.6 system=-0.000  object=+0.003  image_background=+0.007  question=+0.020  assistant_prefix=+0.018
+
+=== head set: hq_country_top8 ===
+  head  ent rank  ent z  q-val z oth-val z  dla ent  dla qval  img attn  q attn top1 inv  top-1 class / verdict
+  21.1   28.9/112  2.16     0.53      0.42    0.038     0.010      0.34    0.17     0.05  other 98% | entity-mover-like
+  21.4   22.0/112  2.51     0.69      0.66    0.095     0.017      0.72    0.11     0.55  other 96% | entity-mover-like
+ 22.15   25.4/112  2.08     1.51      1.45    0.074     0.073      0.55    0.22     0.48  other 100% | entity-mover-like
+ 22.17   18.2/112  2.75     0.59      0.58    0.100     0.008      0.64    0.13     0.44  other 92% | entity-mover-like
+ 23.17   48.1/112  1.09     0.39      0.10    0.008     0.000      0.10    0.03     0.07  other 100% | entity-mover-like
+  23.3   22.0/112  3.30     0.46      0.40    0.108     0.003      0.38    0.09     0.51  other 79% | entity-mover-like
+  23.4   32.8/112  2.00     0.78      0.72    0.031     0.017      0.16    0.18     0.27  other 100% | entity-mover-like (reads text)
+  23.6   20.4/112  2.72     1.25      0.88    0.048     0.039      0.09    0.22     0.38  other 98% | entity-mover-like (reads text)
+  dla_entity by source group (mean over rows): 
+      21.1 system=-0.000  object=+0.012  image_background=+0.025  question=+0.001  assistant_prefix=+0.000
+      21.4 system=-0.000  object=+0.033  image_background=+0.060  question=+0.002  assistant_prefix=+0.000
+     22.15 system=+0.000  object=+0.016  image_background=+0.039  question=+0.013  assistant_prefix=+0.006
+     22.17 system=-0.000  object=+0.030  image_background=+0.059  question=+0.010  assistant_prefix=+0.001
+     23.17 system=-0.000  object=+0.003  image_background=+0.005  question=+0.000  assistant_prefix=+0.000
+      23.3 system=-0.000  object=+0.032  image_background=+0.064  question=+0.008  assistant_prefix=+0.003
+      23.4 system=-0.000  object=+0.004  image_background=+0.013  question=+0.007  assistant_prefix=+0.007
+      23.6 system=-0.000  object=+0.003  image_background=+0.007  question=+0.020  assistant_prefix=+0.018
+
+wrote /workspace/VADE-evals/results/head_vocab_projection/brands/rows.jsonl and summary.json

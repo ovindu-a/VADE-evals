@@ -1,0 +1,28 @@
+[flags/calling_code/train] 35930 -> 23681 (34.1% removed, cause:iso=12528:11153)
+[flags/calling_code/test] 14052 -> 9168 (34.8% removed, cause:iso=2424:6744)
+[flags/capital/train] 35931 -> 24460 (31.9% removed, cause:iso=13572:10888)
+[flags/capital/test] 14052 -> 9168 (34.8% removed, cause:iso=2352:6816)
+[flags/currency/train] 35325 -> 23752 (32.8% removed, cause:iso=13054:10698)
+[flags/currency/test] 14052 -> 9168 (34.8% removed, cause:iso=2052:7116)
+[flags/language/train] 32811 -> 25054 (23.6% removed, cause:iso=16098:8956)
+[flags/language/test] 14052 -> 9168 (34.8% removed, cause:iso=2340:6828)
+wrote /workspace/VADE/models/InternVL3-8B-hf/stats/flags_tuples_prune_summary.json
+wrote /workspace/VADE/models/InternVL3-8B-hf/stats/flags_tuples_prune_summary.md
+[brands/founded_year/train] 25666 -> 18953 (26.2% removed, cause:iso=11476:7477)
+[brands/founded_year/test] 7610 -> 6064 (20.3% removed, cause:iso=1953:4111)
+[brands/hq_country/train] 25666 -> 22050 (14.1% removed, cause:iso=15519:6531)
+[brands/hq_country/test] 8335 -> 6612 (20.7% removed, cause:iso=2825:3787)
+[brands/industry/train] 25666 -> 20983 (18.2% removed, cause:iso=14260:6723)
+[brands/industry/test] 8190 -> 6559 (19.9% removed, cause:iso=2582:3977)
+wrote /workspace/VADE/models/InternVL3-8B-hf/stats/brands_tuples_prune_summary.json
+wrote /workspace/VADE/models/InternVL3-8B-hf/stats/brands_tuples_prune_summary.md
+[celebrities/birth_year/train] 35679 -> 15537 (56.5% removed, cause:iso=6121:9416)
+[celebrities/birth_year/test] 11704 -> 6535 (44.2% removed, cause:iso=1050:5485)
+[celebrities/nationality/train] 33201 -> 18155 (45.3% removed, cause:iso=10380:7775)
+[celebrities/nationality/test] 11128 -> 6263 (43.7% removed, cause:iso=2121:4142)
+[celebrities/native_language/train] 28077 -> 14747 (47.5% removed, cause:iso=8052:6695)
+[celebrities/native_language/test] 9818 -> 5550 (43.5% removed, cause:iso=1879:3671)
+[celebrities/occupation/train] 24535 -> 16079 (34.5% removed, cause:iso=11344:4735)
+[celebrities/occupation/test] 8848 -> 4579 (48.2% removed, cause:iso=1509:3070)
+wrote /workspace/VADE/models/InternVL3-8B-hf/stats/celebrities_tuples_prune_summary.json
+wrote /workspace/VADE/models/InternVL3-8B-hf/stats/celebrities_tuples_prune_summary.md

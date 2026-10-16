@@ -1,0 +1,28 @@
+[flags/calling_code/train] 35930 -> 26537 (26.1% removed, cause:iso=15602:10935)
+[flags/calling_code/test] 14052 -> 10643 (24.3% removed, cause:iso=2880:7763)
+[flags/capital/train] 35931 -> 27547 (23.3% removed, cause:iso=16878:10669)
+[flags/capital/test] 14052 -> 10643 (24.3% removed, cause:iso=2856:7787)
+[flags/currency/train] 35325 -> 22526 (36.2% removed, cause:iso=10638:11888)
+[flags/currency/test] 14052 -> 10643 (24.3% removed, cause:iso=2052:8591)
+[flags/language/train] 32811 -> 24393 (25.7% removed, cause:iso=14570:9823)
+[flags/language/test] 14052 -> 10643 (24.3% removed, cause:iso=2855:7788)
+wrote /workspace/VADE/models/Qwen2.5-VL-3B-Instruct/stats/flags_tuples_prune_summary.json
+wrote /workspace/VADE/models/Qwen2.5-VL-3B-Instruct/stats/flags_tuples_prune_summary.md
+[brands/founded_year/train] 25666 -> 18121 (29.4% removed, cause:iso=10896:7225)
+[brands/founded_year/test] 7610 -> 5354 (29.6% removed, cause:iso=1491:3863)
+[brands/hq_country/train] 25666 -> 21439 (16.5% removed, cause:iso=15271:6168)
+[brands/hq_country/test] 8335 -> 5983 (28.2% removed, cause:iso=2898:3085)
+[brands/industry/train] 25666 -> 20003 (22.1% removed, cause:iso=13497:6506)
+[brands/industry/test] 8190 -> 5862 (28.4% removed, cause:iso=2183:3679)
+wrote /workspace/VADE/models/Qwen2.5-VL-3B-Instruct/stats/brands_tuples_prune_summary.json
+wrote /workspace/VADE/models/Qwen2.5-VL-3B-Instruct/stats/brands_tuples_prune_summary.md
+[celebrities/birth_year/train] 35679 -> 23684 (33.6% removed, cause:iso=13063:10621)
+[celebrities/birth_year/test] 11704 -> 8381 (28.4% removed, cause:iso=2148:6233)
+[celebrities/nationality/train] 33201 -> 23012 (30.7% removed, cause:iso=13419:9593)
+[celebrities/nationality/test] 11128 -> 7937 (28.7% removed, cause:iso=2201:5736)
+[celebrities/native_language/train] 28077 -> 20038 (28.6% removed, cause:iso=12038:8000)
+[celebrities/native_language/test] 9818 -> 6942 (29.3% removed, cause:iso=2269:4673)
+[celebrities/occupation/train] 24535 -> 16109 (34.3% removed, cause:iso=8825:7284)
+[celebrities/occupation/test] 8848 -> 6083 (31.2% removed, cause:iso=1787:4296)
+wrote /workspace/VADE/models/Qwen2.5-VL-3B-Instruct/stats/celebrities_tuples_prune_summary.json
+wrote /workspace/VADE/models/Qwen2.5-VL-3B-Instruct/stats/celebrities_tuples_prune_summary.md

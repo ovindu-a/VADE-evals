@@ -1,0 +1,14 @@
+[flags/calling_code/train] 35930 -> 23681 (34.1% removed, cause:iso=12528:11153)
+[flags/calling_code/test] 14052 -> 9168 (34.8% removed, cause:iso=2424:6744)
+[flags/capital/train] 35931 -> 24460 (31.9% removed, cause:iso=13572:10888)
+[flags/capital/test] 14052 -> 9168 (34.8% removed, cause:iso=2352:6816)
+[flags/currency/train] 35325 -> 23752 (32.8% removed, cause:iso=13054:10698)
+[flags/currency/test] 14052 -> 9168 (34.8% removed, cause:iso=2052:7116)
+Traceback (most recent call last):
+  File "/workspace/VADE-evals/../VADE/models/prune_tuples.py", line 194, in <module>
+    main()
+    ~~~~^^
+  File "/workspace/VADE-evals/../VADE/models/prune_tuples.py", line 182, in main
+    rows = [json.loads(l) for l in open(src_path)]
+                                   ~~~~^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/VADE/data/flags/tuples/identity/train.jsonl'

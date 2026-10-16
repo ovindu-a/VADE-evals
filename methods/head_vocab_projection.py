@@ -517,6 +517,9 @@ def main():
             with Image.open(os.path.join(entity_dir, items[key]["image"])) as im:
                 image = im.convert("RGB")
             for attr in attributes:
+                if key not in val_ids[attr]:     # no stored label -> no gold token to build d_val from
+                    print(f"  skip {key}/{attr}: no ground-truth value")
+                    continue
                 tmpl = lookup[attr][sorted(lookup[attr])[args.template_index]]
                 p = build_prompt(processor, image, tmpl["question"], tmpl["prefill"])
                 ids = p["input_ids"]
