@@ -4,6 +4,10 @@ The latest head-trace follow-ups—continuous answer-token substitution and
 two-phase token identification/knockout—are documented in
 [HEAD_EXPERIMENTS.md](HEAD_EXPERIMENTS.md).
 
+The Tier-1/Tier-2 circuit experiments (E1-E11: what the image->answer circuit
+is, and whether it generalizes across entities and models) are summarized in
+[Circuit experiment results](#circuit-experiment-results-tier-1--tier-2).
+
 Execution repo for the [VADE](https://github.com/Shaveen12/VADE) benchmark
 (Visual Attribute DisEntanglement). VADE itself stays a pure benchmark --
 data, ground truth, prompt templates, object-token geometry, and a
@@ -645,23 +649,25 @@ any entity (`logo_only` for brands, etc.), not just flags:
   spec still gets its own JSON in its own directory, and the row sample
   (`--seed`) is shared, so specs are always compared on identical rows.
 
-#### `seq:before` and `pre_image` are guaranteed NULLs -- run them
+#### `pre_image` is a guaranteed NULL; `seq:before` is NOT
 
 Every image in a VADE entity is **one fixed canvas render** with only the
-object's pixels varying (`object_location.json` states this explicitly). So:
+object's pixels varying (`object_location.json` states this explicitly).
+`pre_image` tokens precede the image entirely, so under the language model's
+causal attention they are bit-identical in base and source at every layer:
+patching them is provably a no-op and MUST score 0%.
 
-- `pre_image` tokens precede the image entirely.
-- `seq:before` tokens are background tokens that precede the object in raster
-  order, and under causal attention can only attend to tokens at or before
-  themselves -- identical pixels, identical context.
-
-Both therefore have **bit-identical activations in base and source at every
-layer**, so patching them is provably a no-op and they MUST score 0%. Nothing
-else in the design is a guaranteed null, which makes these two the controls
-that license reading every other 0% as a real null rather than a measurement
-failure. `seq:after` is the informative twin: those tokens differ from base to
-source *only* via attention to the object, so their ceiling measures how far
-the object's information has leaked into the background by a given layer.
+**`seq:before` was designed as a second null and measured as one that fails
+(E11, 2026-10-16: 15-24% cause on flags/brands/celebrities).** The argument
+("background tokens before the object see identical pixels and identical
+causal context") ignores the vision encoder: Qwen2.5-VL's ViT has
+full-attention blocks (`fullatt_block_indexes` in its config) that are
+bidirectional over the whole image, so every background token already carries
+some object information when it enters the language model. Read `seq:before`
+and `seq:after` as "how much of the entity sits in that background region",
+not as a null and an LLM-only leakage measure respectively. A real null for
+image-token sets needs a layer-0 identity check (base vs source activations at
+those positions), not this spec.
 
 #### `phrase:` mechanics
 
@@ -1215,6 +1221,284 @@ effects this script exists to look at.
   handful of rows is cheap enough to just rerun with different
   `--entity`/`--attribute`/`--positions`/`--limit` rather than needing to
   resume a partial run.
+
+## Circuit experiment results (Tier 1 + Tier 2)
+
+Experiments E1-E11 test one account of how Qwen2.5-VL-7B answers "what is the
+capital/currency/... of the country whose flag is shown":
+
+1. **See**: the entity is encoded at (and around) the object's image tokens.
+2. **Move**: about 10 question-blind *mover* heads in blocks 21-23 (`common10` =
+   21.1 21.5 22.13 22.15 22.17 22.19 23.3 23.4 23.6 23.17) copy it to the last
+   token, while *router* heads in blocks 19-21 (`router8`) carry which attribute
+   was asked.
+3. **Recall**: last-token MLPs in blocks 23-26 (22-27 for brands/celebrities)
+   look up the attribute value and write the answer.
+
+Launchers: `scripts/run_tier1.sh` (E1-E6) and `scripts/run_tier2.sh` (E7-E11).
+Pod instructions: [GPU_RUNBOOK.md](GPU_RUNBOOK.md). Results were committed in
+607b957 (E1, E2, E6), be66844 (E3, E4, E5) and c1f773b (E7-E11). Logs are in
+`logs/tier1/` and `logs/tier2/`; outputs are under `results/`.
+
+**Bottom line:** the account holds across flags, brands and celebrities, and
+across Qwen2.5-VL-7B, Qwen2.5-VL-3B and InternVL3-8B. InternVL3-8B (a different
+vision encoder on the Qwen2.5-7B language model) independently recovers exactly
+`common10`. Two qualifications: identity is never confined to the object's
+tokens, and the lookup is concentrated in one MLP for flags/calling_code but
+spread across blocks for brands and celebrities.
+
+### Tier 1: the circuit on flags (Qwen2.5-VL-7B)
+
+**E1, are attributes already present at the image tokens?**
+(`methods/image_enrichment.py`: logit lens and leave-one-country-out probes at
+the object's tokens, read against layer 0 and a permutation null.)
+
+- Image-token activations are identical whichever question is asked (E0b
+  difference = 0), so the image encoding is question-independent.
+- No language-attribute enrichment above the layer-0 (visual similarity)
+  baseline at any layer.
+- Weak enrichment for attributes shared by several countries: EUR +0.16 to +0.23
+  over layer 0 at layer 10 (ring/background tokens), calling zone +0.07 to +0.13.
+- **Reading:** the image tokens carry the *entity*, not its facts. The lookup
+  happens later, at the last token.
+
+**E2, severed MLP freezing.** (`methods/head_severed.py`: install the source
+flag through `common10`, then freeze later last-token components at base, @mean
+or @other values.)
+
+| | capital | currency | language | calling_code |
+|---|---|---|---|---|
+| movers alone install the source answer | 97% | 78% | 100% | 98% |
+| + MLP 23-26 frozen at base | 0% | 0% | 0% | 0% |
+| + MLP 23-26 frozen at a third country (third country's answer) | 95% | 62% | 95% | 100% |
+
+- Freezing at the mean of other countries collapses the answer, so the blocks
+  are needed, not just re-asserting the base.
+- MLP 25 alone writes calling_code.
+- **Reading:** the movers deliver an entity, and MLPs 23-26 turn it into the
+  answer. Freezing them at another country's values makes the model answer for
+  that country.
+
+**E3, is the lookup attribute-specific at the neuron level?**
+(`methods/readout_jacobian.py --site mlp_hidden --blocks 23-26`, then
+`head_das.py --method dbm` masks.)
+
+- **How the edit works:** for each attribute T, take the top singular directions
+  of the Jacobian of T's first-answer-token logits with respect to the 18,944
+  MLP neurons, at ≤128 directions per block. Fit on 59 train countries and
+  evaluate on 25 disjoint test countries (~1,434 rows per target).
+- **What is copied:** at blocks 23-26, every answer step, only the
+  source-minus-base difference inside that subspace
+  (`h_new = h_base + P_T (h_source - h_base)`).
+- **Isolated variant:** `isolated` also removes the directions the other three
+  attributes read.
+
+VADE scores (cause / mean iso / final):
+
+| target | clean | full swap | readout | isolated | random (same rank) |
+|---|---|---|---|---|---|
+| capital | 0.0 / 93.8 / 46.9 | 96.9 / 0.8 / 48.8 | **91.9 / 76.0 / 84.0** | 62.5 / 91.3 / 76.9 | 0.0 / 94.0 / 47.0 |
+| currency | 0.0 / 98.9 / 49.4 | 70.6 / 0.7 / 35.6 | 59.4 / 78.5 / 69.0 | **43.9 / 94.9 / 69.4** | 0.0 / 98.9 / 49.4 |
+| language | 1.7 / 94.9 / 48.3 | 87.3 / 0.1 / 43.7 | **74.0 / 82.6 / 78.3** | 48.0 / 94.1 / 71.0 | 1.7 / 95.3 / 48.5 |
+| calling_code | 0.0 / 93.8 / 46.9 | 100.0 / 0.8 / 50.4 | **60.6 / 92.3 / 76.4** | 53.9 / 94.0 / 73.9 | 0.0 / 93.8 / 46.9 |
+
+- A question-blind edit of ≤0.7% of the neuron space reaches 69-84% final.
+  A random subspace of the same size does nothing.
+- **Leakage:** the capital edit drags along calling_code and currency (iso 68%
+  and 63%), and `isolated` removes most of it. calling_code's readout is small
+  (rank 6-8 in blocks 25-26) and barely overlaps the others.
+- **Held-out geometry:** cross-energy between attributes is 2-29% at the MLPs,
+  against 50-66% at the mover heads. The attributes separate at the MLPs, not at
+  the heads.
+- **DBM masks (VADE final):** calling_code 88.2, capital 60.3, currency 59.4,
+  language 59.3.
+- **Masks are not interpretable yet:** all four selected 0 neurons. At lr 1e-3
+  and about 63 updates, the mask logits stayed within ±0.04. They need a rerun
+  at `--mask_lr 1e-2 --epochs 2` before mask overlap means anything.
+
+**E4, compose the routes.** (`methods/circuit_compose.py`: movers from (image B,
+asked X) plus routers from (image C, asked A), installed into (C, X).)
+
+| arm | gives B's answer to A |
+|---|---|
+| composed movers + routers | 78.8% |
+| random heads | 0% |
+| full 18-head circuit | 80.3% |
+| whole block window | 92.2% |
+| complement of the circuit | 0% |
+
+**Reading:** entity and attribute travel on separate head sets and compose into
+an answer neither donor run gave.
+
+**E5, direct vs question-mediated route.** (`methods/route_knockout.py`,
+attention-edge knockouts after Salazar et al.)
+
+- Either route suffices: cutting the direct readout→image route leaves 86%,
+  cutting the question route leaves 95%, cutting both leaves 1%.
+- The direct route dominates. Question tokens carry the entity by layer 22 (84%).
+- The empty-knockout no-op check is exact (`max |dlogit| = 0`) after the bf16
+  renormalization fix in bdcd2c4.
+
+**E6, the same pairs with the country named in text.**
+(`methods/text_entity_contrast.py`)
+
+- Text uses the same circuit: the handoff is at L22-24, 9 of 10 mover heads are
+  shared, and freezing MLPs 23-26 removes the answer for both text and image
+  input.
+- **Reading:** the circuit belongs to the language model's entity→fact
+  machinery, not to vision.
+
+### Tier 2: generality (E7-E11)
+
+**Errors and caveats in the Tier-2 run (c1f773b)**
+
+1. `e7_vocab_brands` first crashed with `KeyError: 'industry'` because AIRBUS
+   has no industry label. `head_vocab_projection.py` now skips rows without a
+   ground-truth value; only that one row was skipped.
+2. The first `e8_internvl_prune` crashed because VADE's `identity/` tuples have
+   no train split. `run_tier2.sh` now prunes every tuple directory except
+   `identity`, which E8 does not use.
+3. **E11's `seq:before` control failed (15-24%, not 0%).** This is a design
+   error, not a code bug: the vision encoder's full-attention blocks spread
+   object information into every background token. See the
+   [`seq:before` section](#pre_image-is-a-guaranteed-null-seqbefore-is-not).
+   This voids `seq:before` as a null, not E11's other rows.
+4. Harmless warnings: InternVL's "will NOT tie" embeddings (its output layer
+   really is untied), and transformers 5.x processor-kwargs deprecations.
+5. The inert `brands/founded_year` trace (image patch 0%) was not filtered out of
+   the E10 overlap. It only adds zero-overlap rows.
+6. The InternVL-vs-Qwen-7B comparison has no flags rows, because the 7B flags
+   traces predate `image_head_pipeline`. Flags is compared against `common10`
+   by hand below.
+
+**E10, do the head lists overlap beyond chance?**
+(`methods/head_overlap.py`, 20,000 permutations; the `block` null keeps each
+list's per-block counts.)
+
+- Each of brands/hq_country, celebrities/nationality and
+  celebrities/native_language shares **7 of 8** top heads with `common10`
+  (p < 1e-4, both nulls).
+- Animals share part of the set (native_continent 5/8); body_covering shares
+  almost none.
+- Heads in ≥4 of the 13 traces: 21.1 21.4 21.5 22.15 22.17 22.19 23.3 23.4 23.6
+  23.11 (block-null p = 0.0005).
+- Park et al.'s Visual Retrieval Heads (blocks 14-19) share **0** heads with any
+  trace.
+- Lietzow et al.'s promoting heads share 3 with `common10` (21.5 22.13 23.6).
+  Significant under the pool null (p = 0.002) but not the block null (p = 0.022).
+  Their single "writing" head, 23.6, is one of ours.
+
+**E9, zero Park's Visual Retrieval Heads.** (`methods/vrh_ablation.py`, flags,
+672 generations per arm.)
+
+- **Index check:** `park_vrh` sits at the 98.1st percentile of box-attention
+  mass, against 74.2 for the 1-based reading. The list is 0-based and correctly
+  indexed.
+
+| arm | accuracy | currency | mover name rank | name rank = 1 |
+|---|---|---|---|---|
+| clean | 88.8% | 82.7% | 1.61 | 93.8% |
+| zero `park_vrh` (20 heads) | 81.7% | 61.9% | 2.49 | 91.4% |
+| zero random, same blocks (×3) | 86.3-87.8% | 73-80% | 1.58-1.70 | 93.3-93.8% |
+| zero `common10` (10 heads) | 37.9% | 27.4% | - | - |
+
+- **Reading:** Park's heads do attend to the flag, but they are not the
+  bottleneck: −7 points against −1 to −2.5 for random heads, mostly on currency.
+- The movers still rank the right name first in 91% of rows. Zeroing just the 10
+  movers drops accuracy to 38% (calling_code 11%).
+- The currency-specific drop is unexplained.
+
+**E7, brands and celebrities: severed test and vocabulary projection.**
+(`head_severed.py --gold own`, 128 pairs each, each entity's own top-8 heads.
+All self-checks pass: read-back 0.0, identity bit-exact, liveness 13-15
+logits.)
+
+| source answer transferred (divergence-point scoring) | brands hq_country | celeb nationality | celeb native_language |
+|---|---|---|---|
+| heads only | 64.6% | 76.2% | 89.8% |
+| + MLP 22-27 frozen at base | 1.6% | 1.6% | 1.6% |
+| ... @mean | 38.6% | 23.8% | 25.8% |
+| ... @other (third entity's answer) | 91.9% | 82.1% | 85.9% |
+| MLP 25 alone, frozen at base → @mean | 11.0 → 52.8% | 22.2 → 61.1% | 60.2 → 89.1% |
+| attention 24-27 frozen at base | 73.2% | 81.0% | 89.1% |
+
+- **Reading:** this reproduces flags' E2 on two new entity types. MLPs 22-27
+  write the answer, and late attention does not matter.
+- **Difference from flags:** no single block is the lookup. A single-block freeze
+  at base mostly recovers at @mean (kept 0.8-1.0), so the base freeze was
+  re-asserting the base answer. Block 25 contributes most, writing the third
+  entity's answer in about 24% of rows. On flags, MLP 25 alone wrote
+  calling_code.
+- **Vocabulary projection:** name ranks are weak (brands 18-48 of 112,
+  celebrities 20-43 of 73; flags was about 1-10 of 78). Two caveats: many
+  names share a first token (43 brands, 29 celebrities), and the entity may be
+  encoded non-lexically.
+- The heads stay question-blind: the asked value scores about the same as other
+  values, e.g. 22.15 1.51 vs 1.45.
+- For almost every head, the direct entity write comes more from
+  **background** image tokens than from the object (see E11).
+
+**E11, object vs background tokens.** (`ndm/ceiling_sweep.py`, full residual
+swap per position set, 96 rows.) flags/capital, cause by layer:
+
+| layer | `entity_only` | `~entity_only` | `~entity_ring1` | `full_image` | `seq:before` |
+|---|---|---|---|---|---|
+| 10 | 34% | 34% | 14% | 100% | 16% |
+| 18 | 16% | 68% | 24% | 100% | 19% |
+| 21 | 15% | 59% | 20% | 98% | 18% |
+| 23 | 2% | 1% | 1% | 19% | 1% |
+
+- Brands and celebrities show the same shape:
+  - **brands:** `entity_only` falls from 50% to 9-13%; `~entity_only` peaks at
+    64% at L19.
+  - **celebrities:** `entity_only` falls from 83% to 42% by L20; `~entity_only`
+    peaks at 44%.
+- **Not confined to the object:** even at layer 10, the object's tokens alone
+  transfer only 34-83%, and part of this spread comes from the vision encoder
+  (`seq:before` ≠ 0).
+- **It migrates outward inside the language model** between layers 10 and 18:
+  object-only falls while everything-except-object rises 34 → 68%. Most of
+  that gain sits in the one-token ring around the object.
+- So the movers (blocks 21-23) mostly read the entity from around the object,
+  which matches E7's background-dominated head writes.
+
+**E8, other models.** (`image_head_pipeline.py` on Qwen2.5-VL-3B and
+InternVL3-8B, after VADE accuracy sweeps and pruning per model.)
+
+| model | handoff (depth) | consensus heads (in ≥3 traces) | top-8 sufficiency, flags |
+|---|---|---|---|
+| Qwen2.5-VL-7B (28×28) | blocks 21-23 (75-82%) | `common10` | see E2/E4 |
+| Qwen2.5-VL-3B (36×16) | blocks 27-33 (75-92%) | 27.10 27.11 27.12 31.1 31.3 31.7 32.13 33.3 | 66-92% (calling_code 1.6%) |
+| InternVL3-8B (28×28) | blocks 21-23 | **21.1 21.5 22.13 22.15 22.17 22.19 23.3 23.4 23.6 23.17 = `common10`** | 84-92% (calling_code 1.6%) |
+
+- **InternVL3-8B inherits the movers:** it uses a different vision encoder and
+  256-token tiling, but its language model comes from Qwen2.5-7B, and it
+  independently recovers exactly `common10`.
+  - Its flags traces share 8/8 (capital, language) and 7/8 (currency,
+    calling_code) heads with `common10`.
+  - Celebrities share 7/8 and brands 6/8 with Qwen-7B's traces (p < 1e-4).
+  - The movers survive a new vision encoder and multimodal training, so they
+    are a property of the language model.
+- **Qwen2.5-VL-3B** puts its handoff at the same relative depth, with 27.11 in
+  every flags top-8.
+  - Lietzow's 3B promoting heads share 31.3 and 31.7 (pool p ≈ 0.005, not
+    significant under the block null).
+- Park's InternVL VRH list again shares 0 heads.
+- **calling_code** is the exception in both models: no 8 heads suffice (1.6%),
+  but the whole block window does (72-98%). It is spread across a whole block
+  and needs several answer tokens.
+- InternVL brands/hq_country is similar: top-8 gives 7.8%, the window 88%.
+- The 3B stage-1 curves are coarse (32 rows per layer).
+
+### Open items
+
+- Rerun the E3 DBM masks at a higher mask learning rate (they selected 0 neurons).
+- Add a layer-0 identity check as the real image-position null, and correct
+  `common/position_sets.py`'s docstring and CLAUDE.md, which still call
+  `seq:before` a guaranteed null.
+- Run E7's severed MLP test on InternVL3-8B, to see whether the lookup also sits
+  in the same MLP blocks.
+- Explain why zeroing Park's heads hurts currency specifically.
 
 ## Reproducing results on a fresh machine from the Kaggle-pool SAE checkpoints
 
