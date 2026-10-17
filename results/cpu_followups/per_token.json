@@ -1,0 +1,643 @@
+{
+  "note": "Group totals from head_vocab_projection divided by group size. object = the entity_only footprint; background = the other image tokens (144 - object).",
+  "entities": {
+    "flags": {
+      "n_object_tokens": 8,
+      "n_background_tokens": 136,
+      "heads": [
+        {
+          "head_set": "common10",
+          "head": "21.1",
+          "attn_object": 0.18936975381248408,
+          "attn_background": 0.5991122877846161,
+          "attn_per_token_ratio_obj_over_bg": 5.373426451853344,
+          "dla_entity_object": 0.03185689159532298,
+          "dla_entity_background": 0.10814835102584246,
+          "dla_per_token_ratio_obj_over_bg": 5.0076321273828865
+        },
+        {
+          "head_set": "common10",
+          "head": "21.5",
+          "attn_object": 0.1615365019644655,
+          "attn_background": 0.259217161313808,
+          "attn_per_token_ratio_obj_over_bg": 10.593899414211482,
+          "dla_entity_object": 0.017192897681308664,
+          "dla_entity_background": 0.03122051606678291,
+          "dla_per_token_ratio_obj_over_bg": 9.361769035368958
+        },
+        {
+          "head_set": "common10",
+          "head": "22.13",
+          "attn_object": 0.25398947653316317,
+          "attn_background": 0.30642513262241017,
+          "attn_per_token_ratio_obj_over_bg": 14.090949603616142,
+          "dla_entity_object": 0.008656170002604128,
+          "dla_entity_background": 0.009668172160759457,
+          "dla_per_token_ratio_obj_over_bg": 15.220549199726998
+        },
+        {
+          "head_set": "common10",
+          "head": "22.15",
+          "attn_object": 0.19078146950120017,
+          "attn_background": 0.37410328071564436,
+          "attn_per_token_ratio_obj_over_bg": 8.669490883148981,
+          "dla_entity_object": 0.015051558145300771,
+          "dla_entity_background": 0.03778583801314588,
+          "dla_per_token_ratio_obj_over_bg": 6.771756349061053
+        },
+        {
+          "head_set": "common10",
+          "head": "22.17",
+          "attn_object": 0.23021408259159043,
+          "attn_background": 0.360109083476432,
+          "attn_per_token_ratio_obj_over_bg": 10.86792747984979,
+          "dla_entity_object": 0.022330035349468636,
+          "dla_entity_background": 0.04126577692594375,
+          "dla_per_token_ratio_obj_over_bg": 9.199162822554447
+        },
+        {
+          "head_set": "common10",
+          "head": "22.19",
+          "attn_object": 0.17488720401057176,
+          "attn_background": 0.37750820668103796,
+          "attn_per_token_ratio_obj_over_bg": 7.875543936695711,
+          "dla_entity_object": 0.026093220734682496,
+          "dla_entity_background": 0.06152694692926681,
+          "dla_per_token_ratio_obj_over_bg": 7.209601233741705
+        },
+        {
+          "head_set": "common10",
+          "head": "23.17",
+          "attn_object": 0.12851582999740327,
+          "attn_background": 0.22516647042218774,
+          "attn_per_token_ratio_obj_over_bg": 9.702906058168464,
+          "dla_entity_object": 0.011087862373036236,
+          "dla_entity_background": 0.014051944228326431,
+          "dla_per_token_ratio_obj_over_bg": 13.414062657724152
+        },
+        {
+          "head_set": "common10",
+          "head": "23.3",
+          "attn_object": 0.2589629111545427,
+          "attn_background": 0.4610322308255404,
+          "attn_per_token_ratio_obj_over_bg": 9.548940822953288,
+          "dla_entity_object": 0.05539884147623027,
+          "dla_entity_background": 0.0963604691003725,
+          "dla_per_token_ratio_obj_over_bg": 9.773513079465424
+        },
+        {
+          "head_set": "common10",
+          "head": "23.4",
+          "attn_object": 0.2521915648997362,
+          "attn_background": 0.5866700744345075,
+          "attn_per_token_ratio_obj_over_bg": 7.307781306943279,
+          "dla_entity_object": 0.09156809302057159,
+          "dla_entity_background": 0.22215015562999593,
+          "dla_per_token_ratio_obj_over_bg": 7.00723155892099
+        },
+        {
+          "head_set": "common10",
+          "head": "23.6",
+          "attn_object": 0.10073161001006763,
+          "attn_background": 0.20573091989250056,
+          "attn_per_token_ratio_obj_over_bg": 8.323675269939688,
+          "dla_entity_object": 0.02297519316103024,
+          "dla_entity_background": 0.053426002711711634,
+          "dla_per_token_ratio_obj_over_bg": 7.310640211005239
+        },
+        {
+          "head_set": "router8",
+          "head": "19.21",
+          "attn_object": 0.0018034766073383036,
+          "attn_background": 0.020132157864281908,
+          "attn_per_token_ratio_obj_over_bg": 1.5228920084689956,
+          "dla_entity_object": -9.213211726155767e-07,
+          "dla_entity_background": -1.249175343854772e-05,
+          "dla_per_token_ratio_obj_over_bg": 1.2538239736731234
+        },
+        {
+          "head_set": "router8",
+          "head": "19.27",
+          "attn_object": 0.0028156420015702246,
+          "attn_background": 0.028899230313462403,
+          "attn_per_token_ratio_obj_over_bg": 1.6563041128606109,
+          "dla_entity_object": -2.0376889854662698e-06,
+          "dla_entity_background": -1.1895146709321802e-05,
+          "dla_per_token_ratio_obj_over_bg": 2.912171963863203
+        },
+        {
+          "head_set": "router8",
+          "head": "20.17",
+          "attn_object": 0.0019043796699926524,
+          "attn_background": 0.009702895257283845,
+          "attn_per_token_ratio_obj_over_bg": 3.336576715653195,
+          "dla_entity_object": -3.784750141331389e-06,
+          "dla_entity_background": 9.69704531741283e-06,
+          "dla_per_token_ratio_obj_over_bg": -6.635088348725971
+        },
+        {
+          "head_set": "router8",
+          "head": "20.18",
+          "attn_object": 0.0025992819254973994,
+          "attn_background": 0.010840314217039989,
+          "attn_per_token_ratio_obj_over_bg": 4.076246485917963,
+          "dla_entity_object": -2.0792415859563353e-06,
+          "dla_entity_background": -4.3395908360956865e-07,
+          "dla_per_token_ratio_obj_over_bg": 81.4526260569288
+        },
+        {
+          "head_set": "router8",
+          "head": "21.0",
+          "attn_object": 0.0017785769291332968,
+          "attn_background": 0.015862004716403873,
+          "attn_per_token_ratio_obj_over_bg": 1.9061782123918638,
+          "dla_entity_object": -6.073556084559971e-06,
+          "dla_entity_background": 8.342376789456585e-06,
+          "dla_per_token_ratio_obj_over_bg": -12.376623118726952
+        },
+        {
+          "head_set": "router8",
+          "head": "21.25",
+          "attn_object": 0.016086548400510634,
+          "attn_background": 0.051725572119245215,
+          "attn_per_token_ratio_obj_over_bg": 5.286965645894363,
+          "dla_entity_object": -1.0943981245046888e-05,
+          "dla_entity_background": 5.766967820585749e-05,
+          "dla_per_token_ratio_obj_over_bg": -3.2260918901208693
+        },
+        {
+          "head_set": "router8",
+          "head": "21.4",
+          "attn_object": 0.013158766508457206,
+          "attn_background": 0.07013101983881954,
+          "attn_per_token_ratio_obj_over_bg": 3.1897301815643724,
+          "dla_entity_object": 0.0009694006932336595,
+          "dla_entity_background": 0.003977193785368897,
+          "dla_per_token_ratio_obj_over_bg": 4.143577777275356
+        },
+        {
+          "head_set": "router8",
+          "head": "21.5",
+          "attn_object": 0.1615365019644655,
+          "attn_background": 0.259217161313808,
+          "attn_per_token_ratio_obj_over_bg": 10.593899414211482,
+          "dla_entity_object": 0.017192897681308664,
+          "dla_entity_background": 0.03122051606678291,
+          "dla_per_token_ratio_obj_over_bg": 9.361769035368958
+        }
+      ]
+    },
+    "brands": {
+      "n_object_tokens": 8,
+      "n_background_tokens": 136,
+      "heads": [
+        {
+          "head_set": "common10",
+          "head": "21.1",
+          "attn_object": 0.10253950229824056,
+          "attn_background": 0.24132317911065124,
+          "attn_per_token_ratio_obj_over_bg": 7.223390415683246,
+          "dla_entity_object": 0.011738220139500715,
+          "dla_entity_background": 0.025388234118114795,
+          "dla_per_token_ratio_obj_over_bg": 7.8599299755602585
+        },
+        {
+          "head_set": "common10",
+          "head": "21.5",
+          "attn_object": 0.0956776383145671,
+          "attn_background": 0.3444922577696743,
+          "attn_per_token_ratio_obj_over_bg": 4.7214990022653085,
+          "dla_entity_object": 0.010238934737453248,
+          "dla_entity_background": 0.022635616128428356,
+          "dla_per_token_ratio_obj_over_bg": 7.689735041852856
+        },
+        {
+          "head_set": "common10",
+          "head": "22.13",
+          "attn_object": 0.06511308863642322,
+          "attn_background": 0.15402431629461968,
+          "attn_per_token_ratio_obj_over_bg": 7.186673724308954,
+          "dla_entity_object": 0.0028729224947589356,
+          "dla_entity_background": 0.0049918064956661415,
+          "dla_per_token_ratio_obj_over_bg": 9.7839694814501
+        },
+        {
+          "head_set": "common10",
+          "head": "22.15",
+          "attn_object": 0.16048915995474583,
+          "attn_background": 0.38718388154227334,
+          "attn_per_token_ratio_obj_over_bg": 7.046563272114925,
+          "dla_entity_object": 0.01648808054154485,
+          "dla_entity_background": 0.0390767394319601,
+          "dla_per_token_ratio_obj_over_bg": 7.172997882648641
+        },
+        {
+          "head_set": "common10",
+          "head": "22.17",
+          "attn_object": 0.22930437727167463,
+          "attn_background": 0.41296103197410117,
+          "attn_per_token_ratio_obj_over_bg": 9.439569624726582,
+          "dla_entity_object": 0.030089525135116254,
+          "dla_entity_background": 0.059408811751498376,
+          "dla_per_token_ratio_obj_over_bg": 8.610202968485984
+        },
+        {
+          "head_set": "common10",
+          "head": "22.19",
+          "attn_object": 0.09574252055768244,
+          "attn_background": 0.1764769113425642,
+          "attn_per_token_ratio_obj_over_bg": 9.22286568309878,
+          "dla_entity_object": 0.007207167159443233,
+          "dla_entity_background": 0.011167616865372843,
+          "dla_per_token_ratio_obj_over_bg": 10.971171664246063
+        },
+        {
+          "head_set": "common10",
+          "head": "23.17",
+          "attn_object": 0.038503943337005984,
+          "attn_background": 0.06611065543317492,
+          "attn_per_token_ratio_obj_over_bg": 9.901082245217525,
+          "dla_entity_object": 0.0028170605497758617,
+          "dla_entity_background": 0.0051774692817474115,
+          "dla_per_token_ratio_obj_over_bg": 9.249698402851097
+        },
+        {
+          "head_set": "common10",
+          "head": "23.3",
+          "attn_object": 0.12830749453670362,
+          "attn_background": 0.2510338796682014,
+          "attn_per_token_ratio_obj_over_bg": 8.688976205151878,
+          "dla_entity_object": 0.03208709485123622,
+          "dla_entity_background": 0.06411003140475109,
+          "dla_per_token_ratio_obj_over_bg": 8.508506399368118
+        },
+        {
+          "head_set": "common10",
+          "head": "23.4",
+          "attn_object": 0.036716837756938785,
+          "attn_background": 0.12338664118254036,
+          "attn_per_token_ratio_obj_over_bg": 5.058782992111174,
+          "dla_entity_object": 0.004016441518949105,
+          "dla_entity_background": 0.013356046077260592,
+          "dla_per_token_ratio_obj_over_bg": 5.1122544372158485
+        },
+        {
+          "head_set": "common10",
+          "head": "23.6",
+          "attn_object": 0.024716404804050456,
+          "attn_background": 0.06998594895165715,
+          "attn_per_token_ratio_obj_over_bg": 6.003760582843517,
+          "dla_entity_object": 0.003151393265802808,
+          "dla_entity_background": 0.006994243352756871,
+          "dla_per_token_ratio_obj_over_bg": 7.659682801504323
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "21.1",
+          "attn_object": 0.10253950229824056,
+          "attn_background": 0.24132317911065124,
+          "attn_per_token_ratio_obj_over_bg": 7.223390415683246,
+          "dla_entity_object": 0.011738220139500715,
+          "dla_entity_background": 0.025388234118114795,
+          "dla_per_token_ratio_obj_over_bg": 7.8599299755602585
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "21.4",
+          "attn_object": 0.24490173965420176,
+          "attn_background": 0.4784471950403782,
+          "attn_per_token_ratio_obj_over_bg": 8.701753542039407,
+          "dla_entity_object": 0.03250830652700108,
+          "dla_entity_background": 0.060205135152025656,
+          "dla_per_token_ratio_obj_over_bg": 9.179303552155954
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "22.15",
+          "attn_object": 0.16048915995474583,
+          "attn_background": 0.38718388154227334,
+          "attn_per_token_ratio_obj_over_bg": 7.046563272114925,
+          "dla_entity_object": 0.01648808054154485,
+          "dla_entity_background": 0.0390767394319601,
+          "dla_per_token_ratio_obj_over_bg": 7.172997882648641
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "22.17",
+          "attn_object": 0.22930437727167463,
+          "attn_background": 0.41296103197410117,
+          "attn_per_token_ratio_obj_over_bg": 9.439569624726582,
+          "dla_entity_object": 0.030089525135116254,
+          "dla_entity_background": 0.059408811751498376,
+          "dla_per_token_ratio_obj_over_bg": 8.610202968485984
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "23.17",
+          "attn_object": 0.038503943337005984,
+          "attn_background": 0.06611065543317492,
+          "attn_per_token_ratio_obj_over_bg": 9.901082245217525,
+          "dla_entity_object": 0.0028170605497758617,
+          "dla_entity_background": 0.0051774692817474115,
+          "dla_per_token_ratio_obj_over_bg": 9.249698402851097
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "23.3",
+          "attn_object": 0.12830749453670362,
+          "attn_background": 0.2510338796682014,
+          "attn_per_token_ratio_obj_over_bg": 8.688976205151878,
+          "dla_entity_object": 0.03208709485123622,
+          "dla_entity_background": 0.06411003140475109,
+          "dla_per_token_ratio_obj_over_bg": 8.508506399368118
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "23.4",
+          "attn_object": 0.036716837756938785,
+          "attn_background": 0.12338664118254036,
+          "attn_per_token_ratio_obj_over_bg": 5.058782992111174,
+          "dla_entity_object": 0.004016441518949105,
+          "dla_entity_background": 0.013356046077260592,
+          "dla_per_token_ratio_obj_over_bg": 5.1122544372158485
+        },
+        {
+          "head_set": "hq_country_top8",
+          "head": "23.6",
+          "attn_object": 0.024716404804050456,
+          "attn_background": 0.06998594895165715,
+          "attn_per_token_ratio_obj_over_bg": 6.003760582843517,
+          "dla_entity_object": 0.003151393265802808,
+          "dla_entity_background": 0.006994243352756871,
+          "dla_per_token_ratio_obj_over_bg": 7.659682801504323
+        }
+      ]
+    },
+    "celebrities": {
+      "n_object_tokens": 16,
+      "n_background_tokens": 128,
+      "heads": [
+        {
+          "head_set": "common10",
+          "head": "21.1",
+          "attn_object": 0.12364279789783593,
+          "attn_background": 0.27051465431716115,
+          "attn_per_token_ratio_obj_over_bg": 3.6565205152360476,
+          "dla_entity_object": 0.005828777509459353,
+          "dla_entity_background": 0.01000545373273606,
+          "dla_per_token_ratio_obj_over_bg": 4.660480306166332
+        },
+        {
+          "head_set": "common10",
+          "head": "21.5",
+          "attn_object": 0.22535866733995222,
+          "attn_background": 0.36660837539516034,
+          "attn_per_token_ratio_obj_over_bg": 4.917698175270378,
+          "dla_entity_object": 0.01224126328123107,
+          "dla_entity_background": 0.015922363719840047,
+          "dla_per_token_ratio_obj_over_bg": 6.150475392533763
+        },
+        {
+          "head_set": "common10",
+          "head": "22.13",
+          "attn_object": 0.1357528829636673,
+          "attn_background": 0.20082107982376501,
+          "attn_per_token_ratio_obj_over_bg": 5.407913674512666,
+          "dla_entity_object": 0.005243563850965096,
+          "dla_entity_background": 0.004725712894545116,
+          "dla_per_token_ratio_obj_over_bg": 8.87665242129751
+        },
+        {
+          "head_set": "common10",
+          "head": "22.15",
+          "attn_object": 0.24330661453617117,
+          "attn_background": 0.3447438302627277,
+          "attn_per_token_ratio_obj_over_bg": 5.6460848474242065,
+          "dla_entity_object": 0.011306681075179117,
+          "dla_entity_background": 0.018279988703511663,
+          "dla_per_token_ratio_obj_over_bg": 4.948222346770732
+        },
+        {
+          "head_set": "common10",
+          "head": "22.17",
+          "attn_object": 0.34268500896481174,
+          "attn_background": 0.33595598217410344,
+          "attn_per_token_ratio_obj_over_bg": 8.160235915363963,
+          "dla_entity_object": 0.03133169897046173,
+          "dla_entity_background": 0.0321867810347439,
+          "dla_per_token_ratio_obj_over_bg": 7.787470001834814
+        },
+        {
+          "head_set": "common10",
+          "head": "22.19",
+          "attn_object": 0.19149145563798292,
+          "attn_background": 0.22891070618338527,
+          "attn_per_token_ratio_obj_over_bg": 6.692267350206854,
+          "dla_entity_object": 0.008799116671482244,
+          "dla_entity_background": 0.010608570260081879,
+          "dla_per_token_ratio_obj_over_bg": 6.635477886849066
+        },
+        {
+          "head_set": "common10",
+          "head": "23.17",
+          "attn_object": 0.039977804297536966,
+          "attn_background": 0.03591990672534199,
+          "attn_per_token_ratio_obj_over_bg": 8.903765725946515,
+          "dla_entity_object": 0.0030868927443079776,
+          "dla_entity_background": 0.0015931842667662348,
+          "dla_per_token_ratio_obj_over_bg": 15.500493238355144
+        },
+        {
+          "head_set": "common10",
+          "head": "23.3",
+          "attn_object": 0.17894758607283057,
+          "attn_background": 0.16400753338876667,
+          "attn_per_token_ratio_obj_over_bg": 8.728749582430446,
+          "dla_entity_object": 0.012909535310823474,
+          "dla_entity_background": 0.010883783405103844,
+          "dla_per_token_ratio_obj_over_bg": 9.489005674089158
+        },
+        {
+          "head_set": "common10",
+          "head": "23.4",
+          "attn_object": 0.12305512275391568,
+          "attn_background": 0.18390803353118135,
+          "attn_per_token_ratio_obj_over_bg": 5.3528982020484435,
+          "dla_entity_object": 0.0042155474843030205,
+          "dla_entity_background": 0.006469201797943113,
+          "dla_per_token_ratio_obj_over_bg": 5.213066608178285
+        },
+        {
+          "head_set": "common10",
+          "head": "23.6",
+          "attn_object": 0.12648148458572991,
+          "attn_background": 0.15210784832015634,
+          "attn_per_token_ratio_obj_over_bg": 6.6522003161605125,
+          "dla_entity_object": 0.010140591136698856,
+          "dla_entity_background": 0.014562727332694132,
+          "dla_per_token_ratio_obj_over_bg": 5.570709884230362
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "21.1",
+          "attn_object": 0.12364279789783593,
+          "attn_background": 0.27051465431716115,
+          "attn_per_token_ratio_obj_over_bg": 3.6565205152360476,
+          "dla_entity_object": 0.005828777509459353,
+          "dla_entity_background": 0.01000545373273606,
+          "dla_per_token_ratio_obj_over_bg": 4.660480306166332
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "21.4",
+          "attn_object": 0.15373050585566533,
+          "attn_background": 0.3132861580123149,
+          "attn_per_token_ratio_obj_over_bg": 3.9256252323697587,
+          "dla_entity_object": 0.009486638983630547,
+          "dla_entity_background": 0.012003937006733438,
+          "dla_per_token_ratio_obj_over_bg": 6.322351727310233
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "21.5",
+          "attn_object": 0.22535866733995222,
+          "attn_background": 0.36660837539516034,
+          "attn_per_token_ratio_obj_over_bg": 4.917698175270378,
+          "dla_entity_object": 0.01224126328123107,
+          "dla_entity_background": 0.015922363719840047,
+          "dla_per_token_ratio_obj_over_bg": 6.150475392533763
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "22.15",
+          "attn_object": 0.24330661453617117,
+          "attn_background": 0.3447438302627277,
+          "attn_per_token_ratio_obj_over_bg": 5.6460848474242065,
+          "dla_entity_object": 0.011306681075179117,
+          "dla_entity_background": 0.018279988703511663,
+          "dla_per_token_ratio_obj_over_bg": 4.948222346770732
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "22.17",
+          "attn_object": 0.34268500896481174,
+          "attn_background": 0.33595598217410344,
+          "attn_per_token_ratio_obj_over_bg": 8.160235915363963,
+          "dla_entity_object": 0.03133169897046173,
+          "dla_entity_background": 0.0321867810347439,
+          "dla_per_token_ratio_obj_over_bg": 7.787470001834814
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "23.3",
+          "attn_object": 0.17894758607283057,
+          "attn_background": 0.16400753338876667,
+          "attn_per_token_ratio_obj_over_bg": 8.728749582430446,
+          "dla_entity_object": 0.012909535310823474,
+          "dla_entity_background": 0.010883783405103844,
+          "dla_per_token_ratio_obj_over_bg": 9.489005674089158
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "23.4",
+          "attn_object": 0.12305512275391568,
+          "attn_background": 0.18390803353118135,
+          "attn_per_token_ratio_obj_over_bg": 5.3528982020484435,
+          "dla_entity_object": 0.0042155474843030205,
+          "dla_entity_background": 0.006469201797943113,
+          "dla_per_token_ratio_obj_over_bg": 5.213066608178285
+        },
+        {
+          "head_set": "nationality_top8",
+          "head": "23.6",
+          "attn_object": 0.12648148458572991,
+          "attn_background": 0.15210784832015634,
+          "attn_per_token_ratio_obj_over_bg": 6.6522003161605125,
+          "dla_entity_object": 0.010140591136698856,
+          "dla_entity_background": 0.014562727332694132,
+          "dla_per_token_ratio_obj_over_bg": 5.570709884230362
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "19.6",
+          "attn_object": 0.3195839474931182,
+          "attn_background": 0.43096417419257615,
+          "attn_per_token_ratio_obj_over_bg": 5.9324457415397545,
+          "dla_entity_object": 0.007043276961759321,
+          "dla_entity_background": 0.0072625433638330876,
+          "dla_per_token_ratio_obj_over_bg": 7.758468744527493
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "21.1",
+          "attn_object": 0.12364279789783593,
+          "attn_background": 0.27051465431716115,
+          "attn_per_token_ratio_obj_over_bg": 3.6565205152360476,
+          "dla_entity_object": 0.005828777509459353,
+          "dla_entity_background": 0.01000545373273606,
+          "dla_per_token_ratio_obj_over_bg": 4.660480306166332
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "22.15",
+          "attn_object": 0.24330661453617117,
+          "attn_background": 0.3447438302627277,
+          "attn_per_token_ratio_obj_over_bg": 5.6460848474242065,
+          "dla_entity_object": 0.011306681075179117,
+          "dla_entity_background": 0.018279988703511663,
+          "dla_per_token_ratio_obj_over_bg": 4.948222346770732
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "22.17",
+          "attn_object": 0.34268500896481174,
+          "attn_background": 0.33595598217410344,
+          "attn_per_token_ratio_obj_over_bg": 8.160235915363963,
+          "dla_entity_object": 0.03133169897046173,
+          "dla_entity_background": 0.0321867810347439,
+          "dla_per_token_ratio_obj_over_bg": 7.787470001834814
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "22.19",
+          "attn_object": 0.19149145563798292,
+          "attn_background": 0.22891070618338527,
+          "attn_per_token_ratio_obj_over_bg": 6.692267350206854,
+          "dla_entity_object": 0.008799116671482244,
+          "dla_entity_background": 0.010608570260081879,
+          "dla_per_token_ratio_obj_over_bg": 6.635477886849066
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "23.3",
+          "attn_object": 0.17894758607283057,
+          "attn_background": 0.16400753338876667,
+          "attn_per_token_ratio_obj_over_bg": 8.728749582430446,
+          "dla_entity_object": 0.012909535310823474,
+          "dla_entity_background": 0.010883783405103844,
+          "dla_per_token_ratio_obj_over_bg": 9.489005674089158
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "23.4",
+          "attn_object": 0.12305512275391568,
+          "attn_background": 0.18390803353118135,
+          "attn_per_token_ratio_obj_over_bg": 5.3528982020484435,
+          "dla_entity_object": 0.0042155474843030205,
+          "dla_entity_background": 0.006469201797943113,
+          "dla_per_token_ratio_obj_over_bg": 5.213066608178285
+        },
+        {
+          "head_set": "native_language_top8",
+          "head": "23.6",
+          "attn_object": 0.12648148458572991,
+          "attn_background": 0.15210784832015634,
+          "attn_per_token_ratio_obj_over_bg": 6.6522003161605125,
+          "dla_entity_object": 0.010140591136698856,
+          "dla_entity_background": 0.014562727332694132,
+          "dla_per_token_ratio_obj_over_bg": 5.570709884230362
+        }
+      ]
+    }
+  }
+}

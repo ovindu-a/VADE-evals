@@ -1,0 +1,518 @@
+{
+  "regions": {
+    "object": 8,
+    "ring": 16,
+    "background": 120,
+    "all": 144
+  },
+  "chance_mean_rank": {
+    "name_rank": 42.5,
+    "capital_rank": 40.5,
+    "currency_rank": 28.0,
+    "language_rank": 22.0,
+    "calling_code_rank": 4.0
+  },
+  "layers": {
+    "18": {
+      "object/pooled": {
+        "name_rank": 0.032,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "object/max_token": {
+        "name_rank": 0.016,
+        "capital_rank": 0.0,
+        "currency_rank": 0.038,
+        "language_rank": 0.024
+      },
+      "ring/pooled": {
+        "name_rank": 0.016,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "ring/max_token": {
+        "name_rank": 0.063,
+        "capital_rank": 0.039,
+        "currency_rank": 0.057,
+        "language_rank": 0.083
+      },
+      "background/pooled": {
+        "name_rank": 0.032,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.024
+      },
+      "background/max_token": {
+        "name_rank": 0.111,
+        "capital_rank": 0.039,
+        "currency_rank": 0.0,
+        "language_rank": 0.071
+      },
+      "all/pooled": {
+        "name_rank": 0.032,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.024
+      },
+      "all/max_token": {
+        "name_rank": 0.127,
+        "capital_rank": 0.039,
+        "currency_rank": 0.019,
+        "language_rank": 0.071
+      }
+    },
+    "19": {
+      "object/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.0
+      },
+      "object/max_token": {
+        "name_rank": 0.0,
+        "capital_rank": 0.0,
+        "currency_rank": 0.057,
+        "language_rank": 0.048
+      },
+      "ring/pooled": {
+        "name_rank": 0.063,
+        "capital_rank": 0.026,
+        "currency_rank": 0.0,
+        "language_rank": 0.012
+      },
+      "ring/max_token": {
+        "name_rank": 0.032,
+        "capital_rank": 0.053,
+        "currency_rank": 0.038,
+        "language_rank": 0.107
+      },
+      "background/pooled": {
+        "name_rank": 0.032,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "background/max_token": {
+        "name_rank": 0.111,
+        "capital_rank": 0.039,
+        "currency_rank": 0.019,
+        "language_rank": 0.06
+      },
+      "all/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "all/max_token": {
+        "name_rank": 0.079,
+        "capital_rank": 0.039,
+        "currency_rank": 0.0,
+        "language_rank": 0.071
+      }
+    },
+    "20": {
+      "object/pooled": {
+        "name_rank": 0.016,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "object/max_token": {
+        "name_rank": 0.016,
+        "capital_rank": 0.0,
+        "currency_rank": 0.057,
+        "language_rank": 0.012
+      },
+      "ring/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.024
+      },
+      "ring/max_token": {
+        "name_rank": 0.063,
+        "capital_rank": 0.026,
+        "currency_rank": 0.019,
+        "language_rank": 0.06
+      },
+      "background/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.024
+      },
+      "background/max_token": {
+        "name_rank": 0.095,
+        "capital_rank": 0.053,
+        "currency_rank": 0.019,
+        "language_rank": 0.048
+      },
+      "all/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.024
+      },
+      "all/max_token": {
+        "name_rank": 0.079,
+        "capital_rank": 0.039,
+        "currency_rank": 0.0,
+        "language_rank": 0.036
+      }
+    },
+    "21": {
+      "object/pooled": {
+        "name_rank": 0.032,
+        "capital_rank": 0.026,
+        "currency_rank": 0.019,
+        "language_rank": 0.024
+      },
+      "object/max_token": {
+        "name_rank": 0.0,
+        "capital_rank": 0.0,
+        "currency_rank": 0.075,
+        "language_rank": 0.024
+      },
+      "ring/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.036
+      },
+      "ring/max_token": {
+        "name_rank": 0.063,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.071
+      },
+      "background/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "background/max_token": {
+        "name_rank": 0.079,
+        "capital_rank": 0.039,
+        "currency_rank": 0.019,
+        "language_rank": 0.036
+      },
+      "all/pooled": {
+        "name_rank": 0.063,
+        "capital_rank": 0.0,
+        "currency_rank": 0.019,
+        "language_rank": 0.036
+      },
+      "all/max_token": {
+        "name_rank": 0.063,
+        "capital_rank": 0.039,
+        "currency_rank": 0.038,
+        "language_rank": 0.024
+      }
+    },
+    "22": {
+      "object/pooled": {
+        "name_rank": 0.016,
+        "capital_rank": 0.026,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "object/max_token": {
+        "name_rank": 0.0,
+        "capital_rank": 0.039,
+        "currency_rank": 0.038,
+        "language_rank": 0.012
+      },
+      "ring/pooled": {
+        "name_rank": 0.016,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.048
+      },
+      "ring/max_token": {
+        "name_rank": 0.063,
+        "capital_rank": 0.053,
+        "currency_rank": 0.0,
+        "language_rank": 0.048
+      },
+      "background/pooled": {
+        "name_rank": 0.063,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "background/max_token": {
+        "name_rank": 0.095,
+        "capital_rank": 0.026,
+        "currency_rank": 0.019,
+        "language_rank": 0.06
+      },
+      "all/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.012
+      },
+      "all/max_token": {
+        "name_rank": 0.079,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.06
+      }
+    },
+    "23": {
+      "object/pooled": {
+        "name_rank": 0.048,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.036
+      },
+      "object/max_token": {
+        "name_rank": 0.032,
+        "capital_rank": 0.013,
+        "currency_rank": 0.038,
+        "language_rank": 0.06
+      },
+      "ring/pooled": {
+        "name_rank": 0.079,
+        "capital_rank": 0.013,
+        "currency_rank": 0.019,
+        "language_rank": 0.048
+      },
+      "ring/max_token": {
+        "name_rank": 0.19,
+        "capital_rank": 0.053,
+        "currency_rank": 0.038,
+        "language_rank": 0.083
+      },
+      "background/pooled": {
+        "name_rank": 0.063,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.024
+      },
+      "background/max_token": {
+        "name_rank": 0.27,
+        "capital_rank": 0.066,
+        "currency_rank": 0.057,
+        "language_rank": 0.131
+      },
+      "all/pooled": {
+        "name_rank": 0.095,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.024
+      },
+      "all/max_token": {
+        "name_rank": 0.254,
+        "capital_rank": 0.079,
+        "currency_rank": 0.075,
+        "language_rank": 0.119
+      }
+    },
+    "24": {
+      "object/pooled": {
+        "name_rank": 0.333,
+        "capital_rank": 0.197,
+        "currency_rank": 0.057,
+        "language_rank": 0.179
+      },
+      "object/max_token": {
+        "name_rank": 0.492,
+        "capital_rank": 0.25,
+        "currency_rank": 0.113,
+        "language_rank": 0.262
+      },
+      "ring/pooled": {
+        "name_rank": 0.413,
+        "capital_rank": 0.224,
+        "currency_rank": 0.057,
+        "language_rank": 0.143
+      },
+      "ring/max_token": {
+        "name_rank": 0.746,
+        "capital_rank": 0.408,
+        "currency_rank": 0.132,
+        "language_rank": 0.357
+      },
+      "background/pooled": {
+        "name_rank": 0.397,
+        "capital_rank": 0.237,
+        "currency_rank": 0.094,
+        "language_rank": 0.083
+      },
+      "background/max_token": {
+        "name_rank": 0.921,
+        "capital_rank": 0.395,
+        "currency_rank": 0.208,
+        "language_rank": 0.381
+      },
+      "all/pooled": {
+        "name_rank": 0.429,
+        "capital_rank": 0.224,
+        "currency_rank": 0.094,
+        "language_rank": 0.083
+      },
+      "all/max_token": {
+        "name_rank": 0.921,
+        "capital_rank": 0.408,
+        "currency_rank": 0.208,
+        "language_rank": 0.393
+      }
+    },
+    "25": {
+      "object/pooled": {
+        "name_rank": 0.397,
+        "capital_rank": 0.316,
+        "currency_rank": 0.113,
+        "language_rank": 0.262
+      },
+      "object/max_token": {
+        "name_rank": 0.556,
+        "capital_rank": 0.342,
+        "currency_rank": 0.132,
+        "language_rank": 0.31
+      },
+      "ring/pooled": {
+        "name_rank": 0.635,
+        "capital_rank": 0.395,
+        "currency_rank": 0.17,
+        "language_rank": 0.274
+      },
+      "ring/max_token": {
+        "name_rank": 0.873,
+        "capital_rank": 0.579,
+        "currency_rank": 0.208,
+        "language_rank": 0.417
+      },
+      "background/pooled": {
+        "name_rank": 0.571,
+        "capital_rank": 0.355,
+        "currency_rank": 0.151,
+        "language_rank": 0.238
+      },
+      "background/max_token": {
+        "name_rank": 0.952,
+        "capital_rank": 0.539,
+        "currency_rank": 0.226,
+        "language_rank": 0.524
+      },
+      "all/pooled": {
+        "name_rank": 0.635,
+        "capital_rank": 0.408,
+        "currency_rank": 0.189,
+        "language_rank": 0.238
+      },
+      "all/max_token": {
+        "name_rank": 0.952,
+        "capital_rank": 0.553,
+        "currency_rank": 0.208,
+        "language_rank": 0.524
+      }
+    },
+    "26": {
+      "object/pooled": {
+        "name_rank": 0.524,
+        "capital_rank": 0.303,
+        "currency_rank": 0.151,
+        "language_rank": 0.381
+      },
+      "object/max_token": {
+        "name_rank": 0.603,
+        "capital_rank": 0.329,
+        "currency_rank": 0.17,
+        "language_rank": 0.369
+      },
+      "ring/pooled": {
+        "name_rank": 0.683,
+        "capital_rank": 0.329,
+        "currency_rank": 0.094,
+        "language_rank": 0.369
+      },
+      "ring/max_token": {
+        "name_rank": 0.937,
+        "capital_rank": 0.487,
+        "currency_rank": 0.226,
+        "language_rank": 0.429
+      },
+      "background/pooled": {
+        "name_rank": 0.746,
+        "capital_rank": 0.382,
+        "currency_rank": 0.17,
+        "language_rank": 0.333
+      },
+      "background/max_token": {
+        "name_rank": 0.968,
+        "capital_rank": 0.539,
+        "currency_rank": 0.302,
+        "language_rank": 0.5
+      },
+      "all/pooled": {
+        "name_rank": 0.778,
+        "capital_rank": 0.368,
+        "currency_rank": 0.17,
+        "language_rank": 0.345
+      },
+      "all/max_token": {
+        "name_rank": 0.968,
+        "capital_rank": 0.526,
+        "currency_rank": 0.302,
+        "language_rank": 0.5
+      }
+    },
+    "27": {
+      "object/pooled": {
+        "name_rank": 0.27,
+        "capital_rank": 0.053,
+        "currency_rank": 0.019,
+        "language_rank": 0.071
+      },
+      "object/max_token": {
+        "name_rank": 0.508,
+        "capital_rank": 0.092,
+        "currency_rank": 0.075,
+        "language_rank": 0.202
+      },
+      "ring/pooled": {
+        "name_rank": 0.413,
+        "capital_rank": 0.053,
+        "currency_rank": 0.0,
+        "language_rank": 0.048
+      },
+      "ring/max_token": {
+        "name_rank": 0.81,
+        "capital_rank": 0.263,
+        "currency_rank": 0.094,
+        "language_rank": 0.298
+      },
+      "background/pooled": {
+        "name_rank": 0.365,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.024
+      },
+      "background/max_token": {
+        "name_rank": 0.857,
+        "capital_rank": 0.276,
+        "currency_rank": 0.075,
+        "language_rank": 0.429
+      },
+      "all/pooled": {
+        "name_rank": 0.381,
+        "capital_rank": 0.026,
+        "currency_rank": 0.038,
+        "language_rank": 0.024
+      },
+      "all/max_token": {
+        "name_rank": 0.857,
+        "capital_rank": 0.276,
+        "currency_rank": 0.075,
+        "language_rank": 0.44
+      }
+    }
+  },
+  "note": "top1 = fraction of countries whose own value ranks first among candidates (E1 exclusions apply)."
+}

@@ -1,0 +1,217 @@
+{
+  "capital": {
+    "n_clean_correct": 147,
+    "survival": 0.42857142857142855,
+    "survival_by_value_sharing": {
+      "unique": {
+        "n": 147,
+        "survival": 0.42857142857142855
+      }
+    },
+    "n_wrong": 84,
+    "wrong_mapped_to_other_value": 60,
+    "top_wrong_values": [
+      [
+        "santiago",
+        24,
+        1
+      ],
+      [
+        "madrid",
+        13,
+        1
+      ],
+      [
+        "buenos aires",
+        11,
+        1
+      ],
+      [
+        "brasilia",
+        7,
+        1
+      ],
+      [
+        "canberra",
+        4,
+        1
+      ],
+      [
+        "wellington",
+        1,
+        1
+      ]
+    ]
+  },
+  "currency": {
+    "n_clean_correct": 139,
+    "survival": 0.31654676258992803,
+    "survival_by_value_sharing": {
+      "unique": {
+        "n": 122,
+        "survival": 0.3524590163934426
+      },
+      "shared(>=2 countries)": {
+        "n": 17,
+        "survival": 0.058823529411764705
+      }
+    },
+    "n_wrong": 95,
+    "wrong_mapped_to_other_value": 24,
+    "top_wrong_values": [
+      [
+        "eur",
+        8,
+        10
+      ],
+      [
+        "mxn",
+        3,
+        1
+      ],
+      [
+        "brl",
+        2,
+        1
+      ],
+      [
+        "bdt",
+        2,
+        1
+      ],
+      [
+        "jpy",
+        2,
+        1
+      ],
+      [
+        "lak",
+        2,
+        1
+      ],
+      [
+        "hnl",
+        1,
+        1
+      ],
+      [
+        "kes",
+        1,
+        1
+      ]
+    ]
+  },
+  "language": {
+    "n_clean_correct": 157,
+    "survival": 0.802547770700637,
+    "survival_by_value_sharing": {
+      "unique": {
+        "n": 60,
+        "survival": 0.7
+      },
+      "shared(>=2 countries)": {
+        "n": 97,
+        "survival": 0.865979381443299
+      }
+    },
+    "n_wrong": 31,
+    "wrong_mapped_to_other_value": 26,
+    "top_wrong_values": [
+      [
+        "english",
+        10,
+        9
+      ],
+      [
+        "arabic",
+        4,
+        15
+      ],
+      [
+        "spanish",
+        3,
+        12
+      ],
+      [
+        "german",
+        2,
+        1
+      ],
+      [
+        "russian",
+        2,
+        1
+      ],
+      [
+        "afrikaans",
+        1,
+        1
+      ],
+      [
+        "portuguese",
+        1,
+        4
+      ],
+      [
+        "vietnamese",
+        1,
+        1
+      ]
+    ]
+  },
+  "calling_code": {
+    "n_clean_correct": 154,
+    "survival": 0.11688311688311688,
+    "survival_by_value_sharing": {
+      "unique": {
+        "n": 154,
+        "survival": 0.11688311688311688
+      }
+    },
+    "n_wrong": 136,
+    "wrong_mapped_to_other_value": 46,
+    "top_wrong_values": [
+      [
+        "91",
+        7,
+        1
+      ],
+      [
+        "237",
+        7,
+        1
+      ],
+      [
+        "230",
+        6,
+        1
+      ],
+      [
+        "52",
+        4,
+        1
+      ],
+      [
+        "961",
+        4,
+        1
+      ],
+      [
+        "61",
+        4,
+        1
+      ],
+      [
+        "57",
+        3,
+        1
+      ],
+      [
+        "352",
+        3,
+        1
+      ]
+    ]
+  },
+  "note": "Rows restricted to (item, template) answered correctly in clean. survival = still correct under zero:common10. top_wrong_values = (value, times emitted, #countries owning it)."
+}

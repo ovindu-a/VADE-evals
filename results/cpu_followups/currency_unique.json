@@ -1,0 +1,319 @@
+{
+  "shared_currencies": {
+    "EUR": 10
+  },
+  "n_unique_currency_countries": 74,
+  "route_knockout_pair_rebuild_ok": true,
+  "route_knockout": {
+    "img_patch": {
+      "capital/all": {
+        "n": 128,
+        "transfer": 1.0,
+        "ci95": [
+          0.9709,
+          1.0
+        ]
+      },
+      "currency/all": {
+        "n": 118,
+        "transfer": 0.9830508474576272,
+        "ci95": [
+          0.9403,
+          0.9953
+        ]
+      },
+      "currency/both_unique": {
+        "n": 93,
+        "transfer": 0.989247311827957,
+        "ci95": [
+          0.9416,
+          0.9981
+        ]
+      },
+      "language/all": {
+        "n": 101,
+        "transfer": 0.9702970297029703,
+        "ci95": [
+          0.9163,
+          0.9898
+        ]
+      },
+      "calling_code/all": {
+        "n": 125,
+        "transfer": 0.984,
+        "ci95": [
+          0.9435,
+          0.9956
+        ]
+      }
+    },
+    "ko:readout_all+img_patch": {
+      "capital/all": {
+        "n": 128,
+        "transfer": 0.9453125,
+        "ci95": [
+          0.8914,
+          0.9733
+        ]
+      },
+      "currency/all": {
+        "n": 118,
+        "transfer": 0.6864406779661016,
+        "ci95": [
+          0.598,
+          0.7632
+        ]
+      },
+      "currency/both_unique": {
+        "n": 93,
+        "transfer": 0.6881720430107527,
+        "ci95": [
+          0.5881,
+          0.7733
+        ]
+      },
+      "language/all": {
+        "n": 101,
+        "transfer": 0.8514851485148515,
+        "ci95": [
+          0.7693,
+          0.9079
+        ]
+      },
+      "calling_code/all": {
+        "n": 125,
+        "transfer": 0.96,
+        "ci95": [
+          0.9098,
+          0.9828
+        ]
+      }
+    },
+    "ko:question_all+img_patch": {
+      "capital/all": {
+        "n": 128,
+        "transfer": 1.0,
+        "ci95": [
+          0.9709,
+          1.0
+        ]
+      },
+      "currency/all": {
+        "n": 118,
+        "transfer": 0.9067796610169492,
+        "ci95": [
+          0.8408,
+          0.9471
+        ]
+      },
+      "currency/both_unique": {
+        "n": 93,
+        "transfer": 0.956989247311828,
+        "ci95": [
+          0.8946,
+          0.9831
+        ]
+      },
+      "language/all": {
+        "n": 101,
+        "transfer": 0.900990099009901,
+        "ci95": [
+          0.8273,
+          0.9453
+        ]
+      },
+      "calling_code/all": {
+        "n": 125,
+        "transfer": 0.992,
+        "ci95": [
+          0.9561,
+          0.9986
+        ]
+      }
+    },
+    "qpatch@22+ko:readout_all": {
+      "capital/all": {
+        "n": 128,
+        "transfer": 0.9453125,
+        "ci95": [
+          0.8914,
+          0.9733
+        ]
+      },
+      "currency/all": {
+        "n": 118,
+        "transfer": 0.6101694915254238,
+        "ci95": [
+          0.52,
+          0.6934
+        ]
+      },
+      "currency/both_unique": {
+        "n": 93,
+        "transfer": 0.5913978494623656,
+        "ci95": [
+          0.4898,
+          0.6857
+        ]
+      },
+      "language/all": {
+        "n": 101,
+        "transfer": 0.8712871287128713,
+        "ci95": [
+          0.7922,
+          0.9232
+        ]
+      },
+      "calling_code/all": {
+        "n": 125,
+        "transfer": 0.92,
+        "ci95": [
+          0.859,
+          0.956
+        ]
+      }
+    }
+  },
+  "vrh_ablation_currency": {
+    "clean": {
+      "all": {
+        "n": 168,
+        "acc": 0.8273809523809523
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.8243243243243243
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.85
+      }
+    },
+    "zero:park_vrh": {
+      "all": {
+        "n": 168,
+        "acc": 0.6190476190476191
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.5675675675675675
+      },
+      "shared": {
+        "n": 20,
+        "acc": 1.0
+      }
+    },
+    "zero:park_vrh:random0": {
+      "all": {
+        "n": 168,
+        "acc": 0.7976190476190477
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.7905405405405406
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.85
+      }
+    },
+    "zero:park_vrh:random1": {
+      "all": {
+        "n": 168,
+        "acc": 0.7619047619047619
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.7905405405405406
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.55
+      }
+    },
+    "zero:park_vrh:random2": {
+      "all": {
+        "n": 168,
+        "acc": 0.7321428571428571
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.7837837837837838
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.35
+      }
+    },
+    "zero:park_vrh@1based": {
+      "all": {
+        "n": 168,
+        "acc": 0.7619047619047619
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.7432432432432432
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.9
+      }
+    },
+    "zero:park_vrh@1based:random0": {
+      "all": {
+        "n": 168,
+        "acc": 0.8333333333333334
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.8445945945945946
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.75
+      }
+    },
+    "zero:park_vrh@1based:random1": {
+      "all": {
+        "n": 168,
+        "acc": 0.7678571428571429
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.8040540540540541
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.5
+      }
+    },
+    "zero:park_vrh@1based:random2": {
+      "all": {
+        "n": 168,
+        "acc": 0.7202380952380952
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.6891891891891891
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.95
+      }
+    },
+    "zero:common10": {
+      "all": {
+        "n": 168,
+        "acc": 0.27380952380952384
+      },
+      "unique": {
+        "n": 148,
+        "acc": 0.30405405405405406
+      },
+      "shared": {
+        "n": 20,
+        "acc": 0.05
+      }
+    }
+  }
+}
