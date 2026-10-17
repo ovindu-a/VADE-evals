@@ -215,6 +215,16 @@ def score_generation(gen_toks, batch):
     return ms.float().mean().item(), mb.float().mean().item()
 
 
+def json_filename(layers_tag, text_match=False, out_suffix=""):
+    """The auto-generated per-spec JSON name. `out_suffix` '' gives the historical name."""
+    return f"ceiling_sweep_layers{layers_tag}{'_text' if text_match else ''}{out_suffix}.json"
+
+
+def log_filename(run_label, layers_tag, text_match=False, out_suffix=""):
+    """The auto-generated run log name. `out_suffix` '' gives the historical name."""
+    return f"ceiling_sweep_{run_label}_layers{layers_tag}{'_text' if text_match else ''}{out_suffix}.log"
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--entity", required=True)
@@ -286,6 +296,11 @@ def main():
     ap.add_argument("--out", default=None,
                      help="JSON output path. Defaults to ceiling_sweep_layers<tag>.json under this entity/"
                           "attribute's NDM logs dir (it's a diagnostic, not a scored result).")
+    ap.add_argument("--out_suffix", default="", metavar="S",
+                     help="Appended verbatim to the auto-generated JSON and log filenames (e.g. _n384 -> "
+                          "ceiling_sweep_layers<tag>[_text]_n384.json), for --positions and --positions_list "
+                          "alike, so a re-run at new settings does not overwrite a committed output. Default "
+                          "'' leaves every path unchanged. Not combinable with --out.")
     args = ap.parse_args()
 
     model_slug = args.model_id.split("/")[-1]
@@ -294,6 +309,8 @@ def main():
                   if pruned else None)
     specs = args.positions_list or [args.positions]
     assert not (args.positions_list and args.out), "--out names a single file; drop it when using --positions_list"
+    assert not (args.out and args.out_suffix), "--out_suffix only applies to auto-generated paths; drop it with --out"
+    assert "/" not in args.out_suffix and os.sep not in args.out_suffix, "--out_suffix is a filename suffix, not a path"
     layers_tag = "-".join(str(l) for l in args.layers)
     # Logs dir, not results: this is a diagnostic filter, and its numbers are a token-level proxy rather
     # than score.py output -- keeping it out of results/ avoids it being mistaken for a scored run.
@@ -306,14 +323,13 @@ def main():
         d = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
                           path_safe(spec), "mlp_hidden", pruned)
         os.makedirs(d, exist_ok=True)
-        suffix = "_text" if args.text_match else ""
-        return d, (args.out or os.path.join(d, f"ceiling_sweep_layers{layers_tag}{suffix}.json"))
+        return d, (args.out or os.path.join(d, json_filename(layers_tag, args.text_match, args.out_suffix)))
 
     run_label = "__".join(path_safe(x) for x in specs)[:80]
     log_dir, _ = dirs_for(specs[0])
 
-    with tee_to_log(os.path.join(log_dir, f"ceiling_sweep_{run_label}_layers{layers_tag}"
-                                          f"{'_text' if args.text_match else ''}.log")):
+    with tee_to_log(os.path.join(log_dir, log_filename(run_label, layers_tag, args.text_match,
+                                                       args.out_suffix))):
         adapter = get_adapter(args.model_id)
         model, processor = adapter.load()
         if args.text_match:

@@ -126,24 +126,43 @@ FREEZE_VALUES = ("base", "mean", "other")
 
 
 def parse_span(s):
-    """'22-27' -> [22..27]; '24' -> [24]."""
-    if "-" in str(s):
-        lo, hi = str(s).split("-")
-        out = list(range(int(lo), int(hi) + 1))
-    else:
-        out = [int(s)]
-    assert out, f"empty span {s!r}"
-    return out
+    """'22-27' -> [22..27]; '24' -> [24]; '23,25-26' -> [23, 25, 26].
+
+    A span is a comma-separated list of 'a-b' ranges and single blocks, returned
+    sorted and deduplicated -- so a leave-one-out span like '23-24,26' is one
+    arm. Anything else (empty parts, a reversed range, non-integers) raises."""
+    out = set()
+    for part in str(s).split(","):
+        part = part.strip()
+        bits = part.split("-")
+        if not (1 <= len(bits) <= 2 and all(b.strip().isdigit() for b in bits)):
+            raise ValueError(f"bad span {s!r}: part {part!r} is not 'a' or 'a-b'")
+        lo, hi = int(bits[0]), int(bits[-1])
+        if lo > hi:
+            raise ValueError(f"bad span {s!r}: reversed range {part!r}")
+        out.update(range(lo, hi + 1))
+    return sorted(out)
+
+
+def span_list(value):
+    """--freeze_mlp_span -> its non-empty span strings, in order. Accepts the
+    argparse list (nargs='*') or ONE string (the default, and how the tests and
+    older callers pass it); '' / [''] / [] all mean no span arm."""
+    if value is None:
+        return []
+    if isinstance(value, str):
+        value = [value]
+    return [str(v).strip() for v in value if str(v).strip()]
 
 
 def build_arms(args, head_blocks):
     """-> ordered list of (arm name, uses_heads, uses_full_image, [(kind, block), ...],
     freeze value mode). Every freezing arm is repeated once per --freeze_values."""
     arms = [("clean", False, False, []), ("heads", True, False, [])]
-    mlp_span = parse_span(args.freeze_mlp_span) if args.freeze_mlp_span else []
+    mlp_spans = [(sp, parse_span(sp)) for sp in span_list(args.freeze_mlp_span)]
     attn_span = parse_span(args.freeze_attn_span) if args.freeze_attn_span else []
-    if mlp_span:
-        arms.append((f"heads+mlp[{args.freeze_mlp_span}]", True, False, [("mlp", b) for b in mlp_span]))
+    for sp, blocks in mlp_spans:
+        arms.append((f"heads+mlp[{sp}]", True, False, [("mlp", b) for b in blocks]))
     for b in args.freeze_mlp_singles:
         arms.append((f"heads+mlp[{b}]", True, False, [("mlp", b)]))
     if attn_span:
@@ -152,8 +171,12 @@ def build_arms(args, head_blocks):
         arms.append((f"heads+attn[{b}]", True, False, [("attn", b)]))
     if args.full_image:
         arms.append(("full_image", False, True, []))
-        if mlp_span:
-            arms.append((f"full_image+mlp[{args.freeze_mlp_span}]", False, True, [("mlp", b) for b in mlp_span]))
+        if mlp_spans:                                   # the FIRST span only
+            sp, blocks = mlp_spans[0]
+            arms.append((f"full_image+mlp[{sp}]", False, True, [("mlp", b) for b in blocks]))
+    names = [a[0] for a in arms]
+    dup = sorted({n for n in names if names.count(n) > 1})
+    assert not dup, f"duplicate arm(s) {dup} -- a span repeats another span or a single block"
     for name, uses_heads, _, freezes in arms:
         bad = [b for k, b in freezes if k == "attn" and b in head_blocks and uses_heads]
         assert not bad, (
@@ -500,7 +523,10 @@ def main():
     ap.add_argument("--split", default="test")
     ap.add_argument("--allow_unpruned", action="store_true")
     ap.add_argument("--n_pairs", type=int, default=64, help="Cause rows per attribute, one per (base, source).")
-    ap.add_argument("--freeze_mlp_span", default="22-27", help="'' to skip the all-at-once MLP arm.")
+    ap.add_argument("--freeze_mlp_span", nargs="*", default="22-27",
+                    help="One or more spans, one arm heads+mlp[<span>] each; a span is a comma list "
+                         "of 'a-b' ranges and single blocks, e.g. 23-26 24-26 23,25-26 23-24,26. "
+                         "'' to skip the all-at-once MLP arm. --full_image uses the FIRST span.")
     ap.add_argument("--freeze_mlp_singles", type=int, nargs="*", default=[22, 23, 24, 25, 26, 27])
     ap.add_argument("--freeze_attn_span", default="24-27", help="'' to skip the attention mirror.")
     ap.add_argument("--freeze_attn_singles", type=int, nargs="*", default=[])

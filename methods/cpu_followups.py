@@ -64,6 +64,9 @@ from methods.common.text_match import contains_label, normalize  # noqa: E402
 
 DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT", os.path.join(os.path.dirname(REPO_ROOT), "VADE"))
 OUT_DIR = os.path.join(REPO_ROOT, "results", "cpu_followups")
+COMPOSE_ROWS = os.path.join(REPO_ROOT, "results", "circuit_compose", "flags", "rows.jsonl")
+CROSS_ROWS = os.path.join(REPO_ROOT, "results", "head_cross", "flags", "cross_n64.jsonl")
+EXTRA_PREDICTIONS = []   # (family, name, path) added via --extra_predictions
 ATTRIBUTES = ("capital", "currency", "language", "calling_code")
 
 # UN M49 subregions for the 84 flags countries (ISO 3166-1 alpha-2). Continent = the M49
@@ -214,7 +217,7 @@ def prediction_files():
         cfg = os.path.basename(os.path.dirname(p))
         fam = "trained_mask@mlp23-26(dense,see E3)" if "_dbm_" in cfg else "trained_das@heads"
         out.append((fam, f"head_das/{cfg}", p))
-    return out
+    return out + EXTRA_PREDICTIONS
 
 
 def joined_rows(path, tuples):
@@ -394,7 +397,7 @@ def analysis_error_geography(ctx):
                                           (name, t["base"], t["source"], q)))
     # E4 composition: composed answer should be B.A; 'other' answers checked against B (ref)
     # and C (the base image, other_ref).
-    cc = os.path.join(REPO_ROOT, "results", "circuit_compose", "flags", "rows.jsonl")
+    cc = COMPOSE_ROWS
     if os.path.isfile(cc):
         for r in read_jsonl(cc):
             if not r.get("eligible") or r["labels"].get("compose") != "other":
@@ -404,7 +407,7 @@ def analysis_error_geography(ctx):
             groups["E4_compose"].append(geo_record(vi, A, r["texts"]["compose"], B, C, ex, "circuit_compose",
                                                    ("E4", B, C, A, r["X"])))
     # R11 head_cross: label 'other' in cells where the donor flag differs from the base.
-    hc = os.path.join(REPO_ROOT, "results", "head_cross", "flags", "cross_n64.jsonl")
+    hc = CROSS_ROWS
     if os.path.isfile(hc):
         for r in read_jsonl(hc):
             if r["label"] != "other" or r["donor_flag"] == r["base"]:
@@ -528,7 +531,7 @@ def analysis_per_token(ctx):
 def analysis_compose_failures(ctx):
     gt = ctx["gt"]
     vi = ValueIndex(gt)
-    path = os.path.join(REPO_ROOT, "results", "circuit_compose", "flags", "rows.jsonl")
+    path = COMPOSE_ROWS
     rows = [r for r in read_jsonl(path) if r.get("eligible")]
     cats = defaultdict(Counter)
     totals = Counter()
@@ -674,7 +677,7 @@ def analysis_survivors(ctx):
 # ----------------------------------------------------------------------------- A7 cross bootstrap
 
 def analysis_cross_bootstrap(ctx, n_boot=2000):
-    path = os.path.join(REPO_ROOT, "results", "head_cross", "flags", "cross_n64.jsonl")
+    path = CROSS_ROWS
     rows = read_jsonl(path)
     rng = random.Random(0)
     pairs = sorted({(r["base"], r["source"]) for r in rows})
@@ -996,7 +999,24 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--analyses", nargs="+", choices=list(ANALYSES), default=list(ANALYSES))
+    ap.add_argument("--out_dir", default=None,
+                    help="Where the JSONs and REPORT.md go (default results/cpu_followups). Use a new one "
+                         "when re-running on new inputs, or the committed report is overwritten.")
+    ap.add_argument("--compose_rows", default=None, help="circuit_compose rows.jsonl (default: the E4 run).")
+    ap.add_argument("--cross_rows", default=None, help="head_cross JSONL (default: the R11 seed-0 n64 run).")
+    ap.add_argument("--extra_predictions", nargs="+", default=[], metavar="FAMILY=GLOB",
+                    help="More VADE-format predictions files for entity_swap / error_geography, e.g. "
+                         "'dose=results/tier3/head_swap_dose/*.jsonl'.")
     args = ap.parse_args()
+    global OUT_DIR, COMPOSE_ROWS, CROSS_ROWS
+    OUT_DIR = os.path.abspath(args.out_dir) if args.out_dir else OUT_DIR
+    COMPOSE_ROWS = os.path.abspath(args.compose_rows) if args.compose_rows else COMPOSE_ROWS
+    CROSS_ROWS = os.path.abspath(args.cross_rows) if args.cross_rows else CROSS_ROWS
+    for spec in args.extra_predictions:
+        fam, _, pattern = spec.partition("=")
+        paths = sorted(glob.glob(pattern))
+        assert fam and paths, f"--extra_predictions {spec!r}: need FAMILY=GLOB matching at least one file"
+        EXTRA_PREDICTIONS.extend((fam, f"{fam}/{os.path.basename(p)[:-6]}", p) for p in paths)
     assert set(SUBREGION) and len(SUBREGION) == 84, f"M49 table has {len(SUBREGION)} countries, expected 84"
     gt = load_ground_truth(args.vade_root)
     assert set(gt) == set(SUBREGION), f"M49 table / ground truth mismatch: {set(gt) ^ set(SUBREGION)}"

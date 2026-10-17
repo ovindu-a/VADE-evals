@@ -52,6 +52,35 @@ Claim IDs (A1, Z1, ...) refer to CLAIM_CANDIDATES.md.
 
 ## 2. Code changes to make off-pod first
 
+**Status (2026-10-18): C1-C14 are implemented.**
+- 109 new offline tests in `tests/test_tier3_{heads,attr,mlp_positions,route}.py`. The full suite passes: 401 tests.
+- Every new flag defaults to the old behaviour, checked against the pre-change code (same arms, names, output paths and values).
+- The launcher is `scripts/run_tier3.sh`, with step names `p1`-`p33`, `session1`/`2`/`3` and `smoke`.
+  - Every launcher command was checked against its script's real parser.
+  - Every step that supports `--dry_run` was also dry-run (P6/P31's second commands need their first command's output).
+
+**Where the launcher differs from section 4, it is the authoritative version:**
+- **P1:** masks are written to `results/tier3/dbm_identity/`.
+- **P3:** the held-out consensus (in all four train top-16 lists) is computed automatically and saved to `heldout_consensus.txt`.
+- **P11:** passes `--heads` with the exact `common10` (C13).
+- **P15:** now concrete: `route_knockout.py --entity brands --install_heads <brands top-8> --knockouts late=readout:24-27`.
+- **P23:** uses the two fixed column halves of the face (`idx:` left / right 8), not random draws.
+- **P29:** uses `--mask_lr 1e-2` (C2a makes it reach dbm's mask).
+- **P31:** only calling_code.
+
+**Small additions beyond the spec:**
+- **head_das:**
+  - `_mlr<x>` goes in the dbm tag when `--mask_lr` is passed, and `_init` when `--init_from` is.
+  - Every summary.json now carries `init_from` (null by default).
+- **head_severed:** refuses duplicate arm names.
+- **route_knockout:**
+  - Stacked parts are one `EdgeKnockout.union`, because two separate knockouts on a shared query row would double-subtract.
+  - Installs that share a block with readout/text knockouts are refused.
+  - Non-flags entities score against the model's own answers.
+- **head_swap_vade:** dose arms use `torch.lerp`, which is exact at α=0 and α=1.
+- **head_decode_trace, attribute_switch_sweep, attr_capture:** the implementation hash changed, so old output directories do not resume. Always use new ones.
+
+
 Each change is small and must come with an offline test in `tests/`. Sizes are lines
 of code.
 

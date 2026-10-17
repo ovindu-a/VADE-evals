@@ -223,3 +223,38 @@ ls -lh /workspace/tier12_outputs.tgz
 If any of those paths does not exist because its step failed, drop it from the command,
 and say so in the report. Finally, tell the user the tarball's path and size, and give a
 5-line summary: what ran, what failed, and the single most important number from each tier.
+
+## Tier 3 (FOLLOWUP_PLAN.md), third session
+
+Same ground rules as above: no edits under `methods/`, `tests/` or `scripts/`; never overwrite
+existing `results/` or `logs/` (every Tier-3 step writes under `results/tier3/` or a new
+`*_n128` / `_tier3`-suffixed name).
+
+```bash
+cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home
+git pull && python -m pytest -q tests/              # expect 0 failures (401+ tests)
+tmux new -s tier3
+GPU=a100 bash scripts/run_tier3.sh smoke            # ~15 min; numbers meaningless, every step must finish
+GPU=a100 bash scripts/run_tier3.sh session1         # P1-P12, ~4-6 h; P1, P2, P5 first
+```
+
+Then `session2` (needs `results/readout_jacobian/flags__mlp_hidden_b23-26/readout_fit.pt` from the
+E3 pod for P13, else P13 prints SKIPPED; P18 needs the 3B pruned tuples from E8), then `session3`
+if asked.
+
+**Self-checks that must hold:**
+
+| Step | Must hold |
+|---|---|
+| p1 | `L16_ones` and `L16_ones_nocache` agree with each other. Report both against the ceiling's 31.2% (flag_ring1 L16) and DBM's 60-62%. |
+| p2 | The `clean`, `zero:park_vrh` and `zero:common10` rows reproduce `results/vrh_ablation/flags/summary.json`. |
+| p3 | Print `heldout_consensus.txt` and its overlap with common10. |
+| p6 | In `patch15_blocks15-27_n84.json`, phase 3's ALL arm equals the question patch's `first`. The identity is closed at full coverage. |
+| p9 | The `entity_patch` and `image_movers` arms reproduce E6 (87-91% transfer). |
+| p10 | `self-checks:` shows `identity: bit-exact`. |
+| p11 | `all_downstream_continuous` equals `image_patch` (asserted). |
+| p15, p27 | The empty-knockout no-op check prints `max |dlogit| = 0`. p15 also checks install-of-own-values = clean. |
+| p26 | `--verify_cached` raises on the first mismatch. If it raises, record the message, then continue with the other steps. |
+
+Report as in section 5, writing `RUN_REPORT_TIER3.md`, and package `logs/tier3 results/tier3
+results/image_head_pipeline_n128` plus the `_tier3`-suffixed ceiling logs under `logs/Qwen2.5-VL-7B-Instruct/`.

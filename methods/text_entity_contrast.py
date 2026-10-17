@@ -28,6 +28,10 @@ PHASES (--phases, any subset; each is cheap, forward-only except `accuracy`)
             into a clean run (sufficiency). Also installs the IMAGE movers (R8) into
             the text condition and each condition's top-10 into the other. Same heads
             -> one shared entity-moving mechanism; different heads -> different routes.
+            --mover_subsets adds every single mover, every unordered pair and every
+            leave-one-out set of the image movers (A1: a true conjunction vs an
+            additive effect below a generation threshold, read off `ld`), and writes
+            the per-row records to heads_rows.jsonl.
   freeze    entity patch at L_e, plus MLP outputs frozen at the base's own values
             (`base`) or the leave-one-out batch mean over other countries asked the
             same attribute (`mean`, which writes no single country's answer):
@@ -49,6 +53,7 @@ Usage
     python methods/text_entity_contrast.py                     # 64 pairs x 4 attributes, all phases
 """
 import argparse
+import itertools
 import json
 import os
 import random
@@ -119,6 +124,23 @@ def build_side(m, cond, entity_dir, items, rows, who, text_site="last"):
         entity = torch.tensor([[T - k + off for off in o + o[-1:] * (width - len(o))] for o in ent_offs])
     return {"ids": ids, "mask": mask, "extra": cat_extra(extras) if extras else {},
             "entity": entity, "readout": readout}
+
+
+def fmt_head(h):
+    return f"{h[0]}.{h[1]}"
+
+
+def mover_subsets(heads):
+    """-> {name: heads} for every single head, every unordered pair and every
+    leave-one-out set of `heads` (10 movers -> 10 + 45 + 10 sets). Names are
+    `single:B.H`, `pair:B.H+B.H` (in `heads` order) and `loo:-B.H`."""
+    heads = list(heads)
+    out = {f"single:{fmt_head(h)}": [h] for h in heads}
+    for a, b in itertools.combinations(heads, 2):
+        out[f"pair:{fmt_head(a)}+{fmt_head(b)}"] = [a, b]
+    for h in heads:
+        out[f"loo:-{fmt_head(h)}"] = [x for x in heads if x != h]
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -313,6 +335,10 @@ def main():
                          "tokens, at the cost of keeping only pairs whose names tokenize to equal length.")
     ap.add_argument("--head_ks", type=int, nargs="+", default=[5, 10, 20])
     ap.add_argument("--movers", default=MOVERS)
+    ap.add_argument("--mover_subsets", action="store_true",
+                    help="`heads`: also install every single image mover, every pair and every leave-one-out "
+                         "set (single:B.H, pair:B.H+B.H, loo:-B.H), and write per-row records to "
+                         "heads_rows.jsonl.")
     ap.add_argument("--freeze", nargs="+", default=DEFAULT_FREEZE)
     ap.add_argument("--freeze_values", nargs="+", default=["base", "mean"], choices=["base", "mean"])
     ap.add_argument("--max_new_tokens", type=int, default=8)
@@ -337,7 +363,9 @@ def main():
     m = Model(args.model_id, args.device, attn_impl="sdpa", vade_root=args.vade_root)
     assert all(0 <= L < m.n_layers for L in args.layers)
     os.makedirs(args.out_dir, exist_ok=True)
-    report = {"config": {k: v for k, v in vars(args).items() if k != "dry_run"}, "ground_truth_sha256": gt_sha}
+    # mover_subsets is left out of the config when off, so default runs write the same summary.json as before.
+    report = {"config": {k: v for k, v in vars(args).items()
+                         if k != "dry_run" and not (k == "mover_subsets" and not v)}, "ground_truth_sha256": gt_sha}
 
     if "accuracy" in args.phases:
         report["accuracy"] = phase_accuracy(m, args, entity_dir, items)
@@ -429,6 +457,9 @@ def main():
             pool = sorted({b for b, _ in ranked[cond][:10]})
             sets["random10"] = sorted(rng.sample([(b, h) for b in pool for h in range(m.n_heads)
                                                   if (b, h) not in set(ranked[cond][:10])], 10))
+            if args.mover_subsets:
+                # Appended after every existing set, so those arms keep their order and names.
+                sets.update(mover_subsets(sets["image_movers"]))
             head_sets[cond] = sets
         head_recs = []
         for chunk, entry in zip(chunks, cache):
@@ -438,13 +469,15 @@ def main():
                 zp, lc, lp, ls = entry[cond]
                 for arm, logits in (("clean", lc), ("source_clean", ls), ("entity_patch", lp)):
                     for r, met in zip(chunk, readout_metrics(logits, chunk)):
-                        head_recs.append({"row_index": r["row_index"], "cond": cond, "arm": arm, **met})
+                        head_recs.append({"row_index": r["row_index"], "attribute": r["attribute"], "cond": cond,
+                                          "arm": arm, **met})
                 for name, heads in head_sets[cond].items():
                     if not heads:
                         continue
                     logits = head_install(m, base, heads, {b: v.to(m.model.device) for b, v in zp.items()})
                     for r, met in zip(chunk, readout_metrics(logits.cpu(), chunk)):
-                        head_recs.append({"row_index": r["row_index"], "cond": cond, "arm": f"install:{name}", **met})
+                        head_recs.append({"row_index": r["row_index"], "attribute": r["attribute"], "cond": cond,
+                                          "arm": f"install:{name}", **met})
         report["heads"] = {}
         for cond in CONDITIONS:
             rr = [r for r in head_recs if r["cond"] == cond]
@@ -462,6 +495,13 @@ def main():
         report["heads"]["top10_overlap"] = sorted(shared)
         print(f"\n  image top-10 ∩ text top-10: {sorted(shared)} ({len(shared)}/10)")
         write_json(os.path.join(args.out_dir, "summary.json"), report)
+        if args.mover_subsets:
+            # Per-row ld/src_hit for every arm (summary.json holds only the aggregates); a
+            # conjunction vs additivity reading needs the row-level differences.
+            with open(os.path.join(args.out_dir, "heads_rows.jsonl"), "w") as fh:
+                for r in head_recs:
+                    fh.write(json.dumps(r) + "\n")
+            print(f"  wrote {args.out_dir}/heads_rows.jsonl ({len(head_recs)} records)")
 
     if "freeze" in args.phases:
         frz_recs = []

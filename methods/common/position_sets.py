@@ -26,6 +26,11 @@ SPECS
                   bbox. K=0 is the object itself; K=1 is the band touching it
                   (flag_only + ring:1 == flag_ring1). Add @<name> to pick the
                   base set explicitly (default: the entity's smallest one).
+  idx:i,j,...     explicit image flat indices (0-based, raster order, the
+                  same numbering as object_location.json's "flat" lists),
+                  sorted and deduplicated -- e.g. a hand-picked subset of an
+                  object set. Reads the Qwen grid, so it is refused wherever
+                  the other grid specs are.
   side:left|right|above|below|beside
                   directional background relative to the object's bbox.
                   left/right span only the object's OWN rows ("beside" is
@@ -75,7 +80,7 @@ them. See common/source_cache.py.
 import torch
 
 _TEXT_HEADS = ("tok", "pre_image", "vision_end", "phrase")
-_GRID_HEADS = ("ring", "side", "seq")
+_GRID_HEADS = ("ring", "side", "seq", "idx")
 # Which underlying build a spec needs is decided by what it is ANCHORED ON, not by whether it is
 # "text" or "grid". Only tok: is anchored on the end of the prompt; pre_image/vision_end/phrase all
 # need the IMAGE SPAN's own columns to offset from, so they build with full_image like the grid
@@ -158,6 +163,18 @@ def grid_indices(part, entity_assets):
         return [j for j in range(n_tokens) if j not in excluded]
 
     head = _head(part)
+    if head == "idx":
+        # Explicit indices need no object bbox, so resolve them before _object_bbox (which
+        # asserts the object set carries rows/cols).
+        body = part.split(":", 1)[1] if ":" in part else ""
+        bits = [b.strip() for b in body.split(",") if b.strip()]
+        assert bits, f"{part!r}: expected idx:i,j,... with at least one index"
+        assert all(b.isdigit() for b in bits), f"{part!r}: idx entries must be non-negative integers"
+        out = sorted({int(b) for b in bits})
+        assert out[-1] < n_tokens, (
+            f"{part!r}: index {out[-1]} is outside the image grid (n_tokens={n_tokens})")
+        return out
+
     base_name = part.split("@")[1] if "@" in part else None
     r0, r1, c0, c1, base_name = _object_bbox(entity_assets, base_name)
     body = part.split("@")[0].split(":", 1)[1] if ":" in part.split("@")[0] else ""
@@ -319,7 +336,7 @@ def build_batch_at(spec, rows, entity_assets, adapter, model, processor, batch_c
     from .entities import build_batch
 
     parts = split_union(spec)
-    # Grid-geometry specs (ring:, side:, seq:, ~set) read object_location.json's Qwen grid directly.
+    # Grid-geometry specs (ring:, side:, seq:, idx:, ~set) read object_location.json's Qwen grid directly.
     assert getattr(adapter, "shares_object_grid", True) or not any(
         _is_extended_part(p) and _head(p) not in _TEXT_HEADS for p in parts), (
         f"{spec!r} uses object_location.json's token grid, which {adapter.model_id} does not share")

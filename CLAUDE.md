@@ -767,3 +767,23 @@ torchvision present regardless. `methods/activations/`, `methods/dictionaries*/`
 (large `.pt` checkpoints, one set fetched separately via `rclone` from Google Drive per
 the README — GitHub's 100MB/file limit), `methods/external_data/`, `*.pt`, `*.npz` are
 all gitignored.
+
+## Tier-3 follow-ups: scripts/run_tier3.sh, FOLLOWUP_PLAN.md
+
+`FOLLOWUP_PLAN.md` designs P1-P34 (the open questions in `CLAIM_CANDIDATES.md`), in priority
+order; `scripts/run_tier3.sh` runs them (`smoke`, `session1..3`, `p1`..`p33`), always into
+`results/tier3/`. New flags (all default to the old behaviour; tests in `tests/test_tier3_*.py`):
+`vrh_ablation --n_random_movers`; `head_trace` puts a non-test `--split` in its tag;
+`head_swap_vade --tuples_dir --alphas` (+ any entity's attributes); `text_entity_contrast
+--mover_subsets` (writes `heads_rows.jsonl`); `head_decode_trace --heads`; `attr_head_trace
+--rank_from --donor_attributes`; `attr_steer --direction_layer --continuous --attn_impl
+--direction_scope`; `attribute_switch_sweep` scopes `field` / `tok:-K` and `--attention_sets`;
+`attr_capture --prompts vade --template_index`; `head_das --init_from` (and `--mask_lr` now
+reaches dbm's `mask`); `head_severed --freeze_mlp_span` takes several comma-list spans;
+`position_sets` `idx:i,j,...`; animals `ATTRIBUTE_KEYWORDS`; `ceiling_sweep --out_suffix`;
+`route_knockout` `name=queries:a-b[@image|@object|@background][+...]` (stacked parts are ONE
+`EdgeKnockout.union` -- separate knockouts on a shared query row double-subtract),
+`--install_heads`, `--entity brands|celebrities` (own-answer golds). `methods/cpu_followups.py`
+holds the CPU-only re-analyses (`--out_dir` for new inputs, never the committed report).
+**DBM's anomaly (Z1) is not the 518cf31 cache bug** -- DBM never shares a cache across position
+specs; P1 decides it.

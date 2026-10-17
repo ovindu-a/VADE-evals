@@ -26,8 +26,8 @@ from .common.targets import MAX_ANSWER_TOKENS, build_teacher_forced_extension, d
 # phrases are listed before their substrings only where a shorter one could also mis-match a
 # DIFFERENT attribute's wording (calling_code's "country code" vs. currency's unrelated phrasing) --
 # order among calling_code's own synonyms doesn't matter, since find_last_phrase_token_col takes
-# whichever phrase is actually found, not a longest-match. Not populated for brands/animals (unbuilt
-# per CLAUDE.md, or their attribute names/wordings just haven't been added here yet) -- callers must
+# whichever phrase is actually found, not a longest-match. Not populated for brands (its attribute
+# names/wordings just haven't been added here yet; animals' are below) -- callers must
 # treat a missing entry (attribute_mention_col returning None) as "skip this analysis", not an error.
 ATTRIBUTE_KEYWORDS = {
     "capital": ["capital city", "capital", "seat of government"],  # capital_prefill_v6 says
@@ -39,6 +39,17 @@ ATTRIBUTE_KEYWORDS = {
     "calling_code": ["international calling code", "international dialling code", "international dialing code",
                       "country calling code", "phone country code", "country code", "calling code",
                       "dialling code", "dialing code"],
+    # animals (VADE/data/animals/prompt_templates.json). Every animals question ENDS with an
+    # "Answer with exactly one of ..." options list, which is inside `question` and so inside the
+    # substring/rfind match -- none of these phrases occurs in any options list ("live birth" is an
+    # option, hence "lay eggs" rather than "birth"; "live" is safe only because habitat's options
+    # are forest/desert/ocean/grassland/freshwater/mountain). Checked per template by
+    # tests/test_tier3_mlp_positions.py.
+    "native_continent": ["continent"],
+    "primary_habitat": ["habitat", "environment", "live"],    # v2 "mainly live", v4/v6 "environment"
+    "taxonomic_class": ["taxonomic class", "classes", "class"],
+    "reproduction": ["reproductive mode", "reproductive strategy", "reproduce", "offspring", "lay eggs"],
+    "body_covering": ["body covering", "outer covering", "covering", "covers", "covered"],
 }
 
 

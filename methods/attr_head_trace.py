@@ -186,7 +186,10 @@ def question_patch(adapter, model, batch, patch_layer, src=None):
 
 # ------------------------------------------------------------------------ rows
 
-def sample_rows(entity_dir, items, attributes, countries, n_countries, seed):
+def sample_rows(entity_dir, items, attributes, countries, n_countries, seed, donor_attributes=None):
+    """`donor_attributes` keeps only the rows whose DONOR is listed (every base
+    attribute is kept), so phases 2-4 can be run per donor attribute. The item
+    sample is drawn before the filter, so it is the same items either way."""
     chosen = countries or random.Random(seed).sample(sorted(items), min(n_countries, len(items)))
     if len(set(chosen)) != len(chosen):
         raise ValueError("Item IDs must be unique")
@@ -196,11 +199,33 @@ def sample_rows(entity_dir, items, attributes, countries, n_countries, seed):
         if not (entity_dir / item["image"]).is_file():
             raise FileNotFoundError(entity_dir / item["image"])
         for base, donor in itertools.permutations(attributes, 2):
+            if donor_attributes is not None and donor not in donor_attributes:
+                continue
             rows.append({"row_index": len(rows), "base": item_id, "source": item_id,
                          "base_attribute": base, "donor_attribute": donor,
                          "base_label": item[base], "source_label": item[donor],
                          "template_id": "controlled_report_v1"})
     return chosen, rows
+
+
+def order_from_trace(table, prior):
+    """-> THIS run's phase-1 records, reordered into a PRIOR trace's head order.
+
+    Only the ORDER is taken from `prior` (its phase-1 records sorted by its own
+    `rank_by`, descending by absolute value -- exactly how it ranked itself); the
+    records, and so every value phases 2/3 later install, stay this run's own.
+    That is what makes a held-out evaluation: heads selected on one item set,
+    scored on another. Both traces must cover the identical (block, head) table,
+    or "the same top-k" would silently mean different heads.
+    """
+    field = prior.get("rank_by", "delta_resid")
+    order = [(int(r["block"]), int(r["head"]))
+             for r in sorted(prior["phase1"], key=lambda r: -abs(r[field]))]
+    mine = {(r["block"], r["head"]): r for r in table}
+    if len(set(order)) != len(order) or set(order) != set(mine):
+        raise ValueError(f"--rank_from trace covers {len(set(order))} (block, head) pairs, this run "
+                         f"{len(mine)}; they must be the identical head table (same --blocks)")
+    return [mine[k] for k in order]
 
 
 def main(argv=None):
@@ -219,6 +244,14 @@ def main(argv=None):
                          "first token where the two prompts differ; the rest are provably inert under "
                          "causal attention, so the two choices are the same intervention.")
     ap.add_argument("--rank_by", default="delta_resid", choices=list(RANK_BY))
+    ap.add_argument("--rank_from", default=None,
+                    help="A previous attr_head_trace JSON. Its phase-1 head ORDER (by its own rank_by) "
+                         "replaces this run's ranking for phases 2-4, while every installed value is "
+                         "still this run's own capture -- select heads on one item set, score them on "
+                         "another. The two traces must cover the same (block, head) table.")
+    ap.add_argument("--donor_attributes", nargs="+", choices=ATTRIBUTES, default=None,
+                    help="Keep only rows whose DONOR attribute is listed (bases stay all the others), "
+                         "so the phases run per donor attribute. Default: every directed pair.")
     ap.add_argument("--knockout_ks", type=int, nargs="+", default=[1, 2, 4, 8, 16])
     ap.add_argument("--n_random", type=int, default=8,
                     help="Size of the RANDOM-head null. 0 disables it, which makes phase 2 unreadable.")
@@ -258,19 +291,40 @@ def main(argv=None):
         ap.error(f"block {blocks[0]} runs its attention BEFORE the patch at layer {args.patch_layer} "
                  f"(which writes block {args.patch_layer - 1}'s output), so its heads cannot respond to "
                  f"it. Use --patch_layer {blocks[0]} or start --blocks at {args.patch_layer}.")
+    if args.donor_attributes is not None and not set(args.donor_attributes) <= set(args.attributes):
+        ap.error("--donor_attributes must be a subset of --attributes")
+    rank_from_sha = None
+    if args.rank_from is not None:
+        rank_from_raw = Path(args.rank_from).read_bytes()
+        rank_from_sha = hashlib.sha256(rank_from_raw).hexdigest()
+        prior_trace = json.loads(rank_from_raw)
+        if prior_trace.get("experiment") != "attr_head_trace" or "phase1" not in prior_trace:
+            ap.error(f"--rank_from {args.rank_from} is not an attr_head_trace JSON with phase-1 records")
+        if sorted(prior_trace["blocks"]) != blocks:
+            ap.error(f"--rank_from traced blocks {prior_trace['blocks']}, this run {blocks}; the head "
+                     f"tables must be identical")
     chosen, rows = sample_rows(entity_dir, items, args.attributes, args.countries,
-                               args.n_countries, args.seed)
+                               args.n_countries, args.seed, args.donor_attributes)
 
     out_dir = Path(REPO_ROOT) / "logs" / "attr_head_trace" / args.entity
     out_dir.mkdir(parents=True, exist_ok=True)
     span = f"{blocks[0]}-{blocks[-1]}" if blocks == list(range(blocks[0], blocks[-1] + 1)) \
         else ".".join(map(str, blocks))
     tag = f"attr_head_trace_patch{args.patch_layer}_blocks{span}_{args.question_positions}"
+    if args.donor_attributes is not None:
+        tag += "_donor" + "-".join(args.donor_attributes)
+    if rank_from_sha is not None:
+        tag += f"_rankfrom{rank_from_sha[:8]}"
     out_path = args.out or str(out_dir / f"{tag}.json")
     print(f"[attr_head_trace] entity={args.entity} attributes={args.attributes} "
           f"patch_layer={args.patch_layer} blocks={span} positions={args.question_positions} "
           f"{len(chosen)} items x {len(args.attributes) * (len(args.attributes) - 1)} directed pairs "
           f"= {len(rows)} rows -> {out_path}")
+    if args.donor_attributes is not None:
+        print(f"  donor attributes restricted to {args.donor_attributes}: {len(rows)} rows kept")
+    if args.rank_from is not None:
+        print(f"  head ORDER from {args.rank_from} (sha256 {rank_from_sha[:12]}, ranked by "
+              f"{prior_trace.get('rank_by', 'delta_resid')}); values are this run's own")
     if args.dry_run:
         print("Metadata valid. Token alignment and clean accuracy require a model run.")
         return
@@ -385,6 +439,12 @@ def main(argv=None):
                   "delta_resid": a["delta_resid"] / a["n"], "delta_dla": a["delta_dla"] / a["n"]}
                  for (b, h), a in agg.items() if a["n"]]
         ranked = sorted(table, key=lambda r: -abs(r[args.rank_by]))
+        if args.rank_from is not None:
+            # Held-out ORDER, own VALUES: only `ranked` changes. `table` (and so the random null
+            # drawn from it below) is untouched, so the null head set is identical across runs.
+            ranked = order_from_trace(table, prior_trace)
+            print(f"\n  ranking REPLACED by {args.rank_from}'s phase-1 order; the |{args.rank_by}| "
+                  f"columns below are this run's own values in that order")
         print(f"\ntop {args.top_n} heads by |{args.rank_by}| (how much this head's write to the "
               f"answer position changed when the QUESTION was swapped):")
         print(f"{'block.head':>12} {'delta_resid':>12} {'delta_z':>10} {'delta_dla':>11}")
@@ -413,6 +473,11 @@ def main(argv=None):
                             "donor_first": donor_first / seen, "donor_full": donor_full / seen},
                   "phase1": table, "phase1_ranked": [(r["block"], r["head"]) for r in ranked[:64]],
                   "ground_truth_sha256": hashlib.sha256(raw).hexdigest()}
+        if args.donor_attributes is not None:
+            report["donor_attributes"] = args.donor_attributes
+        if args.rank_from is not None:
+            report.update(rank_from=args.rank_from, rank_from_sha256=rank_from_sha,
+                          rank_from_rank_by=prior_trace.get("rank_by", "delta_resid"))
 
         if args.per_attribute:
             print(f"\nper-attribute top-8 by |{args.rank_by}| (a pooled ranking can hide a head that "

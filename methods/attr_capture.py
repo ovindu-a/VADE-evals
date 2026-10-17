@@ -104,6 +104,43 @@ def head_projection_norms(adapter, model, blocks, n_heads, head_dim):
     return out
 
 
+def vade_prompts(entity_dir, attributes, template_index):
+    """-> {attribute: (template_id, question, prefill)}: each attribute's VADE template
+    number `template_index` among its template ids in sorted order."""
+    templates = json.loads((entity_dir / "prompt_templates.json").read_text())
+    out = {}
+    for a in attributes:
+        by_id = {t["template_id"]: t for t in templates[a]}
+        ids = sorted(by_id)
+        if not 0 <= template_index < len(ids):
+            raise ValueError(f"{a} has {len(ids)} VADE templates; --template_index {template_index} "
+                             f"is out of range")
+        t = by_id[ids[template_index]]
+        out[a] = (t["template_id"], t["question"], t["prefill"])
+    return out
+
+
+def run_order(chosen, attributes, prompts, batch_size):
+    """-> chunks of GRID indices (row = item_idx * A + attr_idx) in processing order.
+
+    Controlled prompts share one token length, so the grid is chunked in its own
+    item-major order -- contiguous rows, exactly as before. VADE templates differ
+    in length ACROSS attributes, so there the chunks are attribute-major and never
+    span two attributes; each row is still written to its item-major grid index,
+    which is what attr_directions' reshape relies on.
+    """
+    A = len(attributes)
+    n_runs = len(chosen) * A
+    if prompts == "controlled":
+        return [list(range(start, min(start + batch_size, n_runs)))
+                for start in range(0, n_runs, batch_size)]
+    chunks = []
+    for a in range(A):
+        rows = [i * A + a for i in range(len(chosen))]
+        chunks.extend(rows[start:start + batch_size] for start in range(0, len(rows), batch_size))
+    return chunks
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--entity", default="flags")
@@ -118,6 +155,14 @@ def main(argv=None):
     ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--prompts", choices=["controlled", "vade"], default="controlled",
+                    help="controlled: attribute_switch_sweep's equal-length prompts (prefill 'Answer:'). "
+                         "vade: the entity's own prompt_templates.json question/prefill per attribute. "
+                         "Caveat: VADE prefills end right after the attribute word, so the last token "
+                         "is not question-neutral there.")
+    ap.add_argument("--template_index", type=int, default=0,
+                    help="With --prompts vade: which template, among each attribute's template ids "
+                         "in sorted order.")
     ap.add_argument("--out_dir", default=None)
     ap.add_argument("--dry_run", action="store_true",
                     help="Validate the grid, images and output sizing without torch or a model.")
@@ -141,6 +186,13 @@ def main(argv=None):
     # Fully crossed and in a fixed order, so `index.jsonl` row i is item i//A, attribute i%A and the
     # analysis can reshape straight to [n_items, n_attributes, ...] after checking the index.
     grid = list(itertools.product(chosen, attributes))
+    if args.prompts == "vade":
+        templates = vade_prompts(entity_dir, attributes, args.template_index)
+        prompt_of = {a: (q, pf) for a, (_, q, pf) in templates.items()}
+    else:
+        if args.template_index != 0:
+            ap.error("--template_index applies only to --prompts vade")
+        prompt_of = {a: (question(a), PREFILL) for a in attributes}
     for item_id in chosen:
         if not (entity_dir / items[item_id]["image"]).is_file():
             raise FileNotFoundError(entity_dir / items[item_id]["image"])
@@ -149,7 +201,8 @@ def main(argv=None):
             raise ValueError(f"{item_id} has no {missing}; the grid must be complete")
 
     out_dir = Path(args.out_dir or Path(REPO_ROOT) / "results" / "attr_capture" / args.entity /
-                   f"blocks{blocks[0]}-{blocks[-1]}_n{len(chosen)}")
+                   (f"blocks{blocks[0]}-{blocks[-1]}_n{len(chosen)}"
+                    + (f"_vade_t{args.template_index}" if args.prompts == "vade" else "")))
     n_runs, n_positions = len(grid), 1
     print(f"[attr_capture] {args.entity}: {len(chosen)} items x {len(attributes)} attributes "
           f"= {n_runs} clean runs; blocks {blocks[0]}-{blocks[-1]}; -> {out_dir}")
@@ -183,6 +236,15 @@ def main(argv=None):
                 "ground_truth_sha256": hashlib.sha256(raw).hexdigest(),
                 "implementation_sha256": hashlib.sha256(
                     (Path(REPO_ROOT) / "methods" / "attr_capture.py").read_bytes()).hexdigest()}
+        if args.prompts == "vade":
+            # Per-attribute prompts AND prefills (they differ here), so a controlled capture and a
+            # VADE one can never compare equal in the meta-mismatch check below.
+            meta.update(prompt_mode="vade", template_index=args.template_index,
+                        template_ids={a: templates[a][0] for a in attributes},
+                        prompts={a: prompt_of[a][0] for a in attributes},
+                        prefill={a: prompt_of[a][1] for a in attributes},
+                        prompt_templates_sha256=hashlib.sha256(
+                            (entity_dir / "prompt_templates.json").read_bytes()).hexdigest())
         meta_path = out_dir / "meta.json"
         if meta_path.exists() and json.loads(meta_path.read_text()) != meta:
             raise ValueError(f"{out_dir} holds a different capture; use another --out_dir")
@@ -192,13 +254,13 @@ def main(argv=None):
                                                shape=(n_runs, len(blocks), n_positions, hidden))
                   for s in SITES}
         index = []
-        for start in range(0, n_runs, args.batch_size):
-            chunk = grid[start:start + args.batch_size]
+        done = 0
+        for rows in run_order(chosen, attributes, args.prompts, args.batch_size):
+            chunk = [grid[r] for r in rows]
             ids, pixels, grids = [], [], []
             for item_id, attribute in chunk:
                 with Image.open(entity_dir / items[item_id]["image"]) as img:
-                    built = adapter.build_inputs(processor, img.convert("RGB"), question(attribute),
-                                                 PREFILL)
+                    built = adapter.build_inputs(processor, img.convert("RGB"), *prompt_of[attribute])
                 ids.append(built["input_ids"].unsqueeze(0))
                 pixels.append(built["extra"]["pixel_values"])
                 grids.append(built["extra"]["image_grid_thw"])
@@ -212,13 +274,15 @@ def main(argv=None):
                                           "image_grid_thw": torch.cat(grids)})
             for site in SITES:
                 stacked = torch.stack([captured[site][b] for b in blocks], dim=1)  # [B, n_blocks, P, H]
-                arrays[site][start:start + len(chunk)] = stacked.float().cpu().numpy()
-            for offset, (item_id, attribute) in enumerate(chunk):
-                index.append({"row": start + offset, "item": item_id, "attribute": attribute,
+                arrays[site][rows] = stacked.float().cpu().numpy()
+            for row, (item_id, attribute) in zip(rows, chunk):
+                index.append({"row": row, "item": item_id, "attribute": attribute,
                               "condition": "clean", "prompt_length": int(batch_ids.shape[1]),
-                              "gold_ids": derive_gold_token_ids(processor.tokenizer, PREFILL,
+                              "gold_ids": derive_gold_token_ids(processor.tokenizer, prompt_of[attribute][1],
                                                                 items[item_id][attribute])})
-            print(f"  {start + len(chunk)}/{n_runs} runs captured", flush=True)
+            done += len(chunk)
+            print(f"  {done}/{n_runs} runs captured", flush=True)
+        index.sort(key=lambda r: r["row"])
         for a in arrays.values():
             a.flush()
         (out_dir / "index.jsonl").write_text("".join(json.dumps(r) + "\n" for r in index))

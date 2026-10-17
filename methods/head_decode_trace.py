@@ -5,6 +5,10 @@ prefill-only and continuous head substitution, in both sufficiency and necessity
 directions. Donors are recomputed on the recipient's freely generated prefix.
 No gold tokens are supplied to the model. Full-prefix recomputation keeps all
 earlier substitutions active and avoids reusing the prefill vector at later steps.
+
+--heads B.H,B.H,... adds an explicit head set (e.g. exactly common10) as the
+selection `custom<k>` next to the trace's own top-k, with a random<k> control of
+the same size drawn the same way (reused when --head_ks already has k).
 """
 import sys
 from pathlib import Path
@@ -12,6 +16,7 @@ import random
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from methods.head_followup_common import Results, Runner, grouped_heads, parser, prepare
+from methods.head_swap_vade import parse_heads
 
 
 def replay_step(runner, batch, source, heads, mode, necessity=False, verify=False):
@@ -40,28 +45,65 @@ def replay_step(runner, batch, source, heads, mode, necessity=False, verify=Fals
     return step
 
 
-def main():
+def build_selections(ranked, head_ks, random_repeats, seed, custom=None, patch_layer=None):
+    """-> [(label, heads)]: the trace's top-k per k, an optional explicit `custom`
+    set (label custom<len>), then the paired random controls, one size-k draw per
+    (k, repeat) seeded by (seed, k, repeat) alone. The custom set's size joins the
+    random sizes, so it gets a control drawn exactly like top-k's -- and when k is
+    already a --head_ks size, that control IS the existing random<k>, not a copy."""
+    ks = sorted({min(k, len(ranked)) for k in head_ks})
+    selections = [(f'top{k}', ranked[:k]) for k in ks]
+    sizes = list(ks)
+    if custom:
+        custom = sorted(custom)
+        if len(set(custom)) != len(custom):
+            raise ValueError(f'--heads repeats a head: {custom}')
+        if patch_layer is not None and any(b < patch_layer for b, _ in custom):
+            raise ValueError(f'--heads must sit at/after the image patch layer {patch_layer}: {custom}')
+        if len(custom) > len(ranked):
+            raise ValueError(f'--heads has {len(custom)} heads; the random control draws from the '
+                             f'{len(ranked)}-head ranking')
+        selections.append((f'custom{len(custom)}', custom))
+        if len(custom) not in sizes:
+            sizes.append(len(custom))
+    # Paired random controls use the same sets for both modes/directions.
+    for k in sizes:
+        for repeat in range(random_repeats):
+            rng = random.Random(seed + 1000 + 100 * k + repeat)
+            selections.append((f'random{k}_r{repeat}', rng.sample(ranked, k)))
+    return selections
+
+
+def build_parser():
     ap = parser(__doc__)
     ap.add_argument('--head_ks', type=int, nargs='+', default=[8, 16])
     ap.add_argument('--random_repeats', type=int, default=1)
     ap.add_argument('--skip_necessity', action='store_true')
+    ap.add_argument('--heads', default=None, metavar='B.H,B.H,...',
+                    help='Also run this explicit head set (selection custom<k>, e.g. common10) next to '
+                         "the trace's top-k, with a same-size random control. Part of config.json.")
+    return ap
+
+
+def main():
+    ap = build_parser()
     args = ap.parse_args()
     if any(k < 1 for k in args.head_ks) or args.random_repeats < 0:
         ap.error('head_ks must be positive; random_repeats must be nonnegative')
+    custom = parse_heads(args.heads) if args.heads else None
     trace, ranked, rows, config, out_dir = prepare(args, 'decode')
+    selections = build_selections(ranked, args.head_ks, args.random_repeats, config['effective_seed'],
+                                  custom=custom, patch_layer=trace['patch_layer'])
+    if custom:
+        print(f'Explicit head set custom{len(custom)}: {custom}', flush=True)
     if args.dry_run:
         print('Dry run passed. No model loaded or output written.')
         return
     results = Results(out_dir, config)
     runner = Runner(args, trace)
     results.check_runtime(runner)
-    ks = sorted({min(k, len(ranked)) for k in args.head_ks})
-    selections = [(f'top{k}', ranked[:k]) for k in ks]
-    # Paired random controls use the same sets for both modes/directions.
-    for k in ks:
-        for repeat in range(args.random_repeats):
-            rng = random.Random(config['effective_seed'] + 1000 + 100 * k + repeat)
-            selections.append((f'random{k}_r{repeat}', rng.sample(ranked, k)))
+    if custom and any(b >= runner.n_layers or h >= runner.n_heads for b, h in custom):
+        raise ValueError(f'--heads outside {runner.n_layers} blocks x {runner.n_heads} heads: {custom}')
     all_downstream = [(b, h) for b in range(trace['patch_layer'], runner.n_layers)
                       for h in range(runner.n_heads)]
     try:

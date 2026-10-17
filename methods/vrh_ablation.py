@@ -41,6 +41,10 @@ ARMS
                          is cut" looks like on these two readouts. Necessity, so
                          expect redundancy to soften it (R10 is a sufficiency
                          result); the mover-rank column is undefined for it.
+    zero:common10:random<i>
+                         --n_random_movers block-matched draws for the movers
+                         (same per-block counts, never a mover; own RNG, seed + 1).
+                         The movers stay intact, so mover rank is defined here.
 
 READING IT
     recall and mover rank both collapse   -> grounding is upstream of the entity
@@ -93,6 +97,26 @@ def block_matched_random(heads, n_heads, rng, exclude=()):
         assert len(free) >= c, f"block {b}: only {len(free)} heads left to draw {c} from"
         out += [(b, h) for h in rng.sample(free, c)]
     return sorted(out)
+
+
+def build_arms(names, published, movers, n_random, n_heads, seed, n_random_movers=0):
+    """-> [(arm name, heads)]. The Park draws use random.Random(seed) exactly as
+    before; --n_random_movers draws come from a SEPARATE random.Random(seed + 1)
+    and are appended after zero:common10, so adding them changes no earlier arm."""
+    rng = random.Random(seed)
+    arms = [("clean", [])]
+    for n in names:
+        arms.append((f"zero:{n}", published[n]["heads"]))
+        for i in range(n_random):
+            arms.append((f"zero:{n}:random{i}", block_matched_random(published[n]["heads"], n_heads, rng,
+                                                                     exclude=movers)))
+    arms.append(("zero:common10", movers))
+    # The movers' own null: same per-block counts, never a mover (block_matched_random
+    # bans `heads` itself). The movers stay intact here, so mover rank IS defined.
+    mrng = random.Random(seed + 1)
+    for i in range(n_random_movers):
+        arms.append((f"zero:common10:random{i}", block_matched_random(movers, n_heads, mrng)))
+    return arms
 
 
 def zero_columns(t, cols):
@@ -224,6 +248,9 @@ def main():
                          "starts with 'park_vrh').")
     ap.add_argument("--movers", default=COMMON10)
     ap.add_argument("--n_random", type=int, default=3)
+    ap.add_argument("--n_random_movers", type=int, default=0,
+                    help="Block-matched random draws for --movers (zero:common10:random<i>), the movers' own "
+                         "null. Separate RNG (seed + 1): the Park draws are unchanged.")
     ap.add_argument("--attributes", nargs="+", default=None)
     ap.add_argument("--n_templates", type=int, default=2, help="VADE templates per attribute (sorted ids).")
     ap.add_argument("--limit_items", type=int, default=0)
@@ -253,15 +280,9 @@ def main():
     templates = {a: sorted(lookup[a])[:args.n_templates] for a in attributes}
     jobs = [(k, a, t) for k in keys for a in attributes for t in templates[a]]
 
-    rng = random.Random(args.seed)
     n_heads_guess = 28
-    arms = [("clean", [])]
-    for n in names:
-        arms.append((f"zero:{n}", published[n]["heads"]))
-        for i in range(args.n_random):
-            arms.append((f"zero:{n}:random{i}", block_matched_random(published[n]["heads"], n_heads_guess, rng,
-                                                                     exclude=movers)))
-    arms.append(("zero:common10", movers))
+    arms = build_arms(names, published, movers, args.n_random, n_heads_guess, args.seed,
+                      n_random_movers=args.n_random_movers)
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "vrh_ablation", args.entity)
     print(f"[vrh_ablation] {args.entity}: {len(keys)} items x {len(attributes)} attributes x "
           f"{args.n_templates} templates = {len(jobs)} generations per arm, {len(arms)} arms -> {out_dir}")

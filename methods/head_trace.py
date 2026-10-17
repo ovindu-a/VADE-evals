@@ -359,6 +359,28 @@ def per_head_delta(adapter, model, base_z, patched_z, block, n_heads, head_dim, 
     return out
 
 
+def trace_tag(patch_layer, blocks, text_match=False, split="test"):
+    """The run's file stem (JSON and .log) under its log_dir.
+
+    The block span is part of the run's identity, not a detail: sweeping windows at ONE
+    --patch_layer is the main way this script gets used, and naming files by --patch_layer
+    alone made every window in such a sweep overwrite the previous one's JSON and log.
+    The split is part of it too: the committed traces are test-split, and a train-split
+    run (held-out head selection) must never overwrite their JSON or append to their log.
+    The default (test) keeps the old name."""
+    def _span(bs):
+        if bs == list(range(bs[0], bs[-1] + 1)):
+            return str(bs[0]) if len(bs) == 1 else f"{bs[0]}-{bs[-1]}"
+        return ".".join(str(b) for b in bs)
+
+    tag = f"head_trace_patch{patch_layer}" + (f"_blocks{_span(blocks)}" if blocks else "_blocksdefault")
+    if text_match:
+        tag += "_text"
+    if split != "test":
+        tag += f"_{split}"
+    return tag
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--entity", required=True)
@@ -420,19 +442,7 @@ def main():
     log_dir = ndm_logs_dir(model_slug, args.entity, args.attribute, 0.0, 0.0, 0.0, 0.0,
                            args.positions, "attn_head_output", pruned, diagnostic=True)
     os.makedirs(log_dir, exist_ok=True)
-    # The block span is part of the run's identity, not a detail: sweeping windows at ONE
-    # --patch_layer is the main way this script gets used, and naming files by --patch_layer alone
-    # made every window in such a sweep overwrite the previous one's JSON and log.
-    def _span(bs):
-        if bs == list(range(bs[0], bs[-1] + 1)):
-            return str(bs[0]) if len(bs) == 1 else f"{bs[0]}-{bs[-1]}"
-        return ".".join(str(b) for b in bs)
-
-    blocks_preview = args.blocks if args.blocks is not None else None
-    tag = f"head_trace_patch{args.patch_layer}" + (f"_blocks{_span(blocks_preview)}"
-                                                    if blocks_preview else "_blocksdefault")
-    if args.text_match:
-        tag += "_text"
+    tag = trace_tag(args.patch_layer, args.blocks, args.text_match, args.split)
     out_path = args.out or os.path.join(log_dir, f"{tag}.json")
 
     with tee_to_log(os.path.join(log_dir, f"{tag}.log")):

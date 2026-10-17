@@ -690,25 +690,65 @@ def chunks(seq, n):
         yield seq[i:i + n]
 
 
+# The mask logits' parameter name per intervention class: VADE's
+# RotatedSpaceIntervention (das_rotated) calls it `masks`, pyvene's
+# SigmoidMaskIntervention (dbm) calls it `mask`. Matching only `masks` silently
+# dropped --mask_lr for dbm. pyvene's `temperature` is ALSO an nn.Parameter
+# (requires_grad=True, though forward() detaches it so it never gets a gradient)
+# and must stay out of the mask group; VADE's is a buffer.
+MASK_PARAM_NAMES = ("masks", "mask")
+
+
+def build_optimizer(interventions, lr, mask_lr=None):
+    """-> (Adam, trainable params). One group at `lr`, unless `mask_lr` is set and
+    the interventions have mask logits, in which case those get their own group."""
+    import torch
+
+    params = [p for iv in interventions.values() for p in iv.parameters() if p.requires_grad]
+    # The mask gets its own group: it needs a step size set by the DISTANCE it must
+    # travel (mask_init -> 0) over the few steps its gradient survives, which has
+    # nothing to do with the rotation's step size. One shared lr cannot serve both.
+    named = [(n, p) for iv in interventions.values() for n, p in iv.named_parameters()
+             if n in MASK_PARAM_NAMES and p.requires_grad]
+    mask_ps = [p for _, p in named]
+    if mask_ps and mask_lr is not None:
+        ids = {id(p) for p in mask_ps}
+        opt = torch.optim.Adam([{"params": [p for p in params if id(p) not in ids], "lr": lr},
+                                {"params": mask_ps, "lr": mask_lr}])
+        if any(n == "masks" for n, _ in named):
+            print(f"  param groups: rotation lr={lr:g}, masks lr={mask_lr:g}")
+        else:
+            print(f"  param groups: other params lr={lr:g}, mask lr={mask_lr:g}")
+    else:
+        opt = torch.optim.Adam(params, lr=lr)
+    return opt, params
+
+
+def load_interventions(interventions, path):
+    """Load a saved `intervention.pt` ({block: state_dict}, as main() writes it)
+    into freshly built `interventions`, in place. The block sets must match
+    exactly -- a checkpoint from another --blocks/--heads would otherwise load
+    partially and evaluate a half-fresh module."""
+    import torch
+
+    state = torch.load(path, map_location="cpu")
+    saved = {int(b) for b in state}
+    assert saved == set(interventions), (
+        f"--init_from {path}: checkpoint blocks {sorted(saved)} != this run's blocks "
+        f"{sorted(interventions)}")
+    by_int = {int(b): sd for b, sd in state.items()}
+    for b, iv in interventions.items():
+        iv.load_state_dict(by_int[b])
+    return interventions
+
+
 def train(adapter, model, processor, args, heads, colmap, items, entity_dir, lookup, pad_id,
           log_path, interventions):
     import torch
 
     blocks = sorted(colmap)
-    params = [p for iv in interventions.values() for p in iv.parameters() if p.requires_grad]
+    opt, params = build_optimizer(interventions, args.lr, args.mask_lr)
     n_params = sum(p.numel() for p in params)
-    # `masks` gets its own group: it needs a step size set by the DISTANCE it must
-    # travel (mask_init -> 0) over the few steps its gradient survives, which has
-    # nothing to do with the rotation's step size. One shared lr cannot serve both.
-    mask_ps = [p for iv in interventions.values() for n, p in iv.named_parameters()
-               if n == "masks" and p.requires_grad]
-    if mask_ps and args.mask_lr is not None:
-        ids = {id(p) for p in mask_ps}
-        opt = torch.optim.Adam([{"params": [p for p in params if id(p) not in ids], "lr": args.lr},
-                                {"params": mask_ps, "lr": args.mask_lr}])
-        print(f"  param groups: rotation lr={args.lr:g}, masks lr={args.mask_lr:g}")
-    else:
-        opt = torch.optim.Adam(params, lr=args.lr)
 
     rows = load_rows(args.vade_root, args.entity, args.attribute, args.train_split,
                      args.train_rows, args.seed)
@@ -932,7 +972,9 @@ def main():
     ap.add_argument("--epochs", type=int, default=1)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--mask_lr", type=float, default=None, metavar="LR",
-                    help="das_rotated/dbm only: separate Adam lr for the `masks` parameter. "
+                    help="das_rotated/dbm only: separate Adam lr for the mask logits (`masks` "
+                         "for das_rotated, pyvene's `mask` for dbm; dbm's `temperature` stays "
+                         "at --lr and never gets a gradient anyway). "
                          "Default (unset) reuses --lr, which is what produced the VOID R12.3 "
                          "runs: the mask enters the loss only as sigmoid(m/T), so its gradient "
                          "underflows to exactly 0 once m/T saturates, and Adam moves it ~lr per "
@@ -983,10 +1025,18 @@ def main():
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out_dir", default=None)
     ap.add_argument("--skip_train", action="store_true",
-                    help="Build the interventions and go straight to eval. Only meaningful where "
-                         "the untrained module is already the thing you want to measure -- "
+                    help="Build the interventions and go straight to eval. Without --init_from "
+                         "this evaluates FRESH interventions, so it is only meaningful where the "
+                         "untrained module is already the thing you want to measure -- "
                          "`das_fixed --subspace_dim full`, which is the full head swap by "
-                         "construction.")
+                         "construction. For dbm a fresh mask is 0, i.e. gate sigmoid(0)=0.5 on "
+                         "every unit: a HALF swap everywhere. With --init_from it evaluates that "
+                         "saved checkpoint instead.")
+    ap.add_argument("--init_from", default=None, metavar="PATH",
+                    help="A saved intervention.pt ({block: state_dict}, as this script writes "
+                         "it) loaded into the freshly built interventions before training/eval. "
+                         "Its blocks must match this run's exactly. With --skip_train it "
+                         "re-evaluates a saved checkpoint.")
     ap.add_argument("--skip_eval", action="store_true")
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
@@ -1020,10 +1070,17 @@ def main():
     else:
         suffix = (f"_l1{args.l1_coef:g}"
                   + (f"_T{args.temperature_start:g}" if args.temperature_start is not None else "")
-                  + (f"-{args.temperature_end:g}" if args.temperature_end is not None else ""))
+                  + (f"-{args.temperature_end:g}" if args.temperature_end is not None else "")
+                  # --mask_lr reaches dbm's `mask` now (it was silently ignored before),
+                  # so it changes the run and goes in the tag, as for das_rotated
+                  + (f"_mlr{args.mask_lr:g}" if args.mask_lr is not None else ""))
     if args.site == "mlp_hidden":
         suffix += f"_mlp{blocks[0]}-{blocks[-1]}" if blocks == list(range(blocks[0], blocks[-1] + 1)) \
             else "_mlp" + "-".join(map(str, blocks))
+    if args.init_from:
+        # a warm start / re-eval of a saved checkpoint must not land in (and overwrite) the
+        # directory of the run that produced it
+        suffix += "_init"
     tag = f"{args.attribute}_{args.method}{suffix}"
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_das", args.entity, tag)
     entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
@@ -1050,6 +1107,10 @@ def main():
           f"{args.batch_size * args.grad_accum_steps} rows/optimizer step")
     print(f"  patch columns per forward: last {MAX_ANSWER_TOKENS} (answer tokens 0..{MAX_ANSWER_TOKENS - 1})")
     print(f"  -> {out_dir}")
+
+    if args.init_from:
+        assert os.path.isfile(args.init_from), f"--init_from {args.init_from}: no such file"
+        print(f"  init_from {args.init_from}" + ("  (--skip_train: evaluating it as saved)" if args.skip_train else ""))
 
     if args.dry_run:
         assert not (set(r["base"] for r in train_rows + eval_rows) - set(items)), "unknown base item"
@@ -1112,6 +1173,9 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     interventions = build_interventions(args.method, colmap, sub_dims, args.vade_root,
                                         model.device, args.mask_init)
+    if args.init_from:
+        load_interventions(interventions, args.init_from)
+        print(f"  loaded interventions from {args.init_from}")
     if not skip_train:
         train(adapter, model, processor, args, heads, colmap, items, entity_dir,
               lookup, pad_id, os.path.join(out_dir, "train_log.jsonl"), interventions)

@@ -130,7 +130,8 @@ DEFAULT_SETS = [f"common5={COMMON5}", f"common10={COMMON10}"]
 ATTRIBUTES = ("capital", "currency", "language", "calling_code")
 
 # Where head_trace.py's valid per-attribute traces live. '{attribute}' in a
-# --head_sets path expands to each of ATTRIBUTES, giving a per-attribute set.
+# --head_sets path expands to each of the entity's attributes (ATTRIBUTES on
+# flags, in the same order), giving a per-attribute set.
 TRACE_GLOB = ("logs/Qwen2.5-VL-7B-Instruct/{entity}/ndm/{attribute}/"
               "L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_attn_head_output_pruned/"
               "head_trace_patch21_blocks21-23.json")
@@ -237,14 +238,17 @@ def build_value_subspace(capture_dir, heads, attribute, dim, vade_root, entity):
     return out, len(classes), len(keep)
 
 
-def resolve_head_sets(specs, entity, top_k):
+def resolve_head_sets(specs, entity, top_k, attributes=ATTRIBUTES):
     """['name=21.1,23.4', 'name=path/to/trace.json#16'] -> {name: heads}.
 
     `heads` is either a flat list, or a {attribute: list} dict when the path
     contained '{attribute}' -- a PER-ATTRIBUTE set, keyed by the attribute the
     donor was captured under. Several sets run in ONE invocation because they
     all live in blocks 21-23 and therefore share a single donor capture: adding
-    k=8 and k=16 costs extra generations, not extra donor passes."""
+    k=8 and k=16 costs extra generations, not extra donor passes.
+
+    `attributes` is what '{attribute}' expands to: main() passes the entity's
+    own list (entity_attributes), which on flags IS ATTRIBUTES, same order."""
     out = {}
     for spec in specs:
         assert "=" in spec, f"--head_sets entry {spec!r} must be NAME=SPEC"
@@ -257,7 +261,7 @@ def resolve_head_sets(specs, entity, top_k):
         k = int(k) if k else top_k
         if "{attribute}" in path:
             out[name] = {a: heads_from_trace(path.format(entity=entity, attribute=a), k)
-                         for a in ATTRIBUTES}
+                         for a in attributes}
         else:
             out[name] = heads_from_trace(path.format(entity=entity), k)
     return out
@@ -321,15 +325,19 @@ def load_assets(vade_root, entity):
     return entity_dir, items, lookup
 
 
-def load_jobs(vade_root, entity, split, attributes, donor_question, limit_pairs, seed):
+def load_jobs(vade_root, entity, split, attributes, donor_question, limit_pairs, seed, tuples_dir=None):
     """-> (jobs, n_scored_rows).
 
     A job is ONE generation plus the list of (target_attribute, row_index) rows
     it answers. With donor_question='queried' the edit does not depend on
     target_attribute, so a single generation serves one row in each of the four
     target files -- 56,208 scored rows collapse to 14,052 generations. With
-    'target' the donor differs per target and the collapse does not apply."""
-    tuples_dir = os.path.join(vade_root, "data", entity, "tuples")
+    'target' the donor differs per target and the collapse does not apply.
+
+    `tuples_dir` (default <vade_root>/data/<entity>/tuples, VADE's UNPRUNED
+    tuples) can point at a pruned set, e.g. VADE/models/<model>/<entity>/tuples:
+    pruning keeps each row's row_index, so the predictions still score."""
+    tuples_dir = tuples_dir or os.path.join(vade_root, "data", entity, "tuples")
     by_key = {}
     n_rows = 0
     for target in attributes:
@@ -537,6 +545,26 @@ def donor_index(align, step, n_steps):
     if align == "step0":
         return 0 if step == 0 else None
     raise ValueError(f"unknown align mode {align!r}; expected one of {ALIGN_MODES}")
+
+
+def alpha_tag(alpha):
+    """0.25 -> 'a0.25', 1.0 -> 'a1' (the arm-name suffix of a dose arm)."""
+    return f"a{alpha:g}"
+
+
+def alpha_transform(blocks, alpha):
+    """-> patched_generate `transform` writing base + alpha * (donor - base) into
+    the selected columns of every block in `blocks`: the dose of the install.
+
+    torch.lerp in float32 rather than the literal `have + a * (want - have)`:
+    same value, but lerp is EXACT at both ends (alpha=0 returns the base, alpha=1
+    the donor, bit for bit), where the literal form in bf16 rounds `want - have`
+    and alpha=1 would not quite reproduce the plain heads arm."""
+    import torch
+
+    def fn(have, want, _a=float(alpha)):
+        return torch.lerp(have.float(), want.float(), _a)
+    return {b: fn for b in sorted(set(blocks))}
 
 
 def patched_generate(adapter, model, heads, donor_z, ids, mask, extra, max_new_tokens, pad_id,
@@ -749,6 +777,10 @@ def main():
     ap.add_argument("--entity", default="flags")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--split", default="test")
+    ap.add_argument("--tuples_dir", default=None,
+                    help="Tuples root holding <attribute>/<split>.jsonl. Default: VADE's unpruned "
+                         "<vade_root>/data/<entity>/tuples. Pruned tuples (VADE/models/<model>/<entity>/"
+                         "tuples) keep row_index, so they score the same way.")
     ap.add_argument("--model_id", default=MODEL_ID)
     ap.add_argument("--head_sets", nargs="+", default=DEFAULT_SETS, metavar="NAME=SPEC",
                     help="One or more named head sets, each scored as its own arm and its own "
@@ -765,6 +797,11 @@ def main():
                          "carries the attribute move it WITHOUT dragging the entity along? K is "
                          "per block (the patch is block-diagonal by necessity) and is capped at "
                          "n_values-1. Arms are renamed sub<K>_<set>.")
+    ap.add_argument("--alphas", type=float, nargs="+", default=None, metavar="A",
+                    help="Dose install: each head set's `heads` arm becomes one arm per alpha, "
+                         "heads_<set>_a<alpha>, writing base + alpha * (donor - base) into the selected "
+                         "heads (alpha=0 is clean, alpha=1 is the plain heads arm). random_heads is "
+                         "unchanged. Not combinable with --subspace_dim.")
     ap.add_argument("--subspace_attribute", default="language",
                     help="Which attribute's value centroids define the subspace. Needs values that "
                          "REPEAT across items; on flags only `language` qualifies.")
@@ -789,8 +826,15 @@ def main():
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
 
-    head_sets = resolve_head_sets(args.head_sets, args.entity, args.top_k)
+    entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
+    # The entity's OWN scored attributes (flags: exactly ATTRIBUTES, same order).
+    attributes = entity_attributes(json.load(open(os.path.join(entity_dir, "ground_truth.json"))))
+    head_sets = resolve_head_sets(args.head_sets, args.entity, args.top_k, attributes=attributes)
     blocks = all_blocks(head_sets)
+    if args.alphas is not None:
+        assert not args.subspace_dim, "--alphas and --subspace_dim are different interventions; pass one"
+        tags = [alpha_tag(a) for a in args.alphas]
+        assert len(set(tags)) == len(tags), f"--alphas {args.alphas} repeat an arm name ({tags})"
     subspaces, sub_tag = {}, ""
     if args.subspace_dim:
         sub_tag = f"sub{args.subspace_dim}_"
@@ -803,15 +847,17 @@ def main():
                 args.vade_root, args.entity)
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "head_swap_vade", args.entity)
 
-    entity_dir, items, lookup = load_assets(args.vade_root, args.entity)
-    jobs, n_scored = load_jobs(args.vade_root, args.entity, args.split, ATTRIBUTES,
-                               args.donor_question, args.limit_pairs, args.seed)
+    jobs, n_scored = load_jobs(args.vade_root, args.entity, args.split, attributes,
+                               args.donor_question, args.limit_pairs, args.seed, tuples_dir=args.tuples_dir)
     n_emitted = sum(len(j["rows"]) for j in jobs)
 
     arm_names = []
     for arm in args.arms:
-        arm_names += ([f"{sub_tag}{arm}_{n}" for n in head_sets]
-                      if arm in ("heads", "random_heads") else [arm])
+        if arm == "heads" and args.alphas is not None:
+            arm_names += [f"{arm}_{n}_{alpha_tag(a)}" for n in head_sets for a in args.alphas]
+        else:
+            arm_names += ([f"{sub_tag}{arm}_{n}" for n in head_sets]
+                          if arm in ("heads", "random_heads") else [arm])
 
     print(f"[head_swap_vade] {args.entity}/{args.split}: {len(jobs)} generations -> {n_emitted} scored "
           f"rows (full split is {n_scored}); donor_question={args.donor_question}")
@@ -923,6 +969,14 @@ def main():
                 else:
                     for name, hs in head_sets.items():
                         use = heads_for(hs, attribute) if arm == "heads" else nulls[name]
+                        if arm == "heads" and args.alphas is not None:
+                            for a in args.alphas:
+                                emit(f"{arm}_{name}_{alpha_tag(a)}",
+                                     patched_generate(adapter, model, use, donor_z, batch["base_ids"],
+                                                      batch["base_mask"], batch["base_extra"],
+                                                      args.max_new_tokens, pad_id, head_dim, stats=stats,
+                                                      transform=alpha_transform([b for b, _ in use], a)))
+                            continue
                         sp = subspaces.get(name) if arm == "heads" else None
                         emit(f"{sub_tag}{arm}_{name}",
                              patched_generate(adapter, model, use, donor_z, batch["base_ids"],

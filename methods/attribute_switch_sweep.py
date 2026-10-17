@@ -16,6 +16,10 @@ ATTRIBUTES = ['capital', 'currency', 'language', 'calling_code']
 FIELDS = dict(capital='capital', currency='currency', language='language', calling_code='calling')
 SITES = ['earlier_text', 'last_residual', 'last_attention', 'last_mlp', 'last_joint']
 SCOPES = ['earlier_text', 'last_token', 'all_text']
+# Single-position scopes beyond SCOPES (validated by `valid_scope`, not listed): `field` is the one
+# token where the base and donor prompts differ (the attribute word), `tok:-K` is prompt_length - K
+# (tok:-1 is the last prompt token). Both are PREFILL-only, like earlier_text: they name prompt
+# columns, never generated ones.
 SITE_ALIASES = {'earlier_text': 'residual', 'last_residual': 'residual',
                 'last_attention': 'attention', 'last_mlp': 'mlp', 'last_joint': 'joint'}
 PREFILL = 'Answer:'
@@ -47,19 +51,83 @@ def alignment(base, donor, image_id, special_ids=()):
     return positions
 
 
+def valid_scope(scope):
+    """-> scope if it is one of SCOPES, `field`, or `tok:-K` with K >= 1; else ValueError."""
+    if scope in SCOPES or scope == 'field':
+        return scope
+    if scope.startswith('tok:-'):
+        k = scope[len('tok:-'):]
+        if k.isdigit() and int(k) >= 1 and str(int(k)) == k:
+            return scope
+    raise ValueError(f'Unknown position scope: {scope} (expected one of {SCOPES}, field, or tok:-K)')
+
+
+def prefill_only(scope):
+    """Scopes naming prompt columns only, which a continuous mode cannot extend."""
+    return scope == 'earlier_text' or scope == 'field' or scope.startswith('tok:')
+
+
+def field_position(batch):
+    """The single prompt column where base and donor differ. Controlled prompts differ in
+    exactly the attribute word; anything else (a multi-token field word, or a second
+    difference) is refused rather than silently reduced to its first token."""
+    base, donor = batch['base_input_ids'], batch['source_input_ids']
+    if base.shape != donor.shape:
+        raise ValueError('field scope needs equal-length base and donor prompts')
+    differ = (base[0] != donor[0]).nonzero().flatten().tolist()
+    if len(differ) != 1:
+        raise ValueError(f'field scope needs exactly one differing prompt token, found {len(differ)} '
+                         f'at {differ}')
+    return differ[0]
+
+
+def parse_attention_set(spec):
+    """'16-18.20-23' -> canonical 'attention_set:16-18.20-23'. Blocks are 0-based decoder
+    blocks; '.'-separated ranges (or single blocks), disjoint, written in any order."""
+    body = spec.split(':', 1)[1] if spec.startswith('attention_set:') else spec
+    blocks = attention_set_blocks('attention_set:' + body)
+    runs, start = [], blocks[0]
+    for prev, cur in zip(blocks, blocks[1:] + [None]):
+        if cur != prev + 1:
+            runs.append(f'{start}' if start == prev else f'{start}-{prev}')
+            start = cur
+    return 'attention_set:' + '.'.join(runs)
+
+
+def attention_set_blocks(kind):
+    """'attention_set:16-18.20-23' -> [16, 17, 18, 20, 21, 22, 23]."""
+    blocks = []
+    for part in kind.split(':', 1)[1].split('.'):
+        lo, _, hi = part.partition('-')
+        if not lo.isdigit() or (hi and not hi.isdigit()):
+            raise ValueError(f'Bad attention_set range {part!r} in {kind}')
+        lo, hi = int(lo), int(hi or lo)
+        if hi < lo:
+            raise ValueError(f'Empty attention_set range {part!r} in {kind}')
+        blocks.extend(range(lo, hi + 1))
+    if len(set(blocks)) != len(blocks):
+        raise ValueError(f'Overlapping attention_set ranges in {kind}')
+    return sorted(blocks)
+
+
 def intervention(name):
     """Resolve explicit scope/site names and retain legacy CLI semantics."""
     if '/' in name:
         scope, site = name.split('/', 1)
-        if scope not in SCOPES:
-            raise ValueError(f'Unknown position scope: {scope}')
-        return scope, site
+        return valid_scope(scope), site
     return ('earlier_text' if name == 'earlier_text' else 'last_token',
             SITE_ALIASES.get(name, name))
 
 
 def patch_positions(batch, scope, length, mode):
     prompt_length = batch['base_input_ids'].shape[1]
+    if scope == 'field':
+        return [field_position(batch)]
+    if scope.startswith('tok:'):
+        at = prompt_length + int(scope[len('tok:'):])
+        if not 0 <= at < prompt_length:
+            raise ValueError(f'{scope} is outside a {prompt_length}-token prompt')
+        return [at]
     positions = list(batch['earlier_positions']) if scope != 'last_token' else []
     if scope != 'earlier_text':
         positions.extend(range(prompt_length - 1, length if mode == 'continuous' else prompt_length))
@@ -89,6 +157,10 @@ def multimodal_position_kwargs(model, ids):
 def parts(name, layer):
     from methods.common.sites import resolve_site
     _, kind = intervention(name)
+    if kind.startswith('attention_set:'):
+        # Names its own blocks, so `layer` is only the arm's label (sweep_arms passes max+1). Same
+        # layer_idx convention as attention_blocks:N below: attn_output at layer_idx b+1 is block b.
+        return [(resolve_site('attn_output'), b + 1) for b in attention_set_blocks(kind)]
     if kind.startswith('attention_blocks:'):
         width = int(kind.split(':')[1])
         if not 1 <= width <= layer:
@@ -224,20 +296,32 @@ def sweep_arms(args):
     requested = list(dict.fromkeys(args.sites + ['last_joint' if n == 1 else f'blocks:{n}'
                                                  for n in args.block_spans]
                                   + ['last_attention' if n == 1 else f'attention_blocks:{n}'
-                                     for n in getattr(args, 'attention_spans', [])]))
+                                     for n in getattr(args, 'attention_spans', [])]
+                                  + [parse_attention_set(s) for s in getattr(args, 'attention_sets', None) or []]))
     scopes = getattr(args, 'scopes', None)
     if scopes:
         requested = list(dict.fromkeys(f'{scope}/{intervention(site)[1]}'
                                       for scope in scopes for site in requested))
     arms = []
+    def add(site, layer, scope):
+        for mode in (['prefill'] if prefill_only(scope) else dict.fromkeys(args.modes)):
+            for control in ['switch'] + args.controls:
+                arms.append((f'{site}/L{layer}/{mode}/{control}', site, layer, mode, control))
     for layer in args.layers:
         for site in requested:
             scope, kind = intervention(site)
+            if kind.startswith('attention_set:'):
+                continue
             if ':' in kind and int(kind.split(':')[1]) > layer:
                 continue
-            for mode in (['prefill'] if scope == 'earlier_text' else dict.fromkeys(args.modes)):
-                for control in ['switch'] + args.controls:
-                    arms.append((f'{site}/L{layer}/{mode}/{control}', site, layer, mode, control))
+            add(site, layer, scope)
+    # An attention_set names its own blocks, so it is emitted ONCE, labelled with the layer its
+    # last block writes (max + 1), independent of --layers -- crossing it with every layer would
+    # repeat the identical intervention under different labels.
+    for site in requested:
+        scope, kind = intervention(site)
+        if kind.startswith('attention_set:'):
+            add(site, attention_set_blocks(kind)[-1] + 1, scope)
     return arms
 
 
@@ -248,6 +332,8 @@ def execute(runner, args, rows, items, entity_dir, results):
     if any(not 1 <= layer <= len(runner.layers) for layer in args.layers):
         raise ValueError(f'Layer must be in 1..{len(runner.layers)}')
     arms = sweep_arms(args)
+    if any(not 1 <= a[2] <= len(runner.layers) for a in arms):
+        raise ValueError(f'attention_set blocks must be in 0..{len(runner.layers) - 1}')
     done = 0
     for row in rows:
         if all(results.has(row, a) for a in ['clean', 'donor_clean'] + [x[0] for x in arms]):
@@ -320,11 +406,17 @@ def main(argv=None):
     ap.add_argument('--attributes', nargs='+', choices=ATTRIBUTES, default=ATTRIBUTES)
     ap.add_argument('--layers', nargs='+', type=int, default=list(range(1, 29)))
     ap.add_argument('--sites', nargs='+', choices=SITES + ['residual', 'attention', 'mlp', 'joint'], default=SITES)
-    ap.add_argument('--scopes', nargs='+', choices=SCOPES,
-                    help='Cross every requested site/window with these text scopes; omitted preserves legacy scopes')
+    ap.add_argument('--scopes', nargs='+', type=valid_scope,
+                    help=f'Cross every requested site/window with these text scopes ({", ".join(SCOPES)}, '
+                         'field = the one token where base and donor prompts differ, tok:-K = '
+                         'prompt_length-K; field and tok:-K are prefill-only); omitted preserves legacy scopes')
     ap.add_argument('--block_spans', nargs='*', type=int, default=[2, 4, 8])
     ap.add_argument('--attention_spans', nargs='*', type=int, default=[],
                     help='Attention-only consecutive windows; recipient MLPs run naturally')
+    ap.add_argument('--attention_sets', nargs='*', type=parse_attention_set, default=[],
+                    help="Attention-only GAPPED block sets, e.g. 16-18.20-23 (0-based blocks, '.'-separated "
+                         "ranges). Each is one arm, labelled L<max block + 1>, independent of --layers; "
+                         "omitted blocks recompute from the edited residual rather than being frozen")
     ap.add_argument('--modes', nargs='+', choices=['prefill', 'continuous'], default=['prefill'])
     ap.add_argument('--controls', nargs='*', choices=['self', 'paraphrase'], default=['self', 'paraphrase'])
     ap.add_argument('--seed', type=int, default=0)

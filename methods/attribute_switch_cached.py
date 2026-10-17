@@ -91,6 +91,12 @@ class CachedPrefill:
                 raise ValueError('CachedPrefill supports only prefill interventions')
             positions = patch_positions(batch, intervention(name)[0], self.prompt_length, mode)
             kept = [p for p in positions if p >= self.prefix_length]
+            # A `tok:-K` column inside the prefix is inert like any other (every variant has the
+            # same token and context there). The `field` column is where base and donor DIFFER, so
+            # it can never be inside a prefix they agree on; if it is, the prefix is wrong.
+            if intervention(name)[0] == 'field' and len(kept) != len(positions):
+                raise AssertionError(f'{arm}: field column {positions} lies inside the shared prefix '
+                                     f'({self.prefix_length} tokens) that base and donor agree on')
             self.positions_dropped_inert += len(positions) - len(kept)
             self.plan[arm] = (control, kept, parts(name, layer))
             for site, at in self.plan[arm][2]:

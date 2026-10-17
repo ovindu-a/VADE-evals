@@ -120,7 +120,7 @@ def estimate_directions(adapter, model, processor, entity_dir, items, item_ids, 
 
 
 def build_steer_patch(means, batch, layer, attributes, mode, alpha, device,
-                      random_direction=None):
+                      random_direction=None, direction_layer=None, continuous=False, item_means=None):
     """-> [(site, layer, patch_fn)] applying ONE direction PER LANE.
 
     Each row of a batch has its own (base, donor) pair, so each lane needs its
@@ -135,10 +135,19 @@ def build_steer_patch(means, batch, layer, attributes, mode, alpha, device,
     it, which is why it cannot overshoot and why it is the arm that tests
     whether the axis carries the attribute rather than whether shoving along it
     changes the answer.
+
+    `direction_layer` K (default: `layer`) takes the means -- and so d, u and t --
+    from residual layer K while the hook still sits at `layer`: a direction
+    estimated at one depth, applied at another. `item_means` ({item: {attribute:
+    vector}}, already at K) replaces the global means per lane with that lane's
+    own item's (keyed by row["base"]). `continuous` also applies `fn` on every
+    decode step, to the one new position (see `steer_hook`).
     """
-    grand = sum(means[layer].values()) / len(attributes)
+    at = layer if direction_layer is None else direction_layer
+    def lane(r):
+        return means[at] if item_means is None else item_means[r["base"]]
     stack = [random_direction if random_direction is not None
-             else means[layer][r["donor_attribute"]] - means[layer][r["base_attribute"]]
+             else lane(r)[r["donor_attribute"]] - lane(r)[r["base_attribute"]]
              for r in batch["rows"]]
     delta = torch.stack([d.to(device) for d in stack])                       # [B, H]
     if mode == "add":
@@ -146,14 +155,34 @@ def build_steer_patch(means, batch, layer, attributes, mode, alpha, device,
             return (x.float() + alpha * _d[:, None, :].to(x.device)).to(x.dtype)
     else:
         u = delta / delta.norm(dim=-1, keepdim=True).clamp_min(1e-9)
-        tgt = torch.stack([(means[layer][r["donor_attribute"]] - grand).to(device) @ u[i]
-                           for i, r in enumerate(batch["rows"])])            # [B]
+        tgt = torch.stack([(lane(r)[r["donor_attribute"]] - sum(lane(r).values()) / len(attributes))
+                           .to(device) @ u[i] for i, r in enumerate(batch["rows"])])   # [B]
         def fn(x, _u=u, _t=tgt):
             y = x.float()
             uu = _u[:, None, :].to(y.device)
             coord = (y * uu).sum(-1, keepdim=True)
             return (y - coord * uu + alpha * _t[:, None, None].to(y.device) * uu).to(x.dtype)
-    return [(RESIDUAL_SITE, layer, make_cache_aware_patch_hook(batch["steer_positions"], fn))]
+    return [(RESIDUAL_SITE, layer, steer_hook(batch["steer_positions"], fn, continuous))]
+
+
+def steer_hook(positions, fn, continuous=False):
+    """make_cache_aware_patch_hook, optionally ALSO steering decode steps.
+
+    The cache-aware hook is a no-op once the hidden state has collapsed to one
+    column (an incremental decode step), so by default only the prefill is
+    steered and every later answer token reads the edit only through the KV
+    cache. With `continuous`, that same one-column case -- detected exactly as
+    the hook detects it, `shape[1] == 1` -- gets `fn` applied to its single new
+    position, so every generated position is steered too.
+    """
+    prefill = make_cache_aware_patch_hook(positions, fn)
+    if not continuous:
+        return prefill
+    def _patch(hidden_states):
+        if hidden_states.shape[1] == 1:
+            return fn(hidden_states).to(hidden_states.dtype)
+        return prefill(hidden_states)
+    return _patch
 
 
 def image_columns(batch, image_token_id):
@@ -209,6 +238,21 @@ def main(argv=None):
     ap.add_argument("--positions", choices=["last_token", "question"], default="last_token",
                     help="Where to apply the direction. last_token is where the sweep says the "
                          "attribute lives from block 20 on; question is where it lives below 17.")
+    ap.add_argument("--direction_layer", type=int, default=None,
+                    help="Estimate the directions at residual layer K (output of block K-1) and apply "
+                         "them at every --layers L. Default: at L itself. The random null's norm is "
+                         "matched to K's directions. Use --mode add: project would install K's "
+                         "coordinate on L's axis.")
+    ap.add_argument("--continuous", action="store_true",
+                    help="Also steer every DECODE step (the single new position), not only the "
+                         "prefill. Requires --positions last_token.")
+    ap.add_argument("--attn_impl", choices=["sdpa", "eager"], default="sdpa",
+                    help="Attention kernel for the run. --image_trace forces eager regardless.")
+    ap.add_argument("--direction_scope", choices=["global", "item"], default="global",
+                    help="global: one direction per ordered pair, from the TRAIN items' means. item: "
+                         "each TEST item's own direction, from its own residuals at the direction "
+                         "layer (resid[item, donor] - resid[item, base]). project mode only -- "
+                         "per-item add at alpha 1 IS the full residual swap and tests nothing.")
     ap.add_argument("--n_train_items", type=int, default=32, help="Items used to ESTIMATE directions.")
     ap.add_argument("--n_test_items", type=int, default=16, help="Disjoint items the steering is scored on.")
     ap.add_argument("--n_random", type=int, default=2,
@@ -232,6 +276,14 @@ def main(argv=None):
     ap.add_argument("--out", default=None)
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args(argv)
+    if args.continuous and args.positions != "last_token":
+        ap.error("--continuous steers the one new position of each decode step, which is the "
+                 "readout; it requires --positions last_token")
+    if args.direction_scope == "item" and args.mode != "project":
+        ap.error("--direction_scope item requires --mode project: per-item add at alpha 1 equals "
+                 "the full residual swap")
+    if args.direction_layer is not None and args.direction_layer < 1:
+        ap.error("--direction_layer must be >= 1")
 
     from pathlib import Path
     entity_dir = Path(args.vade_root) / "data" / args.entity
@@ -263,6 +315,15 @@ def main(argv=None):
     out_dir.mkdir(parents=True, exist_ok=True)
     tag = (f"attr_steer_{args.positions}_L{args.layers[0]}-{args.layers[-1]}_"
            f"{'-'.join(modes)}_train{len(train_items)}")
+    need_attention = args.image_trace is not None
+    if args.direction_layer is not None:
+        tag += f"_dir{args.direction_layer}"
+    if args.direction_scope != "global":
+        tag += f"_{args.direction_scope}"
+    if args.continuous:
+        tag += "_cont"
+    if args.attn_impl == "eager" and not need_attention:
+        tag += "_eager"
     out_path = args.out or str(out_dir / f"{tag}.json")
     print(f"[attr_steer] {args.entity}: directions from {len(train_items)} TRAIN items, scored on "
           f"{len(test_items)} disjoint TEST items = {len(rows)} directed rows; layers "
@@ -274,16 +335,18 @@ def main(argv=None):
               f"generation passes over {len(rows)} rows.")
         return
 
-    need_attention = args.image_trace is not None
     with tee_to_log(str(out_dir / f"{tag}.log")):
         adapter = get_adapter(args.model_id)
         # eager only when the attention phase needs it -- it is markedly slower, and the generation
         # phase does not read attention weights.
+        attn_impl = "eager" if need_attention else args.attn_impl
         model, processor = adapter.load(device=args.device, dtype=torch.bfloat16,
-                                        attn_implementation="eager" if need_attention else "sdpa")
+                                        attn_implementation=attn_impl)
         model.eval().requires_grad_(False)
         n_layers = len(adapter.get_decoder_layers(model))
         assert all(1 <= L <= n_layers for L in args.layers), f"layers must be in 1..{n_layers}"
+        assert args.direction_layer is None or args.direction_layer <= n_layers, \
+            f"direction_layer must be in 1..{n_layers}"
         pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
         image_id = adapter.image_token_id(model, processor)
 
@@ -299,11 +362,14 @@ def main(argv=None):
 
         print(f"\n{'=' * 78}\n=== phase 1: estimating directions on {len(train_items)} held-out-from-test "
               f"items\n{'=' * 78}")
+        # The direction layer joins the estimation layers; by default it IS each steering layer.
+        est_layers = (args.layers if args.direction_layer is None
+                      else list(dict.fromkeys(args.layers + [args.direction_layer])))
         means, counts = estimate_directions(adapter, model, processor, entity_dir, items, train_items,
-                                            attributes, args.layers, args.batch_size, True)
+                                            attributes, est_layers, args.batch_size, True)
         print(f"  per-attribute means over {counts[attributes[0]]} items each")
         print(f"  {'layer':>5} {'block':>5} " + "".join(f"{'||d(' + a[:4] + ')||':>16}" for a in attributes))
-        for L in args.layers:
+        for L in est_layers:
             grand = sum(means[L].values()) / len(attributes)
             print(f"  {L:>5} {L - 1:>5} " + "".join(
                 f"{float((means[L][a] - grand).norm()):>16.3f}" for a in attributes))
@@ -314,8 +380,26 @@ def main(argv=None):
                   "n_rows": len(rows), "seed": args.seed,
                   "direction_norms": {str(L): {a: float((means[L][a] - sum(means[L].values())
                                                          / len(attributes)).norm())
-                                               for a in attributes} for L in args.layers},
+                                               for a in attributes} for L in est_layers},
                   "ground_truth_sha256": hashlib.sha256(raw).hexdigest(), "arms": []}
+        # Recorded only when set, so a default run's report is unchanged.
+        if args.direction_layer is not None:
+            report["direction_layer"] = args.direction_layer
+        if args.continuous:
+            report["continuous"] = True
+        if args.attn_impl != "sdpa":
+            report["attn_impl"] = attn_impl
+        item_means = None
+        if args.direction_scope == "item":
+            # Each TEST item's own per-attribute residuals: one item's "mean" is that item. These
+            # are not held out by design -- it is the item-specific direction P33 asks about.
+            at = args.layers if args.direction_layer is None else [args.direction_layer]
+            print(f"  per-item directions: {len(test_items) * len(attributes)} forwards per layer at {at}")
+            per_item = {it: estimate_directions(adapter, model, processor, entity_dir, items, [it],
+                                                attributes, at, args.batch_size, True)[0]
+                        for it in test_items}
+            item_means = {L: {it: per_item[it][L] for it in test_items} for L in at}
+            report["direction_scope"] = "item"
 
         def run(L, make_patch):
             acc = {"first": 0.0, "full": 0.0, "kept": 0.0, "n": 0}
@@ -335,8 +419,11 @@ def main(argv=None):
             return {m: acc[m] / acc["n"] for m in ("first", "full", "kept")} | {"n": acc["n"]}
 
         def per_row_patch(batch, L, mode, alpha, rand=None):
+            K = L if args.direction_layer is None else args.direction_layer
             return build_steer_patch(means, batch, L, attributes, mode, alpha, model.device,
-                                     random_direction=rand)
+                                     random_direction=rand, direction_layer=args.direction_layer,
+                                     continuous=args.continuous,
+                                     item_means=None if item_means is None else item_means[K])
 
         print(f"\n{'=' * 78}\n=== phase 2: steering the held-out items\n{'=' * 78}")
         clean = run(args.layers[0], lambda b, L: [])
@@ -356,8 +443,9 @@ def main(argv=None):
                                            "kind": "attribute", **r})
                     best.append((r["first"], L))
             if args.n_random:
-                grand = sum(means[L].values()) / len(attributes)
-                scale = float(torch.stack([means[L][a] - grand for a in attributes]).norm(dim=-1).mean()) * 2
+                K = L if args.direction_layer is None else args.direction_layer
+                grand = sum(means[K].values()) / len(attributes)
+                scale = float(torch.stack([means[K][a] - grand for a in attributes]).norm(dim=-1).mean()) * 2
                 for j in range(args.n_random):
                     g = torch.Generator().manual_seed(rng.randrange(1 << 30))
                     v = torch.randn(means[L][attributes[0]].shape, generator=g)
