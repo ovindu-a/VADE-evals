@@ -22,7 +22,7 @@ The six claims already made (as refined in the Ideate chat) are not repeated:
 5. Movers and routers compose.
 6. MLPs 23-26 do the lookup, and the readout edit raises VADE final.
 
-**Fix Z1 (DBM) before anything that cites DBM.**
+**Fix Z1 (DBM) before anything that cites DBM.** The GPU follow-ups for every entry are designed, with verified commands and a run order, in FOLLOWUP_PLAN.md.
 
 **CPU results, 2026-10-17.** Entries marked **CPU result** were run with
 `methods/cpu_followups.py`. It recomputes from files already on disk and needs no
@@ -716,8 +716,8 @@ there.
 
 | # | Problem | What to do | Where |
 |---|---|---|---|
-| Z1 | **DBM cause exceeds its own full-swap ceiling** (L16: 60-62% vs 31% at `flag_ring1`; L22: 58.5% vs 15.6%). A mask cannot do that. The runs (2026-09-09/10) predate the BuildBatchCache fix (518cf31, 2026-09-14), and each built a `full_image` cache first. The DBM curve matches the `full_image` ceiling's shape. | Re-run `dbm/eval.py` on the existing checkpoints with current code; expect cause to drop to ≤31% at L16. Don't cite DBM until then. | `results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/*`, `logs/dbm_*` |
-| Z2 | brands/founded_year is called "inert", but its image patch moves it 78-94% (L5-12). The 0% is first-token scoring of `['Ġ','1','9',...]`. | Score it at the point where the base and source years diverge, or by text match. | README Tier-2 caveat 5; `image_head_pipeline/brands/SUMMARY.md` |
+| Z1 | **DBM cause exceeds its own full-swap ceiling** (L16: 60-62% vs 31% at `flag_ring1`; L22: 58.5% vs 15.6%). This holds on the ceiling's own 32 rows: 22-24/32 for DBM vs 10/32 for the full swap. **Correction (2026-10-18):** this is NOT the BuildBatchCache bug fixed in 518cf31. DBM builds one cache per call with a single position set, and its `full_image` source cache is indexed by freshly resolved `flag_ring1` indices; a mismatch would have crashed on shape. Either a trained per-dimension blend genuinely beats the full swap, or the eval path differs from ceiling_sweep's in some other way. | Run FOLLOWUP_PLAN.md P1 (an all-ones mask through `dbm/eval.py`, with and without the source cache). Don't cite DBM until then. | `results/Qwen2.5-VL-7B-Instruct/flags/dbm/language/*`, `logs/dbm_*` |
+| Z2 | brands/founded_year is called "inert", but its image patch moves it 78-94% (L5-12). Divergence-point scoring (n_div=64) already exists: the image patch gets div_src 100%, every prefill-only head window gets 0%, and base and source never differ at the first answer token. So the year is carried, but a last-column prefill patch cannot reach the digit where the two years diverge. | Edit the README; a continuous install (`head_severed --gold own`) is the next test. | `results/image_head_pipeline/brands/founded_year/windows_patch9_text.json` |
 | Z3 | The name-rank chance level is wrong. There are 156 candidates (two spellings each), so the best-of-two null is ≈52, not 39. The same applies to brands (≈74) and celebrities (≈49). | Recompute the null (A5). | R16.1, README, CLAUDE.md |
 | Z4 | The n=16 "replication" is a byte-identical subset of n64. n256 adds no new pairs. | Run seed 1 (A6). | R11.4 / R11.2b |
 | Z5 | R10.4's "clean scores highest" is false for 2 of 3 targets. The currency figure is 85.4%, not 87%. | Edit the doc. | R10.4/R10.5 |
