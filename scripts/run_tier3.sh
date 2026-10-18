@@ -3,7 +3,7 @@
 #
 #   bash scripts/run_tier3.sh smoke              # every changed code path at tiny size (~15 min)
 #   bash scripts/run_tier3.sh session1           # P1-P12: results that can void or overturn written claims
-#   bash scripts/run_tier3.sh session2           # P13-P27: generality
+#   bash scripts/run_tier3.sh session2           # P14 P19 P20 P22 P23 P25 P26 P27 (trimmed; rest in session2_deferred)
 #   bash scripts/run_tier3.sh session3           # P28-P33: expensive / optional
 #   bash scripts/run_tier3.sh p1 p2 p5           # any steps by name
 #
@@ -19,12 +19,14 @@ STAMP=$(date +%Y%m%d_%H%M%S)
 R=results/tier3
 mkdir -p logs/tier3 "$R"
 
-BS_VRH= BS_CEIL= BS_SEV= BS_TEC= BS_RK= BS_CC= BS_DAS=
+BS_VRH= BS_CEIL= BS_SEV= BS_TEC= BS_RK= BS_CC= BS_DAS= BS_JAC= BS_SWAP=
 if [ "${GPU:-}" = a100 ]; then
   # head_trace / head_window_sweep / attr_head_trace keep their defaults: their shuffled-donor
   # controls roll rows WITHIN a batch (see run_tier2.sh).
-  BS_VRH=128 BS_CEIL=64 BS_SEV=64 BS_TEC=64 BS_RK=64 BS_CC=64 BS_DAS=32
-  echo "GPU=a100 batch profile: vrh=$BS_VRH ceiling=$BS_CEIL severed=$BS_SEV tec=$BS_TEC route=$BS_RK compose=$BS_CC das=$BS_DAS"
+  # JAC/SWAP (readout_jacobian eval, head_swap_vade) were added after Session 1's GPU log: those
+  # generation loops are CPU-dispatch bound, so a 4x batch costs about the same wall time per batch.
+  BS_VRH=128 BS_CEIL=64 BS_SEV=64 BS_TEC=64 BS_RK=64 BS_CC=64 BS_DAS=32 BS_JAC=64 BS_SWAP=64
+  echo "GPU=a100 batch profile: vrh=$BS_VRH ceiling=$BS_CEIL severed=$BS_SEV tec=$BS_TEC route=$BS_RK compose=$BS_CC das=$BS_DAS jacobian=$BS_JAC swap=$BS_SWAP"
 fi
 bs() { [ -n "$1" ] && echo "--batch_size $1"; return 0; }   # bs <value> -> flag or nothing
 
@@ -193,14 +195,14 @@ p13() {  # C5: readout rank sweep at MLPs 23-26 (needs the pod's readout_fit.pt)
   [ -f "$FIT" ] || { echo "p13: SKIPPED -- $FIT missing (gitignored; it lives on the pod that ran E3)"; return 0; }
   for r in 32 64 128 256; do
     run "p13_rank$r" $PY methods/readout_jacobian.py --phase eval --site mlp_hidden --blocks 23-26 --max_rank $r \
-        --energy 1.0 --fit_path "$FIT" --out_dir $R/readout_rank/r${r}_e1
+        --energy 1.0 --fit_path "$FIT" $(bs "$BS_JAC") --out_dir $R/readout_rank/r${r}_e1
   done
 }
 
 p14() {  # A10: common10 installed on animals (image patch at layer 10, before the animals handoff)
   run p14_animals $PY methods/head_swap_vade.py --entity animals \
       --tuples_dir $VADE/models/Qwen2.5-VL-7B-Instruct/animals/tuples --head_sets "common10=$COMMON10" \
-      --arms clean heads random_heads full_image --patch_layer 10 --out_dir $R/head_swap_animals
+      --arms clean heads random_heads full_image --patch_layer 10 $(bs "$BS_SWAP") --out_dir $R/head_swap_animals
 }
 
 p15() {  # C6: brands -- does cutting late attention to the image during the head install raise transfer?
@@ -243,7 +245,7 @@ p18() {  # F2/F3: Qwen2.5-VL-3B's two handoff steps traced separately; continuou
   done
   run p18_3b_install $PY methods/head_swap_vade.py --model_id $M --patch_layer 27 \
       --head_sets "cc10=results/image_head_pipeline_Qwen2.5-VL-3B-Instruct/flags/calling_code/head_trace_patch27_blocks27.json#10" \
-      --arms clean heads random_heads full_image --out_dir $R/head_swap_qwen3b
+      --arms clean heads random_heads full_image $(bs "$BS_SWAP") --out_dir $R/head_swap_qwen3b
 }
 
 p19() {  # B8: one router trace per donor attribute
@@ -326,7 +328,7 @@ p27() {  # A9: answer-column edges to OBJECT vs BACKGROUND keys in the mover blo
 
 p28() {  # A8: dose (alpha) install of common10; then the geography of the 'other' answers
   run p28_dose $PY methods/head_swap_vade.py --head_sets "common10=$COMMON10" --alphas 0 0.25 0.5 0.75 1 \
-      --arms heads --out_dir $R/head_swap_dose
+      --arms heads $(bs "$BS_SWAP") --out_dir $R/head_swap_dose
   local X=() a
   for a in 0 0.25 0.5 0.75 1; do X+=("dose_a$a=$R/head_swap_dose/heads_common10_a$a.jsonl"); done
   run p28_geography $PY methods/cpu_followups.py --analyses error_geography entity_swap \
@@ -403,7 +405,9 @@ smoke() {  # tiny sizes, numbers meaningless: every changed path must run end to
 for step in "$@"; do
   case $step in
     session1) p1; p2; p5; p3; p4; p6; p7; p8; p9; p10; p11; p12 ;;
-    session2) p13; p14; p15; p16; p17; p18; p19; p20; p21; p22; p23; p24; p25; p26; p27 ;;
+    # session2 trimmed 2026-10-18: P13 P15 P16 P17 P18 P21 P24 deferred (FOLLOWUP_PLAN.md section 3)
+    session2) p14; p19; p20; p22; p23; p25; p26; p27 ;;
+    session2_deferred) p13; p15; p16; p17; p18; p21; p24 ;;
     session3) p28; p29; p31; p32; p33 ;;
     p1|p2|p3|p4|p5|p6|p7|p8|p9|p10|p11|p12|p13|p14|p15|p16|p17|p18|p19|p20|p21|p22|p23|p24|p25|p26|p27|p28|p29|p31|p32|p33|smoke) $step ;;
     *) echo "unknown step: $step"; exit 1 ;;
