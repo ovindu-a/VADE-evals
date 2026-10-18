@@ -1,0 +1,163 @@
+{
+  "experiment": "attr_steer",
+  "entity": "flags",
+  "attributes": [
+    "capital",
+    "currency",
+    "language",
+    "calling_code"
+  ],
+  "layers": [
+    22
+  ],
+  "modes": [
+    "add"
+  ],
+  "alphas": [
+    0.5,
+    1.0,
+    2.0,
+    4.0
+  ],
+  "positions": "last_token",
+  "train_items": [
+    "LU",
+    "MU",
+    "AU",
+    "HU",
+    "QA",
+    "PK",
+    "MA",
+    "IT",
+    "PE",
+    "KW",
+    "GH",
+    "PY",
+    "CV",
+    "IQ",
+    "SE",
+    "BZ",
+    "HT",
+    "CY",
+    "JO",
+    "RW",
+    "BH",
+    "NP",
+    "MX",
+    "KP",
+    "DZ",
+    "GY",
+    "IN",
+    "AZ",
+    "EG",
+    "SN",
+    "DK",
+    "UY"
+  ],
+  "test_items": [
+    "JP",
+    "CL",
+    "UG",
+    "NZ",
+    "GR",
+    "UZ",
+    "CU",
+    "AO",
+    "ZM",
+    "AF",
+    "VN",
+    "FI",
+    "KH",
+    "HN",
+    "OM",
+    "CO"
+  ],
+  "n_rows": 192,
+  "seed": 0,
+  "direction_norms": {
+    "22": {
+      "capital": 67.32030487060547,
+      "currency": 71.69725799560547,
+      "language": 60.02888488769531,
+      "calling_code": 85.615478515625
+    }
+  },
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "arms": [
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 0.5,
+      "kind": "attribute",
+      "first": 0.40625,
+      "full": 0.18229166666666666,
+      "kept": 0.453125,
+      "n": 192
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.9583333333333334,
+      "full": 0.5885416666666666,
+      "kept": 0.0,
+      "n": 192
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 2.0,
+      "kind": "attribute",
+      "first": 0.9010416666666666,
+      "full": 0.5520833333333334,
+      "kept": 0.0,
+      "n": 192
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 4.0,
+      "kind": "attribute",
+      "first": 0.4427083333333333,
+      "full": 0.19791666666666666,
+      "kept": 0.0,
+      "n": 192
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.890625,
+      "n": 192
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.84375,
+      "n": 192
+    }
+  ],
+  "direction_layer": 22,
+  "clean": {
+    "first": 0.0,
+    "full": 0.0,
+    "kept": 0.90625,
+    "n": 192
+  }
+}

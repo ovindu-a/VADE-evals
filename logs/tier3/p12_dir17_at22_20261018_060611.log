@@ -1,0 +1,46 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+[attr_steer] flags: directions from 32 TRAIN items, scored on 16 disjoint TEST items = 192 directed rows; layers 22-22; modes=['add']; alphas=[0.5, 1.0, 2.0, 4.0]; positions=last_token -> results/tier3/attr_steer/dir17_at22.json
+
+=== logging to /workspace/VADE-evals/logs/attr_steer/flags/attr_steer_last_token_L22-22_add_train32_dir17.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:38,  1.59it/s]Loading weights:   0%|          | 2/729 [00:01<08:50,  1.37it/s]Loading weights:   1%|          | 5/729 [00:01<03:01,  3.99it/s]Loading weights:   1%|1         | 10/729 [00:01<01:15,  9.48it/s]Loading weights:   2%|2         | 16/729 [00:01<00:42, 16.78it/s]Loading weights:   3%|2         | 20/729 [00:01<00:38, 18.52it/s]Loading weights:   4%|3         | 28/729 [00:02<00:24, 28.37it/s]Loading weights:   5%|4         | 33/729 [00:02<00:24, 28.66it/s]Loading weights:   5%|5         | 40/729 [00:02<00:19, 35.50it/s]Loading weights:   6%|6         | 45/729 [00:02<00:20, 33.41it/s]Loading weights:   7%|7         | 52/729 [00:02<00:17, 39.31it/s]Loading weights:   8%|7         | 57/729 [00:02<00:18, 35.94it/s]Loading weights:   9%|8         | 64/729 [00:02<00:16, 41.41it/s]Loading weights:   9%|9         | 69/729 [00:03<00:17, 37.41it/s]Loading weights:  10%|#         | 76/729 [00:03<00:15, 42.35it/s]Loading weights:  11%|#1        | 81/729 [00:03<00:17, 37.98it/s]Loading weights:  12%|#2        | 88/729 [00:03<00:14, 43.51it/s]Loading weights:  13%|#2        | 93/729 [00:03<00:16, 38.69it/s]Loading weights:  14%|#3        | 100/729 [00:03<00:14, 44.13it/s]Loading weights:  14%|#4        | 105/729 [00:04<00:16, 38.86it/s]Loading weights:  15%|#5        | 112/729 [00:04<00:13, 44.16it/s]Loading weights:  16%|#6        | 117/729 [00:04<00:15, 38.91it/s]Loading weights:  17%|#7        | 124/729 [00:04<00:16, 37.29it/s]Loading weights:  18%|#7        | 131/729 [00:04<00:13, 43.92it/s]Loading weights:  19%|#8        | 136/729 [00:04<00:13, 45.03it/s]Loading weights:  19%|#9        | 141/729 [00:04<00:14, 39.58it/s]Loading weights:  20%|##        | 148/729 [00:05<00:13, 44.06it/s]Loading weights:  21%|##        | 153/729 [00:05<00:14, 38.85it/s]Loading weights:  22%|##1       | 160/729 [00:05<00:15, 37.35it/s]Loading weights:  23%|##2       | 166/729 [00:05<00:13, 42.00it/s]Loading weights:  24%|##3       | 172/729 [00:05<00:12, 45.67it/s]Loading weights:  24%|##4       | 177/729 [00:05<00:14, 39.42it/s]Loading weights:  25%|##5       | 184/729 [00:05<00:12, 44.38it/s]Loading weights:  26%|##5       | 189/729 [00:06<00:13, 39.53it/s]Loading weights:  27%|##6       | 196/729 [00:06<00:11, 44.58it/s]Loading weights:  28%|##7       | 201/729 [00:06<00:13, 39.62it/s]Loading weights:  29%|##8       | 208/729 [00:06<00:11, 44.18it/s]Loading weights:  29%|##9       | 213/729 [00:06<00:13, 39.59it/s]Loading weights:  30%|###       | 220/729 [00:06<00:11, 44.42it/s]Loading weights:  31%|###       | 225/729 [00:06<00:12, 39.32it/s]Loading weights:  32%|###1      | 232/729 [00:07<00:11, 43.91it/s]Loading weights:  33%|###2      | 237/729 [00:07<00:12, 39.50it/s]Loading weights:  33%|###3      | 244/729 [00:07<00:10, 44.44it/s]Loading weights:  34%|###4      | 249/729 [00:07<00:12, 39.69it/s]Loading weights:  35%|###5      | 256/729 [00:07<00:10, 44.59it/s]Loading weights:  36%|###5      | 261/729 [00:07<00:11, 39.49it/s]Loading weights:  37%|###6      | 268/729 [00:07<00:10, 44.50it/s]Loading weights:  37%|###7      | 273/729 [00:08<00:11, 38.78it/s]Loading weights:  38%|###8      | 280/729 [00:08<00:10, 43.43it/s]Loading weights:  39%|###9      | 285/729 [00:08<00:11, 38.84it/s]Loading weights:  40%|####      | 292/729 [00:08<00:09, 43.73it/s]Loading weights:  41%|####      | 297/729 [00:08<00:11, 38.80it/s]Loading weights:  42%|####1     | 304/729 [00:08<00:09, 43.53it/s]Loading weights:  42%|####2     | 309/729 [00:08<00:10, 38.67it/s]Loading weights:  43%|####3     | 316/729 [00:09<00:09, 44.31it/s]Loading weights:  44%|####4     | 321/729 [00:09<00:10, 39.03it/s]Loading weights:  45%|####4     | 328/729 [00:09<00:09, 44.12it/s]Loading weights:  46%|####5     | 333/729 [00:09<00:10, 39.09it/s]Loading weights:  50%|#####     | 365/729 [00:09<00:03, 101.68it/s]Loading weights:  55%|#####5    | 403/729 [00:09<00:01, 168.45it/s]Loading weights:  61%|######    | 444/729 [00:09<00:01, 227.92it/s]Loading weights:  66%|######6   | 482/729 [00:09<00:00, 267.09it/s]Loading weights:  72%|#######2  | 525/729 [00:10<00:00, 308.80it/s]Loading weights:  78%|#######8  | 571/729 [00:10<00:00, 348.06it/s]Loading weights:  85%|########4 | 618/729 [00:10<00:00, 379.71it/s]Loading weights:  90%|######### | 658/729 [00:10<00:00, 383.70it/s]Loading weights:  96%|#########5| 698/729 [00:10<00:00, 383.15it/s]Loading weights: 100%|##########| 729/729 [00:10<00:00, 69.06it/s] 
+
+==============================================================================
+=== phase 1: estimating directions on 32 held-out-from-test items
+==============================================================================
+    8/128 training forwards
+    16/128 training forwards
+    24/128 training forwards
+    32/128 training forwards
+    40/128 training forwards
+    48/128 training forwards
+    56/128 training forwards
+    64/128 training forwards
+    72/128 training forwards
+    80/128 training forwards
+    88/128 training forwards
+    96/128 training forwards
+    104/128 training forwards
+    112/128 training forwards
+    120/128 training forwards
+    128/128 training forwards
+  per-attribute means over 32 items each
+  layer block      ||d(capi)||     ||d(curr)||     ||d(lang)||     ||d(call)||
+     22    21           67.320          71.697          60.029          85.615
+     17    16           10.162           9.211          11.776           9.832
+
+==============================================================================
+=== phase 2: steering the held-out items
+==============================================================================
+  unsteered                          first=  0.0% full=  0.0% base_kept= 90.6%   <-- floor; base_kept is the ceiling for a no-op
+  L22 (block 21) add a=0.5           first=  0.0% full=  0.0% base_kept= 90.6%
+  L22 (block 21) add a=1.0           first=  0.0% full=  0.0% base_kept= 90.6%
+  L22 (block 21) add a=2.0           first=  0.0% full=  0.0% base_kept= 91.7%
+  L22 (block 21) add a=4.0           first=  0.0% full=  0.0% base_kept= 88.5%
+  L22 RANDOM direction #1            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+  L22 RANDOM direction #2            first=  0.0% full=  0.0% base_kept= 90.6%   <-- null
+
+  Read the attribute arms AGAINST the random arms at the same layer. A random direction of matched norm should leave `first` at the unsteered floor (0.0%); if it does not, this layer is simply fragile and its attribute arm proves nothing.
+
+wrote results/tier3/attr_steer/dir17_at22.json
+[W1018 11:26:00.618878213 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())

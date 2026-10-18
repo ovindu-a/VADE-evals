@@ -1,0 +1,74 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+
+=== logging to /workspace/VADE-evals/logs/Qwen2.5-VL-7B-Instruct/flags/ndm/currency/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/ceiling_sweep_full_image_layers0-10-20.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<16:30,  1.36s/it]Loading weights:   1%|          | 5/729 [00:01<02:53,  4.16it/s]Loading weights:   1%|1         | 10/729 [00:01<01:17,  9.31it/s]Loading weights:   2%|2         | 16/729 [00:01<00:44, 16.08it/s]Loading weights:   3%|2         | 20/729 [00:01<00:40, 17.46it/s]Loading weights:   4%|3         | 28/729 [00:02<00:26, 26.63it/s]Loading weights:   5%|4         | 33/729 [00:02<00:26, 26.74it/s]Loading weights:   5%|5         | 40/729 [00:02<00:20, 32.83it/s]Loading weights:   6%|6         | 45/729 [00:02<00:21, 31.41it/s]Loading weights:   7%|7         | 52/729 [00:02<00:18, 37.34it/s]Loading weights:   8%|7         | 57/729 [00:02<00:19, 34.52it/s]Loading weights:   9%|8         | 64/729 [00:02<00:17, 39.01it/s]Loading weights:   9%|9         | 69/729 [00:03<00:18, 35.17it/s]Loading weights:  10%|#         | 76/729 [00:03<00:16, 40.11it/s]Loading weights:  11%|#1        | 81/729 [00:03<00:17, 36.86it/s]Loading weights:  12%|#2        | 88/729 [00:03<00:15, 41.53it/s]Loading weights:  13%|#2        | 93/729 [00:03<00:16, 37.53it/s]Loading weights:  14%|#3        | 100/729 [00:03<00:14, 41.95it/s]Loading weights:  14%|#4        | 105/729 [00:04<00:16, 37.61it/s]Loading weights:  15%|#5        | 112/729 [00:04<00:15, 41.04it/s]Loading weights:  16%|#6        | 117/729 [00:04<00:16, 36.47it/s]Loading weights:  17%|#7        | 124/729 [00:04<00:14, 40.63it/s]Loading weights:  18%|#7        | 129/729 [00:04<00:16, 36.37it/s]Loading weights:  19%|#8        | 136/729 [00:04<00:14, 40.19it/s]Loading weights:  19%|#9        | 141/729 [00:05<00:16, 35.52it/s]Loading weights:  20%|##        | 148/729 [00:05<00:14, 39.90it/s]Loading weights:  21%|##        | 153/729 [00:05<00:16, 35.97it/s]Loading weights:  22%|##1       | 160/729 [00:05<00:14, 40.12it/s]Loading weights:  23%|##2       | 165/729 [00:05<00:15, 35.79it/s]Loading weights:  24%|##3       | 172/729 [00:05<00:13, 40.79it/s]Loading weights:  24%|##4       | 177/729 [00:05<00:14, 36.97it/s]Loading weights:  25%|##5       | 184/729 [00:06<00:13, 40.62it/s]Loading weights:  26%|##5       | 189/729 [00:06<00:14, 36.32it/s]Loading weights:  27%|##6       | 196/729 [00:06<00:15, 35.49it/s]Loading weights:  28%|##7       | 202/729 [00:06<00:13, 39.56it/s]Loading weights:  29%|##8       | 208/729 [00:07<00:21, 23.89it/s]Loading weights:  29%|##9       | 212/729 [00:07<00:22, 22.88it/s]Loading weights:  30%|###       | 220/729 [00:07<00:17, 29.69it/s]Loading weights:  31%|###       | 224/729 [00:07<00:18, 28.05it/s]Loading weights:  32%|###1      | 232/729 [00:07<00:13, 35.51it/s]Loading weights:  33%|###2      | 237/729 [00:07<00:14, 33.35it/s]Loading weights:  33%|###3      | 244/729 [00:08<00:12, 38.76it/s]Loading weights:  34%|###4      | 249/729 [00:08<00:13, 34.33it/s]Loading weights:  35%|###5      | 256/729 [00:08<00:12, 39.40it/s]Loading weights:  36%|###5      | 261/729 [00:08<00:13, 34.57it/s]Loading weights:  37%|###6      | 268/729 [00:08<00:11, 39.52it/s]Loading weights:  37%|###7      | 273/729 [00:08<00:13, 35.03it/s]Loading weights:  38%|###8      | 280/729 [00:08<00:11, 39.95it/s]Loading weights:  39%|###9      | 285/729 [00:09<00:12, 35.21it/s]Loading weights:  40%|####      | 292/729 [00:09<00:10, 40.38it/s]Loading weights:  41%|####      | 297/729 [00:09<00:12, 35.69it/s]Loading weights:  42%|####1     | 304/729 [00:09<00:10, 39.94it/s]Loading weights:  42%|####2     | 309/729 [00:10<00:24, 17.20it/s]Loading weights:  43%|####3     | 316/729 [00:10<00:23, 17.37it/s]Loading weights:  44%|####3     | 319/729 [00:11<00:36, 11.35it/s]Loading weights:  44%|####4     | 324/729 [00:11<00:29, 13.62it/s]Loading weights:  45%|####4     | 328/729 [00:12<00:40, 10.02it/s]Loading weights:  45%|####5     | 330/729 [00:12<00:43,  9.27it/s]Loading weights:  50%|####9     | 361/729 [00:12<00:10, 36.60it/s]Loading weights:  55%|#####5    | 403/729 [00:12<00:04, 80.24it/s]Loading weights:  60%|######    | 438/729 [00:13<00:02, 116.32it/s]Loading weights:  65%|######5   | 476/729 [00:13<00:01, 159.42it/s]Loading weights:  70%|#######   | 512/729 [00:13<00:01, 197.03it/s]Loading weights:  75%|#######5  | 550/729 [00:13<00:00, 235.70it/s]Loading weights:  81%|########  | 587/729 [00:13<00:00, 265.29it/s]Loading weights:  86%|########5 | 625/729 [00:13<00:00, 290.72it/s]Loading weights:  91%|#########1| 667/729 [00:13<00:00, 320.56it/s]Loading weights:  97%|#########6| 704/729 [00:13<00:00, 332.66it/s]Loading weights: 100%|##########| 729/729 [00:13<00:00, 52.64it/s] 
+[ndm/ceiling_sweep] sampled 32 cause rows (seed=0) spanning 20 distinct base entities of 25 available
+[ndm/ceiling_sweep] entity=flags attribute=currency layers=[0, 10, 20] sites=['residual', 'blocks:1', 'blocks:2', 'blocks:3', 'blocks:4', 'blocks:5', 'blocks:10', 'blocks:20'] positions=['full_image'] cause_rows=32 iso_rows=32
+
+==============================================================================
+=== positions='full_image'
+==============================================================================
+  unhooked baseline on cause rows: matches_source=0.0% matches_base=90.6%  (matches_source here is the 'already correct by accident' floor -- subtract it mentally when reading cause_ceiling)
+/root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+                residual layer  0: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  0.0%
+                residual layer 10: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  0.0%
+                residual layer 20: cause_ceiling=100.0% base_kept=  0.0% other=  0.0% iso_floor=  3.1%
+  skip blocks:1 layer 0: needs --layer >= 1 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:1 layer 10: 2 parts over block 9 -- swaps everything residual@10 has that residual@9 does not
+                blocks:1 layer 10: cause_ceiling=  0.0% base_kept= 90.6% other=  9.4% iso_floor=100.0%
+  blocks:1 layer 20: 2 parts over block 19 -- swaps everything residual@20 has that residual@19 does not
+                blocks:1 layer 20: cause_ceiling=  0.0% base_kept= 90.6% other=  9.4% iso_floor=100.0%
+  skip blocks:2 layer 0: needs --layer >= 2 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:2 layer 10: 4 parts over blocks 8-9 -- swaps everything residual@10 has that residual@8 does not
+                blocks:2 layer 10: cause_ceiling=  0.0% base_kept= 90.6% other=  9.4% iso_floor= 96.9%
+  blocks:2 layer 20: 4 parts over blocks 18-19 -- swaps everything residual@20 has that residual@18 does not
+                blocks:2 layer 20: cause_ceiling=  0.0% base_kept= 90.6% other=  9.4% iso_floor=100.0%
+  skip blocks:3 layer 0: needs --layer >= 3 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:3 layer 10: 6 parts over blocks 7-9 -- swaps everything residual@10 has that residual@7 does not
+                blocks:3 layer 10: cause_ceiling=  0.0% base_kept= 84.4% other= 15.6% iso_floor= 93.8%
+  blocks:3 layer 20: 6 parts over blocks 17-19 -- swaps everything residual@20 has that residual@17 does not
+                blocks:3 layer 20: cause_ceiling=  0.0% base_kept= 90.6% other=  9.4% iso_floor=100.0%
+  skip blocks:4 layer 0: needs --layer >= 4 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:4 layer 10: 8 parts over blocks 6-9 -- swaps everything residual@10 has that residual@6 does not
+                blocks:4 layer 10: cause_ceiling=  3.1% base_kept= 68.8% other= 28.1% iso_floor= 75.0%
+  blocks:4 layer 20: 8 parts over blocks 16-19 -- swaps everything residual@20 has that residual@16 does not
+                blocks:4 layer 20: cause_ceiling=  0.0% base_kept= 90.6% other=  9.4% iso_floor=100.0%
+  skip blocks:5 layer 0: needs --layer >= 5 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:5 layer 10: 10 parts over blocks 5-9 -- swaps everything residual@10 has that residual@5 does not
+                blocks:5 layer 10: cause_ceiling= 12.5% base_kept= 65.6% other= 21.9% iso_floor= 68.8%
+  blocks:5 layer 20: 10 parts over blocks 15-19 -- swaps everything residual@20 has that residual@15 does not
+                blocks:5 layer 20: cause_ceiling=  0.0% base_kept= 87.5% other= 12.5% iso_floor=100.0%
+  skip blocks:10 layer 0: needs --layer >= 10 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:10 layer 10: 20 parts over blocks 0-9 -- swaps everything residual@10 has that residual@0 does not
+               blocks:10 layer 10: cause_ceiling= 78.1% base_kept=  6.2% other= 15.6% iso_floor=  9.4%
+  blocks:10 layer 20: 20 parts over blocks 10-19 -- swaps everything residual@20 has that residual@10 does not
+               blocks:10 layer 20: cause_ceiling=  0.0% base_kept= 78.1% other= 21.9% iso_floor= 90.6%
+  skip blocks:20 layer 0: needs --layer >= 20 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  skip blocks:20 layer 10: needs --layer >= 20 (every site but `residual` addresses a SUBLAYER of block layer-1, and layer 0 is the embedding output, which has neither; a span of N blocks needs N of them to exist below the layer)
+  blocks:20 layer 20: 40 parts over blocks 0-19 -- swaps everything residual@20 has that residual@0 does not
+               blocks:20 layer 20: cause_ceiling= 96.9% base_kept=  0.0% other=  3.1% iso_floor=  0.0%
+
+=== ceiling sweep summary (cause_ceiling = upper bound on `cause` for ANY mask) ===
+                  site  layer   width  cause_ceiling  base_kept    other  iso_floor
+              residual      0    3584        100.0%      0.0%    0.0%      0.0%
+              residual     10    3584        100.0%      0.0%    0.0%      0.0%
+              residual     20    3584        100.0%      0.0%    0.0%      3.1%
+              blocks:1     10    7168          0.0%     90.6%    9.4%    100.0%
+              blocks:1     20    7168          0.0%     90.6%    9.4%    100.0%
+              blocks:2     10   14336          0.0%     90.6%    9.4%     96.9%
+              blocks:2     20   14336          0.0%     90.6%    9.4%    100.0%
+              blocks:3     10   21504          0.0%     84.4%   15.6%     93.8%
+              blocks:3     20   21504          0.0%     90.6%    9.4%    100.0%
+              blocks:4     10   28672          3.1%     68.8%   28.1%     75.0%
+              blocks:4     20   28672          0.0%     90.6%    9.4%    100.0%
+              blocks:5     10   35840         12.5%     65.6%   21.9%     68.8%
+              blocks:5     20   35840          0.0%     87.5%   12.5%    100.0%
+             blocks:10     10   71680         78.1%      6.2%   15.6%      9.4%
+             blocks:10     20   71680          0.0%     78.1%   21.9%     90.6%
+             blocks:20     20  143360         96.9%      0.0%    3.1%      0.0%
+
+Most headroom: residual layer 0 (cause_ceiling=100.0%) -- train there.
+wrote results/tier3/ceiling_blockspan/currency_full_image_L0-10-20.json
+[W1018 09:53:55.305612677 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())

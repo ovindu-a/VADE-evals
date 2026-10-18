@@ -1,0 +1,45 @@
+{
+  "entity": "celebrities",
+  "attribute": "nationality",
+  "positions": "seq:before",
+  "scoring": "text",
+  "max_new_tokens": 8,
+  "split": "test",
+  "layers": [
+    0,
+    1
+  ],
+  "sites": [
+    "residual"
+  ],
+  "unhooked_cause_matches_source": 0.0,
+  "unhooked_cause_matches_base": 0.90625,
+  "by_site_layer": {
+    "residual/0": {
+      "site": "residual",
+      "layer": 0,
+      "cause_ceiling": 0.15625,
+      "blocks": [
+        -1
+      ],
+      "base_kept": 0.8125,
+      "other": 0.03125,
+      "iso_floor": 0.8125,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "residual/1": {
+      "site": "residual",
+      "layer": 1,
+      "cause_ceiling": 0.15625,
+      "blocks": [
+        0
+      ],
+      "base_kept": 0.8125,
+      "other": 0.03125,
+      "iso_floor": 0.78125,
+      "width": 3584,
+      "n_cause": 32
+    }
+  }
+}
