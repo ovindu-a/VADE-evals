@@ -318,52 +318,112 @@ Two consequences:
 (CLAIM_CANDIDATES G7). Session 2's comparisons are within each run or about curve shape, so that is
 acceptable there.
 
-### Session 2: three lanes, big batches on two of them
+### Session 2 (trimmed, 2026-10-18): eight steps, three lanes
+
+**Deferred, do not run:**
+- P13 (readout rank sweep)
+- P15 (brands late attention)
+- P16 (n=128 stage-1 curves)
+- P17 (animals text positions)
+- P18 (3B windows and install)
+- P21 (currency with 10 random draws)
+- P24 (steering robustness)
+
+`bash scripts/run_tier3.sh session2` now runs only the eight below; the deferred ones are in
+`session2_deferred`, for later.
+
+| step | claim it tests | lane |
+|---|---|---|
+| p14 | the movers carry entity identity: animals' entity facts transfer, category traits do not (A10) | 1 |
+| p20 | the answer format comes from the base question, not more routers (B9) | 1 |
+| p27 | the movers read identity from object vs background keys, causally (A9) | 1 |
+| p23 | identity spreads outward ring by ring; face identity is object-local (D2, D3) | 1 |
+| p19 | one shared router serves all four attributes (B8) | 2 |
+| p25 | the question is relayed via "Answer"/":"; block 19 is no keystone (B6, B7) | 2 |
+| p26 | the cached attribute-switch engine reproduces serial decoding (G7) | 3 |
+| p22 | whether text has an early subject-enrichment stage that images skip (D9) | 3 |
+
+**0. If you started Session 2's old lane 1** (`p16 p17 p23`, from the earlier instructions), stop
+it with Ctrl-C in its window. P16 and P17 are deferred. Partial files under
+`results/image_head_pipeline_n128/` are harmless: leave them and don't package them.
+
+**1. Wait for Session 1 to finish,** then refresh the checkout. Run nothing while any lane is still
+going; see "Moving from a running Session 1" below if you want to overlap.
 
 ```bash
-GPU=a100 bash scripts/run_tier3.sh p16 p17 p23                              # lane 1: ceiling sweeps
-GPU=a100 bash scripts/run_tier3.sh p13 p14 p18                              # lane 2: jacobian + head installs
-bash scripts/run_tier3.sh p19 p24 p25 p26 p15 p20 p21 p22 p27                # lane 3: default batches
+cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home PYTORCH_ALLOC_CONF=expandable_segments:True
+git add results/tier3 logs/tier3 && git commit -m "Tier-3 Session 1 results"   # anything not yet committed
+rm -f scripts/run_tier3_next.sh && git pull
+python -m pytest -q tests/                               # expect 0 failures
 ```
 
-1. **No a100-profile lane has been measured yet,** so add lanes one at a time. Start lane 1, read
-   its `nvidia-smi` peak after ~10 minutes, then lane 2, then lane 3. Keep the total under ~70 GB.
-2. If the total would go over, run lane 2 without `GPU=a100`, or wait for lane 1 to finish.
-3. Lane 3 stays at default batches. Most of its steps do not use the a100 sizes anyway, and keeping
-   it small caps memory.
-4. **P13 needs E3's `readout_fit.pt`** at `results/readout_jacobian/flags__mlp_hidden_b23-26/`.
-   Without it P13 prints SKIPPED and lane 2 runs only P14 and P18.
-5. P18 needs the 3B pruned tuples in `../VADE/models/Qwen2.5-VL-3B-Instruct/` (written by E8).
-6. **Optional: NVIDIA MPS** lets kernels from the three processes overlap instead of time-slicing.
-   That time-slicing is what held three lanes to 1.5x. MPS changes no numbers. It is untested on
-   this pod and may be blocked inside the container; if the daemon fails to start, skip it. Start it
-   only while **no** CUDA process is running, and export the two variables in every lane window too:
-   ```bash
-   export CUDA_MPS_PIPE_DIRECTORY=/tmp/mps CUDA_MPS_LOG_DIRECTORY=/tmp/mps
-   mkdir -p /tmp/mps && nvidia-cuda-mps-control -d      # before the first lane
-   echo quit | nvidia-cuda-mps-control                   # after the last lane ends
-   ```
-7. When all three lanes are done, run `session3` steps only if asked. Then report as below.
+**2. Optional: start MPS before any lane** (see the note below; skip it if the daemon refuses):
+
+```bash
+export CUDA_MPS_PIPE_DIRECTORY=/tmp/mps CUDA_MPS_LOG_DIRECTORY=/tmp/mps
+mkdir -p /tmp/mps && nvidia-cuda-mps-control -d
+```
+
+Export the same two variables in every lane window if MPS is on.
+
+**3. Start the lanes, one at a time, each in its own tmux window:**
+
+```bash
+GPU=a100 bash scripts/run_tier3.sh p14 p20 p27 p23      # lane 1: steps whose batch GPU=a100 raises
+bash scripts/run_tier3.sh p19 p25                       # lane 2: default batches
+bash scripts/run_tier3.sh p26 p22                       # lane 3: default batches
+```
+
+- Start lane 1 first and read its `nvidia-smi` peak after ~10 minutes. No a100-profile lane has
+  been measured yet, and default lanes were ~17 GB each in Session 1.
+- Then start lanes 2 and 3, keeping the total under ~70 GB. If lane 1 alone goes past ~40 GB,
+  restart it without `GPU=a100`.
+- Expected wall time is roughly 2-3 h, with lane 1 the longest because of P14's ~8.2k head-install
+  generations. This is an estimate from Session 1's rates, not a measurement.
+
+**4. Self-checks to read as each step finishes:**
+
+| step | must hold |
+|---|---|
+| p14 | The `clean` arm's accuracy on animals is high (pruned tuples). The `full_image` arm (patch at layer 10) transfers far more than `random_heads` (~0). |
+| p20 | Read-back is exact, and installing a run's own values is a no-op (both asserted, as in E4). `movers` and `clean` reproduce `results/circuit_compose/flags/summary.json`. The router-dependent arms are new and are not compared. |
+| p27 | The empty-knockout no-op check prints `max |dlogit| = 0`. `img_patch` transfers ~98% as in E5. |
+| p23 | Nothing is asserted. `ring:0` is the same token set as `entity_only`, so at L10/L18 it should sit near E11's capital `entity_only` (34% / 16%, n=96; this run uses 32 rows). Both face halves run. |
+| p19 | Each donor attribute's phase-1 top-8 is printed. Report how many heads each shares with router8. |
+| p25 | No assertion fires for `field` (it requires exactly one differing token per prompt pair). Each gapped `attention_set` arm (16-23 minus block 19, 20 or 21) reads at or below the full `attention_blocks:8` arm (blocks 16-23) in the same run. |
+| p26 | `--verify_cached` raises on the first mismatch. If it does, record the message and continue with the paired runs. |
+| p22 | The freeze specs print, and no warning says L_e excludes a mover block. |
+
+**5. After the lanes:**
+1. `echo quit | nvidia-cuda-mps-control`, if MPS was started.
+2. Commit `results/tier3 logs/tier3` and the `_tier3`-suffixed ceiling logs under
+   `logs/Qwen2.5-VL-7B-Instruct/` (from P23).
+3. Write `RUN_REPORT_TIER3.md` as in section 5.
+
+**About MPS.** It lets kernels from the three processes overlap instead of time-slicing, which is
+what held Session 1's three lanes to 1.5x. MPS changes no numbers. It is untested on this pod and
+may be blocked inside the container. Start it only while **no** CUDA process is running.
 
 ### Moving from a running Session 1 into Session 2
 
-**Never `git pull` or edit `scripts/run_tier3.sh` while a lane is running.** bash reads its
-script incrementally, so a running lane can execute a mix of the old and new file. To start a
-Session 2 lane while Session 1 lanes are still going, run it from an untracked copy of the new
-launcher. It must sit in `scripts/`, because the launcher `cd`s relative to its own path:
+**Never `git pull` or edit `scripts/run_tier3.sh` while a lane is running.** bash reads its script
+incrementally, so a running lane can execute a mix of the old and new file. To start a Session 2
+lane while Session 1 lanes are still going, run it from an untracked copy of the new launcher. The
+copy must sit in `scripts/`, because the launcher `cd`s relative to its own path:
 
 ```bash
 cd /workspace/VADE-evals && git fetch origin
 git show origin/main:scripts/run_tier3.sh > scripts/run_tier3_next.sh     # untracked copy
-GPU=a100 bash scripts/run_tier3_next.sh p16 p17 p23                      # e.g. lane 1, in a new window
+GPU=a100 bash scripts/run_tier3_next.sh p14 p20 p27 p23                  # e.g. lane 1, in a new window
 ```
 
-The only change after Session 1 started is in the launcher; `methods/` is identical, so the copy
-runs the same code. Once every Session 1 lane has finished:
+Only the launcher has changed since Session 1 started; `methods/` is identical, so the copy runs the
+same code. Once every Session 1 lane has finished:
 1. commit their results;
 2. `rm scripts/run_tier3_next.sh`;
 3. `git pull`;
 4. start the remaining Session 2 lanes with `scripts/run_tier3.sh`.
 
-Report as in section 5, writing `RUN_REPORT_TIER3.md`, and package `logs/tier3 results/tier3
-results/image_head_pipeline_n128` plus the `_tier3`-suffixed ceiling logs under `logs/Qwen2.5-VL-7B-Instruct/`.
+Report as in section 5, writing `RUN_REPORT_TIER3.md`, and package `logs/tier3 results/tier3` plus
+the `_tier3`-suffixed ceiling logs under `logs/Qwen2.5-VL-7B-Instruct/`. (`results/image_head_pipeline_n128`
+belongs to the deferred P16; don't package a partial one.)

@@ -159,6 +159,10 @@ The order follows three rules:
 | P33 | Per-country steering directions | C7 | C7 (+~20) | S | Item-specific decay |
 | P34 | Qwen2.5-VL-32B | F1 | small | XL | Relative-depth claim |
 
+**Deferred (2026-10-18):** P13, P15, P16, P17, P18, P21 and P24. Session 2 is now P14, P19, P20,
+P22, P23, P25, P26 and P27 (`run_tier3.sh session2`); the deferred steps are in
+`session2_deferred`. GPU_RUNBOOK.md's Tier-3 section has the lane plan.
+
 **Suggested sessions:**
 - **Session 1:** P1-P12 (~4-6 h). Every P1-P8 result can change text already in
   README / CLAIM_CANDIDATES.

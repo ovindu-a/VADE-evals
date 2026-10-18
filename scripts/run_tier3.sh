@@ -3,7 +3,7 @@
 #
 #   bash scripts/run_tier3.sh smoke              # every changed code path at tiny size (~15 min)
 #   bash scripts/run_tier3.sh session1           # P1-P12: results that can void or overturn written claims
-#   bash scripts/run_tier3.sh session2           # P13-P27: generality
+#   bash scripts/run_tier3.sh session2           # P14 P19 P20 P22 P23 P25 P26 P27 (trimmed; rest in session2_deferred)
 #   bash scripts/run_tier3.sh session3           # P28-P33: expensive / optional
 #   bash scripts/run_tier3.sh p1 p2 p5           # any steps by name
 #
@@ -405,7 +405,9 @@ smoke() {  # tiny sizes, numbers meaningless: every changed path must run end to
 for step in "$@"; do
   case $step in
     session1) p1; p2; p5; p3; p4; p6; p7; p8; p9; p10; p11; p12 ;;
-    session2) p13; p14; p15; p16; p17; p18; p19; p20; p21; p22; p23; p24; p25; p26; p27 ;;
+    # session2 trimmed 2026-10-18: P13 P15 P16 P17 P18 P21 P24 deferred (FOLLOWUP_PLAN.md section 3)
+    session2) p14; p19; p20; p22; p23; p25; p26; p27 ;;
+    session2_deferred) p13; p15; p16; p17; p18; p21; p24 ;;
     session3) p28; p29; p31; p32; p33 ;;
     p1|p2|p3|p4|p5|p6|p7|p8|p9|p10|p11|p12|p13|p14|p15|p16|p17|p18|p19|p20|p21|p22|p23|p24|p25|p26|p27|p28|p29|p31|p32|p33|smoke) $step ;;
     *) echo "unknown step: $step"; exit 1 ;;
