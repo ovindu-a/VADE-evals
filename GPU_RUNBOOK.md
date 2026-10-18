@@ -242,12 +242,52 @@ Then `session2` (needs `results/readout_jacobian/flags__mlp_hidden_b23-26/readou
 E3 pod for P13, else P13 prints SKIPPED; P18 needs the 3B pruned tuples from E8), then `session3`
 if asked.
 
+### Alternative: run Session 1 as three parallel lanes
+
+Every step loads its own copy of Qwen2.5-VL-7B (~16.6 GB bf16) plus activations that grow with
+batch size.
+- **`GPU=a100` is what fills the card.** Its 64-128 batches let ONE job use most of the 80 GB.
+  Never combine it with parallel lanes.
+- **Without it,** every script runs at its own default batch, sized for a 24 GB card. The one
+  measured default-batch run peaked at 18.7 GB, so expect roughly 17-25 GB per lane. These are
+  estimates, not measurements.
+
+```bash
+bash scripts/run_tier3.sh smoke                  # ALONE first, no GPU=a100: downloads + checks every changed path
+# then one tmux window per lane (no GPU=a100 anywhere):
+bash scripts/run_tier3.sh p1 p4 p10              # lane 1
+bash scripts/run_tier3.sh p2 p5 p3 p11           # lane 2
+bash scripts/run_tier3.sh p6 p7 p8 p9 p12        # lane 3
+```
+
+1. Start lanes 1 and 2, watch `nvidia-smi` for ~10 minutes, and start lane 3 only if peak usage
+   stays below ~55 GB.
+2. Check `free -g` first. Each process passes through system RAM while loading the model, so
+   three lanes want roughly 64 GB or more.
+3. Optionally `export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in each window, which
+   reduces memory fragmentation.
+4. If a step runs out of memory, only its lane stops. Rerun that step by name after the other
+   lanes finish.
+
+Things to know:
+- **Keep P1 in one lane.** It is the only Tier-3 step that writes a shared on-disk cache
+  (`../VADE/results/<model>/flags/source_activation_cache/full_image.pt`); its cached and
+  uncached arms already run one after another inside P1. No other step shares an output file:
+  each writes its own directory, and each lane gets its own log names.
+- **Speed:** lanes share the GPU's compute. Jobs that already saturate it gain little;
+  small-batch jobs gain most (P11 at batch 1, the P1/P4 evaluations). Expect Session 1 in
+  roughly 3-4 h instead of 4-6 h, not a third of the time.
+- **Batch size can change a few answers** (CLAIM_CANDIDATES G7: batch shape and attention
+  backend move clean answers on a few rows). P2's baseline arms are checked against the
+  committed E9 run, which used batch 128; at the default 16 a few of those rows may differ.
+  P2's real comparison (movers vs random heads) is within the same run, so it is unaffected.
+
 **Self-checks that must hold:**
 
 | Step | Must hold |
 |---|---|
 | p1 | `L16_ones` and `L16_ones_nocache` agree with each other. Report both against the ceiling's 31.2% (flag_ring1 L16) and DBM's 60-62%. |
-| p2 | The `clean`, `zero:park_vrh` and `zero:common10` rows reproduce `results/vrh_ablation/flags/summary.json`. |
+| p2 | The `clean`, `zero:park_vrh` and `zero:common10` rows reproduce `results/vrh_ablation/flags/summary.json`: exactly with `GPU=a100` (batch 128, as committed); within a few rows at the default batch (parallel lanes). |
 | p3 | Print `heldout_consensus.txt` and its overlap with common10. |
 | p6 | In `patch15_blocks15-27_n84.json`, phase 3's ALL arm equals the question patch's `first`. The identity is closed at full coverage. |
 | p9 | The `entity_patch` and `image_movers` arms reproduce E6 (87-91% transfer). |
