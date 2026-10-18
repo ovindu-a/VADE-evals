@@ -1,0 +1,68 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  capital: 4 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/capital/test.jsonl
+  currency: 4 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/currency/test.jsonl
+  language: 4 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/language/test.jsonl
+  calling_code: 4 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/calling_code/test.jsonl
+[head_severed] flags: heads 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  arms (8): ['clean', 'heads', 'heads+mlp[23-26]', 'heads+mlp[23-26]@other', 'heads+mlp[23,25-26]', 'heads+mlp[23,25-26]@other', 'heads+mlp[27]', 'heads+mlp[27]@other']
+  freeze_steps=all; ~128 scored generations -> results/tier3/smoke/severed
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:19,  1.66it/s]Loading weights:   0%|          | 2/729 [00:01<07:43,  1.57it/s]Loading weights:   1%|          | 5/729 [00:01<02:40,  4.51it/s]Loading weights:   2%|▏         | 11/729 [00:01<01:01, 11.68it/s]Loading weights:   2%|▏         | 17/729 [00:01<00:40, 17.37it/s]Loading weights:   3%|▎         | 24/729 [00:01<00:27, 25.61it/s]Loading weights:   4%|▍         | 29/729 [00:02<00:26, 26.53it/s]Loading weights:   5%|▍         | 35/729 [00:02<00:21, 31.99it/s]Loading weights:   6%|▌         | 41/729 [00:02<00:20, 33.02it/s]Loading weights:   6%|▋         | 46/729 [00:02<00:18, 36.40it/s]Loading weights:   7%|▋         | 53/729 [00:02<00:18, 37.27it/s]Loading weights:   8%|▊         | 58/729 [00:02<00:16, 39.58it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:15, 44.24it/s]Loading weights:   9%|▉         | 69/729 [00:02<00:16, 39.14it/s]Loading weights:  10%|█         | 75/729 [00:03<00:15, 42.61it/s]Loading weights:  11%|█         | 80/729 [00:03<00:16, 38.28it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:13, 46.19it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:15, 40.80it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:13, 45.78it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:15, 40.59it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:13, 45.23it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:15, 40.22it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:13, 45.38it/s]Loading weights:  18%|█▊        | 129/729 [00:04<00:15, 39.76it/s]Loading weights:  19%|█▊        | 135/729 [00:04<00:13, 42.46it/s]Loading weights:  19%|█▉        | 140/729 [00:04<00:15, 38.27it/s]Loading weights:  20%|██        | 148/729 [00:04<00:12, 45.46it/s]Loading weights:  21%|██        | 153/729 [00:04<00:14, 40.26it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:12, 45.33it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:14, 39.65it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 44.90it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:13, 39.75it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:12, 44.54it/s]Loading weights:  26%|██▌       | 189/729 [00:05<00:13, 39.50it/s]Loading weights:  27%|██▋       | 196/729 [00:05<00:12, 44.36it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 38.31it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 43.88it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 39.14it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 44.25it/s]Loading weights:  31%|███       | 225/729 [00:06<00:12, 39.48it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:13, 37.88it/s]Loading weights:  33%|███▎      | 239/729 [00:06<00:11, 43.27it/s]Loading weights:  34%|███▎      | 245/729 [00:07<00:11, 40.74it/s]Loading weights:  34%|███▍      | 251/729 [00:07<00:10, 43.63it/s]Loading weights:  35%|███▌      | 257/729 [00:07<00:11, 40.98it/s]Loading weights:  36%|███▌      | 263/729 [00:07<00:10, 43.72it/s]Loading weights:  37%|███▋      | 269/729 [00:07<00:11, 41.02it/s]Loading weights:  38%|███▊      | 276/729 [00:07<00:09, 46.12it/s]Loading weights:  39%|███▊      | 281/729 [00:08<00:12, 34.79it/s]Loading weights:  40%|████      | 292/729 [00:08<00:09, 48.18it/s]Loading weights:  41%|████      | 298/729 [00:08<00:10, 43.01it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:12, 34.81it/s]Loading weights:  43%|████▎     | 316/729 [00:08<00:08, 48.87it/s]Loading weights:  44%|████▍     | 322/729 [00:08<00:09, 43.69it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:08, 46.73it/s]Loading weights:  46%|████▌     | 334/729 [00:09<00:09, 42.20it/s]Loading weights:  52%|█████▏    | 378/729 [00:09<00:02, 125.44it/s]Loading weights:  59%|█████▉    | 429/729 [00:09<00:01, 211.78it/s]Loading weights:  66%|██████▌   | 478/729 [00:09<00:00, 277.79it/s]Loading weights:  73%|███████▎  | 529/729 [00:09<00:00, 336.37it/s]Loading weights:  80%|███████▉  | 581/729 [00:09<00:00, 383.79it/s]Loading weights:  86%|████████▋ | 630/729 [00:09<00:00, 408.92it/s]Loading weights:  93%|█████████▎| 681/729 [00:09<00:00, 433.22it/s]Loading weights: 100%|█████████▉| 727/729 [00:10<00:00, 419.04it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 72.33it/s] 
+  self-checks: {'readback_worst': 0.0, 'identity': 'bit-exact', 'liveness_max_logit_delta': 13.75}
+  capital: third country from the same template for 0/4 rows
+  capital: 4/4
+  currency: third country from the same template for 3/4 rows
+  currency: 4/4
+  language: third country from the same template for 0/4 rows
+  language: 4/4
+  calling_code: third country from the same template for 0/4 rows
+  calling_code: 4/4
+
+=== capital ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+                             heads    4   100.0%      0.0%        -   1.00   100.0%      0.0%   0.0%        -
+                  heads+mlp[23-26]    4     0.0%     75.0%        -   0.00     0.0%     75.0%  25.0%        -
+            heads+mlp[23-26]@other    4     0.0%      0.0%    75.0%   0.00     0.0%      0.0%  25.0%    75.0%
+               heads+mlp[23,25-26]    4     0.0%     75.0%        -   0.00     0.0%     75.0%  25.0%        -
+         heads+mlp[23,25-26]@other    4     0.0%      0.0%    50.0%   0.00     0.0%      0.0%  50.0%    50.0%
+                     heads+mlp[27]    4    75.0%      0.0%        -   0.75    75.0%      0.0%  25.0%        -
+               heads+mlp[27]@other    4    75.0%      0.0%     0.0%   0.75    75.0%      0.0%  25.0%     0.0%
+
+=== currency ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean    4     0.0%     75.0%        -   0.00     0.0%     75.0%  25.0%        -
+                             heads    4   100.0%      0.0%        -   1.00   100.0%      0.0%   0.0%        -
+                  heads+mlp[23-26]    4     0.0%     75.0%        -   0.00     0.0%     75.0%  25.0%        -
+            heads+mlp[23-26]@other    4     0.0%      0.0%    50.0%   0.00     0.0%      0.0%  50.0%    50.0%
+               heads+mlp[23,25-26]    4     0.0%     75.0%        -   0.00     0.0%     75.0%  25.0%        -
+         heads+mlp[23,25-26]@other    4     0.0%      0.0%    25.0%   0.00     0.0%      0.0%  75.0%    25.0%
+                     heads+mlp[27]    4    50.0%     25.0%        -   0.50    25.0%     25.0%  50.0%        -
+               heads+mlp[27]@other    4    75.0%      0.0%     0.0%   0.75     0.0%      0.0% 100.0%     0.0%
+
+=== language ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+                             heads    4   100.0%      0.0%        -   1.00   100.0%      0.0%   0.0%        -
+                  heads+mlp[23-26]    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+            heads+mlp[23-26]@other    4     0.0%      0.0%   100.0%   0.00     0.0%      0.0%   0.0%   100.0%
+               heads+mlp[23,25-26]    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+         heads+mlp[23,25-26]@other    4     0.0%      0.0%   100.0%   0.00     0.0%      0.0%   0.0%   100.0%
+                     heads+mlp[27]    4    75.0%      0.0%        -   0.75    75.0%     25.0%   0.0%        -
+               heads+mlp[27]@other    4    75.0%      0.0%     0.0%   0.75    75.0%     25.0%   0.0%     0.0%
+
+=== calling_code ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+                             heads    4   100.0%      0.0%        -   1.00   100.0%      0.0%   0.0%        -
+                  heads+mlp[23-26]    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+            heads+mlp[23-26]@other    4    33.3%      0.0%   100.0%   0.33     0.0%      0.0%   0.0%   100.0%
+               heads+mlp[23,25-26]    4     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+         heads+mlp[23,25-26]@other    4    33.3%      0.0%   100.0%   0.33     0.0%      0.0%   0.0%   100.0%
+                     heads+mlp[27]    4   100.0%      0.0%        -   1.00    75.0%      0.0%  25.0%        -
+               heads+mlp[27]@other    4   100.0%      0.0%     0.0%   1.00   100.0%      0.0%   0.0%     0.0%
+
+  kept = src 1st / the same column of `heads`. <<1 under heads+mlp[span] = the lookup is downstream.
+  @mean ~ base -> the block is needed; @mean recovers -> base's answer was being re-written;
+  @other lands on the 3rd country -> the block writes the answer itself. 'other' excludes 3rd.
+
+wrote results/tier3/smoke/severed/rows.jsonl and summary.json

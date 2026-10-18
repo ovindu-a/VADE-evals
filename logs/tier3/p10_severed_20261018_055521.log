@@ -1,0 +1,157 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  capital: 128 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/capital/test.jsonl
+  currency: 128 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/currency/test.jsonl
+  language: 128 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/language/test.jsonl
+  calling_code: 128 cause rows from /workspace/VADE/models/Qwen2.5-VL-7B-Instruct/flags/tuples/calling_code/test.jsonl
+[head_severed] flags: heads 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  arms (23): ['clean', 'heads', 'heads+mlp[23-26]', 'heads+mlp[23-26]@mean', 'heads+mlp[23-26]@other', 'heads+mlp[24-26]', 'heads+mlp[24-26]@mean', 'heads+mlp[24-26]@other', 'heads+mlp[23,25-26]', 'heads+mlp[23,25-26]@mean', 'heads+mlp[23,25-26]@other', 'heads+mlp[23-24,26]', 'heads+mlp[23-24,26]@mean', 'heads+mlp[23-24,26]@other', 'heads+mlp[23-25]', 'heads+mlp[23-25]@mean', 'heads+mlp[23-25]@other', 'heads+mlp[25]', 'heads+mlp[25]@mean', 'heads+mlp[25]@other', 'heads+mlp[27]', 'heads+mlp[27]@mean', 'heads+mlp[27]@other']
+  freeze_steps=all; ~11776 scored generations -> results/tier3/severed_loo_n128_s1
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:49,  1.55it/s]Loading weights:   0%|          | 2/729 [00:01<11:05,  1.09it/s]Loading weights:   1%|          | 5/729 [00:01<03:38,  3.31it/s]Loading weights:   1%|▏         | 10/729 [00:02<01:30,  7.96it/s]Loading weights:   2%|▏         | 16/729 [00:02<00:49, 14.32it/s]Loading weights:   3%|▎         | 20/729 [00:02<00:43, 16.33it/s]Loading weights:   4%|▍         | 28/729 [00:02<00:27, 25.45it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:26, 26.18it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:21, 32.75it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:21, 31.30it/s]Loading weights:   7%|▋         | 52/729 [00:03<00:18, 37.12it/s]Loading weights:   8%|▊         | 57/729 [00:03<00:20, 33.22it/s]Loading weights:   9%|▉         | 64/729 [00:03<00:16, 40.06it/s]Loading weights:   9%|▉         | 69/729 [00:03<00:18, 36.24it/s]Loading weights:  10%|█         | 76/729 [00:03<00:15, 41.15it/s]Loading weights:  11%|█         | 81/729 [00:03<00:17, 36.76it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:15, 41.39it/s]Loading weights:  13%|█▎        | 93/729 [00:04<00:17, 36.85it/s]Loading weights:  14%|█▎        | 100/729 [00:04<00:15, 41.84it/s]Loading weights:  14%|█▍        | 105/729 [00:04<00:16, 37.14it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:14, 42.08it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:16, 37.58it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:14, 42.37it/s]Loading weights:  18%|█▊        | 129/729 [00:05<00:15, 37.61it/s]Loading weights:  19%|█▊        | 136/729 [00:05<00:13, 42.49it/s]Loading weights:  19%|█▉        | 141/729 [00:05<00:15, 37.46it/s]Loading weights:  20%|██        | 148/729 [00:05<00:13, 42.24it/s]Loading weights:  21%|██        | 153/729 [00:05<00:15, 37.43it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:13, 42.10it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:15, 37.29it/s]Loading weights:  24%|██▎       | 172/729 [00:06<00:13, 42.06it/s]Loading weights:  24%|██▍       | 177/729 [00:06<00:14, 37.32it/s]Loading weights:  25%|██▌       | 184/729 [00:06<00:12, 42.28it/s]Loading weights:  26%|██▌       | 189/729 [00:06<00:14, 37.46it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:12, 42.24it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:14, 37.40it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:12, 42.35it/s]Loading weights:  29%|██▉       | 213/729 [00:07<00:13, 37.66it/s]Loading weights:  30%|███       | 220/729 [00:07<00:12, 42.34it/s]Loading weights:  31%|███       | 225/729 [00:07<00:13, 37.57it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:11, 42.27it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:13, 37.43it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:11, 42.21it/s]Loading weights:  34%|███▍      | 249/729 [00:08<00:12, 37.36it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:11, 41.94it/s]Loading weights:  36%|███▌      | 261/729 [00:08<00:12, 37.41it/s]Loading weights:  37%|███▋      | 268/729 [00:08<00:10, 42.64it/s]Loading weights:  37%|███▋      | 273/729 [00:08<00:12, 37.74it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:10, 42.42it/s]Loading weights:  39%|███▉      | 285/729 [00:08<00:11, 37.75it/s]Loading weights:  40%|████      | 292/729 [00:09<00:10, 42.41it/s]Loading weights:  41%|████      | 297/729 [00:09<00:11, 37.75it/s]Loading weights:  42%|████▏     | 304/729 [00:09<00:10, 42.41it/s]Loading weights:  42%|████▏     | 309/729 [00:09<00:11, 37.62it/s]Loading weights:  43%|████▎     | 316/729 [00:09<00:09, 42.28it/s]Loading weights:  44%|████▍     | 321/729 [00:09<00:10, 37.57it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:09, 42.25it/s]Loading weights:  46%|████▌     | 333/729 [00:10<00:10, 37.60it/s]Loading weights:  50%|████▉     | 362/729 [00:10<00:03, 92.23it/s]Loading weights:  56%|█████▌    | 407/729 [00:10<00:01, 175.62it/s]Loading weights:  62%|██████▏   | 452/729 [00:10<00:01, 244.05it/s]Loading weights:  68%|██████▊   | 493/729 [00:10<00:00, 287.63it/s]Loading weights:  74%|███████▍  | 541/729 [00:10<00:00, 336.84it/s]Loading weights:  81%|████████  | 587/729 [00:10<00:00, 370.81it/s]Loading weights:  87%|████████▋ | 634/729 [00:10<00:00, 398.31it/s]Loading weights:  93%|█████████▎| 679/729 [00:10<00:00, 412.31it/s]Loading weights:  99%|█████████▉| 722/729 [00:11<00:00, 412.95it/s]Loading weights: 100%|██████████| 729/729 [00:11<00:00, 65.45it/s] 
+  self-checks: {'readback_worst': 0.0, 'identity': 'bit-exact', 'liveness_max_logit_delta': 2.625}
+  capital: third country from the same template for 128/128 rows
+  capital: 16/128
+  capital: 32/128
+  capital: 48/128
+  capital: 64/128
+  capital: 80/128
+  capital: 96/128
+  capital: 112/128
+  capital: 128/128
+  currency: third country from the same template for 128/128 rows
+  currency: 16/128
+  currency: 32/128
+  currency: 48/128
+  currency: 64/128
+  currency: 80/128
+  currency: 96/128
+  currency: 112/128
+  currency: 128/128
+  language: third country from the same template for 128/128 rows
+  language: 16/128
+  language: 32/128
+  language: 48/128
+  language: 64/128
+  language: 80/128
+  language: 96/128
+  language: 112/128
+  language: 128/128
+  calling_code: third country from the same template for 128/128 rows
+  calling_code: 16/128
+  calling_code: 32/128
+  calling_code: 48/128
+  calling_code: 64/128
+  calling_code: 80/128
+  calling_code: 96/128
+  calling_code: 112/128
+  calling_code: 128/128
+
+=== capital ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+                             heads  128    96.9%      0.8%        -   1.00    96.9%      0.8%   2.3%        -
+                  heads+mlp[23-26]  128     0.0%     99.2%        -   0.00     0.0%     99.2%   0.8%        -
+             heads+mlp[23-26]@mean  128     0.0%      0.8%        -   0.00     0.0%      0.8%  99.2%        -
+            heads+mlp[23-26]@other  128     0.0%      0.0%   100.0%   0.00     0.0%      0.0%   0.0%   100.0%
+                  heads+mlp[24-26]  128     0.0%     89.8%        -   0.00     0.0%     89.8%  10.2%        -
+             heads+mlp[24-26]@mean  128    12.5%      0.8%        -   0.13     9.4%      0.8%  89.8%        -
+            heads+mlp[24-26]@other  128     0.0%      0.0%    78.1%   0.00     0.0%      0.0%  21.9%    78.1%
+               heads+mlp[23,25-26]  128     0.0%     97.7%        -   0.00     0.0%     97.7%   2.3%        -
+          heads+mlp[23,25-26]@mean  128    11.7%      1.6%        -   0.12    10.2%      1.6%  88.3%        -
+         heads+mlp[23,25-26]@other  128     1.6%      0.8%    88.3%   0.02     1.6%      0.0%  10.2%    88.3%
+               heads+mlp[23-24,26]  128     0.0%     96.9%        -   0.00     0.0%     96.9%   3.1%        -
+          heads+mlp[23-24,26]@mean  128     4.7%      3.1%        -   0.05     3.9%      3.1%  93.0%        -
+         heads+mlp[23-24,26]@other  128     0.0%      0.0%    93.0%   0.00     0.0%      0.0%   7.0%    93.0%
+                  heads+mlp[23-25]  128     0.0%     96.9%        -   0.00     0.0%     96.9%   3.1%        -
+             heads+mlp[23-25]@mean  128     9.4%      4.7%        -   0.10     8.6%      3.9%  87.5%        -
+            heads+mlp[23-25]@other  128     0.8%      0.0%    93.8%   0.01     0.8%      0.0%   5.5%    93.8%
+                     heads+mlp[25]  128    43.8%     31.2%        -   0.45    43.8%     31.2%  25.0%        -
+                heads+mlp[25]@mean  128    82.0%      1.6%        -   0.85    82.0%      1.6%  16.4%        -
+               heads+mlp[25]@other  128    57.0%      1.6%     6.2%   0.59    55.5%      1.6%  36.7%     6.2%
+                     heads+mlp[27]  128    86.7%      1.6%        -   0.90    43.8%      1.6%  54.7%        -
+                heads+mlp[27]@mean  128    92.2%      0.0%        -   0.95    73.4%      0.0%  26.6%        -
+               heads+mlp[27]@other  128    90.6%      0.0%     0.0%   0.94    45.3%      0.0%  54.7%     0.0%
+
+=== currency ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean  128     0.0%     87.4%        -   0.00     0.0%     82.0%  18.0%        -
+                             heads  128    79.5%      5.5%        -   1.00    79.7%      3.1%  17.2%        -
+                  heads+mlp[23-26]  128     0.0%     81.9%        -   0.00     0.0%     78.1%  21.9%        -
+             heads+mlp[23-26]@mean  128     5.5%     29.1%        -   0.07     3.9%      7.0%  89.1%        -
+            heads+mlp[23-26]@other  128     0.8%     15.0%    69.0%   0.01     0.0%      0.0%  33.6%    66.4%
+                  heads+mlp[24-26]  128     3.1%     80.3%        -   0.04     1.6%     75.0%  23.4%        -
+             heads+mlp[24-26]@mean  128    14.2%     24.4%        -   0.18     8.6%      4.7%  86.7%        -
+            heads+mlp[24-26]@other  128     3.9%     15.0%    57.9%   0.05     1.6%      0.0%  41.4%    57.0%
+               heads+mlp[23,25-26]  128     0.8%     78.0%        -   0.01     0.8%     72.7%  26.6%        -
+          heads+mlp[23,25-26]@mean  128     8.7%     26.8%        -   0.11     7.8%      9.4%  82.8%        -
+         heads+mlp[23,25-26]@other  128     1.6%     14.2%    62.7%   0.02     0.0%      0.0%  39.8%    60.2%
+               heads+mlp[23-24,26]  128     3.1%     82.7%        -   0.04     1.6%     77.3%  21.1%        -
+          heads+mlp[23-24,26]@mean  128     8.7%     25.2%        -   0.11     6.2%      8.6%  85.2%        -
+         heads+mlp[23-24,26]@other  128     3.9%     17.3%    57.1%   0.05     1.6%      0.8%  40.6%    57.0%
+                  heads+mlp[23-25]  128     0.0%     78.0%        -   0.00     0.0%     75.0%  25.0%        -
+             heads+mlp[23-25]@mean  128     3.1%     33.9%        -   0.04     1.6%     10.9%  87.5%        -
+            heads+mlp[23-25]@other  128     0.8%     21.3%    57.9%   0.01     0.0%      0.8%  42.2%    57.0%
+                     heads+mlp[25]  128     7.9%     52.0%        -   0.10     3.9%     43.0%  53.1%        -
+                heads+mlp[25]@mean  128    22.8%     24.4%        -   0.29    21.9%      9.4%  68.8%        -
+               heads+mlp[25]@other  128    10.2%     21.3%    19.8%   0.13     7.0%      3.9%  69.5%    19.5%
+                     heads+mlp[27]  128    50.4%     22.8%        -   0.63    14.1%     18.8%  67.2%        -
+                heads+mlp[27]@mean  128    73.2%      7.1%        -   0.92    48.4%      1.6%  50.0%        -
+               heads+mlp[27]@other  128    60.6%      8.7%     1.6%   0.76    14.1%      0.8%  83.6%     1.6%
+
+=== language ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean  128     0.0%     95.2%        -   0.00     3.1%     95.3%   4.7%        -
+                             heads  128   100.0%      0.0%        -   1.00   100.0%      3.1%   0.0%        -
+                  heads+mlp[23-26]  128     0.0%     96.0%        -   0.00     3.1%     96.1%   3.9%        -
+             heads+mlp[23-26]@mean  128    25.8%      5.6%        -   0.26    25.8%      6.2%  68.8%        -
+            heads+mlp[23-26]@other  128     0.8%      1.6%    88.7%   0.01     0.8%      1.6%   8.6%    89.1%
+                  heads+mlp[24-26]  128     0.8%     93.5%        -   0.01     3.9%     93.8%   5.5%        -
+             heads+mlp[24-26]@mean  128    43.5%      5.6%        -   0.44    43.0%     12.5%  45.3%        -
+            heads+mlp[24-26]@other  128     1.6%      2.4%    79.0%   0.02     3.1%      2.3%  16.4%    78.1%
+               heads+mlp[23,25-26]  128     0.8%     93.5%        -   0.01     3.9%     94.5%   4.7%        -
+          heads+mlp[23,25-26]@mean  128    46.8%      5.6%        -   0.47    46.1%     14.8%  39.8%        -
+         heads+mlp[23,25-26]@other  128     3.2%      1.6%    73.4%   0.03     3.9%      3.9%  18.8%    73.4%
+               heads+mlp[23-24,26]  128     0.8%     91.1%        -   0.01     3.9%     91.4%   7.8%        -
+          heads+mlp[23-24,26]@mean  128    49.2%      5.6%        -   0.49    50.8%     18.0%  32.8%        -
+         heads+mlp[23-24,26]@other  128     0.8%      3.2%    79.8%   0.01     0.8%      3.1%  17.2%    78.9%
+                  heads+mlp[23-25]  128     0.0%     94.4%        -   0.00     3.1%     94.5%   5.5%        -
+             heads+mlp[23-25]@mean  128    40.3%      4.8%        -   0.40    43.0%     13.3%  46.1%        -
+            heads+mlp[23-25]@other  128     0.8%      1.6%    86.3%   0.01     0.8%      1.6%  12.5%    85.2%
+                     heads+mlp[25]  128    70.2%     14.5%        -   0.70    71.1%     21.9%  10.2%        -
+                heads+mlp[25]@mean  128    86.3%      1.6%        -   0.86    86.7%      6.2%  10.2%        -
+               heads+mlp[25]@other  128    76.6%      3.2%     2.4%   0.77    78.1%     10.9%  11.7%     2.3%
+                     heads+mlp[27]  128    86.3%      0.8%        -   0.86    87.5%     10.9%   4.7%        -
+                heads+mlp[27]@mean  128    91.9%      0.0%        -   0.92    93.8%      6.2%   3.1%        -
+               heads+mlp[27]@other  128    85.5%      0.0%     0.0%   0.85    87.5%      7.0%   8.6%     0.0%
+
+=== calling_code ===
+                               arm    n  src 1st  base 1st  3rd 1st   kept  src txt  base txt  other  3rd txt
+                             clean  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+                             heads  128    99.0%      1.0%        -   1.00    96.1%      0.0%   3.9%        -
+                  heads+mlp[23-26]  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+             heads+mlp[23-26]@mean  128    28.7%     29.7%        -   0.29     1.6%      0.0%  98.4%        -
+            heads+mlp[23-26]@other  128    14.9%     20.8%   100.0%   0.15     0.0%      0.0%   0.0%   100.0%
+                  heads+mlp[24-26]  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+             heads+mlp[24-26]@mean  128    31.7%     27.7%        -   0.32     0.8%      0.0%  99.2%        -
+            heads+mlp[24-26]@other  128    14.9%     20.8%   100.0%   0.15     0.0%      0.0%   0.0%   100.0%
+               heads+mlp[23,25-26]  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+          heads+mlp[23,25-26]@mean  128    29.7%     30.7%        -   0.30     0.0%      0.0% 100.0%        -
+         heads+mlp[23,25-26]@other  128    14.9%     20.8%   100.0%   0.15     0.0%      0.0%   0.0%   100.0%
+               heads+mlp[23-24,26]  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+          heads+mlp[23-24,26]@mean  128    44.6%     23.8%        -   0.45     7.8%      3.1%  89.1%        -
+         heads+mlp[23-24,26]@other  128    14.9%     20.8%   100.0%   0.15     0.0%      0.0%   0.8%    99.2%
+                  heads+mlp[23-25]  128     0.0%    100.0%        -   0.00     0.0%    100.0%   0.0%        -
+             heads+mlp[23-25]@mean  128    29.7%     29.7%        -   0.30     0.8%      0.8%  98.4%        -
+            heads+mlp[23-25]@other  128    14.9%     20.8%   100.0%   0.15     0.0%      0.0%   0.0%   100.0%
+                     heads+mlp[25]  128     0.0%    100.0%        -   0.00     0.0%     95.3%   4.7%        -
+                heads+mlp[25]@mean  128    25.7%     34.7%        -   0.26     0.8%      0.8%  98.4%        -
+               heads+mlp[25]@other  128    14.9%     20.8%   100.0%   0.15     0.0%      0.0%   7.0%    93.0%
+                     heads+mlp[27]  128    95.0%      5.0%        -   0.96    57.8%     10.9%  31.2%        -
+                heads+mlp[27]@mean  128   100.0%      0.0%        -   1.01    93.8%      0.0%   6.2%        -
+               heads+mlp[27]@other  128    94.1%      5.0%     0.0%   0.95    60.2%      0.0%  32.8%     7.0%
+
+  kept = src 1st / the same column of `heads`. <<1 under heads+mlp[span] = the lookup is downstream.
+  @mean ~ base -> the block is needed; @mean recovers -> base's answer was being re-written;
+  @other lands on the 3rd country -> the block writes the answer itself. 'other' excludes 3rd.
+
+wrote results/tier3/severed_loo_n128_s1/rows.jsonl and summary.json
+[W1018 08:21:26.424435249 AllocatorConfig.cpp:28] Warning: PYTORCH_CUDA_ALLOC_CONF is deprecated, use PYTORCH_ALLOC_CONF instead (function operator())

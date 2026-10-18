@@ -1,0 +1,110 @@
+{
+  "experiment": "attr_steer",
+  "entity": "flags",
+  "attributes": [
+    "capital",
+    "currency",
+    "language",
+    "calling_code"
+  ],
+  "layers": [
+    22
+  ],
+  "modes": [
+    "add",
+    "project"
+  ],
+  "alphas": [
+    1.0
+  ],
+  "positions": "last_token",
+  "train_items": [
+    "LU",
+    "MU",
+    "AU",
+    "HU",
+    "QA",
+    "PK",
+    "MA",
+    "IT"
+  ],
+  "test_items": [
+    "PE",
+    "KW",
+    "GH",
+    "PY"
+  ],
+  "n_rows": 48,
+  "seed": 0,
+  "direction_norms": {
+    "22": {
+      "capital": 66.82575988769531,
+      "currency": 69.03227996826172,
+      "language": 57.9503059387207,
+      "calling_code": 85.36825561523438
+    },
+    "17": {
+      "capital": 10.016511917114258,
+      "currency": 9.074962615966797,
+      "language": 11.684538841247559,
+      "calling_code": 9.859827041625977
+    }
+  },
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "arms": [
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.9791666666666666,
+      "n": 48
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "project",
+      "alpha": 1.0,
+      "kind": "attribute",
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 0.9791666666666666,
+      "n": 48
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 0,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 1.0,
+      "n": 48
+    },
+    {
+      "layer": 22,
+      "block": 21,
+      "mode": "add",
+      "alpha": 1.0,
+      "kind": "random",
+      "index": 1,
+      "first": 0.0,
+      "full": 0.0,
+      "kept": 1.0,
+      "n": 48
+    }
+  ],
+  "direction_layer": 17,
+  "continuous": true,
+  "clean": {
+    "first": 0.0,
+    "full": 0.0,
+    "kept": 1.0,
+    "n": 48
+  }
+}

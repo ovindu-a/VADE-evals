@@ -1,0 +1,31 @@
+{
+  "entity": "flags",
+  "attribute": "capital",
+  "positions": "idx:64,65",
+  "scoring": "token",
+  "max_new_tokens": 5,
+  "split": "test",
+  "layers": [
+    10
+  ],
+  "sites": [
+    "residual"
+  ],
+  "unhooked_cause_matches_source": 0.0,
+  "unhooked_cause_matches_base": 1.0,
+  "by_site_layer": {
+    "residual/10": {
+      "site": "residual",
+      "layer": 10,
+      "cause_ceiling": 0.25,
+      "blocks": [
+        9
+      ],
+      "base_kept": 0.75,
+      "other": 0.0,
+      "iso_floor": 1.0,
+      "width": 3584,
+      "n_cause": 4
+    }
+  }
+}

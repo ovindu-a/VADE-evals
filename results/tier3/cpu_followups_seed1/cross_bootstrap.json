@@ -1,0 +1,84 @@
+{
+  "n_pairs": 64,
+  "n_bases": 46,
+  "n_sources": 49,
+  "cells": {
+    "flag/q1==q2": {
+      "n": 256,
+      "rate": 0.8125,
+      "ci95_pair": [
+        0.76953125,
+        0.8515625
+      ],
+      "halfwidth_pair": 0.041015625,
+      "ci95_base_country": [
+        0.7738095238095238,
+        0.8548387096774194
+      ],
+      "halfwidth_base_country": 0.04051459293394777,
+      "ci95_source_country": [
+        0.7653846153846153,
+        0.8582089552238806
+      ],
+      "halfwidth_source_country": 0.04641216991963265
+    },
+    "both/q1!=q2": {
+      "n": 768,
+      "rate": 0.65234375,
+      "ci95_pair": [
+        0.609375,
+        0.6966145833333334
+      ],
+      "halfwidth_pair": 0.043619791666666685,
+      "ci95_base_country": [
+        0.6038251366120219,
+        0.7002923976608187
+      ],
+      "halfwidth_base_country": 0.04823363052439844,
+      "ci95_source_country": [
+        0.6002824858757062,
+        0.7051282051282052
+      ],
+      "halfwidth_source_country": 0.052422859626249485
+    },
+    "question/q1!=q2": {
+      "n": 768,
+      "rate": 0.7877604166666666,
+      "ci95_pair": [
+        0.7526041666666666,
+        0.8216145833333334
+      ],
+      "halfwidth_pair": 0.03450520833333337,
+      "ci95_base_country": [
+        0.7446236559139785,
+        0.8296019900497512
+      ],
+      "halfwidth_base_country": 0.04248916706788636,
+      "ci95_source_country": [
+        0.75,
+        0.8267195767195767
+      ],
+      "halfwidth_source_country": 0.03835978835978837
+    },
+    "self/q1==q2": {
+      "n": 256,
+      "rate": 0.91796875,
+      "ci95_pair": [
+        0.88671875,
+        0.94921875
+      ],
+      "halfwidth_pair": 0.03125,
+      "ci95_base_country": [
+        0.876984126984127,
+        0.953125
+      ],
+      "halfwidth_base_country": 0.03807043650793651,
+      "ci95_source_country": [
+        0.8867924528301887,
+        0.946969696969697
+      ],
+      "halfwidth_source_country": 0.030088622069754156
+    }
+  },
+  "note": "cell flag/both: rate = answer is the donor flag's answer to q1; question/self: rate = base answer kept. Country-cluster bootstraps resample base (or source) countries with all their pairs."
+}

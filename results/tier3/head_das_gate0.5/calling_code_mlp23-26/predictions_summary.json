@@ -1,0 +1,52 @@
+{
+  "predictions_file": "results/tier3/head_das_gate0.5/calling_code_mlp23-26/predictions.jsonl",
+  "entity": "flags",
+  "attribute": "calling_code",
+  "split": "test",
+  "n_missing_predictions": 10052,
+  "by_target_attribute": {
+    "calling_code": {
+      "overall": {
+        "n": 4000,
+        "pct_accuracy": 58.3,
+        "cause_accuracy": 93.0,
+        "iso_mean_accuracy": 46.9,
+        "final_score": 70.0
+      },
+      "by_queried": [
+        {
+          "queried": "calling_code",
+          "n": 1025,
+          "is_cause": true,
+          "pct_accuracy": 93.0,
+          "pct_matches_source": 93.0,
+          "pct_matches_base": 0.7
+        },
+        {
+          "queried": "capital",
+          "n": 995,
+          "is_cause": false,
+          "pct_accuracy": 40.5,
+          "pct_matches_source": 42.0,
+          "pct_matches_base": 40.5
+        },
+        {
+          "queried": "currency",
+          "n": 1015,
+          "is_cause": false,
+          "pct_accuracy": 20.7,
+          "pct_matches_source": 32.5,
+          "pct_matches_base": 20.7
+        },
+        {
+          "queried": "language",
+          "n": 965,
+          "is_cause": false,
+          "pct_accuracy": 79.5,
+          "pct_matches_source": 15.5,
+          "pct_matches_base": 79.5
+        }
+      ]
+    }
+  }
+}

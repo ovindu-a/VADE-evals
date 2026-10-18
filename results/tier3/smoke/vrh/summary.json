@@ -1,0 +1,104 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "entity": "flags",
+  "arms": {
+    "clean": [],
+    "zero:park_vrh": [
+      "14.11",
+      "14.16",
+      "14.23",
+      "16.0",
+      "16.1",
+      "16.6",
+      "16.7",
+      "16.17",
+      "16.20",
+      "17.14",
+      "17.18",
+      "18.15",
+      "18.16",
+      "19.15",
+      "19.17",
+      "19.19",
+      "19.20",
+      "19.22",
+      "19.23",
+      "19.26"
+    ],
+    "zero:common10": [
+      "21.1",
+      "21.5",
+      "22.13",
+      "22.15",
+      "22.17",
+      "22.19",
+      "23.3",
+      "23.4",
+      "23.6",
+      "23.17"
+    ],
+    "zero:common10:random0": [
+      "21.6",
+      "21.20",
+      "22.2",
+      "22.3",
+      "22.8",
+      "22.18",
+      "23.15",
+      "23.18",
+      "23.19",
+      "23.24"
+    ]
+  },
+  "summary": {
+    "clean": {
+      "accuracy": 0.8125,
+      "by_attribute": {
+        "capital": 1.0,
+        "currency": 0.5,
+        "language": 1.0,
+        "calling_code": 0.75
+      },
+      "mover_rank_mean": 1.0,
+      "mover_rank1": 1.0,
+      "n": 16
+    },
+    "zero:park_vrh": {
+      "accuracy": 0.625,
+      "by_attribute": {
+        "capital": 1.0,
+        "currency": 0.0,
+        "language": 0.75,
+        "calling_code": 0.75
+      },
+      "mover_rank_mean": 1.0,
+      "mover_rank1": 1.0,
+      "n": 16
+    },
+    "zero:common10": {
+      "accuracy": 0.1875,
+      "by_attribute": {
+        "capital": 0.25,
+        "currency": 0.0,
+        "language": 0.5,
+        "calling_code": 0.0
+      },
+      "mover_rank_mean": null,
+      "mover_rank1": null,
+      "n": 16
+    },
+    "zero:common10:random0": {
+      "accuracy": 0.875,
+      "by_attribute": {
+        "capital": 1.0,
+        "currency": 0.75,
+        "language": 1.0,
+        "calling_code": 0.75
+      },
+      "mover_rank_mean": 1.0,
+      "mover_rank1": 1.0,
+      "n": 16
+    }
+  },
+  "n_names": 8
+}

@@ -1,0 +1,637 @@
+{
+  "config": {
+    "vade_root": "/workspace/VADE",
+    "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "attributes": [
+      "capital",
+      "currency",
+      "language",
+      "calling_code"
+    ],
+    "n_pairs": 4,
+    "knockouts": [
+      "late=readout:24-27"
+    ],
+    "img_layer": 16,
+    "q_layers": [
+      16
+    ],
+    "no_renormalize": false,
+    "batch_size": 8,
+    "seed": 0,
+    "device": "cuda:0",
+    "out_dir": "results/tier3/smoke/route_install",
+    "install_heads": "common10"
+  },
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "n_rows": 16,
+  "n_eligible": 15,
+  "all": {
+    "clean": {
+      "n": 16,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.19361341827271994
+      ],
+      "base_kept": 0.9375,
+      "other": 0.0625,
+      "mean_ld": -9.9931640625
+    },
+    "source_clean": {
+      "n": 16,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.8063865817272802,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 11.66796875
+    },
+    "img_patch": {
+      "n": 16,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.8063865817272802,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 11.4609375
+    },
+    "ko:late": {
+      "n": 16,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.19361341827271994
+      ],
+      "base_kept": 0.9375,
+      "other": 0.0625,
+      "mean_ld": -9.6689453125
+    },
+    "ko:late+img_patch": {
+      "n": 16,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.8063865817272802,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 11.205078125
+    },
+    "qpatch@16": {
+      "n": 16,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.19361341827271994
+      ],
+      "base_kept": 0.9375,
+      "other": 0.0625,
+      "mean_ld": -9.7265625
+    },
+    "qpatch@16+ko:readout_all": {
+      "n": 16,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.19361341827271994
+      ],
+      "base_kept": 0.9375,
+      "other": 0.0625,
+      "mean_ld": -5.72265625
+    },
+    "install": {
+      "n": 16,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.8063865817272802,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 8.62890625
+    },
+    "install+ko:late": {
+      "n": 16,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.8063865817272802,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 9.521484375
+    }
+  },
+  "eligible": {
+    "clean": {
+      "n": 15,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.20388926630434784
+      ],
+      "base_kept": 1.0,
+      "other": 0.0,
+      "mean_ld": -10.946875
+    },
+    "source_clean": {
+      "n": 15,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.7961107336956521,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 11.364583333333334
+    },
+    "img_patch": {
+      "n": 15,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.7961107336956521,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 11.1875
+    },
+    "ko:late": {
+      "n": 15,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.20388926630434784
+      ],
+      "base_kept": 1.0,
+      "other": 0.0,
+      "mean_ld": -10.601041666666667
+    },
+    "ko:late+img_patch": {
+      "n": 15,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.7961107336956521,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 10.9125
+    },
+    "qpatch@16": {
+      "n": 15,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.20388926630434784
+      ],
+      "base_kept": 1.0,
+      "other": 0.0,
+      "mean_ld": -10.704166666666667
+    },
+    "qpatch@16+ko:readout_all": {
+      "n": 15,
+      "transfer": 0.0,
+      "transfer_ci95": [
+        0.0,
+        0.20388926630434784
+      ],
+      "base_kept": 1.0,
+      "other": 0.0,
+      "mean_ld": -6.685416666666667
+    },
+    "install": {
+      "n": 15,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.7961107336956521,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 8.25
+    },
+    "install+ko:late": {
+      "n": 15,
+      "transfer": 1.0,
+      "transfer_ci95": [
+        0.7961107336956521,
+        1.0
+      ],
+      "base_kept": 0.0,
+      "other": 0.0,
+      "mean_ld": 9.197916666666666
+    }
+  },
+  "by_attribute": {
+    "capital": {
+      "clean": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -12.0
+      },
+      "source_clean": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 14.5546875
+      },
+      "img_patch": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 14.2109375
+      },
+      "ko:late": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -11.5390625
+      },
+      "ko:late+img_patch": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 14.171875
+      },
+      "qpatch@16": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -11.8125
+      },
+      "qpatch@16+ko:readout_all": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -7.3125
+      },
+      "install": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 12.046875
+      },
+      "install+ko:late": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 12.6953125
+      }
+    },
+    "currency": {
+      "clean": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -10.77734375
+      },
+      "source_clean": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 13.6953125
+      },
+      "img_patch": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 13.671875
+      },
+      "ko:late": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -9.94140625
+      },
+      "ko:late+img_patch": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 13.1015625
+      },
+      "qpatch@16": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -10.4140625
+      },
+      "qpatch@16+ko:readout_all": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -4.84375
+      },
+      "install": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 8.671875
+      },
+      "install+ko:late": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 11.40625
+      }
+    },
+    "language": {
+      "clean": {
+        "n": 3,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.5615060804490177
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -14.739583333333334
+      },
+      "source_clean": {
+        "n": 3,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.43849391955098227,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 12.364583333333334
+      },
+      "img_patch": {
+        "n": 3,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.43849391955098227,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 12.510416666666666
+      },
+      "ko:late": {
+        "n": 3,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.5615060804490177
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -14.53125
+      },
+      "ko:late+img_patch": {
+        "n": 3,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.43849391955098227,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 11.989583333333334
+      },
+      "qpatch@16": {
+        "n": 3,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.5615060804490177
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -14.552083333333334
+      },
+      "qpatch@16+ko:readout_all": {
+        "n": 3,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.5615060804490177
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -11.135416666666666
+      },
+      "install": {
+        "n": 3,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.43849391955098227,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 9.833333333333334
+      },
+      "install+ko:late": {
+        "n": 3,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.43849391955098227,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 10.4375
+      }
+    },
+    "calling_code": {
+      "clean": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -7.21875
+      },
+      "source_clean": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 5.09375
+      },
+      "img_patch": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 4.6875
+      },
+      "ko:late": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -7.375
+      },
+      "ko:late+img_patch": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 4.65625
+      },
+      "qpatch@16": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -7.0
+      },
+      "qpatch@16+ko:readout_all": {
+        "n": 4,
+        "transfer": 0.0,
+        "transfer_ci95": [
+          0.0,
+          0.48990002040399916
+        ],
+        "base_kept": 1.0,
+        "other": 0.0,
+        "mean_ld": -4.5625
+      },
+      "install": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 2.84375
+      },
+      "install+ko:late": {
+        "n": 4,
+        "transfer": 1.0,
+        "transfer_ci95": [
+          0.5100999795960008,
+          1.0
+        ],
+        "base_kept": 0.0,
+        "other": 0.0,
+        "mean_ld": 2.5625
+      }
+    }
+  }
+}

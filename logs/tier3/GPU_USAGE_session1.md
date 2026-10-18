@@ -32,6 +32,8 @@ columns are timestamp, util %, mem-util %, MiB used, W, SM MHz.
 | 08:00 | 95% | 46.2 GB | 211 W (380) |
 | 08:30 | 100% | 34.4 GB | 235 W (362) |
 
+Lane 1 (`p1 p4 p10`) finished at 08:21, so the 08:30 row is two lanes, not three.
+
 ## Reading
 
 - **The GPU is busy but not saturated.** "Util" only measures the fraction of time some kernel

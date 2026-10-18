@@ -1,0 +1,25 @@
+{
+  "predictions_file": "results/tier3/dbm_identity/L16_ones/layer16_predictions_test.jsonl",
+  "entity": "flags",
+  "attribute": "language",
+  "split": "test",
+  "n_missing_predictions": 10296,
+  "by_target_attribute": {
+    "language": {
+      "overall": {
+        "n": 3036,
+        "pct_accuracy": 37.5
+      },
+      "by_queried": [
+        {
+          "queried": "language",
+          "n": 3036,
+          "is_cause": true,
+          "pct_accuracy": 37.5,
+          "pct_matches_source": 37.5,
+          "pct_matches_base": 57.5
+        }
+      ]
+    }
+  }
+}

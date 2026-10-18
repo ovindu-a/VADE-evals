@@ -1,0 +1,244 @@
+1 countries, 12 directed question pairs, layers=[21]; 240 generation runs
+Cached prefill: batch_size=8, CPU donor bank, per-arm KV cache; continuous arms and clean baselines use serial execution.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:20,  1.65it/s]Loading weights:   0%|          | 2/729 [00:01<07:45,  1.56it/s]Loading weights:   1%|          | 4/729 [00:01<03:32,  3.41it/s]Loading weights:   2%|▏         | 12/729 [00:01<00:53, 13.29it/s]Loading weights:   2%|▏         | 17/729 [00:01<00:41, 17.09it/s]Loading weights:   3%|▎         | 22/729 [00:01<00:31, 22.21it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:24, 29.18it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:23, 29.19it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:19, 35.75it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:20, 32.93it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 39.46it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 35.98it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:15, 41.61it/s]Loading weights:   9%|▉         | 69/729 [00:02<00:17, 37.83it/s]Loading weights:  10%|█         | 76/729 [00:03<00:15, 43.18it/s]Loading weights:  11%|█         | 81/729 [00:03<00:16, 38.77it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:14, 43.91it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:16, 39.50it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:14, 44.70it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:15, 39.56it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:13, 44.31it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:15, 39.20it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:16, 37.53it/s]Loading weights:  18%|█▊        | 130/729 [00:04<00:14, 41.76it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:13, 45.16it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:14, 39.67it/s]Loading weights:  20%|██        | 148/729 [00:04<00:13, 44.44it/s]Loading weights:  21%|██        | 153/729 [00:05<00:14, 39.17it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:12, 44.49it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:14, 38.86it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 43.97it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:14, 36.97it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:15, 36.11it/s]Loading weights:  26%|██▌       | 190/729 [00:05<00:13, 40.48it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:11, 44.42it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 39.60it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 44.95it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 39.20it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 44.27it/s]Loading weights:  31%|███       | 225/729 [00:06<00:12, 39.13it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:11, 44.23it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:12, 39.52it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:10, 44.16it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:12, 39.29it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 44.12it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:11, 39.56it/s]Loading weights:  37%|███▋      | 268/729 [00:07<00:12, 37.51it/s]Loading weights:  38%|███▊      | 276/729 [00:07<00:10, 44.91it/s]Loading weights:  39%|███▊      | 281/729 [00:08<00:11, 39.96it/s]Loading weights:  39%|███▉      | 286/729 [00:08<00:10, 41.82it/s]Loading weights:  40%|████      | 292/729 [00:08<00:09, 45.65it/s]Loading weights:  41%|████      | 297/729 [00:08<00:10, 39.86it/s]Loading weights:  42%|████▏     | 303/729 [00:08<00:09, 42.84it/s]Loading weights:  42%|████▏     | 308/729 [00:08<00:10, 38.41it/s]Loading weights:  43%|████▎     | 316/729 [00:08<00:09, 45.77it/s]Loading weights:  44%|████▍     | 321/729 [00:09<00:10, 40.25it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:08, 44.84it/s]Loading weights:  46%|████▌     | 333/729 [00:09<00:09, 40.07it/s]Loading weights:  51%|█████     | 371/729 [00:09<00:03, 116.16it/s]Loading weights:  57%|█████▋    | 419/729 [00:09<00:01, 203.12it/s]Loading weights:  64%|██████▍   | 465/729 [00:09<00:00, 267.82it/s]Loading weights:  70%|███████   | 511/729 [00:09<00:00, 318.99it/s]Loading weights:  77%|███████▋  | 559/729 [00:09<00:00, 359.40it/s]Loading weights:  83%|████████▎ | 605/729 [00:09<00:00, 384.06it/s]Loading weights:  90%|████████▉ | 653/729 [00:10<00:00, 408.30it/s]Loading weights:  96%|█████████▋| 703/729 [00:10<00:00, 427.97it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 70.90it/s] 
+  row=0 clean: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 donor_clean: first=1 full=1 base_full=0 answer=' EUR'
+  row=0 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=0 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=1 clean: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 donor_clean: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=1 field/residual/L21/prefill/switch: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/residual/L21/prefill/self: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/residual/L21/prefill/paraphrase: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/attention/L21/prefill/switch: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/attention/L21/prefill/self: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/attention/L21/prefill/paraphrase: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/residual/L21/prefill/switch: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/residual/L21/prefill/self: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/residual/L21/prefill/paraphrase: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/attention/L21/prefill/switch: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/attention/L21/prefill/self: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/attention/L21/prefill/paraphrase: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/attention_set:19-20/L21/prefill/switch: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/attention_set:19-20/L21/prefill/self: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 field/attention_set:19-20/L21/prefill/paraphrase: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/attention_set:19-20/L21/prefill/switch: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/attention_set:19-20/L21/prefill/self: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=1 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=1 full=0 base_full=1 answer=' Luxembourg'
+  row=2 clean: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 donor_clean: first=1 full=1 base_full=0 answer=' 352'
+  row=2 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=2 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourg'
+  row=3 clean: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 donor_clean: first=1 full=1 base_full=0 answer=' Luxembourg'
+  row=3 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=3 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 clean: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 donor_clean: first=1 full=1 base_full=0 answer=' Luxembourgish'
+  row=4 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=4 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 clean: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 donor_clean: first=1 full=1 base_full=0 answer=' 352'
+  row=5 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' EUR'
+  row=5 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' EUR'
+  row=6 clean: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 donor_clean: first=1 full=1 base_full=0 answer=' Luxembourg'
+  row=6 field/residual/L21/prefill/switch: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/residual/L21/prefill/self: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/residual/L21/prefill/paraphrase: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/attention/L21/prefill/switch: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/attention/L21/prefill/self: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/attention/L21/prefill/paraphrase: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/residual/L21/prefill/switch: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/residual/L21/prefill/self: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/residual/L21/prefill/paraphrase: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/attention/L21/prefill/switch: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/attention/L21/prefill/self: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/attention/L21/prefill/paraphrase: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/attention_set:19-20/L21/prefill/switch: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/attention_set:19-20/L21/prefill/self: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 field/attention_set:19-20/L21/prefill/paraphrase: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/attention_set:19-20/L21/prefill/switch: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/attention_set:19-20/L21/prefill/self: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=6 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=1 full=1 base_full=1 answer=' Luxembourgish'
+  row=7 clean: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 donor_clean: first=1 full=1 base_full=0 answer=' EUR'
+  row=7 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=7 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 clean: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 donor_clean: first=1 full=1 base_full=0 answer=' 352'
+  row=8 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=8 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' Luxembourgish'
+  row=9 clean: first=0 full=0 base_full=1 answer=' 352'
+  row=9 donor_clean: first=1 full=1 base_full=0 answer=' Luxembourg'
+  row=9 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=9 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=9 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=10 clean: first=0 full=0 base_full=1 answer=' 352'
+  row=10 donor_clean: first=1 full=1 base_full=0 answer=' EUR'
+  row=10 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=10 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=10 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=11 clean: first=0 full=0 base_full=1 answer=' 352'
+  row=11 donor_clean: first=1 full=1 base_full=0 answer=' Luxembourgish'
+  row=11 field/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/residual/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/residual/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/residual/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/attention/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/attention/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/attention/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=11 field/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/attention_set:19-20/L21/prefill/switch: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/attention_set:19-20/L21/prefill/self: first=0 full=0 base_full=1 answer=' 352'
+  row=11 tok:-2/attention_set:19-20/L21/prefill/paraphrase: first=0 full=0 base_full=1 answer=' 352'
