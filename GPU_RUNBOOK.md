@@ -246,11 +246,10 @@ if asked.
 
 Every step loads its own copy of Qwen2.5-VL-7B (~16.6 GB bf16) plus activations that grow with
 batch size.
-- **`GPU=a100` is what fills the card.** Its 64-128 batches let ONE job use most of the 80 GB.
-  Never combine it with parallel lanes.
-- **Without it,** every script runs at its own default batch, sized for a 24 GB card. The one
-  measured default-batch run peaked at 18.7 GB, so expect roughly 17-25 GB per lane. These are
-  estimates, not measurements.
+- **`GPU=a100` raises batch sizes to 64-128** for the scripts listed in `run_tier3.sh`'s profile.
+  For Session 1 it was kept off every lane, because no a100-profile memory figure existed yet.
+- **Without it,** every script runs at its own default batch, sized for a 24 GB card. Measured in
+  Session 1 (`logs/tier3/GPU_USAGE_session1.md`): 16.5-18 GB per lane, 52 GB peak for three lanes.
 
 ```bash
 bash scripts/run_tier3.sh smoke                  # ALONE first, no GPU=a100: downloads + checks every changed path
@@ -264,8 +263,8 @@ bash scripts/run_tier3.sh p6 p7 p8 p9 p12        # lane 3
    stays below ~55 GB.
 2. Check `free -g` first. Each process passes through system RAM while loading the model, so
    three lanes want roughly 64 GB or more.
-3. Optionally `export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` in each window, which
-   reduces memory fragmentation.
+3. Optionally `export PYTORCH_ALLOC_CONF=expandable_segments:True` in each window, which reduces
+   memory fragmentation. (`PYTORCH_CUDA_ALLOC_CONF` is the deprecated name; torch warns about it.)
 4. If a step runs out of memory, only its lane stops. Rerun that step by name after the other
    lanes finish.
 
@@ -295,6 +294,76 @@ Things to know:
 | p11 | `all_downstream_continuous` equals `image_patch` (asserted). |
 | p15, p27 | The empty-knockout no-op check prints `max |dlogit| = 0`. p15 also checks install-of-own-values = clean. |
 | p26 | `--verify_cached` raises on the first mismatch. If it raises, record the message, then continue with the other steps. |
+
+### What Session 1's GPU log showed (2026-10-18)
+
+Source: `logs/tier3/GPU_USAGE_session1.md`.
+- **The lanes are CPU-dispatch bound, not memory or compute bound.**
+  - Memory: about 17 GB per lane; three lanes peaked at 52 GB.
+  - "Util" read 97%, but power averaged 213 of 400 W.
+  - Each lane's Python process held ONE core at 100% while 93% of the 96 cores idled: token-by-token
+    generation at small batches, with a hook on every layer.
+- **Three lanes gave about 1.5x, not 3x.** One P1 eval took 7 minutes alone and 14 with three lanes:
+  without MPS the processes take turns on the GPU instead of overlapping.
+
+Two consequences:
+- **Bigger batches are the cheapest speed-up.** A dispatch-bound batch of 64 costs about the same wall
+  time as a batch of 16.
+- **One lane alone is not enough.** About half of Session 2's work is in scripts `GPU=a100` does not
+  raise (head_trace, attr_head_trace, attr_steer, the serial switch checks). A single lane would run
+  those one after another at CPU-bound speed.
+
+`run_tier3.sh`'s a100 profile therefore also raises `readout_jacobian` (P13) and `head_swap_vade`
+(P14, P18, P28) to batch 64 (`BS_JAC`, `BS_SWAP`). Batch size can move a few clean answers
+(CLAIM_CANDIDATES G7). Session 2's comparisons are within each run or about curve shape, so that is
+acceptable there.
+
+### Session 2: three lanes, big batches on two of them
+
+```bash
+GPU=a100 bash scripts/run_tier3.sh p16 p17 p23                              # lane 1: ceiling sweeps
+GPU=a100 bash scripts/run_tier3.sh p13 p14 p18                              # lane 2: jacobian + head installs
+bash scripts/run_tier3.sh p19 p24 p25 p26 p15 p20 p21 p22 p27                # lane 3: default batches
+```
+
+1. **No a100-profile lane has been measured yet,** so add lanes one at a time. Start lane 1, read
+   its `nvidia-smi` peak after ~10 minutes, then lane 2, then lane 3. Keep the total under ~70 GB.
+2. If the total would go over, run lane 2 without `GPU=a100`, or wait for lane 1 to finish.
+3. Lane 3 stays at default batches. Most of its steps do not use the a100 sizes anyway, and keeping
+   it small caps memory.
+4. **P13 needs E3's `readout_fit.pt`** at `results/readout_jacobian/flags__mlp_hidden_b23-26/`.
+   Without it P13 prints SKIPPED and lane 2 runs only P14 and P18.
+5. P18 needs the 3B pruned tuples in `../VADE/models/Qwen2.5-VL-3B-Instruct/` (written by E8).
+6. **Optional: NVIDIA MPS** lets kernels from the three processes overlap instead of time-slicing.
+   That time-slicing is what held three lanes to 1.5x. MPS changes no numbers. It is untested on
+   this pod and may be blocked inside the container; if the daemon fails to start, skip it. Start it
+   only while **no** CUDA process is running, and export the two variables in every lane window too:
+   ```bash
+   export CUDA_MPS_PIPE_DIRECTORY=/tmp/mps CUDA_MPS_LOG_DIRECTORY=/tmp/mps
+   mkdir -p /tmp/mps && nvidia-cuda-mps-control -d      # before the first lane
+   echo quit | nvidia-cuda-mps-control                   # after the last lane ends
+   ```
+7. When all three lanes are done, run `session3` steps only if asked. Then report as below.
+
+### Moving from a running Session 1 into Session 2
+
+**Never `git pull` or edit `scripts/run_tier3.sh` while a lane is running.** bash reads its
+script incrementally, so a running lane can execute a mix of the old and new file. To start a
+Session 2 lane while Session 1 lanes are still going, run it from an untracked copy of the new
+launcher. It must sit in `scripts/`, because the launcher `cd`s relative to its own path:
+
+```bash
+cd /workspace/VADE-evals && git fetch origin
+git show origin/main:scripts/run_tier3.sh > scripts/run_tier3_next.sh     # untracked copy
+GPU=a100 bash scripts/run_tier3_next.sh p16 p17 p23                      # e.g. lane 1, in a new window
+```
+
+The only change after Session 1 started is in the launcher; `methods/` is identical, so the copy
+runs the same code. Once every Session 1 lane has finished:
+1. commit their results;
+2. `rm scripts/run_tier3_next.sh`;
+3. `git pull`;
+4. start the remaining Session 2 lanes with `scripts/run_tier3.sh`.
 
 Report as in section 5, writing `RUN_REPORT_TIER3.md`, and package `logs/tier3 results/tier3
 results/image_head_pipeline_n128` plus the `_tier3`-suffixed ceiling logs under `logs/Qwen2.5-VL-7B-Instruct/`.
