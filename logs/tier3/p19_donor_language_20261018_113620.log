@@ -1,0 +1,143 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+[attr_head_trace] entity=flags attributes=['capital', 'currency', 'language', 'calling_code'] patch_layer=15 blocks=15-22 positions=all_text 84 items x 12 directed pairs = 252 rows -> results/tier3/attr_heads/donor_language.json
+  donor attributes restricted to ['language']: 252 rows kept
+
+=== logging to /workspace/VADE-evals/logs/attr_head_trace/flags/attr_head_trace_patch15_blocks15-22_all_text_donorlanguage.log ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:53,  1.54it/s]Loading weights:   0%|          | 2/729 [00:01<08:10,  1.48it/s]Loading weights:   1%|          | 5/729 [00:01<02:47,  4.31it/s]Loading weights:   1%|1         | 10/729 [00:01<01:11, 10.08it/s]Loading weights:   2%|2         | 16/729 [00:01<00:40, 17.64it/s]Loading weights:   3%|2         | 20/729 [00:01<00:36, 19.20it/s]Loading weights:   4%|3         | 28/729 [00:02<00:24, 29.18it/s]Loading weights:   5%|4         | 33/729 [00:02<00:23, 29.12it/s]Loading weights:   5%|5         | 40/729 [00:02<00:22, 30.80it/s]Loading weights:   6%|6         | 46/729 [00:02<00:18, 36.00it/s]Loading weights:   7%|7         | 52/729 [00:02<00:16, 40.76it/s]Loading weights:   8%|7         | 57/729 [00:02<00:18, 36.72it/s]Loading weights:   9%|8         | 64/729 [00:02<00:15, 42.23it/s]Loading weights:   9%|9         | 69/729 [00:03<00:17, 37.63it/s]Loading weights:  10%|#         | 76/729 [00:03<00:15, 42.95it/s]Loading weights:  11%|#1        | 81/729 [00:03<00:16, 38.32it/s]Loading weights:  12%|#2        | 88/729 [00:03<00:14, 43.29it/s]Loading weights:  13%|#2        | 93/729 [00:03<00:16, 38.44it/s]Loading weights:  14%|#3        | 100/729 [00:03<00:14, 43.26it/s]Loading weights:  14%|#4        | 105/729 [00:03<00:16, 38.47it/s]Loading weights:  15%|#5        | 112/729 [00:04<00:14, 43.57it/s]Loading weights:  16%|#6        | 117/729 [00:04<00:15, 38.49it/s]Loading weights:  17%|#7        | 124/729 [00:04<00:13, 43.39it/s]Loading weights:  18%|#7        | 129/729 [00:04<00:15, 38.44it/s]Loading weights:  19%|#8        | 136/729 [00:04<00:13, 43.44it/s]Loading weights:  19%|#9        | 141/729 [00:04<00:15, 38.45it/s]Loading weights:  20%|##        | 148/729 [00:04<00:13, 43.52it/s]Loading weights:  21%|##        | 153/729 [00:05<00:14, 38.69it/s]Loading weights:  22%|##1       | 160/729 [00:05<00:13, 43.64it/s]Loading weights:  23%|##2       | 165/729 [00:05<00:14, 38.55it/s]Loading weights:  24%|##3       | 172/729 [00:05<00:12, 43.45it/s]Loading weights:  24%|##4       | 177/729 [00:05<00:14, 38.41it/s]Loading weights:  25%|##5       | 184/729 [00:05<00:12, 43.56it/s]Loading weights:  26%|##5       | 189/729 [00:06<00:14, 38.09it/s]Loading weights:  27%|##6       | 196/729 [00:06<00:12, 43.14it/s]Loading weights:  28%|##7       | 201/729 [00:06<00:13, 38.52it/s]Loading weights:  29%|##8       | 208/729 [00:06<00:11, 43.43it/s]Loading weights:  29%|##9       | 213/729 [00:06<00:14, 36.72it/s]Loading weights:  30%|###       | 220/729 [00:06<00:14, 35.45it/s]Loading weights:  31%|###       | 224/729 [00:06<00:14, 35.50it/s]Loading weights:  32%|###1      | 232/729 [00:07<00:11, 43.26it/s]Loading weights:  33%|###2      | 237/729 [00:07<00:12, 38.43it/s]Loading weights:  33%|###3      | 244/729 [00:07<00:11, 43.55it/s]Loading weights:  34%|###4      | 249/729 [00:07<00:12, 38.74it/s]Loading weights:  35%|###5      | 256/729 [00:07<00:10, 43.55it/s]Loading weights:  36%|###5      | 261/729 [00:07<00:12, 38.82it/s]Loading weights:  37%|###6      | 268/729 [00:07<00:10, 43.81it/s]Loading weights:  37%|###7      | 273/729 [00:08<00:11, 38.56it/s]Loading weights:  38%|###8      | 280/729 [00:08<00:10, 43.69it/s]Loading weights:  39%|###9      | 285/729 [00:08<00:11, 38.79it/s]Loading weights:  40%|####      | 292/729 [00:08<00:09, 43.88it/s]Loading weights:  41%|####      | 297/729 [00:08<00:11, 38.68it/s]Loading weights:  42%|####1     | 304/729 [00:08<00:09, 43.84it/s]Loading weights:  42%|####2     | 309/729 [00:08<00:10, 38.87it/s]Loading weights:  43%|####3     | 316/729 [00:09<00:09, 43.55it/s]Loading weights:  44%|####4     | 321/729 [00:09<00:10, 38.61it/s]Loading weights:  45%|####4     | 328/729 [00:09<00:09, 43.56it/s]Loading weights:  46%|####5     | 333/729 [00:09<00:10, 38.43it/s]Loading weights:  50%|#####     | 367/729 [00:09<00:03, 104.75it/s]Loading weights:  57%|#####6    | 413/729 [00:09<00:01, 189.20it/s]Loading weights:  63%|######2   | 456/729 [00:09<00:01, 248.95it/s]Loading weights:  69%|######9   | 505/729 [00:09<00:00, 309.49it/s]Loading weights:  76%|#######5  | 551/729 [00:10<00:00, 348.26it/s]Loading weights:  82%|########2 | 598/729 [00:10<00:00, 381.60it/s]Loading weights:  88%|########8 | 645/729 [00:10<00:00, 401.44it/s]Loading weights:  95%|#########4| 690/729 [00:10<00:00, 412.39it/s]Loading weights: 100%|##########| 729/729 [00:10<00:00, 69.35it/s] 
+  21 batch(es); question columns=67 of 67 text columns (first divergence at token 207), prompt length=219
+
+==============================================================================
+=== phase 0: clean baselines
+==============================================================================
+  base question answered correctly:  first= 96.8% full= 93.3%
+  donor question answered correctly: first= 91.7% full= 90.5%
+
+==============================================================================
+=== phase 1: differential head trace (2 forwards per batch, no generation)
+==============================================================================
+/root/.local/workspace/python-packages/lib/python3.13/site-packages/pyvene/models/interventions.py:437: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  mask_sigmoid = torch.sigmoid(self.mask / torch.tensor(self.temperature))
+  batch 1/21 traced
+  batch 2/21 traced
+  batch 3/21 traced
+  batch 4/21 traced
+  batch 5/21 traced
+  batch 6/21 traced
+  batch 7/21 traced
+  batch 8/21 traced
+  batch 9/21 traced
+  batch 10/21 traced
+  batch 11/21 traced
+  batch 12/21 traced
+  batch 13/21 traced
+  batch 14/21 traced
+  batch 15/21 traced
+  batch 16/21 traced
+  batch 17/21 traced
+  batch 18/21 traced
+  batch 19/21 traced
+  batch 20/21 traced
+  batch 21/21 traced
+
+top 20 heads by |delta_resid| (how much this head's write to the answer position changed when the QUESTION was swapped):
+  block.head  delta_resid    delta_z   delta_dla
+21.0               19.1393    16.3353     -0.1065
+20.17              15.9417    12.5522     -0.0516
+20.18              14.1352    11.6216      0.0179
+21.25              13.8938    12.5705     -0.0182
+19.21              12.1786    10.1643     -0.0323
+21.4               10.4834     9.3807     -0.0415
+19.23               9.4325     8.5078      0.0085
+21.5                9.2817     8.4300     -0.0486
+19.27               9.1126     8.0696     -0.0522
+21.19               8.4847     7.2357     -0.0555
+21.21               7.9479     7.0592     -0.0085
+20.22               7.1818     5.6802     -0.0232
+19.20               6.8675     6.0623     -0.0093
+21.17               6.8211     5.6489     -0.0041
+17.24               6.6423     5.2978     -0.0110
+21.23               6.2272     4.7246      0.0088
+20.2                6.0550     4.8788      0.0037
+18.21               6.0471     4.6416     -0.0033
+20.1                5.5688     5.3371     -0.0086
+21.6                5.3726     3.7981      0.0086
+
+per-block total |delta_resid| (where the attribute selection is written):
+  block 15:    20.2383
+  block 16:    38.5052
+  block 17:    45.5093
+  block 18:    48.6258
+  block 19:    68.5530
+  block 20:    95.2011
+  block 21:   124.7194
+  block 22:    52.4594
+  top-1   heads sit in blocks: 21x1
+  top-2   heads sit in blocks: 20x1, 21x1
+  top-4   heads sit in blocks: 20x2, 21x2
+  top-8   heads sit in blocks: 19x2, 20x2, 21x4
+  top-16  heads sit in blocks: 17x1, 19x4, 20x3, 21x8
+
+==============================================================================
+=== phase 1c: read-back identity (batch 1, 3 forwards, no generation)
+==============================================================================
+  residual entering block 15 at the read column, question-patched vs clean: 0.000%
+    -> must be ~0: nothing upstream of the window can have carried the edit here yet
+
+  o_proj INPUT reads back what was installed: worst 0.00e+00 (block 22)
+  o_proj OUTPUT vs W_O @ its captured INPUT: clean max 0.18%, installed max 0.19%
+  final pre-norm residual at the read column, installed-heads run vs:
+    the question-patched run: 6.159%   <-- the identity; ~0 with full coverage
+    the CLEAN run:            83.392%   <-- ~0 would mean the patch changed nothing
+  -> diverges, and --blocks omits downstream block(s) [23, 24, 25, 26, 27], which explains it: their attention at the read column still sees the clean question. Phase 3's ALL arm is a PARTIAL ceiling, not the identity.
+
+==============================================================================
+=== phase 1b: connectivity + block-everything
+==============================================================================
+    block 15: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=2.2812
+    block 16: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=2.3906
+    block 17: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=2.3281
+    block 18: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=3.1875
+    block 19: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=4.0000
+    block 20: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=4.5938
+    block 21: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=2.8906
+    block 22: prefill_calls=21 decode_skips=63 seq_len=219 max|delta|=4.2188
+  question patch + ALL 224 heads ZEROED first=  2.4% full=  0.0% base_kept= 17.9%
+  (zeroing every traced head at the read column severs every path by which the patched question can reach it after block 15, so this SHOULD fall to the clean floor. If it does not, --blocks is too narrow or the read does not go through this position's attention -- and that would be the finding.)
+
+==============================================================================
+=== phase 2: cumulative knockout under the question patch
+==============================================================================
+  unhooked                           first=  1.2% full=  0.0% base_kept= 93.3%
+  question patch only (k=0)          first= 91.3% full= 90.5% base_kept=  0.0%   <-- the effect being traced
+  restore top-1 heads                first= 91.3% full= 90.1% base_kept=  0.0%  (removed  0.0% of the effect)
+  restore top-2 heads                first= 84.1% full= 82.9% base_kept=  5.6%  (removed  7.8% of the effect)
+  restore top-4 heads                first= 16.7% full= 15.1% base_kept= 61.1%  (removed 81.7% of the effect)
+  restore top-8 heads                first=  0.8% full=  0.0% base_kept= 87.3%  (removed 99.1% of the effect)
+  restore top-16 heads               first=  1.2% full=  0.4% base_kept= 89.7%  (removed 98.7% of the effect)
+  restore 8 RANDOM heads (null)      first= 91.3% full= 90.5% base_kept=  0.0%
+  top-8 vs random-8 gap: +90.5%. Near zero means the ranking carries no information and this curve says nothing.
+  (expect this curve to be FLAT even for real conduits: the sweep's span table shows the mechanism is redundant across blocks, and redundancy is exactly what a necessity measurement cannot see. Phase 3 is the one to read.)
+
+==============================================================================
+=== phase 3: sufficiency -- patch ONLY these heads, no question patch
+==============================================================================
+  nothing patched (k=0)              first=  1.2% full=  0.0% base_kept= 93.3%   <-- must match the unhooked row
+  ALL 224 traced heads               first= 91.7% full= 87.7% base_kept=  0.4%   <-- PARTIAL ceiling: blocks [23, 24, 25, 26, 27] untraced
+  patch top-1 heads                  first=  1.2% full=  0.0% base_kept= 92.1%  ( 1.3% of this arm's ceiling)
+  patch top-2 heads                  first=  1.2% full=  0.0% base_kept= 91.7%  ( 1.3% of this arm's ceiling)
+  patch top-4 heads                  first= 13.1% full= 11.1% base_kept= 71.0%  (14.3% of this arm's ceiling)
+  patch top-8 heads                  first= 40.5% full= 34.9% base_kept= 31.3%  (44.2% of this arm's ceiling)
+  patch top-16 heads                 first= 84.9% full= 77.8% base_kept=  2.4%  (92.6% of this arm's ceiling)
+  patch 8 RANDOM heads (null)        first=  1.2% full=  0.0% base_kept= 94.0%   <-- phase 2's null head set
+
+==============================================================================
+=== phase 4: shuffled-donor control (is the content row-specific?)
+==============================================================================
+  Each row receives the head outputs ANOTHER row's DONOR QUESTION produced, and is scored against its own donor gold (`own`) and against the donor row's (`donor`). Every artefactual way phase 3 could succeed -- a mask not really restricted to k heads, a perturbation knocking the residual off-distribution, a scorer counting the wrong thing -- is indifferent to WHICH row supplied the values. Real transfer is not: `own` must collapse and `donor` must rise.
+       top-8 shuffled:  own= 38.9% donor= 10.3% kept= 30.2%   (unshuffled first was 40.5%)
+     ALL 224 shuffled:  own= 70.6% donor= 80.6% kept=  0.4%   (unshuffled first was 91.7%)
+
+  -> partial: best donor rate 80.6% at ALL 224 (own=70.6%). Report as 'carries the selection', not 'sufficient'.
+
+wrote results/tier3/attr_heads/donor_language.json

@@ -1,0 +1,317 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "countries": [
+    "AO",
+    "DE"
+  ],
+  "n_countries": 8,
+  "attributes": [
+    "capital",
+    "currency",
+    "language",
+    "calling_code"
+  ],
+  "layers": [
+    18,
+    20,
+    22,
+    24
+  ],
+  "sites": [
+    "residual",
+    "attention"
+  ],
+  "scopes": [
+    "earlier_text",
+    "last_token"
+  ],
+  "block_spans": [],
+  "attention_spans": [
+    3
+  ],
+  "attention_sets": [],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "execution": "cached",
+  "batch_size": 1,
+  "attn_impl": "sdpa",
+  "no_share_prefix": false,
+  "verify_cached": false,
+  "baselines_only": false,
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Luanda",
+      "source_label": "AOA",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Luanda",
+      "source_label": "Portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 2,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Luanda",
+      "source_label": "244",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 3,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "AOA",
+      "source_label": "Luanda",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 4,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "AOA",
+      "source_label": "Portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 5,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "AOA",
+      "source_label": "244",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 6,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "Portuguese",
+      "source_label": "Luanda",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 7,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "Portuguese",
+      "source_label": "AOA",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 8,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "Portuguese",
+      "source_label": "244",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 9,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "244",
+      "source_label": "Luanda",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 10,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "244",
+      "source_label": "AOA",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 11,
+      "base": "AO",
+      "source": "AO",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "244",
+      "source_label": "Portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 12,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Berlin",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 13,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "capital",
+      "donor_attribute": "language",
+      "base_label": "Berlin",
+      "source_label": "German",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 14,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "capital",
+      "donor_attribute": "calling_code",
+      "base_label": "Berlin",
+      "source_label": "49",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 15,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "EUR",
+      "source_label": "Berlin",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 16,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "currency",
+      "donor_attribute": "language",
+      "base_label": "EUR",
+      "source_label": "German",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 17,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "currency",
+      "donor_attribute": "calling_code",
+      "base_label": "EUR",
+      "source_label": "49",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 18,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "language",
+      "donor_attribute": "capital",
+      "base_label": "German",
+      "source_label": "Berlin",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 19,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "language",
+      "donor_attribute": "currency",
+      "base_label": "German",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 20,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "language",
+      "donor_attribute": "calling_code",
+      "base_label": "German",
+      "source_label": "49",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 21,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "calling_code",
+      "donor_attribute": "capital",
+      "base_label": "49",
+      "source_label": "Berlin",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 22,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "calling_code",
+      "donor_attribute": "currency",
+      "base_label": "49",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 23,
+      "base": "DE",
+      "source": "DE",
+      "base_attribute": "calling_code",
+      "donor_attribute": "language",
+      "base_label": "49",
+      "source_label": "German",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "capital": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the capital of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the capital of this country."
+    ],
+    "currency": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the currency of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the currency of this country."
+    ],
+    "language": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the language of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the language of this country."
+    ],
+    "calling_code": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the calling of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the calling of this country."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "image_sha256": {
+    "AO": "014e3383cf35a2ba6154f6576394595ed2fbdfa3fa4d9aacba5dfe75fe663d7a",
+    "DE": "ee701225d3cbdaf98e418c2d24894fa210d3816c4f12761bdbbc4277e934de1a"
+  },
+  "implementation_sha256": "0075d1d3545ee01a372fddc1430ade83dd38f0414b301ed14d48b7f01cc21e5e"
+}

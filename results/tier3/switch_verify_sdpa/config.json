@@ -1,0 +1,78 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "countries": null,
+  "n_countries": 1,
+  "attributes": [
+    "capital",
+    "currency"
+  ],
+  "layers": [
+    22
+  ],
+  "sites": [
+    "attention"
+  ],
+  "scopes": [
+    "last_token"
+  ],
+  "block_spans": [],
+  "attention_spans": [
+    3
+  ],
+  "attention_sets": [],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "execution": "cached",
+  "batch_size": 2,
+  "attn_impl": "sdpa",
+  "no_share_prefix": false,
+  "verify_cached": true,
+  "baselines_only": false,
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "capital",
+      "donor_attribute": "currency",
+      "base_label": "Luxembourg",
+      "source_label": "EUR",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "LU",
+      "source": "LU",
+      "base_attribute": "currency",
+      "donor_attribute": "capital",
+      "base_label": "EUR",
+      "source_label": "Luxembourg",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "capital": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the capital of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the capital of this country."
+    ],
+    "currency": [
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Report the currency of this country.",
+      "For the country shown, capital means its capital city; currency means its three-letter currency code; language means one official language; calling means its international calling code, digits only without a plus sign. Give only the requested value. Return the currency of this country."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "d0275933149ad667050e9f4cfe18540447dbf546891d0fe02108fa011e188683",
+  "image_sha256": {
+    "LU": "06b0a771dcdcb83d83bdc0220e6cffb79070eb861be894776ff14dead1451cbf"
+  },
+  "implementation_sha256": "0075d1d3545ee01a372fddc1430ade83dd38f0414b301ed14d48b7f01cc21e5e"
+}

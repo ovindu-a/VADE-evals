@@ -1,0 +1,60 @@
+{
+  "predictions_file": "results/tier3/head_swap_animals/full_image.jsonl",
+  "entity": "animals",
+  "attribute": "reproduction",
+  "split": "test",
+  "n_missing_predictions": 0,
+  "by_target_attribute": {
+    "reproduction": {
+      "overall": {
+        "n": 7930,
+        "pct_accuracy": 13.2,
+        "cause_accuracy": 27.4,
+        "iso_mean_accuracy": 11.2,
+        "final_score": 19.3
+      },
+      "by_queried": [
+        {
+          "queried": "body_covering",
+          "n": 1554,
+          "is_cause": false,
+          "pct_accuracy": 25.6,
+          "pct_matches_source": 59.6,
+          "pct_matches_base": 25.6
+        },
+        {
+          "queried": "native_continent",
+          "n": 1734,
+          "is_cause": false,
+          "pct_accuracy": 7.6,
+          "pct_matches_source": 85.8,
+          "pct_matches_base": 7.6
+        },
+        {
+          "queried": "primary_habitat",
+          "n": 1714,
+          "is_cause": false,
+          "pct_accuracy": 7.4,
+          "pct_matches_source": 84.9,
+          "pct_matches_base": 7.4
+        },
+        {
+          "queried": "reproduction",
+          "n": 1152,
+          "is_cause": true,
+          "pct_accuracy": 27.4,
+          "pct_matches_source": 27.4,
+          "pct_matches_base": 72.6
+        },
+        {
+          "queried": "taxonomic_class",
+          "n": 1776,
+          "is_cause": false,
+          "pct_accuracy": 4.0,
+          "pct_matches_source": 96.0,
+          "pct_matches_base": 4.0
+        }
+      ]
+    }
+  }
+}

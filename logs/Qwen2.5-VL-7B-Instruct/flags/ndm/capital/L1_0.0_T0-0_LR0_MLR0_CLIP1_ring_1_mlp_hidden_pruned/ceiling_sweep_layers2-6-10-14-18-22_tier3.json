@@ -1,0 +1,101 @@
+{
+  "entity": "flags",
+  "attribute": "capital",
+  "positions": "ring:1",
+  "scoring": "token",
+  "max_new_tokens": 5,
+  "split": "test",
+  "layers": [
+    2,
+    6,
+    10,
+    14,
+    18,
+    22
+  ],
+  "sites": [
+    "residual"
+  ],
+  "unhooked_cause_matches_source": 0.0,
+  "unhooked_cause_matches_base": 1.0,
+  "by_site_layer": {
+    "residual/2": {
+      "site": "residual",
+      "layer": 2,
+      "cause_ceiling": 0.125,
+      "blocks": [
+        1
+      ],
+      "base_kept": 0.875,
+      "other": 0.0,
+      "iso_floor": 0.84375,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "residual/6": {
+      "site": "residual",
+      "layer": 6,
+      "cause_ceiling": 0.0625,
+      "blocks": [
+        5
+      ],
+      "base_kept": 0.90625,
+      "other": 0.03125,
+      "iso_floor": 0.90625,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "residual/10": {
+      "site": "residual",
+      "layer": 10,
+      "cause_ceiling": 0.03125,
+      "blocks": [
+        9
+      ],
+      "base_kept": 0.9375,
+      "other": 0.03125,
+      "iso_floor": 0.875,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "residual/14": {
+      "site": "residual",
+      "layer": 14,
+      "cause_ceiling": 0.0625,
+      "blocks": [
+        13
+      ],
+      "base_kept": 0.90625,
+      "other": 0.03125,
+      "iso_floor": 0.90625,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "residual/18": {
+      "site": "residual",
+      "layer": 18,
+      "cause_ceiling": 0.0625,
+      "blocks": [
+        17
+      ],
+      "base_kept": 0.90625,
+      "other": 0.03125,
+      "iso_floor": 0.90625,
+      "width": 3584,
+      "n_cause": 32
+    },
+    "residual/22": {
+      "site": "residual",
+      "layer": 22,
+      "cause_ceiling": 0.0,
+      "blocks": [
+        21
+      ],
+      "base_kept": 1.0,
+      "other": 0.0,
+      "iso_floor": 0.96875,
+      "width": 3584,
+      "n_cause": 32
+    }
+  }
+}

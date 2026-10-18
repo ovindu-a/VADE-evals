@@ -1,0 +1,172 @@
+{
+  "n_eligible": 548,
+  "other_rate_by_format": {
+    "different_format": 0.18805309734513273,
+    "same_format": 0.010416666666666666
+  },
+  "n_by_format": {
+    "different_format": 452,
+    "same_format": 96
+  },
+  "other_categories_by_format": {
+    "different_format": {
+      "unmapped (e.g. code/abbrev for B)": 69,
+      "another country's A value": 16
+    },
+    "same_format": {
+      "unmapped (e.g. code/abbrev for B)": 1
+    }
+  },
+  "other_rate_by_X_to_A": {
+    "calling_code->capital": {
+      "n": 52,
+      "other": 0.0
+    },
+    "calling_code->currency": {
+      "n": 43,
+      "other": 0.3488372093023256
+    },
+    "calling_code->language": {
+      "n": 43,
+      "other": 0.18604651162790697
+    },
+    "capital->calling_code": {
+      "n": 52,
+      "other": 0.3269230769230769
+    },
+    "capital->currency": {
+      "n": 48,
+      "other": 0.22916666666666666
+    },
+    "capital->language": {
+      "n": 48,
+      "other": 0.020833333333333332
+    },
+    "currency->calling_code": {
+      "n": 43,
+      "other": 0.18604651162790697
+    },
+    "currency->capital": {
+      "n": 48,
+      "other": 0.020833333333333332
+    },
+    "currency->language": {
+      "n": 40,
+      "other": 0.125
+    },
+    "language->calling_code": {
+      "n": 43,
+      "other": 0.32558139534883723
+    },
+    "language->capital": {
+      "n": 48,
+      "other": 0.0
+    },
+    "language->currency": {
+      "n": 40,
+      "other": 0.15
+    }
+  },
+  "examples": {
+    "unmapped (e.g. code/abbrev for B)": [
+      {
+        "X": "capital",
+        "A": "calling_code",
+        "B": "IT",
+        "C": "LU",
+        "text": " 392",
+        "gold_B.A": "39"
+      },
+      {
+        "X": "capital",
+        "A": "calling_code",
+        "B": "IT",
+        "C": "AU",
+        "text": " 392",
+        "gold_B.A": "39"
+      },
+      {
+        "X": "currency",
+        "A": "language",
+        "B": "IT",
+        "C": "AU",
+        "text": " ITA",
+        "gold_B.A": "Italian"
+      },
+      {
+        "X": "currency",
+        "A": "calling_code",
+        "B": "IT",
+        "C": "AU",
+        "text": " 392",
+        "gold_B.A": "39"
+      },
+      {
+        "X": "language",
+        "A": "calling_code",
+        "B": "IT",
+        "C": "AU",
+        "text": " 392",
+        "gold_B.A": "39"
+      },
+      {
+        "X": "calling_code",
+        "A": "language",
+        "B": "IT",
+        "C": "AU",
+        "text": " ITA",
+        "gold_B.A": "Italian"
+      }
+    ],
+    "another country's A value": [
+      {
+        "X": "calling_code",
+        "A": "currency",
+        "B": "FJ",
+        "C": "IT",
+        "text": " NZD",
+        "gold_B.A": "FJD"
+      },
+      {
+        "X": "capital",
+        "A": "currency",
+        "B": "LY",
+        "C": "BZ",
+        "text": " BHD",
+        "gold_B.A": "LYD"
+      },
+      {
+        "X": "calling_code",
+        "A": "currency",
+        "B": "LY",
+        "C": "BZ",
+        "text": " BHD",
+        "gold_B.A": "LYD"
+      },
+      {
+        "X": "capital",
+        "A": "calling_code",
+        "B": "IS",
+        "C": "RW",
+        "text": " 55",
+        "gold_B.A": "354"
+      },
+      {
+        "X": "calling_code",
+        "A": "currency",
+        "B": "IS",
+        "C": "RW",
+        "text": " RON",
+        "gold_B.A": "ISK"
+      },
+      {
+        "X": "capital",
+        "A": "calling_code",
+        "B": "LY",
+        "C": "UG",
+        "text": " 212",
+        "gold_B.A": "218"
+      }
+    ]
+  }
+}

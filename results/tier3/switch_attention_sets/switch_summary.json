@@ -1,0 +1,4286 @@
+[
+  {
+    "arm": "clean",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.375,
+      "original_full": 0.0,
+      "neither_full": 0.625,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.375,
+      "original_full": 0.0,
+      "neither_full": 0.625,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_blocks:8/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 0.875,
+      "neither_full": 0.125,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-18.20-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.75
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.75
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.75
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.75
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.75
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.75
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-19.21-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.75,
+      "original_full": 0.0,
+      "neither_full": 0.25,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/paraphrase",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.125,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.125
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/self",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "calling_code",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.375,
+      "original_full": 0.0,
+      "neither_full": 0.625,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.375,
+      "original_full": 0.0,
+      "neither_full": 0.625,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.625,
+      "original_full": 0.0,
+      "neither_full": 0.375,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "capital",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.125,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.25,
+      "original_full": 0.0,
+      "neither_full": 0.75,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "currency",
+    "donor_attribute": "language",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 0.875
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 0.875
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "calling_code",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "capital",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/attention_set:16-20.22-23/L24/prefill/switch",
+    "base_attribute": "language",
+    "donor_attribute": "currency",
+    "all": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 8,
+      "country_count": 8,
+      "donor_full": 0.875,
+      "original_full": 0.0,
+      "neither_full": 0.125,
+      "donor_first": 1.0
+    }
+  }
+]
