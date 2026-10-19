@@ -226,7 +226,10 @@ def ridge_retrieval(A, B, entities, groups, alpha=0.1, folds=2, seed=0):
         mu_a, mu_b = At.mean(0), Bt.mean(0)
         Ac = At - mu_a
         K = Ac @ Ac.T
-        lam = alpha * K.diagonal().mean()
+        # Floored: identical inputs (layer 0's last column is the same token embedding in every
+        # row) center to zero, K = 0, and an unfloored lambda makes the solve singular. With the
+        # floor W = 0, every prediction is mu_b, every candidate ties, and retrieval reads chance.
+        lam = (alpha * K.diagonal().mean()).clamp_min(1e-6)
         W = Ac.T @ torch.linalg.solve(K + lam * torch.eye(len(tr), dtype=K.dtype), Bt - mu_b)
         parts.append(retrieval((A[te].float() - mu_a) @ W + mu_b, B[te], [groups[i] for i in te]))
     n = sum(p["n"] for p in parts)

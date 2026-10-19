@@ -141,6 +141,13 @@ carry the same? Two parts in one run: representational (does image-run France si
 text-run France, per layer and per mover head?) and causal (do text-run mover values install
 into an image run, and the reverse?).
 
+**Rerun after the fix (2026-10-19).** The first pod run crashed at the layer-0 ridge solve.
+Layer 0's last-column residual is the same token embedding in every row, so the centered matrix
+was all zeros and the solve was singular. The regularizer is now floored, so that layer reads
+chance (self-check 5), and a test covers the case. After `git pull` and
+`python -m pytest -q tests/test_crossmodal.py`, run X1 on its own:
+`GPU=a100 bash scripts/run_paper.sh x1`. It overwrites only its own output directory.
+
 **Runs as:** step `x1` (lane 3), with smoke in `smoke`. It executes
 `text_entity_contrast.py --phases crossmodal --batch_size 64 --out_dir
 results/text_entity_contrast/flags_crossmodal`.

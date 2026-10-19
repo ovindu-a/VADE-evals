@@ -30,6 +30,17 @@ def test_retrieval_scores_identical_inputs_as_chance_not_perfect():
     assert r["top1"] == 0.0 and r["mean_rank"] == 5.5
 
 
+def test_ridge_retrieval_on_identical_inputs_reads_chance_instead_of_raising():
+    # Layer 0 on the pod: every row's last-column residual is the same token embedding.
+    A = torch.ones(40, 8) * 3.0
+    B = torch.ones(40, 8) * -1.0
+    ents = list(range(20)) * 2
+    groups = ["a"] * 20 + ["b"] * 20
+    for r in (tec.ridge_retrieval(A, B, ents, groups), tec.ridge_retrieval(B, A, ents, groups)):
+        assert r["n"] == 40 and r["top1"] == 0.0
+        assert abs(r["mean_rank"] - 5.5) < 1e-9                # 10 test rows per group, all tied
+
+
 def test_ridge_retrieval_recovers_a_rotation_on_held_out_entities():
     g = torch.Generator().manual_seed(2)
     n_ent, d = 60, 8
