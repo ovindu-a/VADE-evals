@@ -41,6 +41,31 @@ PHASES (--phases, any subset; each is cheap, forward-only except `accuracy`)
             condition is untouched by it but hurt by entity:+..., text facts are looked
             up at the subject position (Geva/Meng) and images use a different, later
             site -- the mechanistic content of "too late to recall".
+  crossmodal  (opt-in; not in the default --phases) do the mover heads carry the SAME
+            thing in both conditions? `heads` shows the same heads are USED; every one of
+            its installs is within-condition, so it cannot say whether their content is
+            shared. Two parts, no --entity_layer needed:
+              representation  clean runs of every (country, attribute) in both conditions;
+                at the last prompt column, each mover's o_proj input, the movers' joint
+                residual write, and the residual at every layer (plus the entity site:
+                image tokens mean-pooled vs the name). Per layer / per head: cross-modal
+                retrieval -- is image-run France nearest to text-run France among all
+                countries asked the same question? -- after centering each condition on
+                its own mean (a modality offset otherwise dominates every cosine), and
+                again through a ridge map fitted on half the COUNTRIES and tested on the
+                other half. The layer curve answers "when does the image run become the
+                text run"; chance top-1 is 1/n_countries.
+              install  the causal version: the movers' values from a CLEAN source run in
+                the OTHER condition, installed at the readout columns of a clean base run
+                (text-named B's mover outputs into image-of-A, and the reverse), against
+                the same-condition donor, a per-head norm-matched cross donor, a random-10
+                head set from the mover blocks, and a `self` donor (the BASE country in
+                the other condition), which must keep the base answer: it separates
+                "carries the entity" from "any foreign-modality vector breaks the run".
+            cross ~= same -> the moved payload is modality-invariant; cross ~= 0 with
+            normmatch recovering it -> same direction, different scale; cross ~= 0 and
+            self also breaks -> the two conditions' mover spaces are not compatible.
+            Arrays are saved to crossmodal_reps.pt for CPU re-analysis.
 
 READOUT. Divergence-point transfer / base_kept / normalized logit difference, as in
 methods/circuit_common.py. Text prompts differ in length between countries, so text
@@ -51,6 +76,8 @@ Usage
     python methods/text_entity_contrast.py --dry_run
     python methods/text_entity_contrast.py --n_pairs 8 --out_dir results/text_entity_contrast/smoke
     python methods/text_entity_contrast.py                     # 64 pairs x 4 attributes, all phases
+    python methods/text_entity_contrast.py --phases crossmodal \
+        --out_dir results/text_entity_contrast/flags_crossmodal  # mover content, image vs text
 """
 import argparse
 import itertools
@@ -69,6 +96,7 @@ from methods.circuit_common import (ATTRIBUTES, DEFAULT_VADE_ROOT, MODEL_ID, MOV
 
 CONDITIONS = ("image", "text")
 PHASES = ("accuracy", "curves", "heads", "freeze")
+OPT_IN_PHASES = ("crossmodal",)                     # never in the default --phases
 DEFAULT_FREEZE = ["readout:16-22", "readout:23-26", "readout:22-27", "entity:+0-+5"]
 
 
@@ -140,6 +168,80 @@ def mover_subsets(heads):
         out[f"pair:{fmt_head(a)}+{fmt_head(b)}"] = [a, b]
     for h in heads:
         out[f"loo:-{fmt_head(h)}"] = [x for x in heads if x != h]
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Cross-modal comparison (pure tensor functions; tested offline)
+# ---------------------------------------------------------------------------
+
+def retrieval(A, B, groups):
+    """A, B [N, d]: row i of A and row i of B are the same entity in two conditions.
+    Within each group (attribute asked), each condition is centered on its own group
+    mean and unit-normalized; row i of A is then ranked against every row of B in its
+    group. -> {n, top1, mean_rank, same_cos, diff_cos, chance_top1}."""
+    import torch.nn.functional as F
+    acc = {"n": 0, "top1": 0.0, "mean_rank": 0.0, "same_cos": 0.0, "diff_cos": 0.0, "chance_top1": 0.0}
+    for g in sorted(set(groups)):
+        idx = [i for i, x in enumerate(groups) if x == g]
+        n = len(idx)
+        if n < 2:
+            continue
+        a, b = A[idx].float(), B[idx].float()
+        a = F.normalize(a - a.mean(0), dim=-1)
+        b = F.normalize(b - b.mean(0), dim=-1)
+        S = a @ b.T
+        d = S.diagonal()
+        # Ties count against a hit and take the average rank: identical inputs (e.g. the
+        # same last token at layer 0, centered to zero) must read chance, not top-1 = 100%.
+        above = (S > d[:, None]).sum(1)
+        ties = (S == d[:, None]).sum(1) - 1
+        rank = above + 1 + ties / 2
+        acc["n"] += n
+        acc["top1"] += float(((above == 0) & (ties == 0)).sum())
+        acc["mean_rank"] += float(rank.sum())
+        acc["same_cos"] += float(d.sum())
+        acc["diff_cos"] += float(((S.sum(1) - d) / (n - 1)).sum())
+        acc["chance_top1"] += 1.0                                  # n rows x 1/n
+    if acc["n"]:
+        for k in ("top1", "mean_rank", "same_cos", "diff_cos", "chance_top1"):
+            acc[k] /= acc["n"]
+    return acc
+
+
+def ridge_retrieval(A, B, entities, groups, alpha=0.1, folds=2, seed=0):
+    """Held-out linear map A -> B: ridge fitted on the rows of all but one fold of
+    ENTITIES (so no country is on both sides), applied to the held-out fold, then
+    `retrieval` there. Dual-form solve, so d >> n is fine; lambda = alpha x mean
+    squared row norm. -> retrieval's dict, pooled over folds."""
+    import torch
+    uniq = sorted(set(entities))
+    random.Random(seed).shuffle(uniq)
+    fold_of = {e: i % folds for i, e in enumerate(uniq)}
+    parts = []
+    for f in range(folds):
+        tr = [i for i, e in enumerate(entities) if fold_of[e] != f]
+        te = [i for i, e in enumerate(entities) if fold_of[e] == f]
+        At, Bt = A[tr].float(), B[tr].float()
+        mu_a, mu_b = At.mean(0), Bt.mean(0)
+        Ac = At - mu_a
+        K = Ac @ Ac.T
+        lam = alpha * K.diagonal().mean()
+        W = Ac.T @ torch.linalg.solve(K + lam * torch.eye(len(tr), dtype=K.dtype), Bt - mu_b)
+        parts.append(retrieval((A[te].float() - mu_a) @ W + mu_b, B[te], [groups[i] for i in te]))
+    n = sum(p["n"] for p in parts)
+    return {k: (n if k == "n" else sum(p[k] * p["n"] for p in parts) / max(n, 1)) for k in parts[0]}
+
+
+def norm_match(z_donor, z_ref, heads, head_dim):
+    """-> copy of z_donor ({b: [B, n, hidden]}) with each listed head's slice rescaled,
+    per row and column, to the norm of the same slice in z_ref."""
+    out = {b: v.clone() for b, v in z_donor.items()}
+    for b, h in heads:
+        sl = slice(h * head_dim, (h + 1) * head_dim)
+        d, r = out[b][..., sl], z_ref[b][..., sl]
+        out[b][..., sl] = d * (r.float().norm(dim=-1, keepdim=True)
+                               / d.float().norm(dim=-1, keepdim=True).clamp_min(1e-8)).to(d.dtype)
     return out
 
 
@@ -315,12 +417,134 @@ def loo_mean(v):
 
 # ---------------------------------------------------------------------------
 
+def crossmodal_capture(m, side, movers):
+    """One clean forward -> (z [B, n_movers, head_dim], write [B, hidden], resid
+    [B, n_layers, hidden], entity [B, n_layers, hidden]) at the LAST readout column.
+    `entity` mean-pools the side's entity columns (every image column, or the name)."""
+    import torch
+    from methods.circuit_common import gather_cols
+    blocks = sorted({b for b, _ in movers})
+    z, _ = head_capture(m, side, blocks)
+    out = m.forward(side["ids"], side["mask"], side["extra"], output_hidden_states=True)
+    zs = torch.stack([z[b][:, -1, h * m.head_dim:(h + 1) * m.head_dim] for b, h in movers], 1)
+    write = torch.stack([
+        z[b][:, -1, h * m.head_dim:(h + 1) * m.head_dim].float()
+        @ m.adapter.get_attn_head_output_module(m.model, b).weight[:, h * m.head_dim:(h + 1) * m.head_dim].float().T
+        for b, h in movers]).sum(0)
+    last = side["readout"][:, -1:]
+    hs = out.hidden_states[:m.n_layers]               # the last entry is post-final-norm (gotcha 2b)
+    resid = torch.stack([gather_cols(h, last.to(h.device))[:, 0] for h in hs], 1)
+    ent = torch.stack([gather_cols(h, side["entity"].to(h.device)).float().mean(1) for h in hs], 1)
+    return zs.half().cpu(), write.half().cpu(), resid.half().cpu(), ent.half().cpu()
+
+
+def phase_crossmodal(m, args, entity_dir, items, chunks, sides, readout_metrics):
+    import torch
+    movers = parse_heads(args.movers)
+    report: dict = {"movers": [fmt_head(h) for h in movers]}
+
+    # -- representation: every (country, attribute), both conditions -------------------
+    rep_rows = [{"row_index": j, "base": c, "source": c, "attribute": a, "prefix": []}
+                for j, (a, c) in enumerate((a, c) for a in args.attributes for c in sorted(items))]
+    reps = {c: {"z": [], "write": [], "resid": [], "entity": []} for c in CONDITIONS}
+    order = []
+    for i, chunk in enumerate(list(chunk_rows(rep_rows, args.batch_size))):
+        order += chunk
+        for cond in CONDITIONS:
+            side = build_side(m, cond, entity_dir, items, chunk, "base", args.text_entity_site)
+            for key, v in zip(("z", "write", "resid", "entity"), crossmodal_capture(m, side, movers)):
+                reps[cond][key].append(v)
+        print(f"  crossmodal/capture {i + 1}", flush=True)
+    reps = {c: {k: torch.cat(v) for k, v in d.items()} for c, d in reps.items()}
+    ents = [r["base"] for r in order]
+    groups = [r["attribute"] for r in order]
+    torch.save({"rows": [(r["base"], r["attribute"]) for r in order], "movers": movers, **{
+        f"{c}_{k}": v for c, d in reps.items() for k, v in d.items()}},
+        os.path.join(args.out_dir, "crossmodal_reps.pt"))
+
+    def both(a, b):
+        return {"centered": retrieval(a, b, groups),
+                "ridge_img2txt": ridge_retrieval(a, b, ents, groups, seed=args.seed),
+                "ridge_txt2img": ridge_retrieval(b, a, ents, groups, seed=args.seed)}
+
+    img, txt = reps["image"], reps["text"]
+    rep = {"n_rows": len(order), "n_countries": len(set(ents)),
+           "resid_by_layer": {L: both(img["resid"][:, L], txt["resid"][:, L]) for L in range(m.n_layers)},
+           "entity_by_layer": {L: both(img["entity"][:, L], txt["entity"][:, L]) for L in range(m.n_layers)},
+           "movers_concat": both(img["z"].flatten(1), txt["z"].flatten(1)),
+           "movers_write": both(img["write"], txt["write"]),
+           "per_head": {fmt_head(h): {**both(img["z"][:, j], txt["z"][:, j]),
+                                      "norm_ratio_img_over_txt": float(img["z"][:, j].float().norm(dim=-1).mean()
+                                                                       / txt["z"][:, j].float().norm(dim=-1).mean())}
+                        for j, h in enumerate(movers)}}
+    report["representation"] = rep
+    print(f"\nCROSSMODAL representation: n={rep['n_rows']} rows, chance top-1 "
+          f"{rep['movers_concat']['centered']['chance_top1']:.1%}")
+    print(f"  {'site':<22} {'top1 ctr':>9} {'top1 ridge i>t':>15} {'same-diff cos':>14}")
+
+    def line(name, d):
+        c = d["centered"]
+        print(f"  {name:<22} {c['top1']:>8.1%} {d['ridge_img2txt']['top1']:>15.1%} "
+              f"{c['same_cos'] - c['diff_cos']:>14.3f}")
+    for L in range(m.n_layers):
+        line(f"resid@{L}", rep["resid_by_layer"][L])
+    for L in range(m.n_layers):
+        line(f"entity@{L}", rep["entity_by_layer"][L])
+    line("movers (concat z)", rep["movers_concat"])
+    line("movers (joint write)", rep["movers_write"])
+    for name, d in rep["per_head"].items():
+        line(f"head {name}", d)
+
+    # -- install: cross-condition donors into clean base runs ---------------------------
+    blocks = sorted({b for b, _ in movers})
+    rng = random.Random(args.seed + 11)
+    random10 = sorted(rng.sample([(b, h) for b in blocks for h in range(m.n_heads) if (b, h) not in set(movers)], 10))
+    recs = []
+    for i, chunk in enumerate(chunks):
+        sd = sides(chunk)
+        cap = {}
+        for cond in CONDITIONS:
+            base, src = sd[cond]
+            cap[cond] = {"base": head_capture(m, base, blocks), "src": head_capture(m, src, blocks)}
+        for r_cond in CONDITIONS:
+            base, _ = sd[r_cond]
+            dev = lambda z: {b: v.to(m.model.device) for b, v in z.items()}  # noqa: E731
+            zc, lc = cap[r_cond]["base"]
+            arms = [("clean", lc), ("source_clean", cap[r_cond]["src"][1])]
+            for d_cond in CONDITIONS:
+                tag = "same" if d_cond == r_cond else "cross"
+                z_src = cap[d_cond]["src"][0]
+                arms.append((f"install:movers<-{tag}", head_install(m, base, movers, dev(z_src))))
+                arms.append((f"install:random10<-{tag}", head_install(m, base, random10, dev(z_src))))
+                if tag == "cross":
+                    arms.append(("install:movers<-cross:normmatch",
+                                 head_install(m, base, movers, dev(norm_match(z_src, zc, movers, m.head_dim)))))
+                    arms.append(("install:movers<-cross:self",
+                                 head_install(m, base, movers, dev(cap[d_cond]["base"][0]))))
+            for arm, logits in arms:
+                for r, met in zip(chunk, readout_metrics(logits.cpu(), chunk)):
+                    recs.append({"row_index": r["row_index"], "attribute": r["attribute"], "cond": r_cond,
+                                 "arm": arm, **met})
+        print(f"  crossmodal/install {i + 1}/{len(chunks)}", flush=True)
+    inst: dict = {"random10": [fmt_head(h) for h in random10]}
+    report["install"] = inst
+    for cond in CONDITIONS:
+        rr = [r for r in recs if r["cond"] == cond]
+        elig = clean_eligible(rr)
+        summ = summarize_arms(rr, elig)
+        inst[cond] = {"n_eligible": len(elig), "arms": summ, "arms_all_rows": summarize_arms(rr),
+                                   "norm_ld": {a: normalized_ld(summ, a) for a in summ}}
+        print_table(summ, f"CROSSMODAL install into the {cond} condition (donor = cross/same condition), "
+                          f"n={len(elig)} eligible")
+    return report, recs
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
     ap.add_argument("--attributes", nargs="+", default=list(ATTRIBUTES), choices=list(ATTRIBUTES))
-    ap.add_argument("--phases", nargs="+", default=list(PHASES), choices=list(PHASES))
+    ap.add_argument("--phases", nargs="+", default=list(PHASES), choices=list(PHASES) + list(OPT_IN_PHASES))
     ap.add_argument("--n_pairs", type=int, default=64)
     ap.add_argument("--layers", type=int, nargs="+", default=list(range(0, 28)),
                     help="Residual layers for `curves` (0 = embeddings). Stops at n_layers-1: the last "
@@ -355,6 +579,9 @@ def main():
         assert args.entity_layer, "--entity_layer IMAGE TEXT is required when `curves` is not run"
     print(f"[text_entity_contrast] phases={args.phases}; {len(pairs)} pairs x {len(args.attributes)} attributes")
     print(f"  example text prompt: {text_question('capital', 'France')!r}")
+    if "crossmodal" in args.phases:
+        print(f"  crossmodal: {len(items)} countries x {len(args.attributes)} attributes per condition for the "
+              f"representation part; movers {args.movers}")
     if args.dry_run:
         print("Metadata valid.")
         return
@@ -408,7 +635,7 @@ def main():
         write_json(os.path.join(args.out_dir, "summary.json"), report)
 
     L_e = {}
-    for j, cond in enumerate(CONDITIONS):
+    for j, cond in enumerate(CONDITIONS if ("heads" in args.phases or "freeze" in args.phases) else ()):
         if args.entity_layer:
             L_e[cond] = args.entity_layer[j]
         else:
@@ -537,6 +764,13 @@ def main():
                                       "arms_all_rows": summarize_arms(rr)}
             print_table(report["freeze"][cond]["arms"], f"FREEZE [{cond}] entity patch at L_e={L_e[cond]}")
         write_json(os.path.join(args.out_dir, "summary.json"), report)
+
+    if "crossmodal" in args.phases:
+        report["crossmodal"], cm_recs = phase_crossmodal(m, args, entity_dir, items, chunks, sides, readout_metrics)
+        write_json(os.path.join(args.out_dir, "summary.json"), report)
+        with open(os.path.join(args.out_dir, "crossmodal_rows.jsonl"), "w") as fh:
+            for r in cm_recs:
+                fh.write(json.dumps(r) + "\n")
 
     with open(os.path.join(args.out_dir, "rows.jsonl"), "w") as fh:
         for r in records:

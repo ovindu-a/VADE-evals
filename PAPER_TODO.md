@@ -7,6 +7,7 @@ How to use this file:
 - Add new items under the claim they serve. Never delete an item; strike it out instead.
 - IDs (A3, P6, ...) refer to CLAIM_CANDIDATES.md and FOLLOWUP_PLAN.md.
 - Priority: **[P0]** needed for submission, **[P1]** strongly expected by reviewers, **[P2]** nice to have.
+- GPU commands for queued experiments live in `PAPER_RUNBOOK.md` (X-numbers), run as one batch.
 
 Working story: **see → move → recall.** Movers (blocks 21-23) carry the whole entity. Routers (blocks
 19-21) carry which attribute was asked. Last-token MLPs 23-26 look the fact up. The contrast with
@@ -20,8 +21,19 @@ answer position, not enriched at the subject.
 - [ ] **[P0]** Replicate movers, routers and the MLP lookup on a model whose language model is not
   Qwen (Gemma-3, Llama-3.2-Vision or Idefics3). Cover flags plus one other entity. InternVL3 shares
   Qwen2.5-7B's language model, so it does not count as generalization.
+  - Chosen: **Idefics3-8B-Llama3** (Llama-3.1 LM; every architecture assumption holds).
+    Llama-3.2-Vision is ruled out: its images enter by cross-attention, so there are no image
+    positions. Gemma-3 is second choice (head_dim ≠ hidden/heads, post-sublayer norms).
+  - **X3** in PAPER_RUNBOOK.md §5: needs an adapter plus generic prompt-builder fixes before it
+    can be queued.
 - [ ] **[P0]** Run the full story on brands and celebrities, not just head localization:
   cross-question mover patching, router tracing, MLP 23-26 freezing (`head_severed --gold own`).
+  - Already done: head localization, `head_severed` on hq_country / nationality /
+    native_language, `head_vocab_projection`.
+  - **X2** (queued, runs today): continuous mover install, cross-question patching, MLP
+    freezing on founded_year / industry / occupation / birth_year.
+  - **X2b** (PAPER_RUNBOOK.md §5): routers, composition and text contrast. Needs per-entity
+    controlled prompts and own-answer golds first.
 - [ ] **[P1]** Relative-depth (~0.8) claim: Qwen2.5-VL-32B stage 1 (P34, F1). Otherwise weaken the
   claim to "late, block window per model".
 - [ ] **[P1]** 3B two-step handoff: separate windows plus a continuous install for calling_code
@@ -55,6 +67,12 @@ answer position, not enriched at the subject.
 - [ ] **[P0]** Image-vs-text convergence: at which layer do image-run activations at the answer
   position (and at the entity) become similar to the text-named run? CKA or cosine per layer, plus
   cross-patching text→image runs per layer. This answers Nikankin et al. 2025 directly.
+  - Implemented as `text_entity_contrast.py --phases crossmodal` (2026-10-19, not yet run;
+    queued as **X1** in PAPER_RUNBOOK.md):
+    cross-modal retrieval per layer / per mover head (centered and held-out ridge), plus
+    cross-condition mover installs (text-named B's movers into image-of-A and the reverse) with
+    same-condition, norm-matched, random-10 and `self` controls. Offline tests in
+    `tests/test_crossmodal.py` have not been run (no local torch).
 - [ ] **[P1]** Same-heads claim with a text-run head trace on brands/celebrities, not just flags.
 
 ## 3. Category vs entity attributes
