@@ -1,0 +1,48 @@
+{
+  "heads": [
+    [
+      24,
+      3
+    ],
+    [
+      16,
+      9
+    ],
+    [
+      24,
+      1
+    ],
+    [
+      16,
+      11
+    ],
+    [
+      16,
+      8
+    ],
+    [
+      24,
+      2
+    ],
+    [
+      16,
+      18
+    ],
+    [
+      22,
+      20
+    ]
+  ],
+  "mlp_span": "23-31",
+  "mlp_singles": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "attn_span": "25-31",
+  "trace": "results/image_head_pipeline_Idefics3-8B-Llama3/flags/language/head_trace_patch16_blocks16-24.json"
+}

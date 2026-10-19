@@ -1,0 +1,339 @@
+{
+  "config": {
+    "vade_root": "/workspace/VADE",
+    "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+    "entity": "celebrities",
+    "attributes": [
+      "nationality",
+      "occupation",
+      "birth_year",
+      "native_language"
+    ],
+    "n_items": 2,
+    "movers": "23.3,22.17,23.4,23.6,21.4,22.15,21.5,21.1",
+    "routers": null,
+    "router_trace": "results/paper/smoke2/x2b_trace_celebrities.json",
+    "router_k": 4,
+    "arms": [
+      "clean",
+      "movers",
+      "routers",
+      "compose",
+      "compose_random",
+      "target_circuit",
+      "target_window",
+      "target_complement"
+    ],
+    "max_new_tokens": 8,
+    "batch_size": 12,
+    "seed": 0,
+    "device": "cuda:0",
+    "out_dir": "results/paper/smoke2/x2b_compose_celebrities"
+  },
+  "movers": [
+    [
+      21,
+      1
+    ],
+    [
+      21,
+      4
+    ],
+    [
+      21,
+      5
+    ],
+    [
+      22,
+      15
+    ],
+    [
+      22,
+      17
+    ],
+    [
+      23,
+      3
+    ],
+    [
+      23,
+      4
+    ],
+    [
+      23,
+      6
+    ]
+  ],
+  "routers": [
+    [
+      15,
+      21
+    ],
+    [
+      16,
+      6
+    ],
+    [
+      16,
+      15
+    ],
+    [
+      16,
+      20
+    ]
+  ],
+  "random_movers": [
+    [
+      21,
+      11
+    ],
+    [
+      21,
+      18
+    ],
+    [
+      21,
+      20
+    ],
+    [
+      22,
+      7
+    ],
+    [
+      23,
+      9
+    ],
+    [
+      23,
+      12
+    ],
+    [
+      23,
+      15
+    ],
+    [
+      23,
+      24
+    ]
+  ],
+  "random_routers": [
+    [
+      15,
+      13
+    ],
+    [
+      15,
+      25
+    ],
+    [
+      16,
+      16
+    ],
+    [
+      16,
+      26
+    ]
+  ],
+  "ground_truth_sha256": "43bb0dbadd343fbdc5b1e7786ecc537588b6077c3f1f26c338421b165fe2d659",
+  "all": {
+    "n": 24,
+    "clean": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "movers": {
+      "C.X": 0.5,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.5,
+      "ambiguous": 0.0
+    },
+    "routers": {
+      "C.X": 0.9166666666666666,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.08333333333333333,
+      "ambiguous": 0.0
+    },
+    "compose": {
+      "C.X": 0.5833333333333334,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.4166666666666667,
+      "ambiguous": 0.0
+    },
+    "compose_random": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_circuit": {
+      "C.X": 0.6666666666666666,
+      "B.X": 0.041666666666666664,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.2916666666666667,
+      "ambiguous": 0.0
+    },
+    "target_window": {
+      "C.X": 0.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.625,
+      "other": 0.375,
+      "ambiguous": 0.0
+    },
+    "target_complement": {
+      "C.X": 0.0,
+      "B.X": 0.0,
+      "C.A": 0.375,
+      "B.A": 0.25,
+      "other": 0.375,
+      "ambiguous": 0.0
+    }
+  },
+  "eligible": {
+    "n": 4,
+    "clean": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "movers": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "routers": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "compose": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "compose_random": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_circuit": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_window": {
+      "C.X": 0.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 1.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_complement": {
+      "C.X": 0.0,
+      "B.X": 0.0,
+      "C.A": 0.25,
+      "B.A": 0.5,
+      "other": 0.25,
+      "ambiguous": 0.0
+    }
+  },
+  "eligible_distinct": {
+    "n": 4,
+    "clean": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "movers": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "routers": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "compose": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "compose_random": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_circuit": {
+      "C.X": 1.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 0.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_window": {
+      "C.X": 0.0,
+      "B.X": 0.0,
+      "C.A": 0.0,
+      "B.A": 1.0,
+      "other": 0.0,
+      "ambiguous": 0.0
+    },
+    "target_complement": {
+      "C.X": 0.0,
+      "B.X": 0.0,
+      "C.A": 0.25,
+      "B.A": 0.5,
+      "other": 0.25,
+      "ambiguous": 0.0
+    }
+  }
+}

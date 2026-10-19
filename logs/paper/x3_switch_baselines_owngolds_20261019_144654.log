@@ -1,0 +1,198 @@
+flags: golds are the model's own clean answers; rows VADE's matcher marks wrong run baselines only.
+8 countries, 96 directed question pairs, layers=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]; 192 generation runs
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] Model config: pad_token_id must be `None` or an integer within the vocabulary (between 0 and 31999), got 128002. This may result in unexpected behavior.
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:17,  1.66it/s]Loading weights:   0%|          | 3/729 [00:01<05:03,  2.39it/s]Loading weights:   1%|          | 5/729 [00:01<02:55,  4.12it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:11, 10.11it/s]Loading weights:   2%|▏         | 14/729 [00:01<00:48, 14.75it/s]Loading weights:   2%|▏         | 17/729 [00:01<00:44, 16.01it/s]Loading weights:   3%|▎         | 23/729 [00:01<00:30, 23.16it/s]Loading weights:   4%|▎         | 27/729 [00:02<00:29, 23.81it/s]Loading weights:   4%|▍         | 32/729 [00:02<00:25, 27.73it/s]Loading weights:   5%|▍         | 36/729 [00:02<00:25, 27.06it/s]Loading weights:   6%|▌         | 41/729 [00:02<00:22, 30.40it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:23, 28.84it/s]Loading weights:   7%|▋         | 50/729 [00:02<00:21, 31.76it/s]Loading weights:   7%|▋         | 54/729 [00:02<00:22, 29.69it/s]Loading weights:   8%|▊         | 59/729 [00:03<00:20, 32.71it/s]Loading weights:   9%|▊         | 63/729 [00:03<00:21, 30.63it/s]Loading weights:   9%|▉         | 68/729 [00:03<00:19, 33.45it/s]Loading weights:  10%|▉         | 72/729 [00:03<00:20, 31.33it/s]Loading weights:  11%|█         | 77/729 [00:03<00:19, 34.03it/s]Loading weights:  11%|█         | 81/729 [00:03<00:20, 32.01it/s]Loading weights:  12%|█▏        | 86/729 [00:03<00:18, 34.86it/s]Loading weights:  12%|█▏        | 90/729 [00:04<00:19, 32.23it/s]Loading weights:  13%|█▎        | 95/729 [00:04<00:18, 34.92it/s]Loading weights:  14%|█▎        | 99/729 [00:04<00:19, 32.04it/s]Loading weights:  14%|█▍        | 104/729 [00:04<00:18, 34.51it/s]Loading weights:  15%|█▍        | 108/729 [00:04<00:19, 32.00it/s]Loading weights:  16%|█▌        | 113/729 [00:04<00:17, 34.57it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:18, 32.23it/s]Loading weights:  17%|█▋        | 122/729 [00:04<00:17, 35.02it/s]Loading weights:  17%|█▋        | 126/729 [00:05<00:18, 32.30it/s]Loading weights:  18%|█▊        | 131/729 [00:05<00:17, 35.07it/s]Loading weights:  19%|█▊        | 135/729 [00:05<00:18, 32.07it/s]Loading weights:  19%|█▉        | 140/729 [00:05<00:17, 34.54it/s]Loading weights:  20%|█▉        | 144/729 [00:05<00:18, 31.98it/s]Loading weights:  20%|██        | 149/729 [00:05<00:16, 34.57it/s]Loading weights:  21%|██        | 153/729 [00:05<00:17, 32.18it/s]Loading weights:  22%|██▏       | 158/729 [00:06<00:16, 35.02it/s]Loading weights:  22%|██▏       | 162/729 [00:06<00:17, 32.24it/s]Loading weights:  23%|██▎       | 167/729 [00:06<00:16, 34.95it/s]Loading weights:  23%|██▎       | 171/729 [00:06<00:17, 31.84it/s]Loading weights:  24%|██▍       | 176/729 [00:06<00:16, 34.33it/s]Loading weights:  25%|██▍       | 180/729 [00:06<00:17, 31.77it/s]Loading weights:  25%|██▌       | 185/729 [00:06<00:15, 34.20it/s]Loading weights:  26%|██▌       | 189/729 [00:07<00:17, 31.69it/s]Loading weights:  27%|██▋       | 194/729 [00:07<00:15, 34.59it/s]Loading weights:  27%|██▋       | 198/729 [00:07<00:16, 31.75it/s]Loading weights:  28%|██▊       | 203/729 [00:07<00:15, 34.13it/s]Loading weights:  28%|██▊       | 207/729 [00:07<00:16, 31.38it/s]Loading weights:  29%|██▉       | 212/729 [00:07<00:15, 33.90it/s]Loading weights:  30%|██▉       | 216/729 [00:07<00:16, 31.24it/s]Loading weights:  30%|███       | 221/729 [00:07<00:14, 33.93it/s]Loading weights:  31%|███       | 225/729 [00:08<00:15, 31.52it/s]Loading weights:  32%|███▏      | 230/729 [00:08<00:14, 34.29it/s]Loading weights:  32%|███▏      | 234/729 [00:08<00:15, 31.44it/s]Loading weights:  33%|███▎      | 239/729 [00:08<00:14, 34.18it/s]Loading weights:  33%|███▎      | 243/729 [00:08<00:15, 31.38it/s]Loading weights:  34%|███▍      | 248/729 [00:08<00:14, 34.06it/s]Loading weights:  35%|███▍      | 252/729 [00:08<00:15, 31.30it/s]Loading weights:  35%|███▌      | 257/729 [00:09<00:13, 33.89it/s]Loading weights:  36%|███▌      | 261/729 [00:09<00:14, 31.45it/s]Loading weights:  36%|███▋      | 266/729 [00:09<00:13, 34.25it/s]Loading weights:  37%|███▋      | 270/729 [00:09<00:14, 31.78it/s]Loading weights:  38%|███▊      | 275/729 [00:09<00:13, 34.29it/s]Loading weights:  38%|███▊      | 279/729 [00:09<00:14, 31.70it/s]Loading weights:  39%|███▉      | 284/729 [00:09<00:13, 34.00it/s]Loading weights:  40%|███▉      | 288/729 [00:10<00:13, 31.76it/s]Loading weights:  45%|████▍     | 327/729 [00:10<00:03, 116.12it/s]Loading weights:  54%|█████▍    | 393/729 [00:10<00:01, 252.90it/s]Loading weights:  63%|██████▎   | 461/729 [00:10<00:00, 361.91it/s]Loading weights:  72%|███████▏  | 525/729 [00:10<00:00, 436.53it/s]Loading weights:  81%|████████  | 589/729 [00:10<00:00, 492.55it/s]Loading weights:  90%|████████▉ | 656/729 [00:10<00:00, 542.97it/s]Loading weights:  98%|█████████▊| 717/729 [00:10<00:00, 558.56it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 67.84it/s] 
+[transformers] Ignoring clean_up_tokenization_spaces=True for BPE tokenizer TokenizersBackend. The clean_up_tokenization post-processing step is designed for WordPiece tokenizers and is destructive for BPE (it strips spaces before punctuation). Set clean_up_tokenization_spaces=False to suppress this warning, or set clean_up_tokenization_spaces_for_bpe_even_though_it_will_corrupt_output=True to force cleanup anyway.
+  row=0 clean: first=0 full=0 base_full=1 answer=' washington.'
+  row=0 donor_clean: first=1 full=1 base_full=0 answer=' eur.'
+  row=1 clean: first=0 full=0 base_full=1 answer=' washington.'
+  row=1 donor_clean: first=1 full=1 base_full=0 answer=' dutch.'
+  row=2 clean: first=0 full=0 base_full=1 answer=' washington.'
+  row=2 donor_clean: first=1 full=1 base_full=0 answer=' 31.'
+  row=3 clean: first=0 full=0 base_full=1 answer=' eur.'
+  row=3 donor_clean: first=1 full=1 base_full=0 answer=' washington.'
+  row=4 clean: first=0 full=0 base_full=1 answer=' eur.'
+  row=4 donor_clean: first=1 full=1 base_full=0 answer=' dutch.'
+  row=5 clean: first=0 full=0 base_full=1 answer=' eur.'
+  row=5 donor_clean: first=1 full=1 base_full=0 answer=' 31.'
+  row=6 clean: first=0 full=0 base_full=1 answer=' dutch.'
+  row=6 donor_clean: first=1 full=1 base_full=0 answer=' washington.'
+  row=7 clean: first=0 full=0 base_full=1 answer=' dutch.'
+  row=7 donor_clean: first=1 full=1 base_full=0 answer=' eur.'
+  row=8 clean: first=0 full=0 base_full=1 answer=' dutch.'
+  row=8 donor_clean: first=1 full=1 base_full=0 answer=' 31.'
+  row=9 clean: first=0 full=0 base_full=1 answer=' 31.'
+  row=9 donor_clean: first=1 full=1 base_full=0 answer=' washington.'
+  row=10 clean: first=0 full=0 base_full=1 answer=' 31.'
+  row=10 donor_clean: first=1 full=1 base_full=0 answer=' eur.'
+  row=11 clean: first=0 full=0 base_full=1 answer=' 31.'
+  row=11 donor_clean: first=1 full=1 base_full=0 answer=' dutch.'
+  row=12 clean: first=0 full=0 base_full=1 answer=' port louis.'
+  row=12 donor_clean: first=1 full=1 base_full=0 answer=' MUR.'
+  row=13 clean: first=0 full=0 base_full=1 answer=' port louis.'
+  row=13 donor_clean: first=1 full=1 base_full=0 answer=' fr.'
+  row=14 clean: first=0 full=0 base_full=1 answer=' port louis.'
+  row=14 donor_clean: first=1 full=1 base_full=0 answer=' 262.'
+  row=15 clean: first=0 full=0 base_full=1 answer=' MUR.'
+  row=15 donor_clean: first=1 full=1 base_full=0 answer=' port louis.'
+  row=16 clean: first=0 full=0 base_full=1 answer=' MUR.'
+  row=16 donor_clean: first=1 full=1 base_full=0 answer=' fr.'
+  row=17 clean: first=0 full=0 base_full=1 answer=' MUR.'
+  row=17 donor_clean: first=1 full=1 base_full=0 answer=' 262.'
+  row=18 clean: first=0 full=0 base_full=1 answer=' fr.'
+  row=18 donor_clean: first=1 full=1 base_full=0 answer=' port louis.'
+  row=19 clean: first=0 full=0 base_full=1 answer=' fr.'
+  row=19 donor_clean: first=1 full=1 base_full=0 answer=' MUR.'
+  row=20 clean: first=0 full=0 base_full=1 answer=' fr.'
+  row=20 donor_clean: first=1 full=1 base_full=0 answer=' 262.'
+  row=21 clean: first=0 full=0 base_full=1 answer=' 262.'
+  row=21 donor_clean: first=1 full=1 base_full=0 answer=' port louis.'
+  row=22 clean: first=0 full=0 base_full=1 answer=' 262.'
+  row=22 donor_clean: first=1 full=1 base_full=0 answer=' MUR.'
+  row=23 clean: first=0 full=0 base_full=1 answer=' 262.'
+  row=23 donor_clean: first=1 full=1 base_full=0 answer=' fr.'
+  row=24 clean: first=0 full=0 base_full=1 answer=' canberra.'
+  row=24 donor_clean: first=1 full=1 base_full=0 answer=' aud.'
+  row=25 clean: first=0 full=0 base_full=1 answer=' canberra.'
+  row=25 donor_clean: first=1 full=1 base_full=0 answer=' english.'
+  row=26 clean: first=0 full=0 base_full=1 answer=' canberra.'
+  row=26 donor_clean: first=1 full=1 base_full=0 answer=' 61.'
+  row=27 clean: first=0 full=0 base_full=1 answer=' aud.'
+  row=27 donor_clean: first=1 full=1 base_full=0 answer=' canberra.'
+  row=28 clean: first=0 full=0 base_full=1 answer=' aud.'
+  row=28 donor_clean: first=1 full=1 base_full=0 answer=' english.'
+  row=29 clean: first=0 full=0 base_full=1 answer=' aud.'
+  row=29 donor_clean: first=1 full=1 base_full=0 answer=' 61.'
+  row=30 clean: first=0 full=0 base_full=1 answer=' english.'
+  row=30 donor_clean: first=1 full=1 base_full=0 answer=' canberra.'
+  row=31 clean: first=0 full=0 base_full=1 answer=' english.'
+  row=31 donor_clean: first=1 full=1 base_full=0 answer=' aud.'
+  row=32 clean: first=0 full=0 base_full=1 answer=' english.'
+  row=32 donor_clean: first=1 full=1 base_full=0 answer=' 61.'
+  row=33 clean: first=0 full=0 base_full=1 answer=' 61.'
+  row=33 donor_clean: first=1 full=1 base_full=0 answer=' canberra.'
+  row=34 clean: first=0 full=0 base_full=1 answer=' 61.'
+  row=34 donor_clean: first=1 full=1 base_full=0 answer=' aud.'
+  row=35 clean: first=0 full=0 base_full=1 answer=' 61.'
+  row=35 donor_clean: first=1 full=1 base_full=0 answer=' english.'
+  row=36 clean: first=0 full=0 base_full=1 answer=' budapest.'
+  row=36 donor_clean: first=1 full=1 base_full=0 answer=' huf.'
+  row=37 clean: first=0 full=0 base_full=1 answer=' budapest.'
+  row=37 donor_clean: first=1 full=1 base_full=0 answer=' Hungarian.'
+  row=38 clean: first=0 full=0 base_full=1 answer=' budapest.'
+  row=38 donor_clean: first=1 full=1 base_full=0 answer=' 373.'
+  row=39 clean: first=0 full=0 base_full=1 answer=' huf.'
+  row=39 donor_clean: first=1 full=1 base_full=0 answer=' budapest.'
+  row=40 clean: first=0 full=0 base_full=1 answer=' huf.'
+  row=40 donor_clean: first=1 full=1 base_full=0 answer=' Hungarian.'
+  row=41 clean: first=0 full=0 base_full=1 answer=' huf.'
+  row=41 donor_clean: first=1 full=1 base_full=0 answer=' 373.'
+  row=42 clean: first=0 full=0 base_full=1 answer=' Hungarian.'
+  row=42 donor_clean: first=1 full=1 base_full=0 answer=' budapest.'
+  row=43 clean: first=0 full=0 base_full=1 answer=' Hungarian.'
+  row=43 donor_clean: first=1 full=1 base_full=0 answer=' huf.'
+  row=44 clean: first=0 full=0 base_full=1 answer=' Hungarian.'
+  row=44 donor_clean: first=1 full=1 base_full=0 answer=' 373.'
+  row=45 clean: first=0 full=0 base_full=1 answer=' 373.'
+  row=45 donor_clean: first=1 full=1 base_full=0 answer=' budapest.'
+  row=46 clean: first=0 full=0 base_full=1 answer=' 373.'
+  row=46 donor_clean: first=1 full=1 base_full=0 answer=' huf.'
+  row=47 clean: first=0 full=0 base_full=1 answer=' 373.'
+  row=47 donor_clean: first=1 full=1 base_full=0 answer=' Hungarian.'
+  row=48 clean: first=0 full=0 base_full=1 answer=' doha.'
+  row=48 donor_clean: first=1 full=1 base_full=0 answer=' QAR.'
+  row=49 clean: first=0 full=0 base_full=1 answer=' doha.'
+  row=49 donor_clean: first=1 full=1 base_full=0 answer=' arabic.'
+  row=50 clean: first=0 full=0 base_full=1 answer=' doha.'
+  row=50 donor_clean: first=1 full=1 base_full=0 answer=' 974.'
+  row=51 clean: first=0 full=0 base_full=1 answer=' QAR.'
+  row=51 donor_clean: first=1 full=1 base_full=0 answer=' doha.'
+  row=52 clean: first=0 full=0 base_full=1 answer=' QAR.'
+  row=52 donor_clean: first=1 full=1 base_full=0 answer=' arabic.'
+  row=53 clean: first=0 full=0 base_full=1 answer=' QAR.'
+  row=53 donor_clean: first=1 full=1 base_full=0 answer=' 974.'
+  row=54 clean: first=0 full=0 base_full=1 answer=' arabic.'
+  row=54 donor_clean: first=1 full=1 base_full=0 answer=' doha.'
+  row=55 clean: first=0 full=0 base_full=1 answer=' arabic.'
+  row=55 donor_clean: first=1 full=1 base_full=0 answer=' QAR.'
+  row=56 clean: first=0 full=0 base_full=1 answer=' arabic.'
+  row=56 donor_clean: first=1 full=1 base_full=0 answer=' 974.'
+  row=57 clean: first=0 full=0 base_full=1 answer=' 974.'
+  row=57 donor_clean: first=1 full=1 base_full=0 answer=' doha.'
+  row=58 clean: first=0 full=0 base_full=1 answer=' 974.'
+  row=58 donor_clean: first=1 full=1 base_full=0 answer=' QAR.'
+  row=59 clean: first=0 full=0 base_full=1 answer=' 974.'
+  row=59 donor_clean: first=1 full=1 base_full=0 answer=' arabic.'
+  row=60 clean: first=0 full=0 base_full=1 answer=' islamabad.'
+  row=60 donor_clean: first=1 full=1 base_full=0 answer=' PKR.'
+  row=61 clean: first=0 full=0 base_full=1 answer=' islamabad.'
+  row=61 donor_clean: first=1 full=1 base_full=0 answer=' urdu.'
+  row=62 clean: first=0 full=0 base_full=1 answer=' islamabad.'
+  row=62 donor_clean: first=1 full=1 base_full=0 answer=' 92.'
+  row=63 clean: first=0 full=0 base_full=1 answer=' PKR.'
+  row=63 donor_clean: first=1 full=1 base_full=0 answer=' islamabad.'
+  row=64 clean: first=0 full=0 base_full=1 answer=' PKR.'
+  row=64 donor_clean: first=1 full=1 base_full=0 answer=' urdu.'
+  row=65 clean: first=0 full=0 base_full=1 answer=' PKR.'
+  row=65 donor_clean: first=1 full=1 base_full=0 answer=' 92.'
+  row=66 clean: first=0 full=0 base_full=1 answer=' urdu.'
+  row=66 donor_clean: first=1 full=1 base_full=0 answer=' islamabad.'
+  row=67 clean: first=0 full=0 base_full=1 answer=' urdu.'
+  row=67 donor_clean: first=1 full=1 base_full=0 answer=' PKR.'
+  row=68 clean: first=0 full=0 base_full=1 answer=' urdu.'
+  row=68 donor_clean: first=1 full=1 base_full=0 answer=' 92.'
+  row=69 clean: first=0 full=0 base_full=1 answer=' 92.'
+  row=69 donor_clean: first=1 full=1 base_full=0 answer=' islamabad.'
+  row=70 clean: first=0 full=0 base_full=1 answer=' 92.'
+  row=70 donor_clean: first=1 full=1 base_full=0 answer=' PKR.'
+  row=71 clean: first=0 full=0 base_full=1 answer=' 92.'
+  row=71 donor_clean: first=1 full=1 base_full=0 answer=' urdu.'
+  row=72 clean: first=0 full=0 base_full=1 answer=' rabat.'
+  row=72 donor_clean: first=1 full=1 base_full=0 answer=' MAD.'
+  row=73 clean: first=0 full=0 base_full=1 answer=' rabat.'
+  row=73 donor_clean: first=1 full=1 base_full=0 answer=' arabic.'
+  row=74 clean: first=0 full=0 base_full=1 answer=' rabat.'
+  row=74 donor_clean: first=1 full=1 base_full=0 answer=' 212.'
+  row=75 clean: first=0 full=0 base_full=1 answer=' MAD.'
+  row=75 donor_clean: first=1 full=1 base_full=0 answer=' rabat.'
+  row=76 clean: first=0 full=0 base_full=1 answer=' MAD.'
+  row=76 donor_clean: first=1 full=1 base_full=0 answer=' arabic.'
+  row=77 clean: first=0 full=0 base_full=1 answer=' MAD.'
+  row=77 donor_clean: first=1 full=1 base_full=0 answer=' 212.'
+  row=78 clean: first=0 full=0 base_full=1 answer=' arabic.'
+  row=78 donor_clean: first=1 full=1 base_full=0 answer=' rabat.'
+  row=79 clean: first=0 full=0 base_full=1 answer=' arabic.'
+  row=79 donor_clean: first=1 full=1 base_full=0 answer=' MAD.'
+  row=80 clean: first=0 full=0 base_full=1 answer=' arabic.'
+  row=80 donor_clean: first=1 full=1 base_full=0 answer=' 212.'
+  row=81 clean: first=0 full=0 base_full=1 answer=' 212.'
+  row=81 donor_clean: first=1 full=1 base_full=0 answer=' rabat.'
+  row=82 clean: first=0 full=0 base_full=1 answer=' 212.'
+  row=82 donor_clean: first=1 full=1 base_full=0 answer=' MAD.'
+  row=83 clean: first=0 full=0 base_full=1 answer=' 212.'
+  row=83 donor_clean: first=1 full=1 base_full=0 answer=' arabic.'
+  row=84 clean: first=0 full=0 base_full=1 answer=' rome.'
+  row=84 donor_clean: first=1 full=1 base_full=0 answer=' EUR.'
+  row=85 clean: first=0 full=0 base_full=1 answer=' rome.'
+  row=85 donor_clean: first=1 full=1 base_full=0 answer=' italian.'
+  row=86 clean: first=1 full=0 base_full=1 answer=' rome.'
+  row=86 donor_clean: first=1 full=1 base_full=0 answer=' 39.'
+  row=87 clean: first=0 full=0 base_full=1 answer=' EUR.'
+  row=87 donor_clean: first=1 full=1 base_full=0 answer=' rome.'
+  row=88 clean: first=0 full=0 base_full=1 answer=' EUR.'
+  row=88 donor_clean: first=1 full=1 base_full=0 answer=' italian.'
+  row=89 clean: first=0 full=0 base_full=1 answer=' EUR.'
+  row=89 donor_clean: first=1 full=1 base_full=0 answer=' 39.'
+  row=90 clean: first=0 full=0 base_full=1 answer=' italian.'
+  row=90 donor_clean: first=1 full=1 base_full=0 answer=' rome.'
+  row=91 clean: first=0 full=0 base_full=1 answer=' italian.'
+  row=91 donor_clean: first=1 full=1 base_full=0 answer=' EUR.'
+  row=92 clean: first=0 full=0 base_full=1 answer=' italian.'
+  row=92 donor_clean: first=1 full=1 base_full=0 answer=' 39.'
+  row=93 clean: first=1 full=0 base_full=1 answer=' 39.'
+  row=93 donor_clean: first=1 full=1 base_full=0 answer=' rome.'
+  row=94 clean: first=0 full=0 base_full=1 answer=' 39.'
+  row=94 donor_clean: first=1 full=1 base_full=0 answer=' EUR.'
+  row=95 clean: first=0 full=0 base_full=1 answer=' 39.'
+  row=95 donor_clean: first=1 full=1 base_full=0 answer=' italian.'

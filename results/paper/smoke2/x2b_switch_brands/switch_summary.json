@@ -1,0 +1,3278 @@
+[
+  {
+    "arm": "clean",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "founded_year",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "hq_country",
+    "donor_attribute": "industry",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "founded_year",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "industry",
+    "donor_attribute": "hq_country",
+    "all": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 1,
+      "country_count": 1,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  }
+]

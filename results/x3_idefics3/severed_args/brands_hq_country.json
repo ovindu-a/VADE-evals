@@ -1,0 +1,48 @@
+{
+  "heads": [
+    [
+      24,
+      3
+    ],
+    [
+      22,
+      23
+    ],
+    [
+      16,
+      9
+    ],
+    [
+      21,
+      15
+    ],
+    [
+      23,
+      27
+    ],
+    [
+      18,
+      17
+    ],
+    [
+      21,
+      13
+    ],
+    [
+      20,
+      3
+    ]
+  ],
+  "mlp_span": "23-31",
+  "mlp_singles": [
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "attn_span": "25-31",
+  "trace": "results/image_head_pipeline_Idefics3-8B-Llama3/brands/hq_country/head_trace_patch16_blocks16-24_text.json"
+}

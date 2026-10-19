@@ -1,0 +1,6 @@
+  clean calling_code: full 62.5% first 100.0% (n=24)
+  clean capital: full 0.0% first 0.0% (n=24)
+  clean currency: full 62.5% first 62.5% (n=24)
+  clean language: full 12.5% first 12.5% (n=24)
+  eligible rows (base AND donor clean-correct): 8/96
+ROUTER GATE FAILED: fewer than 24 eligible rows -- skip the router stage and report

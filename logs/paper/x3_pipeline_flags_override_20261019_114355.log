@@ -1,0 +1,19 @@
+
+##### flags: attributes ['capital', 'currency', 'language', 'calling_code'] stages ['ceiling', 'windows', 'heads']
+
+==============================================================================
+flags/capital
+==============================================================================
+  scoring: token
+  [ceiling] reusing logs/Idefics3-8B-Llama3/flags/ndm/capital/L1_0.0_T0-0_LR0_MLR0_CLIP1_full_image_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32.json for full_image
+  [ceiling] reusing logs/Idefics3-8B-Llama3/flags/ndm/capital/L1_0.0_T0-0_LR0_MLR0_CLIP1_last_token_mlp_hidden_pruned/ceiling_sweep_layers0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32.json for last_token
+  [ceiling] have results/image_head_pipeline_Idefics3-8B-Llama3/flags/capital/ceiling_full_image.json, results/image_head_pipeline_Idefics3-8B-Llama3/flags/capital/ceiling_last_token.json
+  [handoff] layer        12    13    14    15    16    17    18    19    20    21    22    23    24    25    26    27
+            image       91%   91%   88%   88%   88%   56%   28%   31%    9%    9%    9%    9%    9%    3%    3%    3%   (cause)
+            last_tok    25%   28%   28%   31%   28%   28%   34%   38%   59%   56%   59%   59%   66%  100%  100%  100%   (1 - base_kept)
+  -> patch_layer=16  image_end=20  read_end=25  handoff blocks 16-24  window range 16-26
+  [scoring check] image swap @ layer 0 (= the model reading the SOURCE image, which pruning guarantees it answers correctly): 96.9% match source_label; unhooked base match 75.0% (NOT guaranteed: pruning never checks the base on cause rows)
+
+  [stage 2: windows] full attention-block patches, blocks 16..26, <= 3 blocks per window, patch_layer=16
+  $ /opt/conda/bin/python methods/head_window_sweep.py --entity flags --attribute capital --model_id HuggingFaceM4/Idefics3-8B-Llama3 --vade_root /workspace/VADE --patch_layer 16 --positions full_image --range 16 26 --max_len 3 --extra_windows 16-24 --n_rows 64 --seed 0 --batch_size 8 --out /workspace/VADE-evals/results/image_head_pipeline_Idefics3-8B-Llama3/flags/capital/windows_patch16.json
+    (log: logs/image_head_pipeline_Idefics3-8B-Llama3/flags/capital/stage2_windows.log)

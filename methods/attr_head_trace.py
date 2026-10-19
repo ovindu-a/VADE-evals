@@ -276,6 +276,10 @@ def order_from_trace(table, prior):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--entity", default="flags", choices=ENTITIES)
+    ap.add_argument("--own_golds", action="store_true",
+                    help="Flags only (other entities always do this): golds = the model's own clean answers "
+                         "(attribute_switch_sweep --own_golds), for models that do not write flags labels in "
+                         "their stored casing.")
     ap.add_argument("--attributes", nargs="+", choices=ALL_ATTRIBUTES, default=None,
                     help="Default: every attribute of --entity.")
     ap.add_argument("--patch_layer", type=int, default=15,
@@ -360,6 +364,8 @@ def main(argv=None):
         tag += "_donor" + "-".join(args.donor_attributes)
     if rank_from_sha is not None:
         tag += f"_rankfrom{rank_from_sha[:8]}"
+    if args.own_golds and args.entity == "flags":
+        tag += "_owngolds"
     if args.model_id != ap.get_default("model_id"):      # the log is opened in APPEND mode
         tag += f"__{args.model_id.split('/')[-1]}"
     out_path = args.out or str(out_dir / f"{tag}.json")
@@ -391,7 +397,7 @@ def main(argv=None):
         assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
         assert 1 <= args.patch_layer <= n_layers, f"patch_layer must be in 1..{n_layers}"
         pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
-        if uses_own_golds(args.entity):
+        if uses_own_golds(args.entity, args.own_golds):
             rows, n_wrong = own_answer_rows(rows, entity_dir, items, adapter, model, processor,
                                             args.batch_size, args.own_max_new_tokens)
             print(f"  own-answer golds: kept {len(rows)} rows, dropped {n_wrong} the model answers wrongly "
@@ -526,7 +532,7 @@ def main(argv=None):
                             "donor_first": donor_first / seen, "donor_full": donor_full / seen},
                   "phase1": table, "phase1_ranked": [(r["block"], r["head"]) for r in ranked[:64]],
                   "ground_truth_sha256": hashlib.sha256(raw).hexdigest()}
-        if uses_own_golds(args.entity):
+        if uses_own_golds(args.entity, args.own_golds):
             report.update(golds="own_answer", rows_dropped_model_wrong=n_wrong)
         if args.donor_attributes is not None:
             report["donor_attributes"] = args.donor_attributes

@@ -1,0 +1,205 @@
+{
+ "all": {
+  "n": 256,
+  "clean": {
+   "C.X": 0.859375,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.140625,
+   "ambiguous": 0.0
+  },
+  "movers": {
+   "C.X": 0.5078125,
+   "B.X": 0.22265625,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.26953125,
+   "ambiguous": 0.0
+  },
+  "routers": {
+   "C.X": 0.578125,
+   "B.X": 0.0,
+   "C.A": 0.19140625,
+   "B.A": 0.0,
+   "other": 0.23046875,
+   "ambiguous": 0.0
+  },
+  "compose": {
+   "C.X": 0.36328125,
+   "B.X": 0.10546875,
+   "C.A": 0.078125,
+   "B.A": 0.0859375,
+   "other": 0.3671875,
+   "ambiguous": 0.0
+  },
+  "compose_random": {
+   "C.X": 0.84765625,
+   "B.X": 0.00390625,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.1484375,
+   "ambiguous": 0.0
+  },
+  "target_circuit": {
+   "C.X": 0.39453125,
+   "B.X": 0.05078125,
+   "C.A": 0.06640625,
+   "B.A": 0.09375,
+   "other": 0.39453125,
+   "ambiguous": 0.0
+  },
+  "target_window": {
+   "C.X": 0.0,
+   "B.X": 0.0,
+   "C.A": 0.09765625,
+   "B.A": 0.53515625,
+   "other": 0.3671875,
+   "ambiguous": 0.0
+  },
+  "target_complement": {
+   "C.X": 0.48046875,
+   "B.X": 0.046875,
+   "C.A": 0.03515625,
+   "B.A": 0.00390625,
+   "other": 0.43359375,
+   "ambiguous": 0.0
+  }
+ },
+ "eligible": {
+  "n": 64,
+  "clean": {
+   "C.X": 1.0,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.0,
+   "ambiguous": 0.0
+  },
+  "movers": {
+   "C.X": 0.484375,
+   "B.X": 0.421875,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.09375,
+   "ambiguous": 0.0
+  },
+  "routers": {
+   "C.X": 0.6875,
+   "B.X": 0.0,
+   "C.A": 0.21875,
+   "B.A": 0.0,
+   "other": 0.09375,
+   "ambiguous": 0.0
+  },
+  "compose": {
+   "C.X": 0.40625,
+   "B.X": 0.234375,
+   "C.A": 0.0625,
+   "B.A": 0.15625,
+   "other": 0.140625,
+   "ambiguous": 0.0
+  },
+  "compose_random": {
+   "C.X": 0.984375,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.015625,
+   "ambiguous": 0.0
+  },
+  "target_circuit": {
+   "C.X": 0.484375,
+   "B.X": 0.109375,
+   "C.A": 0.03125,
+   "B.A": 0.171875,
+   "other": 0.203125,
+   "ambiguous": 0.0
+  },
+  "target_window": {
+   "C.X": 0.0,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.875,
+   "other": 0.125,
+   "ambiguous": 0.0
+  },
+  "target_complement": {
+   "C.X": 0.65625,
+   "B.X": 0.078125,
+   "C.A": 0.03125,
+   "B.A": 0.0,
+   "other": 0.234375,
+   "ambiguous": 0.0
+  }
+ },
+ "eligible_distinct": {
+  "n": 64,
+  "clean": {
+   "C.X": 1.0,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.0,
+   "ambiguous": 0.0
+  },
+  "movers": {
+   "C.X": 0.484375,
+   "B.X": 0.421875,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.09375,
+   "ambiguous": 0.0
+  },
+  "routers": {
+   "C.X": 0.6875,
+   "B.X": 0.0,
+   "C.A": 0.21875,
+   "B.A": 0.0,
+   "other": 0.09375,
+   "ambiguous": 0.0
+  },
+  "compose": {
+   "C.X": 0.40625,
+   "B.X": 0.234375,
+   "C.A": 0.0625,
+   "B.A": 0.15625,
+   "other": 0.140625,
+   "ambiguous": 0.0
+  },
+  "compose_random": {
+   "C.X": 0.984375,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.0,
+   "other": 0.015625,
+   "ambiguous": 0.0
+  },
+  "target_circuit": {
+   "C.X": 0.484375,
+   "B.X": 0.109375,
+   "C.A": 0.03125,
+   "B.A": 0.171875,
+   "other": 0.203125,
+   "ambiguous": 0.0
+  },
+  "target_window": {
+   "C.X": 0.0,
+   "B.X": 0.0,
+   "C.A": 0.0,
+   "B.A": 0.875,
+   "other": 0.125,
+   "ambiguous": 0.0
+  },
+  "target_complement": {
+   "C.X": 0.65625,
+   "B.X": 0.078125,
+   "C.A": 0.03125,
+   "B.A": 0.0,
+   "other": 0.234375,
+   "ambiguous": 0.0
+  }
+ },
+ "note": "PARTIAL: circuit_compose stopped by user decision at 256/768 rows (first 21 items complete + 4/12 pairs of the 22nd); summary rebuilt offline with circuit_compose.summarize()",
+ "n_rows_written": 256
+}

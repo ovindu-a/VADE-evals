@@ -1,0 +1,623 @@
+{
+  "model_id": "HuggingFaceM4/Idefics3-8B-Llama3",
+  "k": 8,
+  "n_perm": 20000,
+  "skipped_inert": [],
+  "sets": {
+    "brands/hq_country": {
+      "heads": [
+        [
+          16,
+          9
+        ],
+        [
+          18,
+          17
+        ],
+        [
+          20,
+          3
+        ],
+        [
+          21,
+          13
+        ],
+        [
+          21,
+          15
+        ],
+        [
+          22,
+          23
+        ],
+        [
+          23,
+          27
+        ],
+        [
+          24,
+          3
+        ]
+      ],
+      "pool_blocks": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source": "results/image_head_pipeline_Idefics3-8B-Llama3/brands/hq_country/head_trace_patch16_blocks16-24_text.json",
+      "n_heads": 32
+    },
+    "flags/calling_code": {
+      "heads": [
+        [
+          16,
+          9
+        ],
+        [
+          16,
+          11
+        ],
+        [
+          16,
+          18
+        ],
+        [
+          19,
+          25
+        ],
+        [
+          19,
+          27
+        ],
+        [
+          22,
+          20
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          24,
+          3
+        ]
+      ],
+      "pool_blocks": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source": "results/image_head_pipeline_Idefics3-8B-Llama3/flags/calling_code/head_trace_patch16_blocks16-24.json",
+      "n_heads": 32
+    },
+    "flags/capital": {
+      "heads": [
+        [
+          16,
+          9
+        ],
+        [
+          16,
+          11
+        ],
+        [
+          16,
+          18
+        ],
+        [
+          19,
+          25
+        ],
+        [
+          22,
+          20
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          24,
+          2
+        ],
+        [
+          24,
+          3
+        ]
+      ],
+      "pool_blocks": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source": "results/image_head_pipeline_Idefics3-8B-Llama3/flags/capital/head_trace_patch16_blocks16-24.json",
+      "n_heads": 32
+    },
+    "flags/currency": {
+      "heads": [
+        [
+          16,
+          9
+        ],
+        [
+          16,
+          11
+        ],
+        [
+          16,
+          18
+        ],
+        [
+          17,
+          23
+        ],
+        [
+          22,
+          20
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          24,
+          3
+        ],
+        [
+          24,
+          26
+        ]
+      ],
+      "pool_blocks": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source": "results/image_head_pipeline_Idefics3-8B-Llama3/flags/currency/head_trace_patch16_blocks16-24.json",
+      "n_heads": 32
+    },
+    "flags/language": {
+      "heads": [
+        [
+          16,
+          8
+        ],
+        [
+          16,
+          9
+        ],
+        [
+          16,
+          11
+        ],
+        [
+          16,
+          18
+        ],
+        [
+          22,
+          20
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          24,
+          2
+        ],
+        [
+          24,
+          3
+        ]
+      ],
+      "pool_blocks": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "source": "results/image_head_pipeline_Idefics3-8B-Llama3/flags/language/head_trace_patch16_blocks16-24.json",
+      "n_heads": 32
+    }
+  },
+  "pairs": [
+    {
+      "a": "brands/hq_country",
+      "b": "flags/calling_code",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2183,
+        "p": 0.01654917254137293,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.18985,
+        "p": 0.010849457527123643,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2183,
+        "p": 0.01654917254137293,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.2218,
+        "p": 0.014299285035748212,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2183,
+        "p": 0.01654917254137293,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.2218,
+        "p": 0.014299285035748212,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "brands/hq_country",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 2,
+        "null_mean": 0.2183,
+        "p": 0.01654917254137293,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 2,
+        "null_mean": 0.2457,
+        "p": 0.01694915254237288,
+        "shared": [
+          "16.9",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "flags/capital",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.2188,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "19.25",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.5605,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "19.25",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.2188,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.49735,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/calling_code",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.2188,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.5878,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "flags/currency",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.21765,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.5906,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/capital",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 7,
+        "null_mean": 0.21765,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.2",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 7,
+        "null_mean": 0.6825,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.2",
+          "24.3"
+        ]
+      },
+      "derived": false
+    },
+    {
+      "a": "flags/currency",
+      "b": "flags/language",
+      "n_a": 8,
+      "n_b": 8,
+      "pool": {
+        "observed": 6,
+        "null_mean": 0.21665,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "block": {
+        "observed": 6,
+        "null_mean": 0.67755,
+        "p": 4.999750012499375e-05,
+        "shared": [
+          "16.9",
+          "16.11",
+          "16.18",
+          "22.20",
+          "24.1",
+          "24.3"
+        ]
+      },
+      "derived": false
+    }
+  ],
+  "consensus": [
+    {
+      "m": 3,
+      "observed": 6,
+      "null_mean": 0.0665,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "16.11",
+        "16.18",
+        "16.9",
+        "22.20",
+        "24.1",
+        "24.3"
+      ],
+      "null": "pool",
+      "n_sets": 5
+    },
+    {
+      "m": 3,
+      "observed": 6,
+      "null_mean": 0.323,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "16.11",
+        "16.18",
+        "16.9",
+        "22.20",
+        "24.1",
+        "24.3"
+      ],
+      "null": "block",
+      "n_sets": 5
+    },
+    {
+      "m": 4,
+      "observed": 6,
+      "null_mean": 0.0005,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "16.11",
+        "16.18",
+        "16.9",
+        "22.20",
+        "24.1",
+        "24.3"
+      ],
+      "null": "pool",
+      "n_sets": 5
+    },
+    {
+      "m": 4,
+      "observed": 6,
+      "null_mean": 0.0085,
+      "p": 0.0004997501249375312,
+      "heads": [
+        "16.11",
+        "16.18",
+        "16.9",
+        "22.20",
+        "24.1",
+        "24.3"
+      ],
+      "null": "block",
+      "n_sets": 5
+    }
+  ]
+}

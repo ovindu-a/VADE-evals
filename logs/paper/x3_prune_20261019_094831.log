@@ -1,0 +1,18 @@
+[flags/calling_code/train] 35930 -> 26215 (27.0% removed, cause:iso=14268:11947)
+[flags/calling_code/test] 14052 -> 10746 (23.5% removed, cause:iso=2832:7914)
+[flags/capital/train] 35931 -> 27795 (22.6% removed, cause:iso=16356:11439)
+[flags/capital/test] 14052 -> 10746 (23.5% removed, cause:iso=2568:8178)
+[flags/currency/train] 35325 -> 27218 (22.9% removed, cause:iso=15984:11234)
+[flags/currency/test] 14052 -> 10746 (23.5% removed, cause:iso=2748:7998)
+[flags/language/train] 32811 -> 24431 (25.5% removed, cause:iso=13815:10616)
+[flags/language/test] 14052 -> 10746 (23.5% removed, cause:iso=2598:8148)
+wrote /workspace/VADE/models/Idefics3-8B-Llama3/stats/flags_tuples_prune_summary.json
+wrote /workspace/VADE/models/Idefics3-8B-Llama3/stats/flags_tuples_prune_summary.md
+[brands/founded_year/train] 25666 -> 14626 (43.0% removed, cause:iso=8555:6071)
+[brands/founded_year/test] 7610 -> 4490 (41.0% removed, cause:iso=1223:3267)
+[brands/hq_country/train] 25666 -> 18017 (29.8% removed, cause:iso=13114:4903)
+[brands/hq_country/test] 8335 -> 4983 (40.2% removed, cause:iso=2557:2426)
+[brands/industry/train] 25666 -> 16644 (35.2% removed, cause:iso=11188:5456)
+[brands/industry/test] 8190 -> 4887 (40.3% removed, cause:iso=1780:3107)
+wrote /workspace/VADE/models/Idefics3-8B-Llama3/stats/brands_tuples_prune_summary.json
+wrote /workspace/VADE/models/Idefics3-8B-Llama3/stats/brands_tuples_prune_summary.md

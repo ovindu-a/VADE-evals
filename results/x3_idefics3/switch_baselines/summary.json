@@ -1,0 +1,128 @@
+{
+  "clean": {
+    "n": 96,
+    "first_token": 0.010416666666666666,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 0.34375,
+    "distinct_first_token_n": 94,
+    "first_token_accuracy_distinct_gold": 0.010638297872340425,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 96,
+        "accuracy": 0.010416666666666666
+      },
+      {
+        "position": 2,
+        "n": 48,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 48,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.3958333333333333,
+        "distinct_first_token_n": 47,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 48,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 48,
+        "first_token": 0.020833333333333332,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.2916666666666667,
+        "distinct_first_token_n": 47,
+        "first_token_accuracy_distinct_gold": 0.02127659574468085,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 48,
+            "accuracy": 0.020833333333333332
+          },
+          {
+            "position": 2,
+            "n": 48,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "donor_clean": {
+    "n": 96,
+    "first_token": 0.4375,
+    "prefix3_match": 0.34375,
+    "full_match": 0.34375,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 94,
+    "first_token_accuracy_distinct_gold": 0.44680851063829785,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 96,
+        "accuracy": 0.4375
+      },
+      {
+        "position": 2,
+        "n": 48,
+        "accuracy": 0.5625
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 48,
+        "first_token": 0.1875,
+        "prefix3_match": 0.1875,
+        "full_match": 0.1875,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 47,
+        "first_token_accuracy_distinct_gold": 0.19148936170212766,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 48,
+            "accuracy": 0.1875
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 48,
+        "first_token": 0.6875,
+        "prefix3_match": 0.5,
+        "full_match": 0.5,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 47,
+        "first_token_accuracy_distinct_gold": 0.7021276595744681,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 48,
+            "accuracy": 0.6875
+          },
+          {
+            "position": 2,
+            "n": 48,
+            "accuracy": 0.5625
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  }
+}

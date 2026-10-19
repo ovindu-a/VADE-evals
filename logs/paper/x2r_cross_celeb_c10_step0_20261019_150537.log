@@ -1,0 +1,72 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[head_cross] celebrities: 128 item pairs x 4x4 question pairs x 2 donors = 2048 generations
+  attributes (4): nationality, occupation, birth_year, native_language
+  cells: {'flag': 256, 'self': 256, 'both': 768, 'question': 768}
+  heads (10): 21.1, 21.5, 22.13, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6, 23.17
+  golds: own; base question restricted to ['nationality', 'native_language']
+  own answers to generate first: 312 (item, attribute) pairs
+  align: step0   [NOT the R11 intervention -- compare against a --align matched run of the same --n_pairs/--seed, which draws the identical rows]
+  WARNING: --heads is COMMON10, which head_trace localized on FLAGS. On a different entity this arm tests whether the SAME head set carries that entity too; a null here is ambiguous between 'the claim is wrong' and 'these are the wrong heads'. Trace this entity first for the clean test.
+  -> results/paper/x2r_cross_celebrities/common10_n128_own_step0.jsonl
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:34,  1.60it/s]Loading weights:   0%|          | 2/729 [00:01<07:55,  1.53it/s]Loading weights:   1%|          | 5/729 [00:01<02:44,  4.40it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:09, 10.30it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:45, 15.75it/s]Loading weights:   3%|▎         | 22/729 [00:01<00:30, 22.84it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:23, 29.21it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:23, 29.01it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:19, 35.50it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:20, 33.30it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 38.97it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 35.62it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:16, 40.83it/s]Loading weights:   9%|▉         | 69/729 [00:03<00:17, 36.84it/s]Loading weights:  10%|█         | 74/729 [00:03<00:17, 37.67it/s]Loading weights:  11%|█         | 78/729 [00:03<00:19, 32.84it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:14, 44.60it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:16, 39.44it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:14, 44.37it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:16, 38.81it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:14, 43.88it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:15, 39.02it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:13, 43.82it/s]Loading weights:  18%|█▊        | 129/729 [00:04<00:15, 38.79it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:13, 43.90it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:15, 38.90it/s]Loading weights:  20%|██        | 148/729 [00:04<00:13, 43.95it/s]Loading weights:  21%|██        | 153/729 [00:05<00:14, 38.73it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:13, 43.72it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:14, 38.41it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 43.38it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:14, 38.44it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:12, 43.66it/s]Loading weights:  26%|██▌       | 189/729 [00:05<00:14, 38.49it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:12, 43.13it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 37.80it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:12, 42.94it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 38.38it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 43.50it/s]Loading weights:  31%|███       | 225/729 [00:06<00:13, 38.37it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:11, 43.28it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:12, 38.59it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:11, 43.94it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:12, 38.90it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 43.72it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:12, 38.69it/s]Loading weights:  37%|███▋      | 268/729 [00:07<00:10, 43.99it/s]Loading weights:  37%|███▋      | 273/729 [00:08<00:11, 39.46it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:10, 44.54it/s]Loading weights:  39%|███▉      | 285/729 [00:08<00:11, 39.35it/s]Loading weights:  40%|████      | 292/729 [00:08<00:09, 44.67it/s]Loading weights:  41%|████      | 297/729 [00:08<00:10, 39.46it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:09, 44.38it/s]Loading weights:  42%|████▏     | 309/729 [00:08<00:10, 39.40it/s]Loading weights:  43%|████▎     | 316/729 [00:09<00:09, 44.35it/s]Loading weights:  44%|████▍     | 321/729 [00:09<00:10, 39.67it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:08, 44.96it/s]Loading weights:  46%|████▌     | 333/729 [00:09<00:09, 40.03it/s]Loading weights:  51%|█████     | 371/729 [00:09<00:03, 115.03it/s]Loading weights:  58%|█████▊    | 421/729 [00:09<00:01, 207.65it/s]Loading weights:  64%|██████▍   | 469/729 [00:09<00:00, 275.00it/s]Loading weights:  71%|███████   | 517/729 [00:09<00:00, 326.15it/s]Loading weights:  78%|███████▊  | 565/729 [00:09<00:00, 365.26it/s]Loading weights:  84%|████████▍ | 613/729 [00:10<00:00, 395.58it/s]Loading weights:  91%|█████████ | 661/729 [00:10<00:00, 417.95it/s]Loading weights:  97%|█████████▋| 710/729 [00:10<00:00, 438.52it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 70.35it/s] 
+  read-back check: worst = 0.00e+00 over 12 steps
+  own answers matching the stored label: birth_year 56/78, nationality 63/78, native_language 67/78, occupation 74/78
+  64/2048
+  128/2048
+  192/2048
+  256/2048
+  320/2048
+  384/2048
+  448/2048
+  512/2048
+  576/2048
+  640/2048
+  704/2048
+  768/2048
+  832/2048
+  896/2048
+  960/2048
+  1024/2048
+  1088/2048
+  1152/2048
+  1216/2048
+  1280/2048
+  1344/2048
+  1408/2048
+  1472/2048
+  1536/2048
+  1600/2048
+  1664/2048
+  1728/2048
+  1792/2048
+  1856/2048
+  1920/2048
+  1984/2048
+  2048/2048
+
+      cell      n     base_q1  source_q1  source_q2    base_q2      other  ambiguous
+      self    217       97.2%       0.0%       0.0%       0.0%       2.8%       0.0%
+      flag    178       35.4%      53.4%       0.0%       0.0%      11.2%       0.0%
+  question    564       92.4%       0.0%       0.0%       0.0%       7.6%       0.0%
+      both    401       61.1%      32.4%       0.0%       0.0%       6.5%       0.0%
+
+  self must be ~100% base_q1 -- it patches a run with its own values.
+
+  CONTENT SHIFT (the confound-free number):
+    donor asked the SAME question  -> B's answer to Q1 in 53.4% of rows
+    donor asked a DIFFERENT one    -> B's answer to Q1 in 32.4% of rows
+    shift = -21.0pp
+    ~0 means the heads' content does not depend on which question produced it:
+    ENTITY data. A large drop means question-conditioned content: ATTRIBUTE data.
+
+  QUESTION-ONLY cell (entity never changes, so nothing here is entity transfer):
+    stayed at A's answer to Q1: 92.4%   moved to A's answer to Q2: 0.0%
+
+  B's answer to Q1, per base question, INFORMATIVE rows only (base and donor answer Q1 differently; golds: own):
+    q1                       donor asked SAME    donor asked ANOTHER    shift
+    nationality                67.1% (n=  79)         37.1% (n= 175)    -29.9
+    native_language            68.9% (n=  61)         47.4% (n= 137)    -21.4
+
+  excluded (some needed own answer is wrong): 688 of 2048 rows
+
+wrote results/paper/x2r_cross_celebrities/common10_n128_own_step0.jsonl

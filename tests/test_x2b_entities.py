@@ -243,6 +243,45 @@ def test_switch_flags_path_never_reads_own_answers(tiny, tmp_path, monkeypatch):
     assert results.records[0]['gold_ids'] == {'base': [20, 21], 'source': [24, 25]}
 
 
+def test_flags_own_golds_is_opt_in():
+    assert not sw.uses_own_golds("flags") and sw.uses_own_golds("flags", own_golds=True)
+    assert sw.uses_own_golds("brands") and sw.uses_own_golds("brands", own_golds=True)
+
+
+def test_switch_flags_own_golds_flag_takes_the_own_answer_path(tiny, tmp_path):
+    # Idefics3 writes flags answers lowercase (' luxembourg.'); with --own_golds the clean runs become the
+    # golds and VADE's casefold matcher decides correctness, exactly as for brands.
+    runner, batch = switch_setup(tiny, {t: "luxembourg" for t in range(64)})
+    Image.new('RGB', (4, 4)).save(tmp_path / 'flag.png')
+    args = SimpleNamespace(own_golds=True, sites=['last_residual'], block_spans=[], layers=[4],
+                           modes=['prefill'], controls=['self'], max_new_tokens=4,
+                           execution='serial', batch_size=2)
+    row = dict(row_index=0, base='LU', source='LU', base_attribute='capital', donor_attribute='currency',
+               base_label='Luxembourg', source_label='Luxembourg', template_id='controlled_report_v1')
+    results = Results(tmp_path / 'results', {})
+    sw.execute(runner, args, [row], {'LU': {'image': 'flag.png'}}, tmp_path, results)
+    clean = next(r for r in results.records if r['arm'] == 'clean')
+    assert clean['golds'] == 'own_answer' and clean['own_correct'] is True
+    assert clean['gold_ids']['base'] == clean['generated_ids']
+    assert len(results.records) == 2 + len(sw.sweep_arms(args))
+
+
+def test_switch_flags_config_is_unchanged_without_own_golds(tmp_path, monkeypatch):
+    # --own_golds off must not add a key to a flags config (that would refuse every old resume).
+    seen = {}
+    class Stop(Exception):
+        pass
+    def fake_results(out_dir, config):
+        seen.update(config)
+        raise Stop
+    monkeypatch.setattr(sw, 'Results', fake_results)
+    for flag, expect in (([], False), (['--own_golds'], True)):
+        seen.clear()
+        with pytest.raises(Stop):
+            sw.main(['--n_countries', '1', '--layers', '4', '--out_dir', str(tmp_path / 'o'), *flag])
+        assert ('own_golds' in seen) is expect and (seen.get('golds') == 'own_answer') is expect
+
+
 def test_attr_head_trace_own_answer_rows_keep_only_rows_the_model_gets_right(tmp_path, monkeypatch):
     from methods import attr_head_trace as aht
     Image.new('RGB', (4, 4)).save(tmp_path / 'a.png')

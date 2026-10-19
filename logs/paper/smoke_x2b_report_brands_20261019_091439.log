@@ -1,0 +1,18 @@
+
+============================================================================================
+results/paper/smoke2/x2b_switch_brands
+============================================================================================
+  COMPLETE; 8/12 rows eligible (both clean answers correct)
+  clean accuracy on the controlled prompts, by queried attribute:
+    founded_year  full=1.000  first=1.000  (n=4)
+    hq_country    full=1.000  first=1.000  (n=4)
+    industry      full=0.500  first=1.000  (n=4)
+  control self        donor_first=0.0000 donor_full=0.0000 base_kept=1.0000   (pass: donor ~0, base ~1)
+  control paraphrase  donor_first=0.0000 donor_full=0.0000 base_kept=1.0000   (pass: donor ~0, base ~1)
+
+  -- the handoff (donor_first, %) --
+  layer block | question resid  last resid  last attn  last mlp
+      8     7 |          100.0         0.0          -         -
+     16    15 |          100.0         0.0          -         -
+     24    23 |            0.0       100.0          -         -
+     28    27 |            0.0       100.0          -         -

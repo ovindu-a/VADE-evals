@@ -1,0 +1,9 @@
+nnsight is not detected. Please install via 'pip install nnsight' for nnsight backend.
+Traceback (most recent call last):
+  File "/workspace/VADE-evals/methods/ndm/ceiling_sweep.py", line 526, in <module>
+    main()
+    ~~~~^^
+  File "/workspace/VADE-evals/methods/ndm/ceiling_sweep.py", line 311, in main
+    assert not (args.positions_list and args.out), "--out names a single file; drop it when using --positions_list"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: --out names a single file; drop it when using --positions_list

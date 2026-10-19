@@ -1,0 +1,2992 @@
+{
+  "clean": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "donor_clean": {
+    "n": 24,
+    "first_token": 1.0,
+    "prefix3_match": 1.0,
+    "full_match": 1.0,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 1.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 1.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 1.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 1.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L8/prefill/switch": {
+    "n": 24,
+    "first_token": 1.0,
+    "prefix3_match": 1.0,
+    "full_match": 1.0,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 1.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 1.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 1.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 1.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L8/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L8/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L8/prefill/switch": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L8/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L8/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L16/prefill/switch": {
+    "n": 24,
+    "first_token": 0.875,
+    "prefix3_match": 0.875,
+    "full_match": 0.875,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.875,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.875
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.6666666666666666
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 1.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L16/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L16/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L16/prefill/switch": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 0.875,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.8666666666666667,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.8333333333333334,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L16/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L16/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L24/prefill/switch": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L24/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L24/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L24/prefill/switch": {
+    "n": 24,
+    "first_token": 1.0,
+    "prefix3_match": 0.9166666666666666,
+    "full_match": 0.9166666666666666,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 1.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 1.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.8888888888888888
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.6666666666666666
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.6666666666666666
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.6666666666666666
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 1.0,
+        "prefix3_match": 0.6666666666666666,
+        "full_match": 0.6666666666666666,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.8333333333333334
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.6666666666666666
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.6666666666666666
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.6666666666666666
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L24/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L24/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L28/prefill/switch": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L28/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "earlier_text/residual/L28/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L28/prefill/switch": {
+    "n": 24,
+    "first_token": 1.0,
+    "prefix3_match": 0.75,
+    "full_match": 0.75,
+    "base_full_match": 0.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 1.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 1.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.4444444444444444
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 1.0,
+        "prefix3_match": 1.0,
+        "full_match": 1.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 1.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 1.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 0.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 1.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 1.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.16666666666666666
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L28/prefill/self": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  },
+  "last_token/residual/L28/prefill/paraphrase": {
+    "n": 24,
+    "first_token": 0.0,
+    "prefix3_match": 0.0,
+    "full_match": 0.0,
+    "base_full_match": 1.0,
+    "distinct_first_token_n": 24,
+    "first_token_accuracy_distinct_gold": 0.0,
+    "per_token": [
+      {
+        "position": 1,
+        "n": 24,
+        "accuracy": 0.0
+      },
+      {
+        "position": 2,
+        "n": 9,
+        "accuracy": 0.0
+      },
+      {
+        "position": 3,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 4,
+        "n": 6,
+        "accuracy": 0.0
+      },
+      {
+        "position": 5,
+        "n": 6,
+        "accuracy": 0.0
+      }
+    ],
+    "generation_budget_shorter_than_gold": 0,
+    "by_gold_length": {
+      "1": {
+        "n": 15,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 15,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 15,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "2": {
+        "n": 3,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 3,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 3,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 3,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      },
+      "5": {
+        "n": 6,
+        "first_token": 0.0,
+        "prefix3_match": 0.0,
+        "full_match": 0.0,
+        "base_full_match": 1.0,
+        "distinct_first_token_n": 6,
+        "first_token_accuracy_distinct_gold": 0.0,
+        "per_token": [
+          {
+            "position": 1,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 2,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 3,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 4,
+            "n": 6,
+            "accuracy": 0.0
+          },
+          {
+            "position": 5,
+            "n": 6,
+            "accuracy": 0.0
+          }
+        ],
+        "generation_budget_shorter_than_gold": 0
+      }
+    }
+  }
+}

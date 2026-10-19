@@ -1,0 +1,6554 @@
+[
+  {
+    "arm": "clean",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "clean",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "donor_clean",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.5
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.5
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.5
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.5
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L16/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.5
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 0.5
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L24/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L28/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "earlier_text/residual/L8/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.5,
+      "neither_full": 0.5,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.5,
+      "neither_full": 0.5,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.5,
+      "neither_full": 0.5,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.5,
+      "neither_full": 0.5,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.5,
+      "neither_full": 0.5,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.5,
+      "neither_full": 0.5,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L16/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.5,
+      "original_full": 0.0,
+      "neither_full": 0.5,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L24/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 0.0,
+      "neither_full": 1.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L28/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 1.0,
+      "original_full": 0.0,
+      "neither_full": 0.0,
+      "donor_first": 1.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/paraphrase",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/self",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "birth_year",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "nationality",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "native_language",
+    "donor_attribute": "occupation",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "birth_year",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "nationality",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  },
+  {
+    "arm": "last_token/residual/L8/prefill/switch",
+    "base_attribute": "occupation",
+    "donor_attribute": "native_language",
+    "all": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    },
+    "both_clean_correct": {
+      "n": 2,
+      "country_count": 2,
+      "donor_full": 0.0,
+      "original_full": 1.0,
+      "neither_full": 0.0,
+      "donor_first": 0.0
+    }
+  }
+]

@@ -1,0 +1,2034 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "entity": "celebrities",
+  "countries": null,
+  "n_countries": 16,
+  "attributes": [
+    "nationality",
+    "occupation",
+    "birth_year",
+    "native_language"
+  ],
+  "layers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "sites": [
+    "residual",
+    "attention"
+  ],
+  "scopes": [
+    "earlier_text",
+    "last_token"
+  ],
+  "block_spans": [],
+  "attention_spans": [
+    3
+  ],
+  "attention_sets": [],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "execution": "cached",
+  "batch_size": 64,
+  "attn_impl": "sdpa",
+  "no_share_prefix": false,
+  "verify_cached": false,
+  "baselines_only": false,
+  "golds": "own_answer",
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "argentina",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "argentina",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 2,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "argentina",
+      "source_label": "spanish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 3,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "athlete",
+      "source_label": "argentina",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 4,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "athlete",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 5,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "athlete",
+      "source_label": "spanish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 6,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1987",
+      "source_label": "argentina",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 7,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1987",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 8,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1987",
+      "source_label": "spanish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 9,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "spanish",
+      "source_label": "argentina",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 10,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "spanish",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 11,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "spanish",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 12,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "india",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 13,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "india",
+      "source_label": "1869",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 14,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "india",
+      "source_label": "gujarati",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 15,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "politician",
+      "source_label": "india",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 16,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "politician",
+      "source_label": "1869",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 17,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "politician",
+      "source_label": "gujarati",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 18,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1869",
+      "source_label": "india",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 19,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1869",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 20,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1869",
+      "source_label": "gujarati",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 21,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "gujarati",
+      "source_label": "india",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 22,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "gujarati",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 23,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "gujarati",
+      "source_label": "1869",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 24,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "united kingdom",
+      "source_label": "actor",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 25,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "united kingdom",
+      "source_label": "1929",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 26,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "united kingdom",
+      "source_label": "dutch",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 27,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "actor",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 28,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "actor",
+      "source_label": "1929",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 29,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "actor",
+      "source_label": "dutch",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 30,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1929",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 31,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1929",
+      "source_label": "actor",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 32,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1929",
+      "source_label": "dutch",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 33,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "dutch",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 34,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "dutch",
+      "source_label": "actor",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 35,
+      "base": "AUDREY_HEPBURN",
+      "source": "AUDREY_HEPBURN",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "dutch",
+      "source_label": "1929",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 36,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "cisleithania",
+      "source_label": "writer",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 37,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "cisleithania",
+      "source_label": "1883",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 38,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "cisleithania",
+      "source_label": "german",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 39,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "writer",
+      "source_label": "cisleithania",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 40,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "writer",
+      "source_label": "1883",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 41,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "writer",
+      "source_label": "german",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 42,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1883",
+      "source_label": "cisleithania",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 43,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1883",
+      "source_label": "writer",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 44,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1883",
+      "source_label": "german",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 45,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "german",
+      "source_label": "cisleithania",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 46,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "german",
+      "source_label": "writer",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 47,
+      "base": "FRANZ_KAFKA",
+      "source": "FRANZ_KAFKA",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "german",
+      "source_label": "1883",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 48,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "united kingdom",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 49,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "united kingdom",
+      "source_label": "1942",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 50,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "united kingdom",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 51,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "musician",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 52,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "musician",
+      "source_label": "1942",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 53,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "musician",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 54,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1942",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 55,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1942",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 56,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1942",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 57,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "english",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 58,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "english",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 59,
+      "base": "PAUL_MCCARTNEY",
+      "source": "PAUL_MCCARTNEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "english",
+      "source_label": "1942",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 60,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "brazil",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 61,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "brazil",
+      "source_label": "1992",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 62,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "brazil",
+      "source_label": "portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 63,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "athlete",
+      "source_label": "brazil",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 64,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "athlete",
+      "source_label": "1992",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 65,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "athlete",
+      "source_label": "portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 66,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1992",
+      "source_label": "brazil",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 67,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1992",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 68,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1992",
+      "source_label": "portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 69,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "portuguese",
+      "source_label": "brazil",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 70,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "portuguese",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 71,
+      "base": "NEYMAR",
+      "source": "NEYMAR",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "portuguese",
+      "source_label": "1992",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 72,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "brazil",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 73,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "brazil",
+      "source_label": "1945",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 74,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "brazil",
+      "source_label": "portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 75,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "politician",
+      "source_label": "brazil",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 76,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "politician",
+      "source_label": "1945",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 77,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "politician",
+      "source_label": "portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 78,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1945",
+      "source_label": "brazil",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 79,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1945",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 80,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1945",
+      "source_label": "portuguese",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 81,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "portuguese",
+      "source_label": "brazil",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 82,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "portuguese",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 83,
+      "base": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "source": "LUIZ_IN_CIO_LULA_DA_SILVA",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "portuguese",
+      "source_label": "1945",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 84,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "united states",
+      "source_label": "businessperson",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 85,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "united states",
+      "source_label": "1863",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 86,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "united states",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 87,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "businessperson",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 88,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "businessperson",
+      "source_label": "1863",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 89,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "businessperson",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 90,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1863",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 91,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1863",
+      "source_label": "businessperson",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 92,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1863",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 93,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "english",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 94,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "english",
+      "source_label": "businessperson",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 95,
+      "base": "HENRY_FORD",
+      "source": "HENRY_FORD",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "english",
+      "source_label": "1863",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 96,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "south africa",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 97,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "south africa",
+      "source_label": "1918",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 98,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "south africa",
+      "source_label": "xhosa",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 99,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "politician",
+      "source_label": "south africa",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 100,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "politician",
+      "source_label": "1918",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 101,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "politician",
+      "source_label": "xhosa",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 102,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1918",
+      "source_label": "south africa",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 103,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1918",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 104,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1918",
+      "source_label": "xhosa",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 105,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "xhosa",
+      "source_label": "south africa",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 106,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "xhosa",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 107,
+      "base": "NELSON_MANDELA",
+      "source": "NELSON_MANDELA",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "xhosa",
+      "source_label": "1918",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 108,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "united states",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 109,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "united states",
+      "source_label": "1917",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 110,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "united states",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 111,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "politician",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 112,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "politician",
+      "source_label": "1917",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 113,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "politician",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 114,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1917",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 115,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1917",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 116,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1917",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 117,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "english",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 118,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "english",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 119,
+      "base": "JOHN_F_KENNEDY",
+      "source": "JOHN_F_KENNEDY",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "english",
+      "source_label": "1917",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 120,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "united states",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 121,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "united states",
+      "source_label": "1935",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 122,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "united states",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 123,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "musician",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 124,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "musician",
+      "source_label": "1935",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 125,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "musician",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 126,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1935",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 127,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1935",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 128,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1935",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 129,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "english",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 130,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "english",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 131,
+      "base": "ELVIS_PRESLEY",
+      "source": "ELVIS_PRESLEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "english",
+      "source_label": "1935",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 132,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "serbia",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 133,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "serbia",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 134,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "serbia",
+      "source_label": "serbian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 135,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "athlete",
+      "source_label": "serbia",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 136,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "athlete",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 137,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "athlete",
+      "source_label": "serbian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 138,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1987",
+      "source_label": "serbia",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 139,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1987",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 140,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1987",
+      "source_label": "serbian",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 141,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "serbian",
+      "source_label": "serbia",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 142,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "serbian",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 143,
+      "base": "NOVAK_DJOKOVIC",
+      "source": "NOVAK_DJOKOVIC",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "serbian",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 144,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "united kingdom",
+      "source_label": "scientist",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 145,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "united kingdom",
+      "source_label": "1809",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 146,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "united kingdom",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 147,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "scientist",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 148,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "scientist",
+      "source_label": "1809",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 149,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "scientist",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 150,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1809",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 151,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1809",
+      "source_label": "scientist",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 152,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1809",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 153,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "english",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 154,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "english",
+      "source_label": "scientist",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 155,
+      "base": "CHARLES_DARWIN",
+      "source": "CHARLES_DARWIN",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "english",
+      "source_label": "1809",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 156,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "duchy of florence",
+      "source_label": "scientist",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 157,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "duchy of florence",
+      "source_label": "1564",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 158,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "duchy of florence",
+      "source_label": "latin",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 159,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "scientist",
+      "source_label": "duchy of florence",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 160,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "scientist",
+      "source_label": "1564",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 161,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "scientist",
+      "source_label": "latin",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 162,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1564",
+      "source_label": "duchy of florence",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 163,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1564",
+      "source_label": "scientist",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 164,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1564",
+      "source_label": "latin",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 165,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "latin",
+      "source_label": "duchy of florence",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 166,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "latin",
+      "source_label": "scientist",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 167,
+      "base": "GALILEO_GALILEI",
+      "source": "GALILEO_GALILEI",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "latin",
+      "source_label": "1564",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 168,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "switzerland",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 169,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "switzerland",
+      "source_label": "1981",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 170,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "switzerland",
+      "source_label": "german",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 171,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "athlete",
+      "source_label": "switzerland",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 172,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "athlete",
+      "source_label": "1981",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 173,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "athlete",
+      "source_label": "german",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 174,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1981",
+      "source_label": "switzerland",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 175,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1981",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 176,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1981",
+      "source_label": "german",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 177,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "german",
+      "source_label": "switzerland",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 178,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "german",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 179,
+      "base": "ROGER_FEDERER",
+      "source": "ROGER_FEDERER",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "german",
+      "source_label": "1981",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 180,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "jamaica",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 181,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "jamaica",
+      "source_label": "1945",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 182,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "jamaica",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 183,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "musician",
+      "source_label": "jamaica",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 184,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "musician",
+      "source_label": "1945",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 185,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "musician",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 186,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1945",
+      "source_label": "jamaica",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 187,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1945",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 188,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1945",
+      "source_label": "english",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 189,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "english",
+      "source_label": "jamaica",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 190,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "english",
+      "source_label": "musician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 191,
+      "base": "BOB_MARLEY",
+      "source": "BOB_MARLEY",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "english",
+      "source_label": "1945",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "nationality": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the country of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the country of this person."
+    ],
+    "occupation": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the profession of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the profession of this person."
+    ],
+    "birth_year": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the year of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the year of this person."
+    ],
+    "native_language": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the language of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the language of this person."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "43bb0dbadd343fbdc5b1e7786ecc537588b6077c3f1f26c338421b165fe2d659",
+  "image_sha256": {
+    "LIONEL_MESSI": "574377d62e51982bebe889c99c4c2cb9224c94a6bfc913499df896cf41294ec3",
+    "MAHATMA_GANDHI": "6f6a9ea6bfe4df52d2105a91e8f56f100e7f90e80daaff82d076ec6fad7f8014",
+    "AUDREY_HEPBURN": "323a5d98e3f94c885124b062beb8c781c966b0270670a8e0797144cbd295f403",
+    "FRANZ_KAFKA": "49ed597220537757ea6d3228817f9f3b58e3dc2b16779870a4d727600dec2f68",
+    "PAUL_MCCARTNEY": "aaf9001e90ec996d32287cb5293032cec1d168befce64ea7da6cdede6f70bee7",
+    "NEYMAR": "f65a135d20e60d9541bbcc62b88404f92646438e0dff557d4eb696c61a65e340",
+    "LUIZ_IN_CIO_LULA_DA_SILVA": "a3c831b758cd41fb83b21cf886f8a8d19da1683a21d31c01cf77cdd6a3172652",
+    "HENRY_FORD": "c2e7252d4b8ef7340c361b015db8672a789174dea40361df31db7363bbb2d321",
+    "NELSON_MANDELA": "e0c2c11610b32362051177d496881fda9cededee8bed328696d2840ad511c002",
+    "JOHN_F_KENNEDY": "32030697a57967180c79d424771a7ef88ea1d878ba32250d7a8d56194295a35f",
+    "ELVIS_PRESLEY": "d2d0ca53d176e7021d9388adbe8e0c361889f92b0c239aa33e89565cfdaee9d8",
+    "NOVAK_DJOKOVIC": "ec0c931cb6a0c35285b81890d10b6ebe204dfffdbdd1eeece09cb5a09adbe50b",
+    "CHARLES_DARWIN": "6da6fa1dd730a94d9bae9d7b4933b36d34f10853593f6e6975c4166da14d4ae1",
+    "GALILEO_GALILEI": "8c1e53e9fd3a703aeef17ca544c37e2ecb778b1ff1a6a28341fb4c3ab87d3e4b",
+    "ROGER_FEDERER": "ead81132d34943eca77c0aef4cc9d96da36b418f1ad9a8bd1da7dbf709c057a2",
+    "BOB_MARLEY": "4ef1a097e7b1d55485c4bca5ee79f1eed54401a5c165479f74a1cd05d3186744"
+  },
+  "implementation_sha256": "9541e871cb02437c3493226702654c1e249a3191e03db6bba8f119413ed9858a"
+}

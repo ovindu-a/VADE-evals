@@ -1,0 +1,35 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[circuit_compose] brands: 376 rows (64 items x 6 attribute pairs)
+  movers  (8): 21.1, 21.4, 22.15, 22.17, 23.3, 23.4, 23.6, 23.17
+  routers (8): 19.21, 19.27, 20.2, 20.17, 20.18, 21.0, 21.17, 22.25
+  random movers / routers: 21.11, 21.19, 21.21, 22.8, 22.27, 23.11, 23.14, 23.18 / 19.3, 19.12, 20.0, 20.26, 21.7, 21.14, 22.2, 22.24
+  window: blocks 19-23 (140 heads), complement 124
+  ~128 forwards + 4 generate calls per batch of 64
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:30,  1.61it/s]Loading weights:   0%|          | 2/729 [00:01<07:55,  1.53it/s]Loading weights:   1%|          | 4/729 [00:01<03:38,  3.32it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:07, 10.58it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:39, 18.10it/s]Loading weights:   3%|▎         | 20/729 [00:01<00:36, 19.49it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:23, 29.35it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:23, 29.16it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:19, 35.68it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:20, 33.52it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 39.27it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 35.89it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:16, 41.34it/s]Loading weights:   9%|▉         | 69/729 [00:03<00:17, 37.13it/s]Loading weights:  10%|█         | 76/729 [00:03<00:15, 42.00it/s]Loading weights:  11%|█         | 81/729 [00:03<00:17, 37.50it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:15, 42.59it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:16, 37.77it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:14, 42.75it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:16, 37.74it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:14, 42.55it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:16, 37.77it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:14, 42.36it/s]Loading weights:  18%|█▊        | 129/729 [00:04<00:15, 37.66it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:13, 42.80it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:15, 37.65it/s]Loading weights:  20%|██        | 148/729 [00:04<00:13, 42.38it/s]Loading weights:  21%|██        | 153/729 [00:05<00:15, 36.97it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:13, 41.59it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:15, 36.41it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:13, 41.24it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:15, 36.35it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:13, 41.39it/s]Loading weights:  26%|██▌       | 189/729 [00:06<00:14, 36.79it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:12, 41.48it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:15, 33.60it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:13, 37.43it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:15, 33.57it/s]Loading weights:  30%|███       | 220/729 [00:06<00:13, 38.62it/s]Loading weights:  31%|███       | 225/729 [00:07<00:15, 33.36it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:12, 38.75it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:14, 34.10it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:12, 38.41it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:17, 28.21it/s]Loading weights:  35%|███▌      | 256/729 [00:08<00:13, 33.99it/s]Loading weights:  36%|███▌      | 261/729 [00:08<00:17, 27.19it/s]Loading weights:  37%|███▋      | 268/729 [00:08<00:13, 32.94it/s]Loading weights:  37%|███▋      | 273/729 [00:08<00:14, 31.46it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:14, 32.04it/s]Loading weights:  39%|███▉      | 286/729 [00:08<00:12, 36.49it/s]Loading weights:  40%|████      | 292/729 [00:09<00:10, 39.97it/s]Loading weights:  41%|████      | 297/729 [00:09<00:12, 35.58it/s]Loading weights:  42%|████▏     | 304/729 [00:09<00:10, 40.24it/s]Loading weights:  42%|████▏     | 309/729 [00:09<00:11, 36.13it/s]Loading weights:  43%|████▎     | 316/729 [00:09<00:10, 40.70it/s]Loading weights:  44%|████▍     | 321/729 [00:09<00:11, 36.43it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:09, 41.37it/s]Loading weights:  46%|████▌     | 333/729 [00:10<00:10, 36.73it/s]Loading weights:  50%|████▉     | 361/729 [00:10<00:04, 87.76it/s]Loading weights:  55%|█████▌    | 402/729 [00:10<00:02, 161.82it/s]Loading weights:  61%|██████    | 443/729 [00:10<00:01, 223.28it/s]Loading weights:  66%|██████▌   | 482/729 [00:10<00:00, 264.40it/s]Loading weights:  71%|███████   | 518/729 [00:10<00:00, 287.85it/s]Loading weights:  76%|███████▌  | 554/729 [00:10<00:00, 307.37it/s]Loading weights:  81%|████████▏ | 594/729 [00:10<00:00, 326.75it/s]Loading weights:  87%|████████▋ | 633/729 [00:10<00:00, 342.68it/s]Loading weights:  92%|█████████▏| 670/729 [00:11<00:00, 350.19it/s]Loading weights:  97%|█████████▋| 706/729 [00:11<00:00, 352.72it/s]Loading weights: 100%|██████████| 729/729 [00:11<00:00, 64.61it/s] 
+    [check] movers: read-back worst |installed - read| = 0.00e+00
+    [check] routers: read-back worst |installed - read| = 0.00e+00
+    [check] compose: read-back worst |installed - read| = 0.00e+00
+    [check] compose_random: read-back worst |installed - read| = 0.00e+00
+    [check] target_circuit: read-back worst |installed - read| = 0.00e+00
+    [check] target_window: read-back worst |installed - read| = 0.00e+00
+    [check] target_complement: read-back worst |installed - read| = 0.00e+00
+    [check] self-install of 140 heads vs clean: max |dlogit| = 0.00e+00
+  64/376
+  128/376
+  192/376
+  256/376
+  320/376
+  376/376
+
+ELIGIBLE rows with four distinct golds: n=112 (all four reference runs give their own answer)
+  arm                       C.X      B.X      C.A      B.A    other
+  clean                  98.2%     1.8%     0.0%     0.0%     0.0%    (circuit predicts C.X)
+  movers                 50.9%    25.0%     0.0%     0.0%    24.1%    (circuit predicts B.X)
+  routers                82.1%     0.0%     8.9%     0.0%     8.9%    (circuit predicts C.A)
+  compose                45.5%    15.2%     4.5%     0.0%    34.8%    (circuit predicts B.A)
+  compose_random         94.6%     1.8%     0.0%     0.0%     3.6%    (circuit predicts C.X)
+  target_circuit         55.4%     3.6%     1.8%     0.9%    38.4%    (circuit predicts B.A)
+  target_window           0.0%     0.0%     3.6%    82.1%    14.3%    (circuit predicts B.A)
+  target_complement      51.8%     6.2%     5.4%    17.0%    19.6%    (circuit predicts C.X)
+
+wrote results/paper/x2b_compose_brands/summary.json

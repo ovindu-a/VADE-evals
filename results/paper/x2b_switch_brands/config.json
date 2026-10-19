@@ -1,0 +1,1557 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "entity": "brands",
+  "countries": null,
+  "n_countries": 24,
+  "attributes": [
+    "hq_country",
+    "founded_year",
+    "industry"
+  ],
+  "layers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "sites": [
+    "residual",
+    "attention"
+  ],
+  "scopes": [
+    "earlier_text",
+    "last_token"
+  ],
+  "block_spans": [],
+  "attention_spans": [
+    3
+  ],
+  "attention_sets": [],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "execution": "cached",
+  "batch_size": 64,
+  "attn_impl": "sdpa",
+  "no_share_prefix": false,
+  "verify_cached": false,
+  "baselines_only": false,
+  "golds": "own_answer",
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "SIEMENS",
+      "source": "SIEMENS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "germany",
+      "source_label": "1847",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "SIEMENS",
+      "source": "SIEMENS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "germany",
+      "source_label": "electronics",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 2,
+      "base": "SIEMENS",
+      "source": "SIEMENS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1847",
+      "source_label": "germany",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 3,
+      "base": "SIEMENS",
+      "source": "SIEMENS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1847",
+      "source_label": "electronics",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 4,
+      "base": "SIEMENS",
+      "source": "SIEMENS",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "electronics",
+      "source_label": "germany",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 5,
+      "base": "SIEMENS",
+      "source": "SIEMENS",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "electronics",
+      "source_label": "1847",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 6,
+      "base": "SHELL",
+      "source": "SHELL",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united kingdom",
+      "source_label": "1890",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 7,
+      "base": "SHELL",
+      "source": "SHELL",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united kingdom",
+      "source_label": "energy",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 8,
+      "base": "SHELL",
+      "source": "SHELL",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1890",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 9,
+      "base": "SHELL",
+      "source": "SHELL",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1890",
+      "source_label": "energy",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 10,
+      "base": "SHELL",
+      "source": "SHELL",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "energy",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 11,
+      "base": "SHELL",
+      "source": "SHELL",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "energy",
+      "source_label": "1890",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 12,
+      "base": "TOGG",
+      "source": "TOGG",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "turkey",
+      "source_label": "2018",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 13,
+      "base": "TOGG",
+      "source": "TOGG",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "turkey",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 14,
+      "base": "TOGG",
+      "source": "TOGG",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "2018",
+      "source_label": "turkey",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 15,
+      "base": "TOGG",
+      "source": "TOGG",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "2018",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 16,
+      "base": "TOGG",
+      "source": "TOGG",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "turkey",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 17,
+      "base": "TOGG",
+      "source": "TOGG",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "2018",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 18,
+      "base": "KONINKLIJKE_PHILIPS_NV",
+      "source": "KONINKLIJKE_PHILIPS_NV",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "netherlands",
+      "source_label": "1891",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 19,
+      "base": "KONINKLIJKE_PHILIPS_NV",
+      "source": "KONINKLIJKE_PHILIPS_NV",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "netherlands",
+      "source_label": "electronics",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 20,
+      "base": "KONINKLIJKE_PHILIPS_NV",
+      "source": "KONINKLIJKE_PHILIPS_NV",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1891",
+      "source_label": "netherlands",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 21,
+      "base": "KONINKLIJKE_PHILIPS_NV",
+      "source": "KONINKLIJKE_PHILIPS_NV",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1891",
+      "source_label": "electronics",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 22,
+      "base": "KONINKLIJKE_PHILIPS_NV",
+      "source": "KONINKLIJKE_PHILIPS_NV",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "electronics",
+      "source_label": "netherlands",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 23,
+      "base": "KONINKLIJKE_PHILIPS_NV",
+      "source": "KONINKLIJKE_PHILIPS_NV",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "electronics",
+      "source_label": "1891",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 24,
+      "base": "ALEXA_INTERNET",
+      "source": "ALEXA_INTERNET",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1996",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 25,
+      "base": "ALEXA_INTERNET",
+      "source": "ALEXA_INTERNET",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 26,
+      "base": "ALEXA_INTERNET",
+      "source": "ALEXA_INTERNET",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1996",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 27,
+      "base": "ALEXA_INTERNET",
+      "source": "ALEXA_INTERNET",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1996",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 28,
+      "base": "ALEXA_INTERNET",
+      "source": "ALEXA_INTERNET",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 29,
+      "base": "ALEXA_INTERNET",
+      "source": "ALEXA_INTERNET",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "1996",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 30,
+      "base": "FERRARI",
+      "source": "FERRARI",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "italy",
+      "source_label": "1947",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 31,
+      "base": "FERRARI",
+      "source": "FERRARI",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "italy",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 32,
+      "base": "FERRARI",
+      "source": "FERRARI",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1947",
+      "source_label": "italy",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 33,
+      "base": "FERRARI",
+      "source": "FERRARI",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1947",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 34,
+      "base": "FERRARI",
+      "source": "FERRARI",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "italy",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 35,
+      "base": "FERRARI",
+      "source": "FERRARI",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "1947",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 36,
+      "base": "METRO_GOLDWYN_MAYER",
+      "source": "METRO_GOLDWYN_MAYER",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1924",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 37,
+      "base": "METRO_GOLDWYN_MAYER",
+      "source": "METRO_GOLDWYN_MAYER",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 38,
+      "base": "METRO_GOLDWYN_MAYER",
+      "source": "METRO_GOLDWYN_MAYER",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1924",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 39,
+      "base": "METRO_GOLDWYN_MAYER",
+      "source": "METRO_GOLDWYN_MAYER",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1924",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 40,
+      "base": "METRO_GOLDWYN_MAYER",
+      "source": "METRO_GOLDWYN_MAYER",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "media & entertainment",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 41,
+      "base": "METRO_GOLDWYN_MAYER",
+      "source": "METRO_GOLDWYN_MAYER",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "media & entertainment",
+      "source_label": "1924",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 42,
+      "base": "MERCEDES_BENZ",
+      "source": "MERCEDES_BENZ",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "germany",
+      "source_label": "1926",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 43,
+      "base": "MERCEDES_BENZ",
+      "source": "MERCEDES_BENZ",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "germany",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 44,
+      "base": "MERCEDES_BENZ",
+      "source": "MERCEDES_BENZ",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1926",
+      "source_label": "germany",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 45,
+      "base": "MERCEDES_BENZ",
+      "source": "MERCEDES_BENZ",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1926",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 46,
+      "base": "MERCEDES_BENZ",
+      "source": "MERCEDES_BENZ",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "germany",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 47,
+      "base": "MERCEDES_BENZ",
+      "source": "MERCEDES_BENZ",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "1926",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 48,
+      "base": "KIA",
+      "source": "KIA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "south korea",
+      "source_label": "1944",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 49,
+      "base": "KIA",
+      "source": "KIA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "south korea",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 50,
+      "base": "KIA",
+      "source": "KIA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1944",
+      "source_label": "south korea",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 51,
+      "base": "KIA",
+      "source": "KIA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1944",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 52,
+      "base": "KIA",
+      "source": "KIA",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "south korea",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 53,
+      "base": "KIA",
+      "source": "KIA",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "1944",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 54,
+      "base": "TV_AZTECA",
+      "source": "TV_AZTECA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "mexico",
+      "source_label": "1993",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 55,
+      "base": "TV_AZTECA",
+      "source": "TV_AZTECA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "mexico",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 56,
+      "base": "TV_AZTECA",
+      "source": "TV_AZTECA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1993",
+      "source_label": "mexico",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 57,
+      "base": "TV_AZTECA",
+      "source": "TV_AZTECA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1993",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 58,
+      "base": "TV_AZTECA",
+      "source": "TV_AZTECA",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "media & entertainment",
+      "source_label": "mexico",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 59,
+      "base": "TV_AZTECA",
+      "source": "TV_AZTECA",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "media & entertainment",
+      "source_label": "1993",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 60,
+      "base": "SPACEX",
+      "source": "SPACEX",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "2002",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 61,
+      "base": "SPACEX",
+      "source": "SPACEX",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 62,
+      "base": "SPACEX",
+      "source": "SPACEX",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "2002",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 63,
+      "base": "SPACEX",
+      "source": "SPACEX",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "2002",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 64,
+      "base": "SPACEX",
+      "source": "SPACEX",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 65,
+      "base": "SPACEX",
+      "source": "SPACEX",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "2002",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 66,
+      "base": "TESLA",
+      "source": "TESLA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "2003",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 67,
+      "base": "TESLA",
+      "source": "TESLA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 68,
+      "base": "TESLA",
+      "source": "TESLA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "2003",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 69,
+      "base": "TESLA",
+      "source": "TESLA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "2003",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 70,
+      "base": "TESLA",
+      "source": "TESLA",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 71,
+      "base": "TESLA",
+      "source": "TESLA",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "2003",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 72,
+      "base": "GENERAL_MOTORS",
+      "source": "GENERAL_MOTORS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1908",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 73,
+      "base": "GENERAL_MOTORS",
+      "source": "GENERAL_MOTORS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 74,
+      "base": "GENERAL_MOTORS",
+      "source": "GENERAL_MOTORS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1908",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 75,
+      "base": "GENERAL_MOTORS",
+      "source": "GENERAL_MOTORS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1908",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 76,
+      "base": "GENERAL_MOTORS",
+      "source": "GENERAL_MOTORS",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 77,
+      "base": "GENERAL_MOTORS",
+      "source": "GENERAL_MOTORS",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "1908",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 78,
+      "base": "MAZDA",
+      "source": "MAZDA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "japan",
+      "source_label": "1920",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 79,
+      "base": "MAZDA",
+      "source": "MAZDA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "japan",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 80,
+      "base": "MAZDA",
+      "source": "MAZDA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1920",
+      "source_label": "japan",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 81,
+      "base": "MAZDA",
+      "source": "MAZDA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1920",
+      "source_label": "automotive",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 82,
+      "base": "MAZDA",
+      "source": "MAZDA",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "automotive",
+      "source_label": "japan",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 83,
+      "base": "MAZDA",
+      "source": "MAZDA",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "automotive",
+      "source_label": "1920",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 84,
+      "base": "HUAWEI",
+      "source": "HUAWEI",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "china",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 85,
+      "base": "HUAWEI",
+      "source": "HUAWEI",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "china",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 86,
+      "base": "HUAWEI",
+      "source": "HUAWEI",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1987",
+      "source_label": "china",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 87,
+      "base": "HUAWEI",
+      "source": "HUAWEI",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1987",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 88,
+      "base": "HUAWEI",
+      "source": "HUAWEI",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "china",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 89,
+      "base": "HUAWEI",
+      "source": "HUAWEI",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 90,
+      "base": "NOKIA",
+      "source": "NOKIA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "finland",
+      "source_label": "1865",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 91,
+      "base": "NOKIA",
+      "source": "NOKIA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "finland",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 92,
+      "base": "NOKIA",
+      "source": "NOKIA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1865",
+      "source_label": "finland",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 93,
+      "base": "NOKIA",
+      "source": "NOKIA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1865",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 94,
+      "base": "NOKIA",
+      "source": "NOKIA",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "finland",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 95,
+      "base": "NOKIA",
+      "source": "NOKIA",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "1865",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 96,
+      "base": "DELL",
+      "source": "DELL",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1984",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 97,
+      "base": "DELL",
+      "source": "DELL",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 98,
+      "base": "DELL",
+      "source": "DELL",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1984",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 99,
+      "base": "DELL",
+      "source": "DELL",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1984",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 100,
+      "base": "DELL",
+      "source": "DELL",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 101,
+      "base": "DELL",
+      "source": "DELL",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "1984",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 102,
+      "base": "META",
+      "source": "META",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "2004",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 103,
+      "base": "META",
+      "source": "META",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 104,
+      "base": "META",
+      "source": "META",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "2004",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 105,
+      "base": "META",
+      "source": "META",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "2004",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 106,
+      "base": "META",
+      "source": "META",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 107,
+      "base": "META",
+      "source": "META",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "2004",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 108,
+      "base": "BRITISH_BROADCASTING_CORPORA",
+      "source": "BRITISH_BROADCASTING_CORPORA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united kingdom",
+      "source_label": "1927",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 109,
+      "base": "BRITISH_BROADCASTING_CORPORA",
+      "source": "BRITISH_BROADCASTING_CORPORA",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united kingdom",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 110,
+      "base": "BRITISH_BROADCASTING_CORPORA",
+      "source": "BRITISH_BROADCASTING_CORPORA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1927",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 111,
+      "base": "BRITISH_BROADCASTING_CORPORA",
+      "source": "BRITISH_BROADCASTING_CORPORA",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1927",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 112,
+      "base": "BRITISH_BROADCASTING_CORPORA",
+      "source": "BRITISH_BROADCASTING_CORPORA",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "media & entertainment",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 113,
+      "base": "BRITISH_BROADCASTING_CORPORA",
+      "source": "BRITISH_BROADCASTING_CORPORA",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "media & entertainment",
+      "source_label": "1927",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 114,
+      "base": "FOX_NEWS",
+      "source": "FOX_NEWS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1996",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 115,
+      "base": "FOX_NEWS",
+      "source": "FOX_NEWS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 116,
+      "base": "FOX_NEWS",
+      "source": "FOX_NEWS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1996",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 117,
+      "base": "FOX_NEWS",
+      "source": "FOX_NEWS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1996",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 118,
+      "base": "FOX_NEWS",
+      "source": "FOX_NEWS",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "media & entertainment",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 119,
+      "base": "FOX_NEWS",
+      "source": "FOX_NEWS",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "media & entertainment",
+      "source_label": "1996",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 120,
+      "base": "THE_GUARDIAN",
+      "source": "THE_GUARDIAN",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united kingdom",
+      "source_label": "1821",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 121,
+      "base": "THE_GUARDIAN",
+      "source": "THE_GUARDIAN",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united kingdom",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 122,
+      "base": "THE_GUARDIAN",
+      "source": "THE_GUARDIAN",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1821",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 123,
+      "base": "THE_GUARDIAN",
+      "source": "THE_GUARDIAN",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1821",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 124,
+      "base": "THE_GUARDIAN",
+      "source": "THE_GUARDIAN",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "media & entertainment",
+      "source_label": "united kingdom",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 125,
+      "base": "THE_GUARDIAN",
+      "source": "THE_GUARDIAN",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "media & entertainment",
+      "source_label": "1821",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 126,
+      "base": "SAMSUNG_GROUP",
+      "source": "SAMSUNG_GROUP",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "south korea",
+      "source_label": "1938",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 127,
+      "base": "SAMSUNG_GROUP",
+      "source": "SAMSUNG_GROUP",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "south korea",
+      "source_label": "electronics",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 128,
+      "base": "SAMSUNG_GROUP",
+      "source": "SAMSUNG_GROUP",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1938",
+      "source_label": "south korea",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 129,
+      "base": "SAMSUNG_GROUP",
+      "source": "SAMSUNG_GROUP",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1938",
+      "source_label": "electronics",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 130,
+      "base": "SAMSUNG_GROUP",
+      "source": "SAMSUNG_GROUP",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "electronics",
+      "source_label": "south korea",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 131,
+      "base": "SAMSUNG_GROUP",
+      "source": "SAMSUNG_GROUP",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "electronics",
+      "source_label": "1938",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 132,
+      "base": "ASSOCIATED_PRESS",
+      "source": "ASSOCIATED_PRESS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1846",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 133,
+      "base": "ASSOCIATED_PRESS",
+      "source": "ASSOCIATED_PRESS",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 134,
+      "base": "ASSOCIATED_PRESS",
+      "source": "ASSOCIATED_PRESS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1846",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 135,
+      "base": "ASSOCIATED_PRESS",
+      "source": "ASSOCIATED_PRESS",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1846",
+      "source_label": "media & entertainment",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 136,
+      "base": "ASSOCIATED_PRESS",
+      "source": "ASSOCIATED_PRESS",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "media & entertainment",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 137,
+      "base": "ASSOCIATED_PRESS",
+      "source": "ASSOCIATED_PRESS",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "media & entertainment",
+      "source_label": "1846",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 138,
+      "base": "ORACLE_CORPORATION",
+      "source": "ORACLE_CORPORATION",
+      "base_attribute": "hq_country",
+      "donor_attribute": "founded_year",
+      "base_label": "united states",
+      "source_label": "1977",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 139,
+      "base": "ORACLE_CORPORATION",
+      "source": "ORACLE_CORPORATION",
+      "base_attribute": "hq_country",
+      "donor_attribute": "industry",
+      "base_label": "united states",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 140,
+      "base": "ORACLE_CORPORATION",
+      "source": "ORACLE_CORPORATION",
+      "base_attribute": "founded_year",
+      "donor_attribute": "hq_country",
+      "base_label": "1977",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 141,
+      "base": "ORACLE_CORPORATION",
+      "source": "ORACLE_CORPORATION",
+      "base_attribute": "founded_year",
+      "donor_attribute": "industry",
+      "base_label": "1977",
+      "source_label": "technology",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 142,
+      "base": "ORACLE_CORPORATION",
+      "source": "ORACLE_CORPORATION",
+      "base_attribute": "industry",
+      "donor_attribute": "hq_country",
+      "base_label": "technology",
+      "source_label": "united states",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 143,
+      "base": "ORACLE_CORPORATION",
+      "source": "ORACLE_CORPORATION",
+      "base_attribute": "industry",
+      "donor_attribute": "founded_year",
+      "base_label": "technology",
+      "source_label": "1977",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "hq_country": [
+      "For the brand shown, country means the country where its company is headquartered, in its short common form; year means the year its company was founded, digits only; industry means its sector, exactly one of: Automotive, Technology, Electronics, Media & Entertainment, Gaming, Financial Services, Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & Hospitality. Give only the requested value. Report the country of this brand.",
+      "For the brand shown, country means the country where its company is headquartered, in its short common form; year means the year its company was founded, digits only; industry means its sector, exactly one of: Automotive, Technology, Electronics, Media & Entertainment, Gaming, Financial Services, Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & Hospitality. Give only the requested value. Return the country of this brand."
+    ],
+    "founded_year": [
+      "For the brand shown, country means the country where its company is headquartered, in its short common form; year means the year its company was founded, digits only; industry means its sector, exactly one of: Automotive, Technology, Electronics, Media & Entertainment, Gaming, Financial Services, Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & Hospitality. Give only the requested value. Report the year of this brand.",
+      "For the brand shown, country means the country where its company is headquartered, in its short common form; year means the year its company was founded, digits only; industry means its sector, exactly one of: Automotive, Technology, Electronics, Media & Entertainment, Gaming, Financial Services, Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & Hospitality. Give only the requested value. Return the year of this brand."
+    ],
+    "industry": [
+      "For the brand shown, country means the country where its company is headquartered, in its short common form; year means the year its company was founded, digits only; industry means its sector, exactly one of: Automotive, Technology, Electronics, Media & Entertainment, Gaming, Financial Services, Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & Hospitality. Give only the requested value. Report the industry of this brand.",
+      "For the brand shown, country means the country where its company is headquartered, in its short common form; year means the year its company was founded, digits only; industry means its sector, exactly one of: Automotive, Technology, Electronics, Media & Entertainment, Gaming, Financial Services, Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & Hospitality. Give only the requested value. Return the industry of this brand."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "276d442d0b78c10cb50e7c2019b1807a0ca251462117d0c7f34cf52a90d5001f",
+  "image_sha256": {
+    "SIEMENS": "5f8bfe0af0696571e7ae6c37887ec51902b1c987367ae9a927f3f12c87642816",
+    "SHELL": "123c2cfbfb7b14bc4ff791e9ee5e7778fab378daafe817649062328aa4bd11c9",
+    "TOGG": "d504fe1e847e4469986c5745ed9fcbe5a73ac2e065bf5a2fd1256efe71031c1b",
+    "KONINKLIJKE_PHILIPS_NV": "9912872c802f1abf6b1b43dacd6a4e39c327f98837550125723b47d4ee7d2678",
+    "ALEXA_INTERNET": "291eb355c760040cac1551f715c255842a06f244fd9eabd53d6b824b00570b73",
+    "FERRARI": "86d8d8ce56506e3c1591f13fd0e26ff864bbf3ee72468e358a52188dea783c11",
+    "METRO_GOLDWYN_MAYER": "738c92ffbb5b344b02d99d0df987366b7bd827a515eeb6c4b26e59a9218c846d",
+    "MERCEDES_BENZ": "fdc94a8dc888180cdb8f568eccd76c59b0f80bebc8caac46affa8cdb71450a52",
+    "KIA": "a29dec7083852786ec67831133c7b4dc359b4658a1ee8cd767ce3d0fb186bd94",
+    "TV_AZTECA": "c86e346071793f7fb4214f77c7dffa089bc0bfb42ef4ca27e98e658e82d52867",
+    "SPACEX": "6f9cfa2a5422597cb6ed3eb9610768994d96c83c7f2b1b128d6693cbd5d5f618",
+    "TESLA": "b46ab06a2b5774f400c68ce44e6102b9ab59226a1e7e610afba921e315b0d35e",
+    "GENERAL_MOTORS": "a649b851ab1d307630abee13a501b5b1500d0cdaed87822c43713e0d82b449d3",
+    "MAZDA": "401ecd6e647e525623fec749e8d5b7b8c307198063d5182fefc4419ce66b164e",
+    "HUAWEI": "6b637b9670fdad3a65a050348869180a983235e8578bc865984c3eb95a7afc38",
+    "NOKIA": "ab140432d975d4a4f21d90efa1be2470f9040270096c40b26580fce15327e385",
+    "DELL": "21e0eb3f8c393980eb6cd9125d7ee1723176df11f1747205dd5e5c6e7cbbf749",
+    "META": "54154ae8e8573a73b49843fd740ec3d9029e7124eeef766f8d288d788f79cdb5",
+    "BRITISH_BROADCASTING_CORPORA": "4f6bf6ecb8900219a3761860a0cc5705e2f7800d191caf07e0872d4a2d712f7a",
+    "FOX_NEWS": "b16c21f168a684eb00b859eaaa0020a494c4b0498c10239631e0f51ed0249284",
+    "THE_GUARDIAN": "928bb9c538f791f673e552a2078fc6e98e1326f05073f1026c31e7bd2620c323",
+    "SAMSUNG_GROUP": "32545219b1c153ee6d9de98ba0c3aeeb5fbfe64a7c15b02b5ab5cc3d5c11d78b",
+    "ASSOCIATED_PRESS": "8d0ea739231440d51c6098ee67569c8fcc407c28d8ee041d49159e3ef0a53064",
+    "ORACLE_CORPORATION": "95ba9980b4c7b6b94de2cb7159888003adcf3b8d58132f900bf07c3f4dde3c29"
+  },
+  "implementation_sha256": "9541e871cb02437c3493226702654c1e249a3191e03db6bba8f119413ed9858a"
+}

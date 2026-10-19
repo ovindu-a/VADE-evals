@@ -1,0 +1,130 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[text_entity_contrast] celebrities: phases=['crossmodal']; 8 pairs x 4 attributes
+  example text prompt: 'For the person named, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. The person is Abraham Lincoln. Report the country of this person.'
+  golds: the model's own clean answers, kept where image and text runs agree to the divergence token
+  crossmodal: 84 countries x 4 attributes per condition for the representation part; movers 23.3,22.17,23.4,23.6,21.4,22.15,21.5,21.1
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:01<15:55,  1.31s/it]Loading weights:   1%|          | 4/729 [00:01<03:33,  3.39it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:12,  9.90it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:42, 16.83it/s]Loading weights:   3%|▎         | 21/729 [00:01<00:35, 19.96it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:25, 27.77it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:24, 27.85it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:19, 34.66it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:20, 32.70it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 38.76it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 35.53it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:16, 41.12it/s]Loading weights:   9%|▉         | 69/729 [00:03<00:17, 37.10it/s]Loading weights:  10%|█         | 76/729 [00:03<00:18, 35.80it/s]Loading weights:  11%|█         | 82/729 [00:03<00:15, 40.46it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:14, 44.49it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:16, 39.26it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:14, 44.41it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:15, 39.03it/s]Loading weights:  15%|█▌        | 112/729 [00:04<00:13, 44.17it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:15, 39.23it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:13, 44.17it/s]Loading weights:  18%|█▊        | 129/729 [00:04<00:15, 39.15it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:15, 37.30it/s]Loading weights:  19%|█▉        | 142/729 [00:04<00:14, 41.62it/s]Loading weights:  20%|██        | 148/729 [00:04<00:12, 45.59it/s]Loading weights:  21%|██        | 153/729 [00:05<00:14, 39.64it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:12, 44.07it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:14, 38.93it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 44.12it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:14, 39.02it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:12, 44.02it/s]Loading weights:  26%|██▌       | 189/729 [00:05<00:13, 38.96it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:12, 44.06it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 38.71it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 43.54it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 38.68it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 43.72it/s]Loading weights:  31%|███       | 225/729 [00:06<00:12, 38.80it/s]Loading weights:  32%|███▏      | 232/729 [00:07<00:13, 36.97it/s]Loading weights:  33%|███▎      | 238/729 [00:07<00:11, 41.30it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:10, 44.93it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:12, 39.58it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 44.60it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:11, 39.45it/s]Loading weights:  37%|███▋      | 268/729 [00:07<00:10, 44.41it/s]Loading weights:  37%|███▋      | 273/729 [00:07<00:11, 39.29it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:10, 44.46it/s]Loading weights:  39%|███▉      | 285/729 [00:08<00:11, 39.26it/s]Loading weights:  40%|███▉      | 291/729 [00:08<00:12, 35.07it/s]Loading weights:  41%|████      | 298/729 [00:08<00:10, 41.82it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:09, 45.76it/s]Loading weights:  43%|████▎     | 310/729 [00:08<00:10, 39.51it/s]Loading weights:  43%|████▎     | 317/729 [00:09<00:10, 40.13it/s]Loading weights:  44%|████▍     | 322/729 [00:09<00:09, 42.10it/s]Loading weights:  45%|████▍     | 328/729 [00:09<00:08, 45.98it/s]Loading weights:  46%|████▌     | 333/729 [00:09<00:09, 40.06it/s]Loading weights:  51%|█████     | 371/729 [00:09<00:03, 118.04it/s]Loading weights:  57%|█████▋    | 419/729 [00:09<00:01, 207.26it/s]Loading weights:  64%|██████▍   | 467/729 [00:09<00:00, 278.36it/s]Loading weights:  71%|███████   | 515/729 [00:09<00:00, 332.74it/s]Loading weights:  77%|███████▋  | 563/729 [00:09<00:00, 372.91it/s]Loading weights:  84%|████████▍ | 611/729 [00:10<00:00, 402.74it/s]Loading weights:  90%|█████████ | 659/729 [00:10<00:00, 424.23it/s]Loading weights:  97%|█████████▋| 709/729 [00:10<00:00, 439.49it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 70.51it/s] 
+  13 pair rows (dropped: {'no_label': 0, 'same_label': 4, 'model_wrong': 10, 'no_divergence': 0, 'modality_mismatch': 5})
+  crossmodal/capture 1
+  crossmodal/capture 2
+  crossmodal/capture 3
+  crossmodal/capture 4
+  crossmodal/capture 5
+  crossmodal/capture 6
+  crossmodal/capture 7
+  crossmodal/capture 8
+  crossmodal/capture 9
+  crossmodal/capture 10
+  crossmodal/capture 11
+  crossmodal/capture 12
+  crossmodal/capture 13
+  crossmodal/capture 14
+  crossmodal/capture 15
+  crossmodal/capture 16
+  crossmodal/capture 17
+  crossmodal/capture 18
+  crossmodal/capture 19
+  crossmodal/capture 20
+  crossmodal/capture 21
+  crossmodal/capture 22
+  crossmodal/capture 23
+  crossmodal/capture 24
+
+CROSSMODAL representation: n=336 rows, chance top-1 1.2%
+  site                    top1 ctr  top1 ridge i>t  same-diff cos
+  resid@0                    0.0%            0.0%          0.000
+  resid@1                   12.5%           14.9%          0.094
+  resid@2                   12.2%           11.6%          0.080
+  resid@3                   21.7%           17.0%          0.202
+  resid@4                   14.0%            9.2%          0.161
+  resid@5                   13.1%           10.7%          0.154
+  resid@6                   11.9%           14.0%          0.150
+  resid@7                   11.0%           13.7%          0.148
+  resid@8                   12.5%           15.8%          0.139
+  resid@9                   15.2%           17.9%          0.170
+  resid@10                  20.2%           31.0%          0.184
+  resid@11                  22.0%           29.5%          0.186
+  resid@12                  19.6%           27.4%          0.177
+  resid@13                  20.8%           27.1%          0.164
+  resid@14                  19.9%           30.7%          0.154
+  resid@15                  28.0%           30.7%          0.180
+  resid@16                  24.1%           33.9%          0.167
+  resid@17                  25.0%           33.9%          0.159
+  resid@18                  29.5%           34.5%          0.176
+  resid@19                  42.0%           45.8%          0.233
+  resid@20                  80.4%           70.5%          0.534
+  resid@21                  77.4%           69.6%          0.529
+  resid@22                  89.3%           76.5%          0.634
+  resid@23                  96.4%           83.0%          0.734
+  resid@24                  97.6%           83.9%          0.771
+  resid@25                  97.0%           81.8%          0.778
+  resid@26                  96.4%           80.1%          0.782
+  resid@27                  95.8%           78.9%          0.760
+  entity@0                  20.2%            4.8%          0.022
+  entity@1                  46.4%            8.3%          0.086
+  entity@2                  47.6%           15.5%          0.111
+  entity@3                  51.2%           11.9%          0.129
+  entity@4                  60.7%           14.3%          0.146
+  entity@5                  69.0%           17.9%          0.186
+  entity@6                  75.0%           19.0%          0.198
+  entity@7                  79.8%           32.1%          0.227
+  entity@8                  89.3%           34.5%          0.293
+  entity@9                  89.3%           42.9%          0.315
+  entity@10                 89.3%           39.3%          0.373
+  entity@11                 86.9%           35.7%          0.381
+  entity@12                 89.3%           36.9%          0.375
+  entity@13                 86.9%           41.7%          0.389
+  entity@14                 88.1%           41.7%          0.375
+  entity@15                 89.3%           39.3%          0.365
+  entity@16                 89.3%           35.7%          0.356
+  entity@17                 89.3%           41.7%          0.348
+  entity@18                 89.3%           36.9%          0.344
+  entity@19                 86.9%           44.0%          0.362
+  entity@20                 88.1%           45.2%          0.360
+  entity@21                 86.9%           45.2%          0.356
+  entity@22                 89.3%           42.9%          0.330
+  entity@23                 89.3%           42.9%          0.328
+  entity@24                 88.1%           35.7%          0.326
+  entity@25                 91.7%           38.1%          0.328
+  entity@26                 92.9%           42.9%          0.308
+  entity@27                 86.9%           44.0%          0.288
+  movers (concat z)         97.3%           92.3%          0.754
+  movers (joint write)      98.5%           93.8%          0.806
+  head 21.1                 79.5%           69.9%          0.621
+  head 21.4                 95.2%           82.7%          0.771
+  head 21.5                 84.2%           74.7%          0.681
+  head 22.15                97.6%           85.4%          0.839
+  head 22.17                91.1%           74.4%          0.743
+  head 23.3                 92.6%           75.6%          0.746
+  head 23.4                 89.6%           73.2%          0.746
+  head 23.6                 95.8%           84.8%          0.787
+  crossmodal/install 1/6
+  crossmodal/install 2/6
+  crossmodal/install 3/6
+  crossmodal/install 4/6
+  crossmodal/install 5/6
+  crossmodal/install 6/6
+
+CROSSMODAL install into the image condition (donor = cross/same condition), n=13 eligible
+  arm                                              n  transfer        95% CI    base   other   meanLD  normLD
+  clean                                           13     0.0%        0%-23% 100.0%   0.0%    -9.68    0.00
+  source_clean                                    13   100.0%      77%-100%   0.0%   0.0%     7.90    1.00
+  install:movers<-same                            13    46.2%       23%-71%  38.5%  15.4%    -0.77    0.51
+  install:random10<-same                          13     0.0%        0%-23% 100.0%   0.0%    -9.46    0.01
+  install:movers<-cross                           13    46.2%       23%-71%  38.5%  15.4%    -0.29    0.53
+  install:random10<-cross                         13     0.0%        0%-23% 100.0%   0.0%    -9.54    0.01
+  install:movers<-cross:normmatch                 13    46.2%       23%-71%  38.5%  15.4%    -1.47    0.47
+  install:movers<-cross:self                      13     0.0%        0%-23% 100.0%   0.0%   -10.15   -0.03
+
+CROSSMODAL install into the text condition (donor = cross/same condition), n=13 eligible
+  arm                                              n  transfer        95% CI    base   other   meanLD  normLD
+  clean                                           13     0.0%        0%-23% 100.0%   0.0%   -11.44    0.00
+  source_clean                                    13   100.0%      77%-100%   0.0%   0.0%     9.37    1.00
+  install:movers<-cross                           13    38.5%       18%-64%  61.5%   0.0%    -1.59    0.47
+  install:random10<-cross                         13     0.0%        0%-23% 100.0%   0.0%   -11.25    0.01
+  install:movers<-cross:normmatch                 13    46.2%       23%-71%  53.8%   0.0%    -2.12    0.45
+  install:movers<-cross:self                      13     0.0%        0%-23% 100.0%   0.0%   -10.95    0.02
+  install:movers<-same                            13    46.2%       23%-71%  46.2%   7.7%    -0.60    0.52
+  install:random10<-same                          13     0.0%        0%-23% 100.0%   0.0%   -11.33    0.01
+
+wrote results/paper/smoke2/x2b_crossmodal_celebrities/summary.json

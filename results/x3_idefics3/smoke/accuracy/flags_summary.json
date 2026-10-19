@@ -1,0 +1,54 @@
+{
+  "entity": "flags",
+  "model_id": "Idefics3-8B-Llama3",
+  "predictions_file": "results/x3_idefics3/smoke/accuracy/flags_predictions.jsonl",
+  "overall": {
+    "n": 504,
+    "pct_accuracy": 77.2
+  },
+  "by_attribute": [
+    {
+      "attribute": "capital",
+      "n": 504,
+      "pct_accuracy": 77.2
+    }
+  ],
+  "by_attribute_template": [
+    {
+      "attribute": "capital",
+      "template_id": "capital_prefill_v1",
+      "n": 84,
+      "pct_accuracy": 75.0
+    },
+    {
+      "attribute": "capital",
+      "template_id": "capital_prefill_v2",
+      "n": 84,
+      "pct_accuracy": 76.2
+    },
+    {
+      "attribute": "capital",
+      "template_id": "capital_prefill_v3",
+      "n": 84,
+      "pct_accuracy": 78.6
+    },
+    {
+      "attribute": "capital",
+      "template_id": "capital_prefill_v4",
+      "n": 84,
+      "pct_accuracy": 78.6
+    },
+    {
+      "attribute": "capital",
+      "template_id": "capital_prefill_v5",
+      "n": 84,
+      "pct_accuracy": 77.4
+    },
+    {
+      "attribute": "capital",
+      "template_id": "capital_prefill_v6",
+      "n": 84,
+      "pct_accuracy": 77.4
+    }
+  ]
+}

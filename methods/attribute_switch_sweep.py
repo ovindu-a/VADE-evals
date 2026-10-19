@@ -87,9 +87,11 @@ def load_entity_items(vade_root, entity):
     return entity_dir, json.loads(raw)[ENTITY_SPECS[entity]['item_key']], raw
 
 
-def uses_own_golds(entity):
-    """Flags labels are cased as the model writes them, so flags keeps stored-label token golds."""
-    return entity != 'flags'
+def uses_own_golds(entity, own_golds=False):
+    """Flags labels are cased as Qwen writes them, so flags keeps stored-label token golds unless
+    `own_golds` (--own_golds) opts in: Idefics3 answers the flags controlled prompts in lowercase
+    (' luxembourg.' vs ' Luxembourg'), which token golds score as wrong."""
+    return own_golds or entity != 'flags'
 
 
 def stop_ids(model, tokenizer):
@@ -455,7 +457,7 @@ def execute(runner, args, rows, items, entity_dir, results):
         with Image.open(entity_dir / items[row['base']]['image']) as img:
             batch = runner.batch(img.convert('RGB'), row['base_attribute'], row['donor_attribute'])
         p = batch['base_input_ids'].shape[1]
-        if uses_own_golds(getattr(args, 'entity', 'flags')):
+        if uses_own_golds(getattr(args, 'entity', 'flags'), getattr(args, 'own_golds', False)):
             gold = own_golds_row(runner, row, batch, results)
             if gold is None:
                 continue                   # the model is wrong on this row: baselines only, no arms
@@ -522,6 +524,10 @@ def main(argv=None):
     ap.add_argument('--entity', choices=ENTITIES, default='flags',
                     help='Non-flags entities use their own controlled prompts (ENTITY_SPECS) and the '
                          "model's OWN clean answers as golds; rows the model gets wrong run baselines only.")
+    ap.add_argument('--own_golds', action='store_true',
+                    help="Flags only (other entities always do this): golds = the model's own clean "
+                         "answers, kept where VADE's matcher accepts them, instead of the stored labels. "
+                         "For models that do not write flags labels in their stored casing.")
     ap.add_argument('--out_dir', default=None, help='Default: results/attribute_switch/<entity>')
     ap.add_argument('--countries', nargs='+', help='Explicit VADE item IDs; otherwise deterministic sample')
     ap.add_argument('--n_countries', type=int, default=8, help='Items to sample (countries for flags)')
@@ -597,10 +603,11 @@ def main(argv=None):
                 template_id='controlled_report_v1'))
     # summary_every only changes how often a derived file is rewritten, so it is kept out of
     # the run identity -- changing it must not refuse a resume.
-    # `entity` is left out at flags so a flags config is unchanged from before it existed.
+    # `entity` is left out at flags, and `own_golds` when off, so a flags config is unchanged from
+    # before they existed.
     config = {k: v for k, v in vars(args).items() if k not in ('dry_run', 'out_dir', 'summary_every')
-              and not (k == 'entity' and v == 'flags')}
-    if uses_own_golds(args.entity):
+              and not (k == 'entity' and v == 'flags') and not (k == 'own_golds' and not v)}
+    if uses_own_golds(args.entity, args.own_golds):
         config['golds'] = 'own_answer'
     config.update(rows=rows, prompts={a: [question(a), question(a, True)] for a in args.attributes},
         prefill=PREFILL, ground_truth_sha256=hashlib.sha256(raw).hexdigest(),
@@ -609,7 +616,7 @@ def main(argv=None):
         implementation_sha256=hashlib.sha256(b''.join((ROOT / 'methods' / p).read_bytes() for p in
             ['attribute_switch_sweep.py', 'attribute_switch_cached.py', 'head_followup_common.py', 'common/sites.py', 'common/hooks.py',
              'adapters/qwen2_5_vl.py'])).hexdigest())
-    if uses_own_golds(args.entity):
+    if uses_own_golds(args.entity, args.own_golds):
         print(f"{args.entity}: golds are the model's own clean answers; rows VADE's matcher marks wrong "
               f"run baselines only.", flush=True)
     print(f'{len(countries)} {"countries" if args.entity == "flags" else "items"}, {len(rows)} directed question pairs, layers={args.layers}; '

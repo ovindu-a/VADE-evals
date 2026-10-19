@@ -1,0 +1,2657 @@
+{
+  "blocks_captured": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "per_block_mass": {
+    "4": {
+      "delta_resid": 0.583325202082051,
+      "delta_dla": 0.012150809604463575
+    },
+    "5": {
+      "delta_resid": 1.2269824852701277,
+      "delta_dla": 0.019373965848899388
+    },
+    "6": {
+      "delta_resid": 1.491978499572724,
+      "delta_dla": 0.015270771908035385
+    },
+    "7": {
+      "delta_resid": 2.3057137206196785,
+      "delta_dla": 0.03513225944334408
+    },
+    "8": {
+      "delta_resid": 2.7748382166028023,
+      "delta_dla": 0.03771865481394343
+    },
+    "9": {
+      "delta_resid": 3.3141868747770786,
+      "delta_dla": 0.03493480902034207
+    },
+    "10": {
+      "delta_resid": 3.5385580002330244,
+      "delta_dla": 0.055086411117372336
+    },
+    "11": {
+      "delta_resid": 4.968578106723726,
+      "delta_dla": 0.05930994200753048
+    },
+    "12": {
+      "delta_resid": 5.727262191474438,
+      "delta_dla": 0.07102868235961068
+    },
+    "13": {
+      "delta_resid": 8.285787483677268,
+      "delta_dla": 0.11467180820909562
+    },
+    "14": {
+      "delta_resid": 6.909683896228671,
+      "delta_dla": 0.21280626019870397
+    },
+    "15": {
+      "delta_resid": 6.8337450351100415,
+      "delta_dla": 0.11721255236625439
+    },
+    "16": {
+      "delta_resid": 13.060150315985084,
+      "delta_dla": 0.8985014484933345
+    },
+    "17": {
+      "delta_resid": 8.12143662199378,
+      "delta_dla": 0.3470956023757026
+    },
+    "18": {
+      "delta_resid": 6.215948591940105,
+      "delta_dla": 0.09627646693115821
+    },
+    "19": {
+      "delta_resid": 4.999517422635108,
+      "delta_dla": 0.3892058934297893
+    },
+    "20": {
+      "delta_resid": 3.5398785853758454,
+      "delta_dla": 0.034618749345099786
+    },
+    "21": {
+      "delta_resid": 6.881104977801442,
+      "delta_dla": 0.15506721499332343
+    },
+    "22": {
+      "delta_resid": 6.108262542635202,
+      "delta_dla": 0.12056541252241004
+    },
+    "23": {
+      "delta_resid": 5.706130525097251,
+      "delta_dla": 0.23090975926970714
+    },
+    "24": {
+      "delta_resid": 11.356127713806927,
+      "delta_dla": 3.1705966164081474
+    },
+    "25": {
+      "delta_resid": 5.290980165824294,
+      "delta_dla": 0.07574971525900764
+    },
+    "26": {
+      "delta_resid": 10.188062775880098,
+      "delta_dla": 0.35394712731067557
+    },
+    "27": {
+      "delta_resid": 11.190576007589698,
+      "delta_dla": 1.0125559296138817
+    },
+    "28": {
+      "delta_resid": 14.487751133739948,
+      "delta_dla": 0.5008774489397183
+    },
+    "29": {
+      "delta_resid": 19.574018262326717,
+      "delta_dla": 2.790161571043427
+    },
+    "30": {
+      "delta_resid": 36.05224782973528,
+      "delta_dla": 6.303710745763965
+    },
+    "31": {
+      "delta_resid": 25.44616923481226,
+      "delta_dla": 2.7582781148375943
+    }
+  },
+  "unhooked": {
+    "n": 64,
+    "n_first": 64,
+    "cause": 0.015625,
+    "base_kept": 0.734375,
+    "other": 0.25,
+    "first_src": 0.015625,
+    "first_base": 0.734375
+  },
+  "image_patch_only": {
+    "n": 64,
+    "n_first": 64,
+    "cause": 0.9375,
+    "base_kept": 0.0,
+    "other": 0.0625,
+    "first_src": 0.953125,
+    "first_base": 0.0
+  },
+  "windows": [
+    {
+      "blocks": [
+        4
+      ],
+      "label": "4",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        5
+      ],
+      "label": "5",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        6
+      ],
+      "label": "6",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        7
+      ],
+      "label": "7",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        8
+      ],
+      "label": "8",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        9
+      ],
+      "label": "9",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        10
+      ],
+      "label": "10",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        11
+      ],
+      "label": "11",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.9375,
+        "base_kept": 0.0,
+        "other": 0.0625,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        12
+      ],
+      "label": "12",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.75,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        13
+      ],
+      "label": "13",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        14
+      ],
+      "label": "14",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        15
+      ],
+      "label": "15",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.75,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        16
+      ],
+      "label": "16",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.6875,
+        "other": 0.28125,
+        "first_src": 0.03125,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.859375,
+        "base_kept": 0.0,
+        "other": 0.140625,
+        "first_src": 0.875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        17
+      ],
+      "label": "17",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        18
+      ],
+      "label": "18",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.75,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        19
+      ],
+      "label": "19",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        20
+      ],
+      "label": "20",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        21
+      ],
+      "label": "21",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        22
+      ],
+      "label": "22",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        23
+      ],
+      "label": "23",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        24
+      ],
+      "label": "24",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.6875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        25
+      ],
+      "label": "25",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.75,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        26
+      ],
+      "label": "26",
+      "n_heads": 32,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        4,
+        5
+      ],
+      "label": "4-5",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        5,
+        6
+      ],
+      "label": "5-6",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        6,
+        7
+      ],
+      "label": "6-7",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        7,
+        8
+      ],
+      "label": "7-8",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        8,
+        9
+      ],
+      "label": "8-9",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        9,
+        10
+      ],
+      "label": "9-10",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        10,
+        11
+      ],
+      "label": "10-11",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.9375,
+        "base_kept": 0.0,
+        "other": 0.0625,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        11,
+        12
+      ],
+      "label": "11-12",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.9375,
+        "base_kept": 0.0,
+        "other": 0.0625,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        12,
+        13
+      ],
+      "label": "12-13",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        13,
+        14
+      ],
+      "label": "13-14",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        14,
+        15
+      ],
+      "label": "14-15",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.75,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        15,
+        16
+      ],
+      "label": "15-16",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.6875,
+        "other": 0.28125,
+        "first_src": 0.03125,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.890625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.6875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        16,
+        17
+      ],
+      "label": "16-17",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.625,
+        "other": 0.34375,
+        "first_src": 0.03125,
+        "first_base": 0.625
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.828125,
+        "base_kept": 0.0,
+        "other": 0.171875,
+        "first_src": 0.84375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.0625,
+        "base_kept": 0.65625,
+        "first_own": 0.015625,
+        "first_donor": 0.01639344262295082
+      }
+    },
+    {
+      "blocks": [
+        17,
+        18
+      ],
+      "label": "17-18",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.75,
+        "other": 0.234375,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        18,
+        19
+      ],
+      "label": "18-19",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        19,
+        20
+      ],
+      "label": "19-20",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        20,
+        21
+      ],
+      "label": "20-21",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        21,
+        22
+      ],
+      "label": "21-22",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        22,
+        23
+      ],
+      "label": "22-23",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        23,
+        24
+      ],
+      "label": "23-24",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        24,
+        25
+      ],
+      "label": "24-25",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        25,
+        26
+      ],
+      "label": "25-26",
+      "n_heads": 64,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.6875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        4,
+        5,
+        6
+      ],
+      "label": "4-6",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        5,
+        6,
+        7
+      ],
+      "label": "5-7",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        6,
+        7,
+        8
+      ],
+      "label": "6-8",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        7,
+        8,
+        9
+      ],
+      "label": "7-9",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        8,
+        9,
+        10
+      ],
+      "label": "8-10",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.921875,
+        "base_kept": 0.0,
+        "other": 0.078125,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        9,
+        10,
+        11
+      ],
+      "label": "9-11",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.9375,
+        "base_kept": 0.0,
+        "other": 0.0625,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        10,
+        11,
+        12
+      ],
+      "label": "10-12",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.9375,
+        "base_kept": 0.0,
+        "other": 0.0625,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        11,
+        12,
+        13
+      ],
+      "label": "11-13",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        12,
+        13,
+        14
+      ],
+      "label": "12-14",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        13,
+        14,
+        15
+      ],
+      "label": "13-15",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        14,
+        15,
+        16
+      ],
+      "label": "14-16",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.65625,
+        "other": 0.3125,
+        "first_src": 0.03125,
+        "first_base": 0.65625
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.828125,
+        "base_kept": 0.0,
+        "other": 0.171875,
+        "first_src": 0.859375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.6875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        15,
+        16,
+        17
+      ],
+      "label": "15-17",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.046875,
+        "base_kept": 0.609375,
+        "other": 0.34375,
+        "first_src": 0.046875,
+        "first_base": 0.609375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.828125,
+        "base_kept": 0.0,
+        "other": 0.171875,
+        "first_src": 0.84375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.0625,
+        "base_kept": 0.609375,
+        "first_own": 0.015625,
+        "first_donor": 0.01639344262295082
+      }
+    },
+    {
+      "blocks": [
+        16,
+        17,
+        18
+      ],
+      "label": "16-18",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.046875,
+        "base_kept": 0.625,
+        "other": 0.328125,
+        "first_src": 0.046875,
+        "first_base": 0.625
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.78125,
+        "base_kept": 0.0,
+        "other": 0.21875,
+        "first_src": 0.796875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.078125,
+        "base_kept": 0.609375,
+        "first_own": 0.015625,
+        "first_donor": 0.03278688524590164
+      }
+    },
+    {
+      "blocks": [
+        17,
+        18,
+        19
+      ],
+      "label": "17-19",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.859375,
+        "base_kept": 0.0,
+        "other": 0.140625,
+        "first_src": 0.890625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        18,
+        19,
+        20
+      ],
+      "label": "18-20",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.734375,
+        "other": 0.25,
+        "first_src": 0.015625,
+        "first_base": 0.734375
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        19,
+        20,
+        21
+      ],
+      "label": "19-21",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.734375,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        20,
+        21,
+        22
+      ],
+      "label": "20-22",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.703125,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        21,
+        22,
+        23
+      ],
+      "label": "21-23",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        22,
+        23,
+        24
+      ],
+      "label": "22-24",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.6875,
+        "other": 0.296875,
+        "first_src": 0.015625,
+        "first_base": 0.6875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.90625,
+        "base_kept": 0.0,
+        "other": 0.09375,
+        "first_src": 0.9375,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        23,
+        24,
+        25
+      ],
+      "label": "23-25",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.703125
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.875,
+        "base_kept": 0.0,
+        "other": 0.125,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        24,
+        25,
+        26
+      ],
+      "label": "24-26",
+      "n_heads": 96,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.71875,
+        "other": 0.265625,
+        "first_src": 0.015625,
+        "first_base": 0.71875
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.015625,
+        "donor": 0.046875,
+        "base_kept": 0.71875,
+        "first_own": 0.015625,
+        "first_donor": 0.0
+      }
+    },
+    {
+      "blocks": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "label": "4-26",
+      "n_heads": 736,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.859375,
+        "base_kept": 0.0,
+        "other": 0.140625,
+        "first_src": 0.921875,
+        "first_base": 0.0
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.65625,
+        "other": 0.3125,
+        "first_src": 0.03125,
+        "first_base": 0.65625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.03125,
+        "donor": 0.875,
+        "base_kept": 0.03125,
+        "first_own": 0.03125,
+        "first_donor": 0.9180327868852459
+      }
+    },
+    {
+      "blocks": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "label": "4-24",
+      "n_heads": 672,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.84375,
+        "base_kept": 0.0,
+        "other": 0.15625,
+        "first_src": 0.90625,
+        "first_base": 0.0
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.03125,
+        "base_kept": 0.625,
+        "other": 0.34375,
+        "first_src": 0.03125,
+        "first_base": 0.625
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.03125,
+        "donor": 0.890625,
+        "base_kept": 0.03125,
+        "first_own": 0.03125,
+        "first_donor": 0.9344262295081968
+      }
+    },
+    {
+      "blocks": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "label": "4-31",
+      "n_heads": 896,
+      "suff": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.890625,
+        "base_kept": 0.0,
+        "other": 0.109375,
+        "first_src": 0.953125,
+        "first_base": 0.0
+      },
+      "nec": {
+        "n": 64,
+        "n_first": 64,
+        "cause": 0.015625,
+        "base_kept": 0.703125,
+        "other": 0.28125,
+        "first_src": 0.015625,
+        "first_base": 0.75
+      },
+      "shuffled": {
+        "n": 64,
+        "n_first": 64,
+        "own": 0.03125,
+        "donor": 0.875,
+        "base_kept": 0.03125,
+        "first_own": 0.03125,
+        "first_donor": 0.9344262295081968
+      }
+    }
+  ],
+  "full_reference_identity_ok": true,
+  "entity": "flags",
+  "attribute": "capital",
+  "patch_layer": 4,
+  "scoring": "token",
+  "max_new_tokens": 5,
+  "positions": "full_image",
+  "n_rows": 64,
+  "seed": 0,
+  "split": "test",
+  "n_layers": 32,
+  "n_heads": 32
+}

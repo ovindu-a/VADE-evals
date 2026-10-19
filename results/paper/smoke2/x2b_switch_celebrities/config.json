@@ -1,0 +1,313 @@
+{
+  "model_id": "Qwen/Qwen2.5-VL-7B-Instruct",
+  "vade_root": "/workspace/VADE",
+  "entity": "celebrities",
+  "countries": null,
+  "n_countries": 2,
+  "attributes": [
+    "nationality",
+    "occupation",
+    "birth_year",
+    "native_language"
+  ],
+  "layers": [
+    8,
+    16,
+    24,
+    28
+  ],
+  "sites": [
+    "residual"
+  ],
+  "scopes": [
+    "earlier_text",
+    "last_token"
+  ],
+  "block_spans": [],
+  "attention_spans": [],
+  "attention_sets": [],
+  "modes": [
+    "prefill"
+  ],
+  "controls": [
+    "self",
+    "paraphrase"
+  ],
+  "seed": 0,
+  "device": "cuda:0",
+  "max_new_tokens": 12,
+  "execution": "cached",
+  "batch_size": 64,
+  "attn_impl": "sdpa",
+  "no_share_prefix": false,
+  "verify_cached": false,
+  "baselines_only": false,
+  "golds": "own_answer",
+  "rows": [
+    {
+      "row_index": 0,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "argentina",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 1,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "argentina",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 2,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "argentina",
+      "source_label": "spanish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 3,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "athlete",
+      "source_label": "argentina",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 4,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "athlete",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 5,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "athlete",
+      "source_label": "spanish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 6,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1987",
+      "source_label": "argentina",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 7,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1987",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 8,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1987",
+      "source_label": "spanish",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 9,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "spanish",
+      "source_label": "argentina",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 10,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "spanish",
+      "source_label": "athlete",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 11,
+      "base": "LIONEL_MESSI",
+      "source": "LIONEL_MESSI",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "spanish",
+      "source_label": "1987",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 12,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "nationality",
+      "donor_attribute": "occupation",
+      "base_label": "india",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 13,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "nationality",
+      "donor_attribute": "birth_year",
+      "base_label": "india",
+      "source_label": "1869",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 14,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "nationality",
+      "donor_attribute": "native_language",
+      "base_label": "india",
+      "source_label": "gujarati",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 15,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "occupation",
+      "donor_attribute": "nationality",
+      "base_label": "politician",
+      "source_label": "india",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 16,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "occupation",
+      "donor_attribute": "birth_year",
+      "base_label": "politician",
+      "source_label": "1869",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 17,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "occupation",
+      "donor_attribute": "native_language",
+      "base_label": "politician",
+      "source_label": "gujarati",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 18,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "nationality",
+      "base_label": "1869",
+      "source_label": "india",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 19,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "occupation",
+      "base_label": "1869",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 20,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "birth_year",
+      "donor_attribute": "native_language",
+      "base_label": "1869",
+      "source_label": "gujarati",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 21,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "native_language",
+      "donor_attribute": "nationality",
+      "base_label": "gujarati",
+      "source_label": "india",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 22,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "native_language",
+      "donor_attribute": "occupation",
+      "base_label": "gujarati",
+      "source_label": "politician",
+      "template_id": "controlled_report_v1"
+    },
+    {
+      "row_index": 23,
+      "base": "MAHATMA_GANDHI",
+      "source": "MAHATMA_GANDHI",
+      "base_attribute": "native_language",
+      "donor_attribute": "birth_year",
+      "base_label": "gujarati",
+      "source_label": "1869",
+      "template_id": "controlled_report_v1"
+    }
+  ],
+  "prompts": {
+    "nationality": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the country of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the country of this person."
+    ],
+    "occupation": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the profession of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the profession of this person."
+    ],
+    "birth_year": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the year of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the year of this person."
+    ],
+    "native_language": [
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Report the language of this person.",
+      "For the person shown, country means the country they are from, in its short common form; profession means exactly one of: actor, musician, athlete, politician, film director, scientist, businessperson, writer, comedian, television presenter; year means the year they were born, digits only; language means their native language. Give only the requested value. Return the language of this person."
+    ]
+  },
+  "prefill": "Answer:",
+  "ground_truth_sha256": "43bb0dbadd343fbdc5b1e7786ecc537588b6077c3f1f26c338421b165fe2d659",
+  "image_sha256": {
+    "LIONEL_MESSI": "574377d62e51982bebe889c99c4c2cb9224c94a6bfc913499df896cf41294ec3",
+    "MAHATMA_GANDHI": "6f6a9ea6bfe4df52d2105a91e8f56f100e7f90e80daaff82d076ec6fad7f8014"
+  },
+  "implementation_sha256": "9541e871cb02437c3493226702654c1e249a3191e03db6bba8f119413ed9858a"
+}

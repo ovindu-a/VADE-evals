@@ -1,0 +1,76 @@
+{
+  "heads": "20.0,21.1",
+  "freeze_steps": "all",
+  "gold": "own",
+  "model_id": "HuggingFaceM4/Idefics3-8B-Llama3",
+  "freeze_values": [
+    "base"
+  ],
+  "self_checks": {
+    "readback_worst": 0.0,
+    "identity": "bit-exact",
+    "liveness_max_logit_delta": 9.96875
+  },
+  "arms": [
+    "clean",
+    "heads",
+    "heads+mlp[22-31]",
+    "heads+mlp[31]"
+  ],
+  "by_attribute": {
+    "capital": {
+      "clean": {
+        "n": 4,
+        "n_distinct_first": 4,
+        "src_first": 0.0,
+        "base_first": 0.75,
+        "src_text": 0.0,
+        "base_text": 0.75,
+        "other_text": 0.25,
+        "n_own_src_div": 4,
+        "own_src_div": 0.0,
+        "n_own_base_div": 4,
+        "own_base_div": 1.0
+      },
+      "heads": {
+        "n": 4,
+        "n_distinct_first": 4,
+        "src_first": 0.0,
+        "base_first": 0.75,
+        "src_text": 0.0,
+        "base_text": 0.75,
+        "other_text": 0.25,
+        "n_own_src_div": 4,
+        "own_src_div": 0.0,
+        "n_own_base_div": 4,
+        "own_base_div": 1.0
+      },
+      "heads+mlp[22-31]": {
+        "n": 4,
+        "n_distinct_first": 4,
+        "src_first": 0.0,
+        "base_first": 0.75,
+        "src_text": 0.0,
+        "base_text": 0.75,
+        "other_text": 0.25,
+        "n_own_src_div": 4,
+        "own_src_div": 0.0,
+        "n_own_base_div": 4,
+        "own_base_div": 1.0
+      },
+      "heads+mlp[31]": {
+        "n": 4,
+        "n_distinct_first": 4,
+        "src_first": 0.0,
+        "base_first": 0.75,
+        "src_text": 0.0,
+        "base_text": 0.75,
+        "other_text": 0.25,
+        "n_own_src_div": 4,
+        "own_src_div": 0.0,
+        "n_own_base_div": 4,
+        "own_base_div": 1.0
+      }
+    }
+  }
+}
