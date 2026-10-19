@@ -51,6 +51,13 @@ full-match rate is capped by answer length rather than by the intervention.
 Both are printed; the first-token column is the one that compares across
 attributes.
 
+OTHER ENTITIES (--entity brands|celebrities; X2b). Their own controlled prompts
+(attribute_switch_sweep.ENTITY_SPECS). Labels are stored lowercase, so each row's golds are
+the model's OWN clean answers to its base and donor questions (generated once up front,
+--own_max_new_tokens long so VADE's matcher sees the whole answer), and rows where the
+matcher rejects either answer are dropped before phase 0 -- which therefore reads ~100% by
+construction. Read --patch_layer/--blocks off that entity's own attribute-switch sweep.
+
 Usage:
     python methods/attr_head_trace.py --entity flags --patch_layer 15 \
         --blocks 15 16 17 18 19 20 21 22 --n_countries 24
@@ -72,6 +79,10 @@ from PIL import Image  # noqa: E402
 
 from methods.adapters.registry import get_adapter  # noqa: E402
 from methods.attribute_switch_sweep import ATTRIBUTES, PREFILL, alignment, question  # noqa: E402
+from methods.attribute_switch_sweep import (ALL_ATTRIBUTES, ENTITIES, entity_attributes,  # noqa: E402
+                                            load_entity_items, own_correct, own_gold, stop_ids,
+                                            uses_own_golds)
+from methods.common.entities import concat_extra  # noqa: E402
 from methods.common.hooks import make_cache_aware_patch_hook  # noqa: E402
 from methods.common.run_logging import tee_to_log  # noqa: E402
 from methods.common.sites import RESIDUAL_SITE  # noqa: E402
@@ -98,7 +109,7 @@ def build_switch_batch(rows, entity_dir, items, adapter, model, processor, quest
     """
     image_id = adapter.image_token_id(model, processor)
     special = processor.tokenizer.all_special_ids
-    base_ids, donor_ids, pixels, grids, earlier = [], [], [], [], None
+    base_ids, donor_ids, extras, earlier = [], [], [], None
     base_gold, source_gold = [], []
     for row in rows:
         with Image.open(entity_dir / items[row["base"]]["image"]) as img:
@@ -113,10 +124,11 @@ def build_switch_batch(rows, entity_dir, items, adapter, model, processor, quest
             raise ValueError("Rows disagree on the text positions; batch only prompts of one shape")
         base_ids.append(b)
         donor_ids.append(d)
-        pixels.append(base["extra"]["pixel_values"])
-        grids.append(base["extra"]["image_grid_thw"])
-        base_gold.append(derive_gold_token_ids(processor.tokenizer, PREFILL, row["base_label"]))
-        source_gold.append(derive_gold_token_ids(processor.tokenizer, PREFILL, row["source_label"]))
+        extras.append(base["extra"])   # model-specific (Qwen: pixel_values + image_grid_thw)
+        # Non-flags rows carry own-answer golds (own_answer_rows); flags derives them from labels.
+        for role, out in (("base", base_gold), ("source", source_gold)):
+            out.append(row[f"{role}_gold_ids"] if f"{role}_gold_ids" in row else
+                       derive_gold_token_ids(processor.tokenizer, PREFILL, row[f"{role}_label"]))
     if len({x.shape[1] for x in base_ids}) != 1:
         raise ValueError("Prompts in a batch must share a token length; split the batch by shape")
     ids = torch.cat(base_ids)
@@ -138,7 +150,7 @@ def build_switch_batch(rows, entity_dir, items, adapter, model, processor, quest
         "rows": rows,
         "base_input_ids": ids, "source_input_ids": donor,
         "attention_mask": torch.ones_like(ids),
-        "base_extra": {"pixel_values": torch.cat(pixels), "image_grid_thw": torch.cat(grids)},
+        "base_extra": concat_extra(extras),
         "positions": torch.tensor([cols] * B, dtype=torch.long),
         "last_positions": torch.full((B, 1), ids.shape[1] - 1, dtype=torch.long),
         "all_text_positions": earlier, "first_divergence": first_diff,
@@ -201,11 +213,44 @@ def sample_rows(entity_dir, items, attributes, countries, n_countries, seed, don
         for base, donor in itertools.permutations(attributes, 2):
             if donor_attributes is not None and donor not in donor_attributes:
                 continue
+            if base not in item or donor not in item:
+                continue                         # brands: AIRBUS has no industry label
             rows.append({"row_index": len(rows), "base": item_id, "source": item_id,
                          "base_attribute": base, "donor_attribute": donor,
                          "base_label": item[base], "source_label": item[donor],
                          "template_id": "controlled_report_v1"})
     return chosen, rows
+
+
+def own_answer_rows(rows, entity_dir, items, adapter, model, processor, batch_size, max_new_tokens):
+    """Non-flags: -> (rows with `base_gold_ids`/`source_gold_ids` = the model's own clean answers
+    under the controlled prompts, dropped count). A row is kept only when VADE's matcher accepts
+    BOTH answers against the stored labels -- the population the flags run conditions on."""
+    tok = processor.tokenizer
+    stop = stop_ids(model, tok)
+    pad = tok.pad_token_id or tok.eos_token_id
+    need = sorted({(r["base"], a) for r in rows for a in (r["base_attribute"], r["donor_attribute"])})
+    answers = {}
+    for i in range(0, len(need), batch_size):
+        chunk = need[i:i + batch_size]
+        built = []
+        for item_id, attribute in chunk:
+            with Image.open(entity_dir / items[item_id]["image"]) as img:
+                built.append(adapter.build_inputs(processor, img.convert("RGB"), question(attribute), PREFILL))
+        if len({b["input_ids"].shape[0] for b in built}) != 1:
+            raise ValueError("Controlled prompts must share one token length")
+        gen = generate_unhooked(model, torch.stack([b["input_ids"] for b in built]),
+                                torch.ones(len(built), built[0]["input_ids"].shape[0], dtype=torch.long),
+                                {k: torch.cat([b["extra"][k] for b in built]) for k in built[0]["extra"]},
+                                pad, max_new_tokens)
+        for key, g in zip(chunk, gen.tolist()):
+            answers[key] = own_gold(g, stop)
+    kept = []
+    for r in rows:
+        b, s = answers[(r["base"], r["base_attribute"])], answers[(r["base"], r["donor_attribute"])]
+        if own_correct(tok, b, r["base_label"]) and own_correct(tok, s, r["source_label"]):
+            kept.append({**r, "base_gold_ids": b, "source_gold_ids": s})
+    return kept, len(rows) - len(kept)
 
 
 def order_from_trace(table, prior):
@@ -230,8 +275,9 @@ def order_from_trace(table, prior):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--entity", default="flags")
-    ap.add_argument("--attributes", nargs="+", choices=ATTRIBUTES, default=ATTRIBUTES)
+    ap.add_argument("--entity", default="flags", choices=ENTITIES)
+    ap.add_argument("--attributes", nargs="+", choices=ALL_ATTRIBUTES, default=None,
+                    help="Default: every attribute of --entity.")
     ap.add_argument("--patch_layer", type=int, default=15,
                     help="Layer to patch the QUESTION-token residual at (output of block L-1). Must sit "
                          "BELOW the handoff, where the sweep's question-residual column is still ~100%%; "
@@ -249,7 +295,7 @@ def main(argv=None):
                          "replaces this run's ranking for phases 2-4, while every installed value is "
                          "still this run's own capture -- select heads on one item set, score them on "
                          "another. The two traces must cover the same (block, head) table.")
-    ap.add_argument("--donor_attributes", nargs="+", choices=ATTRIBUTES, default=None,
+    ap.add_argument("--donor_attributes", nargs="+", choices=ALL_ATTRIBUTES, default=None,
                     help="Keep only rows whose DONOR attribute is listed (bases stay all the others), "
                          "so the phases run per donor attribute. Default: every directed pair.")
     ap.add_argument("--knockout_ks", type=int, nargs="+", default=[1, 2, 4, 8, 16])
@@ -272,18 +318,17 @@ def main(argv=None):
     ap.add_argument("--max_new_tokens", type=int, default=MAX_ANSWER_TOKENS + 2)
     ap.add_argument("--top_n", type=int, default=20)
     ap.add_argument("--device", default="cuda:0")
+    ap.add_argument("--own_max_new_tokens", type=int, default=12,
+                    help="Non-flags: length of the own-answer generation the golds and the matcher read.")
     ap.add_argument("--out", default=None)
     ap.add_argument("--dry_run", action="store_true", help="Validate rows/images without torch or a model.")
     args = ap.parse_args(argv)
+    args.attributes = args.attributes or entity_attributes(args.entity)
+    if not set(args.attributes) <= set(entity_attributes(args.entity)):
+        ap.error(f"{args.entity} attributes are {entity_attributes(args.entity)}")
 
     from pathlib import Path
-    entity_dir = Path(args.vade_root) / "data" / args.entity
-    raw = (entity_dir / "ground_truth.json").read_bytes()
-    gt = json.loads(raw)
-    key = ENTITY_KEYS.get(args.entity)
-    if key not in gt:
-        key = next(k for k, v in gt.items() if isinstance(v, dict) and k != "coverage")
-    items = gt[key]
+    entity_dir, items, raw = load_entity_items(args.vade_root, args.entity)
     if len(set(args.attributes)) < 2:
         ap.error("Need at least two attributes to switch between")
     blocks = sorted(set(args.blocks))
@@ -315,6 +360,8 @@ def main(argv=None):
         tag += "_donor" + "-".join(args.donor_attributes)
     if rank_from_sha is not None:
         tag += f"_rankfrom{rank_from_sha[:8]}"
+    if args.model_id != ap.get_default("model_id"):      # the log is opened in APPEND mode
+        tag += f"__{args.model_id.split('/')[-1]}"
     out_path = args.out or str(out_dir / f"{tag}.json")
     print(f"[attr_head_trace] entity={args.entity} attributes={args.attributes} "
           f"patch_layer={args.patch_layer} blocks={span} positions={args.question_positions} "
@@ -344,6 +391,12 @@ def main(argv=None):
         assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
         assert 1 <= args.patch_layer <= n_layers, f"patch_layer must be in 1..{n_layers}"
         pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
+        if uses_own_golds(args.entity):
+            rows, n_wrong = own_answer_rows(rows, entity_dir, items, adapter, model, processor,
+                                            args.batch_size, args.own_max_new_tokens)
+            print(f"  own-answer golds: kept {len(rows)} rows, dropped {n_wrong} the model answers wrongly "
+                  f"(VADE matcher)")
+            assert rows, "the model is wrong on every row; nothing to trace"
 
         batches = []
         for i in range(0, len(rows), args.batch_size):
@@ -473,6 +526,8 @@ def main(argv=None):
                             "donor_first": donor_first / seen, "donor_full": donor_full / seen},
                   "phase1": table, "phase1_ranked": [(r["block"], r["head"]) for r in ranked[:64]],
                   "ground_truth_sha256": hashlib.sha256(raw).hexdigest()}
+        if uses_own_golds(args.entity):
+            report.update(golds="own_answer", rows_dropped_model_wrong=n_wrong)
         if args.donor_attributes is not None:
             report["donor_attributes"] = args.donor_attributes
         if args.rank_from is not None:

@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 # Paper experiments (PAPER_RUNBOOK.md X-numbers), one log per step.
 #
-#   bash scripts/run_paper.sh smoke                  # every step at tiny size, plus the head-list check
-#   GPU=a100 bash scripts/run_paper.sh lane1         # the three parallel lanes (PAPER_RUNBOOK.md section 2)
-#   GPU=a100 bash scripts/run_paper.sh lane2
-#   GPU=a100 bash scripts/run_paper.sh lane3
-#   bash scripts/run_paper.sh x2_score               # CPU only, after every lane has finished
+#   Batch 2 (X2b, X3, X2 cross-question rerun):
+#   bash scripts/run_paper.sh smoke2                 # every batch-2 step at tiny size (X3's downloads the model)
+#   GPU=a100 bash scripts/run_paper.sh b2_lane1      # X3: Idefics3 (scripts/run_x3_idefics3.sh all)
+#   GPU=a100 bash scripts/run_paper.sh b2_lane2      # X2b brands, then the brands cross rerun
+#   GPU=a100 bash scripts/run_paper.sh b2_lane3      # X2b celebrities, then the celebrities cross rerun
+#
+#   Batch 1 (X1, X2; ran 2026-10-19, RUN_REPORT_PAPER.md):
+#   bash scripts/run_paper.sh smoke                  # every batch-1 step at tiny size, plus the head-list check
+#   GPU=a100 bash scripts/run_paper.sh b1_lane1      # (was lane1; lane1..3 still work)
+#   bash scripts/run_paper.sh x2_score               # CPU only, after the batch-1 lanes
 #   bash scripts/run_paper.sh x1 x2_cross_brands     # any steps by name
 #
 # Run inside tmux. PY overrides the interpreter (default: python). Logs: logs/paper/<step>_<stamp>.log
@@ -21,10 +26,10 @@ R=results/paper
 P=results/image_head_pipeline
 mkdir -p logs/paper "$R"
 
-BS_TEC= BS_SWAP= BS_CROSS= BS_SEV=
+BS_TEC= BS_SWAP= BS_CROSS= BS_SEV= BS_CC=
 if [ "${GPU:-}" = a100 ]; then
-  BS_TEC=64 BS_SWAP=64 BS_CROSS=64 BS_SEV=64
-  echo "GPU=a100 batch profile: tec=$BS_TEC swap=$BS_SWAP cross=$BS_CROSS severed=$BS_SEV"
+  BS_TEC=64 BS_SWAP=64 BS_CROSS=64 BS_SEV=64 BS_CC=64
+  echo "GPU=a100 batch profile: tec=$BS_TEC swap=$BS_SWAP cross=$BS_CROSS severed=$BS_SEV compose=$BS_CC"
 fi
 bs() { [ -n "$1" ] && echo "--batch_size $1"; return 0; }   # bs <value> -> flag or nothing
 
@@ -152,6 +157,100 @@ x2_score() {   # CPU only: every install arm, per attribute, against the same pr
   done
 }
 
+# ---------------------------------------------------------------- X2 rerun: cross-question, own golds
+# Batch 1's head_cross scored against stored lowercase labels (self cell read 81%) and used each
+# entity's top-8. This reruns it the way the flags result was made: common10, golds = the model's own
+# answers (--gold own), base question restricted to the entity facts a transfer can show up in, and a
+# larger n because two items sharing an answer (61/128 brands are US-headquartered) carry no signal.
+
+x2r_cross_brands() {
+  heads
+  local al
+  for al in matched step0; do
+    run x2r_cross_brands_c10_$al $PY methods/head_cross.py --entity brands --heads "$COMMON10" --gold own \
+        --q1_attributes hq_country --n_pairs 256 --seed 0 --align $al $(bs "$BS_CROSS") \
+        --out $R/x2r_cross_brands/common10_n256_own_$al.jsonl
+  done
+  run x2r_cross_brands_top8_matched $PY methods/head_cross.py --entity brands --heads "$BH" --gold own \
+      --q1_attributes hq_country --n_pairs 256 --seed 0 --align matched $(bs "$BS_CROSS") \
+      --out $R/x2r_cross_brands/top8_n256_own_matched.jsonl
+}
+
+x2r_cross_celeb() {
+  heads
+  local al
+  for al in matched step0; do
+    run x2r_cross_celeb_c10_$al $PY methods/head_cross.py --entity celebrities --heads "$COMMON10" --gold own \
+        --q1_attributes nationality native_language --n_pairs 128 --seed 0 --align $al $(bs "$BS_CROSS") \
+        --out $R/x2r_cross_celebrities/common10_n128_own_$al.jsonl
+  done
+  run x2r_cross_celeb_top8_matched $PY methods/head_cross.py --entity celebrities --heads "$CN" --gold own \
+      --q1_attributes nationality native_language --n_pairs 128 --seed 0 --align matched $(bs "$BS_CROSS") \
+      --out $R/x2r_cross_celebrities/top8_n128_own_matched.jsonl
+}
+
+# ---------------------------------------------------------------- X2b: routers, compose, text contrast
+# One entity per lane; each stage needs the previous one's output. The trace window comes from the
+# sweep by a fixed rule (attribute_switch_report.py --window, which reproduces flags' 15 / 15-22).
+
+x2b_entity() {  # x2b_entity <entity> <movers> <sweep items> <trace items>
+  local e=$1 mv=$2 ns=$3 nt=$4
+  run x2b_switch_$e $PY methods/attribute_switch_sweep.py --entity $e --n_countries $ns \
+      --sites residual attention --scopes earlier_text last_token --block_spans --attention_spans 3 \
+      --execution cached --batch_size 64 --out_dir $R/x2b_switch_$e
+  local PATCH="" BLOCKS=""
+  # --window raises when the sweep shows no handoff; that must not stop the lane (set -e), since the
+  # text contrast and the cross rerun do not depend on it.
+  if run x2b_switch_report_$e $PY methods/attribute_switch_report.py $R/x2b_switch_$e --window \
+      --json_out $R/x2b_switch_$e/report.json; then
+    eval "$(grep -h '^PATCH=' logs/paper/x2b_switch_report_${e}_${STAMP}.log | tail -n 1)"
+  fi
+  if [ -z "$PATCH" ]; then
+    echo "x2b $e: no trace window (self-check 2) -- skipping trace and compose; running the text contrast"
+  else
+    echo "x2b $e: PATCH=$PATCH BLOCKS=$BLOCKS"
+    # shellcheck disable=SC2086
+    run x2b_attr_trace_$e $PY methods/attr_head_trace.py --entity $e --patch_layer $PATCH --blocks $BLOCKS \
+        --n_countries $nt --out $R/x2b_attr_trace_$e.json
+    run x2b_compose_$e $PY methods/circuit_compose.py --entity $e --movers "$mv" \
+        --router_trace $R/x2b_attr_trace_$e.json --n_items 64 $(bs "$BS_CC") --out_dir $R/x2b_compose_$e
+  fi
+  run x2b_tec_$e $PY methods/text_entity_contrast.py --entity $e --movers "$mv" --n_pairs 128 --batch_size 48 \
+      --out_dir $R/x2b_tec_$e
+  run x2b_crossmodal_$e $PY methods/text_entity_contrast.py --entity $e --movers "$mv" --phases crossmodal \
+      --n_pairs 128 $(bs "$BS_TEC") --out_dir $R/x2b_crossmodal_$e
+}
+
+x2b_brands() { heads; x2b_entity brands "$BH" 24 128; }
+x2b_celeb() { heads; x2b_entity celebrities "$CN" 16 84; }
+
+x3() {  # X3 has its own launcher (logs logs/paper/x3_*); GPU passes through
+  bash scripts/run_x3_idefics3.sh all
+}
+
+smoke2() {
+  heads
+  local S=$R/smoke2 e mv
+  for e in brands celebrities; do
+    if [ $e = brands ]; then mv=$BH; else mv=$CN; fi
+    run smoke_x2b_switch_$e $PY methods/attribute_switch_sweep.py --entity $e --n_countries 2 --layers 8 16 24 28 \
+        --sites residual --scopes earlier_text last_token --block_spans --execution cached --batch_size 64 \
+        --out_dir $S/x2b_switch_$e
+    run smoke_x2b_report_$e $PY methods/attribute_switch_report.py $S/x2b_switch_$e
+    run smoke_x2b_trace_$e $PY methods/attr_head_trace.py --entity $e --patch_layer 15 --blocks 15 16 \
+        --n_countries 2 --knockout_ks 1 2 --n_random 2 --control_k 2 --out $S/x2b_trace_$e.json
+    run smoke_x2b_compose_$e $PY methods/circuit_compose.py --entity $e --movers "$mv" \
+        --router_trace $S/x2b_trace_$e.json --router_k 4 --n_items 2 --out_dir $S/x2b_compose_$e
+    run smoke_x2b_tec_$e $PY methods/text_entity_contrast.py --entity $e --movers "$mv" --n_pairs 6 \
+        --layers 0 8 14 18 20 22 24 26 --out_dir $S/x2b_tec_$e
+    run smoke_x2b_crossmodal_$e $PY methods/text_entity_contrast.py --entity $e --movers "$mv" \
+        --phases crossmodal --n_pairs 8 --out_dir $S/x2b_crossmodal_$e
+  done
+  run smoke_x2r_cross $PY methods/head_cross.py --entity brands --heads "$COMMON10" --gold own \
+      --q1_attributes hq_country --n_pairs 4 --seed 0 --out $S/x2r_cross/cross_n4_own.jsonl
+  bash scripts/run_x3_idefics3.sh smoke
+}
+
 # ---------------------------------------------------------------- smoke
 
 smoke() {
@@ -167,14 +266,19 @@ smoke() {
       --out_dir $S/x2_severed
 }
 
-[ $# -eq 0 ] && { sed -n 2,13p "$0"; exit 1; }
+[ $# -eq 0 ] && { sed -n 2,19p "$0"; exit 1; }
 for step in "$@"; do
   case $step in
-    # Balanced by generation count (~13-14k each); see PAPER_RUNBOOK.md section 2.
-    lane1) x2_swap_celeb_a ;;
-    lane2) x2_swap_brands; x2_cross_brands; x2_severed_brands ;;
-    lane3) x2_swap_celeb_b; x2_cross_celeb; x2_severed_celeb; x1 ;;
-    smoke|x1|x2_swap_brands|x2_swap_celeb_a|x2_swap_celeb_b|x2_cross_brands|x2_cross_celeb|x2_severed_brands|x2_severed_celeb|x2_score) $step ;;
+    # Batch 2 (PAPER_RUNBOOK.md section 2): one model chain per lane.
+    b2_lane1) x3 ;;
+    b2_lane2) x2b_brands; x2r_cross_brands ;;
+    b2_lane3) x2b_celeb; x2r_cross_celeb ;;
+    # Batch 1, balanced by generation count (~13-14k each). lane1..3 kept as aliases.
+    b1_lane1|lane1) x2_swap_celeb_a ;;
+    b1_lane2|lane2) x2_swap_brands; x2_cross_brands; x2_severed_brands ;;
+    b1_lane3|lane3) x2_swap_celeb_b; x2_cross_celeb; x2_severed_celeb; x1 ;;
+    smoke|smoke2|x1|x2_swap_brands|x2_swap_celeb_a|x2_swap_celeb_b|x2_cross_brands|x2_cross_celeb|x2_severed_brands|x2_severed_celeb|x2_score) $step ;;
+    x2r_cross_brands|x2r_cross_celeb|x2b_brands|x2b_celeb|x3) $step ;;
     *) echo "unknown step: $step"; exit 1 ;;
   esac
 done

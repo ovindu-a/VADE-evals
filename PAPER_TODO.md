@@ -24,16 +24,55 @@ answer position, not enriched at the subject.
   - Chosen: **Idefics3-8B-Llama3** (Llama-3.1 LM; every architecture assumption holds).
     Llama-3.2-Vision is ruled out: its images enter by cross-attention, so there are no image
     positions. Gemma-3 is second choice (head_dim ≠ hidden/heads, post-sublayer norms).
-  - **X3** in PAPER_RUNBOOK.md §5: needs an adapter plus generic prompt-builder fixes before it
-    can be queued.
+  - [x] ~~Adapter + generic non-Qwen fixes~~ (2026-10-19) `methods/adapters/idefics3.py`;
+    `head_swap_vade` / `attr_head_trace` / `head_vocab_projection` build prompts through the adapter
+    (Qwen kept on its old path, so its inputs are unchanged); `--execution cached` is refused for
+    non-Qwen models; `methods/vade_accuracy_sweep.py --processor_kwargs` (runs VADE's sweep unmodified). `tests/test_idefics3_adapter.py`
+    (26 tests) passed off-pod on CPU torch 2.13 / transformers 5.16 with the real tokenizer, but
+    without the 8B weights.
+  - [ ] **X3** is queued in batch 2, lane 1 (PAPER_RUNBOOK.md §3, `scripts/run_x3_idefics3.sh`): accuracy gate,
+    prune, pipeline on flags + brands, within-model overlap, relative depth, routers (flags) and
+    `head_severed`. Every window and head list comes from Idefics3's own runs via
+    `methods/circuit_windows.py`.
+  - [ ] **[P1]** Brands routers on Idefics3. This is now possible, since X2b's per-entity prompts
+    have landed, but it is not in batch 2: X3's `routers` step is flags-only.
+  - [ ] **[P2]** VADE `object_location.json` override for Idefics3's 13 × 13 grid. Only needed for
+    object-set experiments (E11-style ring / side / seq positions); X3 uses `full_image` and
+    `last_token` only.
 - [ ] **[P0]** Run the full story on brands and celebrities, not just head localization:
   cross-question mover patching, router tracing, MLP 23-26 freezing (`head_severed --gold own`).
   - Already done: head localization, `head_severed` on hq_country / nationality /
     native_language, `head_vocab_projection`.
-  - **X2** (queued, runs today): continuous mover install, cross-question patching, MLP
-    freezing on founded_year / industry / occupation / birth_year.
-  - **X2b** (PAPER_RUNBOOK.md §5): routers, composition and text contrast. Needs per-entity
-    controlled prompts and own-answer golds first.
+  - [x] ~~**X2** (2026-10-19): continuous mover install, cross-question patching, MLP freezing
+    on founded_year / industry / occupation / birth_year~~ (RUN_REPORT_PAPER.md §4):
+    - **Install:** flags' common10 transfers the entity facts at 96.0% (brands hq_country) and
+      89-91% (celebrities nationality / native_language), above each entity's own top-8.
+      Random heads 0-2%.
+    - **Years:** last-token MLPs 22-27 write the answer. Frozen @base kills the install;
+      @other lands on the third item's year 97-98%. The lookup replicates.
+    - **Category attributes** (industry, occupation) barely move with the movers (0-14%), like
+      the animals traits in P14. Occupation's `full_image` at L19 is also only 5.5%, so its
+      information may leave the image earlier.
+  - [ ] **[P0] X2r** (queued in batch 2, PAPER_RUNBOOK.md §3): the cross-question test on these
+    entities is WEAKER than on flags and not yet trustworthy. A by-hand own-answer rescore of
+    X2's rows on the entity facts gave same question 39-61% and another question 6-38%, against
+    flags' 81% / 65%. Three confounds:
+    - it used each entity's top-8, not common10 (which installs much better);
+    - stored-label scoring;
+    - n of only 18-31 per cell.
+
+    X2r reruns `head_cross --gold own --q1_attributes <entity facts>` with common10, at n=256
+    (brands) and n=128 (celebrities), matched + step0, plus the top-8 for comparison.
+  - [ ] **X2b** (queued in batch 2, PAPER_RUNBOOK.md §3): routers (attribute-switch sweep →
+    `attr_head_trace`), composition and text contrast (+ crossmodal). Code landed 2026-10-19:
+    - per-entity controlled prompts (`attribute_switch_sweep.ENTITY_SPECS`);
+    - own-answer golds;
+    - `--entity` on every script;
+    - `head_cross` skips AIRBUS/industry;
+    - offline tests in `tests/test_x2b_entities.py`.
+
+    The trace window comes from the sweep by a fixed rule (`attribute_switch_report.py --window`,
+    which reproduces flags' 15 / 15-22).
 - [ ] **[P1]** Relative-depth (~0.8) claim: Qwen2.5-VL-32B stage 1 (P34, F1). Otherwise weaken the
   claim to "late, block window per model".
 - [ ] **[P1]** 3B two-step handoff: separate windows plus a continuous install for calling_code
@@ -64,15 +103,23 @@ answer position, not enriched at the subject.
 
 - [x] ~~Early entity-position freeze for text vs image (P22)~~ Text depends on early entity MLPs
   (0.9%), images much less (32.3%). `results/tier3/text_Le4_freeze/`
-- [ ] **[P0]** Image-vs-text convergence: at which layer do image-run activations at the answer
-  position (and at the entity) become similar to the text-named run? CKA or cosine per layer, plus
-  cross-patching text→image runs per layer. This answers Nikankin et al. 2025 directly.
-  - Implemented as `text_entity_contrast.py --phases crossmodal` (2026-10-19, not yet run;
-    queued as **X1** in PAPER_RUNBOOK.md):
-    cross-modal retrieval per layer / per mover head (centered and held-out ridge), plus
-    cross-condition mover installs (text-named B's movers into image-of-A and the reverse) with
-    same-condition, norm-matched, random-10 and `self` controls. Offline tests in
-    `tests/test_crossmodal.py` have not been run (no local torch).
+- [x] ~~**[P0]** Image-vs-text convergence (X1, `text_entity_contrast.py --phases crossmodal`)~~
+  (RUN_REPORT_PAPER.md §3, 2026-10-19):
+  - **Causal:** the movers' payload is modality-invariant. Text-run mover values installed into
+    image runs transfer 91.7%, the same as image→image (91.7%); image→text is 88.8% vs 90.9%.
+    The self donor keeps the base 99-100%, random heads 0%, and norm-matching changes nothing.
+  - **Representation:** at the last token the image run matches the text run of the same
+    country from layer 20 (centered top-1 32% at L19 → 92% at L20 → 100% from L23). Each mover's
+    output alone identifies the country across modalities at 92-100%.
+- [ ] **[P1]** X1 follow-ups:
+  - **(a)** The answer position is cross-modally identifiable at L20-21, before the movers'
+    blocks write, yet a last-token swap there does not transfer (ceiling_sweep). Report it as
+    another decodable-not-causal case (G3), not as "convergence at L20".
+  - **(b)** The entity site reads 80-99% centered from L1 (image tokens vs the name token). That
+    is surprising: run a permutation null and check whether the vision encoder's output already
+    lies in name-token space (consistent with D1/E1).
+  - **(c)** Ridge (held-out, 42 candidates) is well below centered cosine at the entity site
+    (20-60%). Find out why before quoting either number.
 - [ ] **[P1]** Same-heads claim with a text-run head trace on brands/celebrities, not just flags.
 
 ## 3. Category vs entity attributes

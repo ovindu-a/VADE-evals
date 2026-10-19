@@ -595,6 +595,29 @@ items x attributes grid of clean activations as memmapped .npy;
 `attr_directions.py` reads it with no model at all. **Do not fork head_trace's
 phases** -- add a patch builder, as attr_head_trace does.
 
+**Other entities (X2b).** `attribute_switch_sweep.ENTITY_SPECS` gives brands and celebrities
+their own controlled prompts (one-token field words, `Answer:` prefill; attribute names are
+disjoint across entities, so `question(attribute)` infers the entity and no caller changed).
+`--entity` now exists on attribute_switch_sweep, attr_head_trace, attr_capture,
+circuit_compose and text_entity_contrast; flags resolves to exactly its old defaults and its
+configs omit `entity`. Non-flags golds are the model's OWN clean answers, kept where VADE's
+matcher accepts them (`own_gold`/`own_correct`; records carry `own_correct`, which
+summarize_switch and attribute_switch_report use for eligibility). circuit_compose and
+text_entity_contrast refuse to run a non-flags entity without its own `--movers`
+(/`--router_trace`). `attribute_switch_report.py --window` picks attr_head_trace's
+patch_layer/blocks from a sweep by a fixed rule that reproduces flags' 15 / 15-22. Brand
+names ending in '.' ('Apple Inc.') get no second period in the text prompt: '..' is one
+token. Tests: `tests/test_x2b_entities.py`.
+
+`head_cross.py --gold own` is the same idea for the cross-question test. Golds are the model's
+own unhooked answers per (item, question), kept where VADE's matcher accepts them. A patched
+generation is classified by normalized exact match, and rows needing an invalid answer are
+`excluded`. The per-base-question CONTENT SHIFT table counts INFORMATIVE rows only, i.e. those
+where base and donor answer Q1 differently. `--q1_attributes` restricts the base question;
+the donor still asks everything. The default `--gold label` leaves flags runs unchanged.
+Batch 1's brands/celebrities cross runs used `label`, and their self cell read 81%
+(RUN_REPORT_PAPER.md §4).
+
 The cached sweep engine now shares a prompt-prefix KV cache across every arm of a
 row (the prompt variants agree on 205 of 219 tokens, image included) and defaults
 to `--attn_impl sdpa`; both change run identity, so earlier partial runs need a
@@ -787,3 +810,34 @@ reaches dbm's `mask`); `head_severed --freeze_mlp_span` takes several comma-list
 holds the CPU-only re-analyses (`--out_dir` for new inputs, never the committed report).
 **DBM's anomaly (Z1) is not the 518cf31 cache bug** -- DBM never shares a cache across position
 specs; P1 decides it.
+
+## X3: Idefics3-8B-Llama3 (a Llama-3.1 LM), scripts/run_x3_idefics3.sh
+
+`methods/adapters/idefics3.py` (registered for any `*idefics3*` id): text stack
+`model.model.text_model.{layers,norm}`, `model.lm_head` untied and bias-free, 32x32 heads of 128.
+One 364px tile (`do_image_splitting=False`, also set on the processor at load) -> 169 tokens in
+a 13x13 grid wrapped as `<fake><global-img><image>x169<fake>`; `<global-img>` is NOT a vocab
+token (4 text tokens), so `_expand` calls the processor's own `replace_image_token`.
+`shares_object_grid = False`. **BOS trap:** the chat template emits `<|begin_of_text|>` and the
+default `processor(text=...)` call adds another; every tokenizer call here passes
+`add_special_tokens=False` and `_check_bos` asserts exactly one. `extra` = `pixel_values`
+[B,1,3,364,364] + bool `pixel_attention_mask`.
+
+Generic non-Qwen routing: `head_swap_vade.prompt_inputs` / `build_batch(..., adapter=)` keep Qwen
+on the old `apply_chat_template` path (bit-identical) and use `adapter.build_inputs` otherwise;
+`attr_head_trace` concatenates `extra` generically; `ModelAdapter.assistant_start_col` (ChatML
+default in base.py, overridden for Idefics3) replaces head_vocab_projection's `<|im_start|>`;
+`attribute_switch_sweep --execution cached` refuses non-Qwen models. `adapters/qwen2_5_vl.py` is
+deliberately untouched: attribute_switch_sweep hashes it into its run identity.
+`attr_head_trace`'s default log/JSON tag gains `__<model slug>` for non-default models (its log
+is opened in append mode, and the tag otherwise ignores the model).
+
+`methods/circuit_windows.py` (CPU) derives a new model's `attr_head_trace` window
+(`router --switch_dir`), `head_severed` heads + freeze spans (`severed --trace`) and a
+relative-depth table (`depth --root R:N`). Its rules reproduce Qwen's hand-picked
+15 / 15-22 and 22-27 / 23-26 / 24-27 from Qwen's own numbers (tested); never pass Qwen's
+blocks to another model. `methods/vade_accuracy_sweep.py --processor_kwargs '{"do_image_splitting":
+false}'` makes pruning see the same single tile. It runs VADE's `models/run_accuracy_sweep.py`
+UNMODIFIED: it loads the module by path, swaps its `run_batch` and calls its `main()`. VADE's code
+is never edited from this repo (tests: `tests/test_vade_accuracy_sweep.py`). Offline tests: `tests/test_idefics3_adapter.py`
+(tiny random Idefics3 + the real tokenizer when cached).

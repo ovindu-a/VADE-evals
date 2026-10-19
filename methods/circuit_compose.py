@@ -52,6 +52,14 @@ Usage
     python methods/circuit_compose.py --dry_run
     python methods/circuit_compose.py --n_items 4 --out_dir results/circuit_compose/smoke
     python methods/circuit_compose.py                        # 32 countries x 12 attribute pairs
+    python methods/circuit_compose.py --entity brands --movers <traced> --router_trace <brands trace>
+
+OTHER ENTITIES (--entity brands|celebrities). Their own controlled prompts
+(attribute_switch_sweep.ENTITY_SPECS). Scoring is already VADE's casefold matcher, so stored
+lowercase labels need no own-answer golds here. --movers and --router_trace (or --routers)
+have no default off flags: the flags heads are not a claim about another entity. Rows whose
+four golds include an item with no label for that attribute (brands: AIRBUS/industry) are
+skipped.
 """
 import argparse
 import itertools
@@ -64,8 +72,9 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from methods.circuit_common import (ATTRIBUTES, DEFAULT_VADE_ROOT, MODEL_ID, MOVERS, ROUTER_TRACE,  # noqa: E402
-                                    load_flags, parse_heads, router_heads, write_json)
+from methods.circuit_common import (ALL_ATTRIBUTES, DEFAULT_VADE_ROOT, ENTITIES, MODEL_ID,  # noqa: E402
+                                    MOVERS, ROUTER_TRACE, entity_attributes, load_entity, parse_heads,
+                                    router_heads, write_json)
 
 LABELS = ("C.X", "B.X", "C.A", "B.A")
 ARMS = ("clean", "movers", "routers", "compose", "compose_random",
@@ -80,6 +89,8 @@ def build_rows(items, attributes, n_items, seed):
     for c in chosen:
         b = rng.choice([x for x in names if x != c])
         for x, a in itertools.permutations(attributes, 2):
+            if any(k not in items[i] for i in (c, b) for k in (x, a)):
+                continue                       # brands: AIRBUS has no industry label
             golds = {"C.X": items[c][x], "B.X": items[b][x], "C.A": items[c][a], "B.A": items[b][a]}
             rows.append({"row_index": len(rows), "C": c, "B": b, "X": x, "A": a,
                          "golds": {k: str(v) for k, v in golds.items()}})
@@ -255,30 +266,48 @@ def summarize(records):
     return out
 
 
+def resolve_entity_args(ap, args):
+    """Per-entity defaults. Flags resolves to exactly the old defaults (so its summary config is
+    unchanged); other entities must name their own movers and routers."""
+    if args.entity == "flags":
+        args.movers = args.movers or MOVERS
+        args.router_trace = args.router_trace or ROUTER_TRACE
+    elif not args.movers or not (args.routers or args.router_trace):
+        ap.error(f"--entity {args.entity} needs --movers and --router_trace (or --routers) from its own "
+                 f"traces; the defaults are the FLAGS heads")
+    args.attributes = args.attributes or entity_attributes(args.entity)
+    if not set(args.attributes) <= set(entity_attributes(args.entity)):
+        ap.error(f"{args.entity} attributes are {entity_attributes(args.entity)}")
+    args.out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "circuit_compose", args.entity)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
-    ap.add_argument("--attributes", nargs="+", default=list(ATTRIBUTES), choices=list(ATTRIBUTES))
+    ap.add_argument("--entity", default="flags", choices=ENTITIES)
+    ap.add_argument("--attributes", nargs="+", default=None, choices=ALL_ATTRIBUTES,
+                    help="Default: every attribute of --entity.")
     ap.add_argument("--n_items", type=int, default=32, help="Base countries C; each gets one random partner B.")
-    ap.add_argument("--movers", default=MOVERS)
+    ap.add_argument("--movers", default=None, help="Default (flags only): common10.")
     ap.add_argument("--routers", default=None, help="Explicit BLOCK.HEAD list; default = top --router_k of "
                                                     "--router_trace, skipping mover heads.")
-    ap.add_argument("--router_trace", default=ROUTER_TRACE)
+    ap.add_argument("--router_trace", default=None, help="Default (flags only): R1's attr_head_trace JSON.")
     ap.add_argument("--router_k", type=int, default=8)
     ap.add_argument("--arms", nargs="+", default=list(ARMS), choices=list(ARMS))
     ap.add_argument("--max_new_tokens", type=int, default=8)
     ap.add_argument("--batch_size", type=int, default=12)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--device", default="cuda:0")
-    ap.add_argument("--out_dir", default=os.path.join(REPO_ROOT, "results", "circuit_compose", "flags"))
+    ap.add_argument("--out_dir", default=None, help="Default: results/circuit_compose/<entity>.")
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
+    resolve_entity_args(ap, args)
 
     movers = parse_heads(args.movers)
     routers = parse_heads(args.routers) if args.routers else router_heads(args.router_trace, args.router_k, movers)
     assert not set(movers) & set(routers), "a head cannot be in both sets: it has one value per forward"
-    entity_dir, items, gt_sha = load_flags(args.vade_root)
+    entity_dir, items, gt_sha = load_entity(args.vade_root, args.entity)
     rows = build_rows(items, args.attributes, args.n_items, args.seed)
     n_heads = 28
     rnd_m, rnd_r = random_sets(movers, routers, n_heads, args.seed)
@@ -290,7 +319,7 @@ def main():
         plans["target_window"] = arm_plan("target_window", movers, routers, rnd_m, rnd_r, window, complement)
 
     fmt = lambda hs: ", ".join(f"{b}.{h}" for b, h in hs)  # noqa: E731
-    print(f"[circuit_compose] {len(rows)} rows ({args.n_items} countries x "
+    print(f"[circuit_compose] {args.entity}: {len(rows)} rows ({args.n_items} items x "
           f"{len(args.attributes) * (len(args.attributes) - 1)} attribute pairs)")
     print(f"  movers  ({len(movers)}): {fmt(movers)}")
     print(f"  routers ({len(routers)}): {fmt(routers)}")
@@ -326,7 +355,8 @@ def main():
 
     summary = summarize(records)
     write_json(os.path.join(args.out_dir, "summary.json"),
-               {"config": {k: v for k, v in vars(args).items() if k != "dry_run"},
+               {"config": {k: v for k, v in vars(args).items()
+                           if k != "dry_run" and not (k == "entity" and v == "flags")},
                 "movers": movers, "routers": routers, "random_movers": rnd_m, "random_routers": rnd_r,
                 "ground_truth_sha256": gt_sha, **summary})
     s = summary["eligible_distinct"]

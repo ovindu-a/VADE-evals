@@ -14,6 +14,9 @@ one is needed; this file only says what to run, what must hold, and what to repo
   without `GPU=a100` (section 2), and record that you did.
 - Never delete or overwrite anything under `results/` or `logs/` that existed before you
   started. Every step below writes to its own directory.
+- **Never edit, commit or pull-modify code in `../VADE`.** It is a separate benchmark repo and is
+  used as-is. The only writes there are new output files under `../VADE/models/<model slug>/`
+  (accuracy predictions, pruned tuples), as for every earlier model.
 - Do not `git commit` or `git push` unless the user says to.
 - If something is ambiguous, stop and ask the user. Do not guess.
 
@@ -23,17 +26,103 @@ If the pod is new, do `GPU_RUNBOOK.md` section 1 (clone both repos side by side 
 `/workspace`, `HF_HOME`, pip install, `pyvene --no-deps`). On an existing pod:
 
 ```bash
-cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home
+cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home PYTORCH_ALLOC_CONF=expandable_segments:True
 git pull
+python -c "from huggingface_hub import snapshot_download as d; d('HuggingFaceM4/Idefics3-8B-Llama3')"   # ~17 GB, X3
 python -c "import torch, transformers; print(torch.__version__, transformers.__version__, torch.cuda.is_available())"
-python -m pytest -q tests/                # expect 0 failures; tokenizer tests may SKIP
+python -m pytest -q -rs tests/            # expect 0 failures and 0 skips (Idefics3 tokenizer now cached)
 ```
 
-`tests/test_crossmodal.py` has never been run (it was written off-pod without torch). If
-any test in it fails, stop and report the failure verbatim; do not run X1.
+Off-pod (2026-10-19, CPU, torch 2.14.1, transformers 5.16.1): 465 passed, 8 skipped (the 8 Idefics3
+real-tokenizer tests, which need the download above). If any test fails on the pod, stop and report it
+verbatim. A failure in `test_idefics3_adapter.py` blocks X3, one in `test_x2b_entities.py` blocks
+X2b, and one in `test_head_cross.py` blocks the X2 rerun. The other lanes may still run.
 
 
-## 2. Run order: smoke, then three lanes on one A100
+## 2. Batch 2 (next): X2b, X3 and the X2 cross-question rerun
+
+| ID | Experiment | PAPER_TODO item | Steps | Lane |
+|---|---|---|---|---|
+| X3 | Idefics3-8B-Llama3: movers, routers, MLP lookup on a Llama LM | §0 non-Qwen model | `x3` (= `scripts/run_x3_idefics3.sh all`) | 1 |
+| X2b | Brands, celebrities: routers, composition, text contrast + crossmodal | §0 full story | `x2b_brands`, `x2b_celeb` | 2, 3 |
+| X2r | Cross-question rerun: common10, own-answer golds, entity facts only | §0 cross-question | `x2r_cross_brands`, `x2r_cross_celeb` | 2, 3 |
+
+**Lanes.** Each lane is one dependent chain, so nothing inside a lane can run in parallel:
+- X3: gate → prep → pipeline → overlap → depth → routers → severed.
+- X2b, per entity: sweep → window → trace → compose → text contrast → crossmodal.
+
+The two entities and the model are independent of each other.
+
+| lane | runs | the chain stops early if |
+|---|---|---|
+| `b2_lane1` | X3 | `GATE FAILED` (accuracy < 50%); the lane exits, report the table |
+| `b2_lane2` | X2b brands, then X2r brands | a step raises (set -e). A missing trace window is NOT a stop: trace and compose are skipped, the rest runs |
+| `b2_lane3` | X2b celebrities, then X2r celebrities | same as lane 2 |
+
+**Memory: this batch is heavier than batch 1, so stagger the lanes and watch.** Known peaks:
+- `circuit_compose` at batch 64: 31.6 GB (Tier-3 P20);
+- the cached attribute-switch engine at batch 64: 24.5 GB (P26);
+- `head_swap_vade`: ~22 GB (batch 1);
+- Idefics3-8B has never been run here. Its weights are ~17 GB, so expect lane 1 at 25-35 GB.
+
+Three lanes could therefore reach ~90 GB if their peaks coincide.
+- Start lane 1, wait ~15 minutes (past the gate), and read `nvidia-smi`.
+- Start lane 2 and wait ~15 minutes.
+- Start lane 3 only if the total is under ~45 GB. Otherwise start it when lane 1 or 2 finishes.
+- If a step runs out of memory: let the others finish, then rerun that step by name without
+  `GPU=a100`, and record it. For X3 the steps are `bash scripts/run_x3_idefics3.sh <step>`.
+
+**Time is only roughly estimated.** Batch 1 ran in 70 min against an estimate of 2.5-4 h per lane, so
+treat any estimate here as an upper bound. Known sizes:
+- X2b's attribute-switch sweep is its largest stage: 71k generation runs for brands and 95k for
+  celebrities (dry run). Tier-3 P25 did ~69k cached runs in ~45 min, so expect ~45-60 min per entity.
+- The X2 cross rerun is ~1.1-2k generations per run, three runs per entity.
+- X3 has no timing at all: it downloads a new model and runs the full pipeline on it.
+
+### Steps
+
+**1. Smoke (one window).** It covers every batch-2 step, including X3 on the real model:
+
+```bash
+tmux new -s paper2
+cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home PYTORCH_ALLOC_CONF=expandable_segments:True
+bash scripts/run_paper.sh smoke2
+```
+
+Check that:
+- every step prints `-> [smoke_...] done` (X3's print `-> [x3_smoke_...] done`), with no traceback;
+- the first line reads `head check ok: ...`;
+- `x3_smoke_tests` reports 26 passed, 0 skipped.
+
+If one entity's or X3's smoke fails, hold that lane back and run the others.
+
+**2. Optional: MPS**, exactly as in batch 1 (section 2b, step 2).
+
+**3. Lanes**, each in its own tmux window with the same `cd` / `export` line, staggered as above:
+
+```bash
+GPU=a100 bash scripts/run_paper.sh b2_lane1
+GPU=a100 bash scripts/run_paper.sh b2_lane2
+GPU=a100 bash scripts/run_paper.sh b2_lane3
+```
+
+Log the GPU in a spare window, as in batch 1:
+
+```bash
+nvidia-smi --query-gpu=timestamp,utilization.gpu,utilization.memory,memory.used,power.draw,clocks.sm \
+    --format=csv -l 30 > logs/paper/gpu_usage_batch2.csv
+```
+
+**4. After the lanes:**
+1. `echo quit | nvidia-cuda-mps-control`, if MPS was started.
+2. Check every self-check in X2r, X2b and X3 (section 3).
+3. Write the report (section 4) as `RUN_REPORT_PAPER_BATCH2.md`.
+
+## 2b. Batch 1 (X1, X2): done 2026-10-19, RUN_REPORT_PAPER.md
+
+Kept for reference. The lanes are now named `b1_lane1..3` (`lane1..3` still work).
+
+### Run order: smoke, then three lanes on one A100
 
 Everything runs through `scripts/run_paper.sh`, which logs each step to
 `logs/paper/<step>_<stamp>.log` and writes results under `results/paper/`. Section 3's
@@ -43,9 +132,6 @@ per-experiment commands are what each named step runs; you do not need to type t
 |---|---|---|---|
 | X1 | Mover-head content, image vs text | §2 image-vs-text convergence | `x1` |
 | X2 | Brands + celebrities: mover install, cross-question, MLP lookup | §0 full story on brands/celebrities | `x2_swap_*`, `x2_cross_*`, `x2_severed_*`, `x2_score` |
-
-Not runnable yet (section 5 lists the code each one needs; do NOT attempt them on the pod):
-X2b (brands/celebrities routers, compose, text contrast) and X3 (Idefics3, a non-Qwen LM).
 
 ### Why three lanes, and how they are balanced
 
@@ -256,6 +342,230 @@ Head sets come from `results/image_head_pipeline/<entity>/<attr>/head_trace_*.js
 - One line on whether the category attributes (industry, occupation) behave like entity
   facts or like the animals category traits (P14).
 
+### X2r. Cross-question rerun on brands and celebrities (own-answer golds, common10)
+
+**Question.** Is the moved payload the ENTITY rather than the asked attribute on brands and celebrities,
+as on flags? Base A is asked Q1 and donor B is asked Q2; is the answer B's answer to Q1? Batch 1's X2
+run could not say, for three reasons:
+- it scored against stored lowercase labels, so the self cell read 81%, not 100%;
+- it used each entity's top-8, which installs far worse than common10 (62% vs 96% on brands);
+- it averaged over attributes the movers do not carry (years, industry, occupation).
+
+A per-attribute rescore of those rows, by hand, gave same question 39-61% and another question
+6-38%, against flags' 81% / 65%. That is too confounded to quote.
+
+**What is new in the code:** `head_cross --gold own` and `--q1_attributes`.
+- `--gold own` first generates the model's own unhooked answer for every (item, question) a row
+  needs. It keeps an answer only if VADE's matcher accepts it against the stored label, then
+  classifies by normalized exact match.
+  - Rows whose four golds are not all valid are `excluded`.
+  - CONTENT SHIFT is reported per base question, on INFORMATIVE rows only: base and donor answer
+    Q1 differently.
+  - Each row also stores `label_stored`, the old scoring, for comparison.
+- `--q1_attributes` restricts the base question to the entity facts. The donor still asks every
+  question, so the `both` cell survives.
+
+**Runs as** (`results/paper/x2r_cross_*/`):
+
+| step | runs |
+|---|---|
+| `x2r_cross_brands` | common10, base question hq_country, n=256 pairs, `--align matched` and `step0`; plus brands' top-8 (matched) for comparison with batch 1 |
+| `x2r_cross_celeb` | the same with nationality + native_language, n=128 pairs |
+
+**Self-checks:**
+1. `self` cell: base_q1 ≥ 99%. With own golds the self-patch is an exact identity (batch 1 showed
+   640/640 rows reproducing the clean answer).
+2. The `own answers matching the stored label` line prints for every attribute. Report it
+   verbatim; it sets how many rows survive.
+3. Informative rows in the per-question table: n ≥ 60 in the `flag` column for each base question.
+   Fewer: report it and say the CI is wide.
+4. `question` cell: moved to A's answer to Q2 at ≤ 5% (flags 0.0%).
+
+**Report back:**
+- each run's 4-way cell table;
+- the per-base-question table (same / another / shift), matched and step0 side by side, next to
+  flags R11 (81.2 / 65.1, shift −16.1; step0 removes most of it);
+- common10 vs top-8 at matched;
+- the `excluded` count.
+
+**How to read it:**
+
+| result | reading |
+|---|---|
+| same ≈ another (shift ≈ 0 under step0) | entity, not attribute, as on flags |
+| large shift that survives step0 | question-conditioned content on these entities |
+| low "same" even with common10 | the movers carry less of these entities at the answer column |
+
+### X2b. Brands and celebrities: routers, composition, text contrast
+
+**Question.** The rest of the flags story, on two more entities:
+- **Routers:** do router heads in blocks ~19-21 carry *which attribute was asked*? (Attribute-switch
+  sweep → `attr_head_trace`.)
+- **Composition:** do movers from one run and routers from another compose into an answer neither
+  run produced? (`circuit_compose`.)
+- **Text contrast:** does the entity arrive later when shown than when named, and do the same mover
+  heads carry it in both conditions? (`text_entity_contrast`, plus `crossmodal` as in X1.)
+
+**What is new in the code (read before judging any number):**
+- **Controlled prompts.** Each entity has its own controlled prompt (`attribute_switch_sweep.ENTITY_SPECS`):
+  - one instruction defining every field word;
+  - `Report the <field> of this brand|person.`;
+  - the `Answer:` prefill.
+
+  Field words are one token each (brands: country / year / industry; celebrities: country /
+  profession / year / language), so prompts differ in exactly one column.
+- **Own-answer golds.** Labels are stored lowercase and the model adds articles, so golds are the
+  model's own clean answers under these prompts, kept only where VADE's matcher accepts them
+  against the stored label. Consequences:
+  - the sweep runs only the baselines on rows the model gets wrong;
+  - `attr_head_trace` drops those rows before phase 0, so phase 0 reads ~100%;
+  - the text contrast keeps a pair only if the image-run and text-run answers agree up to the
+    divergence token.
+- **Year answers** tokenize as `['Ġ', '1', '9', '6', '1']`, like flags' calling codes. A year donor's
+  `donor_first` therefore only says "a number was started":
+  - in the sweep, read `donor_full` for year donors;
+  - in `attr_head_trace`, whose scorer reads at most 3 answer tokens, even `full` covers only the
+    century.
+- **The trace window is not chosen by hand.** `attribute_switch_report.py --window` applies a fixed rule
+  to the sweep (it reproduces flags' patch_layer 15, blocks 15-22). The launcher evals the
+  `PATCH=... BLOCKS="..."` line it prints. If there is no window, trace and compose are skipped and
+  the lane continues.
+
+**Runs as** `x2b_brands` / `x2b_celeb` (`scripts/run_paper.sh`'s `x2b_entity`), each with the entity's
+own traced mover top-8 (BH / CN). Output goes to `results/paper/x2b_*_<entity>*`:
+
+| stage | brands | celebrities |
+|---|---|---|
+| attribute-switch sweep (`--sites residual attention --scopes earlier_text last_token --block_spans --attention_spans 3 --execution cached`) | 24 items | 16 items |
+| report + window (`--window`) | | |
+| `attr_head_trace` at that window | 128 items | 84 items |
+| `circuit_compose` (own movers + own routers) | 64 items | 64 items |
+| `text_entity_contrast` (all phases), then `--phases crossmodal` | 128 pairs | 128 pairs |
+
+`--n_pairs 128` (flags used 64), because own-answer rows lose more pairs to a shared label (61 of 128
+brands are US-headquartered), a wrong answer, or image/text disagreement.
+
+**Self-checks** (per entity; report each as pass/fail with the number):
+
+1. Sweep report: the `self` control's base_kept ≥ 0.99 and `paraphrase` ≥ 0.97 (flags: 0.9998 /
+   0.9977). Eligible rows should be ≥ 50% of the rows with baselines. Report the per-attribute
+   clean-accuracy line verbatim either way.
+2. Sweep report: `--window` printed a `PATCH=... BLOCKS="..."` line. If it raised ("no handoff" or
+   "degenerate window"), the launcher prints `no trace window`; report the handoff table.
+3. Trace phase 0: base and donor `first` ≥ 95% (own-answer golds; anything lower means generation
+   differs between batchings). Report the `own-answer golds: kept ... dropped ...` line.
+4. Trace phase 1b asserts the head patch was reached (it raises otherwise). Phase 1c's verdict line
+   must be either `MATCHES` or `diverges, and --blocks omits downstream block(s)` (as on flags). Any
+   other verdict: report it and do not read phases 2-4.
+5. Trace phase 2: `question patch only (k=0)` first ≥ 80%; it prints a warning below 10%. Phase 3:
+   `nothing patched (k=0)` equals the `unhooked` row (it prints `!!` otherwise).
+6. Compose: the first batch prints `[check]` read-back and self-install lines (they assert).
+   On eligible-distinct rows, `clean` ≥ 95% C.X and `compose_random` ≥ 85% C.X (flags E4: 99.1% /
+   99.1%).
+7. Text contrast: `curves` has `n_eligible` ≥ 100 per condition. If fewer, say so; the `rows
+   (dropped: {...})` line shows why. Crossmodal: X1's self-checks 1-3 and 5 apply unchanged
+   (`n_eligible` has no fixed expectation here).
+8. Any `KeyError`, `AssertionError` or `ValueError`: the lane stops. Quote it verbatim.
+
+**Report back** (per entity):
+- **Sweep:** the handoff table (layer, block, question resid, last resid, last attn), the
+  attention-span table and the chosen window, with flags' for comparison (crossing in blocks 17-21;
+  patch 15, blocks 15-22).
+- **Trace:**
+  - the top-20 heads table, per-block totals, the phase 2/3 curves and phase 4's verdict line;
+  - do the top-8 routers sit in blocks 19-21, as on flags?
+  - how many of flags' router top-8 recur
+    (`logs/attr_head_trace/flags/attr_head_trace_patch15_blocks15-22_all_text_n84.json`)?
+- **Compose:** the eligible-distinct table as printed, next to flags' E4 (n=548): movers 91.8% B.X,
+  routers 85.6% C.A, compose 78.8% B.A, target_window 92.2% B.A, target_complement 91.8% C.X.
+- **Text contrast:** the accuracy table, the curves table, L_e per condition, the head-set transfer
+  table and the freeze table; for crossmodal, X1's report-back items.
+
+### X3. A non-Qwen language model: Idefics3-8B-Llama3
+
+**Question.** Do movers, routers and the late-MLP lookup exist on a model whose language model is not
+Qwen2.5? Idefics3-8B-Llama3's is Llama-3.1-8B (32 blocks × 32 heads). InternVL3-8B shares Qwen2.5-7B's
+text stack, so it does not count. Closes PAPER_TODO §0's first item.
+
+Every head list, trace window and freeze span is derived from this model's own runs by
+`methods/circuit_windows.py`. Its rules are unit-tested to reproduce Qwen's hand-picked arguments from
+Qwen's own numbers. Never pass Qwen's blocks or heads (`common10`, 15-22, 22-27) to an X3 command.
+
+**Needs, beyond section 1:** the Idefics3 download. VADE's code is not changed. Its accuracy sweep runs
+unmodified through `methods/vade_accuracy_sweep.py`, which loads it by path and injects
+`--processor_kwargs` (tests: `tests/test_vade_accuracy_sweep.py`). Like E8's InternVL run, the sweep and
+`prune_tuples` still WRITE their outputs (predictions, pruned tuples) under
+`../VADE/models/Idefics3-8B-Llama3/`, the path every reader here expects. Those are new files only;
+nothing existing in VADE changes.
+
+**Model facts the code relies on** (checked against transformers 5.16; the offline tests assert them):
+- one 364 px tile (`do_image_splitting=False`), so 169 image tokens in a 13 × 13 grid;
+- `shares_object_grid = False`, so only `full_image` and `last_token` position sets are valid;
+- exactly one BOS (the default processor call doubles it; the adapter asserts it does not);
+- `--execution cached` is refused for non-Qwen models; every step here is serial.
+
+**Runs as** step `x3` (lane 1), which is `GPU=a100 bash scripts/run_x3_idefics3.sh all`. Its steps run in
+this order and log to `logs/paper/x3_<step>_<stamp>.log`:
+- **`gate`** (~15 min): sweeps flags capital / language and brands hq_country, and needs each ≥ 50%
+  accurate. On `GATE FAILED` the lane stops; report the table. The rows land in the predictions file
+  `prep` resumes from.
+- **`prep`:** the full accuracy sweep on flags and brands (`methods/vade_accuracy_sweep.py
+  --processor_kwargs '{"do_image_splitting": false}'`), then `prune_tuples`. Output goes to `../VADE/models/Idefics3-8B-Llama3/`.
+- **`pipeline`:** `image_head_pipeline --n_layers 32 --n_heads 32` on the four flags attributes and on
+  brands hq_country.
+- **`overlap`:** `head_overlap` *within* Idefics3. Head IDs do not transfer across models.
+- **`depth`:** the handoff and mover window as a fraction of depth, next to Qwen-7B, Qwen-3B and
+  InternVL.
+- **`routers`:** flags only. A `--baselines_only` gate, then the residual crossover sweep (layers 1-32),
+  then `attr_head_trace` on the window `circuit_windows router` picks.
+- **`severed`:** `head_severed --gold own --freeze_values base mean other`, once per flags attribute
+  and once for brands hq_country. Each run uses that attribute's own top-8 movers, with freeze spans
+  from their deepest block.
+
+To rerun one step after a failure: `GPU=a100 bash scripts/run_x3_idefics3.sh <step>`. To leave out a
+flags attribute whose trace was voided by self-check 4:
+`X3_SEVERED_ATTRS="capital language" GPU=a100 bash scripts/run_x3_idefics3.sh severed`.
+
+**Self-checks** (report each as pass/fail with the number):
+
+0. Smoke: `x3_smoke_tests` reports 26 passed, 0 skipped.
+1. Gate: `GATE PASSED`, with the three accuracies.
+2. Pruning: `stats/*_tuples_prune_summary.md` keeps ≥ 64 test cause rows for each traced attribute.
+3. Pipeline: every attribute passes its own scoring guard (layer-0 `full_image` swap ≥ 85% source
+   match). If one stops after stage 1, report which, with its printed `swap_trace` command. Do not
+   run that command.
+4. Pipeline: each `head_trace` log's phase 1c ends in `-> MATCHES.`, and there is no
+   `!! k=0 differs from unhooked` line. Any other verdict voids that attribute's trace: report it,
+   and rerun `severed` without it (above).
+5. Routers: `ROUTER GATE PASSED` (≥ 24 of 96 rows eligible). Every `/self` arm has
+   donor_first ≤ 5%. `circuit_windows router` prints no `WARNING:` lines; if it does, quote them.
+6. Severed: every run prints `self-checks: {... 'identity': 'bit-exact' ...}`.
+7. Only new paths under `results/x3_idefics3/`, `results/image_head_pipeline_Idefics3-8B-Llama3/`,
+   `logs/image_head_pipeline_Idefics3-8B-Llama3/`, `logs/paper/` and
+   `../VADE/models/Idefics3-8B-Llama3/`.
+
+**Outputs:**
+- `results/x3_idefics3/`;
+- `results/image_head_pipeline_Idefics3-8B-Llama3/` (`SUMMARY.md` per entity);
+- `../VADE/models/Idefics3-8B-Llama3/`. This is a separate repo; package it too.
+
+**Report back:**
+- the accuracy table;
+- both pipeline `SUMMARY.md` files;
+- the `depth` table (Qwen-7B's flags movers are blocks 21-23 of 28, relative depth 0.79-0.86);
+- the overlap consensus table;
+- the router crossover curves, `router_window.json` and `attr_head_trace`'s phase-3 curve;
+- the severed tables next to Qwen's E7 / P10;
+- every derived-argument line the launcher echoes (`router window ...`, `... severed args ...`).
+
+**How to read it:**
+
+| result | reading |
+|---|---|
+| movers in one window, top-8 transfer high, freezing late MLPs kills it | same circuit on a Llama LM |
+| movers found but the MLP freeze leaves transfer intact | the lookup sits elsewhere in this model |
+| no router crossover (warnings) | the controlled prompts do not elicit a routed read here |
+
 <!-- Template for the next experiment. Copy it, give it the next X-number, add its steps to
 scripts/run_paper.sh (a function per step, plus the case line), add it to section 2's table,
 and put each step in the lane with the fewest generations (dry-run it for the count).
@@ -283,7 +593,8 @@ and put each step in the lane with the fewest generations (dry-run it for the co
 
 ## 4. Report
 
-When the batch is done, write `RUN_REPORT_PAPER.md`, with:
+When the batch is done, write its report: `RUN_REPORT_PAPER.md` (batch 1, written) or
+`RUN_REPORT_PAPER_BATCH2.md` (batch 2), with:
 - the environment (GPU, torch and transformers versions, commit, MPS on/off);
 - per-step status and wall time (each step's `done in N min` line), and which lane ran it;
 - GPU usage from `logs/paper/gpu_usage.csv`: per-lane memory peaks, mean power, and whether
@@ -292,89 +603,12 @@ When the batch is done, write `RUN_REPORT_PAPER.md`, with:
 - each experiment's "Report back" items;
 - anything unexpected, quoted verbatim from the log.
 
-Then package `results/paper/`, `results/text_entity_contrast/flags_crossmodal/` and `logs/paper/` for the user, including the gitignored `.pt` files.
+Then package for the user, including the gitignored `.pt` files:
+- batch 1: `results/paper/`, `results/text_entity_contrast/flags_crossmodal/`, `logs/paper/`;
+- batch 2: `results/paper/x2b_*`, `results/paper/x2r_*`, `results/paper/smoke2/`, `results/x3_idefics3/`,
+  `results/image_head_pipeline_Idefics3-8B-Llama3/`, `logs/image_head_pipeline_Idefics3-8B-Llama3/`,
+  `logs/attr_head_trace/{brands,celebrities}/`, `logs/paper/`, and `../VADE/models/Idefics3-8B-Llama3/`.
 
-## 5. Not runnable yet: needs code written off-pod first
+## 5. Not runnable yet
 
-These are on the lineup but must NOT be attempted on the pod: the scripts do not support
-them yet, and the ground rules forbid editing code there. Each moves into section 3 with an
-X-number once its code lands and its offline tests pass.
-
-### X2b. Brands and celebrities: routers, composition, text contrast
-
-The router pipeline (`attribute_switch_sweep` → `attr_head_trace`), `circuit_compose` and
-`text_entity_contrast` only know flags. Code needed (file:line from the 2026-10-19 audit):
-
-- **A. Per-entity controlled prompts** (`attribute_switch_sweep.py:15-33`, imported by
-  `attr_head_trace`, `attr_capture`, `circuit_common`, `text_entity_contrast`):
-  - an attribute list, field words and an instruction per entity ("For the brand shown, …",
-    "For the person shown, …");
-  - field words that tokenize to equal length (`alignment()` enforces it);
-  - the `Answer:` prefill.
-- **B. Own-answer golds** in place of the stored lowercase labels:
-  - files: `attribute_switch_sweep.py:343`, `head_followup_common.py:96`,
-    `attr_head_trace.py:118-119/149-160/402-406`, `circuit_common.py:101-137`;
-  - reuse `route_knockout.own_answers` / `own_rows`.
-- **C. Entity loading and `--entity`:**
-  - replace `circuit_common.load_flags`;
-  - widen the argparse choices in `attr_head_trace`, `attr_capture`, `circuit_compose`,
-    `text_entity_contrast`;
-  - give each script per-entity output dirs.
-- **D.** `attr_capture.py:234` must not call `question()` on non-flags attributes.
-- **E.** Entity-aware `text_question` / `text_prompt` (`circuit_common.py:52-57, 226-232`).
-- **F.** Pass per-entity `--movers` / `--router_trace` rather than the flags defaults.
-- **G.** `head_cross.py:136` crashes on items missing an attribute (AIRBUS has no
-  `industry`); skip those rows. This also lifts X2's brands cap of seed 0 / n ≤ 64.
-
-Run order once the code exists: residual attribute-switch sweep → `attr_head_trace` (window
-from the sweep) → `circuit_compose` → `text_entity_contrast` (+ `--phases crossmodal`, as X1).
-
-### X3. A non-Qwen language model: Idefics3-8B-Llama3
-
-**Why this model.** Its language model is Llama-3.1-8B, and every architecture assumption
-here holds:
-- RMSNorm with `variance_epsilon`;
-- a bias-free `lm_head`;
-- o_proj input = 32 heads × 128 = hidden;
-- SwiGLU `down_proj`;
-- 1-D RoPE and causal attention;
-- with `do_image_splitting=False`, one contiguous run of 169 image tokens (a 13 × 13 grid).
-
-**Ruled out:**
-- **Llama-3.2-Vision:** images enter through cross-attention layers, not tokens in the
-  sequence, so there are no image positions to patch.
-- **Gemma-3:** scientifically stronger, but 2-3× the work, so it comes second:
-  - head_dim ≠ hidden / n_heads in ~14 places;
-  - post-sublayer norms break DLA, `delta_resid` and vocab projection;
-  - bidirectional image attention needs `token_type_ids` injected.
-
-Code needed:
-1. **Generic non-Qwen fixes** (~100 lines; they also unblock InternVL's router and MLP stages):
-   - Route these prompt builders through `adapter.build_inputs`:
-     `head_swap_vade.build_prompt/build_batch` (395-446), `attr_head_trace.py:117,141`.
-   - `head_vocab_projection.py:507-528`: replace the hard-coded `<|im_start|>`.
-   - Make `--execution cached` raise for non-Qwen models.
-2. **`methods/adapters/idefics3.py`** (~170 lines, cloned from `internvl.py`), plus a
-   registry entry. Details:
-   - module paths `model.model.text_model.{layers,norm}`;
-   - `do_image_splitting=False`;
-   - extra = `pixel_values` + `pixel_attention_mask`;
-   - a `vision_patch_grid` for 13 × 13;
-   - `shares_object_grid = False`;
-   - a BOS check.
-3. **VADE side:**
-   - a `--processor_kwargs` option on `run_accuracy_sweep.py`, so pruning sees the same
-     single-tile input;
-   - optionally, an `object_location.json` `models.Idefics3-8B-Llama3` override builder (only
-     object-set experiments need it; the mover pipeline uses `full_image` / `last_token`).
-4. **Launcher.** Same path as E8, but with the router and MLP stages added. Pass explicit
-   `--heads` / `--blocks` / `--freeze_mlp_*` from the new traces, never the Qwen defaults:
-   - accuracy sweep
-   - `prune_tuples`
-   - `image_head_pipeline --n_layers 32 --n_heads 32` on flags + brands
-   - head_overlap vs Qwen-7B
-   - routers
-   - `head_severed`
-
-Check flags/brands accuracy with the cheap accuracy sweep before investing in the rest. If
-recognition is poor, there are too few eligible rows to trace.
+Nothing. X2b and X3 moved into section 3 on 2026-10-19, once their code and offline tests landed.

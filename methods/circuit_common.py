@@ -41,6 +41,8 @@ DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join
 MODEL_ID = "Qwen/Qwen2.5-VL-7B-Instruct"
 
 from methods.attribute_switch_sweep import ATTRIBUTES, FIELDS, INSTRUCTION, PREFILL, question  # noqa: E402
+from methods.attribute_switch_sweep import (ALL_ATTRIBUTES, ATTRIBUTE_ENTITY, ENTITIES, ENTITY_SPECS,  # noqa: E402,F401
+                                            entity_attributes, uses_own_golds)
 
 # R8/R10's image-side entity movers (blocks 21-23) and R1's question-side routers (19-21).
 MOVERS = "21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17"
@@ -53,8 +55,31 @@ TEXT_INSTRUCTION = INSTRUCTION.replace("For the country shown", "For the country
 assert TEXT_INSTRUCTION != INSTRUCTION, "INSTRUCTION wording changed; update TEXT_INSTRUCTION"
 
 
+def text_instruction(entity):
+    """An entity's controlled instruction with 'shown' -> 'named' (TEXT_INSTRUCTION for flags)."""
+    spec = ENTITY_SPECS[entity]
+    shown = f"For the {spec['noun']} shown"
+    assert shown in spec["instruction"], f"{entity} instruction wording changed; update text_instruction"
+    return spec["instruction"].replace(shown, f"For the {spec['noun']} named")
+
+
+def name_intro(entity):
+    """The text before the name in the text-entity prompt: 'The country is ' for flags."""
+    return f"The {ENTITY_SPECS[entity]['noun']} is "
+
+
+def name_sentence(entity, name):
+    """'The country is France.' A name that already ends in '.' ('Apple Inc.') gets no second
+    one: '..' is a single token, which would merge the sentence stop into the name's last
+    token. No flags country name ends in '.', so flags prompts are unchanged."""
+    return f"{name_intro(entity)}{name}" + ("" if name.endswith(".") else ".")
+
+
 def text_question(attribute, name):
-    return TEXT_INSTRUCTION + f"The country is {name}. Report the {FIELDS[attribute]} of this country."
+    entity = ATTRIBUTE_ENTITY[attribute]
+    spec = ENTITY_SPECS[entity]
+    return (text_instruction(entity) + f"{name_sentence(entity, name)} "
+            f"Report the {spec['fields'][attribute]} of this {spec['noun']}.")
 
 
 def parse_heads(spec):
@@ -79,15 +104,40 @@ def router_heads(path, k, exclude=()):
 # ---------------------------------------------------------------------------
 
 def load_flags(vade_root):
-    """-> (entity_dir, items, sha256 of ground_truth.json). Flags only: the controlled
-    prompts' instruction defines exactly the four flags attributes."""
+    """-> (entity_dir, items, sha256 of ground_truth.json) for flags."""
+    return load_entity(vade_root, "flags")
+
+
+def load_entity(vade_root, entity):
+    """-> (entity_dir, items, sha256 of ground_truth.json) for any entity with controlled
+    prompts (attribute_switch_sweep.ENTITY_SPECS)."""
     import hashlib
-    entity_dir = os.path.join(vade_root, "data", "flags")
+    entity_dir = os.path.join(vade_root, "data", entity)
     raw = open(os.path.join(entity_dir, "ground_truth.json"), "rb").read()
-    items = json.loads(raw)["countries"]
+    items = json.loads(raw)[ENTITY_SPECS[entity]["item_key"]]
     for key, it in items.items():
         assert os.path.isfile(os.path.join(entity_dir, it["image"])), f"missing image for {key}"
     return entity_dir, items, hashlib.sha256(raw).hexdigest()
+
+
+def controlled_prompts(attributes):
+    """{attribute: (question, prefill)} in route_knockout.own_answers' format."""
+    return {a: (question(a), PREFILL) for a in attributes}
+
+
+def entity_pair_rows(m, entity, entity_dir, items, pairs, attributes, max_new_tokens, batch_size):
+    """-> (rows, dropped) for (base, source, attribute) pairs under the controlled prompts.
+
+    flags: pair_rows, golds = stored labels (unchanged). Other entities store labels lowercase
+    and the model adds articles, so golds are the model's OWN clean answers (route_knockout's
+    own_answers / own_rows): a row needs different labels, both answers accepted by VADE's
+    matcher, and answers that diverge. `dropped` is an int for flags, a dict of reasons otherwise."""
+    if not uses_own_golds(entity):
+        return pair_rows(items, m.tokenizer, pairs, attributes)
+    from methods.route_knockout import own_answers, own_rows
+    answers = own_answers(m, entity_dir, items, sorted({x for p in pairs for x in p}), attributes,
+                          controlled_prompts(attributes), max_new_tokens, batch_size)
+    return own_rows(items, pairs, attributes, answers, lambda t: m.tokenizer.decode(t, skip_special_tokens=True))
 
 
 def sample_pairs(items, n_pairs, seed):
@@ -227,9 +277,11 @@ class Model:
         text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=False,
                                                   continue_final_message=True)
         enc = self.tokenizer(text, return_offsets_mapping=True, add_special_tokens=False)
-        start = text.find(f"The country is {name}.")
+        entity = ATTRIBUTE_ENTITY[attribute]
+        intro = name_intro(entity)
+        start = text.find(name_sentence(entity, name))
         assert start >= 0, "name sentence not found verbatim in the rendered prompt"
-        lo = start + len("The country is ")
+        lo = start + len(intro)
         hi = lo + len(name)
         cols = [i for i, (s, e) in enumerate(enc["offset_mapping"]) if s < hi and e > lo]
         assert cols, f"no token overlaps the name {name!r}"

@@ -71,6 +71,14 @@ READOUT. Divergence-point transfer / base_kept / normalized logit difference, as
 methods/circuit_common.py. Text prompts differ in length between countries, so text
 batches are left-padded; readout columns are aligned from the end.
 
+OTHER ENTITIES (--entity brands|celebrities; X2b). Their own controlled prompts
+(attribute_switch_sweep.ENTITY_SPECS; text: 'For the brand named ... The brand is Airbus.').
+Their labels are stored lowercase, so golds are the model's OWN clean answers
+(circuit_common.entity_pair_rows), and since one row is read in BOTH conditions, a row is
+kept only where the image-run and text-run answers agree token for token up to and including
+the divergence token (`modality_mismatch` counts the rest). `accuracy` stays VADE's matcher
+against the stored labels. --movers has no default off flags.
+
 Usage
 -----
     python methods/text_entity_contrast.py --dry_run
@@ -90,9 +98,10 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from methods.circuit_common import (ATTRIBUTES, DEFAULT_VADE_ROOT, MODEL_ID, MOVERS, clean_eligible,  # noqa: E402
-                                    load_flags, normalized_ld, parse_heads, print_table, sample_pairs,
-                                    summarize_arms, text_question, write_json)
+from methods.circuit_common import (ALL_ATTRIBUTES, DEFAULT_VADE_ROOT, ENTITIES, MODEL_ID, MOVERS,  # noqa: E402
+                                    clean_eligible, entity_attributes, load_entity, normalized_ld,
+                                    parse_heads, print_table, sample_pairs, summarize_arms, text_question,
+                                    uses_own_golds, write_json)
 
 CONDITIONS = ("image", "text")
 PHASES = ("accuracy", "curves", "heads", "freeze")
@@ -256,7 +265,7 @@ def phase_accuracy(m, args, entity_dir, items):
     """Clean greedy answers for every (country, attribute), both conditions."""
     from methods.circuit_common import cat_extra, left_pack
     from methods.common.text_match import contains_label
-    jobs = [(c, a) for c in sorted(items) for a in args.attributes]
+    jobs = [(c, a) for c in sorted(items) for a in args.attributes if a in items[c]]   # AIRBUS: no industry
     acc = {cond: {a: [0, 0] for a in args.attributes} for cond in CONDITIONS}
     for cond in CONDITIONS:
         for i in range(0, len(jobs), args.batch_size):
@@ -281,6 +290,50 @@ def phase_accuracy(m, args, entity_dir, items):
     for a in args.attributes:
         print(f"  {a:<14}{out['image'][a]:>7.1%}{out['text'][a]:>8.1%}{out['text'][a] - out['image'][a]:>+8.1%}")
     return out
+
+
+def own_text_answers(m, items, keys, attributes, max_new_tokens, batch_size):
+    """route_knockout.own_answers for the TEXT condition: {(key, attribute): greedy answer ids},
+    cut before the first stop token. Left-padded, as phase_accuracy's text batches are."""
+    from methods.attribute_switch_sweep import own_gold, stop_ids
+    from methods.circuit_common import left_pack
+    stop = stop_ids(m.model, m.tokenizer)
+    out = {}
+    for a in attributes:
+        have = [k for k in keys if a in items[k]]
+        for i in range(0, len(have), batch_size):
+            ks = have[i:i + batch_size]
+            ids, mask = left_pack([m.text_prompt(items[k]["name"], a)[0] for k in ks], m.pad_id)
+            for k, g in zip(ks, m.generate(ids, mask, {}, max_new_tokens).tolist()):
+                out[(k, a)] = own_gold(g, stop)
+    return out
+
+
+def modality_agree(rows, text_answers, image_answers):
+    """-> (rows whose base AND source text-run answers equal their image-run answers up to and
+    including the divergence token, re-indexed; number dropped). Those tokens are what the
+    readout appends and compares, so they must be the model's own answer in both conditions."""
+    keep = []
+    for r in rows:
+        n = len(r["prefix"]) + 1
+        if all(text_answers.get((r[w], r["attribute"]), [])[:n] == image_answers[(r[w], r["attribute"])][:n]
+               for w in ("base", "source")):
+            keep.append({**r, "row_index": len(keep)})
+    return keep, len(rows) - len(keep)
+
+
+def own_pair_rows(m, args, entity_dir, items, pairs):
+    """Non-flags rows (module docstring): own-answer golds, agreeing across conditions."""
+    from methods.circuit_common import controlled_prompts
+    from methods.route_knockout import own_answers, own_rows
+    keys = sorted({x for p in pairs for x in p})
+    img = own_answers(m, entity_dir, items, keys, args.attributes, controlled_prompts(args.attributes),
+                      args.max_new_tokens, args.batch_size)
+    txt = own_text_answers(m, items, keys, args.attributes, args.max_new_tokens, args.batch_size)
+    rows, dropped = own_rows(items, pairs, args.attributes, img,
+                             lambda t: m.tokenizer.decode(t, skip_special_tokens=True))
+    rows, dropped["modality_mismatch"] = modality_agree(rows, txt, img)
+    return rows, dropped
 
 
 def run_curves(m, args, batch_sides, rows):
@@ -546,7 +599,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
-    ap.add_argument("--attributes", nargs="+", default=list(ATTRIBUTES), choices=list(ATTRIBUTES))
+    ap.add_argument("--entity", default="flags", choices=ENTITIES)
+    ap.add_argument("--attributes", nargs="+", default=None, choices=ALL_ATTRIBUTES,
+                    help="Default: every attribute of --entity.")
     ap.add_argument("--phases", nargs="+", default=list(PHASES), choices=list(PHASES) + list(OPT_IN_PHASES))
     ap.add_argument("--n_pairs", type=int, default=64)
     ap.add_argument("--layers", type=int, nargs="+", default=list(range(0, 28)),
@@ -561,7 +616,7 @@ def main():
                          "default) or EVERY name token -- the closer analogue of patching all image "
                          "tokens, at the cost of keeping only pairs whose names tokenize to equal length.")
     ap.add_argument("--head_ks", type=int, nargs="+", default=[5, 10, 20])
-    ap.add_argument("--movers", default=MOVERS)
+    ap.add_argument("--movers", default=None, help="Default (flags only): common10.")
     ap.add_argument("--mover_subsets", action="store_true",
                     help="`heads`: also install every single image mover, every pair and every leave-one-out "
                          "set (single:B.H, pair:B.H+B.H, loo:-B.H), and write per-row records to "
@@ -572,16 +627,29 @@ def main():
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--device", default="cuda:0")
-    ap.add_argument("--out_dir", default=os.path.join(REPO_ROOT, "results", "text_entity_contrast", "flags"))
+    ap.add_argument("--out_dir", default=None, help="Default: results/text_entity_contrast/<entity>.")
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
+    # Flags resolves to exactly the old defaults, so its summary config is unchanged.
+    if args.entity == "flags":
+        args.movers = args.movers or MOVERS
+    elif not args.movers:
+        ap.error(f"--entity {args.entity} needs --movers from its own head traces; the default is the FLAGS set")
+    args.attributes = args.attributes or entity_attributes(args.entity)
+    if not set(args.attributes) <= set(entity_attributes(args.entity)):
+        ap.error(f"{args.entity} attributes are {entity_attributes(args.entity)}")
+    args.out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "text_entity_contrast", args.entity)
 
-    entity_dir, items, gt_sha = load_flags(args.vade_root)
+    entity_dir, items, gt_sha = load_entity(args.vade_root, args.entity)
     pairs = sample_pairs(items, args.n_pairs, args.seed)
     if ("heads" in args.phases or "freeze" in args.phases) and "curves" not in args.phases:
         assert args.entity_layer, "--entity_layer IMAGE TEXT is required when `curves` is not run"
-    print(f"[text_entity_contrast] phases={args.phases}; {len(pairs)} pairs x {len(args.attributes)} attributes")
-    print(f"  example text prompt: {text_question('capital', 'France')!r}")
+    print(f"[text_entity_contrast] {args.entity}: phases={args.phases}; {len(pairs)} pairs x "
+          f"{len(args.attributes)} attributes")
+    example = ("capital", "France") if args.entity == "flags" else (args.attributes[0], items[sorted(items)[0]]["name"])
+    print(f"  example text prompt: {text_question(*example)!r}")
+    if uses_own_golds(args.entity):
+        print("  golds: the model's own clean answers, kept where image and text runs agree to the divergence token")
     if "crossmodal" in args.phases:
         print(f"  crossmodal: {len(items)} countries x {len(args.attributes)} attributes per condition for the "
               f"representation part; movers {args.movers}")
@@ -595,16 +663,22 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
     # mover_subsets is left out of the config when off, so default runs write the same summary.json as before.
     report = {"config": {k: v for k, v in vars(args).items()
-                         if k != "dry_run" and not (k == "mover_subsets" and not v)}, "ground_truth_sha256": gt_sha}
+                         if k != "dry_run" and not (k == "mover_subsets" and not v)
+                         and not (k == "entity" and v == "flags")}, "ground_truth_sha256": gt_sha}
 
     if "accuracy" in args.phases:
         report["accuracy"] = phase_accuracy(m, args, entity_dir, items)
         write_json(os.path.join(args.out_dir, "summary.json"), report)
 
-    rows, dropped = pair_rows(items, m.tokenizer, pairs, args.attributes)
-    print(f"  {len(rows)} pair rows ({dropped} dropped: golds never diverge)")
+    if uses_own_golds(args.entity):
+        rows, dropped = own_pair_rows(m, args, entity_dir, items, pairs)
+        print(f"  {len(rows)} pair rows (dropped: {dropped})")
+        report["rows_dropped"] = dropped
+    else:
+        rows, dropped = pair_rows(items, m.tokenizer, pairs, args.attributes)
+        print(f"  {len(rows)} pair rows ({dropped} dropped: golds never diverge)")
     if args.text_entity_site == "all":
-        n_tok = {c: len(m.text_prompt(items[c]["name"], "capital")[1]) for c in items}
+        n_tok = {c: len(m.text_prompt(items[c]["name"], entity_attributes(args.entity)[0])[1]) for c in items}
         before = len(rows)
         rows = [r for r in rows if n_tok[r["base"]] == n_tok[r["source"]]]
         print(f"  text_entity_site=all: kept {len(rows)}/{before} rows whose names tokenize to equal length")

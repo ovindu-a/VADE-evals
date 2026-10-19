@@ -28,9 +28,86 @@ INSTRUCTION = ('For the country shown, capital means its capital city; currency 
                'means its international calling code, digits only without a plus sign. '
                'Give only the requested value. ')
 
+# X2b: the same controlled shape for the other entities -- one instruction per entity defining
+# every field word, the question 'Report the <field> of this <noun>.' and the shared prefill.
+# Every field word is ONE Qwen token (tests/test_x2b_entities.py), so an entity's prompts differ in
+# exactly one column, as alignment() and the `field` scope require. Attribute names are disjoint
+# across entities, so question(attribute) needs no entity argument and no caller changes.
+# These entities store labels lowercase and the model adds articles, so their golds are the
+# model's OWN answers under these prompts (own_gold), kept only where VADE's matcher accepts them.
+ENTITY_SPECS = {
+    'flags': dict(item_key='countries', noun='country', attributes=ATTRIBUTES, fields=FIELDS,
+                  instruction=INSTRUCTION),
+    'brands': dict(
+        item_key='brands', noun='brand', attributes=['hq_country', 'founded_year', 'industry'],
+        fields=dict(hq_country='country', founded_year='year', industry='industry'),
+        instruction=('For the brand shown, country means the country where its company is '
+                     'headquartered, in its short common form; year means the year its company was '
+                     'founded, digits only; industry means its sector, exactly one of: Automotive, '
+                     'Technology, Electronics, Media & Entertainment, Gaming, Financial Services, '
+                     'Retail, Food & Beverage, Fashion, Energy, Healthcare & Pharmaceuticals, Travel & '
+                     'Hospitality. Give only the requested value. ')),
+    'celebrities': dict(
+        item_key='people', noun='person',
+        attributes=['nationality', 'occupation', 'birth_year', 'native_language'],
+        fields=dict(nationality='country', occupation='profession', birth_year='year',
+                    native_language='language'),
+        instruction=('For the person shown, country means the country they are from, in its short '
+                     'common form; profession means exactly one of: actor, musician, athlete, '
+                     'politician, film director, scientist, businessperson, writer, comedian, '
+                     'television presenter; year means the year they were born, digits only; language '
+                     'means their native language. Give only the requested value. ')),
+}
+ENTITIES = list(ENTITY_SPECS)
+ATTRIBUTE_ENTITY = {a: e for e, spec in ENTITY_SPECS.items() for a in spec['attributes']}
+assert len(ATTRIBUTE_ENTITY) == sum(len(s['attributes']) for s in ENTITY_SPECS.values()), \
+    'attribute names must be unique across entities: question() infers the entity from them'
+ALL_ATTRIBUTES = list(ATTRIBUTE_ENTITY)
+
+
+def is_qwen_model(model_id):
+    """Same match as adapters/registry.py's Qwen2.5-VL branch, without importing torch."""
+    return 'qwen2.5-vl' in model_id.lower() or 'qwen2_5_vl' in model_id.lower()
+
 
 def question(attribute, paraphrase=False):
-    return INSTRUCTION + f'{"Return" if paraphrase else "Report"} the {FIELDS[attribute]} of this country.'
+    spec = ENTITY_SPECS[ATTRIBUTE_ENTITY[attribute]]
+    return spec['instruction'] + (f'{"Return" if paraphrase else "Report"} the {spec["fields"][attribute]} '
+                                  f'of this {spec["noun"]}.')
+
+
+def entity_attributes(entity):
+    return list(ENTITY_SPECS[entity]['attributes'])
+
+
+def load_entity_items(vade_root, entity):
+    """-> (entity_dir Path, items, raw ground_truth.json bytes). No torch, no images opened."""
+    entity_dir = Path(vade_root) / 'data' / entity
+    raw = (entity_dir / 'ground_truth.json').read_bytes()
+    return entity_dir, json.loads(raw)[ENTITY_SPECS[entity]['item_key']], raw
+
+
+def uses_own_golds(entity):
+    """Flags labels are cased as the model writes them, so flags keeps stored-label token golds."""
+    return entity != 'flags'
+
+
+def stop_ids(model, tokenizer):
+    eos = model.generation_config.eos_token_id
+    ids = [eos] if isinstance(eos, int) else list(eos or [])
+    return {t for t in ids + [tokenizer.eos_token_id, tokenizer.pad_token_id] if t is not None}
+
+
+def own_gold(tokens, stop):
+    """The model's own greedy answer ids, cut before the first stop token."""
+    tokens = [int(t) for t in tokens]
+    return tokens[:next((i for i, t in enumerate(tokens) if t in stop), len(tokens))]
+
+
+def own_correct(tokenizer, tokens, label):
+    """VADE's matcher (whole word, casefold) on the decoded own answer."""
+    from methods.common.text_match import contains_label
+    return bool(tokens) and contains_label(tokenizer.decode(tokens, skip_special_tokens=True), str(label))
 
 
 def alignment(base, donor, image_id, special_ids=()):
@@ -271,8 +348,12 @@ def summarize_switch(results):
         groups.setdefault((r['arm'], r['base_attribute'], r['donor_attribute']), []).append(r)
     cells = []
     for (arm, base, source), rr in sorted(groups.items()):
-        eligible = [r for r in rr if clean[r['row_index']]['base_score']['full_match']
-                    and donor[r['row_index']]['source_score']['full_match']]
+        # Own-answer golds (non-flags) match their own clean runs by construction, so there the
+        # population is VADE's matcher on those runs instead (`own_correct`).
+        eligible = [r for r in rr
+                    if clean[r['row_index']].get('own_correct', clean[r['row_index']]['base_score']['full_match'])
+                    and donor[r['row_index']].get('own_correct',
+                                                  donor[r['row_index']]['source_score']['full_match'])]
         def scores(items):
             if not items:
                 return None
@@ -325,6 +406,39 @@ def sweep_arms(args):
     return arms
 
 
+def own_golds_row(runner, row, batch, results):
+    """Non-flags rows: the clean base run and the donor-question run ARE the golds.
+
+    Records `clean` and `donor_clean` (or reuses them on resume) with `own_correct` = VADE's
+    matcher against the stored label, and returns {'base', 'source'} gold ids -- or None when
+    either answer is wrong, in which case the row gets no sweep arms (summarize_switch's
+    eligibility would drop it anyway). Generation is runner.generate, the clean arm itself."""
+    import torch
+    p = batch['base_input_ids'].shape[1]
+    tok = runner.processor.tokenizer
+    stop = stop_ids(runner.model, tok)
+    done = {r['arm']: r for r in results.records if r['row_index'] == row['row_index']}
+    steps = {'clean': lambda ids: (runner.run(ids, batch), {}),
+             'donor_clean': lambda ids: (runner.run(torch.cat((batch['source_input_ids'].to(ids.device),
+                                                               ids[:, p:]), dim=1), batch), {})}
+    gen = {arm: done[arm]['generated_ids'] if arm in done else runner.generate(batch, steps[arm])[0]
+           for arm in steps}
+    gold = {'base': own_gold(gen['clean'], stop), 'source': own_gold(gen['donor_clean'], stop)}
+    correct = {'clean': own_correct(tok, gold['base'], row['base_label']),
+               'donor_clean': own_correct(tok, gold['source'], row['source_label'])}
+    meta = dict(clean=dict(base_prompt_ids=batch['base_input_ids'][0].tolist(),
+                           donor_prompt_ids=batch['source_input_ids'][0].tolist(),
+                           paraphrase_prompt_ids=batch['paraphrase_ids'][0].tolist(),
+                           earlier_positions=batch['earlier_positions']),
+                donor_clean={})
+    for arm in steps:
+        if arm not in done:
+            results.add(runner.record(row, arm, gen[arm], gold, base_attribute=row['base_attribute'],
+                                      donor_attribute=row['donor_attribute'], golds='own_answer',
+                                      own_correct=correct[arm], **meta[arm]))
+    return gold if all(correct.values()) else None
+
+
 def execute(runner, args, rows, items, entity_dir, results):
     from PIL import Image
     import torch
@@ -340,11 +454,16 @@ def execute(runner, args, rows, items, entity_dir, results):
             continue
         with Image.open(entity_dir / items[row['base']]['image']) as img:
             batch = runner.batch(img.convert('RGB'), row['base_attribute'], row['donor_attribute'])
-        gold = {role: derive_gold_token_ids(runner.processor.tokenizer, PREFILL, row[f'{role}_label'])
-                for role in ('base', 'source')}
+        p = batch['base_input_ids'].shape[1]
+        if uses_own_golds(getattr(args, 'entity', 'flags')):
+            gold = own_golds_row(runner, row, batch, results)
+            if gold is None:
+                continue                   # the model is wrong on this row: baselines only, no arms
+        else:
+            gold = {role: derive_gold_token_ids(runner.processor.tokenizer, PREFILL, row[f'{role}_label'])
+                    for role in ('base', 'source')}
         if any(not g or len(g) > args.max_new_tokens for g in gold.values()):
             raise ValueError('Empty answer or insufficient max_new_tokens for full gold suffix')
-        p = batch['base_input_ids'].shape[1]
         def save(arm, step, **meta):
             if results.has(row, arm):
                 return
@@ -400,10 +519,14 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--model_id', default='Qwen/Qwen2.5-VL-7B-Instruct')
     ap.add_argument('--vade_root', default=os.environ.get('VADE_ROOT', str(ROOT.parent / 'VADE')))
-    ap.add_argument('--out_dir', default='results/attribute_switch/flags')
-    ap.add_argument('--countries', nargs='+', help='Explicit VADE country IDs; otherwise deterministic sample')
-    ap.add_argument('--n_countries', type=int, default=8)
-    ap.add_argument('--attributes', nargs='+', choices=ATTRIBUTES, default=ATTRIBUTES)
+    ap.add_argument('--entity', choices=ENTITIES, default='flags',
+                    help='Non-flags entities use their own controlled prompts (ENTITY_SPECS) and the '
+                         "model's OWN clean answers as golds; rows the model gets wrong run baselines only.")
+    ap.add_argument('--out_dir', default=None, help='Default: results/attribute_switch/<entity>')
+    ap.add_argument('--countries', nargs='+', help='Explicit VADE item IDs; otherwise deterministic sample')
+    ap.add_argument('--n_countries', type=int, default=8, help='Items to sample (countries for flags)')
+    ap.add_argument('--attributes', nargs='+', choices=ALL_ATTRIBUTES, default=None,
+                    help="Default: every attribute of --entity")
     ap.add_argument('--layers', nargs='+', type=int, default=list(range(1, 29)))
     ap.add_argument('--sites', nargs='+', choices=SITES + ['residual', 'attention', 'mlp', 'joint'], default=SITES)
     ap.add_argument('--scopes', nargs='+', type=valid_scope,
@@ -443,6 +566,10 @@ def main(argv=None):
     ap.add_argument('--baselines_only', action='store_true', help='Check clean controlled-prompt accuracy before sweeping')
     ap.add_argument('--dry_run', action='store_true', help='Validate metadata only; runtime checks token alignment')
     args = ap.parse_args(argv)
+    args.out_dir = args.out_dir or f'results/attribute_switch/{args.entity}'
+    args.attributes = args.attributes or entity_attributes(args.entity)
+    if not set(args.attributes) <= set(entity_attributes(args.entity)):
+        ap.error(f'{args.entity} attributes are {entity_attributes(args.entity)}')
     if (len(set(args.attributes)) < 2 or len(set(args.attributes)) != len(args.attributes)
             or args.n_countries < 1 or args.max_new_tokens < 1 or args.batch_size < 1
             or any(n < 1 for n in args.layers)
@@ -450,9 +577,10 @@ def main(argv=None):
         ap.error('Need at least two attributes and positive counts/spans')
     if args.verify_cached and args.execution != 'cached':
         ap.error('--verify_cached requires --execution cached')
-    entity_dir = Path(args.vade_root) / 'data/flags'
-    raw = (entity_dir / 'ground_truth.json').read_bytes()
-    items = json.loads(raw)['countries']
+    if args.execution == 'cached' and not is_qwen_model(args.model_id):
+        ap.error(f'--execution cached is Qwen2.5-VL-only (attribute_switch_cached.py rebuilds its '
+                 f'image_grid_thw / M-RoPE inputs by hand); use --execution serial for {args.model_id}')
+    entity_dir, items, raw = load_entity_items(args.vade_root, args.entity)
     countries = args.countries or random.Random(args.seed).sample(sorted(items), min(args.n_countries, len(items)))
     if len(set(countries)) != len(countries):
         ap.error('Country IDs must be unique')
@@ -462,12 +590,18 @@ def main(argv=None):
         if not (entity_dir / item['image']).is_file():
             raise FileNotFoundError(entity_dir / item['image'])
         for base, donor in itertools.permutations(args.attributes, 2):
+            if base not in item or donor not in item:
+                continue                   # brands: AIRBUS has no industry label
             rows.append(dict(row_index=len(rows), base=country, source=country, base_attribute=base,
                 donor_attribute=donor, base_label=item[base], source_label=item[donor],
                 template_id='controlled_report_v1'))
     # summary_every only changes how often a derived file is rewritten, so it is kept out of
     # the run identity -- changing it must not refuse a resume.
-    config = {k: v for k, v in vars(args).items() if k not in ('dry_run', 'out_dir', 'summary_every')}
+    # `entity` is left out at flags so a flags config is unchanged from before it existed.
+    config = {k: v for k, v in vars(args).items() if k not in ('dry_run', 'out_dir', 'summary_every')
+              and not (k == 'entity' and v == 'flags')}
+    if uses_own_golds(args.entity):
+        config['golds'] = 'own_answer'
     config.update(rows=rows, prompts={a: [question(a), question(a, True)] for a in args.attributes},
         prefill=PREFILL, ground_truth_sha256=hashlib.sha256(raw).hexdigest(),
         image_sha256={c: hashlib.sha256((entity_dir / items[c]['image']).read_bytes()).hexdigest()
@@ -475,7 +609,10 @@ def main(argv=None):
         implementation_sha256=hashlib.sha256(b''.join((ROOT / 'methods' / p).read_bytes() for p in
             ['attribute_switch_sweep.py', 'attribute_switch_cached.py', 'head_followup_common.py', 'common/sites.py', 'common/hooks.py',
              'adapters/qwen2_5_vl.py'])).hexdigest())
-    print(f'{len(countries)} countries, {len(rows)} directed question pairs, layers={args.layers}; '
+    if uses_own_golds(args.entity):
+        print(f"{args.entity}: golds are the model's own clean answers; rows VADE's matcher marks wrong "
+              f"run baselines only.", flush=True)
+    print(f'{len(countries)} {"countries" if args.entity == "flags" else "items"}, {len(rows)} directed question pairs, layers={args.layers}; '
           f'{len(rows) * (2 + len(sweep_arms(args)))} generation runs', flush=True)
     if args.execution == 'cached':
         print(f'Cached prefill: batch_size={args.batch_size}, CPU donor bank, per-arm KV cache; '

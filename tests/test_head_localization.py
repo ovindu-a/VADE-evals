@@ -44,7 +44,7 @@ def two_rows(tiny):
 def test_token_groups_partition_the_prompt():
     #        sys sys img img img txt txt im_start asst prefill
     ids = [9, 9, 2, 2, 2, 7, 7, 50, 51, 52]
-    g = hvp.token_groups(ids, image_token_id=2, im_start_id=50, footprint={1})
+    g = hvp.token_groups(ids, image_token_id=2, assistant_start=7, footprint={1})
     assert g == ["system", "system", "image_background", "object", "image_background",
                  "question", "question", "assistant_prefix", "assistant_prefix", "assistant_prefix"]
 

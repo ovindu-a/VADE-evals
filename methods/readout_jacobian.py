@@ -562,7 +562,7 @@ def run_eval(args, heads, items, entity_dir, lookup, attributes, fit):
             preds = {arm: {} for arm in arms}
             checked = False
             for _, chunk in batches_by_donor_attribute(jobs, args.batch_size):
-                batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
+                batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, adapter)
                 z = capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
                                   batch["donor_extra"], args.max_new_tokens, pad_id, site=args.site)
                 gen = lambda tr=None: patched_generate(adapter, model, heads, z, batch["base_ids"],

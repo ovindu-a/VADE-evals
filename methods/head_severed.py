@@ -600,7 +600,7 @@ def main():
     image_token_id = adapter.image_token_id(model, processor)
     matcher = vade_matcher(args.vade_root)
 
-    probe = build_batch([as_job(r) for r in rows[attributes[0]][:4]], processor, items, entity_dir, lookup, pad_id)
+    probe = build_batch([as_job(r) for r in rows[attributes[0]][:4]], processor, items, entity_dir, lookup, pad_id, adapter)
     checks = self_checks(adapter, model, probe, heads, head_dim, arms, args.max_new_tokens, pad_id,
                          args.freeze_steps)
     print(f"  self-checks: {checks}")
@@ -616,7 +616,7 @@ def main():
             # and third-country freezes need OTHER rows' values, so these come first.
             clean_toks, store, src_toks = {}, {}, {}
             for chunk in batches:
-                batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id)
+                batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id, adapter)
                 clean, base_vals = capture_components(adapter, model, need, batch["base_ids"], batch["base_mask"],
                                                       batch["base_extra"], args.max_new_tokens, pad_id)
                 src_clean = (plain_generate(model, batch["donor_ids"], batch["donor_mask"], batch["donor_extra"],
@@ -634,7 +634,7 @@ def main():
 
             # PASS 2: the arms.
             for start, chunk in zip(range(0, len(rows[attr]), args.batch_size), batches):
-                batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id)
+                batch = build_batch([as_job(r) for r in chunk], processor, items, entity_dir, lookup, pad_id, adapter)
                 donor_z = capture_donor(adapter, model, head_blocks, batch["donor_ids"], batch["donor_mask"],
                                         batch["donor_extra"], args.max_new_tokens, pad_id)
                 vals = {m: freeze_values_for(m, chunk, store, thirds, means) for m in modes} if need else {}

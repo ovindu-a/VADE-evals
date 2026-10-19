@@ -77,14 +77,17 @@ def baselines(run_dir):
         elif r['arm'] == 'donor_clean':
             donor[r['row_index']] = r
     configured = len(json.loads((Path(run_dir) / 'config.json').read_text())['rows'])
+    # Own-answer golds (X2b's non-flags entities) match their own clean runs by construction;
+    # there `own_correct` (VADE's matcher against the stored label) is the accuracy.
+    def correct(rec, role):
+        return rec.get('own_correct', rec[f'{role}_score']['full_match'])
     per_attribute = defaultdict(lambda: [0, 0, 0])
     for i, c in clean.items():
         a = per_attribute[c['base_attribute']]
-        a[0] += c['base_score']['full_match']
+        a[0] += correct(c, 'base')
         a[1] += c['base_score']['first_token']
         a[2] += 1
-    eligible = sum(1 for i in clean
-                   if clean[i]['base_score']['full_match'] and donor[i]['source_score']['full_match'])
+    eligible = sum(1 for i in clean if correct(clean[i], 'base') and correct(donor[i], 'source'))
     return {'rows_configured': configured, 'rows_covered': len(covered), 'rows_with_baselines': len(clean),
             'eligible': eligible, 'clean_by_attribute': {k: {'full': v[0] / v[2], 'first': v[1] / v[2],
                                                              'n': v[2]} for k, v in per_attribute.items()}}
@@ -107,6 +110,36 @@ def crossover(cells, metric='first', scope_write='earlier_text', scope_read='las
                     'last_attention': read.get(('attention', L), {}).get(metric),
                     'last_mlp': read.get(('mlp', L), {}).get(metric)})
     return out
+
+
+def pick_window(cross, frac=0.9):
+    """-> (patch_layer, blocks) for attr_head_trace from the handoff table, or raise.
+
+    The question-residual curve's top plateau ends at the last layer whose value (and every
+    earlier one's) is within 10% of its range of the top; the last-token residual curve's read
+    completes at the first layer reaching 90% of its range. patch_layer = plateau end - 2 (still
+    on the plateau, two layers before the first drop) and blocks = patch_layer .. read layer + 1
+    (one block past the read). On flags (ATTRIBUTE_SWITCH_FINDINGS.md section 1) this gives
+    exactly the hand-picked patch_layer 15, blocks 15-22 (tests/test_x2b_entities.py)."""
+    q = {r['layer']: r['question_residual'] for r in cross if r['question_residual'] is not None}
+    r_ = {r['layer']: r['last_residual'] for r in cross if r['last_residual'] is not None}
+    if not q or not r_:
+        raise ValueError('need both earlier_text/residual and last_token/residual arms (run with --scopes)')
+    q_hi, q_lo = max(q.values()), min(q.values())
+    r_hi, r_lo = max(r_.values()), min(r_.values())
+    if q_hi - q_lo < 0.5 or r_hi - r_lo < 0.5:
+        raise ValueError(f'no handoff: question curve spans {q_lo:.2f}-{q_hi:.2f}, last-token curve '
+                         f'{r_lo:.2f}-{r_hi:.2f}; both must move by >= 0.5')
+    plateau = None
+    for L in sorted(q):
+        if q[L] < q_hi - (1 - frac) * (q_hi - q_lo):
+            break
+        plateau = L
+    read = next(L for L in sorted(r_) if r_[L] >= r_lo + frac * (r_hi - r_lo))
+    patch = plateau - 2 if plateau is not None else None
+    if patch is None or patch < 1 or read + 1 < patch:
+        raise ValueError(f'degenerate window: plateau ends at L{plateau}, read completes at L{read}')
+    return patch, list(range(patch, read + 2))
 
 
 def spans(cells, scope='last_token', family='attention_blocks', metric='first'):
@@ -156,7 +189,12 @@ def main(argv=None):
     ap.add_argument('--metric', default='first', choices=list(METRICS))
     ap.add_argument('--population', default='both_clean_correct', choices=['both_clean_correct', 'all'])
     ap.add_argument('--json_out', default=None, help='Write every table to one JSON for later plotting')
+    ap.add_argument('--window', action='store_true',
+                    help="Print attr_head_trace's --patch_layer/--blocks by pick_window's fixed rule, as a "
+                         "last line 'PATCH=<L> BLOCKS=\"<b> <b> ...\"' for a shell to eval (one run_dir only).")
     args = ap.parse_args(argv)
+    if args.window and len(args.run_dir) != 1:
+        ap.error('--window reads exactly one run_dir')
 
     everything = {}
     for run in args.run_dir:
@@ -201,9 +239,16 @@ def main(argv=None):
 
         everything[run] = {'baselines': base, 'crossover': cross, 'attention_spans': sp,
                            'controls': {k: v for k, v in ctl.items()}}
+        if args.window:
+            patch, blocks = pick_window(cross)
+            everything[run]['window'] = {'patch_layer': patch, 'blocks': blocks}
     if args.json_out:
         Path(args.json_out).write_text(json.dumps(everything, indent=2, default=str) + '\n')
         print(f'\nwrote {args.json_out}')
+    if args.window:
+        w = everything[args.run_dir[0]]['window']
+        print(f'\n  window (pick_window): patch_layer {w["patch_layer"]}, blocks {w["blocks"][0]}-{w["blocks"][-1]}')
+        print(f'PATCH={w["patch_layer"]} BLOCKS="{" ".join(map(str, w["blocks"]))}"')
 
 
 if __name__ == '__main__':

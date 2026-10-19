@@ -50,8 +50,9 @@ import torch  # noqa: E402
 from PIL import Image  # noqa: E402
 
 from methods.adapters.registry import get_adapter  # noqa: E402
-from methods.attr_head_trace import ENTITY_KEYS  # noqa: E402
-from methods.attribute_switch_sweep import ATTRIBUTES, PREFILL, question  # noqa: E402
+from methods.attr_head_trace import ENTITY_KEYS  # noqa: E402,F401  (attr_steer imports it from here)
+from methods.attribute_switch_sweep import (ALL_ATTRIBUTES, ENTITIES, PREFILL, entity_attributes,  # noqa: E402
+                                            load_entity_items, question)
 from methods.common.hooks import extra_to_device  # noqa: E402
 from methods.common.run_logging import tee_to_log  # noqa: E402
 from methods.common.sites import InterventionSite  # noqa: E402
@@ -143,8 +144,9 @@ def run_order(chosen, attributes, prompts, batch_size):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--entity", default="flags")
-    ap.add_argument("--attributes", nargs="+", choices=ATTRIBUTES, default=ATTRIBUTES)
+    ap.add_argument("--entity", default="flags", choices=ENTITIES)
+    ap.add_argument("--attributes", nargs="+", choices=ALL_ATTRIBUTES, default=None,
+                    help="Default: every attribute of --entity.")
     ap.add_argument("--blocks", type=int, nargs="+", default=list(range(15, 23)),
                     help="Decoder blocks to capture at. Default 15-22, the window "
                          "ATTRIBUTE_SWITCH_FINDINGS.md localizes the question->readout handoff to.")
@@ -169,18 +171,17 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     from pathlib import Path
-    entity_dir = Path(args.vade_root) / "data" / args.entity
-    raw = (entity_dir / "ground_truth.json").read_bytes()
-    gt = json.loads(raw)
-    key = ENTITY_KEYS.get(args.entity)
-    if key not in gt:
-        key = next(k for k, v in gt.items() if isinstance(v, dict) and k != "coverage")
-    items = gt[key]
+    entity_dir, items, raw = load_entity_items(args.vade_root, args.entity)
     blocks = sorted(set(args.blocks))
-    attributes = list(dict.fromkeys(args.attributes))
+    attributes = list(dict.fromkeys(args.attributes or entity_attributes(args.entity)))
+    if not set(attributes) <= set(entity_attributes(args.entity)):
+        ap.error(f"{args.entity} attributes are {entity_attributes(args.entity)}")
     if len(attributes) < 2:
         ap.error("Need at least two attributes -- the design is the CROSSING of items and attributes")
-    chosen = args.items or random.Random(args.seed).sample(sorted(items), min(args.n_items, len(items)))
+    # The grid must be complete, so the sample is drawn from items labelled for every attribute
+    # (all of them for flags; brands' AIRBUS has no industry).
+    pool = sorted(k for k in items if all(a in items[k] for a in attributes))
+    chosen = args.items or random.Random(args.seed).sample(pool, min(args.n_items, len(pool)))
     if len(set(chosen)) != len(chosen):
         ap.error("Item IDs must be unique")
     # Fully crossed and in a fixed order, so `index.jsonl` row i is item i//A, attribute i%A and the
@@ -231,7 +232,7 @@ def main(argv=None):
                 "positions": "last_token", "grid_order": "item-major, attribute-minor",
                 "shape": [n_runs, len(blocks), n_positions, hidden], "dtype": "float32",
                 "n_heads": n_heads, "head_dim": head_dim, "prefill": PREFILL,
-                "prompts": {a: question(a) for a in attributes},
+                "prompts": {a: prompt_of[a][0] for a in attributes},
                 "head_proj_norms": head_projection_norms(adapter, model, blocks, n_heads, head_dim),
                 "ground_truth_sha256": hashlib.sha256(raw).hexdigest(),
                 "implementation_sha256": hashlib.sha256(

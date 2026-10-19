@@ -65,6 +65,17 @@ Usage
     python methods/head_cross.py --dry_run
     python methods/head_cross.py --n_pairs 60 --batch_size 16
     python methods/head_cross.py --n_pairs 60 --subspace_dim 7      # the DAS-shaped patch
+    python methods/head_cross.py --entity brands --gold own --q1_attributes hq_country --n_pairs 192
+
+GOLDS (--gold). `label` (default, every flags result) matches the stored ground-truth label with
+VADE's matcher. brands/celebrities store labels lowercase while the model answers ' the United
+States.', so there `label` scores ~19% of even the self cell as `other` (RUN_REPORT_PAPER.md §4).
+`own` first generates the model's OWN unhooked answer for every (item, question) a row needs,
+keeps an answer only if VADE's matcher accepts it against the stored label (the model knows the
+fact), and classifies a patched generation by normalized exact match against those answers. Rows
+whose four golds are not all valid are `excluded`, not `other`. CONTENT SHIFT is then reported
+on INFORMATIVE rows only: base and donor answer Q1 differently (two US-headquartered brands
+cannot show a transfer).
 """
 import argparse
 import json
@@ -124,6 +135,12 @@ def build_rows(items, attributes, n_pairs, seed):
     return rows
 
 
+def labelled(row, truth):
+    """Every (item, attribute) behind the row's four golds has a label. brands' AIRBUS has no
+    `industry`; its rows are skipped rather than crashing classify()."""
+    return all(attr in truth[item] for item in (row["base"], row["donor_flag"]) for attr in (row["q1"], row["q2"]))
+
+
 def classify(text, row, truth, matcher):
     """-> which of the four golds the generation matched (or 'other'/'ambiguous').
 
@@ -141,6 +158,42 @@ def classify(text, row, truth, matcher):
     # cells make some of the four golds coincide) before calling it ambiguous.
     values = {str(truth[golds[h][0]][golds[h][1]]) for h in hits}
     return hits[0] if len(values) == 1 else "ambiguous"
+
+
+GOLD_KEYS = (("base_q1", "base", "q1"), ("source_q1", "donor_flag", "q1"),
+             ("source_q2", "donor_flag", "q2"), ("base_q2", "base", "q2"))
+
+
+def norm_answer(text):
+    """Casefold, collapse whitespace, drop trailing punctuation: ' the United States.' and
+    'The United States' are the same answer; 'the UK' and 'the United Kingdom' are not."""
+    import re
+    return re.sub(r"\s+", " ", str(text)).strip().casefold().rstrip(" .,;:!")
+
+
+def own_keys(rows):
+    """Every (item, attribute) whose own unhooked answer some row's four golds need."""
+    return sorted({(r[who], r[q]) for r in rows for _, who, q in GOLD_KEYS})
+
+
+def classify_own(text, row, own, valid):
+    """classify() against the model's own answers. own/valid: {(item, attribute): str/bool}.
+    -> a gold name, 'other', 'ambiguous', or 'excluded' (some needed own answer is wrong)."""
+    golds = {name: (row[who], row[q]) for name, who, q in GOLD_KEYS}
+    if not all(valid[k] for k in golds.values()):
+        return "excluded"
+    t = norm_answer(text)
+    hits = [name for name, k in golds.items() if t == norm_answer(own[k])]
+    if not hits:
+        return "other"
+    values = {norm_answer(own[golds[h]]) for h in hits}
+    return hits[0] if len(values) == 1 else "ambiguous"
+
+
+def informative(row, gold_text):
+    """Base and donor give DIFFERENT answers to Q1, so a transfer is visible at all.
+    gold_text: (item, attribute) -> answer string under the run's gold mode."""
+    return norm_answer(gold_text((row["base"], row["q1"]))) != norm_answer(gold_text((row["donor_flag"], row["q1"])))
 
 
 def main():
@@ -176,6 +229,14 @@ def main():
     ap.add_argument("--max_new_tokens", type=int, default=12)
     ap.add_argument("--batch_size", type=int, default=16)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--gold", choices=["label", "own"], default="label",
+                    help="label: stored ground truth via VADE's matcher (every flags result). own: the "
+                         "model's own unhooked answers, kept where they match the stored label (see GOLDS "
+                         "in the module docstring); required for brands/celebrities.")
+    ap.add_argument("--q1_attributes", nargs="+", default=None,
+                    help="Restrict the BASE question to these attributes; the donor still asks every "
+                         "attribute. Keeps the run on the attributes a transfer can show up in (entity "
+                         "facts), without losing the `both` cell. Default: every attribute.")
     ap.add_argument("--out", default=None)
     ap.add_argument("--dry_run", action="store_true")
     args = ap.parse_args()
@@ -192,12 +253,20 @@ def main():
         f"{args.entity} needs >=2 attributes with prompt templates to cross; got {attributes}")
     rows = [r for r in build_rows(items, attributes, args.n_pairs, args.seed)
             if r["cell"] in args.cells]
+    if args.q1_attributes:
+        bad = sorted(set(args.q1_attributes) - set(attributes))
+        assert not bad, f"--q1_attributes {bad} not among {attributes}"
+        rows = [r for r in rows if r["q1"] in args.q1_attributes]
+    n_drawn = len(rows)
+    rows = [r for r in rows if labelled(r, truth)]
     out_path = args.out or os.path.join(REPO_ROOT, "results", "head_cross", args.entity,
                                         f"cross_n{args.n_pairs}"
                                         + (f"_sub{args.subspace_dim}" if args.subspace_dim else "")
                                         # the mode goes in the NAME: three arms of the same
                                         # --n_pairs would otherwise overwrite each other
                                         + ("" if args.align == "matched" else f"_{args.align}")
+                                        + ("" if args.gold == "label" else "_own")
+                                        + (f"_q1-{'-'.join(args.q1_attributes)}" if args.q1_attributes else "")
                                         + ".jsonl")
 
     from collections import Counter
@@ -206,7 +275,13 @@ def main():
     print(f"  attributes ({len(attributes)}): " + ", ".join(attributes)
           + (f"   [no template, skipped: {', '.join(missing)}]" if missing else ""))
     print(f"  cells: {dict(Counter(r['cell'] for r in rows))}")
+    if len(rows) < n_drawn:
+        print(f"  skipped {n_drawn - len(rows)} generations whose golds need a missing label")
     print(f"  heads ({len(heads)}): " + ", ".join(f"{b}.{h}" for b, h in heads))
+    print(f"  golds: {args.gold}" + (f"; base question restricted to {args.q1_attributes}"
+                                     if args.q1_attributes else ""))
+    if args.gold == "own":
+        print(f"  own answers to generate first: {len(own_keys(rows))} (item, attribute) pairs")
     print(f"  align: {args.align}" + ("" if args.align == "matched" else
           "   [NOT the R11 intervention -- compare against a --align matched run of the "
           "same --n_pairs/--seed, which draws the identical rows]"))
@@ -273,6 +348,28 @@ def main():
                             align=args.align)
     print(f"  read-back check: worst = {worst:.2e} over {args.max_new_tokens} steps")
 
+    own, valid = {}, {}
+    if args.gold == "own":
+        # The model's own unhooked answer for every (item, question) a gold needs, under the SAME
+        # template and generation settings as the patched runs. Generated through batch_of's base
+        # side, so the prompt is byte-identical to the one the patched generation sees.
+        keys = own_keys(rows)
+        for start in range(0, len(keys), args.batch_size):
+            ks = keys[start:start + args.batch_size]
+            fake = [{"base": it, "q1": q, "donor_flag": it, "q2": q} for it, q in ks]
+            bi, bm, bx, _, _, _ = batch_of(fake)
+            for k, text in zip(ks, decode(processor, plain_generate(model, bi, bm, bx, args.max_new_tokens,
+                                                                    pad_id))):
+                own[k], valid[k] = text, bool(matcher(text, str(truth[k[0]][k[1]])))
+        by_attr = Counter()
+        for (it, q), ok in valid.items():
+            by_attr[(q, ok)] += 1
+        print("  own answers matching the stored label: " + ", ".join(
+            f"{q} {by_attr[(q, True)]}/{by_attr[(q, True)] + by_attr[(q, False)]}"
+            for q in sorted({q for q, _ in by_attr})))
+    gold_text = (lambda k: own[k]) if args.gold == "own" else (lambda k: str(truth[k[0]][k[1]]))
+    per_q1 = {c: Counter() for c in ("flag", "both")}
+
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     tally = {c: Counter() for c in CELLS}
     with open(out_path, "w") as fh:
@@ -285,14 +382,24 @@ def main():
             clean = plain_generate(model, bi, bm, bx, args.max_new_tokens, pad_id)
             for r, text, ctext, tok0 in zip(chunk, decode(processor, toks),
                                             decode(processor, clean), toks[:, 0].tolist()):
-                label = classify(text, r, truth, matcher)
-                tally[r["cell"]][label] += 1
+                extra = {}
+                if args.gold == "own":
+                    label = classify_own(text, r, own, valid)
+                    extra = {"gold": "own", "label_stored": classify(text, r, truth, matcher),
+                             "own": {name: own[(r[who], r[q])] for name, who, q in GOLD_KEYS}}
+                else:
+                    label = classify(text, r, truth, matcher)
+                if label != "excluded":
+                    tally[r["cell"]][label] += 1
+                    if r["cell"] in per_q1 and informative(r, gold_text):
+                        per_q1[r["cell"]][(r["q1"], label)] += 1
+                        per_q1[r["cell"]][(r["q1"], "n")] += 1
                 # first_token is what makes the three --align modes comparable: they are
                 # identical at t=0 by construction, so this column must MATCH across modes
                 # row for row. It is also the only honest readout for a multi-token answer
                 # whose continuation the intervention cannot reach (swap_trace.py's rule).
                 fh.write(json.dumps({**r, "generated": text, "clean": ctext, "label": label,
-                                     "align": args.align, "first_token": tok0}) + "\n")
+                                     "align": args.align, "first_token": tok0, **extra}) + "\n")
             print(f"  {min(start + args.batch_size, len(rows))}/{len(rows)}", flush=True)
 
     labels = ["base_q1", "source_q1", "source_q2", "base_q2", "other", "ambiguous"]
@@ -326,6 +433,21 @@ def main():
         print(f"\n  QUESTION-ONLY cell (entity never changes, so nothing here is entity transfer):\n"
               f"    stayed at A's answer to Q1: {tally['question']['base_q1'] / qn * 100:.1f}%   "
               f"moved to A's answer to Q2: {tally['question']['base_q2'] / qn * 100:.1f}%")
+    if any(per_q1.values()):
+        print(f"\n  B's answer to Q1, per base question, INFORMATIVE rows only "
+              f"(base and donor answer Q1 differently; golds: {args.gold}):")
+        print(f"    {'q1':<18} {'donor asked SAME':>22} {'donor asked ANOTHER':>22} {'shift':>8}")
+        for q in sorted({q for c in per_q1.values() for q, k in c if k == "n"}):
+            cells = []
+            for c in ("flag", "both"):
+                n = per_q1[c][(q, "n")]
+                cells.append((per_q1[c][(q, "source_q1")] / n * 100, n) if n else (None, 0))
+            txt = [f"{v:5.1f}% (n={n:>4})" if v is not None else f"{'-':>15}" for v, n in cells]
+            shift = (f"{cells[1][0] - cells[0][0]:+7.1f}" if None not in (cells[0][0], cells[1][0]) else "")
+            print(f"    {q:<18} {txt[0]:>22} {txt[1]:>22} {shift:>8}")
+    if args.gold == "own":
+        n_ex = sum(1 for r in rows) - sum(sum(t.values()) for t in tally.values())
+        print(f"\n  excluded (some needed own answer is wrong): {n_ex} of {len(rows)} rows")
     print(f"\nwrote {out_path}")
 
 

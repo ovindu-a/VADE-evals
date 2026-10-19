@@ -394,6 +394,8 @@ def donor_template(lookup, job):
 # ---------------------------------------------------------------------------
 
 def build_prompt(processor, image, question, prefill):
+    """Qwen2.5-VL's prompt, as every result before X3 was built. Callers that may run another
+    model use prompt_inputs instead."""
     messages = [
         {"role": "user", "content": [{"type": "image", "image": image}, {"type": "text", "text": question}]},
         {"role": "assistant", "content": [{"type": "text", "text": prefill}]},
@@ -403,28 +405,49 @@ def build_prompt(processor, image, question, prefill):
         return_dict=True, return_tensors="pt")
 
 
-def build_batch(jobs, processor, items, entity_dir, lookup, pad_id):
+def is_legacy_qwen(adapter):
+    """True for no adapter (old call sites) and for the Qwen2.5-VL adapter: those keep the
+    apply_chat_template path above, so Qwen inputs stay bit-identical to every earlier run."""
+    if adapter is None:
+        return True
+    from methods.adapters.qwen2_5_vl import Qwen25VLAdapter
+    return isinstance(adapter, Qwen25VLAdapter)
+
+
+def prompt_inputs(processor, image, question, prefill, adapter=None):
+    """-> (input_ids [T], extra) for one prompt. Qwen (or no adapter): build_prompt, keeping only
+    pixel_values + image_grid_thw as before. Any other model: adapter.build_inputs, whose `extra`
+    is whatever that model's forward needs (Idefics3: pixel_values + pixel_attention_mask)."""
+    if is_legacy_qwen(adapter):
+        p = build_prompt(processor, image, question, prefill)
+        return p["input_ids"][0], {"pixel_values": p["pixel_values"], "image_grid_thw": p["image_grid_thw"]}
+    built = adapter.build_inputs(processor, image, question, prefill)
+    return built["input_ids"], built["extra"]
+
+
+def build_batch(jobs, processor, items, entity_dir, lookup, pad_id, adapter=None):
     """Base and donor prompts for one chunk, each LEFT-padded to its own max.
 
     Left padding is what lets every hook in this file address column -1: the
     last real prompt token is the final column for every row regardless of
     length, and a decode step has one column. Base and donor are padded
     independently because under donor_question='target' they are different
-    questions and genuinely differ in length."""
+    questions and genuinely differ in length. `adapter`: see prompt_inputs
+    (None = Qwen2.5-VL, as before)."""
     import torch
     from PIL import Image
+    from methods.common.entities import concat_extra
 
-    base_seqs, donor_seqs, base_px, donor_px, base_thw, donor_thw = [], [], [], [], [], []
+    base_seqs, donor_seqs, base_extras, donor_extras = [], [], [], []
     for j in jobs:
         bt = lookup[j["queried"]][j["template_id"]]
         dt = donor_template(lookup, j)
         with Image.open(os.path.join(entity_dir, items[j["base"]]["image"])) as im:
-            bp = build_prompt(processor, im.convert("RGB"), bt["question"], bt["prefill"])
+            b_ids, b_extra = prompt_inputs(processor, im.convert("RGB"), bt["question"], bt["prefill"], adapter)
         with Image.open(os.path.join(entity_dir, items[j["source"]]["image"])) as im:
-            dp = build_prompt(processor, im.convert("RGB"), dt["question"], dt["prefill"])
-        base_seqs.append(bp["input_ids"][0]); donor_seqs.append(dp["input_ids"][0])
-        base_px.append(bp["pixel_values"]); donor_px.append(dp["pixel_values"])
-        base_thw.append(bp["image_grid_thw"]); donor_thw.append(dp["image_grid_thw"])
+            d_ids, d_extra = prompt_inputs(processor, im.convert("RGB"), dt["question"], dt["prefill"], adapter)
+        base_seqs.append(b_ids); donor_seqs.append(d_ids)
+        base_extras.append(b_extra); donor_extras.append(d_extra)
 
     def pack(seqs):
         n = max(len(s) for s in seqs)
@@ -440,9 +463,9 @@ def build_batch(jobs, processor, items, entity_dir, lookup, pad_id):
     return {
         "jobs": jobs,
         "base_ids": base_ids, "base_mask": base_mask,
-        "base_extra": {"pixel_values": torch.cat(base_px), "image_grid_thw": torch.cat(base_thw)},
+        "base_extra": concat_extra(base_extras),
         "donor_ids": donor_ids, "donor_mask": donor_mask,
-        "donor_extra": {"pixel_values": torch.cat(donor_px), "image_grid_thw": torch.cat(donor_thw)},
+        "donor_extra": concat_extra(donor_extras),
     }
 
 
@@ -929,7 +952,7 @@ def main():
     # so pay one generation to find out before paying len(jobs).
     if "heads" in args.arms:
         first_attr, probe_jobs = next(batches_by_donor_attribute(jobs, 4))
-        probe = build_batch(probe_jobs, processor, items, entity_dir, lookup, pad_id)
+        probe = build_batch(probe_jobs, processor, items, entity_dir, lookup, pad_id, adapter)
         pz = capture_donor(adapter, model, blocks, probe["donor_ids"], probe["donor_mask"],
                            probe["donor_extra"], args.max_new_tokens, pad_id)
         for name, hs in head_sets.items():
@@ -943,7 +966,7 @@ def main():
     done = 0
     try:
         for attribute, chunk in batches_by_donor_attribute(jobs, args.batch_size):
-            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id)
+            batch = build_batch(chunk, processor, items, entity_dir, lookup, pad_id, adapter)
             need_donor = any(a in ("heads", "random_heads") for a in args.arms)
             donor_z = (capture_donor(adapter, model, blocks, batch["donor_ids"], batch["donor_mask"],
                                      batch["donor_extra"], args.max_new_tokens, pad_id)

@@ -151,6 +151,18 @@ class ModelAdapter:
         always."""
         raise NotImplementedError
 
+    def assistant_start_col(self, processor, input_ids) -> int:
+        """-> the column where the assistant turn's header begins in one tokenized prompt
+        (input_ids: 1-D), i.e. where the "assistant_prefix" token group of
+        methods/head_vocab_projection.py starts. This default is the ChatML convention (Qwen2.5-VL,
+        InternVL3): the LAST <|im_start|>, which opens the assistant turn. An adapter whose chat
+        template is not ChatML must override it (see idefics3.py)."""
+        ids = input_ids.tolist() if hasattr(input_ids, "tolist") else list(input_ids)
+        im_start_id = processor.tokenizer.convert_tokens_to_ids("<|im_start|>")
+        starts = [i for i, t in enumerate(ids) if t == im_start_id]
+        assert starts, "no <|im_start|> in the prompt -- not a ChatML template; override assistant_start_col"
+        return starts[-1]
+
     def unembed(self, model, hidden_states) -> "torch.Tensor":
         """Projects a residual-stream hidden_states tensor ([..., H]) into vocab-space logits
         ([..., V]) using THIS model's own final norm + output head -- the logit-lens operation.

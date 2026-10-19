@@ -117,18 +117,21 @@ def label_variants(label):
     return out
 
 
-def token_groups(ids, image_token_id, im_start_id, footprint):
+def token_groups(ids, image_token_id, assistant_start, footprint):
     """-> list of group names, one per position.
 
     `footprint` is the set of IMAGE-RELATIVE indices of the object's tokens.
-    `question` runs from the first text token after the image to the last
-    <|im_start|> (exclusive); `assistant_prefix` is that <|im_start|> onward --
-    the assistant header plus the prefill. Anything before the image is `system`."""
+    `assistant_start` is the column where the assistant turn's header begins
+    (adapter.assistant_start_col: the last <|im_start|> on ChatML models).
+    `question` runs from the first text token after the image to that column
+    (exclusive); `assistant_prefix` is that column onward -- the assistant
+    header plus the prefill. Anything before the image is `system`."""
     ids = list(ids)
     img = [i for i, t in enumerate(ids) if t == image_token_id]
     assert img, "no image tokens in the prompt"
-    starts = [i for i, t in enumerate(ids) if t == im_start_id]
-    assert starts and starts[-1] > img[-1], "no <|im_start|> after the image -- not a chat prompt?"
+    assert img[-1] < assistant_start < len(ids), (
+        f"assistant turn starts at column {assistant_start}, not after the image (last image column "
+        f"{img[-1]}) -- not a chat prompt?")
     groups, k = [], 0
     for i, t in enumerate(ids):
         if t == image_token_id:
@@ -136,7 +139,7 @@ def token_groups(ids, image_token_id, im_start_id, footprint):
             k += 1
         elif i < img[0]:
             groups.append("system")
-        elif i < starts[-1]:
+        elif i < assistant_start:
             groups.append("question")
         else:
             groups.append("assistant_prefix")
@@ -497,14 +500,22 @@ def main():
     import torch
     from PIL import Image
     from methods.adapters.registry import get_adapter
-    from methods.head_swap_vade import build_prompt
+    from methods.head_swap_vade import prompt_inputs
 
     adapter = get_adapter(args.model_id)
     model, processor = adapter.load(device=args.device, attn_implementation="eager")
     tok = processor.tokenizer
     head_dim = adapter.hidden_size(model) // adapter.n_attention_heads(model)
     image_token_id = adapter.image_token_id(model, processor)
-    im_start_id = tok.convert_tokens_to_ids("<|im_start|>")
+    if not getattr(adapter, "shares_object_grid", True):
+        # object_location.json's top-level indices are Qwen's 28px grid; only a per-model
+        # override (VADE's "models" key) says which of THIS model's image tokens are the object.
+        override = loc.get("models", {}).get(args.model_id.split("/")[-1])
+        assert override is not None, (
+            f"{args.model_id} does not use object_location.json's Qwen token grid and "
+            f"{args.entity} has no per-model override, so the object/background split is undefined")
+        footprint = set(min(override["object_token_indices"].values(), key=lambda v: len(v["flat"]))["flat"])
+        print(f"  object footprint from the {args.model_id.split('/')[-1]} override: {len(footprint)} image tokens")
     ent_ids, val_ids, collisions = build_candidates(tok, items, attributes, lookup, args.template_index)
     all_ent = sorted({i for v in ent_ids.values() for i in v})
     print("  first-token collisions (rank measures a name FAMILY for these): "
@@ -521,11 +532,11 @@ def main():
                     print(f"  skip {key}/{attr}: no ground-truth value")
                     continue
                 tmpl = lookup[attr][sorted(lookup[attr])[args.template_index]]
-                p = build_prompt(processor, image, tmpl["question"], tmpl["prefill"])
-                ids = p["input_ids"]
-                groups = token_groups(ids[0].tolist(), image_token_id, im_start_id, footprint)
-                store = capture_forward(adapter, model, ids, {"pixel_values": p["pixel_values"],
-                                                              "image_grid_thw": p["image_grid_thw"]}, blocks)
+                ids, extra = prompt_inputs(processor, image, tmpl["question"], tmpl["prefill"], adapter)
+                ids = ids.unsqueeze(0)
+                groups = token_groups(ids[0].tolist(), image_token_id,
+                                      adapter.assistant_start_col(processor, ids[0]), footprint)
+                store = capture_forward(adapter, model, ids, extra, blocks)
                 cands = {"entity": (ent_ids[key], all_ent), "queried": attr,
                          "values": {a: (val_ids[a][key], sorted({i for v in val_ids[a].values() for i in v}))
                                     for a in attributes if key in val_ids[a]}}
