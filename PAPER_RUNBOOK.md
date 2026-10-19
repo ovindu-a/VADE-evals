@@ -10,8 +10,8 @@ one is needed; this file only says what to run, what must hold, and what to repo
 - **Do not edit anything under `methods/`, `tests/` or `scripts/`, and do not change any
   hyperparameter, head list, layer or row count.** A failed self-check is evidence; patching
   the code to make it pass destroys it. Stop that step, record what happened, and report.
-- **The one allowed change:** if a step runs out of GPU memory, rerun just that step with the
-  batch size halved (`--batch_size`), and record that you did.
+- **The one allowed change:** if a step runs out of GPU memory, rerun just that step by name
+  without `GPU=a100` (section 2), and record that you did.
 - Never delete or overwrite anything under `results/` or `logs/` that existed before you
   started. Every step below writes to its own directory.
 - Do not `git commit` or `git push` unless the user says to.
@@ -27,26 +27,110 @@ cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home
 git pull
 python -c "import torch, transformers; print(torch.__version__, transformers.__version__, torch.cuda.is_available())"
 python -m pytest -q tests/                # expect 0 failures; tokenizer tests may SKIP
-mkdir -p logs/paper
 ```
 
 `tests/test_crossmodal.py` has never been run (it was written off-pod without torch). If
 any test in it fails, stop and report the failure verbatim; do not run X1.
 
-Run everything inside tmux (`tmux new -s paper`), each step logged with `tee`.
 
-## 2. Run order
+## 2. Run order: smoke, then three lanes on one A100
 
-Run the batch in the order of section 3. Smoke each new experiment first: smoke numbers mean
-nothing, they only prove the step runs end to end. Then run the full version.
+Everything runs through `scripts/run_paper.sh`, which logs each step to
+`logs/paper/<step>_<stamp>.log` and writes results under `results/paper/`. Section 3's
+per-experiment commands are what each named step runs; you do not need to type them.
 
-| ID | Experiment | PAPER_TODO item | Smoke | Full | Est. time (unverified) |
-|---|---|---|---|---|---|
-| X1 | Mover-head content, image vs text | §2 image-vs-text convergence | yes | yes | ~45 min |
-| X2 | Brands + celebrities: mover install, cross-question, MLP lookup | §0 full story on brands/celebrities | yes | yes | ~3-4 h |
+| ID | Experiment | PAPER_TODO item | Steps |
+|---|---|---|---|
+| X1 | Mover-head content, image vs text | §2 image-vs-text convergence | `x1` |
+| X2 | Brands + celebrities: mover install, cross-question, MLP lookup | §0 full story on brands/celebrities | `x2_swap_*`, `x2_cross_*`, `x2_severed_*`, `x2_score` |
 
 Not runnable yet (section 5 lists the code each one needs; do NOT attempt them on the pod):
 X2b (brands/celebrities routers, compose, text contrast) and X3 (Idefics3, a non-Qwen LM).
+
+### Why three lanes, and how they are balanced
+
+The last two pod sessions (`logs/tier3/GPU_USAGE_session1.md`, `RUN_REPORT_TIER3.md` §5)
+measured how these jobs use the card:
+- They are **CPU-dispatch bound.** One Python core runs at 100% per job; mean power is about
+  205 of 400 W.
+- That makes **bigger batches the cheapest speed-up**, so every lane runs `GPU=a100` (batch 64).
+- **Parallel lanes help, but not linearly.** Three lanes gave about 1.5x throughput, not 3x.
+- **Memory limits the lane count.** a100-profile jobs peaked at 22-32 GB each, and three lanes
+  reached 78.8 GB once. So three lanes is the ceiling; a fourth would run out of memory.
+
+The lanes are balanced by generation count (dry runs, 2026-10-19). Celebrities' install is
+2,308 generations per arm against brands' 1,394, so it is split across two lanes by head set.
+
+| lane | steps | ~generations |
+|---|---|---|
+| 1 | `x2_swap_celeb_a`: celebrities clean, full_image, nat_top8, lang_top8 (+ random nulls) | ~14k |
+| 2 | `x2_swap_brands` (8 arms), `x2_cross_brands` (×2 alignments), `x2_severed_brands` | ~16k |
+| 3 | `x2_swap_celeb_b` (cons6, common10 + nulls), `x2_cross_celeb` (×2), `x2_severed_celeb`, `x1` | ~16k |
+
+Expected wall time is about 2.5-4 h per lane, extrapolated from Tier-3 rates (P3: 14k
+generations in 217 min at batch 16 alongside two other lanes). This is not measured. X1 sits
+last in lane 3 because it is the one step with no earlier timing; if it runs long, nothing
+waits on it.
+
+### Steps
+
+**1. Smoke (~15-25 min, one window).** It also runs the head-list check:
+
+```bash
+tmux new -s paper
+cd /workspace/VADE-evals && export HF_HOME=/workspace/hf_home PYTORCH_ALLOC_CONF=expandable_segments:True
+bash scripts/run_paper.sh smoke
+```
+
+Smoke numbers mean nothing. Check only that every step prints `-> [smoke_...] done`, with no
+traceback, and that the first line reads `head check ok: ...`.
+
+**2. Optional: MPS.** It lets the three lanes' kernels overlap instead of time-slicing. It is
+untested on this pod. Start it only while no CUDA process is running, and skip it if the
+daemon refuses:
+
+```bash
+export CUDA_MPS_PIPE_DIRECTORY=/tmp/mps CUDA_MPS_LOG_DIRECTORY=/tmp/mps
+mkdir -p /tmp/mps && nvidia-cuda-mps-control -d
+```
+
+If MPS is on, export the same two variables in every lane window.
+
+**3. Start the lanes one at a time,** each in its own tmux window (`Ctrl-b c`), with the same
+`cd` / `export` line as step 1:
+
+```bash
+GPU=a100 bash scripts/run_paper.sh lane1
+GPU=a100 bash scripts/run_paper.sh lane2
+GPU=a100 bash scripts/run_paper.sh lane3
+```
+
+- Start lane 1, wait ~10 minutes, and read the `nvidia-smi` peak. Then start lane 2, wait
+  again, then lane 3.
+- Keep the total under ~72 GB. If adding a lane would pass that, wait for one to finish.
+- In a spare window, log `nvidia-smi` every 30 s for the report:
+
+  ```bash
+  nvidia-smi --query-gpu=timestamp,utilization.gpu,utilization.memory,memory.used,power.draw,clocks.sm \
+      --format=csv -l 30 > logs/paper/gpu_usage.csv
+  ```
+
+- **If a step runs out of memory:**
+  1. Only its lane stops (`set -e`).
+  2. Let the other lanes finish.
+  3. Rerun that step by name, without `GPU=a100` (e.g. `bash scripts/run_paper.sh x2_cross_celeb`).
+  4. Record that you did.
+- **No step resumes.** A rerun rewrites that step's own outputs from scratch. That is safe:
+  every step writes only its own directory.
+
+**4. After all three lanes finish:**
+
+```bash
+bash scripts/run_paper.sh x2_score               # CPU only, a few minutes
+echo quit | nvidia-cuda-mps-control              # only if MPS was started
+```
+
+Then check every self-check in section 3 and write the report (section 4).
 
 ## 3. Experiments
 
@@ -57,19 +141,9 @@ carry the same? Two parts in one run: representational (does image-run France si
 text-run France, per layer and per mover head?) and causal (do text-run mover values install
 into an image run, and the reverse?).
 
-**Smoke:**
-
-```bash
-python methods/text_entity_contrast.py --phases crossmodal --n_pairs 8 \
-    --out_dir results/text_entity_contrast/smoke_crossmodal 2>&1 | tee logs/paper/x1_smoke.log
-```
-
-**Full:**
-
-```bash
-python methods/text_entity_contrast.py --phases crossmodal \
-    --out_dir results/text_entity_contrast/flags_crossmodal 2>&1 | tee logs/paper/x1_crossmodal.log
-```
+**Runs as:** step `x1` (lane 3), with smoke in `smoke`. It executes
+`text_entity_contrast.py --phases crossmodal --batch_size 64 --out_dir
+results/text_entity_contrast/flags_crossmodal`.
 
 Defaults: flags, 64 pairs × 4 attributes, `common10` movers, batch 16, seed 0. The
 representation part always uses all 84 countries × 4 attributes.
@@ -119,93 +193,42 @@ Already done, so do not rerun: `head_severed` on brands/hq_country and celebriti
 nationality + native_language (`results/head_severed/*__gold-own`), and
 `head_vocab_projection` on both entities.
 
-**Setup** (once per shell; same helper as `scripts/run_tier3.sh`):
+**Runs as** (section 2 assigns them to lanes):
 
-```bash
-P=results/image_head_pipeline; T=../VADE/models/Qwen2.5-VL-7B-Instruct; O=results/paper
-COMMON10=21.1,21.5,22.13,22.15,22.17,22.19,23.3,23.4,23.6,23.17
-top8() { python - "$@" <<'EOF'
-import glob, json, sys
-root, entity, attribute = sys.argv[1:4]
-paths = sorted(glob.glob(f"{root}/{entity}/{attribute}/head_trace_*.json"))
-assert paths, f"no head_trace JSON under {root}/{entity}/{attribute}"
-print(",".join(f"{b}.{h}" for b, h in json.load(open(paths[0]))["phase1_ranked"][:8]))
-EOF
-}
-BH=$(top8 $P brands hq_country); CN=$(top8 $P celebrities nationality); CL=$(top8 $P celebrities native_language)
-C6=21.1,22.15,22.17,23.3,23.4,23.6        # shared by all three entity top-8s
-echo "BH=$BH"; echo "CN=$CN"; echo "CL=$CL"
-```
+| step | runs | output under `results/paper/` |
+|---|---|---|
+| `x2_swap_brands` | `head_swap_vade` on brands: hq_top8, cons6, common10 (heads + random nulls), clean, full_image | `x2_swap_brands/` |
+| `x2_swap_celeb_a` | the same on celebrities: nat_top8, lang_top8, clean, full_image | `x2_swap_celebrities_a/` |
+| `x2_swap_celeb_b` | celebrities: cons6, common10 (heads + random nulls) | `x2_swap_celebrities_b/` |
+| `x2_cross_brands` / `x2_cross_celeb` | `head_cross`, 64 pairs, seed 0, `--align matched` and `step0` | `x2_cross_*/cross_n64_<align>.jsonl` |
+| `x2_severed_brands` | `head_severed --gold own`: founded_year, industry | `x2_severed_brands_year_industry/` |
+| `x2_severed_celeb` | `head_severed --gold own`: occupation, birth_year | `x2_severed_celebrities_occ_year/` |
+| `x2_score` | VADE `score.py` for every install arm × attribute, on the pruned tuples (CPU) | `x2_swap_*/scores/<arm>/<attribute>/` |
 
-Self-check 0: the three lists must print exactly
-`BH=23.3,21.4,22.17,23.4,23.6,22.15,23.17,21.1`,
-`CN=23.3,22.17,23.4,23.6,21.4,22.15,21.5,21.1`,
-`CL=22.17,23.4,21.1,23.6,23.3,22.19,22.15,19.6`. Anything else: stop and report.
+Settings shared by these steps:
+- `--limit_pairs 128` for the installs.
+- `--patch_layer 19` for `full_image`: both entities' image plateau ends there, and the
+  default 21 under-reads them.
+- Severed flags as in the committed E7 runs: n=128, freeze values base / mean / other, MLP span
+  22-27, singles 23-26, attention 24-27.
+- Brands cross-question stays at seed 0 with n ≤ 64. Larger samples draw AIRBUS, which has no
+  `industry` label and crashes `head_cross` (fix G, section 5).
+- **Random nulls differ from a single run.** Each install step draws its random-head nulls from
+  its own seed-0 RNG, so the celebrities nulls are not the ones a single combined run would draw.
 
-**Smoke** (only proves each script runs; numbers mean nothing):
+Head sets come from `results/image_head_pipeline/<entity>/<attr>/head_trace_*.json`
+(`phase1_ranked[:8]`). The launcher refuses to run if they drift from:
 
-```bash
-python methods/head_swap_vade.py --entity brands --tuples_dir $T/brands/tuples --head_sets "hq_top8=$BH" \
-    --arms clean heads --limit_pairs 4 --out_dir $O/smoke_x2_swap 2>&1 | tee logs/paper/x2_smoke_swap.log
-python methods/head_cross.py --entity celebrities --heads "$CN" --n_pairs 4 --seed 0 \
-    --out $O/smoke_x2_cross/cross_n4.jsonl 2>&1 | tee logs/paper/x2_smoke_cross.log
-python methods/head_severed.py --entity brands --attributes founded_year --heads "$BH" --n_pairs 8 --gold own \
-    --freeze_values base --freeze_mlp_span 23-26 --freeze_attn_span '' \
-    --out_dir $O/smoke_x2_severed 2>&1 | tee logs/paper/x2_smoke_severed.log
-```
-
-**Full.** (a) Continuous mover install, every attribute, VADE-scored. `--patch_layer 19` is
-where both entities' image plateau ends (the default 21 under-reads them); it only affects
-the `full_image` arm.
-
-```bash
-python methods/head_swap_vade.py --entity brands --tuples_dir $T/brands/tuples \
-    --head_sets "hq_top8=$BH" "cons6=$C6" "common10=$COMMON10" \
-    --arms clean heads random_heads full_image --patch_layer 19 --limit_pairs 128 --batch_size 64 \
-    --out_dir $O/x2_swap_brands 2>&1 | tee logs/paper/x2_swap_brands.log
-python methods/head_swap_vade.py --entity celebrities --tuples_dir $T/celebrities/tuples \
-    --head_sets "nat_top8=$CN" "lang_top8=$CL" "cons6=$C6" "common10=$COMMON10" \
-    --arms clean heads random_heads full_image --patch_layer 19 --limit_pairs 128 --batch_size 64 \
-    --out_dir $O/x2_swap_celebrities 2>&1 | tee logs/paper/x2_swap_celebrities.log
-# score every arm, per attribute, against the same pruned tuples
-for e in brands celebrities; do
-  for f in $O/x2_swap_$e/*.jsonl; do
-    for a in $(ls $T/$e/tuples | grep -v identity); do
-      python ../VADE/eval/score.py --predictions "$f" --entity $e --attribute $a --tuples_dir $T/$e/tuples \
-          --out_dir $O/x2_swap_$e/scores/$(basename "$f" .jsonl)/$a
-    done
-  done
-done 2>&1 | tee logs/paper/x2_swap_scores.log
-```
-
-(b) Cross-question patching. Brands stays at `--seed 0 --n_pairs 64`: larger samples draw
-AIRBUS, which has no `industry` label and crashes `head_cross` (a known bug, fix G in
-section 5). `step0` is the alignment control R11 used.
-
-```bash
-for al in matched step0; do
-  python methods/head_cross.py --entity brands --heads "$BH" --n_pairs 64 --seed 0 --align $al --batch_size 64 \
-      --out $O/x2_cross_brands/cross_n64_$al.jsonl 2>&1 | tee logs/paper/x2_cross_brands_$al.log
-  python methods/head_cross.py --entity celebrities --heads "$CN" --n_pairs 64 --seed 0 --align $al --batch_size 64 \
-      --out $O/x2_cross_celebrities/cross_n64_$al.jsonl 2>&1 | tee logs/paper/x2_cross_celebrities_$al.log
-done
-```
-
-(c) MLP freezing on the year and category attributes (Z2's test for `founded_year`).
-Same settings as the committed E7 runs.
-
-```bash
-SEV=(--n_pairs 128 --gold own --freeze_values base mean other --freeze_mlp_span 22-27
-     --freeze_mlp_singles 23 24 25 26 --freeze_attn_span 24-27 --batch_size 64)
-python methods/head_severed.py --entity brands --attributes founded_year industry --heads "$BH" "${SEV[@]}" \
-    --out_dir $O/x2_severed_brands_year_industry 2>&1 | tee logs/paper/x2_severed_brands.log
-python methods/head_severed.py --entity celebrities --attributes occupation birth_year --heads "$CN" "${SEV[@]}" \
-    --out_dir $O/x2_severed_celebrities_occ_year 2>&1 | tee logs/paper/x2_severed_celebrities.log
-```
+| set | heads |
+|---|---|
+| brands hq_country (BH) | `23.3,21.4,22.17,23.4,23.6,22.15,23.17,21.1` |
+| celebrities nationality (CN) | `23.3,22.17,23.4,23.6,21.4,22.15,21.5,21.1` |
+| celebrities native_language (CL) | `22.17,23.4,21.1,23.6,23.3,22.19,22.15,19.6` |
+| cons6 | `21.1,22.15,22.17,23.3,23.4,23.6` (shared by all three) |
 
 **Self-checks:**
 
-0. The head lists match (above).
+0. Every step prints `head check ok: ...` (the launcher exits otherwise).
 1. Install: `random_heads_*` cause ≤ 5% on every attribute; `clean` cause ≈ 0.
 2. Install: `full_image` cause ≥ 70% on hq_country, nationality and native_language (the
    pipeline's own image-swap ceiling there was 90-100%).
@@ -216,7 +239,7 @@ python methods/head_severed.py --entity celebrities --attributes occupation birt
 5. If any step raises `KeyError` on an item or attribute, report it verbatim; do not
    change the seed or sample size to dodge it.
 
-**Outputs:** `results/paper/x2_*`.
+**Outputs:** `results/paper/x2_*` (table above).
 
 **Report back:**
 - Per entity × attribute × arm: cause / iso / final from the score summaries.
@@ -226,8 +249,9 @@ python methods/head_severed.py --entity celebrities --attributes occupation birt
 - One line on whether the category attributes (industry, occupation) behave like entity
   facts or like the animals category traits (P14).
 
-<!-- Template for the next experiment. Copy it, give it the next X-number, and add it to
-the table in section 2.
+<!-- Template for the next experiment. Copy it, give it the next X-number, add its steps to
+scripts/run_paper.sh (a function per step, plus the case line), add it to section 2's table,
+and put each step in the lane with the fewest generations (dry-run it for the count).
 
 ### XN. Title
 
@@ -253,13 +277,15 @@ the table in section 2.
 ## 4. Report
 
 When the batch is done, write `RUN_REPORT_PAPER.md`, with:
-- the environment (GPU, torch and transformers versions, commit);
-- per-step status and wall time;
+- the environment (GPU, torch and transformers versions, commit, MPS on/off);
+- per-step status and wall time (each step's `done in N min` line), and which lane ran it;
+- GPU usage from `logs/paper/gpu_usage.csv`: per-lane memory peaks, mean power, and whether
+  three lanes beat Tier-3's ~1.5x;
 - every self-check as pass/fail with its number;
 - each experiment's "Report back" items;
 - anything unexpected, quoted verbatim from the log.
 
-Then package `results/` and `logs/paper/` for the user, including the gitignored `.pt` files.
+Then package `results/paper/`, `results/text_entity_contrast/flags_crossmodal/` and `logs/paper/` for the user, including the gitignored `.pt` files.
 
 ## 5. Not runnable yet: needs code written off-pod first
 
