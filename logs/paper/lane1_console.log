@@ -1,0 +1,66 @@
+GPU=a100 batch profile: tec=64 swap=64 cross=64 severed=64
+head check ok: BH=23.3,21.4,22.17,23.4,23.6,22.15,23.17,21.1 CN=23.3,22.17,23.4,23.6,21.4,22.15,21.5,21.1 CL=22.17,23.4,21.1,23.6,23.3,22.19,22.15,19.6
+=== [x2_swap_celeb_a] python methods/head_swap_vade.py --entity celebrities --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --head_sets nat_top8=23.3,22.17,23.4,23.6,21.4,22.15,21.5,21.1 lang_top8=22.17,23.4,21.1,23.6,23.3,22.19,22.15,19.6 --arms clean heads random_heads full_image --patch_layer 19 --limit_pairs 128 --batch_size 64 --out_dir results/paper/x2_swap_celebrities_a ===
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[head_swap_vade] celebrities/test: 2308 generations -> 6951 scored rows (full split is 33657); donor_question=queried
+  nat_top8 (8): 21.1, 21.4, 21.5, 22.15, 22.17, 23.3, 23.4, 23.6
+  lang_top8 (8): 19.6, 21.1, 22.15, 22.17, 22.19, 23.3, 23.4, 23.6
+  blocks captured: [19, 21, 22, 23]
+  arms (6): ['clean', 'heads_nat_top8', 'heads_lang_top8', 'random_heads_nat_top8', 'random_heads_lang_top8', 'full_image']
+  2308 donor passes + 13848 scored generations at batch 64
+  -> results/paper/x2_swap_celebrities_a
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:20,  1.65it/s]Loading weights:   0%|          | 2/729 [00:01<08:07,  1.49it/s]Loading weights:   1%|          | 5/729 [00:01<02:47,  4.31it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:11, 10.12it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:45, 15.52it/s]Loading weights:   3%|▎         | 22/729 [00:01<00:32, 21.56it/s]Loading weights:   4%|▍         | 29/729 [00:02<00:29, 23.82it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:18, 36.90it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:19, 34.60it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:17, 39.43it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 36.85it/s]Loading weights:   9%|▊         | 63/729 [00:02<00:16, 40.55it/s]Loading weights:   9%|▉         | 68/729 [00:03<00:17, 37.54it/s]Loading weights:  10%|█         | 76/729 [00:03<00:14, 45.31it/s]Loading weights:  11%|█         | 81/729 [00:03<00:15, 40.52it/s]Loading weights:  12%|█▏        | 88/729 [00:03<00:14, 44.86it/s]Loading weights:  13%|█▎        | 93/729 [00:03<00:15, 40.03it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:13, 45.10it/s]Loading weights:  14%|█▍        | 105/729 [00:03<00:15, 40.11it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:13, 45.45it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:15, 39.67it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:15, 38.11it/s]Loading weights:  18%|█▊        | 132/729 [00:04<00:13, 45.63it/s]Loading weights:  19%|█▉        | 137/729 [00:04<00:14, 39.71it/s]Loading weights:  20%|█▉        | 143/729 [00:04<00:13, 42.84it/s]Loading weights:  20%|██        | 149/729 [00:04<00:14, 40.48it/s]Loading weights:  21%|██▏       | 156/729 [00:05<00:12, 45.56it/s]Loading weights:  22%|██▏       | 161/729 [00:05<00:14, 39.84it/s]Loading weights:  23%|██▎       | 166/729 [00:05<00:13, 41.98it/s]Loading weights:  24%|██▎       | 173/729 [00:05<00:13, 40.38it/s]Loading weights:  25%|██▍       | 180/729 [00:05<00:12, 45.45it/s]Loading weights:  25%|██▌       | 185/729 [00:05<00:13, 39.97it/s]Loading weights:  26%|██▌       | 190/729 [00:05<00:12, 41.85it/s]Loading weights:  27%|██▋       | 196/729 [00:06<00:11, 45.72it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 40.03it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 44.94it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 37.37it/s]Loading weights:  30%|███       | 220/729 [00:06<00:11, 42.60it/s]Loading weights:  31%|███       | 225/729 [00:06<00:13, 37.22it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:11, 41.67it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:13, 37.83it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:11, 43.39it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:12, 38.66it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:10, 43.86it/s]Loading weights:  36%|███▌      | 261/729 [00:07<00:12, 38.82it/s]Loading weights:  37%|███▋      | 267/729 [00:07<00:11, 41.85it/s]Loading weights:  37%|███▋      | 272/729 [00:07<00:12, 37.75it/s]Loading weights:  38%|███▊      | 280/729 [00:08<00:10, 44.84it/s]Loading weights:  39%|███▉      | 285/729 [00:08<00:11, 39.77it/s]Loading weights:  40%|████      | 292/729 [00:08<00:09, 44.54it/s]Loading weights:  41%|████      | 297/729 [00:08<00:10, 39.39it/s]Loading weights:  42%|████▏     | 304/729 [00:08<00:09, 44.47it/s]Loading weights:  42%|████▏     | 309/729 [00:08<00:10, 39.60it/s]Loading weights:  43%|████▎     | 316/729 [00:09<00:10, 37.93it/s]Loading weights:  44%|████▍     | 322/729 [00:09<00:09, 41.20it/s]Loading weights:  45%|████▌     | 329/729 [00:09<00:09, 41.50it/s]Loading weights:  46%|████▌     | 334/729 [00:09<00:09, 41.81it/s]Loading weights:  53%|█████▎    | 385/729 [00:09<00:02, 149.79it/s]Loading weights:  59%|█████▉    | 433/729 [00:09<00:01, 231.59it/s]Loading weights:  66%|██████▌   | 481/729 [00:09<00:00, 295.34it/s]Loading weights:  73%|███████▎  | 529/729 [00:09<00:00, 345.40it/s]Loading weights:  80%|███████▉  | 583/729 [00:09<00:00, 393.41it/s]Loading weights:  87%|████████▋ | 633/729 [00:10<00:00, 418.30it/s]Loading weights:  93%|█████████▎| 679/729 [00:10<00:00, 429.55it/s]Loading weights:  99%|█████████▉| 725/729 [00:10<00:00, 403.88it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 70.93it/s] 
+  null for nat_top8 (8): 19.5, 21.8, 21.24, 21.26, 22.0, 22.9, 22.12, 23.21
+  null for lang_top8 (8): 19.18, 21.0, 21.12, 21.19, 22.7, 22.10, 22.23, 23.24
+  read-back check [nat_top8]: worst |installed - read| = 0.00e+00 over 12 steps
+  read-back check [lang_top8]: worst |installed - read| = 0.00e+00 over 12 steps
+  64/2308 generations (birth_year)
+  128/2308 generations (birth_year)
+  192/2308 generations (birth_year)
+  256/2308 generations (birth_year)
+  320/2308 generations (birth_year)
+  384/2308 generations (birth_year)
+  448/2308 generations (birth_year)
+  512/2308 generations (birth_year)
+  576/2308 generations (birth_year)
+  640/2308 generations (birth_year)
+  665/2308 generations (birth_year)
+  729/2308 generations (nationality)
+  793/2308 generations (nationality)
+  857/2308 generations (nationality)
+  921/2308 generations (nationality)
+  985/2308 generations (nationality)
+  1049/2308 generations (nationality)
+  1113/2308 generations (nationality)
+  1177/2308 generations (nationality)
+  1241/2308 generations (nationality)
+  1305/2308 generations (nationality)
+  1311/2308 generations (nationality)
+  1375/2308 generations (native_language)
+  1439/2308 generations (native_language)
+  1503/2308 generations (native_language)
+  1567/2308 generations (native_language)
+  1631/2308 generations (native_language)
+  1695/2308 generations (native_language)
+  1759/2308 generations (native_language)
+  1823/2308 generations (native_language)
+  1848/2308 generations (native_language)
+  1912/2308 generations (occupation)
+  1976/2308 generations (occupation)
+  2040/2308 generations (occupation)
+  2104/2308 generations (occupation)
+  2168/2308 generations (occupation)
+  2232/2308 generations (occupation)
+  2296/2308 generations (occupation)
+  2308/2308 generations (occupation)
+  note: 234 hook calls ran past the donor's recorded steps (donor hit EOS first); the last donor step was held.
+
+Score each arm with:
+  python /workspace/VADE/eval/score.py --entity celebrities --attribute all --predictions results/paper/x2_swap_celebrities_a/clean.jsonl
+  python /workspace/VADE/eval/score.py --entity celebrities --attribute all --predictions results/paper/x2_swap_celebrities_a/heads_nat_top8.jsonl
+  python /workspace/VADE/eval/score.py --entity celebrities --attribute all --predictions results/paper/x2_swap_celebrities_a/heads_lang_top8.jsonl
+  python /workspace/VADE/eval/score.py --entity celebrities --attribute all --predictions results/paper/x2_swap_celebrities_a/random_heads_nat_top8.jsonl
+  python /workspace/VADE/eval/score.py --entity celebrities --attribute all --predictions results/paper/x2_swap_celebrities_a/random_heads_lang_top8.jsonl
+  python /workspace/VADE/eval/score.py --entity celebrities --attribute all --predictions results/paper/x2_swap_celebrities_a/full_image.jsonl
+    -> [x2_swap_celeb_a] done in 28 min (logs/paper/x2_swap_celeb_a_20261019_063356.log)
+LANE_EXIT=0

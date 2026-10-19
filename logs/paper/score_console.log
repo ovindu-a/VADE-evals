@@ -1,0 +1,321 @@
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/clean.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/clean/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/clean/founded_year/clean_summary.json
+wrote results/paper/x2_swap_brands/scores/clean/founded_year/clean_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/clean.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/clean/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/clean/hq_country/clean_summary.json
+wrote results/paper/x2_swap_brands/scores/clean/hq_country/clean_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/clean.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/clean/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/clean/industry/clean_summary.json
+wrote results/paper/x2_swap_brands/scores/clean/industry/clean_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/full_image.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/full_image/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/full_image/founded_year/full_image_summary.json
+wrote results/paper/x2_swap_brands/scores/full_image/founded_year/full_image_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/full_image.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/full_image/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/full_image/hq_country/full_image_summary.json
+wrote results/paper/x2_swap_brands/scores/full_image/hq_country/full_image_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/full_image.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/full_image/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/full_image/industry/full_image_summary.json
+wrote results/paper/x2_swap_brands/scores/full_image/industry/full_image_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_common10.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_common10/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/heads_common10/founded_year/heads_common10_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_common10/founded_year/heads_common10_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_common10.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_common10/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/heads_common10/hq_country/heads_common10_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_common10/hq_country/heads_common10_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_common10.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_common10/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/heads_common10/industry/heads_common10_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_common10/industry/heads_common10_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_cons6.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_cons6/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/heads_cons6/founded_year/heads_cons6_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_cons6/founded_year/heads_cons6_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_cons6.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_cons6/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/heads_cons6/hq_country/heads_cons6_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_cons6/hq_country/heads_cons6_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_cons6.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_cons6/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/heads_cons6/industry/heads_cons6_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_cons6/industry/heads_cons6_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_hq_top8.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_hq_top8/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/heads_hq_top8/founded_year/heads_hq_top8_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_hq_top8/founded_year/heads_hq_top8_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_hq_top8.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_hq_top8/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/heads_hq_top8/hq_country/heads_hq_top8_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_hq_top8/hq_country/heads_hq_top8_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/heads_hq_top8.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/heads_hq_top8/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/heads_hq_top8/industry/heads_hq_top8_summary.json
+wrote results/paper/x2_swap_brands/scores/heads_hq_top8/industry/heads_hq_top8_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_common10.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_common10/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/random_heads_common10/founded_year/random_heads_common10_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_common10/founded_year/random_heads_common10_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_common10.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_common10/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/random_heads_common10/hq_country/random_heads_common10_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_common10/hq_country/random_heads_common10_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_common10.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_common10/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/random_heads_common10/industry/random_heads_common10_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_common10/industry/random_heads_common10_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_cons6.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_cons6/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/random_heads_cons6/founded_year/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_cons6/founded_year/random_heads_cons6_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_cons6.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_cons6/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/random_heads_cons6/hq_country/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_cons6/hq_country/random_heads_cons6_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_cons6.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_cons6/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/random_heads_cons6/industry/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_cons6/industry/random_heads_cons6_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_hq_top8.jsonl --entity brands --attribute founded_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_hq_top8/founded_year ===
+WARNING: 5405 tuple rows had no matching prediction (of 6017 total) -- scoring on the remaining 612.
+wrote results/paper/x2_swap_brands/scores/random_heads_hq_top8/founded_year/random_heads_hq_top8_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_hq_top8/founded_year/random_heads_hq_top8_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_hq_top8.jsonl --entity brands --attribute hq_country --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_hq_top8/hq_country ===
+WARNING: 5992 tuple rows had no matching prediction (of 6702 total) -- scoring on the remaining 710.
+wrote results/paper/x2_swap_brands/scores/random_heads_hq_top8/hq_country/random_heads_hq_top8_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_hq_top8/hq_country/random_heads_hq_top8_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_brands] python ../VADE/eval/score.py --predictions results/paper/x2_swap_brands/random_heads_hq_top8.jsonl --entity brands --attribute industry --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/brands/tuples --out_dir results/paper/x2_swap_brands/scores/random_heads_hq_top8/industry ===
+WARNING: 5880 tuple rows had no matching prediction (of 6603 total) -- scoring on the remaining 723.
+wrote results/paper/x2_swap_brands/scores/random_heads_hq_top8/industry/random_heads_hq_top8_summary.json
+wrote results/paper/x2_swap_brands/scores/random_heads_hq_top8/industry/random_heads_hq_top8_summary.md
+    -> [x2_score_brands] done in 0 min (logs/paper/x2_score_brands_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/clean.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/clean/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_a/scores/clean/birth_year/clean_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/clean/birth_year/clean_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/clean.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/clean/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_a/scores/clean/nationality/clean_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/clean/nationality/clean_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/clean.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/clean/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_a/scores/clean/native_language/clean_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/clean/native_language/clean_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/clean.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/clean/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_a/scores/clean/occupation/clean_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/clean/occupation/clean_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/full_image.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/full_image/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/birth_year/full_image_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/birth_year/full_image_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/full_image.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/full_image/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/nationality/full_image_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/nationality/full_image_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/full_image.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/full_image/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/native_language/full_image_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/native_language/full_image_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/full_image.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/full_image/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/occupation/full_image_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/full_image/occupation/full_image_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_lang_top8.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/birth_year/heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/birth_year/heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_lang_top8.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/nationality/heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/nationality/heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_lang_top8.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/native_language/heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/native_language/heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_lang_top8.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/occupation/heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_lang_top8/occupation/heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_nat_top8.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/birth_year/heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/birth_year/heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_nat_top8.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/nationality/heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/nationality/heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_nat_top8.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/native_language/heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/native_language/heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/heads_nat_top8.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/occupation/heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/heads_nat_top8/occupation/heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_lang_top8.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/birth_year/random_heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/birth_year/random_heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_lang_top8.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/nationality/random_heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/nationality/random_heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_lang_top8.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/native_language/random_heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/native_language/random_heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_lang_top8.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/occupation/random_heads_lang_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_lang_top8/occupation/random_heads_lang_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_nat_top8.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/birth_year/random_heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/birth_year/random_heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_nat_top8.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/nationality/random_heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/nationality/random_heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_nat_top8.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/native_language/random_heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/native_language/random_heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_a/random_heads_nat_top8.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/occupation/random_heads_nat_top8_summary.json
+wrote results/paper/x2_swap_celebrities_a/scores/random_heads_nat_top8/occupation/random_heads_nat_top8_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_common10.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_common10/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/birth_year/heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/birth_year/heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_common10.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_common10/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/nationality/heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/nationality/heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_common10.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_common10/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/native_language/heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/native_language/heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_common10.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_common10/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/occupation/heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_common10/occupation/heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_cons6.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_cons6/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/birth_year/heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/birth_year/heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_cons6.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_cons6/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/nationality/heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/nationality/heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_cons6.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_cons6/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/native_language/heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/native_language/heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/heads_cons6.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/heads_cons6/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/occupation/heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/heads_cons6/occupation/heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_common10.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_common10/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/birth_year/random_heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/birth_year/random_heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_common10.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_common10/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/nationality/random_heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/nationality/random_heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_common10.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_common10/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/native_language/random_heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/native_language/random_heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_common10.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_common10/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/occupation/random_heads_common10_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_common10/occupation/random_heads_common10_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_cons6.jsonl --entity celebrities --attribute birth_year --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/birth_year ===
+WARNING: 7506 tuple rows had no matching prediction (of 9500 total) -- scoring on the remaining 1994.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/birth_year/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/birth_year/random_heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_cons6.jsonl --entity celebrities --attribute nationality --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/nationality ===
+WARNING: 7189 tuple rows had no matching prediction (of 9052 total) -- scoring on the remaining 1863.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/nationality/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/nationality/random_heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_cons6.jsonl --entity celebrities --attribute native_language --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/native_language ===
+WARNING: 6416 tuple rows had no matching prediction (of 8005 total) -- scoring on the remaining 1589.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/native_language/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/native_language/random_heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+=== [x2_score_celebrities] python ../VADE/eval/score.py --predictions results/paper/x2_swap_celebrities_b/random_heads_cons6.jsonl --entity celebrities --attribute occupation --tuples_dir ../VADE/models/Qwen2.5-VL-7B-Instruct/celebrities/tuples --out_dir results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/occupation ===
+WARNING: 5595 tuple rows had no matching prediction (of 7100 total) -- scoring on the remaining 1505.
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/occupation/random_heads_cons6_summary.json
+wrote results/paper/x2_swap_celebrities_b/scores/random_heads_cons6/occupation/random_heads_cons6_summary.md
+    -> [x2_score_celebrities] done in 0 min (logs/paper/x2_score_celebrities_20261019_074452.log)
+SCORE_EXIT=0

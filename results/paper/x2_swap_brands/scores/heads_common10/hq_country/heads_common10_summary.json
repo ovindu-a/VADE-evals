@@ -1,0 +1,44 @@
+{
+  "predictions_file": "results/paper/x2_swap_brands/heads_common10.jsonl",
+  "entity": "brands",
+  "attribute": "hq_country",
+  "split": "test",
+  "n_missing_predictions": 5992,
+  "by_target_attribute": {
+    "hq_country": {
+      "overall": {
+        "n": 710,
+        "pct_accuracy": 74.1,
+        "cause_accuracy": 96.0,
+        "iso_mean_accuracy": 51.0,
+        "final_score": 73.5
+      },
+      "by_queried": [
+        {
+          "queried": "founded_year",
+          "n": 172,
+          "is_cause": false,
+          "pct_accuracy": 7.0,
+          "pct_matches_source": 1.7,
+          "pct_matches_base": 7.0
+        },
+        {
+          "queried": "hq_country",
+          "n": 322,
+          "is_cause": true,
+          "pct_accuracy": 96.0,
+          "pct_matches_source": 96.0,
+          "pct_matches_base": 3.7
+        },
+        {
+          "queried": "industry",
+          "n": 216,
+          "is_cause": false,
+          "pct_accuracy": 94.9,
+          "pct_matches_source": 2.8,
+          "pct_matches_base": 94.9
+        }
+      ]
+    }
+  }
+}

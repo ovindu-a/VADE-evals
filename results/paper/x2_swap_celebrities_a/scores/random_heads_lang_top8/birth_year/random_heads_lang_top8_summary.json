@@ -1,0 +1,52 @@
+{
+  "predictions_file": "results/paper/x2_swap_celebrities_a/random_heads_lang_top8.jsonl",
+  "entity": "celebrities",
+  "attribute": "birth_year",
+  "split": "test",
+  "n_missing_predictions": 7506,
+  "by_target_attribute": {
+    "birth_year": {
+      "overall": {
+        "n": 1994,
+        "pct_accuracy": 73.0,
+        "cause_accuracy": 0.0,
+        "iso_mean_accuracy": 99.5,
+        "final_score": 49.7
+      },
+      "by_queried": [
+        {
+          "queried": "birth_year",
+          "n": 531,
+          "is_cause": true,
+          "pct_accuracy": 0.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 69.7
+        },
+        {
+          "queried": "nationality",
+          "n": 519,
+          "is_cause": false,
+          "pct_accuracy": 99.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 99.0
+        },
+        {
+          "queried": "native_language",
+          "n": 489,
+          "is_cause": false,
+          "pct_accuracy": 99.4,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 99.4
+        },
+        {
+          "queried": "occupation",
+          "n": 455,
+          "is_cause": false,
+          "pct_accuracy": 100.0,
+          "pct_matches_source": 0.0,
+          "pct_matches_base": 100.0
+        }
+      ]
+    }
+  }
+}

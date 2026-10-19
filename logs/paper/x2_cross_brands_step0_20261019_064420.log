@@ -1,0 +1,47 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[head_cross] brands: 64 item pairs x 3x3 question pairs x 2 donors = 1152 generations
+  attributes (3): hq_country, founded_year, industry
+  cells: {'flag': 192, 'self': 192, 'both': 384, 'question': 384}
+  heads (8): 21.1, 21.4, 22.15, 22.17, 23.3, 23.4, 23.6, 23.17
+  align: step0   [NOT the R11 intervention -- compare against a --align matched run of the same --n_pairs/--seed, which draws the identical rows]
+  -> results/paper/x2_cross_brands/cross_n64_step0.jsonl
+Loading weights:   0%|          | 0/729 [00:00<?, ?it/s]Loading weights:   0%|          | 1/729 [00:00<07:16,  1.67it/s]Loading weights:   0%|          | 2/729 [00:01<07:48,  1.55it/s]Loading weights:   1%|          | 5/729 [00:01<02:41,  4.49it/s]Loading weights:   1%|▏         | 10/729 [00:01<01:08, 10.51it/s]Loading weights:   2%|▏         | 16/729 [00:01<00:38, 18.33it/s]Loading weights:   3%|▎         | 20/729 [00:01<00:35, 19.81it/s]Loading weights:   4%|▍         | 28/729 [00:01<00:23, 30.14it/s]Loading weights:   5%|▍         | 33/729 [00:02<00:23, 29.97it/s]Loading weights:   5%|▌         | 40/729 [00:02<00:18, 36.74it/s]Loading weights:   6%|▌         | 45/729 [00:02<00:19, 34.39it/s]Loading weights:   7%|▋         | 52/729 [00:02<00:16, 40.59it/s]Loading weights:   8%|▊         | 57/729 [00:02<00:18, 36.86it/s]Loading weights:   9%|▉         | 64/729 [00:02<00:15, 42.63it/s]Loading weights:   9%|▉         | 69/729 [00:02<00:17, 38.30it/s]Loading weights:  10%|█         | 76/729 [00:03<00:15, 43.41it/s]Loading weights:  11%|█         | 81/729 [00:03<00:16, 38.76it/s]Loading weights:  12%|█▏        | 87/729 [00:03<00:15, 41.88it/s]Loading weights:  13%|█▎        | 92/729 [00:03<00:16, 37.74it/s]Loading weights:  14%|█▎        | 100/729 [00:03<00:16, 38.40it/s]Loading weights:  15%|█▍        | 106/729 [00:03<00:14, 42.78it/s]Loading weights:  15%|█▌        | 112/729 [00:03<00:13, 46.29it/s]Loading weights:  16%|█▌        | 117/729 [00:04<00:15, 40.36it/s]Loading weights:  17%|█▋        | 124/729 [00:04<00:13, 45.35it/s]Loading weights:  18%|█▊        | 129/729 [00:04<00:15, 39.64it/s]Loading weights:  19%|█▊        | 136/729 [00:04<00:13, 44.77it/s]Loading weights:  19%|█▉        | 141/729 [00:04<00:14, 39.72it/s]Loading weights:  20%|██        | 148/729 [00:04<00:13, 44.47it/s]Loading weights:  21%|██        | 153/729 [00:04<00:14, 39.33it/s]Loading weights:  22%|██▏       | 160/729 [00:05<00:12, 44.37it/s]Loading weights:  23%|██▎       | 165/729 [00:05<00:14, 39.21it/s]Loading weights:  24%|██▎       | 172/729 [00:05<00:12, 44.27it/s]Loading weights:  24%|██▍       | 177/729 [00:05<00:14, 39.13it/s]Loading weights:  25%|██▌       | 184/729 [00:05<00:12, 43.90it/s]Loading weights:  26%|██▌       | 189/729 [00:05<00:13, 39.07it/s]Loading weights:  27%|██▋       | 196/729 [00:05<00:12, 44.13it/s]Loading weights:  28%|██▊       | 201/729 [00:06<00:13, 38.81it/s]Loading weights:  29%|██▊       | 208/729 [00:06<00:11, 43.92it/s]Loading weights:  29%|██▉       | 213/729 [00:06<00:13, 38.74it/s]Loading weights:  30%|███       | 220/729 [00:06<00:13, 37.22it/s]Loading weights:  31%|███       | 226/729 [00:06<00:12, 41.70it/s]Loading weights:  32%|███▏      | 232/729 [00:06<00:10, 45.48it/s]Loading weights:  33%|███▎      | 237/729 [00:07<00:12, 39.67it/s]Loading weights:  33%|███▎      | 244/729 [00:07<00:10, 45.17it/s]Loading weights:  34%|███▍      | 249/729 [00:07<00:12, 39.69it/s]Loading weights:  35%|███▌      | 256/729 [00:07<00:12, 38.11it/s]Loading weights:  36%|███▌      | 264/729 [00:07<00:10, 45.60it/s]Loading weights:  37%|███▋      | 269/729 [00:07<00:11, 40.50it/s]Loading weights:  38%|███▊      | 276/729 [00:07<00:09, 45.51it/s]Loading weights:  39%|███▊      | 281/729 [00:08<00:11, 40.00it/s]Loading weights:  39%|███▉      | 287/729 [00:08<00:10, 43.28it/s]Loading weights:  40%|████      | 293/729 [00:08<00:10, 40.58it/s]Loading weights:  41%|████      | 298/729 [00:08<00:10, 41.26it/s]Loading weights:  42%|████▏     | 305/729 [00:08<00:10, 40.70it/s]Loading weights:  43%|████▎     | 312/729 [00:08<00:09, 45.99it/s]Loading weights:  43%|████▎     | 317/729 [00:08<00:10, 40.45it/s]Loading weights:  44%|████▍     | 324/729 [00:09<00:08, 45.86it/s]Loading weights:  45%|████▌     | 329/729 [00:09<00:10, 39.18it/s]Loading weights:  46%|████▌     | 334/729 [00:09<00:09, 41.54it/s]Loading weights:  52%|█████▏    | 381/729 [00:09<00:02, 143.39it/s]Loading weights:  59%|█████▉    | 431/729 [00:09<00:01, 232.92it/s]Loading weights:  66%|██████▌   | 481/729 [00:09<00:00, 303.58it/s]Loading weights:  73%|███████▎  | 533/729 [00:09<00:00, 358.82it/s]Loading weights:  80%|████████  | 585/729 [00:09<00:00, 403.00it/s]Loading weights:  87%|████████▋ | 635/729 [00:09<00:00, 427.57it/s]Loading weights:  94%|█████████▍| 685/729 [00:10<00:00, 447.01it/s]Loading weights: 100%|██████████| 729/729 [00:10<00:00, 71.87it/s] 
+  read-back check: worst = 0.00e+00 over 12 steps
+  64/1152
+  128/1152
+  192/1152
+  256/1152
+  320/1152
+  384/1152
+  448/1152
+  512/1152
+  576/1152
+  640/1152
+  704/1152
+  768/1152
+  832/1152
+  896/1152
+  960/1152
+  1024/1152
+  1088/1152
+  1152/1152
+
+      cell      n     base_q1  source_q1  source_q2    base_q2      other  ambiguous
+      self    192       81.2%       0.0%       0.0%       0.0%      18.8%       0.0%
+      flag    192       67.2%      16.1%       0.0%       0.0%      16.7%       0.0%
+  question    384       81.0%       0.0%       0.0%       0.0%      19.0%       0.0%
+      both    384       78.6%       5.5%       0.0%       0.0%      15.9%       0.0%
+
+  self must be ~100% base_q1 -- it patches a run with its own values.
+
+  CONTENT SHIFT (the confound-free number):
+    donor asked the SAME question  -> B's answer to Q1 in 16.1% of rows
+    donor asked a DIFFERENT one    -> B's answer to Q1 in 5.5% of rows
+    shift = -10.7pp
+    ~0 means the heads' content does not depend on which question produced it:
+    ENTITY data. A large drop means question-conditioned content: ATTRIBUTE data.
+
+  QUESTION-ONLY cell (entity never changes, so nothing here is entity transfer):
+    stayed at A's answer to Q1: 81.0%   moved to A's answer to Q2: 0.0%
+
+wrote results/paper/x2_cross_brands/cross_n64_step0.jsonl
