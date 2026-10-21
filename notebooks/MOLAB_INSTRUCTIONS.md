@@ -100,6 +100,70 @@ Probes:
 - Use the verdict to finish the entry on the ICLR paper in PAPER_CLAIM_AUDIT.md §4.5.
 - If X5 is worth a full-scale or multi-entity run, add it to PAPER_RUNBOOK.md for the next pod batch.
 
+## X7: `notebooks/x7_mlp_lookup.py` (how entity and question combine in the late MLPs)
+
+**Question.** The movers write *which country* and the routers write *which attribute was asked*
+into the answer column. Do last-token MLPs 23-26 then compute the fact from a plain SUM of the two?
+
+**Method.** `methods/mlp_lookup.py` (flags, controlled prompts, last prompt column) has three phases:
+- **capture:** one forward per cell of the crossed 84 x 4 grid, plus a clean generation. It stores
+  the residual at layers 18-28 and the MLP neurons and output at blocks 21-27 (~265 MB of `.npy`).
+- **compose:** on a base run (C, asked X), it replaces the last-column residual at layers 22-27 by a
+  vector built from the grid without the target cell. Arms:
+  - `actual`;
+  - `additive` = rowmean(B) + colmean(A) - mean;
+  - `swap_entity`;
+  - `swap_question`;
+  - `random_offset`.
+
+  It reads the first answer token against the four golds B.A / C.X / B.X / C.A.
+- **neurons** (CPU): the exact two-way (item x attribute) variance decomposition per layer and block,
+  neuron classes, and the value test. The value test asks whether countries that share a language,
+  EUR or a calling zone group together in a neuron only when that attribute is asked; it is scored
+  against a permutation null. It also writes a heatmap of the top interaction neurons.
+
+Part A of the notebook is a CPU toy model: one attention layer and one MLP trained on a lookup table.
+It shows the same mechanism (a mover head, a router head, an additive residual into the MLP, and
+composition and cross-question transfer at 100%) before any GPU time is spent.
+
+**Links.**
+- Notebook (read-only preview, synced from GitHub):
+  https://molab.marimo.io/github/ovindu-a/VADE-evals/blob/molab/notebooks/x7_mlp_lookup.py
+- To run it, fork it into the workspace and attach the RTX Pro 6000, as for X5.
+
+### Steps
+1. Press **1. Set up**. It clones `molab` into `/tmp/x7`, syncs the bucket, and runs
+   `mlp_lookup.py --dry_run`. That must print `Grid valid.`
+2. **Part A:** press **A. Train + analyse the toy** (CPU, about 1 min).
+   **Self-checks:**
+   - accuracy ~100%;
+   - one head mainly attends to the entity and one to the relation;
+   - the residual's interaction share is ~0;
+   - compose ~100%.
+3. **Part B:** leave **run size = smoke**, then press **2. Run**. Smoke covers 12 flags, 48 compose
+   rows and layers 23-25. **Self-checks:**
+   - no traceback;
+   - `clean` reads ~100% C.X;
+   - `actual` differs from `clean` at every layer (the patch is live).
+4. If the smoke run looks sane, set **full** and press **2** again (84 flags, 384 rows, layers 22-27;
+   about 20-40 min).
+5. Download `summary.json`, `compose_rows.jsonl`, `index.jsonl` and `heatmap.npz`. Save them under
+   `results/mlp_lookup/flags_full/` in this repo. Do not commit them unless the user asks.
+
+### What to report back
+- The **compose** table, per layer: each arm's first-token % on B.A / C.X / B.X / C.A / other.
+  The headline is `additive` against `actual` at the same layer.
+- The interaction share by depth for the residual, the MLP neurons and the MLP output. The residual
+  should stay ≤ ~3.4% through layer 22 (R13.1).
+- The value-test table: blocks and attributes whose diff exceeds the null's 95th percentile.
+- Anything unexpected, verbatim.
+
+| pattern | reading |
+|---|---|
+| `additive` ≈ `actual` ≫ `random_offset` | the lookup acts on entity + question as a sum |
+| `swap_entity` → B.X and `swap_question` → C.A | the two components can be edited independently |
+| `additive` ≈ clean | the late blocks need more than the sum (e.g. an interaction already built upstream) |
+
 ## Next notebooks (not written yet)
 
 These are the next candidates in priority order. Each follows X5's pattern: a thin wrapper over an existing
