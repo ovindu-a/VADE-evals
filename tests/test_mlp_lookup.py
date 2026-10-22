@@ -8,6 +8,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import methods.gate_knockout  # noqa: E402,F401  bind the real contains_label before any test patches it
 from methods.mlp_lookup import (ALL_ARMS, EXPECT, compose_report, entity_component, region_baseline,
                                 ridge_loo_acc, scramble, standardize, additive_loo, arm_vector, attribute_values, col_mean_excl,  # noqa: E402
                                 eta_sq, row_mean_excl, sample_compose_rows, shares, summarize_compose,
