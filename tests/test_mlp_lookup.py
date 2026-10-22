@@ -8,7 +8,8 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from methods.mlp_lookup import (EXPECT, additive_loo, arm_vector, attribute_values, col_mean_excl,  # noqa: E402
+from methods.mlp_lookup import (ALL_ARMS, EXPECT, compose_report, entity_component, region_baseline,
+                                ridge_loo_acc, scramble, standardize, additive_loo, arm_vector, attribute_values, col_mean_excl,  # noqa: E402
                                 eta_sq, row_mean_excl, sample_compose_rows, shares, summarize_compose,
                                 two_way, value_groups, value_test)
 
@@ -53,7 +54,7 @@ def test_arm_vectors_on_additive_grid():
     Y = X.copy()
     Y[c, a] = 1e6
     assert np.all(np.abs(col_mean_excl(Y, c, a)) < 1e5)
-    assert set(EXPECT) == {"clean", "actual", "additive", "swap_entity", "swap_question", "random_offset"}
+    assert set(EXPECT) == set(ALL_ARMS)
 
 
 def test_sample_compose_rows_requires_four_distinct_correct_cells():
@@ -173,7 +174,77 @@ def test_capture_compose_neurons_end_to_end_on_tiny_qwen(tmp_path, monkeypatch):
     assert any(by[(L, "actual") + k[2:]] != g for k, g in by.items() if k[1] == "clean" for L in (k[0],)), \
         "installing another cell's residual never changed a generation -- is the patch connected?"
 
+    # Follow-ups: text capture (the text prompt replaced by a short id sequence per name), the new arms
+    # appended to the same rows file, bundle probes and lens, and the report.
+    monkeypatch.setattr(m, "text_prompt", lambda name, a: (torch.tensor([7, 8 + keys.index("K" + name[1:]),
+                                                                         12 + attrs.index(a), 13]), [1]))
+    acc = ml.run_text_capture(m, items, keys, attrs, meta["resid_layers"], 5, 3, str(tmp_path))
+    assert set(acc) == set(attrs) and np.load(tmp_path / "resid_text.npy").shape == (16, 3, 32)
+    n_before = len(rows)
+    ml.run_compose(m, None, items, keys, attrs, meta, [4], 12, 4, 3, 0, str(tmp_path),
+                   arms=list(ml.CONTROL_ARMS + ml.XM_ARMS))
+    rows = [json.loads(l) for l in open(tmp_path / "compose_rows.jsonl")]
+    assert len(rows) > n_before and {r["arm"] for r in rows} >= set(ml.XM_ARMS)
+    assert all("text_ok" in r for r in rows[n_before:])
+    again = ml.run_compose(m, None, items, keys, attrs, meta, [4], 12, 4, 3, 0, str(tmp_path), arms=["no_entity"])
+    assert len([json.loads(l) for l in open(tmp_path / "compose_rows.jsonl")]) == len(rows), "skip-if-done failed"
+    assert "no_entity" in again["4"]
+    probes = ml.bundle_probes(str(tmp_path), items, keys, attrs, meta, n_perm=5)
+    assert "language" in probes and set(probes["language"]["by_layer"]) == {"2", "3", "4"}
+    lens = ml.bundle_lens(m, str(tmp_path), items, keys, attrs, meta)
+    assert "calling_code" not in lens and lens["capital"]["by_layer"]["4"]["actual"]["own_rank"] >= 1
+    rep = ml.compose_report(str(tmp_path), items, attrs)
+    assert "4" in rep["by_target_attribute"]
+
     rep = ml.analyze_neurons(str(tmp_path), items, keys, attrs, meta, top_k=10, heatmap_block=2, n_perm=10, seed=0)
     assert set(rep["mlp_hidden_shares"]) == {"1", "2", "3"}
     assert abs(sum(rep["resid_shares"]["3"].values()) - 1) < 1e-6
     assert (tmp_path / "heatmap.npz").exists()
+
+
+def test_control_and_crossmodal_arms_on_additive_grids():
+    X, e, q = additive_grid(I=7, A=4, D=6)
+    c, x, b, a = 0, 1, 2, 3
+    # no_entity drops exactly B's entity component
+    np.testing.assert_allclose(arm_vector("no_entity", X, b, a, c, x) + entity_component(X, b, a), X[b, a], atol=1e-9)
+    np.testing.assert_allclose(arm_vector("entity_other_layer", X, b, a, c, x, R_other=X), X[b, a], atol=1e-9)
+    v = np.arange(10.0)
+    assert np.isclose(np.linalg.norm(scramble(v)), np.linalg.norm(v)) and not np.allclose(scramble(v), v)
+    # A TEXT grid with the same entity codes but its own (modality) offset and question part:
+    # the cross-modal arms must cancel the offset and land exactly on the image cell.
+    rng = np.random.default_rng(3)
+    T = rng.normal(size=6) * 50 + e[:, None] + rng.normal(size=(1, 4, 6))
+    np.testing.assert_allclose(arm_vector("xm_additive", X, b, a, c, x, T=T), X[b, a], atol=1e-9)
+    np.testing.assert_allclose(arm_vector("xm_swap_entity", X, b, a, c, x, T=T), X[b, x], atol=1e-9)
+
+
+def test_ridge_loo_and_region_baseline():
+    rng = np.random.default_rng(0)
+    y = [str(i % 3) for i in range(60)]
+    signal = np.eye(3)[[int(v) for v in y]] * 3
+    X = standardize(np.hstack([signal, rng.normal(size=(60, 40))]))
+    assert ridge_loo_acc(X, y) > 0.9
+    assert ridge_loo_acc(standardize(rng.normal(size=(60, 43))), y) < 0.6
+    keys = list("abcdef")
+    region = dict(zip(keys, "xxxyyy"))
+    # a, b -> p (ties broken by order), c -> p (wrong), d-f -> r
+    assert region_baseline(list("ppqrrr"), keys, region, {}) == 5 / 6
+
+
+def test_compose_report_types_other_answers(tmp_path):
+    items = {"FR": {"name": "France", "capital": "Paris", "currency": "EUR", "language": "French", "calling_code": "33"},
+             "JP": {"name": "Japan", "capital": "Tokyo", "currency": "JPY", "language": "Japanese", "calling_code": "81"},
+             "DE": {"name": "Germany", "capital": "Berlin", "currency": "EUR", "language": "German", "calling_code": "49"}}
+    rows = [{"layer": 24, "arm": "additive", "C": "JP", "X": "capital", "B": "FR", "A": "language",
+             "generated": " Paris", "first_hit": "other", "text_hit": "other", "text_ok": True},
+            {"layer": 24, "arm": "additive", "C": "JP", "X": "capital", "B": "FR", "A": "language",
+             "generated": " German", "first_hit": "other", "text_hit": "other", "text_ok": True},
+            {"layer": 24, "arm": "xm_additive", "C": "JP", "X": "capital", "B": "FR", "A": "language",
+             "generated": " French", "first_hit": "B.A", "text_hit": "B.A", "text_ok": True}]
+    with open(tmp_path / "compose_rows.jsonl", "w") as f:
+        f.writelines(json.dumps(r) + "\n" for r in rows)
+    rep = compose_report(str(tmp_path), items, ["capital", "currency", "language", "calling_code"])
+    ob = rep["other_breakdown"]["24"]["additive"]
+    assert ob["n_other"] == 2 and ob["wrong_attr"] == 0.5 and ob["other_entity"] == 0.5
+    assert rep["by_target_attribute"]["24"]["xm_additive"]["language"]["hit"] == 1.0
+    assert rep["text_ok_subset"]["24"]["xm_additive"]["first_B.A"] == 1.0

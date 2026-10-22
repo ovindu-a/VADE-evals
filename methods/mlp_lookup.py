@@ -79,8 +79,20 @@ from methods.circuit_common import DEFAULT_VADE_ROOT, MODEL_ID, load_entity  # n
 from methods.attribute_switch_sweep import ATTRIBUTES  # noqa: E402
 
 ARMS = ("clean", "actual", "additive", "swap_entity", "swap_question", "random_offset")
+# Structured nulls (follow-up 3): each keeps something about the additive vector and breaks one thing.
+CONTROL_ARMS = ("no_entity", "scrambled_entity", "entity_other_layer")
+# Cross-modal (follow-up 4): the entity component comes from runs where the country is NAMED in text.
+XM_ARMS = ("xm_swap_entity", "xm_additive")
+ALL_ARMS = ARMS + CONTROL_ARMS + XM_ARMS
 EXPECT = {"clean": "C.X", "actual": "B.A", "additive": "B.A", "swap_entity": "B.X",
-          "swap_question": "C.A", "random_offset": "C.X"}
+          "swap_question": "C.A", "random_offset": "C.X",
+          # no entity component at all: does late attention refill C from the image (-> C.A)?
+          "no_entity": "C.A",
+          # B's entity component with its coordinates permuted (norm and value distribution kept)
+          "scrambled_entity": "B.A",
+          # B's entity component taken from layer L-2 instead of L, question component from L
+          "entity_other_layer": "B.A",
+          "xm_swap_entity": "B.X", "xm_additive": "B.A"}
 TARGETS = ("B.A", "C.X", "B.X", "C.A")
 SHARED_VALUE_ATTRS = ("language", "currency", "calling_code")
 
@@ -128,9 +140,50 @@ def additive_loo(R, i, a):
     return row_mean_excl(R, i, a) + col_mean_excl(R, i, a) - rest.mean((0, 1))
 
 
-def arm_vector(arm, R, b_i, a_i, c_i, x_i, rng=None):
-    """The residual installed at the base (C, X) column for `arm`. R [I, A, H] at one layer."""
+def rest_mean(R, i, a):
+    """Mean over every cell (i' != i, a' != a)."""
+    return np.delete(np.delete(R, i, axis=0), a, axis=1).mean((0, 1))
+
+
+def entity_component(R, i, a):
+    """Item i's deviation from the grid, estimated without attribute a's column (so a target
+    cell (i, a) is never used): rowmean_{-a}(i) - mean over cells (i' != i, a' != a)."""
+    return row_mean_excl(R, i, a) - rest_mean(R, i, a)
+
+
+def entity_dev(R, i, a):
+    """Item i's deviation from the SAME reference for every item: rowmean_{-a}(i) minus the mean
+    of rowmean_{-a} over all items. Differences of two items' devs are exact on an additive grid
+    (entity_component's leave-out reference differs per item and would scale them by I/(I-1)), so
+    the swap arms use this; column a is still never read."""
+    keep = [x for x in range(R.shape[1]) if x != a]
+    return R[i, keep].mean(0) - R[:, keep].mean((0, 1))
+
+
+def scramble(v, seed=0):
+    """A fixed coordinate permutation: keeps the norm and every coordinate's magnitude
+    (outlier dimensions included) but destroys the direction."""
+    return v[np.random.default_rng(seed).permutation(v.shape[-1])]
+
+
+def arm_vector(arm, R, b_i, a_i, c_i, x_i, rng=None, R_other=None, T=None):
+    """The residual installed at the base (C, X) column for `arm`. R [I, A, H] at one layer.
+    R_other: the same grid at another layer (entity_other_layer). T: the TEXT-named grid at the
+    same layer, items and attributes in the same order (xm_* arms)."""
     base = R[c_i, x_i]
+    if arm == "no_entity":
+        return col_mean_excl(R, b_i, a_i)                       # mu + q_A, no item component
+    if arm == "scrambled_entity":
+        return col_mean_excl(R, b_i, a_i) + scramble(entity_component(R, b_i, a_i))
+    if arm == "entity_other_layer":
+        assert R_other is not None, "entity_other_layer needs the grid at another layer"
+        return col_mean_excl(R, b_i, a_i) + entity_component(R_other, b_i, a_i)
+    if arm == "xm_additive":
+        assert T is not None, "xm arms need the text-named grid"
+        return col_mean_excl(R, b_i, a_i) + entity_component(T, b_i, a_i)
+    if arm == "xm_swap_entity":
+        assert T is not None, "xm arms need the text-named grid"
+        return base + entity_dev(T, b_i, x_i) - entity_dev(R, c_i, x_i)
     if arm == "actual":
         return R[b_i, a_i]
     if arm == "additive":
@@ -232,7 +285,7 @@ def summarize_compose(rows):
     groups = defaultdict(list)
     for r in rows:
         groups[(r["arm"], r["layer"])].append(r)
-    for (arm, layer), rs in sorted(groups.items(), key=lambda kv: (kv[0][1], ARMS.index(kv[0][0]))):
+    for (arm, layer), rs in sorted(groups.items(), key=lambda kv: (kv[0][1], ALL_ARMS.index(kv[0][0]))):
         n = len(rs)
         first = Counter(r["first_hit"] for r in rs)
         text = Counter(r["text_hit"] for r in rs)
@@ -327,19 +380,39 @@ def run_capture(m, entity_dir, items, keys, attributes, resid_layers, mlp_blocks
     return index
 
 
+def load_grid(out_dir, name, I, A, layers, resid_layers):
+    arr = np.load(os.path.join(out_dir, name), mmap_mode="r")
+    return {L: np.asarray(arr[:, resid_layers.index(L)], dtype=np.float64).reshape(I, A, -1) for L in layers}
+
+
 def run_compose(m, entity_dir, items, keys, attributes, meta, layers, n_rows, batch_size,
-                max_new_tokens, seed, out_dir):
+                max_new_tokens, seed, out_dir, arms=ARMS, other_layer_offset=-2):
+    """Appends to compose_rows.jsonl and skips every (layer, arm) already in it, so new arms can
+    be added to a finished run without redoing the old ones. Rows are the same seeded sample
+    whatever the arms (it depends only on the IMAGE grid's clean answers), so arms run at
+    different times are compared on identical rows."""
     import torch
     from methods.circuit_common import cat_extra, first_content_token, gold_ids, residual_patch
     from methods.common.text_match import contains_label
 
     index = [json.loads(l) for l in open(os.path.join(out_dir, "index.jsonl"))]
     I, A = len(keys), len(attributes)
-    resid = np.load(os.path.join(out_dir, "resid.npy"), mmap_mode="r")
     resid_layers = meta["resid_layers"]
     missing = [L for L in layers if L not in resid_layers]
     assert not missing, f"--layers {missing} were not captured (captured: {resid_layers})"
-    grid = {L: np.asarray(resid[:, resid_layers.index(L)], dtype=np.float64).reshape(I, A, -1) for L in layers}
+    grid = load_grid(out_dir, "resid.npy", I, A, layers, resid_layers)
+    other = {}
+    if "entity_other_layer" in arms:
+        need = sorted({L + other_layer_offset for L in layers})
+        bad = [L for L in need if L not in resid_layers]
+        assert not bad, f"entity_other_layer needs layers {bad}, which were not captured"
+        other = load_grid(out_dir, "resid.npy", I, A, need, resid_layers)
+    text, text_ok = {}, None
+    if any(a in XM_ARMS for a in arms):
+        assert os.path.exists(os.path.join(out_dir, "resid_text.npy")), "xm arms need --phase text_capture first"
+        text = load_grid(out_dir, "resid_text.npy", I, A, layers, resid_layers)
+        tindex = [json.loads(l) for l in open(os.path.join(out_dir, "index_text.jsonl"))]
+        text_ok = {(n // A, n % A): r["correct"] for n, r in enumerate(tindex)}
 
     # Gold first tokens from the stored labels (flags labels are cased as the model writes them).
     first_tok, correct = {}, {}
@@ -348,17 +421,21 @@ def run_compose(m, entity_dir, items, keys, attributes, meta, layers, n_rows, ba
         first_tok[cell] = first_content_token(m.tokenizer, gold_ids(m.tokenizer, items[r["item"]][r["attribute"]]))
         correct[cell] = r["correct"]
     rows = sample_compose_rows(keys, attributes, first_tok, correct, n_rows, seed)
-    print(f"[compose] {len(rows)} informative rows (requested {n_rows}); layers {layers}")
+    print(f"[compose] {len(rows)} informative rows (requested {n_rows}); layers {layers}; arms {list(arms)}")
     if not rows:
         raise RuntimeError("no informative rows -- is the clean model answering the grid correctly?")
 
+    path = os.path.join(out_dir, "compose_rows.jsonl")
+    out_rows = [json.loads(l) for l in open(path)] if os.path.exists(path) else []
+    done = {(r["layer"], r["arm"]) for r in out_rows}
     rng = np.random.default_rng(seed)
-    out_rows = []
-    fh = open(os.path.join(out_dir, "compose_rows.jsonl"), "w")
-    try:
+    with open(path, "a") as fh:
         for L in layers:
             R = grid[L]
-            for arm in ARMS:
+            for arm in arms:
+                if (L, arm) in done:
+                    print(f"  layer {L} {arm}: already in {os.path.basename(path)}, skipped")
+                    continue
                 for s in range(0, len(rows), batch_size):
                     chunk = rows[s:s + batch_size]
                     built = [m.image_prompt(entity_dir, items[keys[c]], attributes[x]) for c, x, _, _ in chunk]
@@ -367,7 +444,8 @@ def run_compose(m, entity_dir, items, keys, attributes, meta, layers, n_rows, ba
                     extra = cat_extra([b[1] for b in built])
                     handles = []
                     if arm != "clean":
-                        vals = np.stack([arm_vector(arm, R, b, a, c, x, rng) for c, x, b, a in chunk])
+                        vals = np.stack([arm_vector(arm, R, b, a, c, x, rng, R_other=other.get(L + other_layer_offset),
+                                                    T=text.get(L)) for c, x, b, a in chunk])
                         pos = torch.full((len(chunk), 1), ids.shape[1] - 1, dtype=torch.long)
                         site, layer, fn = residual_patch(
                             L, pos, torch.tensor(vals[:, None], dtype=torch.float32, device=m.model.device))
@@ -377,25 +455,227 @@ def run_compose(m, entity_dir, items, keys, attributes, meta, layers, n_rows, ba
                     finally:
                         for h in handles:
                             h.remove()
-                    for (c, x, b, a), g, text in zip(chunk, gen, m.decode(gen)):
+                    for (c, x, b, a), g, txt in zip(chunk, gen, m.decode(gen)):
                         cells = {"B.A": (b, a), "C.X": (c, x), "B.X": (b, x), "C.A": (c, a)}
                         ft = first_content_token(m.tokenizer, g.tolist())
                         first_hit = next((t for t, cell in cells.items() if first_tok[cell] == ft), "other")
                         text_hit = next((t for t, (i, j) in cells.items()
-                                         if contains_label(text, str(items[keys[i]][attributes[j]]))), "other")
+                                         if contains_label(txt, str(items[keys[i]][attributes[j]]))), "other")
                         r = {"layer": L, "arm": arm, "C": keys[c], "X": attributes[x], "B": keys[b],
-                             "A": attributes[a], "generated": text, "first_hit": first_hit, "text_hit": text_hit}
+                             "A": attributes[a], "generated": txt, "first_hit": first_hit, "text_hit": text_hit}
+                        if text_ok is not None:
+                            r["text_ok"] = bool(text_ok[(b, a)] and text_ok[(b, x)])
                         out_rows.append(r)
                         fh.write(json.dumps(r, ensure_ascii=False) + "\n")
-            print(f"  layer {L}: done", flush=True)
-    finally:
-        fh.close()
+                print(f"  layer {L} {arm}: done", flush=True)
     return summarize_compose(out_rows)
+
+
+def run_text_capture(m, items, keys, attributes, resid_layers, batch_size, max_new_tokens, out_dir):
+    """The crossed grid with the country NAMED in text (circuit_common.text_prompt: same
+    instruction, same question and 'Answer:' prefill, no image). Residual at the last prompt
+    column at every --resid_layers layer, plus a clean generation per cell for eligibility."""
+    import torch
+    from methods.circuit_common import left_pack
+    from methods.common.text_match import contains_label
+
+    cells = grid_cells(keys, attributes)
+    resid = np.lib.format.open_memmap(os.path.join(out_dir, "resid_text.npy"), mode="w+", dtype=np.float32,
+                                      shape=(len(cells), len(resid_layers), m.hidden))
+    index = []
+    for s in range(0, len(cells), batch_size):
+        chunk = cells[s:s + batch_size]
+        ids, mask = left_pack([m.text_prompt(items[k]["name"], a)[0] for k, a in chunk], m.pad_id)
+        pos = torch.full((len(chunk), 1), ids.shape[1] - 1, dtype=torch.long)   # left-padded: last column
+        sink = {L: [] for L in resid_layers}
+        handles = [block_output_hook(m.layers, L - 1, pos, sink[L]) for L in resid_layers]
+        try:
+            m.forward(ids, mask, {})
+        finally:
+            for h in handles:
+                h.remove()
+        for j, L in enumerate(resid_layers):
+            assert len(sink[L]) == 1
+            resid[s:s + len(chunk), j] = sink[L][0][:, 0].float().cpu().numpy()
+        gen = m.generate(ids, mask, {}, max_new_tokens)
+        for (k, a), text in zip(chunk, m.decode(gen)):
+            index.append({"item": k, "attribute": a, "clean": text,
+                          "correct": bool(contains_label(text, str(items[k][a])))})
+        print(f"  text captured {s + len(chunk)}/{len(cells)}", flush=True)
+    resid.flush()
+    with open(os.path.join(out_dir, "index_text.jsonl"), "w") as f:
+        for r in index:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    acc = sum(r["correct"] for r in index) / len(index)
+    print(f"clean accuracy over the TEXT grid: {acc:.1%}")
+    return {a: float(np.mean([r["correct"] for r in index if r["attribute"] == a])) for a in attributes}
 
 
 # ---------------------------------------------------------------------------
 # CPU analysis
 # ---------------------------------------------------------------------------
+
+def ridge_loo_acc(X, y, lams=(1e-1, 1e0, 1e1, 1e2, 1e3)):
+    """Leave-one-item-out accuracy of a one-vs-rest linear ridge classifier, exact and closed
+    form: for kernel ridge with K = X X^T, the LOO prediction is y - (I - H)^-1-diag correction,
+    H = K (K + lam I)^-1. X [n, d] (standardized by the caller), y [n] labels. -> best accuracy over
+    `lams` (the permutation null must take the same max)."""
+    X = np.asarray(X, dtype=np.float64)
+    labels = sorted(set(y))
+    Y = np.array([[1.0 if v == c else 0.0 for c in labels] for v in y])
+    Y = Y - Y.mean(0)
+    K = X @ X.T
+    n = len(y)
+    best = 0.0
+    for lam in lams:
+        H = K @ np.linalg.solve(K + lam * np.trace(K) / n * np.eye(n), np.eye(n))
+        pred = H @ Y
+        loo = (pred - np.diag(H)[:, None] * Y) / (1 - np.diag(H))[:, None]
+        acc = float(np.mean([labels[j] == v for j, v in zip(loo.argmax(1), y)]))
+        best = max(best, acc)
+    return best
+
+
+def standardize(X):
+    X = np.asarray(X, dtype=np.float64)
+    sd = X.std(0)
+    return (X - X.mean(0)) / np.where(sd > 0, sd, 1.0)
+
+
+def region_baseline(y, keys, region, fallback):
+    """LOO accuracy of predicting an item's value as the majority value among the OTHER items in
+    its region (falling back to the coarser region, then to the global majority)."""
+    hits = 0
+    for i, k in enumerate(keys):
+        pred = None
+        for reg in (region, fallback):
+            pool = [y[j] for j, k2 in enumerate(keys) if j != i and reg.get(k2) == reg.get(k)]
+            if pool:
+                pred = Counter(pool).most_common(1)[0][0]
+                break
+        if pred is None:
+            pred = Counter(y[:i] + y[i + 1:]).most_common(1)[0][0]
+        hits += pred == y[i]
+    return hits / len(y)
+
+
+def bundle_probes(out_dir, items, keys, attributes, meta, n_perm=100, seed=0, grid_file="resid.npy"):
+    """Is each attribute's VALUE already linearly readable from the entity component built
+    WITHOUT the question that asks for it? For attribute a, features = item i's residual
+    averaged over the OTHER questions (rowmean_{-a}(i)); labels = i's value of a (language, EUR,
+    calling zone; continent as a reference for how regional the code is). Leave-one-country-out
+    ridge accuracy at every captured layer, against a permutation null (labels shuffled, same max
+    over the ridge penalty) and the REGION BASELINE: majority value among the other countries of
+    the same UN subregion. A bundle predicts accuracy above the region baseline already at L24,
+    before MLPs 24-26; a lookup predicts it appears only after them."""
+    from methods.cpu_followups import CONTINENT, SUBREGION
+    I, A = len(keys), len(attributes)
+    grids = load_grid(out_dir, grid_file, I, A, meta["resid_layers"], meta["resid_layers"])
+    targets = {}
+    for attr in SHARED_VALUE_ATTRS:
+        if attr in attributes:
+            v = attribute_values(items, keys, attr)
+            kept, labels = value_groups(v) if attr == "language" else (list(range(I)), v)
+            targets[attr] = (attributes.index(attr), kept, labels)
+    targets["continent (reference)"] = (None, list(range(I)), [CONTINENT.get(k, "?") for k in keys])
+    rng = random.Random(seed)
+    out = {}
+    for name, (a_idx, kept, labels) in targets.items():
+        kk = [keys[i] for i in kept]
+        res = {"n_items": len(kept), "n_values": len(set(labels)),
+               "majority": Counter(labels).most_common(1)[0][1] / len(labels),
+               "region_baseline": region_baseline(labels, kk, SUBREGION, CONTINENT), "by_layer": {}}
+        nulls = None
+        for L, R in grids.items():
+            feats = np.stack([row_mean_excl(R, i, a_idx) if a_idx is not None else R[i].mean(0) for i in kept])
+            Xs = standardize(feats)
+            acc = ridge_loo_acc(Xs, labels)
+            if nulls is None:            # the null is layer-independent in distribution; draw it once
+                nulls = []
+                for _ in range(n_perm):
+                    lab = labels[:]
+                    rng.shuffle(lab)
+                    nulls.append(ridge_loo_acc(Xs, lab))
+            res["by_layer"][str(L)] = acc
+        res["null_mean"], res["null_p95"] = float(np.mean(nulls)), float(np.percentile(nulls, 95))
+        out[name] = res
+    return out
+
+
+def bundle_lens(m, out_dir, items, keys, attributes, meta):
+    """Direct unembedding of three vectors per (item, attribute) cell and layer: the real
+    residual R[i, a], the additive estimate, and the QUESTION-FREE entity vector rowmean_{-a}(i)
+    (the residual averaged over the other questions). Score = rank of item i's own value
+    (first content token) among the distinct first tokens of every item's value for a; 1 = top.
+    The null is the same rank for a random other item's value. Unembedding direction only (the
+    final norm's scalar does not change a rank); calling_code is skipped (its first tokens are
+    single digits shared by many countries)."""
+    import torch
+    from methods.circuit_common import first_content_token, gold_ids
+    I, A = len(keys), len(attributes)
+    grids = load_grid(out_dir, "resid.npy", I, A, meta["resid_layers"], meta["resid_layers"])
+    out = {}
+    rng = random.Random(0)
+    for attr in attributes:
+        if attr == "calling_code":
+            continue
+        a = attributes.index(attr)
+        tok = [first_content_token(m.tokenizer, gold_ids(m.tokenizer, str(items[k][attr]))) for k in keys]
+        cand = sorted(set(t for t in tok if t is not None))
+        with torch.no_grad():
+            W = m.adapter.logit_direction(m.model, torch.tensor(cand, device=m.model.device)).float().cpu().numpy()
+        col = {t: j for j, t in enumerate(cand)}
+        others = [rng.choice([j for j in range(I) if tok[j] != tok[i] and tok[j] is not None]) for i in range(I)]
+        res = {"n_candidates": len(cand), "chance_rank": (len(cand) + 1) / 2, "by_layer": {}}
+        for L, R in grids.items():
+            vecs = {"actual": np.stack([R[i, a] for i in range(I)]),
+                    "additive": np.stack([additive_loo(R, i, a) for i in range(I)]),
+                    "question_free": np.stack([row_mean_excl(R, i, a) for i in range(I)])}
+            row = {}
+            for name, V in vecs.items():
+                S = V @ W.T                                            # [I, n_cand]
+                own = [1 + int((S[i] > S[i, col[tok[i]]]).sum()) for i in range(I) if tok[i] is not None]
+                oth = [1 + int((S[i] > S[i, col[tok[others[i]]]]).sum()) for i in range(I) if tok[i] is not None]
+                row[name] = {"own_rank": float(np.mean(own)), "other_rank": float(np.mean(oth)),
+                             "own_top1": float(np.mean([r == 1 for r in own]))}
+            res["by_layer"][str(L)] = row
+        out[attr] = res
+    return out
+
+
+def compose_report(out_dir, items, attributes):
+    """CPU, off compose_rows.jsonl: (1) each arm's expected-target first-token rate per target
+    attribute A; (2) what the 'other' first tokens actually said, typed against the arm's expected
+    cell with gate_knockout.classify_fact (the full text right after all / refusal / this item's
+    other attribute / another country's value / other); (3) for the cross-modal arms, the same
+    rates on the rows where the TEXT model also knows B's A and X, next to their image twins."""
+    from methods.gate_knockout import classify_fact
+    rows = [json.loads(l) for l in open(os.path.join(out_dir, "compose_rows.jsonl"))]
+    by_attr = defaultdict(lambda: defaultdict(list))
+    other_types = defaultdict(Counter)
+    for r in rows:
+        exp = EXPECT[r["arm"]]
+        hit = r["first_hit"] == exp
+        by_attr[(r["layer"], r["arm"])][r["A"]].append(hit)
+        if r["first_hit"] == "other":
+            item = {"B": r["B"], "C": r["C"]}[exp[0]]
+            attr = {"A": r["A"], "X": r["X"]}[exp[2]]
+            other_types[(r["layer"], r["arm"])][classify_fact(r["generated"], item, attr, items, attributes)] += 1
+    out = {"by_target_attribute": {}, "other_breakdown": {}, "text_ok_subset": {}}
+    for (L, arm), d in sorted(by_attr.items()):
+        out["by_target_attribute"].setdefault(str(L), {})[arm] = {a: {"n": len(v), "hit": float(np.mean(v))}
+                                                                    for a, v in sorted(d.items())}
+    for (L, arm), c in sorted(other_types.items()):
+        n = sum(c.values())
+        out["other_breakdown"].setdefault(str(L), {})[arm] = {"n_other": n, **{k: v / n for k, v in c.items()}}
+    sub = [r for r in rows if r.get("text_ok")]
+    if sub:
+        keyset = {(r["C"], r["X"], r["B"], r["A"]) for r in sub}
+        twin = [r for r in rows if (r["C"], r["X"], r["B"], r["A"]) in keyset]
+        out["text_ok_subset"] = summarize_compose(twin)
+    return out
+
+
 
 def analyze_neurons(out_dir, items, keys, attributes, meta, top_k, heatmap_block, n_perm, seed):
     I, A = len(keys), len(attributes)
@@ -439,7 +719,13 @@ def analyze_neurons(out_dir, items, keys, attributes, meta, top_k, heatmap_block
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--phase", choices=["capture", "compose", "neurons", "all"], default="all")
+    ap.add_argument("--phase", nargs="+", default=["all"],
+                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "all", "followups"],
+                    help="all = capture compose neurons. followups = text_capture compose bundle report, with "
+                         "--arms defaulting to the control and cross-modal arms (run after `all`).")
+    ap.add_argument("--arms", nargs="+", choices=ALL_ARMS, default=None,
+                    help="compose arms. Default: the six original arms (or, with --phase followups, the "
+                         "control + cross-modal arms). Arms already in compose_rows.jsonl are skipped.")
     ap.add_argument("--vade_root", default=DEFAULT_VADE_ROOT)
     ap.add_argument("--model_id", default=MODEL_ID)
     ap.add_argument("--attributes", nargs="+", default=ATTRIBUTES)
@@ -466,7 +752,12 @@ def main(argv=None):
     entity_dir, items, gt_sha = load_entity(args.vade_root, "flags")
     keys = sorted(items)[:args.limit_items] if args.limit_items else sorted(items)
     attributes = list(args.attributes)
-    phases = ["capture", "compose", "neurons"] if args.phase == "all" else [args.phase]
+    phases = []
+    for ph in args.phase:
+        phases += {"all": ["capture", "compose", "neurons"],
+                   "followups": ["text_capture", "compose", "bundle", "report"]}.get(ph, [ph])
+    phases = list(dict.fromkeys(phases))
+    arms = args.arms or (list(CONTROL_ARMS + XM_ARMS) if "followups" in args.phase else list(ARMS))
     n_cells = len(keys) * len(attributes)
     print(f"[mlp_lookup] {len(keys)} flags x {len(attributes)} attributes = {n_cells} cells; phases {phases}; "
           f"-> {args.out_dir}")
@@ -475,7 +766,7 @@ def main(argv=None):
         assert all(L in args.resid_layers for L in args.layers), "--layers must be a subset of --resid_layers"
         for a in attributes:
             assert all(a in items[k] for k in keys), f"grid incomplete for {a}"
-        print(f"Grid valid. capture writes ~{mb:.0f} MB; compose = {len(args.layers)} layers x {len(ARMS)} arms "
+        print(f"Grid valid. capture writes ~{mb:.0f} MB; compose = {len(args.layers)} layers x {len(arms)} arms "
               f"x <= {args.n_rows} rows.")
         return
 
@@ -494,7 +785,7 @@ def main(argv=None):
     report.update(config=vars(args), meta=meta)
 
     m = None
-    if "capture" in phases or "compose" in phases:
+    if {"capture", "compose", "text_capture", "bundle"} & set(phases):
         from methods.circuit_common import Model
         m = Model(args.model_id, device=args.device, attn_impl=args.attn_impl, vade_root=args.vade_root)
     if "capture" in phases:
@@ -503,9 +794,20 @@ def main(argv=None):
                             args.batch_size, args.max_new_tokens, args.out_dir)
         report["clean_accuracy"] = {a: float(np.mean([r["correct"] for r in index if r["attribute"] == a]))
                                     for a in attributes}
+    if "text_capture" in phases:
+        report["clean_accuracy_text"] = run_text_capture(m, items, keys, attributes, meta["resid_layers"],
+                                                         args.batch_size, args.max_new_tokens, args.out_dir)
     if "compose" in phases:
         report["compose"] = run_compose(m, entity_dir, items, keys, attributes, meta, args.layers, args.n_rows,
-                                        args.batch_size, args.max_new_tokens, args.seed, args.out_dir)
+                                        args.batch_size, args.max_new_tokens, args.seed, args.out_dir, arms=arms)
+    if "bundle" in phases:
+        report["bundle"] = {"probes": bundle_probes(args.out_dir, items, keys, attributes, meta, seed=args.seed),
+                            "lens": bundle_lens(m, args.out_dir, items, keys, attributes, meta)}
+        if os.path.exists(os.path.join(args.out_dir, "resid_text.npy")):
+            report["bundle"]["probes_text"] = bundle_probes(args.out_dir, items, keys, attributes, meta,
+                                                            seed=args.seed, grid_file="resid_text.npy")
+    if "report" in phases:
+        report["compose_report"] = compose_report(args.out_dir, items, attributes)
     if "neurons" in phases:
         report["neurons"] = analyze_neurons(args.out_dir, items, keys, attributes, meta, args.top_k,
                                             args.heatmap_block, args.n_perm, args.seed)
@@ -515,7 +817,7 @@ def main(argv=None):
         print("\ncompose (first answer token; rows with four distinct golds)")
         for L, arms in report["compose"].items():
             for arm, s in arms.items():
-                print(f"  L{L:<3} {arm:<14} n={s['n']:>4}  expect {s['expect']}  " +
+                print(f"  L{L:<3} {arm:<18} n={s['n']:>4}  expect {s['expect']}  " +
                       "  ".join(f"{t} {s['first_' + t]:6.1%}" for t in TARGETS) + f"  other {s['first_other']:6.1%}")
     if "neurons" in report:
         nr = report["neurons"]
@@ -533,6 +835,39 @@ def main(argv=None):
                 if v:
                     print(f"  block {b:<3} {attr:<13} diff {v['mean_diff']:+.3f}  null95 {v['null_p95']:+.3f}  "
                           f"p {v['p_value']:.3f}  ({v['n_items']} items, {v['n_values']} values)")
+    if "bundle" in report:
+        for title, key in (("IMAGE", "probes"), ("TEXT", "probes_text")):
+            if key not in report["bundle"]:
+                continue
+            print(f"\nbundle probes ({title}): LOO-country ridge accuracy of the value from rowmean over the OTHER questions")
+            for attr, r in report["bundle"][key].items():
+                print(f"  {attr:<22} n={r['n_items']:>3} values={r['n_values']:>2} majority {r['majority']:.2f} "
+                      f"region {r['region_baseline']:.2f} null95 {r['null_p95']:.2f} | " +
+                      " ".join(f"L{L}:{v:.2f}" for L, v in r["by_layer"].items()))
+        print("\nbundle lens: mean rank of the item's own value among candidates (own / random other), chance in ()")
+        for attr, r in report["bundle"]["lens"].items():
+            print(f"  {attr} ({r['n_candidates']} candidates, chance {r['chance_rank']:.1f})")
+            for L, row in r["by_layer"].items():
+                print(f"    L{L:<3} " + "  ".join(f"{k} {v['own_rank']:5.1f}/{v['other_rank']:5.1f} top1 {v['own_top1']:.2f}"
+                                               for k, v in row.items()))
+    if "compose_report" in report:
+        cr = report["compose_report"]
+        print("\ncompose by target attribute A (expected-target first-token rate)")
+        for L, arms_ in cr["by_target_attribute"].items():
+            for arm, d in arms_.items():
+                print(f"  L{L:<3} {arm:<18} " + "  ".join(f"{a} {v['hit']:5.1%} (n={v['n']})" for a, v in d.items()))
+        print("\nwhat the 'other' first tokens said (typed against the arm's expected cell)")
+        for L, arms_ in cr["other_breakdown"].items():
+            for arm, d in arms_.items():
+                print(f"  L{L:<3} {arm:<18} n_other={d['n_other']:>4}  " +
+                      "  ".join(f"{k} {v:5.1%}" for k, v in d.items() if k != "n_other"))
+        if cr.get("text_ok_subset"):
+            print("\ncross-modal arms vs their image twins, on rows the TEXT model also answers (B's A and X)")
+            for L, arms_ in cr["text_ok_subset"].items():
+                for arm in ("additive", "xm_additive", "swap_entity", "xm_swap_entity"):
+                    if arm in arms_:
+                        s_ = arms_[arm]
+                        print(f"  L{L:<3} {arm:<16} n={s_['n']:>4} expect {s_['expect']} hit {s_['first_' + s_['expect']]:6.1%}")
     print(f"\nwrote {report_path}")
 
 

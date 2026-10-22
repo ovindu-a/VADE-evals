@@ -348,6 +348,74 @@ def _(alt, mo, np_load, os, out_dir, pd):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""
+    ## Part C: follow-ups (run after a full Part B, reusing its captures)
+
+    1. **Bundle vs lookup.** Is each attribute's value already readable from the entity component built
+       *without* the question that asks for it (the residual averaged over the other questions)?
+       Leave-one-country-out ridge probes against a permutation null and a **region baseline** (majority
+       value among countries of the same UN subregion), plus a direct-unembedding rank. A bundle shows up
+       above the region baseline already at L24; a lookup only after MLPs 24-26.
+    2. **Per-attribute compose, and what the "other" answers are.**
+    3. **Structured nulls:** `no_entity` (question component only), `scrambled_entity` (B's component with
+       its coordinates permuted), `entity_other_layer` (B's component from layer L-2).
+    4. **Cross-modal compose:** B's entity component from runs where the country is **named in text**.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    fu_btn = mo.ui.run_button(label="3. Run follow-ups on the full run (text capture + new arms + bundle + report)")
+    fu_btn
+    return (fu_btn,)
+
+
+@app.cell
+def _(batch, fu_btn, gpu, mo, os, repo, stream, sys, vade):
+    mo.stop(not fu_btn.value, mo.md("Needs a finished **full** Part B run in this session (~15-25 min)."))
+    mo.stop(gpu is None, mo.md("**No GPU.**"))
+    fu_dir = os.path.join(repo, "results", "mlp_lookup", "flags_full")
+    mo.stop(not os.path.exists(os.path.join(fu_dir, "resid.npy")), mo.md("Run Part B at **full** size first."))
+    stream([sys.executable, "methods/mlp_lookup.py", "--phase", "followups", "--vade_root", vade,
+            "--out_dir", fu_dir, "--batch_size", str(int(batch.value))],
+           cwd=repo, env=dict(os.environ, PYTHONUNBUFFERED="1"))
+    mo.md(f"Done: `{fu_dir}`")
+    return (fu_dir,)
+
+
+@app.cell
+def _(alt, fu_dir, json, mo, os, pd):
+    _r = json.load(open(os.path.join(fu_dir, "summary.json")))
+    _rows = []
+    for _key, _mod in (("probes", "image"), ("probes_text", "text")):
+        for _attr, _p in _r["bundle"].get(_key, {}).items():
+            for _L, _acc in _p["by_layer"].items():
+                _rows.append({"modality": _mod, "attribute": _attr, "layer": int(_L), "LOO accuracy": _acc,
+                              "region baseline": _p["region_baseline"], "null 95%": _p["null_p95"]})
+    _df = pd.DataFrame(_rows)
+    _base = alt.Chart(_df).encode(x=alt.X("layer:O"))
+    _chart = alt.layer(
+        _base.mark_line(point=True).encode(y=alt.Y("LOO accuracy:Q", scale=alt.Scale(domain=[0, 1]))),
+        _base.mark_rule(strokeDash=[4, 3], color="gray").encode(y="region baseline:Q"),
+        _base.mark_rule(strokeDash=[1, 2], color="red").encode(y="null 95%:Q"),
+    ).properties(width=200, height=160).facet(row="modality:N", column="attribute:N")
+    _cr = _r["compose_report"]
+    _att = pd.DataFrame([{"layer": int(L), "arm": arm, "A": a, "hit %": round(100 * v["hit"], 1), "n": v["n"]}
+                         for L, d in _cr["by_target_attribute"].items() for arm, aa in d.items() for a, v in aa.items()])
+    _oth = pd.DataFrame([{"layer": int(L), "arm": arm, **{k: (round(100 * v, 1) if k != "n_other" else v)
+                                                           for k, v in d.items()}}
+                         for L, dd in _cr["other_breakdown"].items() for arm, d in dd.items()])
+    mo.vstack([mo.md("### 1. Bundle probes (grey dashes = region baseline, red dots = permutation 95%)"), _chart,
+               mo.md("### 2. Compose by target attribute (expected-target first-token %)"),
+               mo.ui.table(_att.pivot_table(index=["layer", "arm"], columns="A", values="hit %").reset_index(),
+                           selection=None),
+               mo.md("### 2b. What the 'other' answers said (% of other rows)"), mo.ui.table(_oth, selection=None)])
+    return
+
+
+@app.cell
 def _():
     import numpy as np
 
