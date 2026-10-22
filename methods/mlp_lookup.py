@@ -861,6 +861,125 @@ def toptokens_markdown(res, layers=range(14, 29), blocks=None):
     return "\n".join(lines)
 
 
+def text_groups(n_cols, name_cols, assistant_start):
+    """Source groups for the text-entity prompt, in head_vocab_projection.GROUPS' vocabulary: the
+    country NAME's columns take the 'object' slot, nothing is image_background."""
+    first = min(name_cols)
+    return ["object" if i in name_cols else "system" if i < first else
+            "question" if i < assistant_start else "assistant_prefix" for i in range(n_cols)]
+
+
+def attn_sources(m, entity_dir, items, keys, attributes, top_items=TOPTOKEN_ITEMS, blocks=(21, 22, 23), k=20,
+                 n_heads_keep=6, n_pos=6, modes=("image", "text")):
+    """WHERE the attention blocks that write the type / entity tokens read from.
+
+    One unpadded eager forward per (item, question, mode). At the last prompt column, per block:
+      attention  every head's attention mass per source group (system / object / image_background /
+                 question / assistant_prefix; for text prompts 'object' = the country name's tokens)
+      top        the block's write (sum of its heads' exact z_h W_O_h^T) unembedded: top-k tokens
+      by_group   the block write split by source group (A@V is linear in the keys, so the group
+                 writes sum to the block write exactly), each group's top-10 tokens and its share
+                 of the block's top-k tokens' summed logit
+      heads      the n_heads_keep heads contributing most to that summed logit: their attention per
+                 group, their own top tokens, and the n_pos keys they attend to most (column, token)
+    A@V is asserted against o_proj's real input per head (head_vocab_projection's check)."""
+    import torch
+    from methods.head_vocab_projection import (GROUPS, capture_forward, split_head_by_groups, token_groups,
+                                               vocab_logits)
+
+    tok = m.tokenizer
+    top_items = [k_ for k_ in top_items if k_ in items] or keys[:6]
+    footprint = set()
+    if "image" in modes:
+        loc = json.load(open(os.path.join(entity_dir, "object_location.json")))
+        footprint = set(min(loc["object_token_indices"].values(), key=lambda v: len(v["flat"]))["flat"])
+    head_dim = m.hidden // m.n_heads
+    dec = lambda t: tok.decode([int(t)])
+    out = []
+    for mode in modes:
+        for key in top_items:
+            for a in attributes:
+                if mode == "image":
+                    ids, extra = m.image_prompt(entity_dir, items[key], a)
+                    groups = token_groups(ids.tolist(), m.image_id, m.adapter.assistant_start_col(m.processor, ids),
+                                          footprint)
+                else:
+                    ids, name_cols = m.text_prompt(items[key]["name"], a)
+                    extra = {}
+                    groups = text_groups(len(ids), set(name_cols), m.adapter.assistant_start_col(m.processor, ids))
+                store = capture_forward(m.adapter, m.model, ids[None], extra, list(blocks))
+                gidx = torch.tensor([GROUPS.index(g) for g in groups], device=store["logits"].device)
+                rec = {"mode": mode, "item": key, "name": items[key]["name"], "asked": a, "blocks": {}}
+                with torch.no_grad():
+                    for b in blocks:
+                        o_w = m.adapter.get_attn_head_output_module(m.model, b).weight.float()
+                        v_raw = store["v"][b]
+                        kv = v_raw.shape[-1] // head_dim
+                        writes, gwrites, att = [], [], []
+                        for h in range(m.n_heads):
+                            w_o = o_w[:, h * head_dim:(h + 1) * head_dim]
+                            vh = v_raw.view(v_raw.shape[0], kv, head_dim)[:, h // (m.n_heads // kv)]
+                            z, per = split_head_by_groups(store["a"][b][h], vh, w_o, gidx, len(GROUPS))
+                            zr = store["z"][b][h * head_dim:(h + 1) * head_dim]
+                            err = float((z - zr).norm() / zr.norm().clamp_min(1e-8))
+                            assert err < 0.02, f"A@V != o_proj input at {b}.{h} ({err:.2%})"
+                            writes.append(zr @ w_o.T)
+                            gwrites.append(per)                                   # [G, H]
+                            att.append([float(store["a"][b][h][gidx == gi].sum()) for gi in range(len(GROUPS))])
+                        W = torch.stack(writes)                                  # [heads, H]
+                        Gw = torch.stack(gwrites)                                # [heads, G, H]
+                        cols = torch.cat([W.sum(0, keepdim=True), Gw.sum(0), W], 0).T   # [H, 1+G+heads]
+                        L = vocab_logits(m.adapter, m.model, cols)               # [V, 1+G+heads]
+                        blk = L[:, 0]
+                        top = blk.topk(k).indices
+                        tot = float(blk[top].sum())
+                        by_group = {}
+                        for gi, g in enumerate(GROUPS):
+                            lg = L[:, 1 + gi]
+                            by_group[g] = {"share_of_top": float(lg[top].sum()) / tot if tot else 0.0,
+                                           "write_norm": float(Gw[:, gi].sum(0).norm()),
+                                           "top": [dec(t) for t in lg.topk(10).indices.tolist()]}
+                        contrib = L[top][:, 1 + len(GROUPS):].sum(0)             # [heads]
+                        heads = []
+                        for h in contrib.topk(n_heads_keep).indices.tolist():
+                            arow = store["a"][b][h]
+                            kp = arow.topk(n_pos).indices.tolist()
+                            heads.append({"head": f"{b}.{h}", "share_of_top": float(contrib[h]) / tot if tot else 0.0,
+                                          "attention": dict(zip(GROUPS, att[h])),
+                                          "top": [dec(t) for t in L[:, 1 + len(GROUPS) + h].topk(8).indices.tolist()],
+                                          "keys": [[c, dec(ids[c]), groups[c], round(float(arow[c]), 3)] for c in kp]})
+                        rec["blocks"][b] = {"top": [dec(t) for t in top.tolist()], "by_group": by_group,
+                                            "heads": heads,
+                                            "attention_all_heads": [dict(zip(GROUPS, r)) for r in att]}
+                out.append(rec)
+            print(f"  attn sources: {mode} {key} done", flush=True)
+    return {"items": list(top_items), "blocks": list(blocks), "groups": list(GROUPS), "prompts": out}
+
+
+def attn_sources_summary(res):
+    """Means over prompts, per mode x block x asked question: each group's share of the block's top
+    tokens' logit, and attention mass per group averaged over the kept (top-contributing) heads."""
+    out = {}
+    for r in res["prompts"]:
+        for b, d in r["blocks"].items():
+            s = out.setdefault(r["mode"], {}).setdefault(str(b), {}).setdefault(r["asked"], {"n": 0, "share": Counter(),
+                                                                                              "attn_top_heads": Counter(),
+                                                                                              "heads": Counter()})
+            s["n"] += 1
+            s["share"].update({g: v["share_of_top"] for g, v in d["by_group"].items()})
+            for hd in d["heads"]:
+                s["attn_top_heads"].update({g: v / len(d["heads"]) for g, v in hd["attention"].items()})
+                s["heads"][hd["head"]] += 1
+    for mode in out.values():
+        for blk in mode.values():
+            for a, s in blk.items():
+                n = s.pop("n")
+                blk[a] = {"share": {g: v / n for g, v in s["share"].items()},
+                          "attn_top_heads": {g: v / n for g, v in s["attn_top_heads"].items()},
+                          "heads": dict(s["heads"].most_common(6)), "n": n}
+    return out
+
+
 def compose_report(out_dir, items, attributes):
     """CPU, off compose_rows.jsonl: (1) each arm's expected-target first-token rate per target
     attribute A; (2) what the 'other' first tokens actually said, typed against the arm's expected
@@ -938,7 +1057,7 @@ def analyze_neurons(out_dir, items, keys, attributes, meta, top_k, heatmap_block
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--phase", nargs="+", default=["all"],
-                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "rankstats", "toptokens", "all",
+                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "rankstats", "toptokens", "attnsources", "all",
                              "followups"],
                     help="all = capture compose neurons. followups = text_capture compose bundle report, with "
                          "--arms defaulting to the control and cross-modal arms (run after `all`).")
@@ -996,7 +1115,7 @@ def main(argv=None):
     meta = {"model_id": args.model_id, "items": keys, "attributes": attributes,
             "resid_layers": args.resid_layers, "mlp_blocks": args.mlp_blocks, "ground_truth_sha256": gt_sha,
             "prompts": "controlled (attribute_switch_sweep), prefill 'Answer:'", "position": "last prompt column"}
-    if "capture" not in phases and (set(phases) - {"toptokens"} or os.path.exists(meta_path)):
+    if "capture" not in phases and (set(phases) - {"toptokens", "attnsources"} or os.path.exists(meta_path)):
         meta = json.load(open(meta_path))
         assert meta["items"] == keys and meta["attributes"] == attributes, \
             "capture in --out_dir was made with other items/attributes; pass the same --limit_items/--attributes"
@@ -1006,7 +1125,7 @@ def main(argv=None):
     report.update(config=vars(args), meta=meta)
 
     m = None
-    if {"capture", "compose", "text_capture", "bundle", "rankstats", "toptokens"} & set(phases):
+    if {"capture", "compose", "text_capture", "bundle", "rankstats", "toptokens", "attnsources"} & set(phases):
         from methods.circuit_common import Model
         m = Model(args.model_id, device=args.device, attn_impl=args.attn_impl, vade_root=args.vade_root)
     if "capture" in phases:
@@ -1037,6 +1156,11 @@ def main(argv=None):
         with open(os.path.join(args.out_dir, "TOPTOKENS.md"), "w") as f:
             f.write(toptokens_markdown(tt))
         report["toptokens_class_counts"] = tt["class_counts"]
+    if "attnsources" in phases:
+        assert args.attn_impl == "eager", "--phase attnsources needs --attn_impl eager (attention weights)"
+        src = attn_sources(m, entity_dir, items, keys, attributes, top_items=args.top_items or TOPTOKEN_ITEMS)
+        json.dump(src, open(os.path.join(args.out_dir, "attn_sources.json"), "w"), indent=1, ensure_ascii=False)
+        report["attn_sources"] = attn_sources_summary(src)
     if "neurons" in phases:
         report["neurons"] = analyze_neurons(args.out_dir, items, keys, attributes, meta, args.top_k,
                                             args.heatmap_block, args.n_perm, args.seed)
@@ -1086,6 +1210,14 @@ def main(argv=None):
             for L, v in d.items():
                 print(f"    {L:<7} " + " ".join(f"{v[c]:.2f}" for c in TOKEN_CLASSES))
         print(f"  per-prompt dumps: {os.path.join(args.out_dir, 'TOPTOKENS.md')}")
+    if "attn_sources" in report and "attnsources" in phases:
+        print("\nattention blocks: share of the block's top-20 tokens' logit by SOURCE group | attention of the top heads")
+        for mode, d in report["attn_sources"].items():
+            for b, per in d.items():
+                for a, s_ in per.items():
+                    print(f"  {mode:<5} attn{b} {a:<12} " + " ".join(f"{g[:6]} {v:+.2f}" for g, v in s_["share"].items()) +
+                          " | " + " ".join(f"{g[:6]} {v:.2f}" for g, v in s_["attn_top_heads"].items()) +
+                          "  heads " + ",".join(s_["heads"]))
     if "rank_stats" in report and "rankstats" in phases:
         print("\nrank of the item's own value token (1 = top), per run: ASKED vs NOT ASKED")
         for attr, r in report["rank_stats"].items():

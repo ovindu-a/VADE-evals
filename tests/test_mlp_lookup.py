@@ -207,6 +207,19 @@ def test_capture_compose_neurons_end_to_end_on_tiny_qwen(tmp_path, monkeypatch):
     assert set(p0["writes"]) == {f"{k}{b}" for k in ("attn", "mlp") for b in (1, 2, 3)}
     assert all(abs(sum(v.values()) - 1) < 1e-6 for v in tt["class_counts"]["image"].values())
     assert "| block |" in ml.toptokens_markdown(tt, layers=range(1, 5))
+    monkeypatch.setattr(type(m.adapter), "assistant_start_col", lambda self, proc, ids: len(ids) - 2)
+    try:
+        src = ml.attn_sources(m, None, items, keys, attrs, top_items=keys[:2], blocks=(1, 2), k=5,
+                              n_heads_keep=2, n_pos=3, modes=("text",))
+    except AssertionError as e:                 # the tiny model's sdpa path returns no attention weights
+        assert "attention weights unavailable" in str(e)
+    else:
+        assert len(src["prompts"]) == 8
+        b1 = src["prompts"][0]["blocks"][1]
+        assert abs(sum(v["share_of_top"] for v in b1["by_group"].values()) - 1) < 1e-3
+        assert len(b1["heads"]) == 2 and len(b1["heads"][0]["keys"]) == 3
+        summ = ml.attn_sources_summary(src)
+        assert set(summ["text"]["1"]) == set(attrs)
 
     rep = ml.analyze_neurons(str(tmp_path), items, keys, attrs, meta, top_k=10, heatmap_block=2, n_perm=10, seed=0)
     assert set(rep["mlp_hidden_shares"]) == {"1", "2", "3"}
@@ -260,6 +273,11 @@ def test_compose_report_types_other_answers(tmp_path):
     assert ob["n_other"] == 2 and ob["wrong_attr"] == 0.5 and ob["other_entity"] == 0.5
     assert rep["by_target_attribute"]["24"]["xm_additive"]["language"]["hit"] == 1.0
     assert rep["text_ok_subset"]["24"]["xm_additive"]["first_B.A"] == 1.0
+
+
+def test_text_groups():
+    from methods.mlp_lookup import text_groups
+    assert text_groups(8, {3, 4}, 6) == ["system"] * 3 + ["object"] * 2 + ["question"] + ["assistant_prefix"] * 2
 
 
 def test_classify_token():
