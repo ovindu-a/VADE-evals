@@ -643,6 +643,69 @@ def bundle_lens(m, out_dir, items, keys, attributes, meta):
     return out
 
 
+def rank_rows(S, own_cols):
+    """S [n, n_cand] scores, own_cols [n] -> rank (1 = top) of each row's own candidate."""
+    own = S[np.arange(len(own_cols)), own_cols]
+    return 1 + (S > own[:, None]).sum(1)
+
+
+def boot_ci(x, n_boot=2000, seed=0):
+    x = np.asarray(x, dtype=np.float64)
+    rng = np.random.default_rng(seed)
+    means = [x[rng.integers(0, len(x), len(x))].mean() for _ in range(n_boot)]
+    return float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
+
+
+def rank_stats(m, out_dir, items, keys, attributes, meta, layers=None, n_boot=2000):
+    """Per RUN (not per averaged vector): for every item i, layer L and attribute a, the
+    direct-unembedding rank of i's own value of a among a's candidate values (distinct first
+    content tokens), in the run that ASKED a and in each of the three runs that asked another
+    question. Reports mean / median rank, top-1 / top-5 rates, mean reciprocal rank, the paired
+    per-item difference (asked - mean over not-asked) with a country-bootstrap CI, and an
+    asked-question matrix (rank of a's value when question q was asked). calling_code is skipped
+    (its first content tokens are single digits shared across countries)."""
+    import torch
+    from methods.circuit_common import first_content_token, gold_ids
+    I, A = len(keys), len(attributes)
+    layers = layers or meta["resid_layers"]
+    grids = load_grid(out_dir, "resid.npy", I, A, layers, meta["resid_layers"])
+    out = {}
+    for attr in attributes:
+        if attr == "calling_code":
+            continue
+        a = attributes.index(attr)
+        tok = [first_content_token(m.tokenizer, gold_ids(m.tokenizer, str(items[k][attr]))) for k in keys]
+        ok = [i for i in range(I) if tok[i] is not None]
+        cand = sorted(set(tok[i] for i in ok))
+        col = {t: j for j, t in enumerate(cand)}
+        with torch.no_grad():
+            W = m.adapter.logit_direction(m.model, torch.tensor(cand, device=m.model.device)).float().cpu().numpy()
+        own = np.array([col[tok[i]] for i in ok])
+        res = {"n_items": len(ok), "n_candidates": len(cand), "chance_mean_rank": (len(cand) + 1) / 2,
+               "by_layer": {}}
+        for L in layers:
+            R = grids[L]
+            ranks = np.stack([rank_rows(R[ok, q] @ W.T, own) for q in range(A)], axis=1)   # [items, asked q]
+            asked = ranks[:, a]
+            other_q = [q for q in range(A) if q != a]
+            notasked = ranks[:, other_q]                                                       # [items, 3]
+            diff = asked - notasked.mean(1)
+
+            def summ(r):
+                r = np.asarray(r, dtype=np.float64).ravel()
+                return {"mean_rank": float(r.mean()), "median_rank": float(np.median(r)),
+                        "top1": float((r == 1).mean()), "top5": float((r <= 5).mean()), "mrr": float((1 / r).mean())}
+            res["by_layer"][str(L)] = {
+                "asked": {**summ(asked), "mean_rank_ci": boot_ci(asked, n_boot)},
+                "not_asked": {**summ(notasked), "mean_rank_ci": boot_ci(notasked.mean(1), n_boot)},
+                "paired_diff_asked_minus_notasked": {"mean": float(diff.mean()), "ci": boot_ci(diff, n_boot),
+                                                     "frac_items_asked_better": float((diff < 0).mean()),
+                                                     "frac_items_notasked_better": float((diff > 0).mean())},
+                "by_asked_question": {attributes[q]: summ(ranks[:, q]) for q in range(A)}}
+        out[attr] = res
+    return out
+
+
 def compose_report(out_dir, items, attributes):
     """CPU, off compose_rows.jsonl: (1) each arm's expected-target first-token rate per target
     attribute A; (2) what the 'other' first tokens actually said, typed against the arm's expected
@@ -720,7 +783,8 @@ def analyze_neurons(out_dir, items, keys, attributes, meta, top_k, heatmap_block
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--phase", nargs="+", default=["all"],
-                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "all", "followups"],
+                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "rankstats", "all",
+                             "followups"],
                     help="all = capture compose neurons. followups = text_capture compose bundle report, with "
                          "--arms defaulting to the control and cross-modal arms (run after `all`).")
     ap.add_argument("--arms", nargs="+", choices=ALL_ARMS, default=None,
@@ -755,7 +819,7 @@ def main(argv=None):
     phases = []
     for ph in args.phase:
         phases += {"all": ["capture", "compose", "neurons"],
-                   "followups": ["text_capture", "compose", "bundle", "report"]}.get(ph, [ph])
+                   "followups": ["text_capture", "compose", "bundle", "report", "rankstats"]}.get(ph, [ph])
     phases = list(dict.fromkeys(phases))
     arms = args.arms or (list(CONTROL_ARMS + XM_ARMS) if "followups" in args.phase else list(ARMS))
     n_cells = len(keys) * len(attributes)
@@ -785,7 +849,7 @@ def main(argv=None):
     report.update(config=vars(args), meta=meta)
 
     m = None
-    if {"capture", "compose", "text_capture", "bundle"} & set(phases):
+    if {"capture", "compose", "text_capture", "bundle", "rankstats"} & set(phases):
         from methods.circuit_common import Model
         m = Model(args.model_id, device=args.device, attn_impl=args.attn_impl, vade_root=args.vade_root)
     if "capture" in phases:
@@ -808,6 +872,8 @@ def main(argv=None):
                                                             seed=args.seed, grid_file="resid_text.npy")
     if "report" in phases:
         report["compose_report"] = compose_report(args.out_dir, items, attributes)
+    if "rankstats" in phases:
+        report["rank_stats"] = rank_stats(m, args.out_dir, items, keys, attributes, meta)
     if "neurons" in phases:
         report["neurons"] = analyze_neurons(args.out_dir, items, keys, attributes, meta, args.top_k,
                                             args.heatmap_block, args.n_perm, args.seed)
@@ -850,6 +916,25 @@ def main(argv=None):
             for L, row in r["by_layer"].items():
                 print(f"    L{L:<3} " + "  ".join(f"{k} {v['own_rank']:5.1f}/{v['other_rank']:5.1f} top1 {v['own_top1']:.2f}"
                                                for k, v in row.items()))
+    if "rank_stats" in report and "rankstats" in phases:
+        print("\nrank of the item's own value token (1 = top), per run: ASKED vs NOT ASKED")
+        for attr, r in report["rank_stats"].items():
+            print(f"  {attr}: {r['n_items']} items, {r['n_candidates']} candidates, chance mean rank {r['chance_mean_rank']:.1f}")
+            print("    L    asked: mean [95% CI]   median top1  top5   | not asked: mean [95% CI]   median top1  top5   "
+                  "| paired diff [95% CI]  items asked better / not-asked better")
+            for L, d in r["by_layer"].items():
+                a_, n_, p_ = d["asked"], d["not_asked"], d["paired_diff_asked_minus_notasked"]
+                print(f"    L{L:<3} {a_['mean_rank']:6.1f} [{a_['mean_rank_ci'][0]:5.1f},{a_['mean_rank_ci'][1]:5.1f}] "
+                      f"{a_['median_rank']:5.1f} {a_['top1']:5.2f} {a_['top5']:5.2f} | "
+                      f"{n_['mean_rank']:6.1f} [{n_['mean_rank_ci'][0]:5.1f},{n_['mean_rank_ci'][1]:5.1f}] "
+                      f"{n_['median_rank']:5.1f} {n_['top1']:5.2f} {n_['top5']:5.2f} | "
+                      f"{p_['mean']:+6.1f} [{p_['ci'][0]:+5.1f},{p_['ci'][1]:+5.1f}]  "
+                      f"{p_['frac_items_asked_better']:.2f} / {p_['frac_items_notasked_better']:.2f}")
+            print("    by asked question (mean rank / top1):")
+            for L in ("22", "24", "25", "26", "28"):
+                if L in r["by_layer"]:
+                    bq = r["by_layer"][L]["by_asked_question"]
+                    print(f"      L{L:<3} " + "  ".join(f"{q}: {v['mean_rank']:5.1f}/{v['top1']:.2f}" for q, v in bq.items()))
     if "compose_report" in report:
         cr = report["compose_report"]
         print("\ncompose by target attribute A (expected-target first-token rate)")

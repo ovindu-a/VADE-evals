@@ -196,6 +196,10 @@ def test_capture_compose_neurons_end_to_end_on_tiny_qwen(tmp_path, monkeypatch):
     assert "calling_code" not in lens and lens["capital"]["by_layer"]["4"]["actual"]["own_rank"] >= 1
     rep = ml.compose_report(str(tmp_path), items, attrs)
     assert "4" in rep["by_target_attribute"]
+    rs = ml.rank_stats(m, str(tmp_path), items, keys, attrs, meta, n_boot=50)
+    d = rs["capital"]["by_layer"]["4"]
+    assert 1 <= d["asked"]["mean_rank"] <= rs["capital"]["n_candidates"]
+    assert set(d["by_asked_question"]) == set(attrs) and "calling_code" not in rs
 
     rep = ml.analyze_neurons(str(tmp_path), items, keys, attrs, meta, top_k=10, heatmap_block=2, n_perm=10, seed=0)
     assert set(rep["mlp_hidden_shares"]) == {"1", "2", "3"}
@@ -249,3 +253,11 @@ def test_compose_report_types_other_answers(tmp_path):
     assert ob["n_other"] == 2 and ob["wrong_attr"] == 0.5 and ob["other_entity"] == 0.5
     assert rep["by_target_attribute"]["24"]["xm_additive"]["language"]["hit"] == 1.0
     assert rep["text_ok_subset"]["24"]["xm_additive"]["first_B.A"] == 1.0
+
+
+def test_rank_rows_and_boot_ci():
+    from methods.mlp_lookup import boot_ci, rank_rows
+    S = np.array([[0.1, 0.9, 0.5], [0.3, 0.2, 0.1]])
+    assert rank_rows(S, np.array([1, 2])).tolist() == [1, 3]
+    lo, hi = boot_ci(np.ones(20), n_boot=50)
+    assert lo == hi == 1.0
