@@ -706,6 +706,161 @@ def rank_stats(m, out_dir, items, keys, attributes, meta, layers=None, n_boot=20
     return out
 
 
+TOPTOKEN_ITEMS = ("JP", "BR", "EG", "DE", "MX", "KE", "IN", "ES")
+TOKEN_CLASSES = ("asked_value", "other_attr_value", "country_name", "same_attr_other_country",
+                 "other_attr_other_country", "other")
+
+
+def classify_token(t, asked, own, name, attr_values):
+    """Types one vocabulary id against one prompt. asked: the asked attribute; own: {attribute:
+    this country's value first token}; name: the country name's first tokens (a set);
+    attr_values: {attribute: set of every country's value first token}. First match wins, in
+    TOKEN_CLASSES order."""
+    if t == own.get(asked):
+        return "asked_value"
+    if any(t == v for a, v in own.items() if a != asked):
+        return "other_attr_value"
+    if t in name:
+        return "country_name"
+    if t in attr_values.get(asked, ()):
+        return "same_attr_other_country"
+    if any(t in vs for a, vs in attr_values.items() if a != asked):
+        return "other_attr_other_country"
+    return "other"
+
+
+def top_tokens(m, entity_dir, items, keys, attributes, top_items=TOPTOKEN_ITEMS, k=20, k_bottom=10,
+               write_blocks=tuple(range(16, 28)), modes=("image", "text")):
+    """What is IN the last prompt column's residual at every layer, by vocabulary.
+
+    For each (item, asked attribute) prompt, image or text-named, at the last prompt column:
+      lens      the residual after block L-1 (L = 1..n_layers, pre-norm, read by hook) through the
+                model's own final norm + lm_head: top-k tokens with probabilities, and the
+                full-vocabulary rank of this country's four value tokens and its name token;
+      writes    what block b's attention and MLP each ADD, through the unembedding direction
+                (logit_direction = W_U * norm gain; the final norm's scalar is positive, so it does
+                not change a ranking): top-k promoted and k_bottom suppressed tokens.
+    Every listed token is typed by classify_token, and `class_counts` sums the types over prompts
+    per layer, so 'which other facts sit in the residual' is a count, not an anecdote.
+    calling_code values are typed by their first CONTENT token (a digit shared by many countries),
+    so for that attribute 'same_attr_other_country' is inflated by construction."""
+    import torch
+    from methods.circuit_common import cat_extra, first_content_token, gold_ids, left_pack
+    from methods.common.sites import InterventionSite
+
+    tok = m.tokenizer
+    top_items = [k_ for k_ in top_items if k_ in items] or keys[:6]
+    fct = lambda label: first_content_token(tok, gold_ids(tok, str(label)))
+    attr_values = {a: {fct(items[k_][a]) for k_ in keys} - {None} for a in attributes}
+    n_layers = len(m.layers)
+    with torch.no_grad():                                  # [V, H] = W_U * final-norm gain (asserts no head bias)
+        W_dir = m.adapter.logit_direction(m.model, torch.arange(m.model.lm_head.weight.shape[0],
+                                                                device=m.model.device))
+
+    def unembed_dir(x):                                    # [n, H] -> [n, V] logit-direction scores
+        return x.float() @ W_dir.T
+
+    def dec(t):
+        return tok.decode([int(t)])
+
+    out, counts = [], {}
+    attn_site, mlp_site = InterventionSite("attn_output"), InterventionSite("mlp_output")
+    for mode in modes:
+        cells = grid_cells(top_items, attributes)
+        if mode == "image":
+            built = [m.image_prompt(entity_dir, items[k_], a) for k_, a in cells]
+            assert len({b[0].shape[0] for b in built}) == 1, "controlled prompts must share one length"
+            ids = torch.stack([b[0] for b in built])
+            mask, extra = torch.ones_like(ids), cat_extra([b[1] for b in built])
+        else:
+            ids, mask = left_pack([m.text_prompt(items[k_]["name"], a)[0] for k_, a in cells], m.pad_id)
+            extra = {}
+        pos = torch.full((len(cells), 1), ids.shape[1] - 1, dtype=torch.long)
+        r_sink = {L: [] for L in range(1, n_layers + 1)}
+        a_sink = {b: [] for b in write_blocks}
+        o_sink = {b: [] for b in write_blocks}
+        handles = [block_output_hook(m.layers, L - 1, pos, r_sink[L]) for L in r_sink]
+        handles += [attn_site.register_capture(m.adapter, m.model, b + 1, pos, a_sink[b]) for b in write_blocks]
+        handles += [mlp_site.register_capture(m.adapter, m.model, b + 1, pos, o_sink[b]) for b in write_blocks]
+        try:
+            hf = m.forward(ids, mask, extra)
+        finally:
+            for h in handles:
+                h.remove()
+        gen = m.decode(m.generate(ids, mask, extra, 8))
+        with torch.no_grad():
+            lens = {L: m.adapter.unembed(m.model, r_sink[L][0][:, 0]).float() for L in r_sink}
+            # The lens at the last layer must BE the model's output (pre-norm hook + one norm).
+            final = hf.logits[:, -1].float()
+            err = (lens[n_layers] - final).abs().max().item() / final.abs().max().item()
+            assert err < 0.02, f"lens at L{n_layers} does not reproduce the model's logits (rel err {err:.3f})"
+            writes = {(kind, b): unembed_dir(s[b][0][:, 0]) for kind, s in (("attn", a_sink), ("mlp", o_sink))
+                      for b in write_blocks}
+        for n, (k_, a) in enumerate(cells):
+            own = {aa: fct(items[k_][aa]) for aa in attributes}
+            name = {t for t in gold_ids(tok, items[k_]["name"])[:2] if dec(t).strip()}
+            typ = lambda t: classify_token(int(t), a, own, name, attr_values)
+            rec = {"mode": mode, "item": k_, "name": items[k_]["name"], "asked": a, "generated": gen[n],
+                   "values": {aa: str(items[k_][aa]) for aa in attributes}, "lens": {}, "writes": {}}
+            for L, lg in lens.items():
+                p = lg[n].softmax(-1)
+                top = torch.topk(lg[n], k).indices.tolist()
+                tracked = {aa: t for aa, t in own.items() if t is not None}
+                tracked.update({f"name{j}": t for j, t in enumerate(sorted(name))})
+                ranks = {f"{aa}={dec(t)}": 1 + int((lg[n] > lg[n][t]).sum()) for aa, t in tracked.items()}
+                rec["lens"][L] = {"top": [[dec(t), round(float(p[t]), 4), typ(t)] for t in top], "ranks": ranks}
+                c = counts.setdefault(mode, {}).setdefault(str(L), Counter())
+                c.update(typ(t) for t in top)
+            for (kind, b), S in writes.items():
+                s = S[n]
+                rec["writes"][f"{kind}{b}"] = {
+                    "promote": [[dec(t), typ(t)] for t in torch.topk(s, k).indices.tolist()],
+                    "suppress": [[dec(t), typ(t)] for t in torch.topk(-s, k_bottom).indices.tolist()]}
+                c = counts.setdefault(mode + "_writes", {}).setdefault(f"{kind}{b}", Counter())
+                c.update(typ(t) for t in torch.topk(s, k).indices.tolist())
+            out.append(rec)
+        print(f"  top tokens: {mode} done ({len(cells)} prompts)", flush=True)
+    class_counts = {mode: {L: {c: v.get(c, 0) / (sum(v.values()) or 1) for c in TOKEN_CLASSES} for L, v in d.items()}
+                    for mode, d in counts.items()}
+    return {"items": list(top_items), "k": k, "write_blocks": list(write_blocks), "prompts": out,
+            "class_counts": class_counts}
+
+
+def toptokens_markdown(res, layers=range(14, 29), blocks=None):
+    """A readable dump: per prompt, the lens top-k per layer and the late blocks' promoted tokens.
+    Tokens of a typed class are marked: *asked*, [other attr], <name>."""
+    mark = {"asked_value": "**{}**", "other_attr_value": "[{}]", "country_name": "<{}>"}
+    fmt = lambda t, c: mark.get(c, "{}").format(repr(t)[1:-1])
+    lines = ["# Top tokens at the last prompt column", "",
+             "Legend: **asked value**, [another attribute's value of the same country], <country name>.", ""]
+    lines += ["## Share of top-%d lens tokens by type (mean over prompts)" % res["k"], ""]
+    for mode, d in res["class_counts"].items():
+        lines += [f"### {mode}", "", "| layer | " + " | ".join(TOKEN_CLASSES) + " |",
+                  "|---|" + "---|" * len(TOKEN_CLASSES)]
+        for L, v in d.items():
+            lines.append(f"| {L} | " + " | ".join(f"{v[c]:.2f}" for c in TOKEN_CLASSES) + " |")
+        lines.append("")
+    blocks = blocks or res["write_blocks"]
+    for r in res["prompts"]:
+        lines += [f"## {r['mode']} / {r['name']} / asked {r['asked']} -> {r['generated']!r}", "",
+                  "values: " + ", ".join(f"{a}={v}" for a, v in r["values"].items()), "",
+                  "| L | ranks (value/name tokens) | top tokens (p) |", "|---|---|---|"]
+        for L in layers:
+            d = r["lens"].get(L) or r["lens"].get(str(L))
+            if d is None:
+                continue
+            lines.append(f"| {L} | " + ", ".join(f"{repr(t)[1:-1]}:{v}" for t, v in d["ranks"].items()) + " | " +
+                         " ".join(f"{fmt(t, c)}({p:.2f})" if p >= 0.01 else fmt(t, c) for t, p, c in d["top"]) + " |")
+        lines += ["", "| block | MLP promotes | MLP suppresses | attn promotes |", "|---|---|---|---|"]
+        for b in blocks:
+            mw, aw = r["writes"][f"mlp{b}"], r["writes"][f"attn{b}"]
+            lines.append(f"| {b} | " + " ".join(fmt(t, c) for t, c in mw["promote"]) + " | " +
+                         " ".join(fmt(t, c) for t, c in mw["suppress"]) + " | " +
+                         " ".join(fmt(t, c) for t, c in aw["promote"][:10]) + " |")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def compose_report(out_dir, items, attributes):
     """CPU, off compose_rows.jsonl: (1) each arm's expected-target first-token rate per target
     attribute A; (2) what the 'other' first tokens actually said, typed against the arm's expected
@@ -783,7 +938,7 @@ def analyze_neurons(out_dir, items, keys, attributes, meta, top_k, heatmap_block
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--phase", nargs="+", default=["all"],
-                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "rankstats", "all",
+                    choices=["capture", "compose", "neurons", "text_capture", "bundle", "report", "rankstats", "toptokens", "all",
                              "followups"],
                     help="all = capture compose neurons. followups = text_capture compose bundle report, with "
                          "--arms defaulting to the control and cross-modal arms (run after `all`).")
@@ -801,6 +956,8 @@ def main(argv=None):
     ap.add_argument("--layers", type=int, nargs="+", default=[22, 23, 24, 25, 26, 27],
                     help="compose: layers at which the constructed residual is installed")
     ap.add_argument("--n_rows", type=int, default=384)
+    ap.add_argument("--top_items", nargs="+", default=None,
+                    help="toptokens: flags to dump (default %s)" % " ".join(TOPTOKEN_ITEMS))
     ap.add_argument("--top_k", type=int, default=200)
     ap.add_argument("--heatmap_block", type=int, default=25)
     ap.add_argument("--n_perm", type=int, default=200)
@@ -839,7 +996,7 @@ def main(argv=None):
     meta = {"model_id": args.model_id, "items": keys, "attributes": attributes,
             "resid_layers": args.resid_layers, "mlp_blocks": args.mlp_blocks, "ground_truth_sha256": gt_sha,
             "prompts": "controlled (attribute_switch_sweep), prefill 'Answer:'", "position": "last prompt column"}
-    if "capture" not in phases:
+    if "capture" not in phases and (set(phases) - {"toptokens"} or os.path.exists(meta_path)):
         meta = json.load(open(meta_path))
         assert meta["items"] == keys and meta["attributes"] == attributes, \
             "capture in --out_dir was made with other items/attributes; pass the same --limit_items/--attributes"
@@ -849,7 +1006,7 @@ def main(argv=None):
     report.update(config=vars(args), meta=meta)
 
     m = None
-    if {"capture", "compose", "text_capture", "bundle", "rankstats"} & set(phases):
+    if {"capture", "compose", "text_capture", "bundle", "rankstats", "toptokens"} & set(phases):
         from methods.circuit_common import Model
         m = Model(args.model_id, device=args.device, attn_impl=args.attn_impl, vade_root=args.vade_root)
     if "capture" in phases:
@@ -874,6 +1031,12 @@ def main(argv=None):
         report["compose_report"] = compose_report(args.out_dir, items, attributes)
     if "rankstats" in phases:
         report["rank_stats"] = rank_stats(m, args.out_dir, items, keys, attributes, meta)
+    if "toptokens" in phases:
+        tt = top_tokens(m, entity_dir, items, keys, attributes, top_items=args.top_items or TOPTOKEN_ITEMS)
+        json.dump(tt, open(os.path.join(args.out_dir, "toptokens.json"), "w"), indent=1, ensure_ascii=False)
+        with open(os.path.join(args.out_dir, "TOPTOKENS.md"), "w") as f:
+            f.write(toptokens_markdown(tt))
+        report["toptokens_class_counts"] = tt["class_counts"]
     if "neurons" in phases:
         report["neurons"] = analyze_neurons(args.out_dir, items, keys, attributes, meta, args.top_k,
                                             args.heatmap_block, args.n_perm, args.seed)
@@ -916,6 +1079,13 @@ def main(argv=None):
             for L, row in r["by_layer"].items():
                 print(f"    L{L:<3} " + "  ".join(f"{k} {v['own_rank']:5.1f}/{v['other_rank']:5.1f} top1 {v['own_top1']:.2f}"
                                                for k, v in row.items()))
+    if "toptokens_class_counts" in report and "toptokens" in phases:
+        print("\ntop-20 lens tokens at the last prompt column, share by type (mean over prompts)")
+        for mode, d in report["toptokens_class_counts"].items():
+            print(f"  {mode}:  " + " / ".join(TOKEN_CLASSES))
+            for L, v in d.items():
+                print(f"    {L:<7} " + " ".join(f"{v[c]:.2f}" for c in TOKEN_CLASSES))
+        print(f"  per-prompt dumps: {os.path.join(args.out_dir, 'TOPTOKENS.md')}")
     if "rank_stats" in report and "rankstats" in phases:
         print("\nrank of the item's own value token (1 = top), per run: ASKED vs NOT ASKED")
         for attr, r in report["rank_stats"].items():

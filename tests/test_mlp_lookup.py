@@ -200,6 +200,13 @@ def test_capture_compose_neurons_end_to_end_on_tiny_qwen(tmp_path, monkeypatch):
     d = rs["capital"]["by_layer"]["4"]
     assert 1 <= d["asked"]["mean_rank"] <= rs["capital"]["n_candidates"]
     assert set(d["by_asked_question"]) == set(attrs) and "calling_code" not in rs
+    tt = ml.top_tokens(m, None, items, keys, attrs, top_items=keys[:2], k=5, k_bottom=3, write_blocks=(1, 2, 3))
+    assert len(tt["prompts"]) == 2 * 2 * 4 and set(tt["class_counts"]) == {"image", "text", "image_writes", "text_writes"}
+    p0 = tt["prompts"][0]
+    assert set(p0["lens"]) == set(range(1, len(m.layers) + 1)) and len(p0["lens"][1]["top"]) == 5
+    assert set(p0["writes"]) == {f"{k}{b}" for k in ("attn", "mlp") for b in (1, 2, 3)}
+    assert all(abs(sum(v.values()) - 1) < 1e-6 for v in tt["class_counts"]["image"].values())
+    assert "| block |" in ml.toptokens_markdown(tt, layers=range(1, 5))
 
     rep = ml.analyze_neurons(str(tmp_path), items, keys, attrs, meta, top_k=10, heatmap_block=2, n_perm=10, seed=0)
     assert set(rep["mlp_hidden_shares"]) == {"1", "2", "3"}
@@ -253,6 +260,15 @@ def test_compose_report_types_other_answers(tmp_path):
     assert ob["n_other"] == 2 and ob["wrong_attr"] == 0.5 and ob["other_entity"] == 0.5
     assert rep["by_target_attribute"]["24"]["xm_additive"]["language"]["hit"] == 1.0
     assert rep["text_ok_subset"]["24"]["xm_additive"]["first_B.A"] == 1.0
+
+
+def test_classify_token():
+    from methods.mlp_lookup import classify_token
+    own = {"capital": 1, "currency": 2, "language": 3}
+    vals = {"capital": {1, 10}, "currency": {2, 20}, "language": {3, 30}}
+    got = [classify_token(t, "capital", own, {7}, vals) for t in (1, 2, 7, 10, 20, 99)]
+    assert got == ["asked_value", "other_attr_value", "country_name", "same_attr_other_country",
+                   "other_attr_other_country", "other"]
 
 
 def test_rank_rows_and_boot_ci():
