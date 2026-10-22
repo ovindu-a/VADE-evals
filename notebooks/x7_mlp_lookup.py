@@ -163,10 +163,7 @@ def _(mo, n_ent, n_rel, n_steps, n_val, repo, toy_btn, toy_seed):
 
 
 @app.cell
-def _(mo, toy, toy_hist):
-    import altair as alt
-    import pandas as pd
-
+def _(alt, mo, pd, toy, toy_hist):
     _curve = (alt.Chart(pd.DataFrame(toy_hist), title="training").mark_line()
               .encode(x="step:Q", y=alt.Y("acc:Q", title="accuracy", scale=alt.Scale(domain=[0, 1])))
               .properties(width=260, height=180))
@@ -209,7 +206,7 @@ def _(mo, toy, toy_hist):
     output: most of what an MLP writes is main effects, and the lookup is the small conjunctive part
     that decides the answer. Expect the same in Qwen.
     """)])
-    return alt, pd
+    return
 
 
 @app.cell
@@ -413,6 +410,14 @@ def _(alt, fu_dir, json, mo, os, pd):
                            selection=None),
                mo.md("### 2b. What the 'other' answers said (% of other rows)"), mo.ui.table(_oth, selection=None)])
     return
+
+
+@app.cell
+def _():
+    import altair as alt
+    import pandas as pd
+
+    return alt, pd
 
 
 @app.cell
