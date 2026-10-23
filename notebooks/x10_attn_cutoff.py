@@ -222,36 +222,25 @@ def _(json, mo, os, out_dirs):
 
 
 @app.cell
-def _(cut_df, mo, pd, res):
-    import altair as alt
-
-    _marks = pd.DataFrame([{"model": m.split("/")[-1], "depth": r["summary"]["clean"]["name_arrives"] / r["n_layers"]}
-                           for m, r in res.items() if r["summary"]["clean"]["name_arrives"]])
-    _base = alt.Chart(cut_df).mark_line(point=True).encode(
-        x=alt.X("depth:Q", title="cut from layer / n_layers"), y=alt.Y("correct %:Q", scale=alt.Scale(domain=[0, 100])),
-        color="arm:N")
-    _rule = alt.Chart(_marks).mark_rule(strokeDash=[4, 4], color="gray").encode(x="depth:Q")
-    _ch = alt.layer(_base, _rule).properties(width=300, height=220).facet(column="model:N")
-    mo.vstack([mo.md("### Answer kept vs where the cut starts (dashed: the name reaches rank <= 10 in the clean lens)"), _ch])
-    return (alt,)
+def _(cut_df, mo):
+    _p = cut_df.pivot_table(index="cut from L", columns=["model", "arm"], values="correct %").round(0)
+    mo.vstack([mo.md("### Answer kept (% correct, rows the clean model gets right) by where the cut starts"),
+               mo.plain_text(_p.to_string())])
+    return
 
 
 @app.cell
-def _(alt, mo, pd, res):
-    _long = []
+def _(mo, res):
+    _lines = []
     for _m, _r in res.items():
-        _n = _r["n_layers"]
+        _cuts = [c for c in ("22", "24", "28") if c in (_r["summary"].get("attn_zero") or {})][:2]
+        _lines.append(f"## {_m.split('/')[-1]}  (median rank of the asked value; columns = arm@cut-from)")
         for _L, _v in _r["summary"]["clean"]["value_rank_median"].items():
-            _long.append({"model": _m.split("/")[-1], "run": "clean", "layer": int(_L), "log10 value rank": __import__("math").log10(max(_v, 1))})
-        for _cut, _s in (_r["summary"].get("attn_self") or {}).items():
-            if int(_cut) % 4 == 0 and int(_cut) >= _n // 2:
-                for _L, _v in _s["value_rank_median"].items():
-                    _long.append({"model": _m.split("/")[-1], "run": f"attn_self from L{_cut}", "layer": int(_L),
-                                  "log10 value rank": __import__("math").log10(max(_v, 1))})
-    _ch = (alt.Chart(pd.DataFrame(_long)).mark_line().encode(
-        x="layer:Q", y=alt.Y("log10 value rank:Q", scale=alt.Scale(reverse=True)), color="run:N")
-        .properties(width=300, height=220).facet(column="model:N"))
-    mo.vstack([mo.md("### Logit lens: median rank of the asked value (log10; 0 = top-1), clean vs attention cut"), _ch])
+            if int(_L) >= 16:
+                _lines.append(f"L{int(_L):>2}  clean {_v:>7.0f} | " + " ".join(
+                    f"{_a}@{_c} {_r['summary'][_a][_c]['value_rank_median'][_L]:>7.0f}"
+                    for _a in ("attn_self", "attn_zero", "mlp_zero") for _c in _cuts if _a in _r["summary"]))
+    mo.vstack([mo.md("### Logit lens at the answer position: clean vs cut runs"), mo.plain_text("\n".join(_lines))])
     return
 
 
