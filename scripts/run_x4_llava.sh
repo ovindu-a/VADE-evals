@@ -9,7 +9,12 @@
 #     command line and the log rather than typed by hand:
 #       X4_PATCH=16 X4_BLOCKS="16 17 18 19 20" ... pipeline
 #       X4_ROUTER_PATCH=12 X4_ROUTER_BLOCKS="12 13 14 15" ... routers
-#   * the smoke ceiling step no longer passes --out with --positions_list (X3's smoke bug).
+#   * the smoke ceiling step no longer passes --out with --positions_list (X3's smoke bug);
+#   * the controlled prompts (routers, crossmodal) use VADE_PROMPT_STYLE=what_is. LLaVA answers the
+#     default wording ('Report the capital of this country.' + 'Answer:') with the country NAME on
+#     images (X9: 0-1% accuracy, 50-55% name). what_is ('What is the capital of this country?',
+#     same prefill) gets 37-52%, keeps one differing column per attribute pair, and puts the
+#     asked value at lens rank 1 from layer 29. X4_PROMPT_STYLE=default restores the Qwen wording.
 #
 #   bash scripts/run_x4_llava.sh smoke        # every stage at tiny size on the real model
 #   bash scripts/run_x4_llava.sh gate         # cheap accuracy gate; STOP if it fails
@@ -32,6 +37,7 @@ SLUG=${M##*/}
 NL=${X4_N_LAYERS:-32} NH=${X4_N_HEADS:-32}      # 7B; the 13B is 40 x 40
 N_CEIL=${X4_N_CEIL:-128}                        # stage-1 rows per curve (X3 used 32)
 N_ROUTER=${X4_N_ROUTER_COUNTRIES:-16}           # attribute-switch items (X3 used the default 8)
+export VADE_PROMPT_STYLE=${X4_PROMPT_STYLE:-what_is}   # read by attribute_switch_sweep at import (X9)
 R=results/x4_llava
 P=results/image_head_pipeline_$SLUG
 STAMP=$(date +%Y%m%d_%H%M%S)
@@ -126,6 +132,23 @@ for entity in ("flags", "brands"):
             print(f"  {entity}/{row['attribute']}: {row['pct_accuracy']:.1f}% (n={row['n']}) "
                   f"{'ok' if good else f'BELOW {floor:.0f}%'}")
 print("GATE PASSED" if ok else "GATE FAILED: too few eligible rows to trace -- stop X4 here and report")
+sys.exit(0 if ok else 1)
+EOF
+  # The controlled prompts the routers / crossmodal steps use: LLaVA must ANSWER them (X9).
+  run gate_prompts $PY methods/prompt_style_check.py --model_id "$M" --vade_root "$VADE" \
+      --styles "$VADE_PROMPT_STYLE" --out_dir "$R/prompt_style_check"
+  run gate_prompts_check $PY - "$R/prompt_style_check/summary.json" <<'EOF'
+import json, sys
+s = json.load(open(sys.argv[1]))["summary"]
+(style, d), = s.items()
+img = d["image"]
+acc = {a: v["accuracy"] for a, v in img.items() if not a.startswith("_")}
+name = {a: v["said_name"] for a, v in img.items() if not a.startswith("_")}
+ok = img["_aligned"] and min(acc.values()) >= 0.25 and max(name.values()) <= 0.10
+print(f"  {style}: image accuracy " + " ".join(f"{a} {v:.0%}" for a, v in acc.items()) +
+      "; said the name " + " ".join(f"{a} {v:.0%}" for a, v in name.items()) + f"; aligned {img['_aligned']}")
+print("PROMPT GATE PASSED" if ok else "PROMPT GATE FAILED: the routers/crossmodal prompts are not answered -- "
+      "rerun prompt_style_check.py with every style and pick another X4_PROMPT_STYLE")
 sys.exit(0 if ok else 1)
 EOF
 }
