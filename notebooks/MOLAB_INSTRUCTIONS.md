@@ -175,3 +175,39 @@ script, run at smoke size first.
 3. **Early/late MLP freezes on text-named entities** (`text_entity_contrast`). These separate a
    Qwen-specific effect from a modality effect.
 4. **A random-site control for the trained MLP masks** (`head_das --method dbm` at, e.g., MLPs 10-13).
+
+## X8: `notebooks/x8_llava_window.py` (LLaVA-1.5-7B: can the head window be found?)
+
+**Question.** Before the full X4 pod run, can stage 1 find LLaVA-1.5-7B's image->text handoff window,
+and can stage 2 narrow it to a few blocks? Stage 1 is the residual swap at every image position vs at the
+last prompt token, at layers 0-32. Stage 2 installs every head of each window of ≤3 blocks at the last
+token.
+
+**Method.** `methods/image_head_pipeline.py --stages ceiling [windows]` on flags, with:
+- `--model_id llava-hf/llava-1.5-7b-hf --n_layers 32 --n_heads 32`;
+- `--scoring text` (LLaVA's casing need not match the labels);
+- `--allow_unpruned --skip_scoring_check`. VADE's accuracy and pruning scripts are not in the bucket, so
+  the curves are read against `source_read`, the model's own accuracy on these rows.
+
+The setup cell also downloads LLaVA's processor files (no weights) and runs
+`tests/test_llava_adapter.py`, which must show 19 passed and 0 skipped.
+
+**Links.**
+- Notebook (read-only preview, synced from GitHub):
+  https://molab.marimo.io/github/ovindu-a/VADE-evals/blob/molab/notebooks/x8_llava_window.py
+- To run it, fork it into the workspace and attach the RTX Pro 6000, as for X5.
+
+### Steps
+1. Press **1. Set up**. The cell ends with the GPU name and `LLaVA adapter tests: passed`.
+2. Leave attributes = capital, language and rows = medium (64), then press **2. Run**. The first run
+   downloads ~14 GB of weights.
+3. If the curves cross cleanly, tick **stage 2** and press **2** again. Stage 1 is reused.
+4. Download the zip. Save it under `results/image_head_pipeline_llava-1.5-7b-hf/` in this repo, and do not
+   commit it unless the user asks.
+
+### What to report back
+- The stage-1 table per attribute: `source_read`, `patch_layer`, `read_end`, handoff blocks, relative
+  depth, and warnings.
+- Both curves by layer, raw and ÷ `source_read`.
+- If stage 2 ran, its table and chosen window, plus the identity check.
+- Compare against Qwen-7B (21-23 of 28, depth 0.75-0.82) and Idefics3 (16-24 of 32, no ≤3-block window).

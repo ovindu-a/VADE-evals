@@ -276,7 +276,12 @@ class Model:
                     {"role": "assistant", "content": [{"type": "text", "text": PREFILL}]}]
         text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=False,
                                                   continue_final_message=True)
-        enc = self.tokenizer(text, return_offsets_mapping=True, add_special_tokens=False)
+        # A chat template that does not write BOS itself (LLaVA-1.5) gets the tokenizer's, exactly
+        # as that adapter's build_inputs gives the IMAGE prompt; adapters without `_add_special`
+        # (Qwen, InternVL, Idefics3, whose template writes BOS) tokenize as before.
+        adapter = getattr(self, "adapter", None)      # tests build a bare Model with only a processor
+        add_special = getattr(adapter, "_add_special", lambda processor, t: False)(self.processor, text)
+        enc = self.tokenizer(text, return_offsets_mapping=True, add_special_tokens=add_special)
         entity = ATTRIBUTE_ENTITY[attribute]
         intro = name_intro(entity)
         start = text.find(name_sentence(entity, name))
