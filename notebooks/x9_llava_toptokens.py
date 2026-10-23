@@ -149,23 +149,26 @@ def _(bucket, mo, model_id, os, repo_branch, repo_url, setup_btn, stream, sys, w
 def _(mo):
     items = mo.ui.text(value="JP BR EG DE MX KE IN ES", label="flags (ISO codes)")
     wblocks = mo.ui.range_slider(start=0, stop=31, value=[14, 31], label="write blocks", show_value=True)
+    pstyle = mo.ui.dropdown(options=["default", "what_is"], value="what_is",
+                            label="prompt style (VADE_PROMPT_STYLE; see Part B)")
     run_btn = mo.ui.run_button(label="2. Run logit lens (toptokens)")
-    mo.vstack([mo.hstack([items, wblocks]), run_btn])
-    return items, run_btn, wblocks
+    mo.vstack([mo.hstack([items, wblocks]), mo.hstack([pstyle, run_btn])])
+    return items, pstyle, run_btn, wblocks
 
 
 @app.cell
-def _(gpu, items, mo, model_id, os, repo, run_btn, stream, sys, tests_rc, vade, wblocks):
+def _(gpu, items, mo, model_id, os, pstyle, repo, run_btn, stream, sys, tests_rc, vade, wblocks):
     mo.stop(not run_btn.value, mo.md("Press **2. Run**. About 64 forwards plus generations, a few minutes "
                                      "after the ~14 GB model download."))
     mo.stop(gpu is None, mo.md("**No GPU.** Attach one in the notebook specs, then rerun set up."))
     mo.stop(tests_rc != 0, mo.md("**The adapter tests failed.** Fix that first: every number would be suspect."))
-    out_dir = os.path.join(repo, "results", "mlp_lookup_" + model_id.value.split("/")[-1], "flags")
+    out_dir = os.path.join(repo, "results", "mlp_lookup_" + model_id.value.split("/")[-1],
+                           "flags" + ("" if pstyle.value == "default" else "_" + pstyle.value))
     _lo, _hi = wblocks.value
     cmd = [sys.executable, "methods/mlp_lookup.py", "--phase", "toptokens", "--model_id", model_id.value,
            "--vade_root", vade, "--out_dir", out_dir, "--top_items", *items.value.split(),
            "--write_blocks", *[str(b) for b in range(_lo, _hi + 1)]]
-    _env = dict(os.environ, PYTHONUNBUFFERED="1", VADE_ROOT=vade)
+    _env = dict(os.environ, PYTHONUNBUFFERED="1", VADE_ROOT=vade, VADE_PROMPT_STYLE=pstyle.value)
     stream(cmd, cwd=repo, env=_env)
     mo.md(f"Done: `{out_dir}`")
     return (out_dir,)

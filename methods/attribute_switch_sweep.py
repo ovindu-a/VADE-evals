@@ -71,6 +71,8 @@ def is_qwen_model(model_id):
 
 
 def question(attribute, paraphrase=False):
+    if PROMPT_STYLE != 'default':
+        return style_question(attribute, PROMPT_STYLE, paraphrase=paraphrase)
     spec = ENTITY_SPECS[ATTRIBUTE_ENTITY[attribute]]
     return spec['instruction'] + (f'{"Return" if paraphrase else "Report"} the {spec["fields"][attribute]} '
                                   f'of this {spec["noun"]}.')
@@ -83,7 +85,8 @@ def question(attribute, paraphrase=False):
 # methods/prompt_style_check.py measures them.
 PROMPT_STYLES = {
     'default': dict(question='{instruction}Report the {field} of this {noun}.', prefill='Answer:'),
-    'what_is': dict(question='{instruction}What is the {field} of this {noun}?', prefill='Answer:'),
+    'what_is': dict(question='{instruction}What is the {field} of this {noun}?', prefill='Answer:',
+                    paraphrase='{instruction}Which is the {field} of this {noun}?'),
     'answer_is': dict(question='{instruction}Report the {field} of this {noun}.', prefill='The answer is'),
     'field_prefill': dict(question='{instruction}Report the {field} of this {noun}.',
                           prefill='The {field} of this {noun} is'),
@@ -94,7 +97,20 @@ PROMPT_STYLES = {
 }
 
 
-def style_question(attribute, style='default', text_name=None):
+# VADE_PROMPT_STYLE selects the style every controlled-prompt script uses (question(), PREFILL,
+# circuit_common.text_question). Unset = 'default', byte-identical to every earlier run. Only styles
+# with ONE prefill for every attribute and a `paraphrase` template can be selected: PREFILL is a
+# module constant imported by name across methods/, and the sweep's `para` arm needs a paraphrase.
+PROMPT_STYLE = os.environ.get('VADE_PROMPT_STYLE', 'default')
+assert PROMPT_STYLE in PROMPT_STYLES, f'VADE_PROMPT_STYLE={PROMPT_STYLE!r}; known: {list(PROMPT_STYLES)}'
+if PROMPT_STYLE != 'default':
+    assert '{' not in PROMPT_STYLES[PROMPT_STYLE]['prefill'] and 'paraphrase' in PROMPT_STYLES[PROMPT_STYLE], \
+        f'style {PROMPT_STYLE!r} needs a per-attribute prefill or a paraphrase; it can only be measured ' \
+        f'(prompt_style_check.py), not selected'
+    PREFILL = PROMPT_STYLES[PROMPT_STYLE]['prefill']
+
+
+def style_question(attribute, style='default', text_name=None, paraphrase=False):
     """The controlled question in `style`; with text_name, the text-entity version (the item named
     in the prompt, no image), as circuit_common.text_question builds it."""
     spec, st = ENTITY_SPECS[ATTRIBUTE_ENTITY[attribute]], PROMPT_STYLES[style]
@@ -104,7 +120,8 @@ def style_question(attribute, style='default', text_name=None):
         instruction = instruction.replace(shown, f"For the {spec['noun']} named")
         instruction += f"The {spec['noun']} is {text_name}" + ("" if text_name.endswith(".") else ".") + " "
     field = st.get('fields', {}).get(attribute, spec['fields'][attribute])
-    return st['question'].format(instruction=instruction, field=field, noun=spec['noun'])
+    return st['paraphrase' if paraphrase else 'question'].format(instruction=instruction, field=field,
+                                                                 noun=spec['noun'])
 
 
 def style_prefill(attribute, style='default'):
@@ -646,6 +663,8 @@ def main(argv=None):
               and not (k == 'entity' and v == 'flags') and not (k == 'own_golds' and not v)}
     if uses_own_golds(args.entity, args.own_golds):
         config['golds'] = 'own_answer'
+    if PROMPT_STYLE != 'default':
+        config['prompt_style'] = PROMPT_STYLE
     config.update(rows=rows, prompts={a: [question(a), question(a, True)] for a in args.attributes},
         prefill=PREFILL, ground_truth_sha256=hashlib.sha256(raw).hexdigest(),
         image_sha256={c: hashlib.sha256((entity_dir / items[c]['image']).read_bytes()).hexdigest()

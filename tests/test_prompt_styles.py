@@ -30,3 +30,19 @@ def test_check_script_dry_run(capsys):
         pytest.skip("no sibling VADE checkout")
     prompt_style_check.main(["--dry_run", "--vade_root", vade])
     assert "Grid valid." in capsys.readouterr().out
+
+
+def test_selecting_a_style_by_env_var_changes_every_controlled_prompt():
+    import subprocess
+    code = ("from methods import attribute_switch_sweep as sw, circuit_common as cc;"
+            "print(sw.PREFILL); print(sw.question('capital')); print(sw.question('capital', True));"
+            "print(cc.text_question('capital', 'France')); print(cc.PREFILL)")
+    root = os.path.join(os.path.dirname(__file__), "..")
+    out = subprocess.run([sys.executable, "-c", code], cwd=root, capture_output=True, text=True,
+                         env=dict(os.environ, VADE_PROMPT_STYLE="what_is"), check=True).stdout.splitlines()
+    assert out[0] == "Answer:" and out[1].endswith("What is the capital of this country?")
+    assert out[2].endswith("Which is the capital of this country?")
+    assert "For the country named" in out[3] and out[3].endswith("The country is France. What is the capital of this country?")
+    bad = subprocess.run([sys.executable, "-c", "import methods.attribute_switch_sweep"], cwd=root,
+                         capture_output=True, text=True, env=dict(os.environ, VADE_PROMPT_STYLE="field_prefill"))
+    assert bad.returncode != 0 and "can only be measured" in bad.stderr

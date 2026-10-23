@@ -76,6 +76,9 @@ def name_sentence(entity, name):
 
 
 def text_question(attribute, name):
+    from methods.attribute_switch_sweep import PROMPT_STYLE, style_question
+    if PROMPT_STYLE != 'default':
+        return style_question(attribute, PROMPT_STYLE, text_name=name)
     entity = ATTRIBUTE_ENTITY[attribute]
     spec = ENTITY_SPECS[entity]
     return (text_instruction(entity) + f"{name_sentence(entity, name)} "
