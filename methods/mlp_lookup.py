@@ -822,11 +822,11 @@ def top_tokens(m, entity_dir, items, keys, attributes, top_items=TOPTOKEN_ITEMS,
         print(f"  top tokens: {mode} done ({len(cells)} prompts)", flush=True)
     class_counts = {mode: {L: {c: v.get(c, 0) / (sum(v.values()) or 1) for c in TOKEN_CLASSES} for L, v in d.items()}
                     for mode, d in counts.items()}
-    return {"items": list(top_items), "k": k, "write_blocks": list(write_blocks), "prompts": out,
-            "class_counts": class_counts}
+    return {"items": list(top_items), "k": k, "write_blocks": list(write_blocks), "n_layers": n_layers,
+            "prompts": out, "class_counts": class_counts}
 
 
-def toptokens_markdown(res, layers=range(14, 29), blocks=None):
+def toptokens_markdown(res, layers=None, blocks=None):
     """A readable dump: per prompt, the lens top-k per layer and the late blocks' promoted tokens.
     Tokens of a typed class are marked: *asked*, [other attr], <name>."""
     mark = {"asked_value": "**{}**", "other_attr_value": "[{}]", "country_name": "<{}>"}
@@ -841,6 +841,7 @@ def toptokens_markdown(res, layers=range(14, 29), blocks=None):
             lines.append(f"| {L} | " + " | ".join(f"{v[c]:.2f}" for c in TOKEN_CLASSES) + " |")
         lines.append("")
     blocks = blocks or res["write_blocks"]
+    layers = layers or range(14, res.get("n_layers", 28) + 1)
     for r in res["prompts"]:
         lines += [f"## {r['mode']} / {r['name']} / asked {r['asked']} -> {r['generated']!r}", "",
                   "values: " + ", ".join(f"{a}={v}" for a, v in r["values"].items()), "",
@@ -1077,6 +1078,9 @@ def main(argv=None):
     ap.add_argument("--n_rows", type=int, default=384)
     ap.add_argument("--top_items", nargs="+", default=None,
                     help="toptokens: flags to dump (default %s)" % " ".join(TOPTOKEN_ITEMS))
+    ap.add_argument("--write_blocks", type=int, nargs="+", default=list(range(16, 28)),
+                    help="toptokens: blocks whose attention and MLP writes are unembedded (0-based). "
+                         "The default is Qwen2.5-VL-7B's 16-27; give a 32-block model its own (e.g. 14-31).")
     ap.add_argument("--top_k", type=int, default=200)
     ap.add_argument("--heatmap_block", type=int, default=25)
     ap.add_argument("--n_perm", type=int, default=200)
@@ -1151,7 +1155,9 @@ def main(argv=None):
     if "rankstats" in phases:
         report["rank_stats"] = rank_stats(m, args.out_dir, items, keys, attributes, meta)
     if "toptokens" in phases:
-        tt = top_tokens(m, entity_dir, items, keys, attributes, top_items=args.top_items or TOPTOKEN_ITEMS)
+        assert max(args.write_blocks) < m.n_layers, f"--write_blocks must be < {m.n_layers} for this model"
+        tt = top_tokens(m, entity_dir, items, keys, attributes, top_items=args.top_items or TOPTOKEN_ITEMS,
+                        write_blocks=tuple(args.write_blocks))
         json.dump(tt, open(os.path.join(args.out_dir, "toptokens.json"), "w"), indent=1, ensure_ascii=False)
         with open(os.path.join(args.out_dir, "TOPTOKENS.md"), "w") as f:
             f.write(toptokens_markdown(tt))

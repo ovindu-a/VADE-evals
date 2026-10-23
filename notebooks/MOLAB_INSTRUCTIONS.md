@@ -211,3 +211,16 @@ The setup cell also downloads LLaVA's processor files (no weights) and runs
 - Both curves by layer, raw and ÷ `source_read`.
 - If stage 2 ran, its table and chosen window, plus the identity check.
 - Compare against Qwen-7B (21-23 of 28, depth 0.75-0.82) and Idefics3 (16-24 of 32, no ≤3-block window).
+
+## X9: `notebooks/x9_llava_toptokens.py` (LLaVA logit-lens top-20)
+
+X7's `toptokens` phase (`methods/mlp_lookup.py --phase toptokens`) on LLaVA-1.5-7B. It covers 8 flags
+x 4 questions, with the flag shown as an image and with the country named in text. For each prompt it
+reports:
+- the top-20 logit-lens tokens at the last prompt column after every block;
+- the rank of the country's name and value tokens;
+- the top-20 tokens each block's attention and MLP write (blocks 14-31 by default).
+
+Same setup as X8: attach an RTX Pro 6000, press **1. Set up**, then **2. Run**. The adapter tests
+must pass first. Output goes to `results/mlp_lookup_llava-1.5-7b-hf/flags/`, and a zip download
+is at the bottom.

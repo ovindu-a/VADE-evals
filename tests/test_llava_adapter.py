@@ -380,3 +380,36 @@ def test_text_prompt_gets_one_bos_on_llava_and_is_unchanged_elsewhere():
     ids3, cols3 = cc.Model.text_prompt(_wrapped(get_adapter("Qwen/Qwen2.5-VL-7B-Instruct"), _FakeProcessor()),
                                        "France", "capital")
     assert ids3[0].item() == ord("U") and "".join(chr(int(ids3[c])) for c in cols3) == "France"
+
+
+def test_mlp_lookup_top_tokens_runs_on_llava(tiny_llava, monkeypatch):
+    """X9: mlp_lookup's logit-lens top-k phase on the LLaVA stack. Its own assertion checks that the
+    lens at the last layer (pre-norm hook + the adapter's unembed) reproduces the model's logits."""
+    import methods.circuit_common as cc
+    from methods import mlp_lookup as ml
+    adapter, model = tiny_llava
+    tok = SimpleNamespace(pad_token_id=0, eos_token_id=2, decode=lambda ids, **k: " ".join(f"t{int(i)}" for i in ids))
+    m = cc.Model.wrap(adapter, model, SimpleNamespace(tokenizer=tok))
+    attrs = ["capital", "language"]
+    items = {k: {"name": f"N{k}", "capital": f"C{k}", "language": f"L{k}"} for k in ("AA", "BB")}
+    ids0, _ = _inputs()
+
+    def image_prompt(entity_dir, item, attribute):
+        g = torch.Generator().manual_seed(sum(map(ord, item["name"] + attribute)))
+        ids = ids0[0].clone()
+        ids[-5] = 34 + attrs.index(attribute)                  # the question token differs per attribute
+        return ids, {"pixel_values": torch.randn(1, 3, 28, 28, generator=g)}
+
+    labels = {}
+    monkeypatch.setattr(m, "image_prompt", image_prompt)
+    monkeypatch.setattr(m, "text_prompt", lambda name, a: (torch.tensor([1, 20, 50 + len(name) % 5, 34 + attrs.index(a),
+                                                                         40, 41][:5 + attrs.index(a)]), [2]))
+    monkeypatch.setattr(cc, "gold_ids", lambda t, label: [labels.setdefault(label, 44 + len(labels) % 15)])
+    tt = ml.top_tokens(m, None, items, sorted(items), attrs, top_items=sorted(items), k=5, k_bottom=3,
+                       write_blocks=(0, 1, 2))
+    assert tt["n_layers"] == 3 and len(tt["prompts"]) == 2 * 2 * 2
+    p0 = tt["prompts"][0]
+    assert set(p0["lens"]) == {1, 2, 3} and len(p0["lens"][3]["top"]) == 5
+    assert set(p0["writes"]) == {f"{k}{b}" for k in ("attn", "mlp") for b in (0, 1, 2)}
+    md = ml.toptokens_markdown(tt)                              # default layers follow the model's depth
+    assert "| block |" in md
