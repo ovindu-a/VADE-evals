@@ -1640,6 +1640,34 @@ InternVL3-8B, after VADE accuracy sweeps and pruning per model.)
 - InternVL brands/hq_country is similar: top-8 gives 7.8%, the window 88%.
 - The 3B stage-1 curves are coarse (32 rows per layer).
 
+### LLaVA-1.5-7B: the same order, read off the logit lens (X8, X9)
+
+Molab pilots on a Vicuna (Llama-2) language model. Notebooks: `notebooks/x8_llava_window.py` and
+`notebooks/x9_llava_toptokens.py`.
+
+- **Handoff (X8):** residual swaps put LLaVA's image→text handoff at blocks ~18-21 (0.56-0.69 of
+  depth). No window of ≤3 blocks carries it, so the read is spread out as on Idefics3, not compact as
+  on Qwen's 21-23.
+- **Logit lens (X9):** 8 flags × 4 questions, read at the last prompt token, through the model's own
+  final norm and unembedding.
+  - **Entity arrives first:** the country name enters the top-20 at layers 19-21 and reaches rank 1
+    by about L20-26. This dates the read independently of patching and matches X8's handoff.
+  - **Question next:** the question word ('capital', 'currency') appears at L22-24, or at L18 when
+    the country is named in text.
+  - **Value last:** the asked value climbs over L22-30 and is top-1 from L29 to 32. Values that were
+    not asked stay around rank 30-60.
+- **Prompt wording matters for LLaVA.** With the Qwen-designed controlled prompt
+  (`Report the capital of this country.` + `Answer:`), LLaVA answers the country NAME for every image
+  question: the name is still rank 1 at the last layer, with the value at rank 2-6. The pipeline is
+  intact; only the output step picks the wrong token.
+  - `What is the capital of this country?` (`VADE_PROMPT_STYLE=what_is`) fixes it: 37-52% accuracy
+    on 84 flags, ≤1% name answers.
+  - `methods/prompt_style_check.py` compares the candidate wordings.
+- **Reading:** see → move → recall holds on LLaVA in the same order and at a similar relative depth
+  as on Qwen:
+  - the entity reaches the answer position at about 0.6 of depth;
+  - the value is looked up afterwards, at about 0.7-0.95.
+
 ### Open items
 
 - **E9:** zero a random 10-head set from blocks 21-23 (the matched null for "zero
