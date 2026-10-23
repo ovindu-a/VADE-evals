@@ -12,6 +12,7 @@
 #     "altair",
 #     "scikit-learn",
 #     "pytest",
+#     "matplotlib",
 #     "huggingface_hub>=1.24",
 # ]
 # ///
@@ -127,6 +128,11 @@ def _(bucket, mo, model_id, os, repo_branch, repo_url, setup_btn, stream, sys, w
     hf_cli = os.path.join(os.path.dirname(sys.executable), "hf")
     hf_cli = hf_cli if os.path.exists(hf_cli) else (shutil.which("hf") or "hf")
     stream([hf_cli, "buckets", "sync", f"hf://buckets/{bucket.value}", vade])
+    # pyvene is imported by methods/dbm (and so by ndm/ceiling_sweep). --no-deps, as on the pod
+    # (GPU_RUNBOOK.md section 1), so it cannot move transformers off the pinned 5.16.
+    if stream([sys.executable, "-m", "pip", "install", "-q", "--no-deps", "pyvene"], check=False) != 0:
+        stream([shutil.which("uv") or "uv", "pip", "install", "--python", sys.executable, "--no-deps", "pyvene"])
+    stream([sys.executable, "-c", "import pyvene, transformers; print('pyvene ok, transformers', transformers.__version__)"])
     # the processor files only (no weights), so the adapter's real-processor tests RUN, not skip
     from huggingface_hub import list_repo_files, hf_hub_download
     for _f in list_repo_files(model_id.value):
