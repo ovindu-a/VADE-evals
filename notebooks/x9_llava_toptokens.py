@@ -250,8 +250,8 @@ def _(mo, pd, pick, tt):
                            "top-20 (p)": " ".join(f"{_fmt(t, c)}({p:.2f})" if p >= 0.01 else _fmt(t, c)
                                                   for t, p, c in d["top"])}
                           for L, d in _p["lens"].items()])
-    _wr = pd.DataFrame([{"block": int(k[3:]), "MLP promotes": " ".join(_fmt(t, c) for t, c in _p["writes"][f"mlp{k[3:]}"]["promote"]),
-                         "MLP suppresses": " ".join(_fmt(t, c) for t, c in _p["writes"][f"mlp{k[3:]}"]["suppress"]),
+    _wr = pd.DataFrame([{"block": int(k[4:]), "MLP promotes": " ".join(_fmt(t, c) for t, c in _p["writes"][f"mlp{k[4:]}"]["promote"]),
+                         "MLP suppresses": " ".join(_fmt(t, c) for t, c in _p["writes"][f"mlp{k[4:]}"]["suppress"]),
                          "attn promotes": " ".join(_fmt(t, c) for t, c in _p["writes"][k]["promote"])}
                         for k in _p["writes"] if k.startswith("attn")])
     mo.vstack([mo.md(f"### {_p['mode']} / {_p['name']} / asked **{_p['asked']}** -> `{_p['generated']!r}`  \n"
