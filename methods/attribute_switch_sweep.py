@@ -76,6 +76,43 @@ def question(attribute, paraphrase=False):
                                   f'of this {spec["noun"]}.')
 
 
+# Candidate wordings of the controlled prompt for models that do not answer the default one
+# (LLaVA-1.5 names the country instead, X9). `default` reproduces question()/PREFILL and
+# circuit_common.text_question exactly (tests/test_prompt_styles.py). Styles whose prefill names the
+# field differ from the default in two columns (question and prefill), not one.
+# methods/prompt_style_check.py measures them.
+PROMPT_STYLES = {
+    'default': dict(question='{instruction}Report the {field} of this {noun}.', prefill='Answer:'),
+    'what_is': dict(question='{instruction}What is the {field} of this {noun}?', prefill='Answer:'),
+    'answer_is': dict(question='{instruction}Report the {field} of this {noun}.', prefill='The answer is'),
+    'field_prefill': dict(question='{instruction}Report the {field} of this {noun}.',
+                          prefill='The {field} of this {noun} is'),
+    'no_instruction': dict(question='{instruction}What is the {field} of this {noun}?',
+                           prefill='The {field} of this {noun} is', use_instruction=False,
+                           fields=dict(capital='capital', currency='currency code', language='official language',
+                                       calling_code='calling code')),
+}
+
+
+def style_question(attribute, style='default', text_name=None):
+    """The controlled question in `style`; with text_name, the text-entity version (the item named
+    in the prompt, no image), as circuit_common.text_question builds it."""
+    spec, st = ENTITY_SPECS[ATTRIBUTE_ENTITY[attribute]], PROMPT_STYLES[style]
+    instruction = spec['instruction'] if st.get('use_instruction', True) else ''
+    if text_name is not None:
+        shown = f"For the {spec['noun']} shown"
+        instruction = instruction.replace(shown, f"For the {spec['noun']} named")
+        instruction += f"The {spec['noun']} is {text_name}" + ("" if text_name.endswith(".") else ".") + " "
+    field = st.get('fields', {}).get(attribute, spec['fields'][attribute])
+    return st['question'].format(instruction=instruction, field=field, noun=spec['noun'])
+
+
+def style_prefill(attribute, style='default'):
+    spec, st = ENTITY_SPECS[ATTRIBUTE_ENTITY[attribute]], PROMPT_STYLES[style]
+    field = st.get('fields', {}).get(attribute, spec['fields'][attribute])
+    return st['prefill'].format(field=field, noun=spec['noun'])
+
+
 def entity_attributes(entity):
     return list(ENTITY_SPECS[entity]['attributes'])
 

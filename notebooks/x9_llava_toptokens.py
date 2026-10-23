@@ -276,5 +276,60 @@ def _(mo, os, out_dir):
     return
 
 
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ## Part B: which controlled prompt does LLaVA answer?
+
+    X4's routers, compose and crossmodal steps use the controlled prompts (default style above),
+    which LLaVA answers with the country name. `methods/prompt_style_check.py` generates under each
+    candidate style (`attribute_switch_sweep.PROMPT_STYLES`) for all 84 flags x 4 attributes, image
+    and text-named. It reports VADE-matched accuracy, how often the model said the country name
+    instead, and whether the style keeps the controlled design (one prompt length and final token
+    across attributes).
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    style_btn = mo.ui.run_button(label="3. Check prompt styles (all 84 flags)")
+    style_btn
+    return (style_btn,)
+
+
+@app.cell
+def _(gpu, mo, model_id, os, repo, stream, style_btn, sys, vade):
+    mo.stop(not style_btn.value, mo.md("Press **3** to compare the prompt styles."))
+    mo.stop(gpu is None, mo.md("**No GPU.**"))
+    style_dir = os.path.join(repo, "results", "prompt_style_check", model_id.value.split("/")[-1])
+    stream([sys.executable, "methods/prompt_style_check.py", "--model_id", model_id.value, "--vade_root", vade,
+            "--out_dir", style_dir], cwd=repo, env=dict(os.environ, PYTHONUNBUFFERED="1", VADE_ROOT=vade))
+    return (style_dir,)
+
+
+@app.cell
+def _(json, mo, os, style_dir):
+    import pandas as _pd
+
+    _r = json.load(open(os.path.join(style_dir, "summary.json"), encoding="utf-8"))
+    _rows = []
+    for _s, _d in _r["summary"].items():
+        for _mode, _per in _d.items():
+            _row = {"style": _s, "mode": _mode, "aligned": _per.get("_aligned", "")}
+            for _a in ("capital", "currency", "language", "calling_code"):
+                _row[f"{_a} acc %"] = round(100 * _per[_a]["accuracy"], 1)
+                _row[f"{_a} name %"] = round(100 * _per[_a]["said_name"], 1)
+            _rows.append(_row)
+    _ex = [{"style": _s, "mode": _mode, "attribute": _a, "examples": " | ".join(_per[_a]["examples"])}
+           for _s, _d in _r["summary"].items() for _mode, _per in _d.items() for _a in _per if not _a.startswith("_")]
+    _q = [{"style": _s, "question (capital)": v["question"]["capital"], "prefill (capital)": v["prefill"]["capital"]}
+          for _s, v in _r["styles"].items()]
+    mo.vstack([mo.ui.table(_pd.DataFrame(_q), selection=None),
+               mo.md("### accuracy % / said the country name %"), mo.ui.table(_pd.DataFrame(_rows), selection=None),
+               mo.ui.table(_pd.DataFrame(_ex), selection=None, page_size=20)])
+    return
+
+
 if __name__ == "__main__":
     app.run()
