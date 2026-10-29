@@ -24,6 +24,11 @@ says how late attention is still needed. Rows are restricted to those the clean 
 
     python methods/attn_cutoff.py --model_id Qwen/Qwen2.5-VL-7B-Instruct --dry_run
     VADE_PROMPT_STYLE=what_is python methods/attn_cutoff.py --model_id llava-hf/llava-1.5-7b-hf
+    python methods/attn_cutoff.py --entity brands --n_items 128          # X12: other entities
+
+--entity brands|celebrities (X12): their labels are lowercase and the model adds articles, so
+`correct` is VADE's case-insensitive matcher (as for flags), and the lens tracks the clean run's
+OWN first answer token instead of the label's (a second clean pass, so the clean ranks use it too).
 """
 import argparse
 import json
@@ -107,8 +112,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model_id", default="Qwen/Qwen2.5-VL-7B-Instruct")
     ap.add_argument("--vade_root", default=os.environ.get("VADE_ROOT", os.path.join(REPO_ROOT, "..", "VADE")))
-    ap.add_argument("--attributes", nargs="+", default=ATTRIBUTES)
-    ap.add_argument("--n_items", type=int, default=16, help="flags, evenly spaced over the sorted keys")
+    ap.add_argument("--entity", default="flags", choices=["flags", "brands", "celebrities"])
+    ap.add_argument("--attributes", nargs="+", default=None, help="default: the entity's controlled attributes")
+    ap.add_argument("--n_items", type=int, default=16, help="items, evenly spaced over the sorted keys")
     ap.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS)
     ap.add_argument("--layer_step", type=int, default=2, help="cut-from layers 0, step, 2*step, ...")
     ap.add_argument("--batch_size", type=int, default=16)
@@ -119,14 +125,16 @@ def main(argv=None):
 
     from methods.circuit_common import (Model, cat_extra, first_content_token, gold_ids, load_entity,
                                         PREFILL, question)
-    from methods.attribute_switch_sweep import PROMPT_STYLE
+    from methods.attribute_switch_sweep import ENTITY_SPECS, PROMPT_STYLE
     from methods.common.text_match import contains_label
-    entity_dir, items, _ = load_entity(args.vade_root, "flags")
+    args.attributes = args.attributes or list(ENTITY_SPECS[args.entity]["attributes"])
+    entity_dir, items, _ = load_entity(args.vade_root, args.entity)
     keys = sorted(items)
     keys = keys[::max(1, len(keys) // args.n_items)][:args.n_items]
-    out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "attn_cutoff", args.model_id.split("/")[-1])
-    print(f"[attn_cutoff] {args.model_id}: {len(keys)} flags x {len(args.attributes)} attributes; "
-          f"prompt style {PROMPT_STYLE!r}: {question('capital')[-45:]!r} + {PREFILL!r}; arms {args.arms} -> {out_dir}")
+    out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "attn_cutoff", args.model_id.split("/")[-1]
+                                           + ("" if args.entity == "flags" else f"_{args.entity}"))
+    print(f"[attn_cutoff] {args.model_id}: {len(keys)} {args.entity} x {len(args.attributes)} attributes; "
+          f"prompt style {PROMPT_STYLE!r}: {question(args.attributes[0])[-45:]!r} + {PREFILL!r}; arms {args.arms} -> {out_dir}")
     if args.dry_run:
         print("items:", " ".join(keys))
         print("Grid valid.")
@@ -180,6 +188,15 @@ def main(argv=None):
         return recs
 
     clean = run("clean", None)
+    if args.entity != "flags":
+        # Lowercase labels do not tokenize like the model's answer: track its own first answer token.
+        it = iter(clean)
+        for bt in batches:
+            for r in range(len(bt["keys"])):
+                first = next(it)["first"]
+                if first is not None:
+                    bt["tracked"][r, 0] = first
+        clean = run("clean", None)
     # Sanity: the lens at the last layer IS the model's next-token prediction, so its top-1 must be
     # the first generated token (or whitespace before it) on clean rows.
     agree = sum(r["lens_top1"].strip() == tok.decode([r["first"]]).strip() for r in clean if r["first"] is not None)
@@ -217,7 +234,7 @@ def main(argv=None):
                   f"said name {s['said_name']:5.1%}  value rank@final {s['value_rank_final_median']:7.0f}  "
                   + " ".join(f"{a[:4]} {v:.0%}" for a, v in s["by_attribute"].items()), flush=True)
 
-    json.dump({"model_id": args.model_id, "prompt_style": PROMPT_STYLE, "n_layers": n_layers, "items": keys,
+    json.dump({"model_id": args.model_id, "entity": args.entity, "prompt_style": PROMPT_STYLE, "n_layers": n_layers, "items": keys,
                "attributes": args.attributes, "summary": summary},
               open(os.path.join(out_dir, "summary.json"), "w"), indent=1, ensure_ascii=False)
     with open(os.path.join(out_dir, "rows.jsonl"), "w") as f:

@@ -45,6 +45,14 @@ ARMS
                          --n_random_movers block-matched draws for the movers
                          (same per-block counts, never a mover; own RNG, seed + 1).
                          The movers stay intact, so mover rank is defined here.
+    mean:common10, mean:common10:random<i>
+                         --ablation mean (X11): the same head sets, but each head's
+                         o_proj input is replaced by its CLEAN MEAN over every item
+                         asked the same (attribute, template), at the same column
+                         counted from the prompt's end (and the same decode step).
+                         Zeroing is off-distribution; the mean keeps everything the
+                         heads write regardless of WHICH entity is shown, and removes
+                         only the item-specific part. Same random draws as zero:*.
 
 READING IT
     recall and mover rank both collapse   -> grounding is upstream of the entity
@@ -99,10 +107,12 @@ def block_matched_random(heads, n_heads, rng, exclude=()):
     return sorted(out)
 
 
-def build_arms(names, published, movers, n_random, n_heads, seed, n_random_movers=0):
+def build_arms(names, published, movers, n_random, n_heads, seed, n_random_movers=0, ablations=("zero",)):
     """-> [(arm name, heads)]. The Park draws use random.Random(seed) exactly as
     before; --n_random_movers draws come from a SEPARATE random.Random(seed + 1)
-    and are appended after zero:common10, so adding them changes no earlier arm."""
+    and are appended after zero:common10, so adding them changes no earlier arm.
+    "mean" in `ablations` appends mean:common10 and mean:common10:random<i> AFTER
+    every zero arm, on the SAME random draws; ablations=("zero",) is the old list."""
     rng = random.Random(seed)
     arms = [("clean", [])]
     for n in names:
@@ -114,9 +124,69 @@ def build_arms(names, published, movers, n_random, n_heads, seed, n_random_mover
     # The movers' own null: same per-block counts, never a mover (block_matched_random
     # bans `heads` itself). The movers stay intact here, so mover rank IS defined.
     mrng = random.Random(seed + 1)
-    for i in range(n_random_movers):
-        arms.append((f"zero:common10:random{i}", block_matched_random(movers, n_heads, mrng)))
+    draws = [block_matched_random(movers, n_heads, mrng) for _ in range(n_random_movers)]
+    for i, d in enumerate(draws):
+        arms.append((f"zero:common10:random{i}", d))
+    if "mean" in ablations:
+        arms.append(("mean:common10", movers))
+        for i, d in enumerate(draws):
+            arms.append((f"mean:common10:random{i}", d))
+    if "zero" not in ablations:
+        arms = [(n, h) for n, h in arms if not n.startswith("zero:common10")]
     return arms
+
+
+class PositionMeans:
+    """Running mean of a block's o_proj input per (template key, column), from CLEAN runs.
+
+    Columns are indexed so that left padding does not matter: index P-1 is the prompt's last
+    column (P = that template's prompt length, identical for every item since the canvas is
+    fixed), 0..P-1 the prompt, and P-1+k the k-th generated token. lookup() clamps a decode
+    step past the longest one seen to the last index that has data."""
+
+    def __init__(self):
+        self.sum, self.n, self.plen = {}, {}, {}
+
+    def _ensure(self, key, plen, width, n_steps, like):
+        import torch
+        if key not in self.sum:
+            self.plen[key] = plen
+            self.sum[key] = torch.zeros(plen + n_steps, width, dtype=torch.float32, device=like.device)
+            self.n[key] = torch.zeros(plen + n_steps, dtype=torch.float32, device=like.device)
+        assert self.plen[key] == plen, f"{key}: prompt length {plen} != {self.plen[key]} seen before"
+
+    def add_prefill(self, key, x_row, plen, n_steps):
+        """x_row [T, W] (one row of a left-padded prefill)."""
+        self._ensure(key, plen, x_row.shape[-1], n_steps, x_row)
+        self.sum[key][:plen] += x_row[-plen:].float()
+        self.n[key][:plen] += 1
+
+    def add_step(self, key, x_vec, step):
+        """x_vec [W]: the column fed at decode step `step` (>= 1)."""
+        i = self.plen[key] - 1 + step
+        if i < self.sum[key].shape[0]:
+            self.sum[key][i] += x_vec.float()
+            self.n[key][i] += 1
+
+    def finalize(self):
+        """sum/n -> mean, with never-seen indices filled from the last seen one."""
+        self.mean = {}
+        for key, s in self.sum.items():
+            n = self.n[key]
+            seen = (n > 0).nonzero(as_tuple=True)[0]
+            assert len(seen) and int(seen[0]) == 0, f"{key}: prompt columns never captured"
+            m = s / n.clamp(min=1)[:, None]
+            last = int(seen[-1])
+            m[last + 1:] = m[last]
+            self.mean[key] = m
+        return self
+
+    def prefill(self, key):
+        return self.mean[key][:self.plen[key]]
+
+    def step(self, key, step):
+        m = self.mean[key]
+        return m[min(self.plen[key] - 1 + step, m.shape[0] - 1)]
 
 
 def zero_columns(t, cols):
@@ -161,6 +231,52 @@ def register_zero(adapter, model, heads, head_dim):
 
         def pre(_m, args, _cols=cols):
             return (zero_columns(args[0], _cols.to(args[0].device)),) + tuple(args[1:])
+        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(pre))
+    return handles
+
+
+def register_mean_capture(adapter, model, blocks, means, keys, plens, n_steps):
+    """Clean-run pre-hooks accumulating each block's full o_proj input into means[block]
+    (a PositionMeans); keys/plens are this batch's per-row template keys and prompt lengths."""
+    handles = []
+    for b in blocks:
+        state = {"calls": 0}
+
+        def grab(_m, args, _b=b, _state=state):
+            x = args[0]
+            if x.shape[1] > 1:
+                _state["calls"] = 0
+                for i, (k, p) in enumerate(zip(keys, plens)):
+                    means[_b].add_prefill(k, x[i], p, n_steps)
+            else:
+                _state["calls"] += 1
+                for i, k in enumerate(keys):
+                    means[_b].add_step(k, x[i, 0], _state["calls"])
+        handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(grab))
+    return handles
+
+
+def register_mean(adapter, model, heads, head_dim, means, keys, plens):
+    """Pre-hooks replacing `heads`' o_proj input columns by their clean per-(template, column)
+    mean, at every position and decode step (the mean counterpart of register_zero)."""
+    import torch
+    handles = []
+    for b in sorted({b for b, _ in heads}):
+        cols = torch.tensor(head_cols(heads, b, head_dim), dtype=torch.long)
+        state = {"calls": 0}
+
+        def pre(_m, args, _b=b, _cols=cols, _state=state):
+            x = args[0].clone()
+            c = _cols.to(x.device)
+            if x.shape[1] > 1:
+                _state["calls"] = 0
+                for i, (k, p) in enumerate(zip(keys, plens)):
+                    x[i, -p:, c] = means[_b].prefill(k)[:, c].to(x.dtype)
+            else:
+                _state["calls"] += 1
+                for i, k in enumerate(keys):
+                    x[i, 0, c] = means[_b].step(k, _state["calls"])[c].to(x.dtype)
+            return (x,) + tuple(args[1:])
         handles.append(adapter.get_attn_head_output_module(model, b).register_forward_pre_hook(pre))
     return handles
 
@@ -251,6 +367,10 @@ def main():
     ap.add_argument("--n_random_movers", type=int, default=0,
                     help="Block-matched random draws for --movers (zero:common10:random<i>), the movers' own "
                          "null. Separate RNG (seed + 1): the Park draws are unchanged.")
+    ap.add_argument("--ablation", nargs="+", default=["zero"], choices=["zero", "mean"],
+                    help="How --movers and their random draws are ablated. 'mean' (X11) replaces each head's "
+                         "o_proj input by its clean mean over items at the same (template, column, decode step); "
+                         "default 'zero' only, i.e. the old arm list.")
     ap.add_argument("--attributes", nargs="+", default=None)
     ap.add_argument("--n_templates", type=int, default=2, help="VADE templates per attribute (sorted ids).")
     ap.add_argument("--limit_items", type=int, default=0)
@@ -282,7 +402,7 @@ def main():
 
     n_heads_guess = 28
     arms = build_arms(names, published, movers, args.n_random, n_heads_guess, args.seed,
-                      n_random_movers=args.n_random_movers)
+                      n_random_movers=args.n_random_movers, ablations=tuple(args.ablation))
     out_dir = args.out_dir or os.path.join(REPO_ROOT, "results", "vrh_ablation", args.entity)
     print(f"[vrh_ablation] {args.entity}: {len(keys)} items x {len(attributes)} attributes x "
           f"{args.n_templates} templates = {len(jobs)} generations per arm, {len(arms)} arms -> {out_dir}")
@@ -343,8 +463,13 @@ def main():
         with Image.open(os.path.join(entity_dir, items[k]["image"])) as im:
             images[k] = im.convert("RGB")
     agg = defaultdict(lambda: defaultdict(list))
+    mean_blocks = sorted({b for n, hs in arms if n.startswith("mean:") for b, _ in hs})
+    means = {b: PositionMeans() for b in mean_blocks}
     with open(os.path.join(out_dir, "rows.jsonl"), "w") as fh:
         for arm, heads in arms:
+            if arm.startswith("mean:") and not hasattr(means[mean_blocks[0]], "mean"):
+                for m in means.values():
+                    m.finalize()
             for start in range(0, len(jobs), args.batch_size):
                 chunk = jobs[start:start + args.batch_size]
                 prompts = [build_prompt(processor, images[k], lookup[a][t]["question"], lookup[a][t]["prefill"])
@@ -353,7 +478,17 @@ def main():
                 extra = {"pixel_values": torch.cat([p["pixel_values"] for p in prompts]),
                          "image_grid_thw": torch.cat([p["image_grid_thw"] for p in prompts])}
                 sink = {}
-                handles = register_zero(adapter, model, heads, head_dim) if heads else []
+                keys_b = [f"{a}/{t}" for _, a, t in chunk]
+                plens = [len(p["input_ids"][0]) for p in prompts]
+                if arm.startswith("mean:"):
+                    handles = register_mean(adapter, model, heads, head_dim, means, keys_b, plens)
+                elif heads:
+                    handles = register_zero(adapter, model, heads, head_dim)
+                else:
+                    handles = []
+                if arm == "clean" and mean_blocks:
+                    handles += register_mean_capture(adapter, model, mean_blocks, means, keys_b, plens,
+                                                     args.max_new_tokens)
                 handles += register_mover_capture(adapter, model, movers, sink)
                 try:
                     gen = model.generate(input_ids=ids.to(model.device), attention_mask=mask.to(model.device),
@@ -367,7 +502,7 @@ def main():
                 scores = mover_write(adapter, model, sink, movers, head_dim) @ name_dirs.T          # [B, N]
                 for i, ((k, a, t), text) in enumerate(zip(chunk, texts)):
                     correct = bool(matcher(text, str(items[k][a])))
-                    rank = (None if arm == "zero:common10" else
+                    rank = (None if arm == "zero:common10" or arm == "mean:common10" else
                             candidate_rank(scores[i].new_zeros(max(all_ent) + 1).index_copy(
                                 0, torch.tensor(all_ent), scores[i]), ent_ids[k], all_ent)["rank"])
                     agg[arm][a].append((correct, rank))
