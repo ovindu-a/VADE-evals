@@ -253,7 +253,7 @@ def per_block_mass(adapter, model, batches, blocks, base_z, patched_z, finals):
     where the image-patched run's writes to the last token changed. A cheap
     locator, not a causal result (marginal, and blind to conjunctions)."""
     n_heads = adapter.n_attention_heads(model)
-    head_dim = adapter.hidden_size(model) // n_heads
+    head_dim = adapter.head_dim(model)
     mass = {b: {"delta_resid": 0.0, "delta_dla": 0.0} for b in blocks}
     for (b_img, _), zb, zp, (fb, fp) in zip(batches, base_z, patched_z, finals):
         gold_b = b_img["base_gold_toks"][:, 0].to(model.device)
@@ -274,8 +274,8 @@ def run_arm(adapter, model, batches, img_src, z_per_batch, heads, with_image_pat
     z_per_batch, optionally under the image patch. Mirrors head_trace's
     run_cause / run_cause_shuffled (1-row batches are skipped when shuffled,
     since they roll onto themselves)."""
-    hidden = adapter.hidden_size(model)
-    head_dim = hidden // adapter.n_attention_heads(model)
+    head_dim = adapter.head_dim(model)
+    hidden = adapter.n_attention_heads(model) * head_dim     # o_proj's INPUT width (z), see ModelAdapter.head_dim
     t = Tally(tokenizer)
     for (b_img, b_last), z, src in zip(batches, z_per_batch, img_src):
         if shuffled and len(b_img["rows"]) < 2:

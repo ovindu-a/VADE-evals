@@ -506,7 +506,7 @@ def site_units(adapter, model, site, heads=None, blocks=None):
     """-> (units, unit_dim): what to pass as `heads` / `head_dim` for `site`."""
     if site == "attn_head_output":
         assert heads, "attn_head_output needs a head list"
-        return heads, adapter.hidden_size(model) // adapter.n_attention_heads(model)
+        return heads, adapter.head_dim(model)
     assert blocks, "mlp_hidden needs a block list"
     return [(b, 0) for b in sorted(blocks)], adapter.intermediate_size(model)
 
@@ -920,10 +920,8 @@ def main():
 
     adapter = get_adapter(args.model_id)
     model, processor = adapter.load()
-    hidden = adapter.hidden_size(model)
     n_heads = adapter.n_attention_heads(model)
-    assert hidden % n_heads == 0
-    head_dim = hidden // n_heads
+    head_dim = adapter.head_dim(model)
     n_layers = len(adapter.get_decoder_layers(model))
     assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
     for name, hs in head_sets.items():

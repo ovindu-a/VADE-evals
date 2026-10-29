@@ -79,6 +79,7 @@ DEFAULT_VADE_ROOT = os.environ.get("VADE_ROOT") or os.path.normpath(os.path.join
 
 import torch  # noqa: E402
 
+from methods.adapters.base import ModelAdapter  # noqa: E402
 from methods.adapters.registry import get_adapter  # noqa: E402
 from methods.common.entities import (  # noqa: E402
     BuildBatchCache, load_entity_assets, load_tuples, require_pruned_tuples,
@@ -342,9 +343,24 @@ def per_head_delta(adapter, model, base_z, patched_z, block, n_heads, head_dim, 
     the direction across the batch would attribute row i's head movement along
     row j's answer axis). scale_*: [B, n_pos, 1] from each run's own final
     pre-norm residual."""
-    w = adapter.get_attn_head_output_module(model, block).weight  # [H_out, H_in], bias-free
     d = direction.unsqueeze(1)                                    # [B, 1, H]
     out = []
+    if type(adapter).head_residual_writes is not ModelAdapter.head_residual_writes:
+        # A post-attention norm sits between o_proj and the residual (Gemma-3): the adapter's own
+        # per-head writes, with that norm's scale frozen at each run's full sum, so the split stays
+        # exact. Every other adapter keeps the slice-by-slice code below, bit-for-bit.
+        wb = adapter.head_residual_writes(model, block, base_z)                    # [B, n_pos, n, H]
+        wp = adapter.head_residual_writes(model, block, patched_z)
+        for h in range(n_heads):
+            sl = head_slice(h, head_dim)
+            rb, rp = wb[:, :, h], wp[:, :, h]
+            out.append((h,
+                        (patched_z[:, :, sl] - base_z[:, :, sl]).float().norm(dim=-1).mean().item(),
+                        (rp - rb).norm(dim=-1).mean().item(),
+                        (scale_patched.squeeze(-1) * (rp * d).sum(-1)
+                         - scale_base.squeeze(-1) * (rb * d).sum(-1)).mean().item()))
+        return out
+    w = adapter.get_attn_head_output_module(model, block).weight  # [H_out, H_in], bias-free
     for h in range(n_heads):
         sl = head_slice(h, head_dim)
         wh = w[:, sl].float()                                                      # [H_out, head_dim]
@@ -404,6 +420,10 @@ def main():
     ap.add_argument("--n_random", type=int, default=8,
                     help="Size of the RANDOM-head null control. 0 disables it, which you should not do: "
                          "without it a phase-2 curve is uninterpretable.")
+    ap.add_argument("--null_ks", type=int, nargs="+", default=None,
+                    help="Phase 3 only: for each k, --null_draws random head sets with the SAME per-block "
+                         "counts as the top-k (block-matched null for a k-curve). Off by default.")
+    ap.add_argument("--null_draws", type=int, default=3)
     ap.add_argument("--skip_knockout", action="store_true",
                     help="Phase 1 only -- skips BOTH generation phases (2 and 3).")
     ap.add_argument("--control_k", type=int, nargs="+", default=[8],
@@ -454,9 +474,10 @@ def main():
         entity_assets = load_entity_assets(args.vade_root, args.entity)
         n_layers = len(adapter.get_decoder_layers(model))
         n_heads = adapter.n_attention_heads(model)
-        hidden = adapter.hidden_size(model)
-        assert hidden % n_heads == 0, f"hidden_size {hidden} is not divisible by {n_heads} heads"
-        head_dim = hidden // n_heads
+        # `hidden` here is o_proj's INPUT width (the z every head patch writes into), which is
+        # hidden_size on Qwen/Llama but not on Gemma-3 / Pixtral -- see ModelAdapter.head_dim.
+        head_dim = adapter.head_dim(model)
+        hidden = n_heads * head_dim
         pad_token_id = processor.tokenizer.pad_token_id or processor.tokenizer.eos_token_id
         blocks = args.blocks if args.blocks is not None else list(range(max(args.patch_layer - 1, 0), n_layers))
         assert all(0 <= b < n_layers for b in blocks), f"blocks must be in 0..{n_layers - 1}"
@@ -619,6 +640,10 @@ def main():
         def _o_proj_rel(run_z, run_o, b):
             """o_proj's captured OUTPUT vs W_O @ its captured INPUT. ~0 means the module really was
             called with the tensor we captured; large means it was not."""
+            if type(adapter).head_residual_writes is not ModelAdapter.head_residual_writes:
+                # attn_output is AFTER a post-attention norm (Gemma-3): the adapter's exact per-head
+                # writes, summed, are what that site must equal.
+                return _rel(run_o[b], adapter.head_residual_writes(model, b, run_z[b]).sum(-2))
             mod = adapter.get_attn_head_output_module(model, b)
             expect = run_z[b].float() @ mod.weight.float().T
             if mod.bias is not None:
@@ -938,6 +963,34 @@ def main():
                 if top_same is not None:
                     print(f"\n  top-{args.n_random} vs random-{args.n_random}: "
                           f"{top_same['cause']:.1%} vs {ms:.1%} of cause.")
+            if args.null_ks:
+                # BLOCK-MATCHED null (X15): for each k, random head sets with the top-k's per-block
+                # counts, drawn from each block's non-top-k heads when enough remain. The pool null
+                # above is one draw at one k; this is the one to read a k-curve against.
+                rng = random.Random(args.seed + 2)
+                by_block = {}
+                for r in table:
+                    by_block.setdefault(r["block"], []).append(r["head"])
+                print(f"\n  block-matched random heads ({args.null_draws} draws per k):")
+                for k in sorted({min(k, len(ranked)) for k in args.null_ks if k > 0}):
+                    top = [(r["block"], r["head"]) for r in ranked[:k]]
+                    counts = {}
+                    for b, _ in top:
+                        counts[b] = counts.get(b, 0) + 1
+                    draws = []
+                    for d in range(args.null_draws):
+                        heads = []
+                        for b, c in sorted(counts.items()):
+                            pool = [h for h in by_block[b] if (b, h) not in top]
+                            heads += [(b, h) for h in rng.sample(pool if len(pool) >= c else by_block[b], c)]
+                        ms, mb = run_cause(heads, patched_z_per_batch, False)
+                        suff.append({"k": k, "kind": "random_block", "draw": d, "heads": heads, "cause": ms,
+                                     "base_kept": mb})
+                        draws.append(ms)
+                    top_k = next((x["cause"] for x in suff if x["kind"] == "top" and x["k"] == k), None)
+                    print(f"  k={k:<3} random_block cause mean={sum(draws) / len(draws):6.1%} "
+                          f"max={max(draws):6.1%}" + (f"   (top-{k}: {top_k:.1%})" if top_k is not None else ""),
+                          flush=True)
             report["phase3_sufficiency"] = {"ceiling_all_traced_heads": ceil_ms, "k0_cause": z0_ms,
                                             "arms": suff}
 

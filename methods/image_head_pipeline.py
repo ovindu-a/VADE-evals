@@ -444,6 +444,8 @@ class Runner:
                    "--n_rows", str(a.n_rows), "--seed", str(a.seed), "--batch_size", str(a.batch_size),
                    "--knockout_ks", *map(str, ks), "--control_k", *map(str, a.control_k),
                    "--n_random", str(a.n_random), "--out", trace_path]
+            if a.null_ks:
+                cmd += ["--null_ks", *map(str, a.null_ks), "--null_draws", str(a.null_draws)]
             print(f"\n  [stage 3: heads] head_trace in blocks {span_label(blocks)}")
             rc = self.run(cmd, os.path.join(logd, f"stage3_heads_blocks{span_label(blocks)}.log"))
             if rc:
@@ -660,6 +662,9 @@ def main():
     ap.add_argument("--knockout_ks", type=int, nargs="+", default=[1, 2, 4, 8, 16, 32, 64])
     ap.add_argument("--control_k", type=int, nargs="+", default=[1, 2, 4, 8, 16, 32])
     ap.add_argument("--n_random", type=int, default=8)
+    ap.add_argument("--null_ks", type=int, nargs="+", default=None,
+                    help="head_trace --null_ks: block-matched random head sets at these k (X15). Off by default.")
+    ap.add_argument("--null_draws", type=int, default=3)
     ap.add_argument("--decode_head_ks", type=int, nargs="+", default=[8, 16])
     ap.add_argument("--decode_limit", type=int, default=None)
     # plumbing

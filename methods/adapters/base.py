@@ -4,6 +4,30 @@ method written against this interface runs unchanged on any model that
 implements it -- adding a new model means writing one new adapter file,
 never touching common/ or das/.
 """
+import math
+
+
+def containing_box_override(object_location, grid):
+    """InternVL3's convention (VADE's object_location.json `models.InternVL3-8B-hf` entries), computed
+    rather than stored: for a model whose token grid is NOT object_location.json's 28px Qwen grid, the
+    one object position set is `entity_ring1` = the smallest whole-cell box CONTAINING object_bbox_px.
+    It is a cover, not pixel-exact (the bbox need not fall on this grid's cell edges), and there is no
+    separate entity_only -- the same name as Qwen's dilated set, so `--positions entity_ring1` makes the
+    same experimental choice across models. grid: the adapter's own vision_patch_grid for the canvas,
+    which must expose canvas_px_per_token (cells are uniform over the canvas)."""
+    bb = object_location["object_bbox_px"]
+    cw, ch = grid["canvas_px_per_token"]
+    c0, c1 = int(math.floor(bb["x"] / cw)), int(math.ceil((bb["x"] + bb["width"]) / cw - 1e-9)) - 1
+    r0, r1 = int(math.floor(bb["y"] / ch)), int(math.ceil((bb["y"] + bb["height"]) / ch - 1e-9)) - 1
+    rows, cols = list(range(r0, r1 + 1)), list(range(c0, c1 + 1))
+    assert rows and cols and r1 < grid["grid_rows"] and c1 < grid["grid_cols"], (rows, cols, grid)
+    return {"vlm_token_grid": {k: grid[k] for k in ("model", "patch_size_px", "merge_size", "grid_rows",
+                                                    "grid_cols", "n_tokens")},
+            "object_token_indices": {"entity_ring1": {
+                "flat": [r * grid["grid_cols"] + c for r in rows for c in cols], "rows": rows, "cols": cols,
+                "description": f"COMPUTED (adapters/base.py containing_box_override): smallest whole-cell "
+                               f"{grid['grid_rows']}x{grid['grid_cols']} box containing object_bbox_px "
+                               f"({bb['x']},{bb['y']},{bb['width']},{bb['height']}); a cover, not pixel-exact."}}}
 
 
 class ModelAdapter:
@@ -69,10 +93,54 @@ class ModelAdapter:
 
     def n_attention_heads(self, model) -> int:
         """Number of QUERY heads in a decoder block's self-attention. o_proj's input width is
-        n_attention_heads * head_dim == hidden_size, so head h occupies the contiguous dim range
-        [h*hidden_size//n, (h+1)*hidden_size//n) of the `attn_head_output` site. Grouped-query
-        attention reduces KEY/VALUE heads only and must NOT be reported here."""
+        n_attention_heads * head_dim, so head h occupies the contiguous dim range
+        [h*head_dim, (h+1)*head_dim) of the `attn_head_output` site. Grouped-query attention
+        reduces KEY/VALUE heads only and must NOT be reported here."""
         raise NotImplementedError
+
+    # ---- additions for models whose block is not Qwen/Llama-shaped (Gemma-3, Pixtral) --------
+    # Every default below reproduces the old behaviour exactly, so no existing adapter changes.
+
+    def head_dim(self, model) -> int:
+        """Width of one head's slice of o_proj's input. The default, hidden_size // n_heads, is
+        right for Qwen2.5 / Llama / Vicuna, where n_heads * head_dim == hidden_size. It is WRONG
+        for Gemma-3 (12B: 16 x 256 = 4096 vs hidden 3840) and Mistral-Nemo / Pixtral (32 x 128 =
+        4096 vs 5120), whose adapters override it from the config's own head_dim."""
+        hidden, n = self.hidden_size(model), self.n_attention_heads(model)
+        assert hidden % n == 0, f"hidden_size {hidden} is not divisible by {n} heads -- override head_dim()"
+        return hidden // n
+
+    def get_attn_output_module(self, model, block_idx):
+        """-> the module whose forward() OUTPUT (element 0 if a tuple) is EXACTLY what the
+        attention sublayer adds to the residual stream -- the `attn_output` site. The default is
+        the attention module itself. Gemma-3 normalizes the attention output BEFORE the residual
+        add (post_attention_layernorm), so its adapter returns that norm instead.
+        get_attn_block stays the attention module (callers reach .v_proj / attention weights)."""
+        return self.get_attn_block(model, block_idx)
+
+    def get_mlp_output_module(self, model, block_idx):
+        """-> the module whose forward() OUTPUT is exactly what the MLP sublayer adds to the
+        residual stream -- the `mlp_output` site. Default: the MLP; Gemma-3: post_feedforward_layernorm."""
+        return self.get_mlp_block(model, block_idx)
+
+    def head_residual_writes(self, model, block_idx, z):
+        """z: [..., n_heads * head_dim] (o_proj's input) -> [..., n_heads, hidden] float32, each
+        head's write into the residual stream; summed over heads it is the `attn_output` site.
+        Default: z_h @ W_O[:, h]^T (o_proj is bias-free). An adapter with a post-attention norm
+        overrides it, freezing that norm's per-position scale at the value the FULL sum gets
+        (the same trick as final_norm_scale), so the per-head split stays exact."""
+        import torch
+        w =self.get_attn_head_output_module(model, block_idx).weight.float()     # [hidden, n*d]
+        n, d = self.n_attention_heads(model), self.head_dim(model)
+        zh = z.float().reshape(*z.shape[:-1], n, d)
+        return torch.einsum("...nd,hnd->...nh", zh, w.reshape(w.shape[0], n, d))
+
+    def object_location_override(self, object_location, model) -> "dict | None":
+        """A per-model {vlm_token_grid, object_token_indices} for an entity's object_location.json,
+        used by common/entities.py when VADE's own file has no `models.<slug>` entry. Default None
+        (only full_image / last_token for a model off the Qwen grid). See containing_box_override."""
+        return None
+
 
     def get_attn_head_output_module(self, model, block_idx):
         """-> the submodule of decoder block block_idx's attention whose

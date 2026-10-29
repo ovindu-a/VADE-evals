@@ -224,3 +224,33 @@ reports:
 Same setup as X8: attach an RTX Pro 6000, press **1. Set up**, then **2. Run**. The adapter tests
 must pass first. Output goes to `results/mlp_lookup_llava-1.5-7b-hf/flags/`, and a zip download
 is at the bottom.
+
+## X15: `notebooks/x15_cross_model_heads.py` (the head-discovery procedure on Gemma-3, Pixtral, Idefics3)
+
+**Question.** Does the same rule-based procedure that found Qwen's ten movers find an entity-mover
+bottleneck on Gemma-3 (Gemma LM), Pixtral-12B (Mistral-Nemo LM) and Idefics3-8B (Llama-3.1 LM), and how
+concentrated is it? Per model: `verify_sites` -> `own_accuracy_prune.py` (recognition + pruning) ->
+`image_head_pipeline.py` stages 1-3 with block-matched random heads -> `x15_summary.py`.
+PAPER_RUNBOOK.md §3 X15 has the commands.
+
+**Before the first run:** the code must be on the `molab` branch (push it there), and the HF account
+whose token you paste must have accepted Gemma-3's licence on huggingface.co (Pixtral and Idefics3 are
+not gated).
+
+### Steps
+1. Fork the notebook into the workspace and attach the RTX Pro 6000, as for X5.
+2. Paste the HF token, press **1. Set up**. Self-checks: the adapter tests show **0 skipped** and pass;
+   every model reads `ok` under hub access; the GPU line is not "none".
+3. Leave **Gemma-3 4B (smoke)**, flags, language + capital, **smoke** size, press **2. Run**
+   (~20-40 min incl. the ~9 GB download). Self-checks: `verify_sites` "all checks passed" for every site;
+   clean accuracy is plausible (flags language well above 50%); stage-1 `source_read` >= 85%; head_trace
+   phase 1c read-back exact; no traceback.
+4. Then **full** size with Gemma-3 12B, Pixtral-12B and Idefics3-8B (each model ~1-2 h per attribute;
+   resumable: press **2** again after a disconnect).
+5. Download the zip and unzip it at the repo root: it fills `results/x15_cross_model_heads/` and
+   `logs/image_head_pipeline_<slug>/`. Do not commit unless the user asks.
+
+### What to report back
+- The notebook's two tables (recognition; handoff/window/k90 per model and attribute) and the k-curves.
+- `results/x15_cross_model_heads/SUMMARY.md` (cross-model) as written by `x15_summary.py`.
+- Every warning line, verbatim, and anything unexpected.

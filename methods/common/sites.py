@@ -42,7 +42,7 @@ of its computation gets swapped (plus one JOINT site, described after them):
                  to carry a whole-entity attribute?" No privileged basis
                  (o_proj is a linear map, and privilege does not survive one).
 
-    attn_head_output  block L-1's per-head z       width = hidden_size (3584)
+    attn_head_output  block L-1's per-head z       width = n_heads * head_dim (3584; != hidden on Gemma-3/Pixtral)
                  -- o_proj's INPUT, i.e. the concatenated per-head attention
                  outputs (28 heads x 128 dims on Qwen2.5-VL-7B). Same width
                  as attn_output but structured: contiguous 128-dim blocks are
@@ -224,6 +224,9 @@ class InterventionSite:
         """The mask's embed_dim for this site."""
         if self.name == "mlp_hidden":
             return adapter.intermediate_size(model)
+        if self.name == "attn_head_output":
+            # o_proj's INPUT width: equal to hidden_size on Qwen/Llama, not on Gemma-3 or Pixtral.
+            return adapter.n_attention_heads(model) * adapter.head_dim(model)
         return adapter.hidden_size(model)
 
     def _module_and_hook_kind(self, adapter, model, layer_idx):
@@ -237,12 +240,14 @@ class InterventionSite:
             f"site {self.name!r} needs layer_idx>=1 (it addresses a sublayer of decoder block "
             f"layer_idx-1); layer_idx=0 is the embedding output, which has no attention or MLP sublayer")
         block = layer_idx - 1
+        # The *_output_module accessors default to the MLP / attention modules themselves; Gemma-3's
+        # adapter returns its post-sublayer norms, which sit BEFORE the residual add.
         if self.name == "mlp_output":
-            return adapter.get_mlp_block(model, block), "post"
+            return adapter.get_mlp_output_module(model, block), "post"
         if self.name == "mlp_hidden":
             return adapter.get_mlp_hidden_module(model, block), "pre"
         if self.name == "attn_output":
-            return adapter.get_attn_block(model, block), "post"
+            return adapter.get_attn_output_module(model, block), "post"
         if self.name == "attn_head_output":
             return adapter.get_attn_head_output_module(model, block), "pre"
         raise AssertionError(f"no module mapping for site {self.name!r}")

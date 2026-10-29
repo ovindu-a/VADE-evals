@@ -106,7 +106,7 @@ def canonical_position_name(name, available):
     return POSITION_ALIASES[name]
 
 
-def _model_location_override(entity_assets, model):
+def _model_location_override(entity_assets, model, adapter=None):
     """Some models (e.g. InternVL3-8B-hf, whose fixed-resize image pipeline produces a
     different token grid than Qwen2.5-VL's native-resolution one for the same entity) need
     their own vlm_token_grid/object_token_indices instead of object_location.json's top-level
@@ -116,7 +116,13 @@ def _model_location_override(entity_assets, model):
     additive lookup that changes nothing for existing Qwen2.5-VL runs. (Synced from VADE.)"""
     model_id = getattr(model.config, "name_or_path", None) or ""
     model_slug = model_id.split("/")[-1]
-    return entity_assets.object_location.get("models", {}).get(model_slug)
+    override = entity_assets.object_location.get("models", {}).get(model_slug)
+    # DIVERGENCE FROM VADE (this repo only): with no entry in VADE's file, an adapter may COMPUTE
+    # one from the canvas and its own token grid (adapters/{gemma3,pixtral}.py: the smallest
+    # whole-cell box containing object_bbox_px, InternVL's convention). VADE's entry always wins.
+    if override is None and adapter is not None:
+        override = adapter.object_location_override(entity_assets.object_location, model)
+    return override
 
 
 def object_token_indices_for_model(entity_assets, model_slug):
@@ -138,7 +144,7 @@ def _validated_n_image_tokens(entity_assets, adapter, model):
     the object's pixel content varies) -- that's what makes it safe for
     BuildBatchCache to tokenize a template once and reuse it for every row
     regardless of which image."""
-    override = _model_location_override(entity_assets, model)
+    override = _model_location_override(entity_assets, model, adapter)
     loc = entity_assets.object_location
     grid = override["vlm_token_grid"] if override else loc["vlm_token_grid"]
     canvas = loc["canvas_px"]
@@ -169,7 +175,7 @@ def resolve_position_set(positions_name, entity_assets, adapter, model):
     if positions_name == "full_image":
         return list(range(n_image_tokens)), n_image_tokens, False
 
-    override = _model_location_override(entity_assets, model)
+    override = _model_location_override(entity_assets, model, adapter)
     assert override is not None or getattr(adapter, "shares_object_grid", True), (
         f"{positions_name!r} is defined on object_location.json's {entity_assets.object_location['vlm_token_grid']['grid_rows']}"
         f"x{entity_assets.object_location['vlm_token_grid']['grid_cols']} Qwen token grid, which {adapter.model_id} "
@@ -193,9 +199,19 @@ def object_token_positions(input_ids_1d, image_token_id, flat_indices, n_image_t
     positions = [i for i, t in enumerate(ids) if t == image_token_id]
     assert positions, "no image tokens found in sequence"
     o = positions[0]
-    assert positions == list(range(o, o + n_image_tokens)), \
-        f"image token span not contiguous/{n_image_tokens} as expected: {positions[:5]}...{positions[-5:]}"
-    return [o + f for f in flat_indices]
+    if positions != list(range(o, o + n_image_tokens)):
+        # DIVERGENCE FROM VADE: Pixtral ends every grid row with one [IMG_BREAK] (the last with
+        # [IMG_END]), so its image tokens are row-contiguous with a one-token gap after each row.
+        # Accepted ONLY in exactly that shape; flat index f is then the f-th image token, i.e. still
+        # row * grid_cols + col.
+        gaps = [j for j in range(1, len(positions)) if positions[j] != positions[j - 1] + 1]
+        row = gaps[0] if gaps else 0
+        assert (len(positions) == n_image_tokens and row > 0 and n_image_tokens % row == 0
+                and gaps == list(range(row, n_image_tokens, row))
+                and all(positions[j] == positions[j - 1] + 2 for j in gaps)), (
+            f"image token span is neither contiguous nor row-broken with {n_image_tokens} tokens: "
+            f"{positions[:5]}...{positions[-5:]}")
+    return [positions[f] for f in flat_indices]
 
 
 def concat_extra(extra_dicts):
