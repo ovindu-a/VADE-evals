@@ -153,8 +153,9 @@ def main(argv=None):
     # Per attribute one batch shape: every flag's controlled prompt has the same length.
     batches = []
     for a in args.attributes:
-        for i in range(0, len(keys), args.batch_size):
-            ks = keys[i:i + args.batch_size]
+        labelled = [k for k in keys if items[k].get(a) not in (None, "")]   # brands: AIRBUS has no industry
+        for i in range(0, len(labelled), args.batch_size):
+            ks = labelled[i:i + args.batch_size]
             built = [m.image_prompt(entity_dir, items[k], a) for k in ks]
             assert len({b[0].shape[0] for b in built}) == 1, "controlled prompts must share one length"
             ids = torch.stack([b[0] for b in built])
