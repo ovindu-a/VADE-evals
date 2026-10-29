@@ -101,6 +101,13 @@ def vade_matcher(vade_root):
     """VADE's own `contains_label`, imported rather than reimplemented so a hit
     here means exactly what it means in eval/score.py."""
     eval_dir = os.path.join(vade_root, "eval")
+    if not os.path.exists(os.path.join(eval_dir, "score.py")):
+        # A data-only VADE checkout (e.g. molab's HF bucket) has no eval/. common/text_match.py is
+        # the same matcher copied from score.py (normalize + whole-word contains_label), so use it.
+        from methods.common.text_match import contains_label
+        print(f"[vade_matcher] {eval_dir}/score.py not found; using methods/common/text_match.py "
+              f"(the same matcher, copied)", flush=True)
+        return contains_label
     if eval_dir not in sys.path:
         sys.path.insert(0, eval_dir)
     import importlib.util

@@ -260,7 +260,7 @@ def summarize(records):
         rr = [r for r in records if keep(r)]
         out[subset] = {"n": len(rr)}
         for arm in ARMS:
-            labs = [r["labels"][arm] for r in rr]
+            labs = [r["labels"][arm] for r in rr if arm in r["labels"]]   # --arms may be a subset
             if labs:
                 out[subset][arm] = {k: labs.count(k) / len(labs) for k in LABELS + ("other", "ambiguous")}
     return out
